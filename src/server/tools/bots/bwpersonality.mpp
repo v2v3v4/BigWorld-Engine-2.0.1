@@ -1,0 +1,43 @@
+/******************************************************************************
+BigWorld Technology 
+Copyright BigWorld Pty, Ltd.
+All Rights Reserved. Commercial in confidence.
+
+WARNING: This computer program is protected by copyright law and international
+treaties. Unauthorized use, reproduction or distribution of this program, or
+any portion of this program, may result in the imposition of civil and
+criminal penalties as provided by law.
+******************************************************************************/
+
+/*~ module BWPersonality
+ *  @components{ bots }
+ *  The name of this module is specified by the personality option in
+ *  the configuration file. This module should be implemented by the user.
+ *  It should contain callback methods that will be called by the server at
+ *  specific events.
+ */
+/*~ function BWPersonality.onLoseConnection
+ *  @components{ bots }
+ *	If present, this method is called when the simulated client loses 
+ *   connection with the server. The return value from this callback
+ *   should be boolean. If function returns true, the client will
+ *   automatically be destroyed. Otherwise, the client will be put in a
+ *   dormant state waiting for reactivation (from script). Note: This
+ *   callback is not invoked if the client is disconnected through logOff
+ *   function call.
+ *
+ *   @param playerID	the ID of simulated client (and its player entity)
+ *
+ *   @return boolean
+ */
+/*~ function BWPersonality.onClientAppDestroy
+ *  @components{ bots }
+ *	If present, this method is called when the simulated client is destroyed
+ *	and removed from the Bots application.
+ *
+ *  @param playerID	the ID of simulated client (and its player entity)
+ */
+/*~ function BWPersonality.onTick
+ *  @components{ bots }
+ *	If present, this method will be called every game tick.
+ */

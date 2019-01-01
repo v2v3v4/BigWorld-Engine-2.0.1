@@ -1,0 +1,764 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;4.&nbsp;Demonstration and Analysis</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="BigWorld Technology Server Whitepaper">
+      <link rel="up" href="index.html" title="BigWorld Technology Server Whitepaper">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Case Studies">
+      <link rel="next" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Summary">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/bigworld_whitepaper/ch04.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Demonstration and Analysis</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Demonstration"></a>Chapter&nbsp;4.&nbsp;Demonstration and Analysis
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="sect1"><a href="ch04.html#d0e582">4.1. Introduction</a></span></dt>
+                  <dt><span class="sect1"><a href="ch04.html#d0e593">4.2. BigWorld Tools</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="sect2"><a href="ch04.html#d0e598">4.2.1. Stat Logger</a></span></dt>
+                        <dt><span class="sect2"><a href="ch04.html#xref_Tools_SpaceViewer">4.2.2. Space Viewer</a></span></dt>
+                        <dt><span class="sect2"><a href="ch04.html#xref_Tools_Bots">4.2.3. Bots</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="sect1"><a href="ch04.html#d0e658">4.3. Test Environment</a></span></dt>
+                  <dt><span class="sect1"><a href="ch04.html#d0e663">4.4. Hardware Configuration</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="sect2"><a href="ch04.html#xref_IBM_Cluster_1">4.4.1. IBM Test Cluster 1</a></span></dt>
+                        <dt><span class="sect2"><a href="ch04.html#d0e675">4.4.2. IBM Test Cluster 2</a></span></dt>
+                        <dt><span class="sect2"><a href="ch04.html#d0e682">4.4.3. BigWorld Local Test Cluster</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="sect1"><a href="ch04.html#d0e687">4.5. Game Configuration</a></span></dt>
+                  <dt><span class="sect1"><a href="ch04.html#xref_Feature_Demonstration">4.6. Feature Demonstrations</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="sect2"><a href="ch04.html#d0e705">4.6.1. Server Scalability</a></span></dt>
+                        <dt><span class="sect2"><a href="ch04.html#d0e748">4.6.2. Load Balancing</a></span></dt>
+                        <dt><span class="sect2"><a href="ch04.html#d0e808">4.6.3. Scalability Demonstration</a></span></dt>
+                        <dt><span class="sect2"><a href="ch04.html#d0e837">4.6.4. Fault Tolerance</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <div class="sect1" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e582"></a>4.1.&nbsp;Introduction
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The purpose of the following demonstrations and tests is to show
+                      scientifically that the features and asymptotic trends of the BigWorld
+                      Server described in <a href="ch02.html" title="Chapter&nbsp;2.&nbsp;Architecture Overview"><i xmlns:xlink="http://www.w3.org/1999/xlink">Architecture Overview</i></a> hold true for
+                      real world deployments.
+                      Analysing real customer deployments as well as scientific test results
+                      allows for the creation of estimates for hardware costs for different
+                      server deployments as specified in the previous chapter.
+               </p>
+               <p>It should be noted that in the large-scale tests, game entities
+                      running significant Artificial Intelligence (AI) routines were not used.
+                      This was a deliberate choice as the variance in complexity and efficiency
+                      of AI in a real game is potentially very large, and is determined almost
+                      entirely by the design of a given game as opposed to the BigWorld Server.
+                      This is also the main reason for the wide variance in CCUs quoted in <a href="ch03.html" title="Chapter&nbsp;3.&nbsp;Case Studies"><i xmlns:xlink="http://www.w3.org/1999/xlink">Case Studies</i></a>. Since these variations are
+                      difficult to account for, they were excluded from these tests. As BigWorld
+                      already has multiple customers with games in beta and release stages,
+                      we have good statistics about the expected behaviour of these
+                      factors.
+               </p>
+            </div>
+            <div class="sect1" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e593"></a>4.2.&nbsp;BigWorld Tools
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The data displayed in the following tests was collected using 
+                      BigWorld Server tools. The BigWorld server is shipped with a collection of
+                      web-enabled tools which are used to monitor and administer the server.
+                      The following is a short description of these tools:
+               </p>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e598"></a>4.2.1.&nbsp;Stat Logger
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Stat Logger, as the name suggests, is used to log runtime
+                           statistics from a live BigWorld Server. It does this by periodically
+                           querying the BigWorld server machines and processes for a predefined set of
+                           statistics and writing the results to a MySQL database. These statistics
+                           typically include (but are not limited to):
+                  </p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>CPU, memory, disk and network usage;</p>
+                        </li>
+                        <li>
+                           <p>Elements of server state, such as current and cumulative
+                                        number of entities;
+                           </p>
+                        </li>
+                        <li>
+                           <p>Profiles of specific code blocks.</p>
+                        </li>
+                     </ol>
+                  </div>
+                  <p>The statistics collected by Stat Logger provide the basis for the
+                           bulk of the analysis in this document.
+                  </p>
+                  <p>A graphical representation of the data gathered by Stat Logger is
+                           available using the Stat Grapher module of WebConsole (see <a href="ch04.html#xref_Figure_StatLogger_Display">StatGrapher Screenshot</a>, below). Note: for illustration
+                           purposes, there are additional graphs in this document generated using gnuplot.
+                           (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.gnuplot.info/" target="_top">http://www.gnuplot.info/</a>).
+                  </p>
+                  <div class="informalfigure"><a name="xref_Figure_StatLogger_Display"></a><div class="mediaobject"><img src="images/stat_grapher.png" height=""><span class="caption">
+                           <p>Stat Grapher live monitoring
+                                        interface
+                           </p></span></div>
+                  </div>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Tools_SpaceViewer"></a>4.2.2.&nbsp;Space Viewer
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Space Viewer provides a top-down graphical display of entity and
+                           cell distributions across a particular space on a BigWorld Server. It
+                           consists of a daemon and a GUI app written in Python.
+                           The daemon polls the server for cell data and writes the
+                           data to a logfile. The GUI application connects to the daemon
+                           process via TCP and requests cell data for any time within the log
+                           period.
+                  </p>
+                  <div class="informalfigure"><a name="xref_Figure_SpaceViewer_3_Cells"></a><div class="mediaobject"><img src="images/space_viewer.png" height=""><span class="caption">
+                           <p>Space Viewer showing three cells</p></span></div>
+                  </div>
+                  <p>Space Viewer displays cell boundaries as blue lines, and entities
+                           as small circles, coloured by type. The green grid lines indicate the
+                           boundaries of the chunks that comprise the 3D world data.
+                  </p>
+                  <p>Each cell is labelled with its ID, IP address, and its current
+                           load (represented as a float value 0 to 1.).
+                  </p>
+                  <p>Space Viewer can also display the rough entity extents for each
+                           cell (represented here by the cyan rectangles). This is useful for
+                           getting an idea of the distribution of entities in a large multi-cell
+                           system. It is not feasible to record and display the position of every individual
+                           entity in systems of this size, and as such Space Viewer only supports
+                           tracking entities on a single cell at a time. In the example above, Cell
+                           4 is selected and we can see the individual entities within its
+                           boundaries (the coloured circles) and the ghost entities near its
+                           boundaries (the greyed out circles).
+                  </p>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Tools_Bots"></a>4.2.3.&nbsp;Bots
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The technique used to generate server load in our testing
+                           procedures is via a set of <em class="emphasis">"bot"</em> processes. A
+                           single Bot process provides the ability to establish multiple client
+                           connections to a server with a low memory / CPU overhead for each
+                           connection, as opposed to a GUI client which is generally far more
+                           resource intensive. The client connections established via a Bot process
+                           are capable of all the same actions as a GUI client and receive the same
+                           network traffic/events.
+                  </p>
+                  <p>Bots are a valuable load generation technique because they allow
+                           the simulation of huge numbers of concurrently connected clients with a
+                           relatively small amount of hardware dedicated to the load generation
+                           itself, while still providing an accurate and realistic test of the
+                           server. Since the server makes no distinction between bots and real
+                           (GUI) clients, the load on the server is an accurate reflection of the
+                           load generated by an equivalent number of real clients.
+                  </p>
+                  <p>Bots should be used by developers to test their games during the
+                           development cycle and towards the beta stages. It is a useful tool to
+                           evaluate the effect of new features and optimisations by directly
+                           comparing load statistics for a given set of entities to a
+                           baseline.
+                  </p>
+               </div>
+            </div>
+            <div class="sect1" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e658"></a>4.3.&nbsp;Test Environment
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The large scale tests were carried out at the IBM Deep Computing
+                      facility in Poughkeepsie, NY. Various logging applications were installed
+                      to log the test results. These results were then analysed.
+               </p>
+            </div>
+            <div class="sect1" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e663"></a>4.4.&nbsp;Hardware Configuration
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The results presented as part of this whitepaper were collected on
+                      three different clusters. The hardware configurations for each are given
+                      below:
+               </p>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_IBM_Cluster_1"></a>4.4.1.&nbsp;IBM Test Cluster 1
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>96 dual 3.06GHz Xeon machines, each with 3GB RAM and Gigabit
+                           Ethernet, running Redhat Enterprise Linux. 16 machines in the cluster
+                           were Hyper-Threading (HT) enabled (i.e. had 4 logical CPUs).
+                  </p>
+                  <p>Unless otherwise specified, all tests run on this cluster were
+                           done with the 16 HT machines allocated to running the bots processes,
+                           logging and administration, while the remaining 80 non-HT machines were
+                           allocated for running the game server.
+                  </p>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e675"></a>4.4.2.&nbsp;IBM Test Cluster 2
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>128 dual 3.06GHz Xeon machines, each with 3GB RAM and Gigabit
+                           Ethernet, running Redhat Enterprise Linux. 22 machines in the cluster
+                           were HT-enabled.
+                  </p>
+                  <p>Unless otherwise specified, all tests run on this cluster used 20
+                           of the HT machines for bots, one of the HT machines as the control node
+                           (where logging and administration was carried out). The remaining HT
+                           machine and 106 non-HT machines were used for running the game
+                           server.
+                  </p>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e682"></a>4.4.3.&nbsp;BigWorld Local Test Cluster
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>20 machines of varying speed between 1GHz and 3GHz, running
+                           various versions of Fedora and Debian. The heterogeneous nature of the
+                           cluster, in terms of both hardware and OS, enabled server tests across
+                           multiple possible configurations while also verifying that the
+                           load-balancing and redundancy algorithms operate effectively even with
+                           cluster nodes of varying performance.
+                  </p>
+               </div>
+            </div>
+            <div class="sect1" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e687"></a>4.5.&nbsp;Game Configuration
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Each test was run using the following server-side settings:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Game tick rate = 10Hz (the rate at which server updates
+                           	      are sent to the player);
+                        </p>
+                     </li>
+                     <li>
+                        <p>Client Area of Interest (AoI) radius = 500m;</p>
+                     </li>
+                     <li>
+                        <p>Client downstream bandwidth limit = 20kbit/s;</p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="sect1" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Feature_Demonstration"></a>4.6.&nbsp;Feature Demonstrations
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e705"></a>4.6.1.&nbsp;Server Scalability
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e708"></a>4.6.1.1.&nbsp;Description
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>This test aimed to verify the server's ability to handle extreme
+                                volumes of concurrent players in a single shard, and to
+                                determine the maximum number of clients that could be connected on the
+                                available hardware. The test was performed on IBM Test Cluster 1 by
+                                adding bots to a 40km x 40km square region of a single space.
+                     </p>
+                     <p>It is important to note that the only entities in the game world
+                                were client entities; there were no NPCs spawned. As far as server
+                                load is concerned, this test should yield overly conservative
+                                estimates of the server's ability to handle large volumes of entities.
+                                The cost of a client entity on the server is (in general) greater than
+                                an NPC entity because updates of entities around a client entity must
+                                be sent down to the client, whereas this is not true of NPCs. For
+                                example, using the FantasyDemo world that is bundled with the BigWorld
+                                server, the cost ratio of a client entity to a Guard NPC (who is
+                                constantly patrolling and watching for attacks on other Guards) is
+                                roughly 4:1. Guards are considered to be
+                                <em class="emphasis">heavy-weight</em> NPCs, as they are constantly pathing
+                                and run AI routines. Examples of <em class="emphasis">light-weight</em>
+                                NPCs would be shop-keepers, mission-givers, and other NPCs who don't
+                                move much and mostly react to player actions as opposed to acting of
+                                their own volition. We would expect these <em class="emphasis">dumb</em>
+                                NPCs to cost 1/20th of a client entity or even less.
+                     </p>
+                     <p>In a typical game world containing both client entities and
+                                NPCs, the majority of CPU time is consumed in the formation and
+                                sending of downstream packets for client entities; therefore, as
+                                client entities are empirically more expensive than NPCs, and provided
+                                that the NPC AI isn't excessive, it is expected that there can be many
+                                NPCs for the cost of one client entity in a typical game.
+                     </p>
+                  </div>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e726"></a>4.6.1.2.&nbsp;Results and Analysis
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The IBM Test Cluster 1, was able to achieve a total of
+                                100,000 concurrently connected clients. The below space viewer diagram
+                                shows the distribution of the space into 80 cellapps which were used
+                                to handle the clients load.
+                     </p>
+                     <div class="informalfigure"><a name="xref_Figure_SV_100k"></a><div class="mediaobject"><img src="images/space_viewer2.png" height=""><span class="caption">
+                              <p>Space Viewer showing 100,000 concurrent
+                                             users
+                              </p></span></div>
+                     </div>
+                     <p>These results show that the BigWorld Server can handle 100,000
+                                CCUs with automatic distribution of load between multiple cellapps.
+                        	At the time, this was the largest number of players in a single world.
+                                
+                     </p>
+                     <p>The entity bounds shown above indicate that the clients are
+                                spread over a 40km x 40km region, or
+                                1,600km<sup>2</sup>. Each entity has an Area of
+                                Interest (AoI) radius of 500m, which means each is aware of entities
+                                in the square kilometre surrounding it. For 100,000 entities spread
+                                over 1,600km<sup>2</sup>, this equates to about 62
+                                entities in the AoI of each client, which is a reasonable number of
+                                entities for each player to be aware of for a standard World of
+                                Warcraft style MMO.
+                     </p>
+                  </div>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e748"></a>4.6.2.&nbsp;Load Balancing
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e751"></a>4.6.2.1.&nbsp;Description
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The BigWorld Server is designed to distribute load over
+                                multiple machines and to do so in a timely manner, where the desired
+                                average load level is specified by the server administrator. This also
+                                means that administrators can add or remove machines from a BigWorld
+                                cluster at will and the server will always make the best use of the
+                                resources available to it.
+                     </p>
+                     <p>This demonstration aims to show that the server responds to
+                                changes in entity distribution in a timely manner and maintains
+                                average load as close as possible to the desired level, with as little
+                                deviation as possible, whilst using as few machines as
+                                possible.
+                     </p>
+                     <p>Multiple tests were run with different entity distribution
+                                to show that the load is distributed in a balanced way between the
+                                different CellApps. Some of these tests are specified
+                                below.
+                     </p>
+                  </div>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e760"></a>4.6.2.2.&nbsp;Shifting Movement Patterns
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>These are the results from the 8-pointed-star test. Initially,
+                                we have 30,000 clients distributed evenly across a 40km x 40km space,
+                                we can see that the space is distributed uniformly into cells:
+                     </p>
+                     <div class="informalfigure">
+                        <div class="mediaobject"><img src="images/space_viewer3.png" height=""><span class="caption">
+                              <p>30000 entities distributed evenly across a 40km x
+                                             40km region
+                              </p></span></div>
+                     </div>
+                     <p>The clients begin walking to one of the points of the star, and
+                                the load increases as the clients begin bunching up around the points
+                                of the star and its centre. The important thing to notice here is that
+                                even with a shifting entity distribution (and cell layout), the
+                                minimum and maximum loads differ from the average load by less than
+                                5%:
+                     </p>
+                     <div class="informalfigure">
+                        <div class="mediaobject"><img src="images/space_viewer4.png" height=""><span class="caption">
+                              <p>The 30000 entities are now concentrated at nine 
+                                             locations
+                              </p></span></div>
+                     </div>
+                     <p>As the clients begin walking on the paths between the points of
+                                the star and its centre, the density decreases and the distribution
+                                shifts back towards the centre, however the load still stays balanced
+                                to within &plusmn;5% of average load:
+                     </p>
+                     <div class="informalfigure">
+                        <div class="mediaobject"><img src="images/space_viewer5.png" height=""><span class="caption">
+                              <p>Clients begin traversing the paths from the points
+                                             to the centre
+                              </p></span></div>
+                     </div>
+                     <p>These results show the server automatically balances the load
+                                between multiple CellApps to achieve a load-balanced state that was
+                                consistent across the CellApp processes, reflecting optimal resource
+                                utilisation. Tests with other movement patterns produced similar
+                                results.
+                     </p>
+                  </div>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e792"></a>4.6.2.3.&nbsp;Economical Allocation of Machines
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>In this test we have set the server desired
+                                average load to 20% while increasing the amount of entities (see the
+                                horizontal axis). As the entities numbers increase the server
+                                automatically used more cells (purple line) and kept the average load
+                                (green line) on each cell constant. After depleting the available
+                                CellApps, the server started to use more than 20% CPU on average per
+                                cell. Please note that this demonstration uses similar raw data as the scalability
+                                demonstration below. 
+                     </p>
+                     <p>Customers can similarly set their desired server load and the
+                                BigWorld Server will automatically add more cells as the number of
+                                entities grows until the number of CellApps is exhausted. After this
+                                point, load increases linearly with respect to the number of entities
+                                in the system.
+                     </p>
+                     <p>The graph below shows the average cell load (green), maximum cell load (blue)
+                        	      minimum cell load (red) and total number of cells (purple).
+                     </p>
+                     <div class="informalfigure">
+                        <div class="mediaobject"><img src="images/graph1.png" height=""><span class="caption">
+                              <p>Graph of server load and active Cells as entities
+                                             are added to a BigWorld Server
+                              </p></span></div>
+                     </div>
+                  </div>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e808"></a>4.6.3.&nbsp;Scalability Demonstration
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e811"></a>4.6.3.1.&nbsp;Description
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p> Multiple tests were run to examine the effects of altering 
+                                different server parameters, but
+                                for the purposes of this demonstration they were functionally very
+                                similar. Each test consisted of adding moving bots maintaining
+                                constant density while making sure that all the downstream bandwidth
+                                to each client was being utilised. This allows us to show that the
+                                BigWorld Server does indeed scale linearly with respect to number of
+                                entities with other variables (density, AI etc.) held constant.
+                     </p>
+                  </div>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e816"></a>4.6.3.2.&nbsp;Results and Analysis
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The graph below relates server load and number of active
+                                CellApps to the number of entities. The important thing to notice in
+                                each graph is that load grows linearly with the number of entities.
+                                The desired cell load was set to 20%. The results show that:
+                     </p>
+                     <div class="orderedlist">
+                        <ol type="1">
+                           <li>
+                              <p>Average load (green) held constant while number of active
+                                             cells (purple) increases linearly, then
+                              </p>
+                           </li>
+                           <li>
+                              <p>Number of active cells held constant (i.e. all CellApps are
+                                             now active) while average load increases linearly.
+                              </p>
+                           </li>
+                        </ol>
+                     </div>
+                     <div class="informalfigure">
+                        <div class="mediaobject"><img src="images/graph2.png" height=""><span class="caption">
+                              <p>Graph of cell load and active cells vs. number of
+                                             entities for Test 2
+                              </p></span></div>
+                     </div>
+                     <p>These results demonstrate that the BigWorld Server does indeed
+                                scale linearly and therefore any BigWorld Technology based game would be free to
+                                expand as much as its customer base demanded.
+                     </p>
+                  </div>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e837"></a>4.6.4.&nbsp;Fault Tolerance
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e840"></a>4.6.4.1.&nbsp;Description
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>A demonstration of the BigWorld Server fault tolerance capabilities was
+                                performed by killing a CellApp process on a running server and
+                                observing that all the entities on the Cell owned by the killed
+                                CellApp are restored by BaseApps to another available Cell. This test
+                                does not depend on the size of the cluster as it deals with single
+                                component failure and can be also demonstrated by your account
+                                manager if required.
+                     </p>
+                  </div>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e845"></a>4.6.4.2.&nbsp;Results and Analysis
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The server used in this test consisted of 3 CellApps. Initially
+                                only 2 CellApps are active. This test uses the standard FantasyDemo
+                        	game that is shipped with BigWorld Technology, with 32 bot clients
+                        	and one real game client connected.
+                     </p>
+                     <div class="informalfigure">
+                        <div class="mediaobject"><img src="images/fault1.png" height=""><span class="caption">
+                              <p>Server state before the CellApp is
+                                             killed
+                              </p></span></div>
+                     </div>
+                     <p>The following figure shows the state immediately after Cell 2 is
+                                manually hard-killed:
+                     </p>
+                     <div class="informalfigure">
+                        <div class="mediaobject"><img src="images/fault2.png" height=""><span class="caption">
+                              <p>Figure 14. Server state immediately after Cell 2 is
+                                             killed
+                              </p></span></div>
+                     </div>
+                     <p>As soon as CellApp 2 is killed, the BaseApp restores that Cell&#8217;s
+                                entities to the next available Cell on that space, which in this case
+                                is Cell 1. On the client, we observe a short (~2 seconds) pause in
+                                entity updates (i.e. guards and wildlife stop moving around) while the
+                                restore takes place.
+                     </p>
+                     <p>Naturally, the load on the first Cell increases quickly with the
+                                extra entity load, which causes two things to happen:
+                     </p>
+                     <div class="orderedlist">
+                        <ol type="1">
+                           <li>
+                              <p>The CellAppMgr notices that the load on Cell 1 now exceeds
+                                             the 0.5 desired level and therefore adds the CellApp that was in
+                                             reserve to the space.
+                              </p>
+                           </li>
+                           <li>
+                              <p>While temporarily overloaded, Cell 1 <em class="emphasis">scales
+                                                back</em>, which means it temporarily throttles its
+                                             downstream bit-rate to clients to reduce load while it waits for
+                                             another Cell to start taking on its excess load to relieve it.
+                                             This means that clients will temporarily receive updates less
+                                             frequently per-entity, but the server state is kept stable.
+                              </p>
+                           </li>
+                        </ol>
+                     </div>
+                     <div class="informalfigure">
+                        <div class="mediaobject"><img src="images/fault3.png" height=""><span class="caption">
+                              <p>The unused cell is added to the space to replace
+                                             the dead one
+                              </p></span></div>
+                     </div>
+                     <p>As the new Cell takes over a larger and larger portion of the
+                                space, the load on the first CellApp moves toward the lower
+                                equilibrium state where both cells have equal load:
+                     </p>
+                     <div class="informalfigure">
+                        <div class="mediaobject"><img src="images/fault4.png" height=""><span class="caption">
+                              <p>Desired load level is restored</p></span></div>
+                     </div>
+                     <p>The above example is a typical example of how first level fault
+                                tolerance works. There is little disruption to the flow of game play
+                                on the client (it feels like a short lag spike) and the game state is
+                                preserved accurately. We have illustrated that in the event of a Cell
+                                failure, neighbouring Cells assume responsibility over the space and
+                                containing entities that previously resided on the failed Cell. After
+                                a short time, the average load of each Cell 
+                                increases to a level that is inversely proportional to the number of
+                                available Cells allocated to that space. Therefore, having more
+                                available CellApps improves the fault tolerance by spreading failed
+                                Cells' load over more available Cells. This reduces the duration of
+                                scaleback observed by players.
+                     </p>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Case Studies&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Summary</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

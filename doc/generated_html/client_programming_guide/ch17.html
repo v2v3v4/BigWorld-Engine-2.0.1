@@ -1,0 +1,377 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;17.&nbsp;Fonts</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch16.html" title="Chapter&nbsp;16.&nbsp;Graphical User Interface (GUI)">
+      <link rel="next" href="ch18.html" title="Chapter&nbsp;18.&nbsp;Input Method Editors (IME)">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch17.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;17.&nbsp;Fonts</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch16.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch18.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Fonts"></a>Chapter&nbsp;17.&nbsp;Fonts
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch17.html#d0e6434">17.1. Creating and Using Fonts</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch17.html#d0e6439">17.1.1. Creating a Font Definition File</a></span></dt>
+                        <dt><span class="section"><a href="ch17.html#d0e6473">17.1.2. Preloading Glyphs</a></span></dt>
+                        <dt><span class="section"><a href="ch17.html#d0e6483">17.1.3. Specifying the widest character</a></span></dt>
+                        <dt><span class="section"><a href="ch17.html#d0e6493">17.1.4. Displaying Text</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch17.html#d0e6503">17.2. Artist modified Fonts</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch17.html#d0e6508">17.2.1. Generating a Snapshot of a Font's Glyph Cache</a></span></dt>
+                        <dt><span class="section"><a href="ch17.html#d0e6516">17.2.2. Modifying the Font Texture</a></span></dt>
+                        <dt><span class="section"><a href="ch17.html#d0e6523">17.2.3. Explaining the Font Grid .dds File</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>BigWorld has an in-built font generation and glyph caching system. It
+                 supports large international character sets. Internally, BigWorld uses GDI+
+                 and requires an installed true-type font file to draw the glyphs into a
+                 glyph-cache render target. As an alternative, you can ship your game with
+                 pre-cached font maps, however this method does not support dynamic glyph
+                 usage, and as such is not appropriate for large character sets.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e6434"></a>17.1.&nbsp;Creating and Using Fonts
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To use fonts, you must first create a font definition file that
+                      describes the font style, point size, and desired effects. Once a font is
+                      defined, you can use the font to display text on-screen. The main way to
+                      display text on-screen is via a Python GUI.Text component.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6439"></a>17.1.1.&nbsp;Creating a Font Definition File
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Font Definition Files are an XML file describing the font itself,
+                           the size of the glyph cache and the details of any preloaded glyphs
+                           :
+                  </p><pre class="programlisting">&lt;example_font.font&gt;
+    &lt;creation&gt;
+        &lt;sourceFont&gt; Arial &lt;/sourceFont&gt;
+        &lt;sourceFontSize&gt; 16 &lt;/sourceFontSize&gt;
+        &lt;effectsMargin&gt;   1 &lt;/effectsMargin&gt;
+        &lt;textureMargin&gt;   1 &lt;/textureMargin&gt;
+        &lt;dropShadow&gt;   true &lt;/dropShadow&gt;
+        &lt;shadowAlpha&gt;   192 &lt;/shadowAlpha&gt;
+        &lt;bold&gt;         true &lt;/bold&gt;
+    &lt;/creation&gt;
+&lt;/example_font.font&gt;</pre><p>Since fonts are generated
+                           on-the-fly and their glyphs cached at runtime, this is all you need to
+                           do to begin using a new font. If the specified source font name does not
+                           exist on the system, then Windows will automatically choose the nearest
+                           matching typeface. To avoid any potential problems, please make sure you
+                           license and install your desired true-type fonts on the end-users'
+                           system (e.g. as part of the installer scripts). If you do decide to
+                           choose only Windows fonts (and assume they exist on the end-users'
+                           machines) then be aware that there are large differences in the standard
+                           fonts used by Windows, depending on the region. For example, if Windows
+                           has been installed with the Asian font pack, it will have a
+                           significantly different standard font sets by default (even for English
+                           language fonts).
+                  </p>
+                  <p>See <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch15.html" class="olink"><i><span class="literal">.font</span></i></a> for a detailed description of the
+                           .font definition format.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e6452"></a>17.1.1.1.&nbsp;Secondary Font Families
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>In order to allow mixing different character sets within the
+                                same string of text while maintaining control over how each character
+                                set is rendered, secondary font families can be defined. For example,
+                                Arial may be desired for latin-1 (e.g. English) characters, however
+                                Arial is not designed to render east-Asian character sets (e.g.
+                                Chinese). This would mean artifacts are produced when rendering
+                                east-Asian characters.
+                     </p>
+                     <p>Secondary fonts are defined using one or more
+                                <code class="code">secondary</code> tags within the <code class="code">creation</code> section.
+                                A secondary font consists of a font name and a Unicode range used to
+                                selected which secondary font to use.
+                     </p>
+                     <p>For example, to use Arial and Chinese you could add a
+                                <code class="code">secondary</code> font using SimSun:
+                     </p><pre class="programlisting">&lt;example_font.font&gt;
+    &lt;creation&gt;
+        &lt;sourceFont&gt; Arial &lt;/sourceFont&gt;
+        ...
+        &lt;secondary&gt;
+            &lt;sourceFont&gt;      SimSun          &lt;/sourceFont&gt;
+            &lt;unicodeRange&gt;    U+2F00-U+9FFF   &lt;/unicodeRange&gt;
+        &lt;/secondary&gt;
+    &lt;/creation&gt;
+&lt;/example_font.font&gt;</pre></div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6473"></a>17.1.2.&nbsp;Preloading Glyphs
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>For languages that have a limited number of glyphs, for example
+                           English, you may want to preload all the glyphs into the cache so the
+                           client doesn't have to do anything more at runtime. Additionally, for
+                           larger Asian languages, you may still want to preload the cache with
+                           some often-used glyphs and from then on let the cache deal with
+                           whichever less-frequently used glyphs are required at runtime. The glyph
+                           caching system will still be in effect, but the cache will contain these
+                           glyphs to begin with. Additionally, the preloaded glyphs will never
+                           leave the cache during the duration of client execution, even if they
+                           are not used.
+                  </p>
+                  <p>To preload glyphs or a range of glyphs, add any combination of the
+                           following tags into your font definition file.
+                  </p><pre class="programlisting">&lt;startChar&gt;    32    &lt;/startChar&gt;
+&lt;endChar&gt;     192    &lt;/endChar&gt;
+
+or
+
+&lt;unicodeChar&gt;  U+3000  &lt;unicodeChar&gt;
+
+and/or
+
+&lt;unicodeRange&gt;  U+AC00-U+D7A3   &lt;/unicodeRange&gt;</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6483"></a>17.1.3.&nbsp;Specifying the widest character
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Font glyphs are cached into a texture and are positioned on a
+                           regular grid (i.e. each grid element is the same width and height). In
+                           order to determine the size of each grid element up front, the glyph
+                           cache must know the dimensions of the widest character. By default the
+                           letter 'W' is used to calculate this size but this may be inappropriate
+                           for some character sets (including Chinese). If the widest character is too
+                           narrow, then visual artifacts will occur (characters will be clipped and
+                           neighbouring characters may 'leak' into each other). If it is too wide,
+                           then texture space will be wasted.
+                  </p>
+                  <p>The widest character can be set using the &lt;widestChar&gt; tag
+                           in the font definition file. For example:
+                  </p><pre class="programlisting">&lt;example_font.font&gt;
+    &lt;creation&gt;
+        ...
+        &lt;widestChar&gt;  U+FF1F  &lt;/widestChar&gt;
+        ...
+    &lt;/creation&gt;
+&lt;/example_font.font&gt;</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6493"></a>17.1.4.&nbsp;Displaying Text
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Text GUI Components are the main way that fonts are used to
+                           display text on-screen. For full details on Text GUI Components and
+                           their python GUI.Text counterpart, please refer to the Python Client API
+                           guide, under the section GUI.Text. The GUI.Text class supports the
+                           "font" attribute, this specifies the name of the font definition file,
+                           relative from the font root (see File Grammar Guide / resources.xml to
+                           see how to choose or change the font root folder.)
+                  </p>
+                  <p>Here is an example of how to use the above example font file,
+                           which for now we will assume was saved to
+                           $FONT_ROOT/example_font.font.
+                  </p><pre class="programlisting">import GUI
+t = GUI.Text( "Some Text" )
+t.font = "example_font.font"
+GUI.addRoot(t)</pre></div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e6503"></a>17.2.&nbsp;Artist modified Fonts
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Built-in or licensed true-type fonts may not necessarily have to
+                      desired look for your game. For example you may want to use fonts that
+                      have a glow effect, or an internal gradient fill. In these situations, you
+                      have the choice to output a fixed snapshot of a glyph cache as a .dds
+                      file. This file can then be processed by an artist to generate whatever
+                      font effects they like. Note that this procedure will only work with a
+                      fixed set of glyphs, as the client will not internally posess the ability
+                      to recreate the steps the artist took to modify the font.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6508"></a>17.2.1.&nbsp;Generating a Snapshot of a Font's Glyph Cache
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The python API contains a function, BigWorld.saveFontCacheMap,
+                           that outputs the contents of the font's glyph cache to a DDS file, and
+                           the details of the font metrics to the .font file. Once this snapshot is
+                           taken, the .font file contains a &lt;generated&gt; section, and the font
+                           will no longer use the glyph cache, or be able to generate any new
+                           glyphs at runtime. To revert this change, simply remove the
+                           &lt;generated&gt; section from the .font file, and delete the .dds file.
+                           The texture will be named $FONT_ROOT/$FONTNAME_font.dds
+                  </p><pre class="programlisting">import BigWorld
+BigWorld.saveFontCacheMap( "super_turbo.font" )
+#this generates super_turbo.font.dds, super_turbo.font.generated, and super_turbo.font.grid.dds</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6516"></a>17.2.2.&nbsp;Modifying the Font Texture
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Once a snapshot has been created, the generated font .dds file can
+                           be loaded into Photoshop (you may need to download and install a .dds
+                           file plugin, depending on the version of Photoshop you are using). The
+                           glyphs can then be modified freely, however care must be taken not to go
+                           outside of the designated bounds for each character. The grid reference
+                           bitmap describes the go and no-go areas, and its alpha-channel has a
+                           copy of the glyphs to provide shape information and to simply
+                           demonstrate which character goes where.
+                  </p>
+                  <p>Once you have modified a font texture, simply save over the
+                           *.font.dds file, and make sure both it and the *.font.generated file is
+                           committed as part of your asset repository. The presence of these files
+                           on disk instructs the font system to use the generated map from now on,
+                           and never attempt to expand the glyph cache. If glyphs are encountered
+                           that do not exist as part of the generated glyph cache, a warning will
+                           be output to the debug window and a filler character will be
+                           used.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6523"></a>17.2.3.&nbsp;Explaining the Font Grid .dds File
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Below is a portion of a font.grid.dds file, duplicated 3 times in
+                           photoshop with various colour channels extracted. You can see the three
+                           colour channels, with the alpha channel overlayed in white.
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/font_grid.png"><span class="caption">
+                           <p>Example extracted from a .font.grid.dds
+                                        file
+                           </p></span></div>
+                  </div>
+                  <p>On the left, <em class="emphasis">the red channel describes the
+                              raw glyph rectangle as given by GDI+</em>. As you can see in the
+                           example, the W and / glyphs go outside of this region. This is because
+                           this particular font already has a drop-shadow applied. The drop shadow,
+                           as provided in-engine, is a copy of the glyph, with a single pixel
+                           offset. This is demonstrated by the green region below.
+                  </p>
+                  <p><em class="emphasis">The green region describes the glyph region
+                              plus the effect margin, and is the rectangle that will be drawn by the
+                              engine</em>. Any pixels outside of the green area will be clipped
+                           when drawing text to the screen. Note too that when glyphs are drawn
+                           together, creating a string or a sentence, the red regions (raw size)
+                           determine the spacing between characters, and any effects margin is
+                           overlapped by the next glyph, this ensures that adding effects like drop
+                           shadows do not increase the width of your strings.
+                  </p>
+                  <p><em class="emphasis">The blue region describes the glyph region
+                              plus effect margin plus texture margin</em>. The texture margin is
+                           used to pad the glyphs apart in the texture map, to avoid any filtering
+                           artifacts. The texture margin should never be drawn, and is pretty much
+                           wasted space. If you are sure that your font will only be drawn at a 1:1
+                           ratio between pixels and texels (for example the text will never be
+                           shrunk, or drawn in 3D where it can be rotated and mip-maps come into
+                           play), then you can safely do away with any texture margin.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch16.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch18.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;16.&nbsp;Graphical User Interface (GUI)&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;18.&nbsp;Input Method Editors (IME)</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

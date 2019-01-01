@@ -1,0 +1,486 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;13.&nbsp;Particles</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch12.html" title="Chapter&nbsp;12.&nbsp;Server Communications">
+      <link rel="next" href="ch14.html" title="Chapter&nbsp;14.&nbsp;Detail Objects">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch13.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;13.&nbsp;Particles</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch12.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch14.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Particles"></a>Chapter&nbsp;13.&nbsp;Particles
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch13.html#d0e4671">13.1. Particle Systems</a></span></dt>
+                  <dt><span class="section"><a href="ch13.html#d0e4733">13.2. Particle Actions</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch13.html#d0e4763">13.2.1. Source actions</a></span></dt>
+                        <dt><span class="section"><a href="ch13.html#d0e4772">13.2.2. Movement actions</a></span></dt>
+                        <dt><span class="section"><a href="ch13.html#d0e4784">13.2.3. Sink actions</a></span></dt>
+                        <dt><span class="section"><a href="ch13.html#d0e4800">13.2.4. Alteration actions</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch13.html#d0e4805">13.3. Particle types</a></span></dt>
+                  <dt><span class="section"><a href="ch13.html#d0e4823">13.4. Attaching particle systems to bones</a></span></dt>
+               </dl>
+            </div>
+            <p>A particle is a textured rectangle or a small mesh that can be drawn
+                 quickly and simply, usually with an additive blend mode. They are mostly
+                 used to create interesting graphical effects.
+            </p>
+            <p>Particles are managed within particle system objects, which keep track
+                 of a number of particles with similar properties, and an identical function
+                 pipeline to describe the transition of its particles' properties.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4671"></a>13.1.&nbsp;Particle Systems
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The particle system is implemented in C++ and is accessible from
+                      both the scripting environment and C++. The Python module for particle
+                      systems is named Pixie.
+               </p>
+               <p>Each particle system is presently responsible for a set of particles
+                      of the same texture. While a particle system can change its particle
+                      texture colour dynamically, effects that require different simultaneous
+                      textures require separate particle systems.
+               </p>
+               <p>A particle system is a conglomerate of the following:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Particles. This is a container that has specific allocation
+                                   requirements determined by the renderer type. Currently there are
+                                   contiguous particles, which have optimal insert/erase characteristics;
+                                   and FixedIndex particles, these behave like a circular buffer and
+                                   ensure that particle indices remain constant over their lifetime.
+                                   FixedIndexParticles are a requirement for trail rendering and mesh
+                                   particle rendering.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Particle Actions, which are responsible for the movement of
+                                   particles (these actions do all the work of moving, creating and
+                                   destroying each particle).
+                        </p>
+                     </li>
+                     <li>
+                        <p>Particle Renderer, which is in charge of drawing the
+                                   particles.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The Particle System itself provides a common access point for all
+                      three objects.
+               </p>
+               <p>The Particle Renderer is for the most part hidden within the
+                      particle system. Likewise, the particles themselves are inaccessible to
+                      the outside. Most game code associated with the Particle System involves
+                      the creation of special Particle Actions.
+               </p>
+               <p>Particle Actions work only during the update phase of the client.
+                      They are called in turn during the tick method for a particle system, and
+                      the combined actions of each produce the overall particle effect of the
+                      system.
+               </p>
+               <p>For each particle system class, there is a corresponding python
+                      wrapper class. For example, <span class="literal">MetaParticleSystem</span> is
+                      wrapped by <span class="literal">PyMetaParticleSystem</span>. These python wrappers
+                      hold no state, they only hold a smart pointer reference to the underlying
+                      C++ object. The reason for this separation between the C++ object and
+                      their python equivalent is to allow the full construction of particle
+                      systems in the background thread (Python objects may only be constructed
+                      in the main thread.)
+               </p>
+               <p>There is one more particle system class, which is the ChunkParticles
+                      class. This is entirely C++ and implements a ChunkItem for particle
+                      systems, it allows particle systems to be placed in the world via the
+                      WorldEditor tool. Note that such particle systems should be automatically
+                      time triggered, as there is no way to access them at run-time in python
+                      and turn them on or off.
+               </p>
+               <p>At present, the procedure for using a particle system involves the
+                      following steps:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Particle System is created using Particle Editor.</p>
+                     </li>
+                     <li>
+                        <p>Particle Editor is used to create the different types of
+                                   Particle Actions that control the particles.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Any texture and material effects are set.</p>
+                     </li>
+                     <li>
+                        <p>Particle System is added to a model, in order to be displayed
+                                   and updated.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Particle Systems can easily be created in the BigWorld
+                      ParticleEditor and saved as XML files &#8212; typically under folder the
+                      resource tree <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span>.
+                      In the client, they can either be placed directly into the scene using the
+                      World Editor, or invoked from Python as such:
+               </p><pre class="programlisting">import Pixie
+ps = Pixie.create( "my_particle_system.xml" )
+BigWorld.player().model.node( "biped head" ).attach( ps )</pre><p>Note
+                      that particle systems can take a reasonably long time to construct - for a
+                      moderately complex system it might take 5ms to parse the xml file, create
+                      all the subsystems and hook them all up together. For this reason, it is
+                      highly recommended that the script-writer load Particle Systems
+                      asynchronously, using either the Pixie.createBG method, the
+                      BigWorld.loadResourceListBG method, or using Entity prerequisites. For
+                      example:
+               </p><pre class="programlisting">Example 1:
+
+import Pixie
+ps = Pixie.createBG( "my_particle_system.xml", self.onLoadPS )
+
+def onLoadPS( self, ps ):
+  BigWorld.player().model.node( "biped head" ).attach( ps )
+
+
+Example 2:
+
+import BigWorld
+BigWorld.loadResourceListBG( ("particles/one.xml", "particles/two.xml"), self.onLoadResources )
+
+def onLoadResources( self, resources ):
+  self.model.root.attach( resources["particles/one.xml"] )
+  self.model.root.attach( resources["particles/two.xml"] )
+</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4733"></a>13.2.&nbsp;Particle Actions
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>There are four main categories of Particle Actions:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Source</em></p>
+                        <p>Creates particles</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Movement</em></p>
+                        <p>Changes the velocity or position of the particles based on a set
+                                   of rules. One movement action is special as it applies the effect of
+                                   velocity onto the position of each particle.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Sink</em></p>
+                        <p>Removes particles from the list of active particles according to
+                                   a set of rules.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Alteration</em></p>
+                        <p>Changes the appearance of the particles.</p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4763"></a>13.2.1.&nbsp;Source actions
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Source actions can create particles over regular periods of time,
+                           on demand, or even be sensitive to the movement of the model to which it
+                           is attached. The size, colour, velocity, position, and even age of the
+                           particles can be specified upon creation. The key behind vector
+                           descriptions of particles is the Vector Generation subsystem.
+                  </p>
+                  <p>Each source action requires three vector generators. A vector
+                           generator is a class of objects that randomly create vectors within a
+                           given space; the space is usually defined by the type of generator and
+                           the parameters given to it. For example, a sphere generator may accept a
+                           point in 3D space and a radius value, while a line generator may accept
+                           two points in 3D space.
+                  </p>
+                  <p>The three generators are used to find the initial position,
+                           velocity, and colour of the particle when created. When calculating
+                           position and velocity, the local space of the model is taken into
+                           account, but only for the creation of the particle. What this means is
+                           that a cube described by two points, (-0.5, -0.5, -0.5) to (0.5, 0.5,
+                           0.5) is roughly the bounding box of the particle in position.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4772"></a>13.2.2.&nbsp;Movement actions
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Movement actions act on every particle in the system. There is a
+                           variety of movements that can be applied to a particle. Examples would
+                           be force, stream, barrier, and jitter.
+                  </p>
+                  <p>Basic movement of particles due to velocity is calculated
+                           automatically within the particle system, taking wind also into
+                           account.
+                  </p>
+                  <p>Particles can also undergo full scene collision &#8212;
+                           <em class="emphasis">e.g.</em>, spent bullets tumbling down steps.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4784"></a>13.2.3.&nbsp;Sink actions
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Sink actions remove particles from the system, whether it is due
+                           to age or for moving beyond a specified boundary. Examples of sink
+                           actions are <em class="emphasis">sink</em>, <em class="emphasis">barrier,</em> and
+                           <em class="emphasis">splat</em>.
+                  </p>
+                  <p>It is important to note that without sink actions, particles once
+                           created will never leave the system, eventually forcing it to hit its
+                           particle limit.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4800"></a>13.2.4.&nbsp;Alteration actions
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Alteration actions affect the appearance of the particles. They
+                           can modify the shading, alpha level, and size of the particle over time.
+                           They are typically used in smoke effects, gentle fading in and out, and
+                           glowing effects. Particle textures can be animated if the texture
+                           specified is an animated texture.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4805"></a>13.3.&nbsp;Particle types
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The particle system renderer is separate from the main particle
+                      system calculations, and allows not just texture-based particles, but also
+                      sprite-based and mesh-based particles. Multiple particle systems can share
+                      the same renderer.
+               </p>
+               <p>The mesh particle renderer can use any visual, but for optimum
+                      performance, meshes specific for use in particle systems should be
+                      exported from 3ds Max or Maya in groups of 15, having the Mesh Particles
+                      option button selected in its respective exporter dialog. For more
+                      details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch11.html" class="olink"><i>3ds Max and Maya Exporters</i></a> .
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/3ds_max_and_maya_visual_exporter_dialogs.png"><span class="caption">
+                        <p>3ds Max Visual Exporter dialog and Maya Visual Exporter
+                                   dialog
+                        </p></span></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4823"></a>13.4.&nbsp;Attaching particle systems to bones
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>For details on any class mentioned in this section, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>'s entry <em class="emphasis">Class
+                              List</em>.
+                  </p>
+               </div>
+               <p>To have a particle system follow a bone and orient to an external
+                      target, you should attach it to a node, and then point that node using a
+                      tracker.
+               </p>
+               <p>The tracker class provided by the BigWorld module (BigWorld.Tracker)
+                      can be set up using a variety of DirectionProviders to point a node in the
+                      appropriate direction:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">EntityDirProvider</span></em></p>
+                        <p>Points a node in the direction that an entity is facing.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">DiffDirProvider</span></em></p>
+                        <p>Points a node towards the position given by a MatrixProvider
+                                   (<em class="emphasis">e.g.</em>, to point at the head node of another
+                                   entity, or to point in a constant world direction).
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">ScanDirProvider</span></em></p>
+                        <p>Makes a node swing back and forth around its Y-axis
+                                   (<em class="emphasis">e.g.</em>, to simulate a security camera).
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Depending on your particular game, you might not be able to use a
+                      tracker to point a node on the source model. For example, the node may be
+                      part of a character's skeleton and have some mesh rigged to it, so you may
+                      not want to actually point to this bone (only the particle system attached
+                      to it). If this is the case, then you will need to create a new node on
+                      which to mount your particle system &#8212; ask your artists to build dummy
+                      nodes into their models on which to mount FX.
+               </p>
+               <p>To have a particle system exist at a position that is not provided
+                      by a bone, you should attach it to a separate model, and display the
+                      separate model using <span class="literal">Entity.addModel</span>. Using
+                      <span class="literal">Entity.addModel</span> instead of
+                      <span class="literal">Entity.model.node(xxx).attach</span> means that the model
+                      exists at location independent from the entity &#8212; in fact, it means that
+                      nobody will be setting the position/direction of the model, and it is
+                      entirely up to the script.
+               </p>
+               <p>Once you have an independent model, you can set its position and
+                      orientation to any <span class="literal">MatrixProvider</span>, by using the
+                      <span class="literal">Servo Motor</span>. As explained in the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>, the <span class="literal">Servo</span> class is a
+                      <span class="literal">Motor</span> that sets the transform of a model to the given
+                      <span class="literal">MatrixProvider</span> &#8212; as the
+                      <span class="literal">MatrixProvider</span> is updated, the model moves. The signal
+                      attribute is the <span class="literal">MatrixProvider</span> that sets the model's
+                      transform.
+               </p>
+               <p>This way, you can use the <span class="literal">Servo</span>
+                      <span class="literal">Motor</span> to move the model to a position provided by any
+                      dynamic matrix. If the independent model has a node to point to, then you
+                      can set its orientation by using a <span class="literal">Tracker</span>, as
+                      explained above. This allows you to detach the position of a particle
+                      system from a bone, but still set the orientation of the particle system
+                      to the orientation of the bone, or towards an external target.
+               </p>
+               <p>Finally, if you want a particle system to exist at a fixed
+                      point/orientation, then use the <span class="literal">ParticleSystem</span>'s
+                      <span class="literal">explicitPosition</span> and
+                      <span class="literal">explicitDirection</span> attributes. These set the
+                      position/orientation of a particle system once, and cannot be set to
+                      dynamic matrices. Note that if you use either attribute, you will need to
+                      use both (setting either attribute tells the particle system that it is
+                      using an 'explicit transform' derived from both attributes).
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>Be careful when attaching particle systems to bones! To attach a
+                             particle system to a bone, a PyModelNode must be retrieved. If there
+                             are no existing PyModelNodes referencing the bone you want to use,
+                             then its transform is undefined until the next draw call. Since python
+                             scripts are updated *before* the draw call, there is no way of knowing
+                             where a node is at the time of first retrieval. Therefore in this
+                             case, you should only attach a particle system to a PyModelNode when
+                             you know it has been updated. Your possible options are :
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Retrieve and keep a reference to the bone when you create
+                                          your model. This will ensure at a later date when a particle
+                                          system is attached to that bone, that the bone's position is
+                                          well-known.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Retrieve a reference to the bone you require, and callback
+                                          yourself the next frame to attach the particle system to it. For
+                                          example :
+                           </p>
+                           <p>BigWorld.callback( 0.0, partial( self.model.node("HP
+                                          particles").attach, self.particles ) )
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch12.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch14.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;12.&nbsp;Server Communications&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;14.&nbsp;Detail Objects</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

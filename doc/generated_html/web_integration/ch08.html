@@ -1,0 +1,823 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;8.&nbsp;PHP</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="BigWorld Web Integration Reference">
+      <link rel="up" href="index.html" title="BigWorld Web Integration Reference">
+      <link rel="prev" href="ch07.html" title="Chapter&nbsp;7.&nbsp;Python">
+      <link rel="next" href="ch09.html" title="Chapter&nbsp;9.&nbsp;Porting to Other Scripting Languages">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/web_integration/ch08.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;8.&nbsp;PHP</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_PHP"></a>Chapter&nbsp;8.&nbsp;PHP
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch08.html#d0e587">8.1. Dependence on Python Module</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#d0e594">8.2. Independence From Apache</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#xref_PHP_Building_The_Module_From_Source">8.3. Building the Module From Source</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch08.html#d0e605">8.3.1. Requirements</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#d0e619">8.3.2. Building a PHP-compatible Python Distribution</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#xref_PHP_Building">8.3.3. Building the PHP Module</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch08.html#d0e700">8.4. Installation</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch08.html#d0e703">8.4.1. Requirements</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#d0e708">8.4.2. Module Loading</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#d0e726">8.4.3. Configuration</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#d0e764">8.4.4. Configuration Directives</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch08.html#d0e859">8.5. Testing</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#d0e896">8.6. Mailbox Session Storage</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#d0e949">8.7. Remote Methods</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#d0e995">8.8. The PHP BigWorld API</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#d0e1158">8.9. Example Scripts</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch08.html#d0e1167">8.9.1. Requirements</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#xref_WURFL">8.9.2. WURFL</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#d0e1201">8.9.3. Installation</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>A PHP module is provided to interface with a BigWorld server through
+                 script. PHP is a very popular open-source scripting language for web
+                 development. This module is designed to be used under Linux with
+                 Apache/mod_php, and in addition, it has also been known to work with the PHP
+                 Linux command-line interpreter as well.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e587"></a>8.1.&nbsp;Dependence on Python Module
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The PHP module is actually a wrapper around the Python module
+                      described above, and thus it requires the Python module to be accessible
+                      for use. For details on how to install it (and, if necessary, build it),
+                      see <a href="ch07.html#xref_Python_Building_The_Module_From_Source" title="7.2.&nbsp;Building the Module From Source">Building the Module From Source</a>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e594"></a>8.2.&nbsp;Independence From Apache
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This installation guide supposes that you will be using Apache, but
+                      this is not a hard limit &#8212; you can use the BigWorld PHP Web Integration
+                      Module with any web server that supports PHP under Linux
+                      (<em class="emphasis">e.g.</em>,, you could use the PHP CLI interface &#8212; this
+                      implies that any web server that supports CGI will work).
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_PHP_Building_The_Module_From_Source"></a>8.3.&nbsp;Building the Module From Source
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e605"></a>8.3.1.&nbsp;Requirements
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Building the PHP module requires a valid PHP development
+                           environment available on the machine you are building on. This can be
+                           either the PHP source distribution tarball or the PHP source
+                           distribution packaged for your distribution (<em class="emphasis">e.g.</em>,
+                           YUM package <span class="literal">php-devel</span> in Fedora / CentOS or the APT
+                           package <span class="literal">php5-dev</span> in Debian). For details on how to
+                           install these packages, see your distribution's documentation.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e619"></a>8.3.2.&nbsp;Building a PHP-compatible Python Distribution
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Due to requirements of the PHP runtime, the PHP module is required
+                           to link against a version of Python 2.6 that is built without thread
+                           support (see <a href="ch05.html" title="Chapter&nbsp;5.&nbsp;Threading Issues"><i xmlns:xlink="http://www.w3.org/1999/xlink">Threading Issues</i></a>). Also, the
+                           BigWorld Python module, which is imported by the BigWorld PHP module,
+                           requires that Unicode UCS4 support is enabled. Note that these
+                           requirements can be different to whatever stock Python package is
+                           usually distributed with supported Linux distributions, so a separate
+                           local build of Python 2.6 is necessary in order to build the PHP shared
+                           library.
+                  </p>
+                  <p>Please note that you cannot use the Python 2.6 sources from
+                           <code class="filename">src/lib/python</code>, as it has been
+                           modified for use with the other BigWorld server components and
+                           client.
+                  </p>
+                  <p>You can download the Python 2.6 source distribution from <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.python.org" target="_top">http://www.python.org</a>. Once it has
+                           been downloaded, decompress the Python 2.6 tarball, then build the
+                           Python 2.6 distribution, as per below:
+                  </p><pre class="programlisting">$ ./configure EXTRA_CFLAGS=-fPIC CFLAGSFORSHARED=-fPIC --enable-unicode=ucs4 --without-threads --prefix=/usr/local/python2.6
+...
+$ make
+...
+$ sudo make install
+...</pre><p>The above example also specifies the <code class="option">--prefix</code>
+                           option where the locally built Python 2.6 installation to reside
+                           (<code class="filename">/usr/local/python2.6</code>). This path
+                           needs to match where the PHP build process expects the Python 2.6
+                           distribution to be, so ensure that the path given by
+                           <span class="literal">--prefix</span> matches what is in the
+                           <code class="filename">config.m4</code> file (for details, see <a href="ch08.html#xref_PHP_Building" title="8.3.3.&nbsp;Building the PHP Module">Building the PHP Module</a>).
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_PHP_Building"></a>8.3.3.&nbsp;Building the PHP Module
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>You need to tell the PHP build process where to find the Python
+                           source tree by editing
+                           <span class="literal">bigworld/src/server/web/php/config.m4</span>, as displayed
+                           in the excerpt below:
+                  </p><pre class="programlisting">  PHP_REQUIRE_CXX()
+# Put the path to your own python2.6 include path here
+  PHP_ADD_INCLUDE(/usr/local/python2.6/include/python2.6)
+  PHP_SUBST(BIGWORLD_PHP_SHARED_LIBADD)
+
+# Put the path to your own python2.6 static library path here
+  PHP_ADD_LIBRARY_WITH_PATH(python2.6, /usr/local/python2.6/lib/python2.6/config, BIGWORLD_PHP_SHARED_LIBADD)  </pre><p><span class="citetitle">Excerpt from
+                              <code class="filename">bigworld/src/server/web/php/config.m4</code> &#8212; Defining
+                              Python's source tree</span></p>
+                  <p>You also need to run a command called <span class="literal">phpize</span> in
+                           the module source's root directory at
+                           <span class="literal">bigworld/src/server/web/php</span> &#8212; an example output is
+                           displayed below:
+                  </p><pre class="programlisting">$ phpize
+Configuring for:
+PHP Api Version:         20020918
+Zend Module Api No:      20020429
+Zend Extension Api No:   20021010</pre><p><span class="citetitle">Example output from
+                              <span class="literal">phpize</span></span></p>
+                  <p>This will generate some files for facilitating the build process,
+                           including a <span class="literal">configure</span> script. You may then build the
+                           module and install it as follows:
+                  </p><pre class="programlisting">$ ./configure
+...
+$ make install
+...</pre><p><span class="citetitle">Configuring, building and installing the PHP
+                              module</span></p>
+                  <p>The above commands compile the module and install it as a PHP
+                           extension in the directory where PHP expects it. Note that the last
+                           command (<span class="literal">make install</span>) usually requires superuser
+                           privileges.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e700"></a>8.4.&nbsp;Installation
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e703"></a>8.4.1.&nbsp;Requirements
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>You will need both the Python extension module and the
+                           appropriately versioned PHP extension module for your distribution of
+                           PHP. For details on installation of PHP, see the PHP Installation
+                           documentation.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e708"></a>8.4.2.&nbsp;Module Loading
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The BigWorld module performs some initialisation of the network
+                           interfaces and structures used to talk to a BigWorld server cluster, and
+                           it contains some static data that persists over the lifetime of that
+                           module &#8212; loading it at start-time ensures that this step has been done
+                           once and only once for the lifetime of the PHP process. The alternative
+                           of not loading the module at start-time implies that the module needs to
+                           be loaded every time before use, thus duplicating this load-time
+                           initialisation step unnecessarily.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>If PHP is invoked as a CGI process rather than as part of the
+                                web server (<em class="emphasis">e.g.</em>, PHP as an Apache Dynamic Shared
+                                Object (DSO) residing within the Apache web server process), then this
+                                implies that the <span class="literal">bigworld_php.so</span> PHP extension
+                                module is loaded each time that PHP is invoked.
+                     </p>
+                     <p>The recommended setup is for PHP to be a Dynamic Shared Object
+                                and loaded into the Apache process to prevent this from happening. For
+                                details, see the PHP and Apache HTTP Server documentation.
+                     </p>
+                     <p>Fedora / CentOS and Debian distributions all provide binary
+                                packages for PHP as a DSO. For details on installation, see your
+                                distribution's documentation.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e726"></a>8.4.3.&nbsp;Configuration
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Packaged versions of PHP have a configuration file
+                           directory<sup>[<a name="d0e731" href="#ftn.d0e731">1</a>]</sup> for which each file contained is included as part of the
+                           PHP configuration. Source distributions of PHP can specify this when
+                           running the configure script before building.
+                  </p>
+                  <p>A sample configuration file is included in
+                           <code class="filename">bigworld/src/server/web/php/sample.ini</code> and is
+                           included below:
+                  </p><pre class="programlisting">;
+; Sample PHP configuration for the bigworld module
+; 
+; Put this file in your PHP configuration files directory, e.g. /etc/php.d or /etc/php/conf.d
+; and modify it with your correct settings.
+;
+
+; PHP directive to load the extension module. This requires that the PHP module be
+; built and installed into wherever PHP is expecting PHP extension modules to reside
+extension=bigworld_php.so
+
+[bigworld]
+; Change this to be the UID that your server is running under.
+bigworld.uid = 500
+
+; Change this to be the location of BigWorld.so. Typically bigworld/bin/web/Hybrid.
+; NOTE: This has to be set correctly for the PHP module to function!
+
+bigworld.additional_python_paths = /../bigworld/bin/web/Hybrid
+
+; Increase for more debugging.
+bigworld.debug_level = 0</pre><p><span class="citetitle">Sample configuration file
+                              <code class="filename">bigworld/src/server/web/php/sample.ini</code></span></p>
+                  <p>Some distributions have PHP packaged so that configuration can be
+                           placed in <code class="filename">/etc/php/conf.d</code> or
+                           similar directory. It is usually good practice to place module-specific
+                           configuration in its own file in such a directory
+                           (<em class="emphasis">e.g.</em>, <code class="filename">bigworld.ini</code>).
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e764"></a>8.4.4.&nbsp;Configuration Directives
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The configuration directives used in the
+                           <code class="filename">php.ini</code> file that are required for using the PHP
+                           module are described in the list below.
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><code class="varname">bigworld.uid</code></em></p>
+                           <p>This directive specifies the user ID of the BigWorld server to
+                                        communicate with. This also indirectly determines the resource path,
+                                        as it is read from <code class="filename">~/.bwmachined.conf</code>. This is
+                                        required because Apache is usually run as a special web account user
+                                        (e.g. <span class="literal">www-data</span>).
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><code class="varname">bigworld.additional_python_paths</code></em></p>
+                           <p>This directive specifies the additional python paths to
+                                        include in the Python interpreter's
+                                        <span class="literal"><code class="varname">sys.path</code></span>. In practice, this is
+                                        used to specify the location of the BigWorld Python extention module
+                                        in <code class="filename"><em class="replaceable"><code>$(MF_ROOT)</code></em>/bigworld/bin/web/Hybrid</code>.
+                                        This path to <code class="filename">BigWorld.so</code> must be included in
+                                        <code class="varname">bigworld.additional_python_paths</code>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><code class="varname">bigworld.debug_level</code></em></p>
+                           <p>This optional directive specifies the level at which the error
+                                        log entries are generated from use of the PHP module to the PHP
+                                        error log. The possible values for this are:
+                           </p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">0</span></em> &#8212;
+                                                     Debug level: <span class="literal">ERROR</span></p>
+                                    <p>Only errors are output to the log.</p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">1</span></em> &#8212;
+                                                     Debug level: <span class="literal">INFO</span></p>
+                                    <p>Only errors and information messages are output to the log
+                                                     (information messages include remote method calls and their
+                                                     parameters).
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">2</span></em> &#8212;
+                                                     Debug level: <span class="literal">TRACE</span></p>
+                                    <p>Currently, this is the same as the <span class="literal">INFO</span>
+                                                     level.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">3</span></em> &#8212;
+                                                     Debug level: <span class="literal">MEMORY</span></p>
+                                    <p>Additional information about memory allocations and
+                                                     deallocations are output to the log, as well as messages for
+                                                     lower log levels.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e859"></a>8.5.&nbsp;Testing
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To test the configuration changes above, you can use the
+                      <code class="function">phpinfo()</code> function, which prints PHP-related
+                      information, including any modules that have been loaded and their
+                      configuration directive values.
+               </p>
+               <p>The easiest way to do this is to create a PHP script as illustrated
+                      below and use a browser to view it:
+               </p><pre class="programlisting">&lt;?php
+  phpinfo();
+?&gt;</pre><p><span class="citetitle">Testing PHP configuration changes</span></p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/example_phpinfo_output.png"><span class="caption">
+                        <p>Example <span class="literal">phpinfo</span>
+                                   output
+                        </p></span></div>
+               </div>
+               <p>The BigWorld PHP module should be listed amongst the other PHP
+                      loaded modules, as illustrated below.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/example_phpinfo_output_bigworld_module_configuration.png"><span class="caption">
+                        <p>Example <code class="function">phpinfo()</code> output &#8212;
+                                   BigWorld module configuration
+                        </p></span></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e896"></a>8.6.&nbsp;Mailbox Session Storage
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>As they stand, Python objects represented as PHP resources do not
+                      persist across page requests. PHP resource objects are typically discarded
+                      at the end of the page request. Without persistence, mailboxes would have
+                      to be looked up each time a page was loaded that required remote methods
+                      to be called.
+               </p>
+               <p>In mod_python, when Python objects (including mailboxes) are set in
+                      the session variables in the form of serialised strings (or
+                      <em class="emphasis">pickles</em>, in Python parlance), they are serialised
+                      when the session variable is set and then deserialised at page load into
+                      mailboxes. PHP has a similar session mechanism accessed via the
+                      <code class="varname">$_SESSION</code> superglobal variable, after first
+                      initialising the session by calling PHP's
+                      <code class="function">session_start()</code>.
+               </p>
+               <p>There are two functions in the API to facilitate a similar mechanism
+                      where mailboxes are serialised and deserialised:
+                      <code class="function">bw_serialise()</code> and
+                      <code class="function">bw_deserialise()</code>. The string returned from
+                      <code class="function">bw_serialise()</code> applied on a mailbox can be stored in
+                      a PHP session, and the mailbox can then be restored by applying
+                      <code class="function">bw_deserialise()</code> &#8212; it returns a PHP resource which
+                      can be used in <code class="function">bw_exec()</code> to call remote
+                      methods.
+               </p><pre class="programlisting">session_start(); <em class="emphasis">// enable PHP sessions</em>
+...
+$mailbox = bw_look_up_entity_by_name( "Account", $username );
+$_SESSION['mailbox'] = bw_serialise( $mailbox ); <em class="emphasis">// serialises the mailbox into a string using Python pickling</em></pre><p><span class="citetitle">Example of saving a mailbox to session storage in
+                         PHP</span></p><pre class="programlisting">$mailbox = bw_deserialise( $_SESSION['mailbox'] ); <em class="emphasis">// deserialises the mailbox pickle string</em>
+$res = bw_exec( $mailbox, ... ); <em class="emphasis">// call some method on the deserialised mailbox</em></pre><p><span class="citetitle">Example of retrieving a mailbox from session storage in
+                         PHP</span></p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e949"></a>8.7.&nbsp;Remote Methods
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Invocations of remote methods with defined return values return an
+                      associative array of those return values with the names of the defined
+                      return values as keys.
+               </p>
+               <p>In the examples below, the remote method
+                      <code class="methodname">getGoldAndInventory()</code> is called using the
+                      previous looked-up mailbox of the Avatar entity named
+                      <span class="literal">bob</span>. The lookup involves a query to the DBMgr, which
+                      returns the mailbox (which locates the entity object amongst the
+                      BaseApps). The method call takes an argument of <span class="literal">INT32</span>,
+                      and is directed to the Avatar entity base specified by the looked-up
+                      mailbox. The method invocation returns back a PHP array that has keys
+                      <span class="literal">goldPieces</span> and <span class="literal">inventoryList</span> set to
+                      the return values from the BigWorld server.
+               </p><pre class="programlisting">&lt;root&gt;
+   ...
+   &lt;BaseMethods&gt;
+      ...
+      &lt;getGoldAndInventory&gt;
+         &lt;Arg&gt;  INT32  &lt;/Arg&gt; &lt;!-- bag ID --&gt;
+         &lt;ReturnValues&gt;
+            &lt;goldPieces&gt;    UINT32                          &lt;/goldPieces&gt;
+            &lt;inventoryList&gt; ARRAY &lt;of&gt; INVENTORY_ITEM &lt;/of&gt; &lt;/inventoryList&gt;
+         &lt;/ReturnValues&gt;
+      &lt;/getGoldAndInventory&gt;
+      ...
+   &lt;/BaseMethods&gt;
+   ...
+&lt;/root&gt;</pre><p><span class="citetitle">Example remote entity method
+                         definition</span></p><pre class="programlisting">$player = bw_look_up_entity_by_name( "Avatar", "bob" );  <em class="emphasis"># mailbox to Avatar 'bob'</em>
+result = bw_exec( $player, "getGoldAndInventory", $player, $bagID );    # <em class="emphasis">argument is integer</em>
+gold = $result['goldPieces'];                     <em class="emphasis"># integer</em>
+inventoryList = $result['inventoryList'];         <em class="emphasis"># list of inventory items</em></pre><p><span class="citetitle">Example invocation of a remote entity method with return
+                         values in PHP</span></p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>Since PHP does not have any concept of a Unicode type,
+                           UNICODE_STRING cannot be used with the BigWorld PHP integration module.
+                           Pass strings encoded in UTF-8 and then manually decode these into
+                           Unicode on the Python side. Conversely, when returning strings to PHP,
+                           you should manually encode the Python Unicode object into UTF-8.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e995"></a>8.8.&nbsp;The PHP BigWorld API
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The methods available in the PHP BigWorld API are described in the
+                      list below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="function">bw_exec( <em class="parameter"><code>$mailbox</code></em>, 
+                                      <em class="parameter"><code>$baseMethodName</code></em>,  <em class="parameter"><code>...</code></em>
+                                      )</code></p>
+                        <p>Executes a remote method on an entity mailbox given as a PHP
+                                   resource, as returned by
+                                   <code class="function">bw_look_up_entity_by_name()</code> and
+                                   <code class="function">bw_look_up_entity_by_dbid()</code>.
+                        </p>
+                        <p>This method has a variable size argument lists, which are
+                                   converted to Python objects before being sent to the Python remote
+                                   method.
+                        </p>
+                        <p>The arguments are defined in the entity definition file, and
+                                   should match the order in which they appear.
+                        </p>
+                        <p>If the remote method contains return values, then these are
+                                   converted to PHP types. In particular, return values are always
+                                   returned as a PHP array, with the keys being the return value names as
+                                   defined in the function specification in the entity definition
+                                   file
+                        </p>
+                        <p>If there are no return values, then <span class="literal">NULL</span> is
+                                   returned.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="function">bw_get_keep_alive_seconds(
+                                      <em class="parameter"><code>$mailbox</code></em>, <em class="parameter"><code>$keepAliveSeconds</code></em>
+                                      )</code></p>
+                        <p>Returns the keep-alive period (in seconds) for the specified
+                                   mailbox.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="function">bw_logon(
+                                      <em class="parameter"><code>$username</code></em>, <em class="parameter"><code>$password</code></em>, <em class="parameter"><code>$allow_already_logged_on=FALSE</code></em>
+                                      )</code></p>
+                        <p>Logs on a user given an input password. The method returns
+                                   <span class="literal">TRUE</span> if the logon attempt was successful, otherwise
+                                   it returns an error message string.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="function">bw_look_up_entity_by_dbid(
+                                      <em class="parameter"><code>$entityType</code></em>, <em class="parameter"><code>$dbId</code></em>
+                                      )</code></p>
+                        <p>Queries the BigWorld server for a specific entity with the given
+                                   type and database ID. If the entity exists and an entity base has been
+                                   loaded into the BigWorld system, then it returns a an entity mailbox
+                                   that can be used by <code class="function">bw_exec()</code> to invoke methods
+                                   on that entity base.
+                        </p>
+                        <p>If the entity exists but has not been loaded, then
+                                   <span class="literal">TRUE</span> is returned. If the entity does not exist,
+                                   then <span class="literal">FALSE</span> is returned.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="function">bw_look_up_entity_by_name(
+                                      <em class="parameter"><code>$entityType</code></em>,  <em class="parameter"><code>$entityName</code></em>
+                                      )</code></p>
+                        <p>Queries the BigWorld server for a specific entity with the given
+                                   type and name. If the entity exists and an entity base has been loaded
+                                   into the BigWorld system, then it returns an entity mailbox pointing
+                                   to that can be used by <code class="function">bw_exec()</code> to invoke
+                                   methods on that entity base.
+                        </p>
+                        <p>If the entity exists but has not been loaded, then
+                                   <span class="literal">TRUE</span> is returned. If the entity does not exist,
+                                   then <span class="literal">FALSE</span> is returned.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="function">bw_set_default_keep_alive_seconds(
+                                      <em class="parameter"><code>$keepAliveSeconds</code></em> )</code></p>
+                        <p>Sets the default keep-alive period (in seconds) for all new
+                                   entity mailboxes.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="function">bw_set_keep_alive_seconds(
+                                      <em class="parameter"><code>$mailbox</code></em>, 
+                                      <em class="parameter"><code>$keepAliveSeconds</code></em> )</code></p>
+                        <p>Sets the keep-alive period (in seconds) for the specified
+                                   mailbox.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="function">bw_reset_network_interface(
+                                      <em class="parameter"><code>$port</code></em> )</code></p>
+                        <p>Recreates the network interface (including its socket) and
+                                   resets any addresses to BigWorld services that it has cached.
+                        </p>
+                        <p>The socket is bound to the given port, unless the given port is
+                                   zero, in which case the socket is bound to a random port.
+                        </p>
+                     </li>
+                     <li>
+                        <p><a name="xref_PHP_BigWorld_API_bw_serialise"></a><code class="function">bw_serialise( <em class="parameter"><code>$mailbox</code></em>
+                                      )</code></p>
+                        <p>This method serialises a mailbox to a string that can be used to
+                                   store away a mailbox into whatever session persistence mechanism your
+                                   web script environment uses. The mailbox can be re-made using
+                                   <code class="function">bw_deserialise()</code>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><a name="xref_PHP_BigWorld_deserialise"></a><code class="function">bw_deserialise(
+                                      <em class="parameter"><code>$serialisedMailbox</code></em> )</code></p>
+                        <p>This method deserialises a serialised mailbox string into a
+                                   mailbox.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1158"></a>8.9.&nbsp;Example Scripts
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Example scripts demonstrating how to use the BigWorld PHP extension
+                      module to integrate with PHP are located in <code class="filename"><span class="literal">fantasydemo/src/web/php</span></code>.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1167"></a>8.9.1.&nbsp;Requirements
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>For details on how to set up the requirements of the PHP example
+                           scripts, see your Linux distribution instructions. The requirements are
+                           listed below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>WURFL &#8212; included with the example scripts (for details, see
+                                        <a href="ch08.html#xref_WURFL" title="8.9.2.&nbsp;WURFL">WURFL</a>)
+                           </p>
+                        </li>
+                        <li>
+                           <p>PHP CLI and Apache2 module &#8212; the CLI is used to install
+                                        WURFL
+                           </p>
+                        </li>
+                        <li>
+                           <p>PHP <span class="literal">gd</span> module &#8212; for image operations
+                           </p>
+                        </li>
+                        <li>
+                           <p>Apache (2.2 series)</p>
+                        </li>
+                        <li>
+                           <p>Running BigWorld server</p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_WURFL"></a>8.9.2.&nbsp;WURFL
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>WURFL is a library for reading Wireless Universal Resource Files
+                           that describe capabilities of mobile devices and provides support for
+                           searching these capabilities based on the HTTP User Agent string. This
+                           package needs to be set up for the example scripts you intend to use. In
+                           order to use this package you will need a command-line version of PHP
+                           installed. For details on WURFL, see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://wurfl.sourceforge.net" target="_top">http://wurfl.sourceforge.net</a>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1201"></a>8.9.3.&nbsp;Installation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Make sure that the BigWorld PHP module has been built ( see <a href="ch08.html#xref_PHP_Building_The_Module_From_Source" title="8.3.&nbsp;Building the Module From Source">Building the Module From Source</a>) and is being
+                           loaded from startup.
+                  </p>
+                  <p>The WURFL cache needs to be updated before the example scripts can
+                           be used. To update WURFL, follow the steps below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Move to the WURFL directory.</p><pre class="programlisting">cd fantasydemo/src/web/wurfl</pre></li>
+                        <li>
+                           <p>Run the command below:</p><pre class="programlisting">php update_cache.php</pre></li>
+                        <li>
+                           <p>Make a symbolic link to <code class="filename">fantasydemo/src/web/php</code> somewhere in
+                                        Apache's <span class="literal">DocumentRoot</span> (<em class="emphasis">e.g.</em>,
+                                        <code class="filename">/var/www/html/fantasydemo</code>).
+                           </p>
+                        </li>
+                        <li>
+                           <p>Make sure that the Apache configuration directive
+                                        <span class="literal">FollowSymlinks</span> is on for the directory containing
+                                        the symlink, and that the web server user has full read access to
+                                        the directories and files underneath <code class="filename">fantasydemo/src/web/php</code> (for more
+                                        details, see the Apache manual).
+                           </p>
+                        </li>
+                        <li>
+                           <p>Point the browser to the corresponding URL. If you log in
+                                        using an account already created via the FantasyDemo client, then
+                                        you should be able to see the character that you created there in a
+                                        list on successful login. You can then view character statistics and
+                                        inventory, create auctions from your inventory, check your own
+                                        auctions, and bid on other player's auctions.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/php_example_scripts_login_page.png"><span class="caption">
+                           <p>PHP example scripts login page</p></span></div>
+                  </div>
+               </div>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e731" href="#d0e731">1</a>] </sup>The configuration file directory is located at <code class="filename">/etc/php.d</code> for Fedora / CentOS
+                               distributions, or <code class="filename">/etc/php5/conf.d</code> for Debian
+                               distributions.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;7.&nbsp;Python&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;9.&nbsp;Porting to Other Scripting Languages</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

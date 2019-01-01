@@ -1,0 +1,243 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;5.&nbsp;Cluster Configuration</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Installation Guide">
+      <link rel="up" href="index.html" title="Server Installation Guide">
+      <link rel="prev" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Installing the BigWorld Server">
+      <link rel="next" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Development Environment Configuration">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;5.&nbsp;Cluster Configuration</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Cluster_Configuration"></a>Chapter&nbsp;5.&nbsp;Cluster Configuration
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch05.html#xref_Cluster_Configuration_Security">5.1. Security</a></span></dt>
+                  <dt><span class="section"><a href="ch05.html#xref_Cluster_Configuration_Routing">5.2. Routing</a></span></dt>
+                  <dt><span class="section"><a href="ch05.html#xref_Disabling_Cron_Jobs">5.3. Disabling <span><strong class="command">cron</strong></span> jobs</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Cluster_Configuration_Security"></a>5.1.&nbsp;Security
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>In a BigWorld Server cluster, not all machines are connected to the
+                      public internet, but those that are need to be secured well.
+               </p>
+               <p>This is most easily achieved by using a firewall to block incoming
+                      packets. In general, the approach for machines with public IP addresses
+                      should be to block all incoming packets on the interface with the public
+                      IP.
+               </p>
+               <p>The exception is that LoginApps and BaseApps need to allow UDP
+                      traffic to the ports they listen on. The ports to be used are defined in
+                      the <code class="filename">res/server/bw.xml</code> file using the options
+                      <span class="literal">loginApp/externalPorts/port</span> and
+                      <span class="literal">baseApp/externalPorts/port</span>. For details on these
+                      options, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s chapter
+                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a>, sections <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html#xref_BaseApp_Configuration_Options" class="olink">BaseApp Configuration Options</a> and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html#xref_LoginApp_Configuration_Options" class="olink">LoginApp Configuration Options</a>.
+               </p>
+               <p>Using the Linux firewall configuration tool,
+                      <span><strong class="command">iptables</strong></span>, we can add a rule to drop all incoming
+                      traffic on the external interface. In the following examples, we assume
+                      the external interface is <span class="literal">eth1</span>. For example:
+               </p><pre class="programlisting"># /sbin/iptables -A INPUT -i eth1 -j DROP</pre><p>On the machines running LoginApps, we can add a rule to allow
+                      traffic through on the login port, using the default port of
+                      <span class="literal">20013</span>, as illustrated below:
+               </p><pre class="programlisting"># /sbin/iptables -I INPUT 1 -p udp -i <em class="replaceable"><code>eth1</code></em> --destination-port <em class="replaceable"><code>20013</code></em> -j ACCEPT</pre><p>Similarly, for machines running BaseApps, we add similar rules to
+                      allow traffic through on the BaseApp external port as specified in the
+                      <span class="literal">baseApp/externalPorts/port</span> options.
+               </p>
+               <p>We use <span class="literal">-I INPUT 1</span> in the new rule instead of
+                      <span class="literal">-A INPUT</span> because <span><strong class="command">iptables</strong></span> applies
+                      the first rule in the chain that matches an incoming packet. Therefore, we
+                      need to insert the rule for accepting login packets before the rule for
+                      rejecting all UDP traffic on <span class="literal">eth1</span>.
+               </p>
+               <p>For a production server, you should disable all networking services
+                      apart from SSH from trusted IP addresses.
+               </p>
+               <p>BWMachined requires the ability to broadcast on the internal
+                      interface and receive back its own replies on UDP ports
+                      <span class="literal">20018</span> and <span class="literal">20019</span>. The internal
+                      interface is denoted here as <span class="literal">eth0</span>. The firewall rules
+                      should accommodate this requirement.
+               </p>
+               <p>For example:</p><pre class="programlisting"># /sbin/iptables -I INPUT 1 -p udp -i <em class="replaceable"><code>eth0</code></em> -m multiport --destination-ports 20018:20019 -j ACCEPT</pre><p>For details about the ports used by a BigWorld server see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch08.html" class="olink"><i>Security</i></a>.
+               </p>
+               <p>You must ensure that the firewall rules are restored each time the
+                      machine boots. You can use the following command to save the
+                      <span><strong class="command">iptables</strong></span> configuration:
+               </p><pre class="programlisting"># /etc/init.d/iptables save</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Cluster_Configuration_Routing"></a>5.2.&nbsp;Routing
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>A large number of tools and server components in BigWorld Technology
+                      rely on being able to send IP broadcast packets to the default broadcast
+                      address (255.255.255.255), and for them to be routed correctly.
+               </p>
+               <p>This will happen by default on a machine with only one network
+                      interface (i.e., machines on the internal network only, such as CellApp
+                      machines, DBMgr machines, etc...).
+               </p>
+               <p>For machines with two network interfaces (i.e., BaseApp and LoginApp
+                      machines), we need to make sure that packets sent to the broadcast address
+                      are routed via the internal interface.
+               </p>
+               <p>We can make sure this is done correctly by making an entry in the
+                      kernel routing table with the <span><strong class="command">ip</strong></span> command. This command
+                      may not be installed by default. You can install this utility running the
+                      following command as root:
+               </p><pre class="programlisting"># yum install iproute</pre><p>In the example below, we once again assume that
+                      <span class="literal">eth0</span> interface is the internal network. To add a
+                      default broadcast route, run the following command as the root
+                      user:
+               </p><pre class="programlisting"># /sbin/ip route add broadcast 255.255.255.255 dev <em class="replaceable"><code>eth0</code></em></pre><p>This command however will only add the route to the current routing
+                      table, and will not apply after rebooting your machine. In order to ensure
+                      this route is applied whenever the <span class="literal">eth0</span> interface is
+                      brought online run the following command as the root user:
+               </p><pre class="programlisting"># echo "broadcast 255.255.255.255 dev <em class="replaceable"><code>eth0</code></em>" &gt; /etc/sysconfig/network-scripts/route-<em class="replaceable"><code>eth0</code></em></pre><p>This command will create the file
+                      <code class="filename">/etc/sysconfig/network-scripts/route-<em class="replaceable"><code>eth0</code></em></code>
+                      if it doesn't already exist.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Disabling_Cron_Jobs"></a>5.3.&nbsp;Disabling <span><strong class="command">cron</strong></span> jobs
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Cron is a system daemon which enables tasks to be scheduled for
+                      running at pre-determined intervals, such as hourly, daily, weekly, etc.
+                      Cron refers to these periodic tasks as <em class="emphasis">jobs</em>. These
+                      jobs may adversely affect the performance of a running server due to the
+                      the kind of functionality they perform. For example it is quite common for
+                      cron jobs to update the <span><strong class="command">locate</strong></span> database which involves
+                      performing a recursive directory listing on the entire machine. These
+                      kinds of jobs can involve reading from each part of a hard drive,
+                      effectively causing a flush of the disk cache Linux has in memory. This
+                      can cause a momentary lapse in performance of server processes, as disk
+                      swapping starts to occur on the host machine.
+               </p>
+               <p>We recommend that BigWorld Server machines have resource-intensive
+                      (CPU, memory or disk) cron jobs disabled in production environments. You
+                      can achieve this (with various levels of granularity) by disabling these
+                      cron jobs.
+               </p>
+               <p>Cron jobs can be disabled by clearing the executable bit on the
+                      relevant job. For example, to disable the job run by
+                      <code class="filename">/etc/cron.daily/makewhatis.cron</code>:
+               </p><pre class="programlisting"># chmod -x /etc/cron.daily/makewhatis.cron</pre><p>Re-enabling cronjobs can be done by setting the executable bit using
+                      the reverse operation:
+               </p><pre class="programlisting"># chmod +x /etc/cron.daily/makewhatis.cron</pre><div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>System cron jobs are stored in the following locations:</p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><code class="filename">/etc/cron.d</code> (contains cron jobs for
+                                                system services)
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><code class="filename">/etc/cron.hourly</code> (for hourly cron job
+                                                scripts)
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><code class="filename">/etc/cron.daily</code> (for daily cron job
+                                                scripts)
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><code class="filename">/etc/cron.weekly</code> (for weekly cron job
+                                                scripts)
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><code class="filename">/etc/cron.monthly</code> (for monthly cron job
+                                                scripts)
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+               <p>Also remove any unnecessary user-level cron jobs. These can be
+                      listed per-user using:
+               </p><pre class="programlisting">$ crontab -l</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>We do not recommend completely disabling the cron service as
+                           facilities such as log rotation and some security mechanisms may rely on
+                           the cron service being active.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;4.&nbsp;Installing the BigWorld Server&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;6.&nbsp;Development Environment Configuration</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

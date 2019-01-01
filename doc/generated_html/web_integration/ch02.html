@@ -1,0 +1,165 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;2.&nbsp;Remote Methods with Return Values</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="BigWorld Web Integration Reference">
+      <link rel="up" href="index.html" title="BigWorld Web Integration Reference">
+      <link rel="prev" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Overview">
+      <link rel="next" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Logging on Entities">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/web_integration/ch02.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;2.&nbsp;Remote Methods with Return Values</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Remote_Methods_With_Return_Values"></a>Chapter&nbsp;2.&nbsp;Remote Methods with Return Values
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p>Within BigWorld, remote Python method calls are one-way and
+               asynchronous. That is, methods immediately return control back to the
+                 calling process. For return values, a callback method is usually defined
+                 that is also one-way.
+            </p>
+            <p>In a web server context, the web server process is only active during
+                 the processing of a web request, so that it necessarily has to block if it
+                 is to receive return values back from the BigWorld server cluster.
+            </p>
+            <p>The mechanism of blocking methods with return values is useful here
+                 because calls to remote methods block the web server process until a
+                 response is received, or the remote method experiences a time-out condition.
+                 Return value methods are currently only implemented on base methods, and
+                 have the following structure in the entity definitions file:
+            </p><pre class="programlisting">&lt;root&gt;
+   ...
+   &lt;BaseMethods&gt;
+   ...
+      &lt;myReturnValueMethod&gt;
+         &lt;Arg&gt; INT32  &lt;/Arg&gt;  &lt;!-- first argument --&gt;
+         &lt;Arg&gt; STRING &lt;/Arg&gt;  &lt;!-- second argument --&gt;
+         &lt;ReturnValues&gt;
+            &lt;someList&gt;   ARRAY &lt;of&gt; INT32&lt;/of&gt; &lt;/someList&gt;
+            &lt;someString&gt; STRING                &lt;/someString&gt;
+         &lt;/ReturnValues&gt;
+       &lt;myReturnValueMethod&gt;
+     ...
+   &lt;/BaseMethods&gt;
+   ...
+&lt;/root&gt;</pre><p><span class="citetitle">Excerpt from an entity definitions file showing a
+                    return-value method</span></p>
+            <p>In the above example, the return value method is called
+                 <span class="literal">myReturnValueMethod</span>, and it has two arguments &#8212; the first
+                 is typed as a <span class="literal">INT32</span>, and the second as a
+                 <span class="literal">STRING</span> type. It returns two values &#8212; the first is named
+                 <span class="literal">someList</span> and is typed as an <span class="literal">ARRAY</span> of
+                 <span class="literal">INT32</span>s, and the second is named
+                 <span class="literal">someString</span> and is typed as a STRING.
+            </p>
+            <p>Executing these remote methods from the web server context would be
+                 carried out in the following manner in mod_python:
+            </p><pre class="programlisting">playerBob = BigWorld.lookUpEntityByName( 'Avatar', 'bob' )
+result = playerBob.myReturnValueMethod( 35, 'example' )
+req.write( &#8220;someString = %s&#8221; % result[&#8216;someString'] )
+for listElement in result[&#8216;someList']:
+   req.write( &#8220;listElement: %d&#8221;, listElement )</pre><p><span class="citetitle">Executing remote methods in mod_python</span></p>
+            <p>The actual server-side implementation of remote methods with return
+                 values are implemented as base entity methods on the BaseApp
+                 (<em class="emphasis">e.g.</em>, <span class="literal">base/Avatar.py</span>). These
+                 implementations differ from regular remote methods without return values in
+                 that an extra response object is created for each request and passed to the
+                 function as an extra parameter.
+            </p>
+            <p>This response object has attributes corresponding to each return value
+                 in the method definition, which the implementation of the method must set
+                 values for. When the scripting code has prepared the response back, it must
+                 invoke the <code class="methodname">done()</code> method on the response object for
+                 the response to be sent back to the calling context of the web
+                 server.
+            </p>
+            <p>Method response objects cannot be passed as parameters to other server
+                 components (<em class="emphasis">i.e.</em>, other BaseApps or CellApps), but can
+                 be passed around within the same BaseApp.
+            </p><pre class="programlisting">import BigWorld
+
+class EntityType:
+   ...
+   def myReturnValueMethod( self, response<a name="co130"></a><img src="../images/callouts/1.png" alt="1" border="0">, argInt32, argString ):
+      # The arguments argInt32 and argString match those arguments 
+      # defined in the .def file.
+      ...
+
+      # Set some values of the response, the attributes match 
+      # those that are defined in the .def file.
+      response.someList = [1, 3, 5, 7, 11]
+      response.someString = "This is my string"
+
+      # Send the response back, we are done with it, and the web 
+      # integration module is blocking, pending this response.
+      response.done()<a name="co142"></a><img src="../images/callouts/2.png" alt="2" border="0"></pre><p><span class="citetitle">Server-side implementation of a remote
+                    method</span></p>
+            <div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co130"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>The <span class="literal">response</span> object being passed.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co142"><img src="../images/callouts/2.png" alt="2" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>The response object <code class="methodname">done()</code> method being
+                                 called.
+                        </p>
+                     </td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Overview&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;Logging on Entities</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,342 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;19.&nbsp;BigWorld Web Integration</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch18.html" title="Chapter&nbsp;18.&nbsp;Input Method Editors (IME)">
+      <link rel="next" href="ch20.html" title="Chapter&nbsp;20.&nbsp;Sounds">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch19.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;19.&nbsp;BigWorld Web Integration</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch18.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch20.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Web"></a>Chapter&nbsp;19.&nbsp;BigWorld Web Integration
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch19.html#d0e6868">19.1. Architecture</a></span></dt>
+                  <dt><span class="section"><a href="ch19.html#d0e6907">19.2. Using the Web Integration</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch19.html#xref_Web_GUI_Component">19.2.1. In Game Web GUI Component</a></span></dt>
+                        <dt><span class="section"><a href="ch19.html#xref_Web_Screen">19.2.2. In Game Web Screen</a></span></dt>
+                        <dt><span class="section"><a href="ch19.html#xref_Texture_Mapping">19.2.3. Texture Mapping of Web Pages into a world object</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>The BigWorld Technology engine now includes the open source Mozilla
+                 project allowing for displaying and interacting with web pages as part of
+                 the client.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e6868"></a>19.1.&nbsp;Architecture
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The BigWorld Technology Client includes the following components as
+                      part of the web browser integration:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>The bigworld/src/lib/web_render directory contains the BigWorld
+                                   web integration code. The WebPageProvider class is the main interface
+                                   for the web integration. The MozillaWebPageInterface class contains
+                                   the main interface implementation for the Mozilla integration.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The Mozilla project, see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.mozilla.org/" target="_top">http://www.mozilla.org/</a> is the
+                                   web layout engine used by the BigWorld Technology Client. This project
+                                   is shipped as compiled dlls as part of the BigWorld engine. These dlls
+                                   are available in the fantasydemo/game/mozilla directory. Different
+                                   dlls are compiled for Visual Studio 2005 and Visual Studio 2008. These
+                                   dlls are based on the Mozilla 1.8 release. If required, customers can
+                                   also replace these dlls by recompiling Mozilla using the instructions
+                                   available at http://ubrowser.com/. When recompiling Mozilla,
+                                   additional fixes to the Mozilla source code might be required (see the
+                                   content of bigworld/bin/client/mozilla/patch/mozilla_diff.txt for more
+                                   details. Any modification to the Mozilla source code will require
+                                   redistribution of the modification (as required by the Mozilla
+                                   license).
+                        </p>
+                     </li>
+                     <li>
+                        <p>The LLMozlib library, see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://ubrowser.com/" target="_top">http://ubrowser.com/</a> is an open
+                                   source wrapper for the Mozilla project and is shipped as part of the
+                                   BigWorld source code. The LLMozlib source code is available in
+                                   bigworld/src/lib/third_party/llmozlib2 and is compiled as part of the
+                                   BigWorld client solution file. Any modification to the LLMozlib source
+                                   code will require redistribution of the modification (as required by
+                                   the LLMozlib license).
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>How the code works:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>A secondary thread is used to deal with all web related
+                                   requests. This prevents performance spikes when responding to long web
+                                   related requests.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The MozillaWebPageManager manages calls to Mozilla and callbacks
+                                   by using a separate command thread with two FIFO buffers.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Users (i.e. Python/C++ classes) use MozillaWebPageInterface to
+                                   interact with the MozillaWebPageManager, and they send commands to the
+                                   manager which are sent over via the FIFO buffer to be dealt with by
+                                   the secondary thread. This thread dispatches the commands to the
+                                   MozillaWebPage instance which correlates with the
+                                   MozillaWebPageInterface.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Callbacks are dispatched using a second FIFO buffer which is
+                                   flushed by the main thread during the tick method.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Please note that all interaction with Mozilla must be done in
+                                   the second thread (as Mozilla itself is not thread safe).
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e6907"></a>19.2.&nbsp;Using the Web Integration
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The BigWorld web integration can be used in multiple scenarios.
+                      Multiple usage examples are available as part of FantasyDemo and will be
+                      explained below.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Web_GUI_Component"></a>19.2.1.&nbsp;In Game Web GUI Component
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>An in game web GUI component is a GUI component capable of
+                           displaying 2D web content and sending mouse and keyboard events to that
+                           web content. There is some experimental (not supported) code also allows
+                           building a game integrated with ActionScript and JavaScript components
+                           (see below).
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e6917"></a>19.2.1.1.&nbsp;Creating an Interactive 2D Web GUI Component
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Displaying an interactive 2D web GUI Component which can be used
+                                to browse the web can be done by creating a GUI component containing a
+                                child SimpleGuiComponent using the
+                                fantasydemo/res/scripts/client/Helpers/PyGUI/InternalBrowser.py
+                                script. For an example of a 2D web GUI component please review the
+                                fantasydemo/res/gui/web.gui. Following are the main considerations for
+                                creating an interactive 2D web GUI component.
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>The web.gui contains multiple child GUI components. The main
+                                             GUI component used to display the web content is the
+                                             InternalBrowser component. Other child components are mainly used
+                                             to display navigation buttons, a window label and the window
+                                             texture.
+                              </p>
+                           </li>
+                           <li>
+                              <p>The InternalBrowser.py sets the SimpleGuiComponent texture
+                                             to use the TextureProvider returned by the WebPageProvider in
+                                             order to display the web page as part of the
+                                             SimpleGuiComponent.
+                              </p>
+                           </li>
+                           <li>
+                              <p>The InternalBrowser.py implementation currently supports two
+                                             types of keyboard input methods. Keyboard input is automatically
+                                             captured by Mozilla when mozillaHandlesKeyboard is set to True,
+                                             otherwise key events are sent to Mozilla by the InternalBrowser
+                                             script, allowing for in game IME implementation.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e6932"></a>19.2.1.2.&nbsp;Creating a Game Integrated 2D Web GUI Component
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>A game integrated 2D web GUI component is a web GUI component
+                                which can interact with the game logic. This allows building game GUI
+                                using fast development tools like HTML or Flash, and having them call
+                                Python methods using a JavaScript to Python or ActionScript to Python
+                                bridges. Please note that this BigWorld feature is not supported and
+                                we recommend using the ScaleForm solution for customers interested in
+                                such a solution. Implementing a Game Integrated 2D Web GUI Component
+                                is done similarly to the above Interactive Component but with several
+                                additional steps. The fantasydemo/res/gui/html_chat_window.gui
+                                contains an example html GUI component using the JavaScript to Python
+                                bridge.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Web_Screen"></a>19.2.2.&nbsp;In Game Web Screen
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>An in game web screen is a 3D in game entity with similar
+                           capabilities and use cases as the previously explained Web GUI
+                           Component. The main difference between the Web GUI component and the in
+                           game web screen is that the Web Screen is part of the 3D game scene and
+                           not a 2D GUI component. This Web Screen is located in a specific world
+                           location and isn't available for gamers as part of their HUD.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e6942"></a>19.2.2.1.&nbsp;Creating an In Game Web Screen
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The WebScreen entity available as an example in
+                                fantasydemo/res/scripts/client/WebScreen.py implements an in game web
+                                screen. Following are the main considerations for creating an In Game
+                                Web Screen:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>The WebScreen entity uses a model with multiple tints, the
+                                             current tint is fed by a TextureFeed created by the WebScreen
+                                             entity. The parameters usedTint and textureFeedName control the
+                                             entity model used tint and the TextureFeed name used by this
+                                             entity. These should usually contain the same string based on the
+                                             tints available for that model. These options are exposed as part
+                                             of WorldEditor.
+                              </p>
+                           </li>
+                           <li>
+                              <p>The model used by the WebScreen entity should also have
+                                             three hard points called HP_top_left, HP_top_right,
+                                             HP_bottom_left. These hard points are used by the
+                                             _intersectMouseCoordinates method to find an intersection between
+                                             a world ray and the entity model. This allows sending mouse events
+                                             with a 2D position to the actual web page.
+                              </p>
+                           </li>
+                           <li>
+                              <p>The webPage member of this entity contains a WebPageProvider
+                                             and is used to render a web page and to send mouse and keyboard
+                                             events to the web page.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Texture_Mapping"></a>19.2.3.&nbsp;Texture Mapping of Web Pages into a world object
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The TextureProvider returned by the WebPageProvider can be used to
+                           build a TextureFeed (similar to the one used for the WebScreen entity
+                           above). A VideoScreen Entity allows simple usage of the TextureFeed to
+                           map the texture into 3D world objects with the correct material settings
+                           (same as the tints used above). The exhibition room in the Urban space
+                           contains a teapot example of mapping a web texture into a world object
+                           using a VideoScreen entity.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch18.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch20.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;18.&nbsp;Input Method Editors (IME)&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;20.&nbsp;Sounds</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

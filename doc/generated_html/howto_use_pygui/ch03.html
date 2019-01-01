@@ -1,0 +1,225 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;3.&nbsp;Integration</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Using PyGUI">
+      <link rel="up" href="index.html" title="Using PyGUI">
+      <link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;How it Works">
+      <link rel="next" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Constructing an Interface">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Integration</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Integration"></a>Chapter&nbsp;3.&nbsp;Integration
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch03.html#d0e401">3.1. Personality script integration</a></span></dt>
+                  <dt><span class="section"><a href="ch03.html#d0e463">3.2. Factory strings</a></span></dt>
+                  <dt><span class="section"><a href="ch03.html#d0e488">3.3. Input Method Editor</a></span></dt>
+                  <dt><span class="section"><a href="ch03.html#d0e513">3.4. Testing</a></span></dt>
+               </dl>
+            </div>
+            <p>There are a number of script hooks that need to be in place in order
+                 for PyGUI to function correctly.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e401"></a>3.1.&nbsp;Personality script integration
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To allow the PyGUI framework to handle some logic at a global level,
+                      the personality script needs to call some PyGUI event
+                      handlers.
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>In <code class="code">BWPersonality.handleKeyEvent</code>, call
+                                     <code class="code">PyGUI.handleKeyEvent</code>: 
+                        </p><pre class="programlisting">def handleKeyEvent( event):
+    ...
+    handled = PyGUI.handleKeyEvent( event )
+    if not handled:
+        handled = GUI.handleKeyEvent( event )
+    ...</pre></li>
+                     <li>
+                        <p>In <code class="methodname">BWPersonality.handleMouseEvent()</code>,
+                                     call <code class="methodname">PyGUI.handleMouseEvent()</code>:
+                        </p><pre class="programlisting">def handleMouseEvent( event ):
+    ...
+    handled = PyGUI.handleMouseEvent( event )
+    if not handled:
+        handled = GUI.handleMouseEvent( event )
+    ...</pre></li>
+                     <li>
+                        <p>In <code class="code">BWPersonality.handleIMEEvent</code>, call
+                                     <code class="code">PyGUI.handleIMEEvent</code> to allow edit fields to cope with
+                                     IME state changes (see below for more details on IME).
+                        </p><pre class="programlisting">def handleIMEEvent( event ):
+    return PyGUI.handleIMEEvent( event )</pre></li>
+                     <li>
+                        <p>In <code class="code">BWPersonality.handleLangChangeEvent</code>, call
+                                     <code class="code">PyGUI.handleInputLangChangeEvent</code> to update components
+                                     such as the language indicator.
+                        </p><pre class="programlisting">def handleInputLangChangeEvent():
+    return PyGUI.handleInputLangChangeEvent()</pre></li>
+                     <li>
+                        <p>In <code class="methodname">BWPersonality.onRecreateDevice()</code>,
+                                     call <code class="methodname">PyGUI.onRecreateDevice</code> to allow the
+                                     GUI to cope with the screen size changing.
+                        </p><pre class="programlisting">def onRecreateDevice():
+    ...
+    PyGUI.onRecreateDevice()
+    ...   </pre></li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e463"></a>3.2.&nbsp;Factory strings
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To allow the GUI system to successfully load .gui files and attach
+                      class instances to the components, the PyGUI module needs to be loaded
+                      into the main Python namespace. This can be done by putting the following
+                      lines at the top of the client personality script:
+               </p><pre class="programlisting">from Helpers import PyGUI
+__import__('__main__').PyGUI = PyGUI</pre><p>This is neccessary because PyGUI factory strings are of the form
+                      <code class="code">PyGUI.ClassName</code> (e.g. <code class="code">PyGUI.Button</code>) and the GUI
+                      system needs to be able to find the <code class="code">PyGUI</code> module at the top
+                      level.
+               </p>
+               <p>In order to be able to load your own classes derived from
+                      <code class="code">PyGUI.Window</code>, you will need to also add your game specific
+                      GUI module in a smiliar fashion. For example, if you place all your game
+                      specific GUI scripts into a module called GameGUI, then you would put this
+                      near the top of the personality script:
+               </p><pre class="programlisting">import GameGUI
+__import__('__main__').GameGUI = GameGUI</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e488"></a>3.3.&nbsp;Input Method Editor
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>PyGUI includes an IME presentation layer implementation, which is
+                      contained within the <code class="classname">PyGUI.IME</code> module. This module
+                      implements the IME display as a set of component singletons, which will
+                      display themselves at a specified location (e.g. at the cursor carat of
+                      the EditField) based on the current IME state. The EditField script uses
+                      this module.
+               </p>
+               <p>To allow IME to work, <code class="methodname">PyGUI.IME.init()</code>
+                      should be called on startup. This will initialise the singleton
+                      components, which are initially hidden until the user starts using an IME
+                      enabled EditField.
+               </p>
+               <p>Call <code class="methodname">PyGUI.IME.fini()</code> on shutdown to clean
+                      up these components.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>See the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/index.html" class="olink">Client Programming Guide</a> chapter
+                           <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch18.html" class="olink"><i>Input Method Editors (IME)</i></a> for
+                           detailed information about IME integration.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e513"></a>3.4.&nbsp;Testing
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To test if the integration is working, use the PyGUI test window
+                      script:
+               </p><pre class="programlisting">&gt;&gt;&gt; import Helpers.PyGUI.Test
+&gt;&gt;&gt; Helpers.PyGUI.Test.testWindow()</pre><p>This will clear the existing GUI and display a draggable window with
+                      a number of basic components. If all is well, then you will be able to
+                      interact with these components.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>The test window script assumes the following resources
+                           exist:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><code class="filename">gui/tests/window.gui</code></p>
+                        </li>
+                        <li>
+                           <p><code class="filename">gui/visual_states/button_test.xml</code></p>
+                        </li>
+                        <li>
+                           <p><code class="filename">gui/visual_states/checkbox_test.xml</code></p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;How it Works&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;Constructing an Interface</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,13 @@
+This file lists the changes made by BigWorld to the LibPNG distribution:
+
+1.  In png.h the line:
+
+	#include "zlib.h"
+
+has been changed to:
+
+	#include "zip/zlib.h"
+	
+2.  The Visual Studio projects have been updated to Visual Studio 2005 from Visual Studio 2003.
+
+3.  A Makefile has been added for the Linux build to help build the server.

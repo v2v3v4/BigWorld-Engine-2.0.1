@@ -1,0 +1,87 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;3.&nbsp;Logging on Entities</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="BigWorld Web Integration Reference">
+      <link rel="up" href="index.html" title="BigWorld Web Integration Reference">
+      <link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Remote Methods with Return Values">
+      <link rel="next" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Keep-alive Messages">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/web_integration/ch03.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Logging on Entities</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Logging_On_Entities"></a>Chapter&nbsp;3.&nbsp;Logging on Entities
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p>When a player logs on with the web module, and the player's entity was
+               not previously loaded from the database, then the entity is loaded onto the
+               least loaded BaseApp. A reference to the newly created or already existing
+                 entity base can then be looked up using one of the lookup methods present in
+                 the API.
+            </p>
+            <p>If the entity is already logged on, for example, via the client, then
+                 the player entity has already been loaded and will have the
+                 <code class="methodname">BigWorld.onLogOnAttempt()</code> method called on the
+                 entity base (for details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/baseapp/index.html" class="olink">BaseApp Python API</a>).
+                 It is called with the parameters <em class="parameter"><code>ip</code></em>,
+                 <em class="parameter"><code>port</code></em> and <em class="parameter"><code>password</code></em>. If the
+                 logon attempt is from a web integration gateway, then the IP and port will
+                 be equal to 0.
+            </p>
+            <p>In script, the entity must deal with multiple logons from the client
+                 through the LoginApp versus multiple logons from the web integration
+                 gateway.
+            </p>
+            <p>There is a facility for ensuring an entity is not destroyed
+                 prematurely when accessing entity methods on a mailbox, by sending
+                 keep-alive messages and specifying an interval for script callbacks when no
+                 keep-alive messages have been sent in that interval (for details, see <a href="ch04.html" title="Chapter&nbsp;4.&nbsp;Keep-alive Messages"><i xmlns:xlink="http://www.w3.org/1999/xlink">Keep-alive Messages</i></a>).
+            </p>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;Remote Methods with Return Values&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;Keep-alive Messages</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,198 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;33.&nbsp;.texformat</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch32.html" title="Chapter&nbsp;32.&nbsp;.texanim">
+      <link rel="next" href="ch34.html" title="Chapter&nbsp;34.&nbsp;texture_detail_levels.xml">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch33.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;33.&nbsp;<span class="literal">.texformat</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch32.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch34.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_texformat"></a>Chapter&nbsp;33.&nbsp;<span class="literal">.texformat</span></h2>
+                  </div>
+               </div>
+            </div>
+            <p>Located under various folders under the
+                 <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span> tree,
+                 <span class="literal">texture_detail_levels.xml</span> and
+                 <span class="literal">.texformat</span> files are divided into filename matching
+                 criteria, and conversion rules.
+            </p>
+            <p>For more details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/index.html" class="olink">Client Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch21.html" class="olink"><i>3D Engine (Moo)</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch21.html#xref_Textures" class="olink">Textures</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch21.html#xref_Texture_Details_Levels_Compression" class="olink">Texture detail levels/compression</a>.
+            </p>
+            <p>For details on how SpeedTree uses .texformat files to implement LOD,
+                 see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../thirdparty_integrations/index.html" class="olink">Third-Party Integrations</a>'s section
+                 <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../thirdparty_integrations/ch04.html" class="olink"><i>SpeedTree</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../thirdparty_integrations/ch04.html#xref_we_Level_Of_Detail" class="olink">Level of detail</a>.
+            </p>
+            <p>The grammar for the texture detail level configuration file is
+                 described below:
+            </p><pre class="programlisting">&lt;root&gt;
+  +&lt;detailLevel&gt;
+     *&lt;prefix&gt;         <em class="replaceable"><code>string</code></em>      &lt;/prefix&gt;
+     *&lt;postfix&gt;        <em class="replaceable"><code>string</code></em>      &lt;/postfix&gt;
+     *&lt;contains&gt;       <em class="replaceable"><code>string</code></em>      &lt;/contains&gt;
+     ?&lt;maxDim&gt;         <em class="replaceable"><code>integer</code></em>     &lt;/maxDim&gt;
+     ?&lt;minDim&gt;         <em class="replaceable"><code>integer</code></em>     &lt;/minDim&gt;
+     ?&lt;reduceDim&gt;      <em class="replaceable"><code>integer</code></em>     &lt;/reduceDim&gt;
+     ?&lt;format&gt;         <em class="replaceable"><code>string</code></em>      &lt;/format&gt;
+     ?&lt;mipCount&gt;       <em class="replaceable"><code>integer</code></em>     &lt;/mipCount&gt;
+     ?&lt;horizontalMips&gt; true|false  &lt;/horizontalMips&gt;
+     ?&lt;noFilter&gt;       true|false  &lt;/noFilter&gt;
+     ?&lt;mipSize&gt;        <em class="replaceable"><code>integer</code></em>     &lt;mipSize&gt;
+     ?&lt;lodMode&gt;        <em class="replaceable"><code>integer</code></em>     &lt;lodMode&gt;
+   &lt;/detailLvel&gt;
+&lt;/root&gt;</pre><p><span class="citetitle">Grammar of texture detail level configuration
+                    file</span></p>
+            <p>The list below describes the tags in the texture detail level
+                 configuration file:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">contains</span></em></p>
+                     <p><em class="replaceable"><code>Filename match criterion.</code></em></p>
+                     <p>Filename substring that must be matched to apply the conversion
+                              rule.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">detailLevel</span></em></p>
+                     <p>Tag for detail level conversion rules.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">format</span></em></p>
+                     <p><em class="emphasis">Conversion rule.</em></p>
+                     <p>Indicates is mipmaps are stored along the horizontal axis. If set
+                              to true and mipCount is non-zero, then mipmaps are stored along the
+                              horizontal axis of the texture; otherwise, they are stored along
+                              vertical axis.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">horizontalMips</span></em></p>
+                     <p><em class="emphasis">Conversion rule.</em></p>
+                     <p>Indicates is mipmaps are stored along the horizontal axis.</p>
+                     <p>If set to true and mipCount is non-zero, then mipmaps are stored
+                              along the horizontal axis of the texture; otherwise, they are stored
+                              along vertical axis.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">maxDim</span></em></p>
+                     <p><em class="emphasis">Conversion rule.</em></p>
+                     <p>The maximum width/height dimension that the converted texture
+                              might have.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">minDim</span></em></p>
+                     <p><em class="emphasis">Conversion rule.</em></p>
+                     <p>The minimum width/height dimension that the converted texture
+                              might have.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">mipCount</span></em></p>
+                     <p><em class="emphasis">Conversion rule.</em></p>
+                     <p>Number of mipmaps stored when precomputed mipmaps are stored in a
+                              single source texture.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">mipSize</span></em></p>
+                     <p><em class="emphasis">Conversion rule.</em></p>
+                     <p>Size of the topmost level of the mipmap, along the axis determined
+                              by the horizontalMips value.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">noFilter</span></em></p>
+                     <p>Instructs Moo what filter to use when auto-generating mipmaps: if
+                              true, then point filtering will be used; if false, then box filtering
+                              will be used.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">postfix</span></em></p>
+                     <p><em class="emphasis">Filename match criterion.</em></p>
+                     <p>Filename postfix that must be matched for the conversion rule to
+                              be applied.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">prefix</span></em></p>
+                     <p><em class="emphasis">Filename match criterion.</em></p>
+                     <p>Path/filename prefix that must be matched to apply the conversion
+                              rule.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">reduceDim</span></em></p>
+                     <p><em class="emphasis">Conversion rule.</em></p>
+                     <p>The number of times to halve the dimensions of the texture.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">lodMode</span></em></p>
+                     <p><em class="emphasis">Texture Quality Setting Modifier.</em></p>
+                     <p>This modifier tweaks how the texture responds to the texture
+                              quality setting which varies from 0 (highest) to 2 (lowest). How this
+                              modifier tweaks the quality setting is described in the following
+                              table.
+                     </p><pre class="programlisting">
+                               texture quality setting
+        lodMode                  0       1       2
+        0 (disabled)             0       0       0
+        1 (normal)               0       1       2
+        2 (low bias)             0       1       1
+        3 (high bias)            0       0       1</pre></li>
+               </ul>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch32.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch34.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;32.&nbsp;<span class="literal">.texanim</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;34.&nbsp;<span class="literal">texture_detail_levels.xml</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

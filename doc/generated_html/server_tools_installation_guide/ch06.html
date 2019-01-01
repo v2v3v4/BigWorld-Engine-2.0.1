@@ -1,0 +1,171 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;6.&nbsp;Server Tools Installation</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Tools Installation Guide">
+      <link rel="up" href="index.html" title="Server Tools Installation Guide">
+      <link rel="prev" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Checkout / Unpack Tools Source">
+      <link rel="next" href="ch07.html" title="Chapter&nbsp;7.&nbsp;Post-installation">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Server Tools Installation</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch07.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Server_Tools_Installation"></a>Chapter&nbsp;6.&nbsp;Server Tools Installation
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p>Before installing the server tools, make sure that MySQL is installed,
+                 and a MySQL user has been added. For details on how to do this, see the
+                 document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/index.html" class="olink">Server Installation Guide</a>, section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/ch04.html#xref_Configure_MySQL_Server" class="olink">Configure MySQL Server</a>.
+            </p>
+            <p>The final step to installing the server tools is to run the script
+                 <code class="filename">bigworld/tools/server/install/install_tools.py</code>. The
+                 purpose of the <code class="filename">install_tools.py</code> script is to install
+                 system startup scripts into <code class="filename">/etc/init.d</code>, and setup which run levels the new
+                 system services should start in. Once this has been done, the installation
+                 script will attempt to launch the services. This process will also attempt
+                 to verify the environment in which the server tools have been installed in
+                 and create any required directories.
+            </p>
+            <p>The installation script must be run as root from the <code class="filename">bigworld/tools/server/install</code> directory.
+            </p><pre class="programlisting">$ cd /home/bwtools/mf/bigworld/tools/server/install
+$ su
+# ./install_tools.py
+BigWorld Server Tools Installation
+NOTE: This installation program will not copy binaries into your 
+        system paths, the system startup scripts and configuration
+        files are used to reference back into the current tools
+        directory. If you intend on moving the tools you will need
+        to re-run this script.</pre><p>The first stage of the installation will ask you about your MySQL
+                 database. Default settings have been provided, which should be correct for
+                 the hostname and port if the recommended system setup is used. You may have
+                 to modify the username and password fields depending on your desired MySQL
+                 configuration. Once this information has been entered, the script will
+                 attempt to connect to the database to verify its existence, and to create
+                 the necessary database for WebConsole, and will then modify the
+                 configuration files for the server tools that need to connect to the
+                 database.
+            </p><pre class="programlisting">* Database Configuration
+Please input MySQL database information:
+Hostname [localhost]:
+Port [3306]:
+Username [bigworld]: bwtools
+Password [bigworld]: bwtools_passwd 
+StatLogger DB name prefix [bw_stat_log_data]:
+
+MySQL database configuration: 
+Hostname : localhost
+Port : 3306
+Username : bwtools
+Password : btools_passwd
+Prefix   : bw_stat_log_data
+
+Are these details correct?
+ [yes]
+
++ Creating web_console database in MySQL
++ Writing '../web_console/prod.cfg'.
++ Writing '../stat_logger/preferences.xml'.</pre><p>The next set of questions will verify that the environment that the
+                 tools are installed in (and will be run from) is as expected. This is a last
+                 chance for you to make any modifications to the environment before the
+                 server tools are installed. The environment can be changed at any point.
+                 Doing so, however, will require updating configuration files or re-running
+                 the installation script.
+            </p><pre class="programlisting">* Server Tools Installation
+
+Server tools will be run as: 
+User : bwtools
+Group : bwtools
+
+Are these details correct?
+ [yes] 
+
+* Server Tools: Installation Paths
+This installation is being run from under '/home/bwtools/mf/bigworld/tools/server'.
+Configuration files and system startup scripts will be modified 
+to refer to this installation directory.
+
+Is this directory correct?
+ [yes]</pre><p>Next, we specify where MessageLogger is to store its logs. This should
+                 be a location with enough room to cope with a large amount of logs.
+            </p><pre class="programlisting">Where should message_logger store its logs?
+ [/var/log/bigworld/message_logger]</pre><p>The server tools startup scripts will need a location to store
+                 <code class="filename">.pid</code> files, which record the process
+                 ID and running state of the server tools. This is specified as below:
+            </p><pre class="programlisting">Where should .pid files be stored?
+ [/var/run/bigworld]</pre><p>You are now given an opportunity to confirm the input directories and
+                 modify them if necessary.
+            </p><pre class="programlisting">Server tools directories:
+Tool dir : /home/bwtools/mf/bigworld/tools/server
+Log dir : /var/log/bigworld/message_logger
+PID dir : /var/run/bigworld
+
+Are these details correct?
+ [yes]
+
++ Chown'ing '/var/log/bigworld' to bwtools:bwtools
+
++ Chown'ing '/var/run/bigworld' to bwtools:bwtools
+
++ Chown'ing '/var/log/bigworld/message_logger' to bwtools:bwtools
+
++ Chcon'ing '../message_logger/bwlog.so' type to user_u:object_r:textrel_shlib_t</pre><p>The final step to install the server tools will attempt to copy the
+                 <em class="emphasis">init.d</em> scripts for the 3 server tools into <code class="filename">/etc/init.d</code> then start the services. The MySQL
+                 service should be started before StatLogger and WebConsole, otherwise they
+                 will fail to load.
+            </p><pre class="programlisting">* Installing system services
+- Uninstalling existing system service 'bw_stat_logger'
++ Installing package: bw_stat_logger
+Starting stat_logger:                                          [ OK ] 
+- Uninstalling existing system service 'bw_message_logger'
++ Installing package: bw_message_logger 
+Starting message_logger:                                       [ OK ]
+- Uninstalling existing system service 'bw_web_console'
++ Installing package: bw_web_console
+Starting BigWorld web console:                                 [ OK ]</pre></div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch07.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Checkout / Unpack Tools Source&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;7.&nbsp;Post-installation</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

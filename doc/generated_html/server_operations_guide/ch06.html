@@ -1,0 +1,248 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;6.&nbsp;Controlled Startup and Shutdown</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Operations Guide">
+      <link rel="up" href="index.html" title="Server Operations Guide">
+      <link rel="prev" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Backups and Disaster Recovery">
+      <link rel="next" href="ch07.html" title="Chapter&nbsp;7.&nbsp;Stress Testing with Bots">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_operations_guide/ch06.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Controlled Startup and Shutdown</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch07.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Controlled_Startup_And_Shutdown"></a>Chapter&nbsp;6.&nbsp;Controlled Startup and Shutdown
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch06.html#d0e7751">6.1. Server-wide Shutdown</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#d0e7836">6.2. Individual Application Retirement</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch06.html#d0e7841">6.2.1. BaseApp Retirement</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e7852">6.2.2. CellApp Retirement</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e7857">6.2.3. Retirement via WebConsole</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e7867">6.2.4. Retirement via <span class="literal">control_cluster.py</span></a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>For maintenance and upgrade reasons, the server or some part of it may
+                 be required to shutdown. There are two typical scenarios:
+            </p>
+            <div class="orderedlist">
+               <ol type="1">
+                  <li>
+                     <p>Server-wide shutdown, where the entire server needs to be
+                              restarted.
+                     </p>
+                  </li>
+                  <li>
+                     <p>Individual application retirement that does not cause the server
+                              to stop running.
+                     </p>
+                  </li>
+               </ol>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e7751"></a>6.1.&nbsp;Server-wide Shutdown
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>There are times when the entire server might need to be shut down,
+                      and restarted later in a similar state.
+               </p>
+               <p>To tell the server to shut down in a controlled way, a message must
+                      be sent to all LoginApps. This may be in the form of a Watcher message or
+                      a USR1 signal. The easiest way to do this is to use the script
+                      <span class="literal">control_cluster.py</span> with the option stop or via
+                      WebConsole. For more details, see <a href="ch03.html#xref_control_cluster_py" title="3.4.1.&nbsp;Control Cluster">Control Cluster</a>.
+               </p>
+               <p>Controlled startup and shutdown only work when the underlying
+                      database is MySQL &#8212; it does not work when the XML version is used.
+               </p>
+               <p>If the <span class="literal">bw.xml</span>'s
+                      <span class="literal">dbMgr</span>/<span class="literal">clearRecoveryData</span>
+                      configuration option is set to <span class="literal">false</span>, then the server
+                      is automatically started using information written during the controlled
+                      shutdown. If the server had failed unexpectedly, then it is started using
+                      the disaster recovery information. Setting that configuration option to
+                      <span class="literal">true</span> will cause the server to be started in its initial
+                      state, <em class="emphasis">i.e.</em>, an empty space with no entities. For
+                      more details, see <a href="ch02.html#xref_DBMgr_Configuration_Options" title="2.14.&nbsp;DBMgr Configuration Options">DBMgr Configuration Options</a>.
+               </p>
+               <p>The main information that is restored from the database is:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Spaces and their data</p>
+                     </li>
+                     <li>
+                        <p>Game time</p>
+                     </li>
+                     <li>
+                        <p>Which entities should be in each space.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>When using MySQL as the underlying database, this information is
+                      stored in the following tables:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Spaces and their data &#8212; <span class="literal">bigworldSpaces</span>,
+                                   <span class="literal">bigworldSpaceData</span></p>
+                     </li>
+                     <li>
+                        <p>Game time &#8212; <span class="literal">bigworldGameTime</span></p>
+                     </li>
+                     <li>
+                        <p>Which entities should be in each space &#8212;
+                                   <span class="literal">bigworldLogOns</span></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>For details on these tables, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch33.html" class="olink"><i>MySQL Database Schema</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch33.html#xref_Non_Entity_Tables" class="olink">Non-Entity Tables</a></p>
+               <p>For details on related scripting, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch17.html" class="olink"><i>Controlled Startup and Shutdown</i></a>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e7836"></a>6.2.&nbsp;Individual Application Retirement
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Individual BaseApps and CellApps can be retired. This can be useful
+                      if maintenance is required on a single machine where only BaseApps and
+                      CellApps are running.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7841"></a>6.2.1.&nbsp;BaseApp Retirement
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When BaseApps retire, base entities and proxy entities are
+                           offloaded to other BaseApps, and connected clients will be reconnected
+                           with another BaseApp transparently.
+                  </p>
+                  <p>It may take some time for the base entities and proxy entities to
+                           be offloaded from the retiring BaseApp to other BaseApps. The retiring
+                           BaseApp will shutdown once these entities have been successfully
+                           offloaded and a new backup cycle has completed, ensuring no data
+                           loss.
+                  </p>
+                  <p>If another BaseApp terminates unexpectedly while the retirement is
+                           in progress, any entities that were offloaded to the dead BaseApp will
+                           be re-offloaded on to another BaseApp.
+                  </p>
+                  <p>For redundancy reasons, it is recommended that retirement only be
+                           done if there are at least two other BaseApps running. This ensures that
+                           in the event of a unexpected BaseApp termination while retirement
+                           occurs, every base entity in the system is adequately backed up.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7852"></a>6.2.2.&nbsp;CellApp Retirement
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>CellApps can also be retired. Each cell administered by the
+                           retiring CellApp will shrink in size gradually, each cell disappearing
+                           once the area reaches zero. Once there are no more cells, the CellApp
+                           will shut itself down.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7857"></a>6.2.3.&nbsp;Retirement via WebConsole
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A BaseApp or a CellApp can be individually retired by using the
+                           WebConsole in the ClusterControl module, by selecting<em class="emphasis"> Retire
+                              App</em> from the action menu for the particular CellApp or
+                           BaseApp to be retired. Refer to the section on <a href="ch03.html#xref_WebConsole" title="3.1.&nbsp;WebConsole">WebConsole</a>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7867"></a>6.2.4.&nbsp;Retirement via <span class="literal">control_cluster.py</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A BaseApp or a CellApp can be individually retired by using the
+                           ControlCluster command line tool (see <a href="ch03.html#xref_Server_Command_Line_Utilities" title="3.4.&nbsp;Server Command-Line Utilities">Server Command-Line Utilities</a>), using the
+                           <span><strong class="command">retireproc</strong></span> command. For example:
+                  </p><pre class="programlisting">$ ./control_cluster.py retireproc cellapp01
+$ ./control_cluster.py retireproc baseapp03</pre></div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch07.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Backups and Disaster Recovery&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;7.&nbsp;Stress Testing with Bots</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

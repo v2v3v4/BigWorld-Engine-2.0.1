@@ -1,0 +1,321 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;15.&nbsp;.font</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch14.html" title="Chapter&nbsp;14.&nbsp;flags.xml">
+      <link rel="next" href="ch16.html" title="Chapter&nbsp;16.&nbsp;.gui">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch15.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;15.&nbsp;<span class="literal">.font</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch14.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch16.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_name_size_font"></a>Chapter&nbsp;15.&nbsp;<span class="literal">.font</span></h2>
+                  </div>
+               </div>
+            </div>
+            <p>Mentioned in document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/index.html" class="olink">Client Programming Guide</a>'s
+                 section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch16.html" class="olink"><i>Graphical User Interface (GUI)</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch17.html" class="olink"><i>Fonts</i></a>.
+            </p>
+            <p>Named
+                 <span class="literal"><em class="replaceable"><code>&lt;font_name&gt;</code></em>_<em class="replaceable"><code>&lt;font_size&gt;</code></em>.font</span>
+                 and located in the folder specified by section
+                 <span class="literal"><em class="replaceable"><code>&lt;system&gt;</code></em>/<em class="replaceable"><code>&lt;fontRoot&gt;</code></em></span>
+                 in file
+                 <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/resources.xml</span>, a
+                 font file has the grammar described below:
+            </p><pre class="programlisting">&lt;file_name&gt;
+
+  +&lt;creation&gt;
+     &lt;sourceFont&gt;       <em class="replaceable"><code>string</code></em>           &lt;/sourceFont&gt;
+     &lt;sourceFontSize&gt;   <em class="replaceable"><code>integer</code></em>          &lt;/sourceFontSize&gt;
+     &lt;startChar&gt;        [U+<em class="replaceable"><code>hex</code></em>|<em class="replaceable"><code>integer</code></em>]  &lt;/startChar&gt;
+     &lt;endChar&gt;          [U+<em class="replaceable"><code>hex</code></em>|<em class="replaceable"><code>integer</code></em>]  &lt;/endChar&gt;
+     &lt;widestChar&gt;       [U+<em class="replaceable"><code>hex</code></em>|<em class="replaceable"><code>integer</code></em>]  &lt;/widestChar&gt;
+     &lt;fixedWidth&gt;       <em class="replaceable"><code>integer</code></em>          &lt;/fixedWidth&gt;
+     &lt;effectsMargin&gt;    <em class="replaceable"><code>integer</code></em>          &lt;/effectsMargin&gt;
+     &lt;textureMargin&gt;    <em class="replaceable"><code>integer</code></em>          &lt;/textureMargin&gt;
+     &lt;spaceProxyChar&gt;   <em class="replaceable"><code>integer</code></em>          &lt;/spaceProxyChar&gt;
+     &lt;maxTextureWidth&gt;  <em class="replaceable"><code>integer</code></em>          &lt;/maxTextureWidth&gt;
+     &lt;dropShadow&gt;      [true|false]      &lt;/dropShadow&gt;
+     &lt;shadowAlpha&gt;      <em class="replaceable"><code>integer</code></em>          &lt;/shadowAlpha&gt; 
+     &lt;antialias&gt;       [true|false]      &lt;/antialias&gt;
+     &lt;bold&gt;            [true|false]      &lt;/bold&gt;
+    *&lt;secondary&gt;
+       &lt;sourceFont&gt;     <em class="replaceable"><code>string</code></em>              &lt;/sourceFont&gt;
+       &lt;unicodeRange&gt;   U+<em class="replaceable"><code>hex</code></em>-U+<em class="replaceable"><code>hex</code></em>         &lt;/unicodeRange&gt;
+       &lt;bold&gt;           [true|false]        &lt;/bold&gt;
+       &lt;antialias&gt;      [true|false]        &lt;/antialias&gt;
+       &lt;dropShadow&gt;     [true|false]        &lt;/dropShadow&gt;
+     &lt;/secondary&gt;
+   &lt;/creation&gt;
+  *&lt;generated&gt;
+     &lt;map&gt;             <em class="replaceable"><code>file</code></em>          &lt;/map&gt;
+     &lt;mapDimensions&gt;   <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>   &lt;/mapDimensions&gt;
+     &lt;maxWidth&gt;        <em class="replaceable"><code>integer</code></em>       &lt;/maxWidth&gt;
+     &lt;height&gt;          <em class="replaceable"><code>integer</code></em>       &lt;/height&gt;
+     &lt;uvs&gt;             <em class="replaceable"><code>string</code></em>        &lt;/uvs&gt;
+     &lt;widths&gt;          <em class="replaceable"><code>string</code></em>        &lt;/widths&gt;
+   &lt;/generated&gt;
+&lt;/file_name&gt;</pre><p><span class="citetitle">Grammar of font file</span></p>
+            <p>The list below describes the tags in the font file:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">creation</span></em></p>
+                     <p>Tag for section with font description.</p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">antialias</span></em></p>
+                              <p>If set to true, then characters will be anti-aliased.</p>
+                              <p>Defaults to <code class="code">true</code>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">bold</span></em></p>
+                              <p>If set to true, then the lfWeight member of the
+                                           <span class="literal">LOGFONT</span> structure will be set to
+                                           <span class="literal">FW_BOLD</span>, otherwise it will be set to
+                                           <span class="literal">FW_NORMAL</span>.
+                              </p>
+                              <p>Defaults to <span class="literal">false</span>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">dropShadow</span></em></p>
+                              <p>If set to true, then BigWorld will automatically create a drop
+                                           shadow in the font. This will help displaying text against any
+                                           coloured background, as long as the text is drawn blended.
+                              </p>
+                              <p>Defaults to <span class="literal">false</span>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">effectsMargin</span></em></p>
+                              <p>Number of pixels used by BigWorld font effects. For example,
+                                           if you use <span class="literal">dropShadow</span>, then you should include 1
+                                           pixel for it.
+                              </p>
+                              <p>Defaults to <span class="literal">0</span>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">fixedWidth</span></em></p>
+                              <p>Width of all character in the font map.</p>
+                              <p>Set this value to <span class="literal">0</span> if font has variable
+                                           width (proportional spacing).
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">maxTextureWidth</span></em></p>
+                              <p>Maximum allowed width for the generated texture map.</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">maxWidth</span>
+                                              </em></p>
+                              <p>Maximum width assumed by any of the font characters.</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">shadowAlpha</span></em></p>
+                              <p>Alpha value to use when creating the shadow.</p>
+                              <p>A value of <span class="literal">255</span> generates a fully opaque
+                                           shadow. Lower values will create softer, and usually better looking,
+                                           shadows.
+                              </p>
+                              <p>Defaults to <span class="literal">255</span>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">sourceFont</span></em></p>
+                              <p>This is set into the <span class="literal">lfFaceName</span> member of
+                                           the Windows API <span class="literal">LOGFONT</span> structure.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">sourceFontSize</span></em></p>
+                              <p>This is set into the <span class="literal">lfHeight</span> member of the
+                                           Windows API <span class="literal">LOGFONT</span> structure.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">spaceProxyChar</span></em></p>
+                              <p>ASCII code of the character to be used for calculating the
+                                           width of a space character.
+                              </p>
+                              <p>Defaults to <span class="literal">105</span> (character
+                                           <span class="literal">i</span>).
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">startChar</span></em></p>
+                              <p>Unicode value of the first character to preload into the glyph
+                                           cache.
+                              </p>
+                              <p>Defaults to <span class="literal">0</span>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">endChar</em></p>
+                              <p>Unicode value of the last character to preload into the glyph
+                                           cache.
+                              </p>
+                              <p>Defaults to <span class="literal">0</span>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">textureMargin</span></em></p>
+                              <p>How many extra texels will be added in-between each
+                                           glyph.
+                              </p>
+                              <p>If a font is to be used with bilinear filtering turned on, it
+                                           is best to include at least 1 texel worth of
+                                           <span class="literal">textureMargin</span>, so the filtering will not sample
+                                           from neighbouring glyphs.
+                              </p>
+                              <p>Defaults to <span class="literal">0</span>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">secondary</span></em></p>
+                              <p>Tag for section to define a secondary font to use when
+                                           rendering a characters from a particular Unicode range. Multiple
+                                           secondary fonts can be specified for different ranges.
+                              </p>
+                              <div class="itemizedlist">
+                                 <ul type="square">
+                                    <li>
+                                       <p><em class="emphasis"><span class="literal">sourceFont</span></em></p>
+                                       <p>The face name of the font to use.</p>
+                                    </li>
+                                    <li>
+                                       <p><em class="emphasis"><span class="literal">unicodeRange</span></em></p>
+                                       <p>The range, in Unicode of characters, that this secondary
+                                                        font will apply.
+                                       </p>
+                                    </li>
+                                    <li>
+                                       <p><em class="emphasis"><span class="literal">bold</span></em></p>
+                                       <p>If set to true, the font characters will be bold.</p>
+                                       <p>Defaults to the value of <code class="code">bold</code> in the parent
+                                                        <code class="code">creation</code> section.
+                                       </p>
+                                    </li>
+                                    <li>
+                                       <p><em class="emphasis"><span class="literal">antialias</span></em></p>
+                                       <p>If set to true, the font characters will be
+                                                        antialiased.
+                                       </p>
+                                       <p>Defaults to the value of <code class="code">antialias</code> in the
+                                                        parent <code class="code">creation</code> section.
+                                       </p>
+                                    </li>
+                                    <li>
+                                       <p><em class="emphasis"><span class="literal">dropShadow</span></em></p>
+                                       <p>If set to true, then BigWorld will automatically create a
+                                                        drop shadow in the font. This will help displaying text against
+                                                        any coloured background, as long as the text is drawn blended.
+                                                        The value of <code class="code">shadowAlpha</code> in the parent creation
+                                                        section will be used.
+                                       </p>
+                                       <p>Defaults to the value of <code class="code">dropShadow</code> in the
+                                                        parent <code class="code">creation</code> section.
+                                       </p>
+                                    </li>
+                                 </ul>
+                              </div>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">generated</span></em></p>
+                     <p>Tag for section with generated font metrics.</p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">height</span></em></p>
+                              <p>Upon font generation, this tag will store the global font
+                                           height.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">map</span></em></p>
+                              <p>This tag will store the name of the texture containing the
+                                           font map.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">mapDimensions</span></em></p>
+                              <p>Upon font generation, this tag will store font map
+                                           dimensions.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">uvs</span></em></p>
+                              <p>List of UV coordinates for each of the characters in the font
+                                           map.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">widths</span></em></p>
+                              <p>List of widths for each of the characters in the font
+                                           map.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">maxWidth</span></em></p>
+                              <p>Maximum width assumed by any of the font characters.</p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch14.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch16.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;14.&nbsp;<span class="literal">flags.xml</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;16.&nbsp;<span class="literal">.gui</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

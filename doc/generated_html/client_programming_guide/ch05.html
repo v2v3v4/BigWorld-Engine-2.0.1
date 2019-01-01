@@ -1,0 +1,255 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;5.&nbsp;Cloud shadows</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Terrain">
+      <link rel="next" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Chunks">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch05.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;5.&nbsp;Cloud shadows</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Cloud_Shadows"></a>Chapter&nbsp;5.&nbsp;Cloud shadows
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch05.html#d0e2015">5.1. Requirements</a></span></dt>
+                  <dt><span class="section"><a href="ch05.html#d0e2020">5.2. Implementation</a></span></dt>
+                  <dt><span class="section"><a href="ch05.html#d0e2032">5.3. Effect File Implementation</a></span></dt>
+                  <dt><span class="section"><a href="ch05.html#xref_Tweaking">5.4. Tweaking</a></span></dt>
+               </dl>
+            </div>
+            <p>All objects in the BigWorld client engine that are drawn outside are
+                 affected by cloud shadows. This effect is applied per-pixel, and is
+                 performed using a light map-stored as a texture feed in the engine that is
+                 projected onto the world.
+            </p>
+            <p>This light map is exposed to the effects system via macros defined in
+                 the file
+                 <span class="literal">bigworld/res/shaders/std_effects/stdinclude.fxh</span>.
+            </p>
+            <p>By default, the texture feed is named <span class="literal">skyLightMap</span>,
+                 and therefore is accessible to Python via the command:
+            </p><pre class="programlisting">BigWorld.getTextureFeed( "skyLightMap" )</pre><p>Information for the sky light map is found in the sky XML file, which
+                 is defined in the file
+                 <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/spaces/<em class="replaceable"><code>&lt;space&gt;</code></em>/space.settings</span>
+                 (for details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch31.html" class="olink"><i><span class="literal">space.settings</span></i></a>) for the
+                 given space. The parameters are the same as in any BigWorld light
+                 map.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e2015"></a>5.1.&nbsp;Requirements
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Cloud shadowing requires one extra texture layer per material. While
+                      the fixed-function pipeline supports this for most materials, cloud
+                      shadowing on bump-mapped and specular objects requires more than four sets
+                      of texture coordinates, meaning that for bump-mapped objects it will only
+                      work on Pixel Shader 2 and above.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e2020"></a>5.2.&nbsp;Implementation
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The sky light map is calculated by the code in C++ file
+                      <span class="literal">src/lib/romp/sky_light_map.cpp</span>, and is updated by the
+                      sky module during draw.
+               </p>
+               <p>It is exposed to the effect engine via automatic effect constants.
+                      The light map is updated only when a new cloud is created, or the current
+                      set of clouds has moved more than 25% downwind.
+               </p>
+               <p>Between updates, the projection texture coordinates are slid by the
+                      wind speed so that the cloud shadows appear to move with the clouds. All
+                      effect files incorporate the cloud shadowing effect, including the terrain
+                      and flora.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e2032"></a>5.3.&nbsp;Effect File Implementation
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>There are two effect constants exposed to effect files to aid with
+                      sky light mapping:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">SkyLightMapTransform</span></em></p>
+                        <p>Sets the "World to SkyLightMap" texture projection.Use this
+                                   constant to convert x,z world vertex positions to u,v texture
+                                   coordinates.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">SkyLightMap</span></em></p>
+                        <p>Exposes the sky light map texture to effect files.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>There are several macros in file
+                      <span class="literal">bigworld/res/shaders/std_effects/stdinclude.fxh</span> that
+                      assist with integrating cloud shadowing into your effect files.
+               </p>
+               <p>These macros are described in the list below:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">BW_SKY_LIGHT_MAP_OBJECT_SPACE</span>,
+                                      <span class="literal">BW_SKY_LIGHT_MAP_WORLD_SPACE</span></em></p>
+                        <p>These macros declare the variables and constants required for
+                                   the texture projection, including:
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p>World space camera position.</p>
+                              </li>
+                              <li>
+                                 <p>Sky light map transform.</p>
+                              </li>
+                              <li>
+                                 <p>The sky light map itself.</p>
+                              </li>
+                           </ul>
+                        </div>
+                        <p>When using an effect file that performs lighting in object space
+                                   (for example, if you are also using the macro
+                                   <span class="literal">DIFFUSE_LIGHTING_OBJECT_SPACE</span>), use the variation
+                                   <span class="literal">BW_SKY_LIGHT_MAP_OBJECT_SPACE</span>, and that will have
+                                   the world matrix declared.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">BW_SKY_LIGHT_MAP_SAMPLER</span></em></p>
+                        <p>This macro declares a sampler object that is used when
+                                   implementing cloud shadows in a pixel shader.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">BW_SKY_MAP_COORDS_OBJECT_SPACE</span>,
+                                      <span class="literal">BW_SKY_MAP_COORDS_WORLD_SPACE</span></em></p>
+                        <p>These macros perform the texture projection on the given vertex
+                                   position, and set the texture coordinates into the given
+                                   register.
+                        </p>
+                        <p>Be sure to pass the positions in the appropriate reference
+                                   frame, depending on which set of macros you are using.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">BW_TEXTURESTAGE_CLOUDMAP</span></em></p>
+                        <p>This macro defines a texture stage that multiplies the previous
+                                   stage's result by the appropriate cloud shadowing value.
+                        </p>
+                        <p>It should be used after any diffuse lighting calculation, and
+                                   before any reflection or specular lighting.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">SAMPLE_SKY_MAP</span></em></p>
+                        <p>This macro samples the sky light map in a pixel shader, and
+                                   returns a 1D-float value representing the amount by which you should
+                                   multiply your diffuse lighting value.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Tweaking"></a>5.4.&nbsp;Tweaking
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>After the light map is calculated based on the current clouds, it is
+                      clamped to a maximum value. This means that the cloud map can never get
+                      too dark, or have too great an effect on the world.
+               </p>
+               <p>For example, even if the sun is completely obscured by clouds during
+                      the day, there will still be enough ambient lighting and illumination from
+                      the cloud layer itself such that sunlight still takes effect.
+               </p>
+               <p>The BigWorld watcher <span class="literal">Client
+                         Settings/Clouds/max&nbsp;sky&nbsp;light&nbsp;map&nbsp;darkness</span>
+                      sets the maximum value that the sky light map can have. A value of 1 means
+                      that the sky light map is able to completely obscure the sun (full
+                      shadowing). The default value of 0.65 represents the BigWorld artists'
+                      best guess at the optimal value for cloud shadowing. A value of 0 would
+                      mean there is never any effect of cloud shadows on the world.
+               </p>
+               <p>This value is also read from the file sky.xml in the light map
+                      settings. It is represented by the maxDarkness tag. For details on the sky
+                      light map settings file, see <a href="ch21.html#xref_Sky_Light_Map" title="21.1.4.1.2.&nbsp;Sky light map">Sky light map</a>.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;4.&nbsp;Terrain&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;6.&nbsp;Chunks</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

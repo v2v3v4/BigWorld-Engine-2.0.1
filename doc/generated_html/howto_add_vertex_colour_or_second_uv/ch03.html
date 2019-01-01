@@ -1,0 +1,119 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;3.&nbsp;Using the vertex data in a shader</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Add Vertex Colours Or A Second UV Channel">
+      <link rel="up" href="index.html" title="How To Add Vertex Colours Or A Second UV Channel">
+      <link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Exporting vertex data">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Using the vertex data in a shader</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_CreatingTheShader"></a>Chapter&nbsp;3.&nbsp;Using the vertex data in a shader
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch03.html#d0e41">3.1. Using Vertex Colour</a></span></dt>
+                  <dt><span class="section"><a href="ch03.html#d0e61">3.2. Using A Second UV Channel</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e41"></a>3.1.&nbsp;Using Vertex Colour
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Once you have a model exported with the extra vertex colour data,
+                  you will need to make a few shader modifications to use it. The most
+                        important part is the modification of the vertex shader input structures
+                        to include the new parameter. The vertex colour is bound as an extra
+                        stream of vertex data. This stream is linked to the
+                        <span class="literal">COLOR0</span> input semantic. So to use the vertex colour in
+                        you vertex shader, the input should include something like:
+               </p><pre class="programlisting">float4 colour:	COLOR;</pre><p>The <code class="classname">VertexXYZNDUV</code> structure is used in the
+                        example shader. Once you have access to this data inside the vertex
+                        shader, you can do whatever use it however you want. The example shader
+                        uses the vertex colour to tint the result of the regular lightonly
+                        shader.
+               </p>
+               <p>You can refer to the
+                        <code class="filename">lightonly_vertexcolour.fx</code> file for an example of
+                        using the new vertex colour stream.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e61"></a>3.2.&nbsp;Using A Second UV Channel
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Using a second UV channel is very similar to way the vertex colour
+                        is used (described above). The new vertex UV coordinate is bound as an
+                        extra stream of vertex data and is linked to the
+                        <span class="literal">TEXCOORD1</span> input semantic. So in order to access this
+                        data, the vertex input structure should include:
+               </p><pre class="programlisting">float4 uv2:	TEXCOORD1;</pre><p>The example shader uses the extra texture coordinates to sample a
+                        second texture and combine it with another texture (sampled with the
+                        original coordinates) and combined via the alpha channel of the second
+                        texture.
+               </p>
+               <p>You can refer to the <code class="filename">lightonly_dual.fx</code> file
+                        for an example of using the new secondary vertex uv stream.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;Exporting vertex data&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

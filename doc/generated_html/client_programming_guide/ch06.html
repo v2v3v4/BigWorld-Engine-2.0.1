@@ -1,0 +1,619 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;6.&nbsp;Chunks</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Cloud shadows">
+      <link rel="next" href="ch07.html" title="Chapter&nbsp;7.&nbsp;Entities">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch06.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Chunks</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch07.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Chunks"></a>Chapter&nbsp;6.&nbsp;Chunks
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch06.html#d0e2146">6.1. Definitions</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#xref_Implementation_Files">6.2. Implementation files</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#xref_Details_And_Notes">6.3. Details and notes</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch06.html#d0e2278">6.3.1. Includes</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e2296">6.3.2. Models</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e2303">6.3.3. Entities</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#xref_Boundaries_And_Portals">6.3.4. Boundaries and portals</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e2325">6.3.5. Transforms</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e2330">6.3.6. Other items</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch06.html#d0e2354">6.4. Loading and ejecting</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#d0e2364">6.5. Focus grid</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch06.html#d0e2375">6.5.1. Hull tree</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e2385">6.5.2. Quad tree</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch06.html#d0e2392">6.6. Collisions</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#xref_Sway_Items">6.7. Sway items</a></span></dt>
+               </dl>
+            </div>
+            <p>The scene graph drawn by the BigWorld client is built from small
+                 convex chunks of space. This has many benefits including easy streaming,
+                 reduced loading times, concurrent world editing, and facilitation of server
+                 scene updates and physics checking.
+            </p>
+            <p>The concepts and implementation of the chunking system are described
+                 in the following sections.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e2146"></a>6.1.&nbsp;Definitions
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The following terms are related to the BigWorld chunking
+                      system:
+               </p>
+               <p>A space is a continuous three-dimensional Cartesian medium. Each
+                      space is divided piecewise into chunks, which occupy the entire space but
+                      do not overlap. Every point in the space is in exactly one chunk. A space
+                      is split into columns of 100x100 metres in the horizontal dimensions, and
+                      total vertical range. Examples of separate spaces include planets,
+                      parallel spaces, space stations, and 'detached' apartment/dungeon
+                      levels.
+               </p>
+               <p>A chunk is a convex three-dimensional volume. It contains a
+                      description of the scene objects that reside inside it. Scene objects
+                      include models, lights, entities, terrain blocks, etc, known as chunk
+                      items. It also defines the set of planes that form its boundary.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>The <em class="emphasis">outside</em> chunk of a column is exempt
+                             from this &#8212; it needs only define the four planes to adjacent column.
+                             The boundary planes of other chunks overlapping that grid square are
+                             used to build a complete picture of the division of space inside
+                             it.
+                  </p>
+               </div>
+               <p> Some planes have portals defined on them, indicating that a
+                      neighbouring chunk is visible through them.
+               </p>
+               <p>A portal is a polygon plus a reference to the chunk that is visible
+                      through that polygon. It includes a flag to indicate whether it permits
+                      objects to pass through it. Some portals may be named so that scripts can
+                      address them, and change their permissivity.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Implementation_Files"></a>6.2.&nbsp;Implementation files
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The following files are used by the chunking system:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">One <span class="literal">space.setting</span>s file
+                                      for each space in the universe (XML format)</em></p>
+                        <p>For details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch31.html" class="olink"><i><span class="literal">space.settings</span></i></a>.
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">&lt;res&gt;/spaces/&lt;space&gt;/space.settings</span></em></p>
+                                 <div class="itemizedlist">
+                                    <ul type="square">
+                                       <li>
+                                          <p>Environment settings</p>
+                                       </li>
+                                       <li>
+                                          <p>Bounding rectangle of grid squares</p>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Multiple <span class="literal">.chunk</span> files
+                                      for each space (XML format)</em></p>
+                        <p>For details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch08.html" class="olink"><i><span class="literal">.chunk</span></i></a>.
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">&lt;res&gt;/spaces/&lt;space&gt;/XXXXZZZZo.chunk</span>
+                                                   (o = outside)</em></p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">&lt;res&gt;/spaces/&lt;space&gt;/CCCCCCCCi.chunk</span>
+                                                   (i = inside)</em></p>
+                                 <div class="itemizedlist">
+                                    <ul type="square">
+                                       <li>
+                                          <p>List of scene objects</p>
+                                       </li>
+                                       <li>
+                                          <p>Texture sets used</p>
+                                       </li>
+                                       <li>
+                                          <p>Boundary planes and portals (including references to
+                                                             visible chunks)
+                                          </p>
+                                       </li>
+                                       <li>
+                                          <p>Collision scene</p>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Multiple <span class="literal">.cdata</span> files
+                                      for each space (binary format)</em></p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">&lt;res&gt;/spaces/&lt;space&gt;/XXXXZZZZ.cdata</span></em></p>
+                                 <div class="itemizedlist">
+                                    <ul type="square">
+                                       <li>
+                                          <p>Terrain data such as:</p>
+                                          <div class="itemizedlist">
+                                             <ul type="disc">
+                                                <li>
+                                                   <p>Height map data</p>
+                                                </li>
+                                                <li>
+                                                   <p>Overlay data</p>
+                                                </li>
+                                                <li>
+                                                   <p>Textures used</p>
+                                                </li>
+                                             </ul>
+                                          </div>
+                                       </li>
+                                    </ul>
+                                 </div>
+                                 <p>&#8212; or &#8212;</p>
+                                 <div class="itemizedlist">
+                                    <ul type="square">
+                                       <li>
+                                          <p>Multiple instances of lighting data for each object in
+                                                             the chunk:
+                                          </p>
+                                          <div class="itemizedlist">
+                                             <ul type="disc">
+                                                <li>
+                                                   <p>Static lighting data</p>
+                                                </li>
+                                                <li>
+                                                   <p>A colour value for each vertex in the model</p>
+                                                </li>
+                                             </ul>
+                                          </div>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Details_And_Notes"></a>6.3.&nbsp;Details and notes
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2278"></a>6.3.1.&nbsp;Includes
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Includes are transparent after being loaded (to client, server,
+                           and scripts). Label clashes are handled by appending
+                           '<span class="literal">_<em class="replaceable"><code>n</code></em></span>' to labels, where
+                           <span class="literal"><em class="replaceable"><code>N</code></em></span> is the number of objects
+                           with that label already.
+                  </p>
+                  <p>Includes are expanded inline where they are encountered, and do
+                           not need to have a bounding box for the purposes of the client or
+                           server.
+                  </p>
+                  <p>The WorldEditor does not generate includes.</p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2296"></a>6.3.2.&nbsp;Models
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Material overrides and animation declarations remain the domain of
+                           model files. For more details, see <a href="ch10.html" title="Chapter&nbsp;10.&nbsp;Models"><i xmlns:xlink="http://www.w3.org/1999/xlink">Models</i></a>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2303"></a>6.3.3.&nbsp;Entities
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Only entities that are implicitly instantiated need to have their
+                           ID field filled in. If it is zero or is missing, then the entity is
+                           assigned a unique ID from either the client's pool (if it is a
+                           client-instantiated entity) or the creating cell's pool (if it is a
+                           server-instantiated entity).
+                  </p>
+                  <p>If an entity needs a label, it must include the label as a
+                           property in its formal type definition.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Boundaries_And_Portals"></a>6.3.4.&nbsp;Boundaries and portals
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The special chunk identifier heaven may be used if only the sky
+                           (gradient, clouds, sun, moon, stars, etc...) is to be drawn there.
+                           Similarly with earth, if the terrain ought to be drawn. Therefore,
+                           outside chunks will have six sides, with the heaven chunk on the top and
+                           the earth chunk on the bottom.
+                  </p>
+                  <p>The absence of a chunk reference in a portal means it is
+                           unconnected and that nothing will be drawn there.
+                  </p>
+                  <p>If a chunk is included inside another, then its boundary planes
+                           are ignored &#8212; only things like its includes, models, lights, and sounds
+                           are used.
+                  </p>
+                  <p>An internal portal means that the specified boundary is not an
+                           actual boundary, but instead that the space occupied by the chunk it
+                           connects to (and all chunks that that chunk connects to) should be
+                           logically subtracted from the space owned by this chunk, as defined by
+                           its non-internal boundaries. This was originally intended only for
+                           'outside' chunks to connect to 'inside' chunks, but it may be readily
+                           adapted for 'interior portals', the complement to 'boundary
+                           portals'.
+                  </p>
+                  <p>In a portal definition, the vAxis for the 2D polygon points is
+                           found by the cross product of the normal with uAxis.
+                  </p>
+                  <p>In boundary definitions, the normals should point inward.</p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2325"></a>6.3.5.&nbsp;Transforms
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Everything in the chunk except the bounding box is interpreted in
+                           the local space of the chunk (as specified in the top-level transform
+                           section).
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2330"></a>6.3.6.&nbsp;Other items
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The following items can also exist in chunks:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Spot Light</p>
+                        </li>
+                        <li>
+                           <p>Ambient Light</p>
+                        </li>
+                        <li>
+                           <p>Directional Light</p>
+                        </li>
+                        <li>
+                           <p>Water (body of water)</p>
+                        </li>
+                        <li>
+                           <p>Flare (lens flare)</p>
+                        </li>
+                        <li>
+                           <p>Particle System</p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e2354"></a>6.4.&nbsp;Loading and ejecting
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>At every frame, the Chunk Manager performs a simple graph traversal
+                      of all the chunks it has loaded, looking for new chunks to load. It
+                      follows the portals between chunks, keeping track of how far it has
+                      'travelled' in its scan. Its scan is limited to the maximum visible
+                      distance, <em class="emphasis">i.e.</em>, a little further than the far plane
+                      distance.
+               </p>
+               <p>The closest unloaded chunk it finds on this traversal is the chunk
+                      that is loaded next. Loading is done in a separate thread, so it does not
+                      interfere with the running of the game. Similarly, any chunks that are
+                      beyond the reach of the scan are candidates for ejecting
+                      (unloading).
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e2364"></a>6.5.&nbsp;Focus grid
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The focus grid is a set of columns surrounding the camera position.
+                      Each column is 100x100metres and is aligned to the terrain squares and
+                      outside chunks. The focus grid is sized to just exceed the far
+                      plane.
+               </p>
+               <p>For a far plane of 500m, for example, the focus grid goes 700m in
+                      each direction, making for 14 x 14 = 196 columns total.
+               </p>
+               <p>The set of columns in the focus grid is dependent on the camera
+                      position. As the camera moves, the focus grid disposes columns that are no
+                      longer under the grid and 'focuses' on ones that have just come close
+                      enough.
+               </p>
+               <p>Each column contains a hull tree and a quad tree.</p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2375"></a>6.5.1.&nbsp;Hull tree
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A hull tree is a kind of binary-space partitioning tree for convex
+                           hulls. It can handle hulls that overlap. It can do point tests and
+                           proper line traversals.
+                  </p>
+                  <p>The hull tree is formed from the boundaries of all the chunks that
+                           overlap the column. From this tree, the chunk that any given point lies
+                           in can be quickly determined. (<em class="emphasis">e.g.</em>, the location
+                           of the camera)
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2385"></a>6.5.2.&nbsp;Quad tree
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The quad tree is made up of the bounding boxes (or, potentially,
+                           any other bounding convex hull) of all the obstacles that overlap the
+                           column. This tree is used for collision scene tests. Chunk items are
+                           responsible for adding and implementing obstacles. Currently only model
+                           and terrain chunk items add any obstacles.
+                  </p>
+                  <p>If a chunk or obstacle is in more than one column, it is added to
+                           the trees of both columns.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e2392"></a>6.6.&nbsp;Collisions
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Using its focus grid of obstacle quad trees, the chunk space class
+                      can sweep any 3D shape through its space, and report all the triangle
+                      collisions to a callback object. The currently supported 3D shapes are
+                      points and triangles, but any other could be added with very little
+                      difficulty.
+               </p>
+               <p>The bottommost level of collision checking is handled by a generic
+                      obstacle interface, so any conceivable obstacle could be added to this
+                      collision scene, as long as it can quickly determine when another shape
+                      collides with it (in its own local coordinates).
+               </p>
+               <p>For more details, see file
+                      <span class="literal">bigworld/src/client/physics.cpp</span>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Sway_Items"></a>6.7.&nbsp;Sway items
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>A sway item is a chunk item that is swayed by the passage of other
+                      chunk items. Whenever a dynamic chunk item moves, any sway items in that
+                      chunk get the sway method called on them, specifying source and destiny of
+                      movement.
+               </p>
+               <p>Currently the only user of this is <span class="literal">ChunkWater</span>. It
+                      uses movements that pass through its surface to make ripples in the water.
+                      This is why the ripples work for any kind of dynamic item &#8212; from dynamic
+                      obstacles/moving platforms to player models to small bullets.
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">In
+                                      <span class="literal">mf/src/lib/chunk/chunk_water.cpp</span>:</em></p><pre class="programlisting">/**
+ * Constructor
+ */
+ChunkWater::ChunkWater() :
+  ChunkItem( 5 ), <a name="co1543"></a><img src="../images/callouts/1.png" alt="1" border="0">
+  pWater_( NULL )
+{
+}
+...
+/**
+ *   Apply a disturbance to this body of water
+ */
+void ChunkWater::sway( const Vector3 &amp; src, const Vector3 &amp; dst )
+{
+  if (pWater_ != NULL)
+  {
+    pWater_-&gt;addMovement( src, dst );
+  }
+}</pre><div class="calloutlist">
+                           <table border="0" summary="Callout list">
+                              <tr>
+                                 <td width="5%" valign="top" align="left"><a href="#co1543"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                                 </td>
+                                 <td valign="top" align="left">
+                                    <p>Calls <span class="literal">ChunkItem</span> constructor with
+                                                   <span class="literal">wantFlags</span> =5:
+                                    </p>
+                                    <div class="itemizedlist">
+                                       <ul type="circle">
+                                          <li>
+                                             <p><em class="emphasis"><span class="literal">1</span></em> &#8212;
+                                                                <span class="literal">wantsDraw</span></p>
+                                          </li>
+                                          <li>
+                                             <p><em class="emphasis"><span class="literal">4</span></em> &#8212;
+                                                                <span class="literal">wantsSway</span></p>
+                                          </li>
+                                       </ul>
+                                    </div>
+                                 </td>
+                              </tr>
+                           </table>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">In
+                                      <span class="literal">mf/src/lib/chunk/chunk_item.hpp</span>:</em></p><pre class="programlisting">...
+class ChunkItem : public SpecialChunkItem
+{
+public:
+  ChunkItem( int wantFlags = 0 ) : SpecialChunkItem( wantFlags ) { }
+};
+...
+typedef ClientChunkItem SpecialChunkItem;
+...
+class ClientChunkItem : public ChunkItemBase
+{
+public:
+  ClientChunkItem( int wantFlags = 0 ) : ChunkItemBase( wantFlags ) { }
+};
+...
+ChunkItemBase( int wantFlags = 0 );
+
+bool wantsDraw() const { return !!(wantFlags_ &amp; 1); }
+bool wantsTick() const { return !!(wantFlags_ &amp; 2); }
+bool wantsSway() const { return !!(wantFlags_ &amp; 4); }
+bool wantsNest() const { return !!(wantFlags_ &amp; 8); }</pre></li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch07.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Cloud shadows&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;7.&nbsp;Entities</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

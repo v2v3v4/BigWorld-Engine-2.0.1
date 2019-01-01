@@ -1,0 +1,116 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "animationexporter", "animationexporter2008.vcproj", "{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81} = {4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950} = {1ABB1158-909C-4AD4-9F81-CB38BBA5D950}
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141} = {5DC4CC9A-3052-4076-A8D4-FE229C1AC141}
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D} = {204D85B9-F793-4F21-99FF-40AC92A08E5D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cstdmf", "..\..\lib\cstdmf\cstdmf2008.vcproj", "{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "math", "..\..\lib\math\math3d2008.vcproj", "{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "resmgr", "..\..\lib\resmgr\resmgr2008.vcproj", "{204D85B9-F793-4F21-99FF-40AC92A08E5D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zip", "..\..\lib\zip\zip2008.vcproj", "{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Max2008 Debug|Win32 = Max2008 Debug|Win32
+		Max2008 Release|Win32 = Max2008 Release|Win32
+		Max2009 Debug|Win32 = Max2009 Debug|Win32
+		Max2009 Release|Win32 = Max2009 Release|Win32
+		Max2010 Debug|Win32 = Max2010 Debug|Win32
+		Max2010 Release|Win32 = Max2010 Release|Win32
+		Max2011 Debug|Win32 = Max2011 Debug|Win32
+		Max2011 Release|Win32 = Max2011 Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2008 Debug|Win32.ActiveCfg = Max2008 Debug|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2008 Debug|Win32.Build.0 = Max2008 Debug|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2008 Release|Win32.ActiveCfg = Max2008 Release|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2008 Release|Win32.Build.0 = Max2008 Release|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2009 Debug|Win32.ActiveCfg = Max2009 Debug|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2009 Debug|Win32.Build.0 = Max2009 Debug|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2009 Release|Win32.ActiveCfg = Max2009 Release|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2009 Release|Win32.Build.0 = Max2009 Release|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2010 Debug|Win32.ActiveCfg = Max2010 Debug|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2010 Debug|Win32.Build.0 = Max2010 Debug|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2010 Release|Win32.ActiveCfg = Max2010 Release|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2010 Release|Win32.Build.0 = Max2010 Release|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2011 Debug|Win32.ActiveCfg = Max2011 Debug|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2011 Debug|Win32.Build.0 = Max2011 Debug|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2011 Release|Win32.ActiveCfg = Max2011 Release|Win32
+		{F0CD7B1D-4350-4ADE-A657-7AF660A42D25}.Max2011 Release|Win32.Build.0 = Max2011 Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2008 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2008 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2008 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2008 Release|Win32.Build.0 = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2009 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2009 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2009 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2009 Release|Win32.Build.0 = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2010 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2010 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2010 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2010 Release|Win32.Build.0 = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2011 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2011 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2011 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Max2011 Release|Win32.Build.0 = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2008 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2008 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2008 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2008 Release|Win32.Build.0 = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2009 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2009 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2009 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2009 Release|Win32.Build.0 = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2010 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2010 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2010 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2010 Release|Win32.Build.0 = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2011 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2011 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2011 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Max2011 Release|Win32.Build.0 = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2008 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2008 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2008 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2008 Release|Win32.Build.0 = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2009 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2009 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2009 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2009 Release|Win32.Build.0 = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2010 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2010 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2010 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2010 Release|Win32.Build.0 = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2011 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2011 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2011 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Max2011 Release|Win32.Build.0 = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2008 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2008 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2008 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2008 Release|Win32.Build.0 = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2009 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2009 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2009 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2009 Release|Win32.Build.0 = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2010 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2010 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2010 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2010 Release|Win32.Build.0 = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2011 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2011 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2011 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Max2011 Release|Win32.Build.0 = Exporter_Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

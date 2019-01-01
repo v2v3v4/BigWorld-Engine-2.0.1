@@ -1,0 +1,266 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Server Tools Installation Guide</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="Server_Tools_Installation_Guide"></a>Server Tools Installation Guide</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Overview">1. Overview</a></span></dt><dt><span class="chapter"><a href="#xref_Recommended_Setup">2. Recommended Setup</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e43">2.1. Supported Distributions</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Requirements_And_Caveats">3. Requirements and Caveats</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e69">3.1. Hardware Requirements</a></span></dt><dt><span class="section"><a href="#d0e92">3.2. Other Requirements</a></span></dt><dt><span class="section"><a href="#xref_Dependencies">3.3. Dependencies</a></span></dt><dt><span class="section"><a href="#d0e117">3.4. Caveats</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Post_OS_Installation_Setup">4. Installation Preparation</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_Post_OS_Installation_Introduction">4.1. Introduction</a></span></dt><dt><span class="section"><a href="#xref_Update_System_Packages">4.2. Update System Packages</a></span></dt><dt><span class="section"><a href="#xref_Create_User_Account">4.3. Create User Account</a></span></dt><dt><span class="section"><a href="#d0e194">4.4. Other Packages</a></span></dt><dt><span class="section"><a href="#d0e219">4.5. MySQL Server</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e228">4.5.1. Create a Database Account</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e238">4.6. BWMachined</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Checkout_Unpack_Tools_Source">5. Checkout / Unpack Tools Source</a></span></dt><dt><span class="chapter"><a href="#xref_Server_Tools_Installation">6. Server Tools Installation</a></span></dt><dt><span class="chapter"><a href="#xref_ServerTools_Post_Installation">7. Post-installation</a></span></dt><dt><span class="chapter"><a href="#xref_upgrading_from_a_previous_release">8. Upgrading From A Previous Release</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e401">8.1. Stop Current Services</a></span></dt><dt><span class="section"><a href="#d0e408">8.2. Backup Old Release and Preferences</a></span></dt><dt><span class="section"><a href="#d0e430">8.3. Upgrading Packages</a></span></dt><dt><span class="section"><a href="#d0e441">8.4. Installing the New Version</a></span></dt><dt><span class="section"><a href="#d0e448">8.5. Setup Preferences</a></span></dt><dt><span class="section"><a href="#d0e469">8.6. Re-start Services</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_running_space_viewer">9. Running SpaceViewer on Windows</a></span></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Overview"></a>Chapter&nbsp;1.&nbsp;Overview</h2></div></div></div><p>A suite of utilities collectively referred to as "server tools" is
+  provided to monitor and query BigWorld servers' status, both live and post
+  event. These tools include WebConsole, MessageLogger and StatLogger.</p><p>This document provides a step-by-step guide on how to set up a working
+  monitoring machine within a BigWorld server cluster. Note that it is also
+  possible for any user to run these tools without running them as system
+  daemons. For details on these tools, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>.</p><p>For information on installing the BigWorld Server, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/server_installation_guide.html#Server_Installation_Guide" class="olink">Server Installation Guide</a>.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Recommended_Setup"></a>Chapter&nbsp;2.&nbsp;Recommended Setup</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e43">2.1. Supported Distributions</a></span></dt></dl></div><p>The recommended system configuration for the server tools is a single
+  machine within the server cluster that does not run any server processes
+  such as BaseAppMgr, CellAppMgr, and DBMgr. This machine will run the server
+  tools components StatLogger, MessageLogger, WebConsole, as well as
+  BWMachined and MySQL.</p><p>The isolation of the server tools on a separate machine is recommended
+  in order to ensure that if high load situations occur on any cluster
+  machines, the associated increase in logging and monitoring tasks performed
+  by the server tools do not further degrade performance on any of the active
+  cluster machines.</p><p>Due to the potential for log files to grow quite drastically in both a
+  development and a production environment it is recommended that, when
+  creating partitions for the operating system installation, to create a
+  separate partition or have an entirely separate hard disk dedicated for the
+  BigWorld server logs.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e43"></a>2.1.&nbsp;Supported Distributions</h2></div></div></div><p>BigWorld only officially supports the 64-bit CentOS
+    5.<em class="replaceable"><code>x</code></em> and RedHat Enterprise Linux
+    5.<em class="replaceable"><code>x</code></em> distributions.</p><p>BigWorld has previously supported other Linux distributions, however
+    in order to better support customers we have consolidated our support list
+    to have a greater focus and reduce variability when resolving customer
+    issues.</p><p>CentOS can be downloaded from the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.centos.org/" target="_top">CentOS community portal</a>.</p><p>RedHat Enterprise Linux is available from the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.redhat.com/" target="_top">RedHat website</a>.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Requirements_And_Caveats"></a>Chapter&nbsp;3.&nbsp;Requirements and Caveats</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e69">3.1. Hardware Requirements</a></span></dt><dt><span class="section"><a href="#d0e92">3.2. Other Requirements</a></span></dt><dt><span class="section"><a href="#xref_Dependencies">3.3. Dependencies</a></span></dt><dt><span class="section"><a href="#d0e117">3.4. Caveats</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e69"></a>3.1.&nbsp;Hardware Requirements</h2></div></div></div><p>As a minimum, we recommend the following hardware system
+    requirements:</p><div class="itemizedlist"><ul type="disc"><li><p>1GHz CPU</p></li><li><p>1GB RAM</p></li><li><p>30GB Hard disk (for main OS install)</p></li><li><p>120GB Hard disk (for logging)</p></li><li><p>100Mbit NIC</p></li></ul></div><p>If an external machine is hosting the MySQL server for
+    use with WebConsole and StatLogger, we recommend that machine to have
+    similar specifications. We also recommend that the network link between
+    the machine hosting the WebConsole and/or StatLogger and the link to the
+    MySQL server be low-latency and high capacity for best performance.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e92"></a>3.2.&nbsp;Other Requirements</h2></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>Dedicated user account for the server tools</p></li><li><p>MySQL Database</p></li><li><p>Python 2.4 or higher (default for RedHat / CentOS)</p></li><li><p>TurboGears v1.x (default for RedHat / CentOS)</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Dependencies"></a>3.3.&nbsp;Dependencies</h2></div></div></div><p>WebConsole uses a MySQL database server for managing all persistent
+    data such as user information, preferences, etc.</p><p>For WebConsole, because of the way in which the MySQL connection is
+    managed by CherryPy (the underlying web framework), we require that the
+    MySQL version be at least 5.0 or later.</p><p>The statistics collecting process, StatLogger also relies on a MySQL
+    database server for storing process and machine statistics, though this
+    can potentially be different to the database server used by
+    WebConsole.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e117"></a>3.4.&nbsp;Caveats</h2></div></div></div><p>BigWorld only supports 64-bit CentOS and RedHat Enterprise Linux
+    distributions. Testing is performed on the most up to date version of
+    these distribution at the time of release.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Post_OS_Installation_Setup"></a>Chapter&nbsp;4.&nbsp;Installation Preparation</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#xref_Post_OS_Installation_Introduction">4.1. Introduction</a></span></dt><dt><span class="section"><a href="#xref_Update_System_Packages">4.2. Update System Packages</a></span></dt><dt><span class="section"><a href="#xref_Create_User_Account">4.3. Create User Account</a></span></dt><dt><span class="section"><a href="#d0e194">4.4. Other Packages</a></span></dt><dt><span class="section"><a href="#d0e219">4.5. MySQL Server</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e228">4.5.1. Create a Database Account</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e238">4.6. BWMachined</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Post_OS_Installation_Introduction"></a>4.1.&nbsp;Introduction</h2></div></div></div><p>Due to the dependencies of the server tools as outlined in <a href="#xref_Dependencies" title="3.3.&nbsp;Dependencies">Dependencies</a> it is nescessary to perform some steps on a
+    Linux installation to bring the system to a state that is ready for the
+    server tools to be installed.</p><p>The server tools have been tested to work against CentOS 5 (64 bit).
+    For information on installing CentOS, refer to the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/server_installation_guide.html#Server_Installation_Guide" class="olink">Server Installation Guide</a> chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/server_installation_guide.html#xref_Install_OS" class="olink"><i>Installing CentOS 5</i></a>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Make sure you install the MySQL server when prompted.</p></div><p>The following chapter will outline the steps required to prepare an
+    installed Linux distribution for an installation of the BigWorld server
+    tools.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Update_System_Packages"></a>4.2.&nbsp;Update System Packages</h2></div></div></div><p>After any system installation it is a good idea to update all the
+    installed system packages as there may have been important security fixes
+    or other bug fixes which can impact the performance and security of your
+    system since the installation media used for your install was
+    produced.</p><p>As root:</p><pre class="programlisting"># yum update</pre><p>After performing this update it is a good idea to reboot your
+    computer to pick up any system changes.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Create_User_Account"></a>4.3.&nbsp;Create User Account</h2></div></div></div><p>The server tools require their own user account to run as. This is
+    done to help isolation of processes and files. It is also suggested to
+    create a unique group which all server tool components and logs will be
+    owned as. To create a user and group on the current system we will use the
+    <span><strong class="command">useradd</strong></span> and <span><strong class="command">groupadd</strong></span>
+    commands.</p><p>For the purposes of this installation guide, we will use a
+    <em class="emphasis">username</em> and <em class="emphasis">groupname</em> of
+    <span class="literal">bwtools</span>, however these can be whatever you prefer for
+    your own environment.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>If your environment uses an LDAP or NIS user account
+      infrastructure, you will have to follow your own environment's account
+      and group creation procedures.</p></div><p>Perform the following operations as root:</p><p>Create the group:</p><pre class="programlisting"># /usr/sbin/groupadd bwtools</pre><p>Create the user account:</p><pre class="programlisting"># /usr/sbin/useradd bwtools -g bwtools -d /home/bwtools -m</pre><p>Set the password of the user account:</p><pre class="programlisting"># passwd bwtools
+Changing password for user bwtools.
+New UNIX password:
+Retype new UNIX password:
+passwd: all authentication tokens updated successfully. </pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e194"></a>4.4.&nbsp;Other Packages</h2></div></div></div><p>Some packages required by the BigWorld server tools installation
+    process are not installed when using the default Red Hat / CentOS
+    installation options. Please ensure you install the following packages
+    which will be required by the server tools.</p><p>In order to fully support the server tools under CentOS it is
+    necessary to install some non-default packages. In order to facilitate
+    this you must enable the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://fedoraproject.org/wiki/EPEL" target="_top">Extra Packages for Enterprise
+    Linux (EPEL)</a> provided by the Fedora Project.</p><p>To enable the EPEL repository use the following command:</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>The EPEL packages aren't kept as up to date as the official
+      releases. If you have trouble downloading a version, try navigating to
+      the directory and searching for the current version of the EPEL package.
+      For example as of the CentOS 5.5 release the EPEL package still refers
+      to 5.4.</p><p>Please modify the following URL as required.</p></div><p>As root, run:</p><pre class="programlisting"># rpm -Uvh http://download.fedora.redhat.com/pub/epel/5/x86_64/epel-release-5-4.noarch.rpm</pre><p>With the EPEL repository enabled, as root run:</p><pre class="programlisting"># yum install python-setuptools MySQL-python python-sqlobject TurboGears</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e219"></a>4.5.&nbsp;MySQL Server</h2></div></div></div><p>After installation it is quite common to not have the MySQL server
+    active or setup to restart after a reboot. As it is a core component of
+    the server tools, it is important to check the MySQL server is setup
+    correctly before proceeding.</p><p>As root run:</p><pre class="programlisting"># /sbin/chkconfig --levels 345 mysqld on 
+# /etc/init.d/mysqld start</pre><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e228"></a>4.5.1.&nbsp;Create a Database Account</h3></div></div></div><p>The server tools by default will be installed to use a MySQL
+      database. In order for this to work you must grant appropriate
+      permissions for the user that will be using the database. Use the MySQL
+      <span class="literal">GRANT</span> command to enable access for the new user. For
+      example:</p><pre class="programlisting">$ mysql -u root
+mysql&gt; GRANT ALL PRIVILEGES ON *.* TO 'bwtools'@'localhost' IDENTIFIED BY 'bwtools_passwd';
+mysql&gt; GRANT ALL PRIVILEGES ON *.* TO 'bwtools'@'%' IDENTIFIED BY 'bwtools_passwd';</pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e238"></a>4.6.&nbsp;BWMachined</h2></div></div></div><p>If you do not yet have the BigWorld tools directory available on the
+    installation machine, please read ahead to the chapter <a href="#xref_Checkout_Unpack_Tools_Source" title="Chapter&nbsp;5.&nbsp;Checkout / Unpack Tools Source"><i xmlns:xlink="http://www.w3.org/1999/xlink">Checkout / Unpack Tools Source</i></a> and then come back here to
+    install BWMachined.</p><p>In order to successfully install the server tools the BWMachined
+    daemon must already be installed and functional. Please refer to the
+    instructions in the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/server_installation_guide.html#Server_Installation_Guide" class="olink">Server Installation Guide</a>,
+    section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/server_installation_guide.html#xref_Installing_BWMachined" class="olink">Installing BWMachined</a> for more information.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Checkout_Unpack_Tools_Source"></a>Chapter&nbsp;5.&nbsp;Checkout / Unpack Tools Source</h2></div></div></div><p>The only directory required to run the server tools is <code class="filename">bigworld/tools/server</code>. This directory should
+  exist within and be owned by the <span class="literal">bwtools</span> user account
+  created above in <a href="#xref_Create_User_Account" title="4.3.&nbsp;Create User Account">Create User Account</a>. It is
+  recommended to keep the same directory layout when creating this directory
+  as with all the other BigWorld software in the cluster. We also assume that
+  these tools will be placed into the <code class="filename">/home/bwtools/mf</code> directory.</p><p>We recommend that you avoid using networked file systems, such as
+  SMB/CIFS or NFS when installing the tools.</p><p>First, we need to log in as the <span class="literal">bwtools</span> user for
+  installing the files as that user:</p><pre class="programlisting">login: bwtools
+Password: ******** </pre><p>or</p><pre class="programlisting">su - bwtools</pre><p>Confirm you are in the <span class="literal">bwtools</span> home
+  directory:</p><pre class="programlisting">$ pwd /home/bwtools</pre><p>Confirm you are the <span class="literal">bwtools</span> user:</p><pre class="programlisting">$ whoami bwtools</pre><p>Because the user will only be running the server tools, we only
+  require a minimal checkout of the respository.</p><p>If you are working from SVN, you may wish to obtain the source similar
+  to this:</p><pre class="programlisting">$ cd $HOME
+$ svn co http://<em class="replaceable"><code>YOUR_REPOSITORY</code></em>/bigworld/tools/server mf/bigworld/tools/server</pre></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Server_Tools_Installation"></a>Chapter&nbsp;6.&nbsp;Server Tools Installation</h2></div></div></div><p>Before installing the server tools, make sure that MySQL is installed,
+  and a MySQL user has been added. For details on how to do this, see the
+  document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/server_installation_guide.html#Server_Installation_Guide" class="olink">Server Installation Guide</a>, section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/server_installation_guide.html#xref_Configure_MySQL_Server" class="olink">Configure MySQL Server</a>.</p><p>The final step to installing the server tools is to run the script
+  <code class="filename">bigworld/tools/server/install/install_tools.py</code>. The
+  purpose of the <code class="filename">install_tools.py</code> script is to install
+  system startup scripts into <code class="filename">/etc/init.d</code>, and setup which run levels the new
+  system services should start in. Once this has been done, the installation
+  script will attempt to launch the services. This process will also attempt
+  to verify the environment in which the server tools have been installed in
+  and create any required directories.</p><p>The installation script must be run as root from the <code class="filename">bigworld/tools/server/install</code> directory.</p><pre class="programlisting">$ cd /home/bwtools/mf/bigworld/tools/server/install
+$ su
+# ./install_tools.py
+BigWorld Server Tools Installation
+NOTE: This installation program will not copy binaries into your 
+        system paths, the system startup scripts and configuration
+        files are used to reference back into the current tools
+        directory. If you intend on moving the tools you will need
+        to re-run this script.</pre><p>The first stage of the installation will ask you about your MySQL
+  database. Default settings have been provided, which should be correct for
+  the hostname and port if the recommended system setup is used. You may have
+  to modify the username and password fields depending on your desired MySQL
+  configuration. Once this information has been entered, the script will
+  attempt to connect to the database to verify its existence, and to create
+  the necessary database for WebConsole, and will then modify the
+  configuration files for the server tools that need to connect to the
+  database.</p><pre class="programlisting">* Database Configuration
+Please input MySQL database information:
+Hostname [localhost]:
+Port [3306]:
+Username [bigworld]: bwtools
+Password [bigworld]: bwtools_passwd 
+StatLogger DB name prefix [bw_stat_log_data]:
+
+MySQL database configuration: 
+Hostname : localhost
+Port : 3306
+Username : bwtools
+Password : btools_passwd
+Prefix   : bw_stat_log_data
+
+Are these details correct?
+ [yes]
+
++ Creating web_console database in MySQL
++ Writing '../web_console/prod.cfg'.
++ Writing '../stat_logger/preferences.xml'.</pre><p>The next set of questions will verify that the environment that the
+  tools are installed in (and will be run from) is as expected. This is a last
+  chance for you to make any modifications to the environment before the
+  server tools are installed. The environment can be changed at any point.
+  Doing so, however, will require updating configuration files or re-running
+  the installation script.</p><pre class="programlisting">* Server Tools Installation
+
+Server tools will be run as: 
+User : bwtools
+Group : bwtools
+
+Are these details correct?
+ [yes] 
+
+* Server Tools: Installation Paths
+This installation is being run from under '/home/bwtools/mf/bigworld/tools/server'.
+Configuration files and system startup scripts will be modified 
+to refer to this installation directory.
+
+Is this directory correct?
+ [yes]</pre><p>Next, we specify where MessageLogger is to store its logs. This should
+  be a location with enough room to cope with a large amount of logs.</p><pre class="programlisting">Where should message_logger store its logs?
+ [/var/log/bigworld/message_logger]</pre><p>The server tools startup scripts will need a location to store
+  <code class="filename">.pid</code> files, which record the process
+  ID and running state of the server tools. This is specified as below:</p><pre class="programlisting">Where should .pid files be stored?
+ [/var/run/bigworld]</pre><p>You are now given an opportunity to confirm the input directories and
+  modify them if necessary.</p><pre class="programlisting">Server tools directories:
+Tool dir : /home/bwtools/mf/bigworld/tools/server
+Log dir : /var/log/bigworld/message_logger
+PID dir : /var/run/bigworld
+
+Are these details correct?
+ [yes]
+
++ Chown'ing '/var/log/bigworld' to bwtools:bwtools
+
++ Chown'ing '/var/run/bigworld' to bwtools:bwtools
+
++ Chown'ing '/var/log/bigworld/message_logger' to bwtools:bwtools
+
++ Chcon'ing '../message_logger/bwlog.so' type to user_u:object_r:textrel_shlib_t</pre><p>The final step to install the server tools will attempt to copy the
+  <em class="emphasis">init.d</em> scripts for the 3 server tools into <code class="filename">/etc/init.d</code> then start the services. The MySQL
+  service should be started before StatLogger and WebConsole, otherwise they
+  will fail to load.</p><pre class="programlisting">* Installing system services
+- Uninstalling existing system service 'bw_stat_logger'
++ Installing package: bw_stat_logger
+Starting stat_logger:                                          [ OK ] 
+- Uninstalling existing system service 'bw_message_logger'
++ Installing package: bw_message_logger 
+Starting message_logger:                                       [ OK ]
+- Uninstalling existing system service 'bw_web_console'
++ Installing package: bw_web_console
+Starting BigWorld web console:                                 [ OK ]</pre></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_ServerTools_Post_Installation"></a>Chapter&nbsp;7.&nbsp;Post-installation</h2></div></div></div><p>The server tools should now be completely installed and running on
+  your new machine. All that remains is a few final testing and configuration
+  steps.</p><p>First, we will confirm that all services are running:</p><pre class="programlisting">$ /etc/init.d/bw_stat_logger status
+Status of stat_logger: running 
+$ /etc/init.d/bw_message_logger status
+Status of message_logger: running
+$ /etc/init.d/bw_web_console status
+Status of web_console: running </pre><p>Once we are sure the services are running, we can attempt to connect
+  to the WebConsole via HTTP. The web server is started on port 8080, so
+  connect to the WebConsole using a URL such as
+  <span class="literal">http://<em class="replaceable"><code>hostname</code></em>:8080/</span>. You
+  should be presented with the page similar to the following:</p><div class="informalfigure"><div class="mediaobject" align="center"><img src="images/web_console_login.png" align="middle"></div></div><p>The user accounts on the WebConsole now need to be created and the
+  default administration login password changed. To do this, log in with
+  username <span class="literal">admin</span>, password <span class="literal">admin</span>. Please
+  refer to the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a> for
+  details.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_upgrading_from_a_previous_release"></a>Chapter&nbsp;8.&nbsp;Upgrading From A Previous Release</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e401">8.1. Stop Current Services</a></span></dt><dt><span class="section"><a href="#d0e408">8.2. Backup Old Release and Preferences</a></span></dt><dt><span class="section"><a href="#d0e430">8.3. Upgrading Packages</a></span></dt><dt><span class="section"><a href="#d0e441">8.4. Installing the New Version</a></span></dt><dt><span class="section"><a href="#d0e448">8.5. Setup Preferences</a></span></dt><dt><span class="section"><a href="#d0e469">8.6. Re-start Services</a></span></dt></dl></div><p>Please be aware that as with any software upgrade, changes may occur
+  in a manner you aren't expecting. We strongly urge a test period on a
+  separate installation prior to migrating to the new release to ensure all
+  functionality works for your site prior to making the new release
+  live.</p><p>There is currently no dedicated utility to assist with upgrading from
+  a previous release, and while a fresh installation will ensure the best
+  success installing the server tools, the following procedure should enable a
+  successful migration path from a previous release.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e401"></a>8.1.&nbsp;Stop Current Services</h2></div></div></div><p>As root run:</p><pre class="programlisting"># /etc/init.d/bw_web_console stop
+Stopping BigWorld web_console:                               [ OK ]
+# /etc/init.d/bw_message_logger stop
+Stopping message_logger:                                     [ OK ]
+# /etc/init.d/bw_stat_logger stop
+Stopping stat_logger:                                        [ OK ]</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e408"></a>8.2.&nbsp;Backup Old Release and Preferences</h2></div></div></div><p>As a safety measure it is recommended to keep a copy of your current
+    installation around in case you find you need to revert to it. It is also
+    recommended to backup your preference files to avoid performing a
+    re-installation with the <code class="filename">install_tools.py</code>
+    script.</p><p>As the <span class="literal">bwtools</span> user:</p><pre class="programlisting">$ mkdir $HOME/preferences_backup $HOME/preferences_backup/init.d 
+$ cd $HOME/mf/bigworld/tools/server 
+$ cp message_logger/message_logger.conf $HOME/preferences_backup 
+$ cp stat_logger/preferences.xml $HOME/preferences_backup 
+$ cp web_console/*.cfg $HOME/preferences_backup 
+$ cp /etc/init.d/bw_* $HOME/preferences_backup/init.d </pre><p>As the <span class="literal">bwtools</span> user:</p><pre class="programlisting">$ cd $HOME
+$ mv mf old_tools_mf </pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e430"></a>8.3.&nbsp;Upgrading Packages</h2></div></div></div><p>It is wise at this point to update any packages installed on the
+    system to pickup any security patches that may have been applied since
+    your first installation.</p><p>As root:</p><pre class="programlisting"># yum update</pre><p>After performing this update it is a good idea to reboot your
+    computer to pick up any system changes.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e441"></a>8.4.&nbsp;Installing the New Version</h2></div></div></div><p>To install the new version of the server tools, follow the procedure
+    outlined in <a href="#xref_Server_Tools_Installation" title="Chapter&nbsp;6.&nbsp;Server Tools Installation"><i xmlns:xlink="http://www.w3.org/1999/xlink">Server Tools Installation</i></a>. It may also
+	be worthwhile skimming through the earlier chapters to ensure your system
+	is as up to date as possible.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e448"></a>8.5.&nbsp;Setup Preferences</h2></div></div></div><p>Now that the server tools should be installed, copy the old
+    preference files into place.</p><p>As the <span class="literal">bwtools</span> user:</p><pre class="programlisting">$ cd $HOME/mf/bigworld/tools/server
+$ cp $HOME/preferences_backup/message_logger.conf message_logger/
+$ cp $HOME/preferences_backup/preferences.xml stat_logger/
+$ cp $HOME/preferences_backup/*.cfg web_console/</pre><p>It is also recommended to upgrade the <code class="filename">init.d</code>
+    scripts.</p><p>As root:</p><pre class="programlisting"># cd /home/bwtools/mf/bigworld/tools/server/install
+# cp bw_functions.sh /etc/init.d/
+# cp stat_logger.sh /etc/init.d/bw_stat_logger.sh
+# cp message_logger.sh /etc/init.d/bw_message_logger.sh
+# cp web_console.sh /etc/init.d/bw_web_console.sh </pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e469"></a>8.6.&nbsp;Re-start Services</h2></div></div></div><p>As root:</p><pre class="programlisting"># /etc/init.d/bw_stat_logger start
+Starting stat_logger:                                               [ OK ]
+# /etc/init.d/bw_message_logger start
+Starting message_logger:                                            [ OK ]
+# /etc/init.d/bw_web_console start
+Starting BigWorld web_console:                                      [ OK ] </pre></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_running_space_viewer"></a>Chapter&nbsp;9.&nbsp;Running SpaceViewer on Windows</h2></div></div></div><p>Space Viewer can be run under Windows, and requires the following to
+  be installed on the host machine:</p><div class="itemizedlist"><ul type="disc"><li><p>Python 2.4 (and above). Refer to the Python project page for
+        downloading a Windows installer.</p></li><li><p>wxPython 2.6 (and above). Refer to the wxPython project page for
+        downloading a package.</p></li></ul></div><p>Space Viewer can be run through the following
+  command:</p><pre class="programlisting"><em class="replaceable"><code>python</code></em> space_viewer.py</pre><p>Located in the directory
+  <code class="filename">bigworld/tools/server/space_viewer</code>.</p><p>Replace <em class="replaceable"><code>python</code></em> above with the path to your
+  Python interpreter executable, or alternatively, you may also be able to
+  double-click on <code class="filename">space_viewer.py</code> to run Space
+  Viewer.</p></div></div></div></body></html>

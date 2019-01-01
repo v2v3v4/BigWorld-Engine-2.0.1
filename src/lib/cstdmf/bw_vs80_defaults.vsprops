@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="bw_vs80_defaults"
+	OutputDirectory="bin\$(PlatformName)\$(ConfigurationName)_2005"
+	IntermediateDirectory="obj\$(PlatformName)\$(ConfigurationName)_2005"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		PreprocessorDefinitions="_WINDOWS;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_SECURE_SCL=0;_WIN32_WINNT=0x0501;_WIN32_WINDOWS=0x0501;_WIN32_IE=0x0600"
+		EnableEnhancedInstructionSet="1"
+		FloatingPointModel="2"
+		UsePrecompiledHeader="2"
+		PrecompiledHeaderThrough="pch.hpp"
+		BrowseInformation="1"
+		WarningLevel="3"
+		WarnAsError="true"
+		CompileAs="0"
+	/>
+ 	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="fmodex_vc.lib fmod_event_net.lib"
+		AdditionalLibraryDirectories="..\lib\fmod\api\lib;..\lib\fmod\fmoddesignerapi\api\lib;..\..\lib\fmod\api\lib;..\..\lib\fmod\fmoddesignerapi\api\lib"
+	/>
+	<Tool
+		Name="VCResourceCompilerTool"
+		Culture="3081"
+	/>
+</VisualStudioPropertySheet>

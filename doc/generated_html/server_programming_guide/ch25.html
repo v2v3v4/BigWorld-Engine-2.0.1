@@ -1,0 +1,165 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;25.&nbsp;Extending BigWorld Server</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt02.html" title="Part&nbsp;II.&nbsp;Server C++ Programming Guide">
+      <link rel="prev" href="ch24.html" title="Chapter&nbsp;24.&nbsp;Overview">
+      <link rel="next" href="ch26.html" title="Chapter&nbsp;26.&nbsp;Entity Extras and Controllers">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch25.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;25.&nbsp;Extending BigWorld Server</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch24.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;II.&nbsp;Server C++ Programming Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch26.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Extending_BigWorld_Server"></a>Chapter&nbsp;25.&nbsp;Extending BigWorld Server
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p>The best way of extending BigWorld is to take advantage of its
+               extension loading mechanism. When a CellApp or BaseApp component of the
+                 system is loaded, it checks for executable objects in its extensions
+                 directory, and dynamically loads each one separately, in alphabetical
+                 order.
+            </p>
+            <p>The extensions directory is located in the same folder of the
+                 component executable, and is named after it, with the
+                 <span class="literal">-extensions</span> suffix.
+            </p>
+            <p>For example, the CellApp's extensions directory is cellapp-extensions,
+                 and is normally located under folder
+                 <span class="literal">bigworld/bin/$MF_CONFIG</span>.
+            </p>
+            <p>The file <code class="filename">bigworld/src/build/common.mak</code> contains
+                 Makefile rules to ease the compilation of server extensions, and it is
+                 recommended that you use of it.
+            </p>
+            <p>The format of a Makefile for an extension is described below (italics
+                 indicate placeholders):
+            </p><pre class="programlisting">SO = <em class="replaceable"><code>extension_name</code></em>
+COMPONENT = <em class="replaceable"><code>component_name</code></em>
+SRCS = <em class="replaceable"><code>source files</code></em>
+
+include $(MF_ROOT)/bigworld/src/build/common.mak
+
+all::</pre><p>The list below describes the Makefile entries:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">SO</span></em></p>
+                     <p>Name chosen for the extension.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">COMPONENT</span></em></p>
+                     <p>Name of the BigWorld component to extend (CellApp or
+                              BaseApp).
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">SRCS</span></em></p>
+                     <p>List of sources files to compile, separated by white spaces
+                              (excluding the suffix '<span class="literal">.cpp</span>').
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>There is no blueprint for what an extension must do, and there is no
+                 API that is called by the host component. In general, any functionality that
+                 does not damage the operation of the host component may be compiled into an
+                 extension, including launching threads, and sending network messages.
+                 However, extensions must take great care not to block the main thread of the
+                 component while running in the game.
+            </p>
+            <p>Since an extension is a dynamic library, it does not have any standard
+                 entry point such as <code class="function">main</code>(). Usually, an extension must
+                 have static initialisers that call back into its host component to hook in
+                 somewhere, or else the extension will have no way of being executed. Most
+                 BigWorld systems have macros that create such static initialisers
+                 automatically, such as <span class="literal">IMPLEMENT_CHUNK_ITEM</span> for a chunk
+                 item type.
+            </p>
+            <p>The BigWorld infrastructure is modular, and there are many ways to
+                 hook into it without changing the underlying code (which is fixed in the
+                 component binary).
+            </p>
+            <p>Some examples of places to hook in are:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>New chunk item types.</p>
+                  </li>
+                  <li>
+                     <p>New ResMgr file systems.</p>
+                  </li>
+                  <li>
+                     <p>Entity extras.</p>
+                  </li>
+                  <li>
+                     <p>Controllers.</p>
+                  </li>
+                  <li>
+                     <p>Loading thread jobs.</p>
+                  </li>
+                  <li>
+                     <p>Network packet filters.</p>
+                  </li>
+                  <li>
+                     <p>Game tick (and higher resolution) timer queues.</p>
+                  </li>
+                  <li>
+                     <p>New Python functions or object types.</p>
+                  </li>
+                  <li>
+                     <p>New basic entity data types.</p>
+                  </li>
+               </ul>
+            </div>
+            <p>These are all ideal candidates for compiling into extensions.</p>
+            <p>The following sections describe some of the most useful and
+                 sophisticated extensions.
+            </p>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch24.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt02.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch26.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;24.&nbsp;Overview&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;26.&nbsp;Entity Extras and Controllers</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

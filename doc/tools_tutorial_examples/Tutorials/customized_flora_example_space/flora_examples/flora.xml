@@ -1,0 +1,261 @@
+<flora.xml>
+	<!-- flora.xml describes the ecotypes that automatically get placed onto
+	the ground based on the ground texture when the space is saved in WorldEditor.
+	There is a variable sized vertex buffer which will determine how many
+	objects can be shown at once depending on its size.  All flora object
+	textures are copied onto a larger texture for efficiency so they must
+	have a texture size of 256x128 or 512x256.  There is a limit of vertices
+	per object based upon the maximum number of possible objects in a chunk.
+	Ecotypes are based on a index rather than looked up by name so it doesn't
+	matter what they are called.  It is possible to have multiple textures
+	representing a ecotype and multiple visuals displaying for a given
+	ecotype. -->
+
+	<vb_size>5000000 </vb_size>
+	<!-- Size of the vertex buffer. Only 
+	used if <vb_size_options> is not defined -->
+	
+	<texture_width>	512 </texture_width>
+	<!-- Maximum width/length of flora visuals. -->
+	
+	<texture_height> 256 </texture_height>
+	<!-- Maximum height of flora visuals. -->
+	
+	<AlphaTestRef>			128			</AlphaTestRef>
+	<ShadowAlphaTestRef>		128			</ShadowAlphaTestRef>
+	<AlphaTestDistance>		50			</AlphaTestDistance>
+	<AlphaBlendDistance>		0			</AlphaBlendDistance>
+	<AlphaTestFadePercent>		75			</AlphaTestFadePercent>
+	<AlphaBlendFadePercent>		70			</AlphaBlendFadePercent>
+
+	<!-- Lightmap for classic terrain -->
+	<light_map>
+		<material> system/materials/light_map.mfm </material>
+		<!-- Path to effect material.  Must be valid.-->
+
+		<width>			512	</width>
+		<!-- Width in pixels of the light map. -->
+
+		<height>		512	</height>	
+		<!-- Height in pixels of the light map. -->
+
+		<timeToleranceSecs>	60	</timeToleranceSecs>
+		<!-- Game time between updates of light map. -->
+
+		<textureFeedName>	floraLightMap	</textureFeedName>
+		<!-- Optional name of texture feed for light map. -->
+
+		<effectTextureName>	FloraLightMap	</effectTextureName>
+		<!-- Required, exposes the light map to the effect engine -->
+
+		<effectTransformName>	FloraLightMapTransform </effectTransformName>
+		<!-- Required, exposes the worldToLightMap transform to the effect engine -->
+	</light_map>
+
+	<!-- Lightmap for new terrain -->	
+	<light_map2>
+		<material> system/materials/light_map2.mfm </material>
+		<!-- Path to effect material.  Must be valid.-->
+
+		<width>			512	</width>
+		<!-- Width in pixels of the light map. -->
+
+		<height>		512	</height>	
+		<!-- Height in pixels of the light map. -->
+
+		<timeToleranceSecs>	60	</timeToleranceSecs>
+		<!-- Game time between updates of light map. -->
+
+		<textureFeedName>	floraLightMap	</textureFeedName>
+		<!-- Optional name of texture feed for light map. -->
+
+		<effectTextureName>	FloraLightMap	</effectTextureName>
+		<!-- Required, exposes the light map to the effect engine -->
+
+		<effectTransformName>	FloraLightMapTransform </effectTransformName>
+		<!-- Required, exposes the worldToLightMap transform to the effect engine -->
+	</light_map2>
+
+	<ecotypes>
+		<!-- Ecotypes, or ecosystems, are represented by the underlying
+		texture (the texture with the highest percentage blend wins).
+		If many different textures are used to represent the same ecotype
+		you can list all the textures individually - for example, below
+		you can see two different stone textures used to represent the
+		same stone ecotype.
+		Each ecotype can have a sound tag and detail object associated
+		with it. -->
+
+		<empty>	
+		
+			<texture>	maps/landscape/ice_rock_03.dds	</texture>
+			<texture>	maps/landscape/a_desertsand01.dds </texture>
+			<texture>	maps/landscape/ls2_dust.dds </texture>
+			<texture>	maps/landscape/ls2_dust2.dds </texture>
+			<texture>	maps/landscape/lev_path01.dds </texture>
+			<texture>	maps/landscape/lev_path02.dds </texture>
+			<texture>	maps/landscape/lev_path03.dds </texture>
+			<sound_tag>	wood </sound_tag>
+		</empty>
+		<mus>
+			<texture>	maps/landscape/gra_roots_02.tga</texture>
+			<!-- The grass ecotype is identified by any part of the terrain
+			that uses these textures.  -->
+			
+			<sound_tag>	grass </sound_tag>
+			<!-- Sound is not supported in BigWorld, however this tag can be
+			used to identify what movement sound should be played by a 3rd
+			party audio engine. -->
+			<visual> sets/temperate/flora/mushrooms1_7tris.visual 		
+			</visual>				
+
+			<!-- This specifies the detail objects that will be randomly
+			positioned and oriented over this ecotype.  The ecotypes.py
+			script in BigBang (bigworld/tools/worldeditor/resources/scripts)
+			can be used to specify the rules of placement, eg, how steep
+			before object not placed, etc...
+			available generator types are empty, visual, and chooseMax.
+			the chooseMax type uses value generators to choose between
+			it's sub-generators.  available value generators are noise,
+			random and fixed. -->
+		</mus>
+
+		<grass>
+			<texture>	maps/landscape/grasslands.dds	</texture>
+			<!-- The grass ecotype is identified by any part of the terrain
+			that uses these textures.  -->
+			
+			<sound_tag>	grass </sound_tag>
+			<!-- Sound is not supported in BigWorld, however this tag can be
+			used to identify what movement sound should be played by a 3rd
+			party audio engine. -->
+			
+			<generator> chooseMax
+				<noise>
+					<frequency>	0.1 </frequency>
+					<generator> visual
+						<visual> flora/dry_grass/grasslands_tall_4tris.visual
+							<scaleVariation>	0.8		</scaleVariation>
+						</visual>
+						<visual>  flora/dry_grass/grass_1_tris.visual
+							<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/dry_grass/grass_3_tris.visual
+							<scaleVariation>	0.9		</scaleVariation>
+						</visual>					
+					</generator>				
+				</noise>
+				<noise>
+					<frequency>	0.8 </frequency>	
+					<generator> visual
+						<visual> flora/dry_grass/grass_3_tris.visual
+							<scaleVariation>	0.9		</scaleVariation>
+						</visual>					
+						<visual>  flora/dry_grass/grass_1_tris.visual
+							<scaleVariation>	1.0		</scaleVariation>
+						</visual>
+					</generator>
+				</noise>				
+				<noise>
+					<frequency>	0.70 </frequency>	
+					<generator> visual
+						<visual> flora/dry_grass/grass_3_tris.visual
+							<scaleVariation>	0.7		</scaleVariation>
+						</visual>
+						<visual> flora/dry_grass/grass_1_tris.visual
+							<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+					</generator>
+				</noise>				
+			</generator>
+			<!-- This specifies the detail objects that will be randomly
+			positioned and oriented over this ecotype.  The ecotypes.py
+			script in BigBang (bigworld/tools/worldeditor/resources/scripts)
+			can be used to specify the rules of placement, eg, how steep
+			before object not placed, etc...
+			available generator types are empty, visual, and chooseMax.
+			the chooseMax type uses value generators to choose between
+			it's sub-generators.  available value generators are noise,
+			random and fixed. -->
+		</grass>
+		
+		<clover>
+			<texture>	maps/landscape/clover.dds	</texture>
+			<generator> chooseMax
+			<!-- have an fixed tag here make the value will always above 0.3 -->
+				<fixed>
+					<value> 0.8 </value>			
+				</fixed>
+				<noise>
+					<frequency>	0.1 </frequency>
+					<generator> visual
+						<density>	0.9					</density>
+						<visual>	flora/reeds.visual 
+						<scaleVariation>	3		</scaleVariation>
+						</visual>
+					</generator>					
+				</noise>
+			</generator>					
+			<sound_tag> gravel </sound_tag>			
+		</clover>
+		
+		<drygrass_wildwheat>
+			<texture>	maps/landscape/grass_patchy.tga	</texture>
+			<sound_tag>	grass </sound_tag>
+			<generator> chooseMax
+				<random>
+					<generator> visual
+						<visual> flora/drygrass_wildwheat/drygrass_1_tris.visual
+						<scaleVariation>	1		</scaleVariation>
+						</visual>
+					</generator>					
+				</random>					
+				<noise>
+					<frequency>	0.8 </frequency>
+					<generator> visual
+						<density>	1				</density>	
+						<visual> flora/drygrass_wildwheat/wildwheat_2_tris.visual
+						<scaleVariation>	0.7		</scaleVariation>
+						</visual>    
+					</generator>					
+				</noise>		
+			</generator>
+		</drygrass_wildwheat>
+
+		<flower>
+                        <texture>       maps/landscape/a_cracked_mud01.dds  </texture>
+                        <sound_tag>water</sound_tag>
+                        <generator> chooseMax
+                                <fixed>
+                                        <value> 0.8</value>
+                                </fixed>
+                                <noise>
+                                        <frequency>     0.2 </frequency>
+                                        <density>       0.2     </density>      
+                                        <generator> visual
+					<visual>  flora/dry_grass/flower_3_tris_stem_1_tris.visual 
+						<scaleVariation>       0.8             </scaleVariation>
+					</visual>                       
+                                        </generator>                            
+                                </noise>                                        
+                        </generator>
+		</flower>
+
+                <wheat>
+                        <texture>       maps/landscape/a_desertsand01.dds  </texture>
+                        <sound_tag>     wood </sound_tag>
+                        <generator> chooseMax
+                                <fixed>
+                                        <value> 0.8</value>
+                                </fixed>
+			<random>
+				<density>       0.2     </density>    
+				<visual> flora/longgrass/longgrassa01.visual
+					<scaleVariation>       0.8             </scaleVariation>
+				</visual>                       
+			</random>                                        
+                        </generator>
+                </wheat>
+	</ecotypes>
+</flora.xml>
+

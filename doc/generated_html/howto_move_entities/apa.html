@@ -1,0 +1,231 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Appendix&nbsp;A.&nbsp;Source files</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Move Entities">
+      <link rel="up" href="index.html" title="How To Move Entities">
+      <link rel="prev" href="ch05.html" title="Chapter&nbsp;5.&nbsp;How to Move Client-Controlled Entities">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_move_entities/apa.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Appendix&nbsp;A.&nbsp;Source files</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="appendix" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Source_Files"></a>Appendix&nbsp;A.&nbsp;Source files
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="apa.html#d0e459">A.1. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/RandomNavigator.py</span></a></span></dt>
+                  <dt><span class="section"><a href="apa.html#d0e467">A.2. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/RandomNavigator.py</span></a></span></dt>
+                  <dt><span class="section"><a href="apa.html#d0e475">A.3. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/RandomNavigator.py</span></a></span></dt>
+                  <dt><span class="section"><a href="apa.html#d0e483">A.4. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/editor/RandomNavigator.py</span></a></span></dt>
+                  <dt><span class="section"><a href="apa.html#d0e491">A.5. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/defs/RandomNavigator.def</span></a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e459"></a>A.1.&nbsp;<span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/RandomNavigator.py</span></h2>
+                     </div>
+                  </div>
+               </div><pre class="programlisting">import BigWorld
+import math
+import random
+import Math
+
+
+class RandomNavigator( BigWorld.Entity ):
+
+    TIMER_WAITING_FOR_NAVMESH = 1
+    
+    #---------------------------------------------------------------------
+    # Constructor.
+    #---------------------------------------------------------------------
+    def __init__( self ):
+        BigWorld.Entity .__init__( self )
+        self.destination = self.position
+        self.addTimer( 5.0, 0, RandomNavigator.TIMER_WAITING_FOR_NAVMESH )
+
+    #---------------------------------------------------------------------
+    # This method is called when a timer expires.
+    #---------------------------------------------------------------------
+    def onTimer(self, timerId, userId):
+        if userId == RandomNavigator.TIMER_WAITING_FOR_NAVMESH:
+            if self.canNavigateTo( self.position ) == None:
+                self.addTimer( 5.0, 0, RandomNavigator.TIMER_WAITING_FOR_NAVMESH )
+            else:
+                self.navigateStep( self.destination, 5.0, 10.0 )
+
+
+    #---------------------------------------------------------------------
+    # This method is called when we've finished moving to a point.
+    #---------------------------------------------------------------------
+    def onMove(self, controllerId, userId):
+        if ( self.position - self.destination ).length &gt; 0.1:
+            self.navigateStep( self.destination, 5.0, 10.0 )
+        else:
+            self.destination = None
+            while self.destination == None:
+                randomDestination = ( 
+                    self.position.x + random.randrange(-400, 400, 1.0),
+                    self.position.y,
+                    self.position.z + random.randrange(-400, 400, 1.0) )
+                self.destination = self.canNavigateTo( randomDestination )
+
+            self.navigateStep( self.destination, 5.0, 10.0 )
+
+# RandomNavigator.py</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e467"></a>A.2.&nbsp;<span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/RandomNavigator.py</span></h2>
+                     </div>
+                  </div>
+               </div><pre class="programlisting">import math
+import BigWorld
+from keys import *
+
+
+# --------------------------------------------------------------------------
+# Section: class RandomNavigator
+# --------------------------------------------------------------------------
+
+
+class RandomNavigator( BigWorld.Entity ):
+    stdModel = 'characters/avatars/base/base.model'
+
+    def __init__( self ):
+        BigWorld.Entity.__init__( self )
+
+
+    def prerequisites( self ):
+        return [ RandomNavigator.stdModel ]
+
+
+    def enterWorld( self ):
+        self.model = BigWorld.Model( RandomNavigator.stdModel )
+        BigWorld.addShadowEntity( self )
+        self.targetCaps = [ CAP_CAN_HIT , CAP_CAN_USE ]
+        self.filter = BigWorld.AvatarDropFilter()
+        
+
+    def leaveWorld( self ):
+        BigWorld.delShadowEntity( self )
+        self.model = None
+
+
+    def use( self ):
+        pass
+
+
+#RandomNavigator.py</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e475"></a>A.3.&nbsp;<span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/RandomNavigator.py</span></h2>
+                     </div>
+                  </div>
+               </div><pre class="programlisting">import FantasyDemo
+
+# --------------------------------------------------------------------------
+# Section: class RandomNavigator
+# --------------------------------------------------------------------------
+
+class RandomNavigator( FantasyDemo.Base ):
+
+    def __init__( self ):
+        FantasyDemo.Base.__init__( self )
+
+
+# RandomNavigator.py  </pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e483"></a>A.4.&nbsp;<span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/editor/RandomNavigator.py</span></h2>
+                     </div>
+                  </div>
+               </div><pre class="programlisting">class RandomNavigator:
+    def modelName( self, props ):
+        return 'characters/avatars/base/base.model'
+
+# RandomNavigator.py</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e491"></a>A.5.&nbsp;<span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/defs/RandomNavigator.def</span></h2>
+                     </div>
+                  </div>
+               </div><pre class="programlisting">&lt;root&gt;
+    &lt;Volatile&gt;
+        &lt;position/&gt;
+        &lt;yaw/&gt;
+    &lt;/Volatile&gt;
+
+    &lt;Properties&gt;
+
+        &lt;destination&gt;
+            &lt;Type&gt;            PYTHON                &lt;/Type&gt;
+            &lt;Flags&gt;            CELL_PRIVATE        &lt;/Flags&gt;
+        &lt;/destination&gt;
+
+    &lt;/Properties&gt;
+
+    &lt;ClientMethods&gt;
+    &lt;/ClientMethods&gt;
+
+    &lt;CellMethods&gt;
+    &lt;/CellMethods&gt;
+&lt;/root&gt;</pre></div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;How to Move Client-Controlled Entities&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

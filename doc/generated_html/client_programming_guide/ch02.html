@@ -1,0 +1,427 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;2.&nbsp;User Input</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Overview">
+      <link rel="next" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Cameras">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch02.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;2.&nbsp;User Input</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_User_Input"></a>Chapter&nbsp;2.&nbsp;User Input
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch02.html#xref_Key_Events">2.1. Key events</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch02.html#d0e481">2.1.1. Character events</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e495">2.1.2. Auto-repeat</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e505">2.1.3. Sequence of events</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e554">2.1.4. Sinking events</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e569">2.1.5. Mouse cursor position</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch02.html#d0e580">2.2. Mouse</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch02.html#d0e583">2.2.1. Movement</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e621">2.2.2. Buttons</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch02.html#d0e631">2.3. Joystick</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch02.html#d0e636">2.3.1. Axis events</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e647">2.3.2. Buttons</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e657">2.3.3. Controlling player direction</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e665">2.3.4. Avatar movement</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>The BigWorld client uses a combination of Windows messages and the
+                 Windows raw input API for keyboard and mouse input. It reads key-up,
+                 key-down, and character press events from the keyboard as well as high
+                 resolution movement events from the mouse. It uses the DirectInput API to
+                 read button and axis movement events from joysticks.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Key_Events"></a>2.1.&nbsp;Key events
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Key events, encapsulated by the KeyEvent object
+                      (<code class="code">BigWorld.KeyEvent</code> in Python), are generated by devices that
+                      have keys or buttons. This includes the keyboard, mouse buttons, and
+                      joystick buttons.
+               </p>
+               <p>The two basic types of key events are key-down and key-up.</p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e481"></a>2.1.1.&nbsp;Character events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>If a KeyEvent is generated by the keyboard, it may have a
+                           character attached to it. The character generated by a particular key is
+                           determined by the currently set locale and input language in the
+                           operating system, and is represented by the
+                           <code class="code">KeyEvent.character</code> member (a Unicode string).
+                  </p>
+                  <p>Dead character keys are supported (e.g. in Spanish, a user can
+                           type the letter &eacute; by first pressing the apostrophe key followed by the e
+                           key). In this case the first key press will not have a character
+                           associated with it, and the second key press will have the final
+                           character.
+                  </p>
+                  <p>The BigWorld client supports advanced Input Method Editors (IME).
+                           See <a href="ch18.html" title="Chapter&nbsp;18.&nbsp;Input Method Editors (IME)"><i xmlns:xlink="http://www.w3.org/1999/xlink">Input Method Editors (IME)</i></a> for details on using an IME in your
+                           game.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e495"></a>2.1.2.&nbsp;Auto-repeat
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The keyboard will generate auto-repeat events when keys are held
+                           down, based on the user's operating system settings (e.g. repeat delay).
+                           The mouse and joystick do not generate auto-repeat events.
+                  </p>
+                  <p>Auto-repeat events are sent as additional key-down events, however
+                           scripts that do not want to handle repeat events can call the
+                           <code class="code">KeyEvent.isRepeatedEvent</code> method to determine whther or not
+                           it is an auto-repeat event.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e505"></a>2.1.3.&nbsp;Sequence of events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When the user presses a button (keyboard, mouse or joystick), the
+                           sequence of events are:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>The first key-down event.</p>
+                        </li>
+                        <li>
+                           <p>If the key is held down, multiple key-down events are raised
+                                        due to auto-repeat (keyboard only).
+                           </p>
+                        </li>
+                        <li>
+                           <p>A key-up event is triggered when the user releases the
+                                        button.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The output from the user input module is processed by a number of
+                           other modules, which take it in turn to examine events and either
+                           consume or ignore them. If an event is not consumed by any module then
+                           it is discarded. The order of modules that get a turn at the events is
+                           as follows:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">Debug</em> &#8212; Special keys,
+                                        consoles, etc.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Personality script</em> &#8212;
+                                        Global keys.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Application</em> &#8212;
+                                        Hard-coded keys such as <span class="literal">QUIT</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Player script</em> &#8212; The
+                                        rest, which is the major part of the processing.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>Note that the GUI system does not automatically receive input,
+                                instead it is up to the script write to choose when. This could be
+                                either in the personality script, or in the player script. The most
+                                obvious place is in the personality script callbacks, for example in
+                                the personality script's handleKeyEvent, you should call
+                                <code class="code">GUI.handleKeyEvent()</code> and check the return value.
+                     </p>
+                     <p>Similarly, the active camera also does not automatically receive
+                                input events. It is up to the Python scripts to decide when and where
+                                the camera receives user input.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e554"></a>2.1.4.&nbsp;Sinking events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The BigWorld client performs event matching to ensure consistent
+                           module behaviour. If a key-down event is consumed by a module, that
+                           module's identifier is recorded as the sink of the event's key number.
+                           When the corresponding auto-repeat and key-up event arrives, it is
+                           delivered directly to that module. For example, if a chat console is
+                           brought up (and inserted into the list) while the player is running, and
+                           the user subsequently releases the run key, then the player script will
+                           still get the key-up event for that key, and be able to stop the run
+                           action.
+                  </p>
+                  <p>In some cases it may be desired to temporarily block certain key
+                           events from being passed into the scripts. For example, the GUI scripts
+                           may handle a key down event by removing the current GUI screen and
+                           replacing it with a new GUI screen. By default, since the new GUI screen
+                           has become the active screen by the time <code class="code">handleKeyEvent</code>
+                           returns, any associated auto-repeat and key-up events will be posted to
+                           the new GUI screen creating possibly unwanted behaviour.
+                  </p>
+                  <p>The <code class="code">BigWorld.sinkKeyEvents</code> function can be used to
+                           stop all key events for the given key-code from reaching the scripts
+                           until (and including) the next key-up. See the Python API guide for
+                           details.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e569"></a>2.1.5.&nbsp;Mouse cursor position
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>It is often a requirement to know where the mouse was when a key
+                           event occured (i.e. rather than where the mouse is at the time of
+                           handling the event), especially when processing mouse button events.
+                           Therefore, the mouse cursor position is available via the
+                           <code class="code">KeyEvent.cursorPosition</code> property, and should be used
+                           instead of <code class="code">GUI.mcursor().position</code> where ever
+                           possible.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e580"></a>2.2.&nbsp;Mouse
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e583"></a>2.2.1.&nbsp;Movement
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>High resolution mouse movement events are sent to the scripts as a
+                           <code class="code">MouseEvent</code>. This object exposes three direction
+                           deltas.
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>The <code class="code">dx</code> and <code class="code">dy</code> members are signed
+                                        integers indicating movement of the mouse in the X and Y
+                                        directions.
+                           </p>
+                        </li>
+                        <li>
+                           <p>The <code class="code">dz</code> member represents movement of the mouse
+                                        wheel. 
+                           </p>
+                           <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                              <h3 class="title">Note</h3>
+                              <p>If multiple mouse deltas arrive from the driver within a
+                                               single frame, they are accumulated into a single
+                                               <code class="code">MouseEvent</code>.
+                              </p>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Similar to the <code class="code">KeyEvent</code> object, the mouse cursor
+                           position for when the event occured is available as a member of the
+                           <code class="code">MouseEvent</code> object.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e621"></a>2.2.2.&nbsp;Buttons
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Mouse buttons are sent as a <code class="code">KeyEvent</code>, however they do
+                           not generate auto-repeat events. See <a href="ch02.html#xref_Key_Events" title="2.1.&nbsp;Key events">Key events</a>
+                           for details.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e631"></a>2.3.&nbsp;Joystick
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The BigWorld client will automatically detect the first joystick
+                      device attached to the system, and is been designed to be used with
+                      dual-stick style joypads.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e636"></a>2.3.1.&nbsp;Axis events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When axis events occur, they will be sent to the scripts as an
+                           <code class="code">AxisEvent</code> object via the <code class="code">handleAxisEvent</code>
+                           personality script function.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e647"></a>2.3.2.&nbsp;Buttons
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Joystick buttons are sent as a <code class="code">KeyEvent</code>, however they
+                           do not generate auto-repeat events. See <a href="ch02.html#xref_Key_Events" title="2.1.&nbsp;Key events">Key events</a> for details.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e657"></a>2.3.3.&nbsp;Controlling player direction
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The C++ engine will automatically pass axis events to the active
+                           cursor, so the direction cursor can be joystick controlled by setting it
+                           as the active cursor using <code class="code">BigWorld.setCursor</code>. The
+                           direction cursor will process any events generated by the right
+                           axis.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e665"></a>2.3.4.&nbsp;Avatar movement
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The C++ engine will also give the physics subsystem a chance to
+                           handle axis events. The physics treats axis input as a special case and
+                           will scale movement speed by how far the user as pushed the joystick
+                           forward.
+                  </p>
+                  <p>In order to enable joystick support on movement physics, set the
+                           <code class="code">Physics.joystickEnabled</code> property to True and be sure to set
+                           <code class="code">joystickFwdSpeed</code> and <code class="code">joystickBackSpeed</code>
+                           properties to values appropriate for your game.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Overview&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;Cameras</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

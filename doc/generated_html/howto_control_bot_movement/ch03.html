@@ -1,0 +1,123 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;3.&nbsp;The MovementController</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Write a Bot Movement Controller">
+      <link rel="up" href="index.html" title="How To Write a Bot Movement Controller">
+      <link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;The MovementFactory">
+      <link rel="next" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Useful Utility Classes">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_control_bot_movement/ch03.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;3.&nbsp;The MovementController</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="d0e159"></a>Chapter&nbsp;3.&nbsp;The MovementController
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch03.html#d0e188">3.1. The <code class="methodname">nextStep()</code> method</a></span></dt>
+               </dl>
+            </div>
+            <p>The movement controller needs to maintain a set of state variables
+                   that are used to control the bot's movements.
+            </p>
+            <p>For example, the <code class="classname">GraphTraverser</code> movement
+                   controller in
+                   <code class="filename">src/server/tools/bots/patrol_graph.<em class="replaceable"><code>[ch]</code></em>pp</code>
+                   keeps track of the following information:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>A graph that the bot is traversing.</p>
+                  </li>
+                  <li>
+                     <p>The node towards which the bot is heading.</p>
+                  </li>
+                  <li>
+                     <p>A position near that node toward which it is actually
+                                heading.
+                     </p>
+                  </li>
+                  <li>
+                     <p>A timer for spending time at a given node.</p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e188"></a>3.1.&nbsp;The <code class="methodname">nextStep()</code> method
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The most important part of the movement controller is the
+                        <code class="methodname">nextStep()</code> method:
+               </p><pre class="programlisting">bool nextStep( float &amp; speed, float dTime, Vector3 &amp; pos, Direction3D &amp; dir )</pre><p>The <code class="varname">dTime</code> parameter is the time elapsed since
+                        the last call to <code class="methodname">nextStep()</code>.
+               </p>
+               <p>Aside from updating any state variables as necessary, the general
+                        function of this method is to establish some unit vector the bot is
+                        moving down, and to update <code class="varname">pos</code> and
+                        <code class="varname">dir</code> appropriately, according to the formula
+                        below:
+               </p>
+               <div class="blockquote">
+                  <blockquote class="blockquote">
+                     <p>pos += unitvec * (speed * dTime);</p>
+                     <p>dir.yaw = unitvec.yaw()</p>
+                  </blockquote>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;The <code class="classname">MovementFactory</code>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;Useful Utility Classes</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

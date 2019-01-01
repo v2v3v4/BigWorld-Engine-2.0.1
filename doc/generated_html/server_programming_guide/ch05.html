@@ -1,0 +1,1174 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;5.&nbsp;Methods</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Properties">
+      <link rel="next" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Inheritance in BigWorld">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch05.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;5.&nbsp;Methods</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Methods"></a>Chapter&nbsp;5.&nbsp;Methods
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch05.html#d0e3981">5.1. Basic Method Specification</a></span></dt>
+                  <dt><span class="section"><a href="ch05.html#xref_Intra_Entity_Communication">5.2. Intra-Entity Communication</a></span></dt>
+                  <dt><span class="section"><a href="ch05.html#d0e4198">5.3. Sending Auxiliary Data to the Client Via Proxy</a></span></dt>
+                  <dt><span class="section"><a href="ch05.html#xref_SPG_ExposedMethods">5.4. Exposed Methods <span class="symbol">&#8208;</span> Client-to-Server
+                               Communication</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e4371">5.4.1. Security Considerations of Exposed Methods</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch05.html#xref_Implicit_set_property_name_Methods">5.5. Client callbacks on property changes</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e4431">5.5.1. Implicit
+                                       <code class="methodname">set_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code>
+                                       Methods</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e4514">5.5.2. Implicit
+                                       <code class="methodname">setNested_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code>
+                                       Methods</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e4566">5.5.3. Implicit
+                                       <code class="methodname">setSlice_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code>
+                                       Methods</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch05.html#d0e4609">5.6. LOD on Methods</a></span></dt>
+                  <dt><span class="section"><a href="ch05.html#xref_Inter_Entity_Communication">5.7. Inter-Entity Communication</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e4698">5.7.1. Entity IDs</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch05.html#xref_Mailboxes">5.8. Mailboxes</a></span></dt>
+                  <dt><span class="section"><a href="ch05.html#d0e5076">5.9. Method Execution Context</a></span></dt>
+               </dl>
+            </div>
+            <p>Methods allow events to be propagated, both between different
+                 execution contexts of an entity (<em class="emphasis">i.e.</em>, cell, base,
+                 client), as well as between different entities. BigWorld separates entity
+                 methods into categories based on which execution context they will be
+                 executed within.
+            </p>
+            <p>In general, methods should not be used for propagating states. The use
+                 of properties is recommended for this purpose. For example, a player holding
+                 a gun should be a property, while a player shooting should be a
+                 method.
+            </p>
+            <p>The categories of methods are:</p>
+            <div class="altrow">
+               <table border="0">
+                  <colgroup>
+                     <col width="20%">
+                     <col width="13%">
+                     <col width="67%">
+                  </colgroup>
+                  <thead>
+                     <tr>
+                        <th align="left">Category</th>
+                        <th align="left">Runs on</th>
+                        <th align="left">Common uses</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td align="left"><code class="property">&lt;BaseMethods&gt;</code></td>
+                        <td align="left">BaseApp</td>
+                        <td align="left">
+                           <p>Updates properties on the
+                                          base.
+                           </p>
+                           <p>Serves as a root point to propagate messages to
+                                          related things.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td align="left"><code class="property">&lt;CellMethods&gt;</code></td>
+                        <td align="left">CellApp</td>
+                        <td align="left">
+                           <p>Notifies the cell of changes in response
+                                          to player interaction.
+                           </p>
+                           <p>Allows communication between
+                                          nearby entities.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td align="left"><code class="property">&lt;ClientMethods&gt;</code></td>
+                        <td align="left">Clients</td>
+                        <td align="left">
+                           <p>Notifies the client of events, so that
+                                          the player can see them. Implicit
+                                          <code class="methodname">set_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code>
+                                          methods need not be declared<sup>[<a name="d0e3951" href="#ftn.d0e3951">a</a>]</sup>.
+                           </p>
+                        </td>
+                     </tr>
+                  </tbody>
+                  <tbody class="footnotes">
+                     <tr>
+                        <td colspan="3">
+                           <div class="footnote">
+                              <p><sup>[<a name="ftn.d0e3951" href="#d0e3951">a</a>] </sup>For details, see <a href="ch05.html#xref_Implicit_set_property_name_Methods" title="5.5.&nbsp;Client callbacks on property changes">Client callbacks on property changes</a></p>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+            <p><span class="citetitle">Method categories.</span></p>
+            <p>The grammar for method declaration is described below:</p><pre class="programlisting">&lt;[ClientMethods|CellMethods|BaseMethods]&gt;
+
+  &lt;<em class="replaceable"><code>method_name</code></em>&gt;
+    &lt;Exposed/&gt;
+    &lt;Arg&gt; data_type &lt;/Arg&gt;
+   &lt;/<em class="replaceable"><code>method_name</code></em>&gt;
+
+&lt;/[ClientMethods|CellMethods|BaseMethods]&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                    <span class="symbol">&#8208;</span> Method declaration
+                    syntax</span></p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e3981"></a>5.1.&nbsp;Basic Method Specification
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>All methods in all categories have some fundamental common
+                      characteristics. They are declared in the relevant section in the file
+                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>,
+                      with an XML tag per method.
+               </p>
+               <p>The method's arguments are also defined in the file, and its types
+                      are specified in the same way as property types. For more details, see
+                      <a href="ch04.html#xref_Property_Types" title="4.1.&nbsp;Property Types">Property Types</a>.
+               </p>
+               <p>In order to declare a method called <code class="methodname">yell</code> on
+                      the cell, which receives a string argument, we would have the lines
+                      below:
+               </p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;<em class="emphasis">CellMethods</em>&gt;
+    &lt;<em class="emphasis">yell</em>&gt;
+      &lt;<em class="emphasis">Arg</em>&gt; <em class="emphasis">STRING</em> &lt;/Arg&gt; &lt;!-- phrase to exclaim --&gt;
+    &lt;/yell&gt;
+  &lt;/CellMethods&gt;
+  ...
+&lt;/root&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                         <span class="symbol">&#8208;</span> Declaration of cell method
+                         <code class="methodname">yell</code></span></p>
+               <p>By convention, the meaning of each argument is written next to it as
+                      an XML comment.
+               </p>
+               <p>Once the method is declared, it also needs to be declared in the
+                      appropriate Python implementation file. Each context of execution (cell,
+                      base, and client) has a folder containing scripts for each entity.
+               </p>
+               <p>In our example, the method was added to the section
+                      <code class="property">&lt;CellMethods&gt;</code>, and therefore will be executed
+                      on the cell entity.
+               </p>
+               <p>The cell script for this entity, named
+                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/<em class="replaceable"><code>&lt;entity&gt;</code></em>.py</code>,
+                      will need to define the <code class="methodname">yell</code> method, as
+                      illustrated below:
+               </p><pre class="programlisting">import BigWorld
+...
+class <em class="emphasis"><em class="replaceable"><code>entity</code></em></em>(BigWorld.Entity):
+
+  def <em class="emphasis">__init__</em>(self):
+    BigWorld.Entity.__init__(self)
+
+  def <em class="emphasis">yell</em>(self, phrase):
+    # insert code to implement yell here
+    return</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/<em class="replaceable"><code>&lt;entity&gt;</code></em>.py</code>
+                         <span class="symbol">&#8208;</span> Definition of cell method
+                         <code class="methodname">yell</code></span></p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Intra_Entity_Communication"></a>5.2.&nbsp;Intra-Entity Communication
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Different execution contexts of an entity communicate with each
+                      other by calling methods on the other execution contexts. These are
+                      exposed as special properties of the entity.
+               </p>
+               <p>As a quick reference, the available objects are described
+                      below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">allClients</span> <span class="symbol">&#8208;</span> Available on: Cell</em></p>
+                        <p><em class="emphasis">When/how to use:</em> To call a
+                                   client method on all client instances of this entity.
+                        </p>
+                        <p><em class="emphasis">Example:
+                                      </em><span class="literal">self.allClients.someMethod()</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">base</span> <span class="symbol">&#8208;</span> Available on: Cell, Client</em></p>
+                        <p><em class="emphasis">When/how to use:</em> To call a base
+                                   method of this entity. Calls to this object are executed on the base
+                                   script. The client cannot directly call methods on the base of other
+                                   entities.
+                        </p>
+                        <p><em class="emphasis">Example:</em>
+                                   <span class="literal">self.base.someMethod()</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">cell</span> <span class="symbol">&#8208;</span> Available on: Base, Client</em></p>
+                        <p><em class="emphasis">When/how to use:</em> To call a cell
+                                   method of this entity. Calls to this object are executed on the cell
+                                   script. All client instances can access their cell object (when the
+                                   entity exists on the cell).
+                        </p>
+                        <p><em class="emphasis">Example:</em>
+                                   <span class="literal">self.cell.someMethod()</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">otherClients</span> <span class="symbol">&#8208;</span> Available on: Cell</em></p>
+                        <p><em class="emphasis">When/how to use:</em> To call a
+                                   client method on all client instances of this entity, except on its
+                                   own.
+                        </p>
+                        <p><em class="emphasis">Example:</em>
+                                   <span class="literal">self.otherClients.someMethod()</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">ownClient</span> <span class="symbol">&#8208;</span> Available on: Cell, Base</em></p>
+                        <p><em class="emphasis">When/how to use:</em> To call a
+                                   client method only on this entity's client. This object calls the
+                                   method only on the entity on the client application that is 'playing'
+                                   as this entity, not on other client applications that can see this
+                                   entity.
+                        </p>
+                        <p><em class="emphasis">Example:</em>
+                                   <span class="literal">self.ownClient.someMethod()</span></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The methods of a nearby entity can be called from the client
+                      directly on the cell part of that entity.
+               </p>
+               <p>BigWorld automatically exposes these objects to the relevant script
+                      classes.
+               </p>
+               <p>What this means is that it is possible for any script that is part
+                      of an entity (cell, base or client part) to call other scripts that are
+                      part of the same entity. The definition file
+                      (<code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>)
+                      describes which methods are exposed to different execution
+                      contexts.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4198"></a>5.3.&nbsp;Sending Auxiliary Data to the Client Via Proxy
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Auxiliary data can be streamed to the client via the proxy, without
+                      affecting the normal game traffic. This data is opportunistically streamed
+                      to the client when bandwidth is available.
+               </p>
+               <p>All data types in this streamed data are user-defined, since
+                      BigWorld does not have any internal uses for it.
+               </p>
+               <p>Data is added to a proxy via method
+                      <code class="methodname">streamStringToClient</code>:
+               </p><pre class="programlisting">id = Proxy.streamStringToClient( id, data )</pre><p>or via method <code class="methodname">streamFileToClient</code>:
+               </p><pre class="programlisting">id = Proxy.streamFileToClient( id, resource )</pre><p>Where the parameters are:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><em class="parameter"><code>id</code></em></em></p>
+                        <p>16-bit ID of the data. If <span class="literal">-1</span> is received,
+                                   then the next ID in sequence that is not currently in use is selected.
+                                   The caller of this method is responsible for the management of this
+                                   parameter. The same ID value used by the method is returned to the
+                                   caller.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><em class="parameter"><code>data</code></em></em></p>
+                        <p>Data to be sent to the attached client. Must be in string
+                                   format.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><em class="parameter"><code>resource</code></em></em></p>
+                        <p>The string name of the resource to be sent to the client.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Once the client has received the entire data string, the callback
+                      <code class="classname">BWPersonality</code>.<code class="methodname">onStreamComplete</code>
+                      is called on the client.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_SPG_ExposedMethods"></a>5.4.&nbsp;Exposed Methods <span class="symbol">&#8208;</span> Client-to-Server
+                               Communication
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Because MMOGs operate over the Internet, and in order to stop
+                      players cheating, server methods (those on the cell or the base) are not
+                      automatically allowed to be called by the client.
+               </p>
+               <p>In order to make a server method callable from the client (so that
+                      the world can provide interactivity), its declaration has to include the
+                      tag <code class="property">&lt;Exposed/&gt;</code>, as illustrated below:
+               </p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;<em class="emphasis">CellMethods</em>&gt;
+    &lt;<em class="emphasis">yell</em>&gt;
+      &lt;<em class="emphasis">Exposed</em>/&gt;
+      &lt;Arg&gt; STRING &lt;/Arg&gt; &lt;!-- phrase to exclaim --&gt;
+    &lt;/yell&gt;
+  &lt;/CellMethods&gt;
+  ...
+&lt;/root&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                         <span class="symbol">&#8208;</span> Declaration of the exposed
+                         method</span></p>
+               <p>The tag <code class="property">&lt;Exposed/&gt;</code> accomplishes two
+                      things:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>It makes the method available to clients.</p>
+                     </li>
+                     <li>
+                        <p>On the cell, it acts as an <code class="property">&lt;Arg&gt;</code> tag
+                                   that is automatically filled in with the entity ID of the client
+                                   calling it.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Client instances actually call the method with one argument less
+                      than are received by the cell entity, which prevents 'entity-faking'
+                      outside the safe server environment. The entity ID needs to be passed as
+                      an argument when calling exposed methods from the server
+                      components.
+               </p>
+               <p>The definition of the method on the cell must be extended to take
+                      this parameter, as illustrated below:
+               </p><pre class="programlisting">import BigWorld
+class EntityName(BigWorld.Entity):
+
+  def __init__(self):
+    BigWorld.Entity.init(self)
+
+  def <em class="emphasis">yell</em>(self, <em class="emphasis">sourceEntityID</em>, phrase):
+    # insert code to implement yell here
+    # if desired, check that self.id == sourceEntityID before proceeding
+    return</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/<em class="replaceable"><code>&lt;entity&gt;</code></em>.py</code>
+                         <span class="symbol">&#8208;</span> Definition of cell method
+                         <code class="methodname">yell</code></span></p>
+               <p>On the client, the method <code class="methodname">yell</code> can be
+                      called with the code below:
+               </p><pre class="programlisting">self.cell.yell( "BigWorld message test" )</pre><p><span class="citetitle">Example of a client calling a cell method <em class="emphasis"><code class="methodname">yell</code></em></span></p>
+               <p>If the cell method <code class="methodname">yell</code> implements the
+                      check of <code class="varname">sourceEntityID</code> against
+                      <code class="varname">self</code>.<code class="varname">id</code>, only its client will be
+                      able to call it. Others clients will not be able to execute it.
+               </p>
+               <p>There might be occasions where the method might run with a different
+                      <code class="varname">sourceEntityID</code>. For example, for a method called
+                      <code class="methodname">shakeHand</code>, it is a good idea to check that the
+                      source entity is within a couple of metres away from the
+                      <code class="varname">self</code> entity before proceeding (and maybe that neither
+                      is dead).
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4371"></a>5.4.1.&nbsp;Security Considerations of Exposed Methods
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Script writers should be aware that the arguments of any exposed
+                           method need to be heavily scrutinised on the server side before being
+                           operated on.
+                  </p>
+                  <p>The underlying C++ code that handles the passing of arguments
+                           ensures that the method will be invoked on the server side only
+                           if:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>The right number of arguments is being passed.</p>
+                        </li>
+                        <li>
+                           <p>The arguments have the expected type.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Beyond that, however, the underlying architecture cannot provide
+                           any further constraints on the values that clients may pass to method
+                           calls on the server.
+                  </p>
+                  <p>For example, integers may take any valid 32-bit value, strings and
+                           arrays may be of any length, &#8230;. It is up to the script writer to ensure
+                           that the arguments to an exposed method have values that make sense in
+                           the context of that method.
+                  </p>
+                  <p>You should carefully inspect the value of any arguments to an
+                           exposed method before using them.
+                  </p>
+                  <p>It is never safe to trust arbitrary Python objects from the client
+                           as passed in through <code class="code">PYTHON</code> parameters to exposed method
+                           invocations. A <span class="literal">WARNING</span> log message is emitted at
+                           startup by any component that parses the entity definitions if an
+                           exposed method has parameter of type <code class="code">PYTHON</code>. The safer
+                           alternative is to use some other data type that is more concretely
+                           defined, for example the <code class="code">FIXED_DICT</code> data type, and validate
+                           each known element.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Implicit_set_property_name_Methods"></a>5.5.&nbsp;Client callbacks on property changes
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>When the server changes a property on the client a callback method
+                      is called on the entity to allow the client to take appropriate
+                      action.
+               </p>
+               <p><code class="code">set_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code> is
+                      called when a property of an entity is replaced with a new value. That is,
+                      a value in the entity's <code class="code">__dict__</code> is replaced.
+               </p>
+               <p>If an existing property is modified, either
+                      <code class="code">setNested_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code> or
+                      <code class="code">setSlice_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code> is
+                      called.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4431"></a>5.5.1.&nbsp;Implicit
+                                    <code class="methodname">set_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code>
+                                    Methods
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When the server updates a property with distribution flag
+                           <sup>[<a name="d0e4441" href="#ftn.d0e4441">7</a>]</sup> <span class="literal">ALL_CLIENTS</span>,
+                           <span class="literal">OTHER_CLIENTS</span> or <span class="literal">OWN_CLIENT</span>, an
+                           implicit method called
+                           <code class="methodname">set_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code>
+                           is called on the client.
+                  </p>
+                  <p>This method should not need be declared in the section
+                           <code class="property">&lt;ClientMethods&gt;</code> of the definition file as it
+                           is automatically provided by BigWorld.
+                  </p>
+                  <p>All implicitly defined
+                           <code class="methodname">set_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code>
+                           methods have one argument which receives the old value of the property
+                           when the method is called. For example:
+                  </p><pre class="programlisting">class Seat( BigWorld.Entity ):
+    ...
+  def <em class="emphasis">set_seatType</em>( self, <em class="emphasis">oldValue</em> ):
+    ...</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Seat.py</code>
+                              <span class="symbol">&#8208;</span> Example of an implicit
+                              <code class="methodname">set_seatType</code> for the
+                              <code class="classname">Seat</code> entity.</span></p>
+                  <p>Note that if an existing property is modified instead of being
+                           replaced and the appropriate
+                           <code class="methodname">setNested_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code>
+                           or
+                           <code class="methodname">setSlice_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code>
+                           method does not exist, this method is called with the
+                           <code class="code">oldValue</code> argument as <code class="code">None</code>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4514"></a>5.5.2.&nbsp;Implicit
+                                    <code class="methodname">setNested_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code>
+                                    Methods
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>If a nested property of an existing property is modified, the
+                           <code class="methodname">setNested_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code>
+                           is called. This includes modifying a single element of an
+                           <code class="code">ARRAY</code> or <code class="code">FIXED_DICT</code>. The method accepts two
+                           arguments. The first represents the path to the change and the second is
+                           the value that has been replaced.
+                  </p>
+                  <p>For example:</p><pre class="programlisting">class Seat( BigWorld.Entity ):
+    ...
+  def <em class="emphasis">setNested_myFixedDict</em>( self, <em class="emphasis">path</em>, <em class="emphasis">oldValue</em> ):
+    ...</pre><p>The first argument represents the path to the changed property.
+                           For example, if the change was:
+                  </p><pre class="programlisting">self.myFixedDict.rightHandItem.weight = 10</pre><p>The value of path would be:</p><pre class="programlisting">["rightHandItem", "weight"]</pre><p>If you had a property that was <code class="code">ARRAY &lt;of&gt; ARRAY
+                              &lt;of&gt; INT32 &lt;/of&gt; &lt;/of&gt;.</code></p><pre class="programlisting">self.myArray[ 5 ][ 3 ] = 8</pre><p>would result with the value of path being:</p><pre class="programlisting">(5, 3)</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4566"></a>5.5.3.&nbsp;Implicit
+                                    <code class="methodname">setSlice_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code>
+                                    Methods
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>If a slice of an array is modified, the
+                           <code class="methodname">setSlice_<em class="replaceable"><code>&lt;property_name&gt;</code></em></code>
+                           is called. This includes appending and deleting from an array. The
+                           method accepts two arguments. The first represents the path to the
+                           changed slice and the second is the slice that has been replaced. The
+                           last value in the path is a tuple containing two integers. These
+                           represent the range of the new values. To create a slice containing the
+                           new values, use <code class="code">myModifiedArray[ path[-1][0] : path[-1][1]
+                              ]</code>.
+                  </p>
+                  <p>For example, if <code class="code">self.myArray</code> is an existing array
+                           with 5 elements:
+                  </p><pre class="programlisting">self.myArray.append( 10 )</pre><p>would result in <code class="methodname">setSlice_myArray</code> being
+                           called with:
+                  </p><pre class="programlisting">path = [(5,6)]
+oldValues = [ ]
+newValues = self.myArray[ path[-1][0] : path[-1][1] ]</pre><p>If the array is part of a <code class="code">FIXED_DICT</code> and the array
+                           has 5 elements with the last value 21.
+                  </p><pre class="programlisting">del self.myFixedDict.myArray[-1]</pre><p>would result in:</p><pre class="programlisting">path = ["myArray", (4,4)]
+oldValues = [21]</pre></div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4609"></a>5.6.&nbsp;LOD on Methods
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Like properties, some methods need to be broadcast only to nearby
+                      entities.
+               </p>
+               <p>For example, even though an entity may be visible at an AoI distance
+                      (500 metres), it seems unlikely that players will be able to tell the
+                      difference between a smiling and a non-smiling entity.
+               </p>
+               <p>To reflect his, the smile method's level of detail, can be declared
+                      as illustrated below:
+               </p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;ClientMethods&gt;
+    ...
+    &lt;<em class="emphasis">smile</em>&gt;
+      ...
+      &lt;<em class="emphasis">DetailDistance</em>&gt; <em class="emphasis">30</em> &lt;/DetailDistance&gt;
+    &lt;/smile&gt;
+    ...
+  &lt;/ClientMethods&gt;
+  ...
+&lt;/root&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/<em class="replaceable"><code>&lt;entity&gt;</code></em>.py</code>
+                         <span class="symbol">&#8208;</span> Declaration of client method
+                         <code class="methodname">smile</code></span></p>
+               <p>The specification of the LOD for a method is far simpler than it is
+                      for a property. This is because a non-broadcast property change might have
+                      to be sent later if the LOD increases, while a non-broadcast method in the
+                      same scenario will not have to.
+               </p>
+               <p>Consequently, the method just needs to declare a tag
+                      <code class="property">&lt;DetailDistance&gt;</code> inline, and when it is called
+                      on exposed objects <code class="varname">allClients</code> or
+                      <code class="varname">otherClients</code>, it is broadcast only to clients within
+                      the specified distance around the entity.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Inter_Entity_Communication"></a>5.7.&nbsp;Inter-Entity Communication
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Once the entities have methods assigned to them, it becomes useful
+                      to be able to call methods on other entities.
+               </p>
+               <p>If you have an object <code class="varname">ent</code> as a Python script
+                      representation of another entity, then you can call
+                      <code class="varname">ent</code>.<code class="methodname">someMethod</code>() to call that
+                      method on <code class="varname">ent</code>. This assumes that
+                      <code class="methodname">someMethod</code>() runs on the same execution context
+                      you are in. For example, if you are on the cell, then
+                      <code class="varname">ent</code>.<code class="methodname">someMethod</code>() must be
+                      defined and provided by the entity type of <code class="varname">ent</code>.
+               </p>
+               <p>If you are on the cell, you can call a method on the base, with the
+                      code below:
+               </p><pre class="programlisting">ent.base.otherMethod()</pre><p>This means that once you are able to obtain an entity object, there
+                      is a plethora of options for invoking methods on different execution
+                      contexts of different entity instances. For more details, see <a href="ch05.html#xref_Intra_Entity_Communication" title="5.2.&nbsp;Intra-Entity Communication">Intra-Entity Communication</a>.
+               </p>
+               <p>But to achieve this, first it is necessary to retrieve the object
+                      for another entity. The mechanism for that is described in the next
+                      sub-section
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4698"></a>5.7.1.&nbsp;Entity IDs
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In order to uniquely identify every object in the game universe,
+                           BigWorld assigns a unique number to every entity. This is referred to as
+                           the entity ID.
+                  </p>
+                  <p>In the <code class="classname">BigWorld</code> Python module (which is
+                           imported at the start of most scripts), there is an object which maps
+                           entity IDs to the corresponding entity object. This object has the same
+                           interface as a Python dictionary, and is called
+                           <code class="classname">BigWorld</code>.<code class="varname">entities</code>.
+                  </p>
+                  <p>Given an entity id <code class="varname">entityID</code>, its entity object
+                           can be retrieved with the code below:
+                  </p><pre class="programlisting">ent = BigWorld.entities[ entityID ]</pre><p><span class="citetitle">Retrieval of entity object using its
+                              ID</span></p>
+                  <p>One should be very careful with entity IDs, and always check for
+                           the existence of the corresponding entity before assuming that it is
+                           safe to use it.
+                           <code class="classname">BigWorld</code>.<code class="varname">entities</code> throws an
+                           exception if the entity looked up does not exist.
+                  </p>
+                  <p>Each execution context has a version of the
+                           <code class="classname">BigWorld</code>.<code class="varname">entities</code> object with
+                           different entities in it.
+                  </p>
+                  <p><code class="classname">BigWorld</code>.<code class="varname">entities</code>
+                           contains the entities that are relevant to the execution context in
+                           which it is located, as listed below:
+                  </p>
+                  <div class="altrow">
+                     <table border="0">
+                        <colgroup>
+                           <col width="18%">
+                           <col width="82%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th align="left">Execution context</th>
+                              <th align="left">Entities listed in
+                                                 <code class="classname">BigWorld</code>.<code class="varname">entities</code></th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td align="left">Cell</td>
+                              <td align="left">Real and ghosted entities located on all
+                                                 cells managed by this cell's CellApp.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">Base</td>
+                              <td align="left">Entities located on this base's BaseApp
+                                                 <sup>[<a name="d0e4774" href="#ftn.d0e4774">a</a>]</sup>.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">Client</td>
+                              <td align="left">Entities in the client's AoI.</td>
+                           </tr>
+                        </tbody>
+                        <tbody class="footnotes">
+                           <tr>
+                              <td colspan="2">
+                                 <div class="footnote">
+                                    <p><sup>[<a name="ftn.d0e4774" href="#d0e4774">a</a>] </sup>For sending messages to bases on other BaseApps, see
+                                                           <a href="ch05.html#xref_Mailboxes" title="5.8.&nbsp;Mailboxes">Mailboxes</a></p>
+                                 </div>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <p><span class="citetitle">Entities listed in
+                              <code class="classname">BigWorld</code>.<code class="varname">entities</code> per
+                              execution context.</span></p>
+                  <p>Entity IDs can be obtained in various ways:</p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>From exposed methods (client sends entity ID as
+                                        argument).
+                           </p>
+                        </li>
+                        <li>
+                           <p>From the entity object's <code class="varname">id</code>
+                                        property.
+                           </p>
+                           <p>You can pass the object's ID from one execution context to
+                                        another (<em class="emphasis">e.g.</em>, from the client to the cell), so
+                                        that the other context can obtain the corresponding object. You can
+                                        also use this property to obtain the ID of a newly created
+                                        entity.
+                           </p>
+                        </li>
+                        <li>
+                           <p>From various utility methods that one can use to find entity
+                                        references.
+                           </p>
+                           <p>One of these methods is
+                                        <code class="methodname">entitiesInRange</code><sup>[<a name="d0e4816" href="#ftn.d0e4816">8</a>]</sup>. This method is defined for every cell entity, and
+                                        returns all entity objects located within a certain distance from
+                                        the calling entity. The resulting output can be queried again for
+                                        more specific search results.
+                           </p>
+                           <p>For example, to find all the <code class="classname">Guard</code>
+                                        entities within 100 metres of the current entity, you could have the
+                                        code below:
+                           </p><pre class="programlisting">def findGuards():
+  output = []
+  for entity in <em class="emphasis">self</em>.<em class="emphasis">entitiesInRange</em>( 100 ):
+    if entity.__class__.__name__ == "Guard":
+      output += [entity]
+  return output</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/<em class="replaceable"><code>&lt;entity&gt;</code></em>.py</code>
+                                           <span class="symbol">&#8208;</span> Obtaining ID of surrounding
+                                           entities</span></p>
+                           <p>Care should be taken when using this approach for entity
+                                        discovery as it is a linear search, and hence does not scale well.
+                                        Specifically to be avoided are searches over large entity sets that
+                                        could be obtained from a search of large distances, or from using
+                                        the complete set of entities in
+                                        <code class="classname">BigWorld</code>.<code class="varname">entities</code>. For a
+                                        small distance however, one would not expect large numbers of
+                                        objects (although this depends on the game).
+                           </p>
+                        </li>
+                     </ol>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Mailboxes"></a>5.8.&nbsp;Mailboxes
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Mailboxes are used to communicate to entities that are remote,
+                      <em class="emphasis">i.e.</em>, not on the current process.
+               </p>
+               <p>Entities can only access other entities that are running in the same
+                      execution context<sup>[<a name="d0e4870" href="#ftn.d0e4870">9</a>]</sup>, however it is frequently useful to be able to send a
+                      message to entities in other execution contexts. For example, an entity
+                      may wish to send a message to all members of a chat channel, but the
+                      channel might not have all its members located on the same BaseApp as the
+                      executing entity.
+               </p>
+               <p>Mailboxes are used to implement the following properties of an
+                      entity:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="varname">self</code>.<code class="varname">cell</code></p>
+                     </li>
+                     <li>
+                        <p><code class="varname">self</code>.<code class="varname">base</code></p>
+                     </li>
+                     <li>
+                        <p><code class="varname">self</code>.<code class="varname">ownClient</code></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>These properties allow you to reference objects located on different
+                      processes, and can be sent like any other value, using method calls, and
+                      the <span class="literal">MAILBOX</span> data type.
+               </p>
+               <p>You can use the <span class="literal">MAILBOX</span> like a normal entity
+                      reference, and call methods declared in the entity's definition file on
+                      other entities on other processes.
+               </p>
+               <p>Considering that an entity <em class="emphasis">B</em> (referenced in the
+                      following example as <code class="varname">anotherEntity</code>) has a method
+                      <code class="methodname">heyThere</code> which takes one argument of type
+                      <span class="literal">MAILBOX</span>, an entity <em class="emphasis">A</em> can pass its
+                      base mailbox to entity <em class="emphasis">B</em> from the cell, as in the
+                      example below:
+               </p><pre class="programlisting">anotherEntity.heyThere( <em class="emphasis">self.base</em> )</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/<em class="replaceable"><code>&lt;original_entity&gt;</code></em>.py</code>
+                         <span class="symbol">&#8208;</span> Passing base mailbox from
+                         cell</span></p>
+               <p>On the receiving entity <em class="emphasis">B</em> (referenced in the
+                      example as <code class="varname">anotherEntity</code>), the calling entities (entity
+                      <em class="emphasis">A</em>) base mailbox (as received via the method argument)
+                      can be used to call a method <code class="methodname">someMethod</code> on entity
+                      <em class="emphasis">A</em>. For example:
+               </p><pre class="programlisting">def heyThere( self, <em class="emphasis">originalEntity</em> ):
+  <em class="emphasis">originalEntity</em>.<em class="emphasis">someMethod</em>()</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/<em class="replaceable"><code>&lt;another_entity&gt;</code></em>.py</code>
+                         <span class="symbol">&#8208;</span> Receiving base mailbox</span></p>
+               <p>It is also possible to store mailboxes in a class as properties.
+                      However this is only useful for base entity mailboxes, since they will not
+                      change address as the entity moves around the space.
+               </p>
+               <p>Cell entity mailboxes should not be stored, because they can change
+                      as the entity moves between cells. It is possible to pass cell entity
+                      mailboxes to another entity for once-off use, since they are guaranteed to
+                      be usable for the time it takes to call a method and have it respond
+                      (<em class="emphasis">i.e.</em>, up to approximately 1 second).
+               </p>
+               <p>Using mailboxes, it is also possible to call methods within a
+                      different execution context to that of the mailbox being called. For
+                      example, using a base mailbox of an entity (<code class="varname">baseMB</code> in
+                      the following code), it is possible to call a cell method of the base
+                      entity as follows:
+               </p><pre class="programlisting">baseMB.cell.cellMethod()</pre><p><span class="citetitle">Calling a cell method of another entity through its base
+                         mailbox</span></p>
+               <p>The call is sent to the base entity first, which then calls the cell
+                      method from where the base entity resides. Though it is more convenient
+                      than calling a base method that in turn calls the cell method, it still
+                      takes two hops to call the cell entity.
+               </p>
+               <p>Available usages are:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><span class="literal">baseMB.cell</span></p>
+                     </li>
+                     <li>
+                        <p><span class="literal">baseMB.ownClient</span></p>
+                     </li>
+                     <li>
+                        <p><span class="literal">cellMB.base</span></p>
+                     </li>
+                     <li>
+                        <p><span class="literal">cellMB.ownClient</span></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>These are in fact instances of MailBoxes, and can be passed as
+                      method arguments. However, the same restriction applies to
+                      <span class="literal">cellMB.base</span> and <span class="literal">cellMB.client</span> as to
+                      cell mailboxes <span class="symbol">&#8208;</span> they can change as an
+                      entity moves around, and therefore should not be stored for later
+                      use.
+               </p>
+               <p>Note that both <span class="literal">baseMB.ownClient</span> and
+                      <span class="literal">cellMB.ownClient</span> refer to their own client only. There
+                      are no shortcut calls to <span class="literal">otherClients</span> and
+                      <span class="literal">allClients</span>.
+               </p>
+               <p>A convenient way to obtain other entities' mailboxes is by using the
+                      methods
+                      <code class="classname">BigWorld</code>.<code class="methodname">lookUpBaseByDBID</code>
+                      and
+                      <code class="classname">BigWorld</code>.<code class="methodname">lookUpBaseByName</code>
+                      on the BaseApp. For more details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/baseapp/index.html" class="olink">BaseApp Python API</a>'s entry <em class="emphasis">Main&nbsp;Page <span class="symbol">&#8594;</span> BigWorld
+                         (Module) <span class="symbol">&#8594;</span> Member
+                         Functions</em>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e5076"></a>5.9.&nbsp;Method Execution Context
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>All entity method calls across physical machines are asynchronous.
+                      For example, if you execute <span class="literal">self.cell.cellMethod()</span> or
+                      <span class="literal">self.client.clientMethod()</span> on a base entity, the call
+                      returns immediately without any value. The actual method execution takes
+                      place on the machine where the cell or client part of the entity
+                      resides.
+               </p>
+               <p>To inform the calling entity of the execution result you will have
+                      to call a function from within the method.
+               </p>
+               <p>The example below describes the client entity of class
+                      <span class="literal">Avatar</span> initiating a sequence of actions to open a door,
+                      executing the following steps:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>The client method <span class="literal">openDoor</span> of class
+                                   <span class="literal">Avatar</span> calls its cell method
+                                   <span class="literal">openDoor</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>That method then calls the cell method <span class="literal">unlock</span>
+                                   of class <span class="literal">Door</span>, passing <span class="literal">self</span> as
+                                   an argument. This way, <span class="literal">Door</span> receives a mailbox of
+                                   the cell entity <span class="literal">Avatar</span>, which is later used (with
+                                   exposed object client) to call the appropriate cell method on
+                                   <span class="literal">Avatar</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>That method then checks the keycard, and using the cell mailbox
+                                   (<span class="literal">sourceEntity</span>), makes a call directly to the
+                                   appropriate client method of class <span class="literal">Avatar</span> (in this
+                                   example, we assume it was successful).
+                        </p>
+                     </li>
+                  </ol>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">The client entity of the
+                                      <span class="literal">Avatar</span> class:</em></p><pre class="programlisting">class Avatar( ):
+  ...
+  def openDoor( self, doorID ):
+    # Call the cell method to open the door
+    self.cell.openDoor( doorID )
+  ...
+  def doorOpenFailed( self, doorID, keycard ):
+    # Animation shows the Avatar scratching his head
+  ...
+  def doorOpenSucceeded( self, doorID, keycard ):
+    # Animation shows the door with corresponding doorID opening
+  ...</pre><p><span class="citetitle"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span>
+                                      <span class="symbol">&#8208;</span> Definition of <span class="literal">door</span>
+                                      methods</span></p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">The cell entity of the
+                                      <span class="literal">Avatar</span> class:</em></p><pre class="programlisting">class Avatar( ):
+  ...
+  def openDoor( self, doorID ):
+    # locate the door
+    door = self.locateTheDoor( doorID )
+    keycard = self.getKeycardFromInventory()
+    door.unlock( self, keycard )
+   ...</pre><p><span class="citetitle"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Avatar.py</span>
+                                      <span class="symbol">&#8208;</span> Definition of
+                                      <span class="literal">methodopenDoor</span></span></p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">The cell entity of the
+                                      <span class="literal">Door</span> class:</em></p><pre class="programlisting">class Door( BigWorld.Entity ):
+  ...
+  def unlock( self, sourceEntity, keycard ):
+  # check source is close enough
+  # check keycard is good
+  if not self.isGoodKeycard( keycard ):
+    sourceEntity.client.doorOpenFailed( self.id, keycard )
+  else:
+    self.isOpen = True
+    sourceEntity.client.doorOpenSucceeded( self.id, keycard )
+  ...</pre><p><span class="citetitle"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Door.py</span>
+                                      <span class="symbol">&#8208;</span> Definition of
+                                      <span class="literal">methodunlock</span></span></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The same callback technique is used to return values from a called
+                      method.
+               </p>
+               <p>The example below describes the client entity of class
+                      <span class="literal">Avatar</span> initiating a sequence of actions to inquire
+                      about an item's description based on its inventory index, executing the
+                      following steps:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>The client method <span class="literal">investigateInventory</span> of
+                                   class <span class="literal">Avatar</span> calls its base method
+                                   <span class="literal">itemDescriptionRequest</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>That method then calls its client method
+                                   <span class="literal">itemDescriptionReply</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>That method then displays the item's description.</p>
+                     </li>
+                  </ol>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">The client entity of the
+                                      <span class="literal">Avatar</span> class:</em></p><pre class="programlisting">class Avatar( ):
+  ...
+  def investigateInventory( self, indexInInventory ):
+    # first get the details from the server
+    self.base.itemDescriptionRequest( indexInInventory )
+    # maybe have a timeout in case server doesn't reply
+  ...
+  def itemDescriptionReply( self, indexInInventory, desc ):
+    # call the callback
+    if desc == []:
+      GUI.addAlert( "No such item" + str(indexInInventory) )
+      return
+    GUI.displayItemWindow( indexInInventory, desc )
+  ...</pre><p><span class="citetitle">Example
+                                      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span>
+                                      <span class="symbol">&#8208;</span> Definition of inventory
+                                      methods</span></p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">The base entity of the
+                                      <span class="literal">Avatar</span> class:</em></p><pre class="programlisting">class Avatar( ):
+  ...
+  def itemDescriptionRequest( self, indexInInventory ):
+    try:
+      desc = self.generateDescription( indexInInventory )
+    except:
+      desc = []    # in case no such index
+    self.client.itemDescriptionReply( indexInInventory, desc )
+  ...</pre><p><span class="citetitle">Example
+                                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Avatar.py</code>
+                                      <span class="symbol">&#8208;</span> Definition of
+                                      <code class="methodname">itemDescriptionRequest</code></span></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>For those entities residing in the same process, the method calls
+                      take place synchronously. However, since there is no guarantee that the
+                      calling entities and the called ones will always be in the same process,
+                      it is better to adopt the callback solution.
+               </p>
+               <p>A special case is an entity method that is not defined in the
+                      entity's definition file
+                      (<span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</span>
+                      <span class="symbol">&#8208;</span> For details, see <a href="ch02.html#xref_The_Definition_File" title="2.2.&nbsp;The Entity Definition File">The Entity Definition File</a>). In this case, the method is always
+                      executed synchronously, and is only executed in the process of the caller.
+                      For example, a method call on a ghosted entity normally will be delegated
+                      to the real one. However, if this method is not defined in the entity's
+                      definition file, it will be treated as a usual Python method, and run
+                      locally.
+               </p>
+               <p>This mechanism does save a bit of network traffic between server
+                      components, and can return a result immediately to the caller, but it is
+                      also limited in that it can only access the read-only ghosted properties.
+                      Trying to access non-ghosted properties or to write read-only properties
+                      would result in unexpected errors. Unless carefully planned, one should
+                      not take advantage of this feature.
+               </p>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e4441" href="#d0e4441">7</a>] </sup>For details on property's distribution flags, see <a href="ch04.html#xref_Data_Distribution" title="4.3.&nbsp;Data Distribution">Data Distribution</a></p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e4816" href="#d0e4816">8</a>] </sup>For other methods, please refer to the
+                                   <code class="classname">BigWorld</code>.<code class="classname">Entity</code>
+                                   class reference in the Base, Cell and Client Python API
+                                   documentation.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e4870" href="#d0e4870">9</a>] </sup>For more details, see <a href="ch05.html#xref_Inter_Entity_Communication" title="5.7.&nbsp;Inter-Entity Communication">Inter-Entity Communication</a></p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;4.&nbsp;Properties&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;6.&nbsp;Inheritance in BigWorld</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

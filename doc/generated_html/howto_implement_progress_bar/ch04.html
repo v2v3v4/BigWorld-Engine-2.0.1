@@ -1,0 +1,114 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;4.&nbsp;Troubleshooting</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Implement a Progress Bar">
+      <link rel="up" href="index.html" title="How To Implement a Progress Bar">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Implementing Progress Bars">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_implement_progress_bar/ch04.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Troubleshooting</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Troubleshooting"></a>Chapter&nbsp;4.&nbsp;Troubleshooting
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch04.html#d0e273">4.1. My game's personality script takes a while to initialise</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e273"></a>4.1.&nbsp;My game's personality script takes a while to initialise
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The application will call method <span class="literal">setProgress</span>
+                      until it reaches 100%. Once this value is reached, the personality script
+                      <span class="literal">init</span> method is called.
+               </p>
+               <p>If you want to seamlessly incorporate the loading of the application
+                      with the loading of the personality script, then make your loading bar GUI
+                      script rescale the incoming values.
+               </p>
+               <p>For example in
+                      <span class="literal">fantasydemo/res/scripts/client/Helpers/ProgressBar.py</span>,
+                      here are the code snippets that perform this task:
+               </p><pre class="programlisting">def setMinMax( self, min, max ):
+    self.min = min
+    self.max = max
+
+def setProgress( self, value ):
+    #remap value into the correct range
+    range = self.max - self.min
+    value = self.min + value*range
+    self.component.bar.clipper.value = value
+
+def onLoad( self, section ):
+    self.phase1Ratio = section.readFloat( "phase1Ratio", self.phase1Ratio )
+
+def startPhase( self, num ):
+    if num == 1:
+        self.setMinMax( 0.0, self.phase1Ratio )
+    else:
+        self.setMinMax( self.phase1Ratio, 1.0 )</pre><p><span class="citetitle">Incorporating the loading of application with loading of
+                         personality script</span></p>
+               <p>FantasyDemo's loading bar loads a value from the
+                      <span class="literal">.gui</span> file called <span class="literal">phase1ratio</span>. This
+                      is set to 0.66, meaning that the application's initialisation goes up to
+                      66% of the progress bar. Therefore 33% of the time will be used by the
+                      personality script to load chunks.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Implementing Progress Bars&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

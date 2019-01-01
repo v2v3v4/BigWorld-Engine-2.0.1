@@ -1,0 +1,627 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;4.&nbsp;PHP Presentation Layer</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Implement Web Integration">
+      <link rel="up" href="index.html" title="How To Implement Web Integration">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;BigWorld Python Scripting Layer">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_web_integration/ch04.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;PHP Presentation Layer</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="d0e1231"></a>Chapter&nbsp;4.&nbsp;PHP Presentation Layer
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch04.html#d0e1239">4.1. Overview</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1259">4.2. Device-specific handling and WURFL</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1271">4.3. Constants in <code class="filename">Constants.php</code></a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1291">4.4. XHTML-MP helper functions</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1403">4.5. Debugging PHP example scripts</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1463">4.6. <code class="classname">XHTMLMPPage</code> objects</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1506">4.7. <code class="classname">AuthenticatedXHTMLMPPage</code> objects</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1549">4.8. <code class="classname">BWAuthenticator</code> objects</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1595">4.9. <code class="filename">Login.php</code></a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1623">4.10. <code class="filename">Characters.php</code></a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1665">4.11. <code class="filename">News.php</code></a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1681">4.12. <code class="filename">Character.php</code></a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1701">4.13. <code class="filename">Inventory.php</code></a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1743">4.14. <code class="filename">PlayerAuctions.php</code></a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1761">4.15. <code class="filename">SearchAuctions.php</code></a></span></dt>
+               </dl>
+            </div>
+            <p>The presentation layer is written in PHP, and handles requests from
+                 web user agents (such as mobile phones and PC browsers) and presents
+                 information from the game. The example code PHP sources are found at
+                 <code class="filename">fantasydemo/src/web/php</code>.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1239"></a>4.1.&nbsp;Overview
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>PHP pages in the example code are represented as PHP objects, and
+                      the PHP class definition for
+                      <span class="literal"><em class="replaceable"><code>&lt;class&gt;</code></em></span> is located in
+                      <span class="literal"><em class="replaceable"><code>&lt;class&gt;</code></em>.php</span>.
+                      Generally, after the class definition an instance of the page object is
+                      created and asked to render itself.
+               </p>
+               <p>We do not recommend this way of structuring a web interface &#8212; the
+                      purpose of this PHP construction is to illustrate, as clearly as possible,
+                      solutions to common problems encountered when implementing a web interface
+                      to a BigWorld game instance. It is not meant to illustrate best practices
+                      in web interface implementation.
+               </p>
+               <p>Developers can use any frameworks that they wish to implement a web
+                      interface in PHP or Python &#8212; BigWorld does not limit the use of
+                      third-party frameworks, from complex systems such as Zope to simple
+                      templating engines such as PHP Smarty.
+               </p>
+               <p>The examples adhere to the XHTML-MP standard (XHTML Mobile
+                      Profile).
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1259"></a>4.2.&nbsp;Device-specific handling and WURFL
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Since there is a large variability in the device capabilities of
+                      each user agent, we present a solution for handling multiple device types
+                      using WURFL.
+               </p>
+               <p>WURFL is a database of user agents and their capabilities, and given
+                      the user agent string, we can access the device's capabilities (such as
+                      screen resolution) and adjust our presentation accordingly. WURFL has
+                      script support in PHP and Python (among other languages). The latest
+                      release of WURFL can be downloaded from <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://wurfl.sourceforge.net" target="_top">http://wurfl.sourceforge.net</a>.
+               </p>
+               <p>WURFL requires some initial set-up before it can be used in PHP; in
+                      particular, the device capabilities cache needs to be created. For details
+                      on how to install and update the cache, see the WURFL
+                      documentation.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1271"></a>4.3.&nbsp;Constants in <code class="filename">Constants.php</code></h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Configuration constants and static data are defined in
+                      <code class="filename">Constants.php</code>. Among other things, it
+                      contains:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>The static item type data (such as URLs to image icons, image
+                                   statistics, etc.) that are used when displaying player
+                                   inventory.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The URL of the login page.</p>
+                     </li>
+                     <li>
+                        <p>The URL of the welcome page after authentication.</p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1291"></a>4.4.&nbsp;XHTML-MP helper functions
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p><span class="literal">XHTML-MP-functions.php</span> contains functions for
+                      commonly used XHTML-MP (XHTML Mobile Profile) element constructs. The
+                      simple base ones are listed below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="function">xhtmlMpSingleTag( <em class="parameter"><code>$name</code></em>, 
+                                      <em class="parameter"><code>$className=''</code></em>, 
+                                      <em class="parameter"><code>$attrString=''</code></em> )</code></p>
+                        <p>Returns the element source of a single unenclosed XHTML element
+                                   with the given name, class and attribute string.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="function">xhtmlMpTag( <em class="parameter"><code>$name</code></em>, 
+                                      <em class="parameter"><code>$contents</code></em>,  <em class="parameter"><code>$className=''</code></em>, 
+                                      <em class="parameter"><code>$attrString=''</code></em> )</code></p>
+                        <p>Returns the element source of a single enclosed XHTML element
+                                   with the given name, contents, class and attribute string.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="function">xhtmlMpAddAttribute(
+                                      <em class="parameter"><code>$attrString=''</code></em>,  <em class="parameter"><code>$key</code></em>, 
+                                      <em class="parameter"><code>$value</code></em> )</code></p>
+                        <p>Adds a key value attribute to an attribute string and returns
+                                   it.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>From these, the other common XHTML elements are built. Here are some
+                      examples:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="function">xhtmlMpHeading( <em class="parameter"><code>$contents</code></em>, 
+                                      <em class="parameter"><code>$level=1</code></em>,  <em class="parameter"><code>$className=''</code></em>, 
+                                      <em class="parameter"><code>$attrString=''</code></em> )</code></p>
+                        <p>Returns the element source of a single unenclosed XHTML element
+                                   with the given name, class and attribute string.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="function">xhtmlMpDiv( <em class="parameter"><code>$contents</code></em>, 
+                                      <em class="parameter"><code>$className=''</code></em>, 
+                                      <em class="parameter"><code>$attrString=''</code></em> )</code></p>
+                        <p>Returns the element source for a XHTML <span class="literal">DIV</span>
+                                   element with the given optional class and attribute string.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="function">xhtmlMpPara( <em class="parameter"><code>$contents</code></em>, 
+                                      <em class="parameter"><code>$className=''</code></em> $attrString )</code></p>
+                        <p>Returns the element source for a XHTML paragraph.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>There is also a <code class="classname">XHTMLMPForm</code> class for
+                      creating XHTML MP forms.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1403"></a>4.5.&nbsp;Debugging PHP example scripts
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>There is a debug library implemented in
+                      <code class="filename">Debug.php</code> that is used throughout the code example.
+                      You can use this to trace the flow of the example scripts using the
+                      various debugging output options.
+               </p>
+               <p>Generally, debug output is displayed in a page as a XHTML
+                      comment.
+               </p><pre class="programlisting">class SomePage extends AuthenticatedXHTMLMPPage
+{
+...
+   function renderBody() 
+   {
+      ...
+      debug( "this is a test" );
+      ...
+   }
+...
+}</pre><p><span class="citetitle">Example PHP using the debug function</span></p>
+               <p>The code above will generate HTTP output like this:</p><pre class="programlisting">&lt;!--
+this is a test
+--&gt;</pre><p><span class="citetitle">Example HTTP output</span></p>
+               <p>Additionally, you may use this in an overridden
+                      <code class="methodname">XHTMLMPPage::initialise</code> method. Because
+                      <code class="methodname">initialise</code> does not write output except for HTTP
+                      headers in order to perform actions such as HTTP redirects, debug output
+                      is deferred until the rendering stage of the page, where you will see
+                      debug output as:
+               </p><pre class="programlisting">&lt;!-- deferred error output follows
+debug output instance 1
+debug output instance 2
+debug output instance 3
+deferred error output above --&gt;</pre><p><span class="citetitle">Example HTTP output</span></p>
+               <p>There are also some helpful debugging functions for getting
+                      representations of more complex PHP objects such as Arrays and class
+                      instance objects:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="methodname">debugStringObj</code></p>
+                        <p>Returns the string output.</p>
+                     </li>
+                     <li>
+                        <p><code class="methodname">debugObj</code></p>
+                        <p>Sends the string output through
+                                   <code class="function">debug()</code>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Both these functions generate debug strings representing the
+                      objects. This is useful for PHP Arrays and PHP class instance
+                      objects.
+               </p>
+               <p>There is also a registered error handler that prints errors through
+                      <code class="function">debug()</code>, including information such as stack trace,
+                      function line numbers, and passed parameter values.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1463"></a>4.6.&nbsp;<code class="classname">XHTMLMPPage</code> objects
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>These are abstractions of a page, and are the basis for all viewable
+                      pages on the web interface &#8212; their definition is in
+                      <code class="filename">Page.php</code>.
+               </p>
+               <p>There are methods designed to be overridden for the processing stage
+                      and the output stage.
+               </p>
+               <p>The <code class="methodname">XHTMLMPPage::initialise()</code> method is
+                      called by <code class="methodname">XHTMLMPPage::render()</code> for processing
+                      before any page source is output. Its purpose is to usually set up the
+                      page and provide a processing hook for processing HTTP GET/POST request
+                      parameters, and initialise page instance variables so they can be easily
+                      rendered in the output stage.
+               </p>
+               <p><code class="methodname">XHTMLMPPage::initialise()</code> allows you to set
+                      redirections from a page to another URL &#8212;
+                      <code class="methodname">XHTMLMPPage::setRedirect()</code> takes a parameter
+                      <em class="parameter"><code>$url</code></em> for this purpose. After calling
+                      <code class="methodname">initialise()</code>, if a redirection has been set, then
+                      the browser redirects via the HTTP header <code class="code">Location</code>.
+               </p>
+               <p><code class="methodname">XHTMLMPPage::renderBody()</code> (called from
+                      <code class="methodname">XHTMLMPPage::render()</code>) renders the page, and
+                      outputs the XHTML element for the page content.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1506"></a>4.7.&nbsp;<code class="classname">AuthenticatedXHTMLMPPage</code> objects
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Authenticated XHTML Page inherited objects (class
+                      <code class="classname">AuthenticatedXHTMLMPPage</code> in
+                      <code class="filename">AuthenticatedPage.php</code>) are pages that only
+                      authenticated users can view. Authentication is performed by an instance
+                      of <code class="classname">Authenticator</code>, with the name of the
+                      <code class="classname">Authenticator</code> class used to do this (which is
+                      configured in <code class="filename">Constants.php</code>). For FantasyDemo
+                      scripts, it is the <code class="classname">BWAuthenticator</code> class.
+               </p>
+               <p><code class="classname">Authenticator</code> objects also provide a means of
+                      storing key-value pairs as server-side session variables.
+               </p>
+               <p>The absence of authentication token variables set in the session
+                      indicates that the user is not logged in, which instructs the client
+                      browser to redirect to the login page configured in
+                      <code class="filename">Constants.php</code>. This login page must process requests
+                      for logging in so that an authenticator object be created that
+                      authenticates the user and their password and creates the necessary
+                      authentication token variables.
+               </p>
+               <p>There is also a timeout for an authenticated session; if no access
+                      has been made for a configured amount of time (for details, see
+                      <code class="filename">Constants.php</code>), then the session is invalidated, and
+                      browsers that have timed out are redirected back to the configured login
+                      page with an error message stating that their session has expired.
+               </p>
+               <p>Authenticators are used by authenticated pages to check the presence
+                      of a valid authentication token:
+               </p><pre class="programlisting">if ($this-&gt;auth-&gt;doesAuthTokenExist()) 
+{
+   $authErr = $this-&gt;auth-&gt;authenticateSessionToken();
+   ...
+}</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1549"></a>4.8.&nbsp;<code class="classname">BWAuthenticator</code> objects
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This class provides an example of how to perform authentication with
+                      the BigWorld system. It involves invoking the
+                      <code class="function">bw_logon()</code> method with the user's name and
+                      password:
+               </p><pre class="programlisting">$logonResult = bw_logon( $username, $pass, 
+    /* allow_already_logged_on */ TRUE );</pre><p>The result returned by <code class="function">bw_logon()</code> is
+                      <code class="code">TRUE</code> if it succeeded, or an error message with the reason why
+                      the logon operation failed.
+               </p><pre class="programlisting">$mailbox = bw_look_up_entity_by_name( "Account", $username );</pre><p>We then retrieve the mailbox by calling
+                      <code class="function">bw_look_up_entity_by_name()</code>. We know it is of the
+                      <code class="classname">Account</code> type because that is the initial entity
+                      type when a user logs in (this is defined in <code class="filename">bw.xml</code>
+                      option <span class="literal">dbMgr/entityType</span>).
+               </p><pre class="programlisting">bw_set_keep_alive_seconds( $mailbox, AUTHENTICATOR_INACTIVITY_PERIOD );</pre><p>A keep-alive period is set on this mailbox after we have retrieved
+                      it.
+               </p><pre class="programlisting">function &amp;getMailbox()
+{
+   $mailboxSerialised =&amp; $this-&gt;getVariable(
+      BW_AUTHENTICATOR_TOKEN_KEY_MAILBOX );
+   ...
+   return bw_deserialise( $mailboxSerialised );
+}</pre><p>Authenticated pages can access this mailbox by their authentication
+                      object:
+               </p><pre class="programlisting">$playerMailbox = $this-&gt;auth-&gt;getMailbox();</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1595"></a>4.9.&nbsp;<code class="filename">Login.php</code></h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This page is responsible for collecting the user name and password
+                      to be authenticated against the BigWorld server. Thus, any user name and
+                      password that is valid when logging in with the FantasyDemo client is also
+                      valid here, so that the <span class="literal">bw.xml</span> configuration options
+                      <span class="literal">dbMgr/createUnknown</span> and
+                      <span class="literal">dbMgr/rememberUnknown</span> become relevant (for details on
+                      these configuration options, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html#xref_DBMgr_Configuration_Options" class="olink">DBMgr Configuration Options</a>).
+               </p>
+               <p>Authentication is performed by making a request to the authenticator
+                      object, for example:
+               </p><pre class="programlisting">$this-&gt;auth-&gt;authenticateUserPass( $_REQUEST['username'], $_REQUEST['password'] );</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1623"></a>4.10.&nbsp;<code class="filename">Characters.php</code></h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Once the user authenticates using a username and password, the
+                      <code class="classname">Account</code> mailbox is queried for its list of
+                      associated <code class="classname">Avatar</code> characters. This is done as
+                      follows:
+               </p><pre class="programlisting">$player = $this-&gt;auth-&gt;getMailbox();
+$res = bw_exec( $player, "webGetCharacterList" );</pre><p>This returns the list of character descriptors in
+                      <code class="code">$res['characters']</code>. Each character descriptor is a dictionary
+                      with keys <span class="literal">name</span> and <span class="literal">type</span> (of entity,
+                      usually <code class="classname">Avatar</code>).
+               </p>
+               <p>You can also create characters via this page:</p><pre class="programlisting">$res = bw_exec( $player, "webCreateCharacter", $_GET['new_character_name'] );</pre><p>You choose a character to progress. Once chosen, the session player
+                      <code class="classname">Account</code> mailbox is replaced by a mailbox to the
+                      player <code class="classname">Avatar</code> entity and the keep-alive period is
+                      set on the newly made character mailbox.
+               </p><pre class="programlisting">$res = bw_exec( $player, "webChooseCharacter", $_GET['character'], "Avatar" );
+$mailbox = $res['character'];
+bw_set_keep_alive_seconds( $mailbox, AUTHENTICATOR_INACTIVITY_PERIOD );</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1665"></a>4.11.&nbsp;<code class="filename">News.php</code></h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This page is the entry point after a user has logged in and chosen a
+                      character. Currently, this is a static PHP page, but one possible
+                      extension to this is to have a <code class="classname">News</code> entity in the
+                      world, which is queried by this page each time it loads up.
+               </p>
+               <p>A hook for doing this is present in the
+                      <code class="methodname">NewsPage::initialise()</code> method:
+               </p><pre class="programlisting">// the articles could also come from an entity
+// e.g.
+// $newsagent = bw_lookup_entity_by_name( "NewsAgent", &#8220;NewsAgent" );
+// $res = bw_exec( $newsagent, "getNewsArticles" );
+// $this-&gt;articles = $res['articles'];</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1681"></a>4.12.&nbsp;<code class="filename">Character.php</code></h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This page queries the player <code class="classname">Avatar</code> mailbox
+                      in real-time via the <code class="methodname">Avatar.webGetPlayerInfo()</code>
+                      web method for the current statistics of the player for display:
+               </p><pre class="programlisting">$player = $this-&gt;auth-&gt;getMailbox();
+$res = bw_exec( $player, "webGetPlayerInfo" );</pre><p>For details on how this is implemented in BigWorld Python script,
+                      see <a href="ch03.html#xref_Retrieving_Real_Time_Player_Data" title="3.2.&nbsp;Retrieving real-time player data">Retrieving real-time player data</a>.
+               </p>
+               <p>The position and the direction the player is currently facing is
+                      also reported back through this page if the player is online.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1701"></a>4.13.&nbsp;<code class="filename">Inventory.php</code></h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This page queries the player character mailbox via the
+                      <code class="methodname">Avatar.webGetGoldAndInventory()</code> web method. This
+                      method is defined in the entity definitions file for the
+                      <code class="classname">Avatar</code> entity type, in
+                      <code class="filename">fantasydemo/res/scripts/entity_defs/Avatar.def</code>:
+               </p><pre class="programlisting">&lt;webGetGoldAndInventory&gt;
+   &lt;ReturnValues&gt;
+      &lt;!-- The Avatar's available gold pieces. --&gt;
+      &lt;goldPieces&gt;        GOLDPIECES  &lt;/goldPieces&gt;
+
+      &lt;!-- List of item descriptions as dictionaries with keys:
+           'serial': the serial number of the item
+           'itemType': the item type
+           'lockHandle' : lock handle associated with this item
+      --&gt;
+      &lt;inventoryItems&gt;    PYTHON      &lt;/inventoryItems&gt;
+
+      &lt;!-- List of dictionary with keys:
+          'serials': a list of serial numbers of locked items
+          'goldPieces': the gold pieces locked
+      --&gt;
+      &lt;lockedItems&gt;       PYTHON      &lt;/lockedItems&gt;
+    &lt;/ReturnValues&gt;
+&lt;/webGetGoldAndInventory&gt;</pre><p>The excerpt above shows that
+                      that the return value to the PHP scripting layer is an Array with keys
+                      <code class="varname">goldPieces</code>, <code class="varname">inventoryItems</code> and
+                      <code class="varname">lockedItems</code>. We store them in the class instance
+                      variable <code class="varname">$this-&gt;inventory</code>:
+               </p><pre class="programlisting">$mailbox =&amp; $this-&gt;auth-&gt;getMailbox();
+...
+$this-&gt;inventory = bw_exec( $mailbox, "webGetInventoryAndGold" );</pre><p>
+                      The gold pieces are accessible from this instance variable when displaying
+                      its value to the user: 
+               </p><pre class="programlisting">echo(
+   xhtmlMpDiv(
+      'Gold: '. $this-&gt;inventory['goldPieces'],
+         'goldRow'
+    )
+);</pre><p> This page is also responsible for handling requests for
+                      creating auctions from the player. The player nominates an item in their
+                      inventory, based on its serial number, then sets the initial auction
+                      parameters through the form and on submission, and creating the auction is
+                      a case of invoking the
+                      <code class="methodname">Avatar.webCreateAuction</code>:
+               </p><pre class="programlisting">$res = bw_exec( $mailbox, 'webCreateAuction',
+   $itemSerialToAuction, $expiry, $bidPrice, $buyout );</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1743"></a>4.14.&nbsp;<code class="filename">PlayerAuctions.php</code></h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This page enables players to see the state of auctions they have
+                      created. The search criteria used is an instance of
+                      <code class="classname">SellerCriteria</code> with the current player's database
+                      ID. This is retrieved from
+                      <code class="methodname">Avatar.webGetPlayerInfo()</code>:
+               </p><pre class="programlisting">$res = bw_exec( $this-&gt;player, "webGetPlayerInfo" );
+$this-&gt;playerDBID = $res['databaseID'];</pre><p> The result is used
+                      in constructing and applying the <code class="classname">SellerCriteria</code> for
+                      getting search results to present to the user.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1761"></a>4.15.&nbsp;<code class="filename">SearchAuctions.php</code></h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This page enables players to search for auctions by using the
+                      singleton <code class="classname">AuctionHouse</code> entity, and allows for
+                      bidding of searched auctions.
+               </p>
+               <p>Search criteria objects are built up using various methods in
+                      AuctionHouse, for example:
+               </p><pre class="programlisting">$res = bw_exec( $this-&gt;auctionHouse,
+    "webCreateItemTypeCriteria", $itemTypesList );
+...
+$searchCriteria = $res['criteria'];
+...
+$res = bw_exec( $this-&gt;auctionHouse,
+    "webCreateBidRangeCriteria",
+    $searchMinBid, $searchMaxBid );
+$bidRangeCriteria = $res['criteria'];
+$res = bw_exec( $this-&gt;auctionHouse,
+    "webCombineAnd",
+    $searchCriteria, $bidRangeCriteria );
+$searchCriteria = $res['criteria'];</pre><p>The <code class="varname">$searchCriteria</code> object contains the combined
+                      search criteria. It can be applied to a search via the
+                      <code class="methodname">AuctionHouse.webSearchAuctions()</code> method. This
+                      method returns a list of auction IDs that match the criteria.
+               </p>
+               <p>To retrieve the auction descriptors (which contains information such
+                      as the seller player, the current bid amount, the item type), we use the
+                      <code class="methodname">AuctionHouse.webGetAuctionInfo()</code> which takes a
+                      list of auction IDs and returns a list of auction descriptors.
+                      
+               </p><pre class="programlisting">$res = bw_exec( $this-&gt;auctionHouse, 'webSearchAuctions', $searchCriteria );
+...
+$res = bw_exec( $this-&gt;auctionHouse, 'webGetAuctionInfo', 
+    $res['searchedAuctions'] );
+...
+// store the auctions in an associative array by auction ID
+$this-&gt;searchResults = Array();
+foreach ($res['auctionInfo'] ) as $auctionInfo)
+{
+    $this-&gt;searchResults[$auctionInfo['auctionID'] = $auctionInfo;
+}
+...</pre></div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;BigWorld Python Scripting Layer&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

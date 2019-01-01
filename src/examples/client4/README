@@ -1,0 +1,61 @@
+-------------------------------------------------------------------------------
+client4 Example Code : README
+-------------------------------------------------------------------------------
+
+This file is an overview of the client4 example client.
+
+It demonstrates logging in through an initial Account entity, and selection of
+an appropriate character entity (called ClientAvatar in this example). There is
+an example account created called 'MyAccount', which contains a reference to a 
+character ClientAvatar entity called 'MyCharacter'. 
+
+The source layout consists of the source for the client4 client executable 
+and also the resource tree, located in the directory 
+	$MF_ROOT/bigworld/src/examples/client4/res
+
+You can inspect the account data in the 
+	$MF_ROOT/bigworld/src/examples/client4/res/entities/db.xml 
+file. Note that the 'character' property of the MyAccount has the value
+'MyCharacter', which is then used to load the ClientAvatar entity with its 
+'playerName' property equal to 'MyCharacter'.
+
+To run this client, do the following:
+
+* compile the client4 executable using make:
+	$ cd $MF_ROOT/bigworld/src/examples/client4/
+	$ make
+	
+* start a server instance with the resource paths set to:
+	$MF_ROOT/bigworld/src/examples/client4/res:$MF_ROOT/bigworld/res
+  Consult the Server Operations Guide for more detailed instructions on how 
+  to start a server instance.
+  
+* once all the server components are up and running, run the client4
+  executable with the same resource paths.
+	$ ./client4 --res ./res:$MF_ROOT/bigworld/res
+ 
+* It will prompt for the entry of the server name; do so.
+* It will then prompt for a user name. Enter 'MyAccount'.
+* It will then attempt to login to the server. Amongst other debugging output
+  there should be five lines printed once a second that read something like:
+  	Account.chatMessage: Hello from the base: 1 
+	Account.chatMessage: Hello from the base: 2
+	...
+	Account.chatMessage: Hello from the base: 5
+
+  This is the initial Account entity. After 5 seconds, it will attempt to load
+  a character ClientAvatar entity called MyCharacter. When the ClientAvatar
+  base entity is loaded, the client will be transferred from the Account 
+  base entity to that ClientAvatar base entity, and the Account base entity 
+  destroyed. Once this is done, the ClientAvatar base entity creates its cell 
+  entity. 
+  
+  We have now spawned a new character ClientAvatar entity from the Account 
+  entity.
+
+* After a second's delay, the ClientAvatar cell entity will send a chat message
+  to its client entity.
+  This will appear as:
+  	ClientAvatar.fromCell: 2002: Hello from the cell
+  where 2002 is the entity ID of the character ClientAvatar entity.
+  

@@ -1,0 +1,116 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>How To Implement Items And Trading</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Implement Items And Trading">
+      <link rel="next" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Introduction">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_items/index.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">How To Implement Items And Trading</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left">&nbsp;</td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch01.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="book" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h1 class="title"><a name="HowTo_Items_And_Trading"></a>How To Implement Items And Trading
+                     </h1>
+                  </div>
+                  <div>
+                     <p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p>
+                  </div>
+                  <div>
+                     <p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p>
+                  </div>
+                  <div>
+                     <div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+                           is restricted to authorised users. This document is protected by
+                           copyright laws of Australia, other countries and international treaties.
+                             Unauthorised use, reproduction or distribution of this document, or any
+                             portion of this document, may result in the imposition of civil and
+                             criminal penalties as provided by law.
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <hr>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="chapter"><a href="ch01.html">1. Introduction</a></span></dt>
+                  <dt><span class="chapter"><a href="ch02.html">2. Items</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch02.html#xref_Item_Definition">2.1. Item definition</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_Additional_Security">2.2. Additional Security</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_Rendering_The_Item">2.3. Rendering the Item</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_Item_Inventory">2.4. The Inventory</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch02.html#xref_Inventory_Manager">2.4.1. Inventory Manager</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#xref_Serial_Numbers">2.4.2. Serial Numbers</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch02.html#xref_Dropping_And_Picking_Items_Up">2.5. Dropping and picking items up</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch02.html#xref_Dropping_An_Item_On_The_Ground">2.5.1. Dropping an item on the ground</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#xref_Picking_An_Item_Up_From_The_Ground">2.5.2. Picking an item up from the ground</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch02.html#xref_Locking_Inventory_Items">2.6. Locking inventory items</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch03.html">3. Trading</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#d0e871">3.1. Trade Protocol</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_Trading_Supervisor">3.2. Trading Supervisor</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_Dealing_With_Failure_Conditions">3.3. Dealing with failure conditions</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_Creating_And_Destroying_The_Trading_Supervisor">3.4. Creating and destroying the trading supervisor</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e1378">3.5. Scalability</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e1405">3.6. Vulnerabilities</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left">&nbsp;</td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch01.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">&nbsp;</td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;1.&nbsp;Introduction</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

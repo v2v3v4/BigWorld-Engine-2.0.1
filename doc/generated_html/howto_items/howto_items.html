@@ -1,0 +1,881 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>How To Implement Items And Trading</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_Items_And_Trading"></a>How To Implement Items And Trading</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Introduction">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#xref_Items">2. Items</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_Item_Definition">2.1. Item definition</a></span></dt><dt><span class="section"><a href="#xref_Additional_Security">2.2. Additional Security</a></span></dt><dt><span class="section"><a href="#xref_Rendering_The_Item">2.3. Rendering the Item</a></span></dt><dt><span class="section"><a href="#xref_Item_Inventory">2.4. The Inventory</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_Inventory_Manager">2.4.1. Inventory Manager</a></span></dt><dt><span class="section"><a href="#xref_Serial_Numbers">2.4.2. Serial Numbers</a></span></dt></dl></dd><dt><span class="section"><a href="#xref_Dropping_And_Picking_Items_Up">2.5. Dropping and picking items up</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_Dropping_An_Item_On_The_Ground">2.5.1. Dropping an item on the ground</a></span></dt><dt><span class="section"><a href="#xref_Picking_An_Item_Up_From_The_Ground">2.5.2. Picking an item up from the ground</a></span></dt></dl></dd><dt><span class="section"><a href="#xref_Locking_Inventory_Items">2.6. Locking inventory items</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Trading">3. Trading</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e871">3.1. Trade Protocol</a></span></dt><dt><span class="section"><a href="#xref_Trading_Supervisor">3.2. Trading Supervisor</a></span></dt><dt><span class="section"><a href="#xref_Dealing_With_Failure_Conditions">3.3. Dealing with failure conditions</a></span></dt><dt><span class="section"><a href="#xref_Creating_And_Destroying_The_Trading_Supervisor">3.4. Creating and destroying the trading supervisor</a></span></dt><dt><span class="section"><a href="#d0e1378">3.5. Scalability</a></span></dt><dt><span class="section"><a href="#d0e1405">3.6. Vulnerabilities</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Introduction"></a>Chapter&nbsp;1.&nbsp;Introduction</h2></div></div></div><p>This document describes one possible solution for the implementation
+  of items and inventory systems using BigWorld Technology. It also presents
+  an example in which the back end of a system allows two players to securely
+  trade items between themselves. It illustrates just one of the many ways in
+  which atomic trades can be implemented.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Items"></a>Chapter&nbsp;2.&nbsp;Items</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#xref_Item_Definition">2.1. Item definition</a></span></dt><dt><span class="section"><a href="#xref_Additional_Security">2.2. Additional Security</a></span></dt><dt><span class="section"><a href="#xref_Rendering_The_Item">2.3. Rendering the Item</a></span></dt><dt><span class="section"><a href="#xref_Item_Inventory">2.4. The Inventory</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_Inventory_Manager">2.4.1. Inventory Manager</a></span></dt><dt><span class="section"><a href="#xref_Serial_Numbers">2.4.2. Serial Numbers</a></span></dt></dl></dd><dt><span class="section"><a href="#xref_Dropping_And_Picking_Items_Up">2.5. Dropping and picking items up</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_Dropping_An_Item_On_The_Ground">2.5.1. Dropping an item on the ground</a></span></dt><dt><span class="section"><a href="#xref_Picking_An_Item_Up_From_The_Ground">2.5.2. Picking an item up from the ground</a></span></dt></dl></dd><dt><span class="section"><a href="#xref_Locking_Inventory_Items">2.6. Locking inventory items</a></span></dt></dl></div><p>Items are things that players and other entities can possess, such as
+  guns, swords, loot, etc.</p><p>Since these are, most of the time, attached to other entities and do
+  not have a position of their own in the world, they do not need to be
+  BigWorld entities. The only exceptions are items lying on the ground. For
+  more details, see <a href="#xref_Dropping_And_Picking_Items_Up" title="2.5.&nbsp;Dropping and picking items up">Dropping and picking items up</a>.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Item_Definition"></a>2.1.&nbsp;Item definition</h2></div></div></div><p>The simplest way of representing an item is as an integer value,
+    representing the <em class="emphasis">item type ID</em>. This <em class="emphasis">type
+    ID</em> can then be transmitted between the server and
+    clients.</p><p>It is recommended that an <em class="emphasis">alias</em> be defined for
+    the item type in the file
+    <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml</code>
+    (where <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span> is the
+    first folder specified in environment variables
+    <code class="envar">BW_RES_PATH</code>). In the sample implementation, the definition
+    looks like this:</p><pre class="programlisting">&lt;root&gt;
+    ...
+    &lt;ITEMTYPE&gt;    INT32    &lt;/ITEMTYPE&gt;
+    ....</pre><p>The items types are enumerated inside the file
+    <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/common/ItemBase.py</code>:</p><pre class="programlisting">class ItemBase( object ):
+    ...
+    NONE_TYPE          = -1
+    STAFF_TYPE         =  2
+    STAFF_TYPE_2       =  3
+    DRUMSTICK_TYPE     =  4
+    SPIDER_LEG_TYPE    =  5
+    BINOCULARS_TYPE    =  6
+    SWORD_TYPE         =  7
+    SWORD_TYPE_2       =  9
+    GOBLET_TYPE        =  17
+    ...</pre><p>Mapping from <em class="emphasis">item type ID</em> to specific item look
+    and behaviour can be coded on the client and server as needed. This can be
+    done by simply using lookup tables or item classes. In the sample
+    implementation, item classes are used on the client to implement the
+    behaviour of each type of item. All items types derive from a base
+    <code class="classname">Item</code> class and must specialize items behaviours
+    like <code class="methodname">enact</code>, <code class="methodname">enactIdle</code>,
+    <code class="methodname">enactDrawn</code> and
+    <code class="methodname">use</code>.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+        <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Item.py</code>:</em></p><pre class="programlisting">import ItemBase
+....
+
+class Item( ItemBase.ItemBase ):
+    def use( self, user, target ):
+        ...
+    def name( self ):
+        ...
+
+class Food( Item ):
+    def use( self, user, target ):
+        ....
+        user.eat( self.itemType )
+        user.cell.eat( self.itemType )
+        ...</pre></li></ul></div><p>The type classes are also used to carry information about the items
+    look, like models and icons.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+        <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Item.py</code>:</em></p><pre class="programlisting">class Food( Item ):
+    ...
+    modelNames = {
+        STRIFF_DRUMSTICK: "sets/items/item_food_drumstick.model",
+        SPIDER_LEG:       "characters/npc/spider/spider_leg.model",
+        WINE_GOBLET:      "sets/items/grail.model"
+    }
+    ...
+    guiIconNames = {
+        STRIFF_DRUMSTICK: "gui/maps/icon_items/icon_food_drumstick.tga",
+        SPIDER_LEG:       "gui/maps/icon_items/icon_spider_leg.tga",
+        WINE_GOBLET:      "gui/maps/icon_items/icon_grail.tga"
+    }
+    ...</pre></li></ul></div><p>Within this system, creating a new item type is done by inserting a
+    new <em class="emphasis">item type ID</em> into the items type list and
+    implementing class for the specialized behaviour.</p><p>You can build more complex structures to represent an item as
+    needed, such as adding its ammo count. This information could be encoded
+    into the <span class="literal">INT32</span> data type, or a new class structure
+    could be created to implement it.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Additional_Security"></a>2.2.&nbsp;Additional Security</h2></div></div></div><p>The creation and deletion of items are best done using a
+    <em class="emphasis">global items</em> manager on the base. This manager should
+    ensure that items are created and destroyed according to specific rules,
+    assign unique serial number to items, and enforce security so that things
+    such as duplication exploits cannot be used.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Rendering_The_Item"></a>2.3.&nbsp;Rendering the Item</h2></div></div></div><p>For the item currently equipped by an Avatar to be properly rendered
+    on all clients, the property containing the <em class="emphasis">item type
+    ID</em> must be current on all clients at all times. Whenever a
+    player chooses to equip a new item, it must notify its cell. The cell will
+    then update all other clients with the newly selected <em class="emphasis">item type
+    ID</em>.</p><p>In the sample implementation, the property
+    <code class="varname">rightHand</code> carries the Avatar&#8217;s currently equipped item.
+    The fact that this property is flagged
+    <span class="literal">OTHER_CLIENTS</span><sup>[<a name="d0e156" href="#ftn.d0e156">1</a>]</sup> means that the owner <code class="classname">Avatar</code> in the
+    client will not be updated when the property changes in the cell as the
+    changes to the property have been initiated by the client
+    <code class="classname">Avatar</code>.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+        <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/interfaces/Avatar.def</code>:</em></p><pre class="programlisting">&lt;root&gt;
+    ...
+    &lt;Properties&gt;
+        &lt;rightHand&gt;
+            &lt;Type&gt; ITEMTYPE &lt;/Type&gt;
+            &lt;Flags&gt; OTHER_CLIENTS &lt;/Flags&gt;
+            &lt;Default&gt; -1  &lt;/Default&gt;
+            &lt;Editable&gt; true &lt;/Editable&gt;
+    &lt;/rightHand&gt;
+    ...</pre></li><li><p><em class="emphasis">In
+        <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span>:</em></p><pre class="programlisting">class PlayerAvatar( Avatar ):
+    ...
+    def equip( self, itemType ... ):
+        ...
+        self.rightHand = itemType          # change locally
+        self.cell.setRightHand( itemType ) # tell the world
+        ...</pre></li><li><p><em class="emphasis">In
+        <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Avatar.py</span>:</em></p><pre class="programlisting">def setRightHand( self, sourceID, itemType ):
+    ...
+    self.rightHand = itemType # will propagate to all otherClients</pre></li></ul></div><p>To render the item in the player's hand, the 3D model representing
+    the item must be attached to a hard point in the Avatar model. This should
+    be done whenever the player equips a new item. The sample implementation
+    uses the <span class="literal">set_rightHand</span> method to do that. The
+    <span class="literal">set_rightHand</span> method is implicitly called whenever the
+    value of the property <span class="literal">rightHand</span> is updated in the
+    client by the server.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+        <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</code>:</em></p><pre class="programlisting">class Avatar( BigWorld.Entity ):
+    def set_rightHand( self, oldRH = None ... ):
+        ...
+        self.lockRightHandModel( True )
+        ...
+
+    def lockRightHandModel( self, lock, itemLoader = None ):
+        ...
+            self.rightHandItem = Item.newItem( self.rightHand )
+            ...
+            if self.rightHandItem != None:
+                ...
+                self.model.right_hand = self.rightHandItem.model
+                ...
+        ...</pre></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Item_Inventory"></a>2.4.&nbsp;The Inventory</h2></div></div></div><p>An inventory is a collection of items. Inventories are typically
+    stored on both the client and the base. Having the inventory on the cell
+    would increase the load of migrating entities from cell to cell as they
+    move in the space.</p><p>The authoritative copy of an inventory should always reside on the
+    base entity, where it can be easily stored and retrieved from persistent
+    storage through the BigWorld database interface. The client copy of the
+    inventory can then be regenerated from the base whenever necessary.</p><p>The client should have a graphical user interface to the inventory,
+    so that players can view their items. Players can use this interface to
+    add or remove items from their inventories. This should then be updated on
+    the base entity and stored on the database at convenient times.</p><p>In the sample implementation, the inventory data is stored in a set
+    of <span class="literal">BASE_AND_CLIENT</span> properties in the
+    <code class="classname">Avatar</code> entity:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="varname">inventoryItems</code></p></li><li><p><code class="varname">inventoryLocks</code></p></li><li><p><code class="varname">inventoryGoldPieces</code></p></li></ul></div><p><code class="varname">inventoryItems</code> is an array of the type
+    <span class="literal">InventoryEntry</span>. <code class="varname">inventoryLocks</code> is an
+    array of the type <span class="literal">LockedEntry</span>. Both
+    <span class="literal">InventoryEntry</span> and <span class="literal">LockedEntry</span> types
+    are defined in the
+    <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml
+    file</code>. These types are defined using BigWorld's
+    <span class="literal">FIXED_DICT</span> type feature.
+    <code class="varname">inventoryGoldPieces</code> is of type
+    <span class="literal">INT32</span>.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+        <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/Avatar.def</code>:</em></p><pre class="programlisting">&lt;root&gt;
+    &lt;Properties&gt;
+        ...
+        &lt;inventoryItems&gt;
+            &lt;Type&gt;  ARRAY &lt;of&gt; InventoryEntry &lt;/of&gt; &lt;/Type&gt;
+            &lt;Flags  BASE_AND_CLIENT &lt;/Flags&gt;
+            &lt;Persistent&gt; true   &lt;/Persistent&gt;
+            &lt;Default&gt;  ...   &lt;/ Default &gt;
+        &lt;/inventoryItems&gt;
+
+         &lt;inventoryLocks&gt;
+             &lt;Type&gt;   ARRAY &lt;of&gt; LockedEntry &lt;/of&gt; &lt;/Type&gt;
+             &lt;Flags&gt; BASE_AND_CLIENT &lt;/Flags&gt;
+             &lt;Persistent&gt; true   &lt;/Persistent&gt;
+        &lt;/inventoryLocks&gt;
+
+        &lt;inventoryGoldPieces&gt;
+            &lt;Type&gt;  INT32   &lt;/Type&gt;
+            &lt;Flags&gt;  BASE_AND_CLIENT &lt;/Flags&gt;
+            &lt;Persistent&gt; true   &lt;/Persistent&gt;
+            &lt;Default&gt; 100 &lt;/Default&gt;
+        &lt;/inventoryGoldPieces&gt;
+        ....</pre></li><li><p><em class="emphasis">In
+        <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml</code>:</em></p><pre class="programlisting">&lt;root&gt;
+    ...
+    &lt;ITEMSERIAL&gt;  INT32  &lt;/ITEMSERIAL&gt;
+    &lt;LOCKHANDLE&gt;  INT32  &lt;/LOCKHANDLE&gt;
+    &lt;GOLDPIECES&gt;  INT16  &lt;/GOLDPIECES&gt;
+
+    &lt;InventoryEntry&gt; FIXED_DICT
+        &lt;Properties&gt;
+            &lt;itemType&gt;
+                &lt;Type&gt; ITEMTYPE &lt;/Type&gt;
+            &lt;/itemType&gt;
+            &lt;serial&gt;
+                &lt;Type&gt; ITEMSERIAL &lt;/Type&gt;
+            &lt;/serial&gt;
+            &lt;lockHandle&gt;
+                &lt;Type&gt; LOCKHANDLE &lt;/Type&gt;
+            &lt;/lockHandle&gt;
+       &lt;/Properties&gt;
+    &lt;/InventoryEntry&gt;
+
+    &lt;LockedEntry&gt; FIXED_DICT
+        &lt;Properties&gt;
+            &lt;lockHandle&gt;
+                &lt;Type&gt; LOCKHANDLE &lt;/Type&gt;
+            &lt;/lockHandle&gt;
+            &lt;goldPieces&gt;
+                &lt;Type&gt; GOLDPIECES &lt;/Type&gt;
+            &lt;/goldPieces&gt;
+        &lt;/Properties&gt;
+    &lt;/LockedEntry&gt;
+    ....</pre></li></ul></div><p>The fact that the inventory properties are flagged
+    <span class="literal">BASE_AND_CLIENT</span>, means that:</p><div class="itemizedlist"><ul type="disc"><li><p>When initialised, the owning client entity will be carrying an
+        exact copy of the properties as set on the base entity</p></li><li><p>The inventory property will not exist either in the cell entity
+        or in client Avatars not controlled by the owning player.</p></li><li><p>Changes to the inventory property's value in the base will not
+        be propagated to the client. The game logic must take care of keeping
+        both copies synchronized as changes are made to the inventory.</p><p>One example of such logic is an item being added to the
+        inventory after being picked up by the player:</p><div class="itemizedlist"><ul type="circle"><li><p><em class="emphasis">After the pick up, the base adds the
+            item into the inventory and notifies the cell.</em></p></li><li><p><em class="emphasis">The cell forwards the notification to
+            the client.</em></p><div class="itemizedlist"><ul type="square"><li><p><em class="emphasis">In
+                <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Avatar.py</code>:</em></p><pre class="programlisting">def pickUpResponse( self, success, droppedItemID, itemType ):
+    ...
+    itemsSerial = self.inventoryMgr.addItem( itemType )
+    self.cell.pickUpResponse( True, droppedItemID, itemType, itemsSerial )
+    ...</pre></li><li><p><em class="emphasis">In
+                <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Avatar.py</code>:</em></p><pre class="programlisting">def pickUpResponse( self, success, droppedItemID, itemType, itemSerial ):
+    ...
+    self.client.pickUpResponse( True, droppedItemID, itemSerial )
+    ...</pre></li></ul></div></li><li><p><em class="emphasis">In the client, the Player replicates
+            the addition of the item into the inventory.</em></p><div class="itemizedlist"><ul type="square"><li><p><em class="emphasis">In
+                <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span>:</em></p><pre class="programlisting">class PlayerAvatar( Avatar ):
+    ...
+    def pickUpResponse( self, success, droppedItemID, itemSerial ):
+        ...
+        droppedItem = BigWorld.entities[ droppedItemID ]
+        self._pickUpProcedure( droppedItem, itemSerial )
+        ...
+    
+    def _pickUpProcedure( self, droppedItem, itemSerial ):
+        ...
+        itemType = droppedItem.classType
+        self.inventoryMgr.addItem( itemType, itemSerial )
+        ...</pre></li></ul></div></li></ul></div></li></ul></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_Inventory_Manager"></a>2.4.1.&nbsp;Inventory Manager</h3></div></div></div><p>In the sample implementation, the class
+      <span class="literal">InventoryMgr</span> encapsulates the logic of adding,
+      removing, selecting, locking, and trading items in the inventory. The
+      <span class="literal">InventoryMgr</span> is initialised with a reference to the
+      inventory holder entity. It looks for the inventory properties
+      (<code class="varname">inventoryItems</code>, <code class="varname">inventoryLocks</code>
+      and <code class="varname">inventoryGoldPieces</code>) in that entity.</p><p>Only changes made to the entity's properties (on the base) will be
+      written to the database. <span class="literal">InventoryMgr</span> member
+      variables will not persist, and should be treated as temporary. One such
+      variable is <code class="varname">_currentItemIndex</code>, which is not
+      considered a persistent property and is initialised to
+      <span class="literal">NOITEM</span> (<span class="literal">-1</span>) every time a new
+      inventory is instantiated.</p><p>Adding and removing items to/from the inventory is just a matter
+      of appending and popping items into/from the
+      <code class="varname">inventoryItems</code> array, taking care of respecting
+      locking rules, if any, and internal consistency constraints, like
+      resetting the selected item, if it is the one being removed from
+      inventory.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+          <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/common/Inventory.py</code>:</em></p><pre class="programlisting">NOLOCK = -1 
+NOITEM = -1
+...
+def __init__( self, entity ):
+    self._entity = weakref.proxy( entity )
+    self._curItemIndex = NOITEM
+    ...
+    
+def addItem( self, itemType ... ):
+    ...
+    if itemSerial is None:
+        itemSerial = self._genItemSerial()
+    entry = { "itemType": itemType, "serial": itemSerial, "lockHandle": NOLOCK }
+    self._entity.inventoryItems.append( entry )
+    ...
+    return itemSerial
+
+def removeItem( self, itemSerial ):
+    index = self._itemSerial2Index( itemSerial ) # throws is serial not found
+    entry = self._retrieveIfNotLocked( index )   # throws if item is locked
+    try:
+        item = inventory[ itemIndex ]
+        inventory.pop( itemIndex )
+    except IndexError:
+        errorMsg = 'removeItem: invalid item index (idx=%d)'
+        raise IndexError, errorMsg % itemIndex
+
+    if self._curItemIndex == index:
+        self._curItemIndex = -1
+    elif self._curItemIndex &gt; index:
+        self._curItemIndex -= 1
+    ...
+    return entry[ "itemType" ]</pre></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Instead of a straight reference, a <span class="literal">weakref</span> to
+        the entity is kept to avoid creating a cyclic reference that will
+        prevent the entity from being eventually deleted.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_Serial_Numbers"></a>2.4.2.&nbsp;Serial Numbers</h3></div></div></div><p>Note that in the sample implementation items are not referenced by
+      their index inside the <span class="literal">inventoryItems</span> array. Instead,
+      they are assigned a serial number when added to the inventory, and are
+      referenced by that serial throughout all their life inside it.</p><p>The reason for this is to allow simultaneously changes to the
+      inventory from multiple sources (<em class="emphasis">e.g.</em>, game client,
+      web interface, mobile device). In this case, if direct indices are used,
+      references to items can become obsolete while a request is still being
+      processed.</p><p>In the example, serial numbers are not attached to the item
+      itself, but to their existence in an inventory, that is, serial numbers
+      are guaranteed to be unique only within a single inventory. Two
+      inventories can contain items with serial numbers duplicated between
+      them.</p><p>A more comprehensive items systems can use a global serial number
+      generator and have them assigned to items when they are first created.
+      This serial numbers can then be used throughout all game subsystems to
+      uniquely refer to items, to track duplicated items, etc.</p><p>When using serial numbers it is important to have a single
+      authoritative copy of the inventory generating the serials for each
+      item, otherwise serial numbers can become inconsistent between instances
+      of the same inventory. When adding an item to the non-authoritative copy
+      of the inventory, its assigned serial number must be provided along with
+      the item.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+          <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/common/Inventory.py</span>:</em></p><pre class="programlisting">def addItem( self, itemType, itemSerial = None ):
+    ...
+    entry = { "itemType": itemType, "serial": itemSerial, "lockHandle": NOLOCK }
+    self._entity.inventoryItems.append( entry )
+    ...
+    return itemSerial</pre></li></ul></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Dropping_And_Picking_Items_Up"></a>2.5.&nbsp;Dropping and picking items up</h2></div></div></div><p>As mentioned above, the items can usually be represented as a
+    property of an <em class="emphasis">entity</em> (or an entry into an array
+    property). However, there is one case where this is not sufficient, and
+    the item needs to be an <em class="emphasis">entity</em>.</p><p>This is the case of an item that has been dropped on the ground. The
+    reason for this is that if you walk away from an item that you dropped,
+    other people still need to see it.</p><p>If the item was just a property of a player, then when the player
+    left the <em class="emphasis">area of interest</em> (which is usually about
+    500m), the property would disappear as well, and so would the dropped
+    item.</p><p>On the other hand, if the dropped item itself is an entity, then
+    other players will see it, as long as it is in their <em class="emphasis">area of
+    interest</em>.</p><p>Making a dropped item an entity means that you can write interaction
+    scripts just like any other entity in the world. You can target it, shoot
+    it, pick it up, etc...</p><p>The process of dropping and picking items up should be something
+    similar to the steps described below.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_Dropping_An_Item_On_The_Ground"></a>2.5.1.&nbsp;Dropping an item on the ground</h3></div></div></div><p>Initially, the item is in the player&#8217;s inventory, expressed as an
+      entry in the <em class="emphasis">inventoryItems</em> property, the
+      <span class="literal">itemType</span> field in the entry holds the <em class="emphasis">item
+      type ID</em>.</p><p>A game would follow the steps described below for an item
+      drop:</p><div class="orderedlist"><ol type="1"><li><p>Player uses the user interface to drop an item.</p></li><li><p>Because the item may be unavailable in the server
+          (<em class="emphasis">e.g.</em>, in case it has just been locked in the
+          inventory from a web interface to the trading system), the client
+          Avatar makes the drop item requests to the base. If the player can
+          drop the item, the base removes the item from the inventory and
+          notifies the cell about the dropped item:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In </em><em class="emphasis"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span>:</em></p><pre class="programlisting">class PlayerAvatar( Avatar ):
+    ...
+    def dropOnline( self ):
+        ...
+        self.base.dropRequest( itemSerial )</pre></li><li><p><em class="emphasis">In
+              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Avatar.py</span>:</em></p><pre class="programlisting">def dropRequest( self, itemSerial ):
+    ...
+    itemType = self.inventoryMgr.removeItem( itemIndex )
+    self.cell.dropNotify( True, itemType )
+    ...</pre></li></ul></div></li><li><p>The cell creates a <span class="literal">DroppedItem</span> entity that
+          matches the item dropped by the player:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Avatar.py</span>:</em></p><pre class="programlisting">def dropNotify( self, success, itemType ):
+    ...
+    BigWorld.createEntity( "DroppedItem", ... )
+    ...
+    self.rightHand = ItemBase.ItemBase.NONE_TYPE</pre></li></ul></div></li><li><p>The server informs all clients within the <em class="emphasis">area of
+          interest</em> that a <span class="literal">DroppedItem</span> has been
+          created (via Python's function
+          <span class="literal">BigWorld.createEntity</span>).</p></li><li><p>The confirmation to the Avatar for his drop request comes from
+          the <span class="literal">DroppedItem</span> itself. The client then plays the
+          drop animation and removes the item from player&#8217;s right hand (for
+          simplicity, the code that synchronizes the drop animations, the item
+          model being removed from the avatar&#8217;s right hand and reappearing on
+          the ground is not shown here):</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/DroppedItem.py</span>:</em></p><pre class="programlisting">def enterWorld( self ):
+    ...
+    dropper = BigWorld.entities[ self.dropperID ]
+    dropper.dropNotify( self ) 
+    ...</pre></li><li><p><em class="emphasis">In
+              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span>:</em></p><pre class="programlisting">class Avatar( BigWorld.Entity ):
+    ...
+    def dropNotify( self, droppedItem ):
+        ...
+        self._dropProcedure( droppedItem )
+
+    def _dropProcedure( self, droppedItem ):
+        ...
+        droppedItem.dropComplete()
+        ...</pre></li></ul></div></li><li><p>All clients now draw the correct model for the
+          <span class="literal">DroppedItem</span> entity on the ground:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/DroppedItem.py</span>:</em></p><pre class="programlisting">class DroppedItem( BigWorld.Entity ):
+    ...
+    def dropComplete( self ):
+        ...
+        self._showModel()
+
+    def _showModel ( self ): 
+        ...
+        self.model = self.item.model</pre></li></ul></div></li></ol></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_Picking_An_Item_Up_From_The_Ground"></a>2.5.2.&nbsp;Picking an item up from the ground</h3></div></div></div><p>Initially, the item is a <span class="literal">DroppedItem</span> entity
+      lying on the ground, as described in <a href="#xref_Dropping_An_Item_On_The_Ground" title="2.5.1.&nbsp;Dropping an item on the ground">Dropping an item on the ground</a>.</p><p>A game would follow the steps described below for picking up an
+      item:</p><div class="orderedlist"><ol type="1"><li><p>Client requests to pick item up.</p><div class="itemizedlist"><ul type="bullet"><li style="list-style-type: disc"><p><em class="emphasis">In
+              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span>:</em></p><pre class="programlisting">class PlayerAvatar( Avatar ):
+    ...
+    def pickExecute( self, droppedItem ):
+        ...
+        self.cell.pickUpRequest( droppedItem.id )
+        ...</pre></li><li style="list-style-type: disc"><p><em class="emphasis">In
+              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Avatar.py</span>:</em></p><pre class="programlisting">def pickUpRequest( self, sourceID, droppedItemID ):
+    ...
+    item = BigWorld.entities[ droppedItemID ]
+    item.pickUpRequest( self.id )
+    ...</pre></li></ul></div></li><li><p>The item locks itself as being picked up by the requesting
+          Avatar. Further requests for pickup will be denied by the server.
+          The item also notifies the requester base about the pickup so that
+          the item is added to the player inventory. Finally, the item sets a
+          timer to remove itself from the world.</p><div class="itemizedlist"><ul type="bullet"><li style="list-style-type: disc"><p><em class="emphasis">In</em><em class="emphasis"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/DroppedItem.py</span>:</em></p><pre class="programlisting">def pickUpRequest( self, whomID ):
+    ...
+    if self.pickerID == 0:
+        picker = BigWorld.entities[ whomID ]
+        picker.base.pickUpResponse( True, self.id, self.classType )
+        self.addTimer( 5, 0, DroppedItem.DESTROY_TIMER )
+        self.pickerID = whomID
+    ...</pre></li><li style="list-style-type: disc"><p><em class="emphasis">In
+              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Avatar.py</span>:</em></p><pre class="programlisting">def pickUpResponse( self, success, droppedItemID, itemType ):
+    if success:
+        itemsSerial = self.inventoryMgr.addItem( itemType )
+        self.cell.pickUpResponse( True, droppedItemID, itemType, itemsSerial )
+    ...</pre></li></ul></div></li><li><p>The cell notifies all clients about the pick up and updates
+          the avatar&#8217;s right hand property.</p><div class="itemizedlist"><ul type="bullet"><li style="list-style-type: disc"><p><em class="emphasis">In
+              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Avatar.py</span>:</em></p><pre class="programlisting">def pickUpResponse( self, success, droppedItemID, itemType, itemSerial ):
+    if success:
+        # sucess:notify all clients this entity base
+        self.client.pickUpResponse( True, droppedItemID, itemSerial )
+        self.otherClients.pickUpNotify( droppedItemID )
+        self.rightHand = itemType
+    ...</pre></li></ul></div></li><li><p>All clients are notified that the Avatar is picking up the
+          item. A picking item up animation is started on the Avatar&#8217;s model.
+          Note that, although other clients will see the item model in the
+          player hands as a consequence of <span class="literal">rightHand</span> being
+          set in the server, the <span class="literal">PlayerAvatar</span> will not have
+          its <span class="literal">rightHand</span> property updated and must
+          explicitly equip the item (remember that
+          <span class="literal">rightHand</span> is flagged
+          <span class="literal">OTHER_CLIENTS</span>).</p><div class="itemizedlist"><ul type="bullet"><li style="list-style-type: disc"><p><em class="emphasis">In
+              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span>:</em></p><pre class="programlisting">class Avatar( BigWorld.Entity ):
+    ...
+    def pickUpNotify( self, droppedItemID ):
+        ...
+        droppedItem = BigWorld.entities[ droppedItemID ]
+        self._pickUpProcedure( droppedItem )
+        ...
+
+class PlayerAvatar( Avatar ):
+    ...
+    def pickUpResponse( self, success, droppedItemID, itemSerial ):
+        ...
+        droppedItem = BigWorld.entities[ droppedItemId ]
+        self._pickUpProcedure( droppedItem, itemSerial )
+        ...</pre></li></ul></div></li><li><p>The Player adds the picked item into his inventory and selects
+          it.</p><div class="itemizedlist"><ul type="bullet"><li style="list-style-type: disc"><p><em class="emphasis">In
+              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span>:</em></p><pre class="programlisting">class PlayerAvatar( Avatar ):
+    ...
+    def pickUpFinish( self, droppedItem ):
+        ...
+        itemType  = droppedItem.classType
+        self.inventoryMgr.addItem( itemType, itemSerial )
+        self.inventoryMgr.selectItem( itemSerial )
+        ...</pre></li></ul></div></li><li><p>On the base, the timer goes out and the
+          <span class="literal">DroppedItem</span> entity destroys itself.</p><div class="itemizedlist"><ul type="bullet"><li style="list-style-type: disc"><p><em class="emphasis">In
+              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/DroppedItem.py</span>:</em></p><pre class="programlisting">def pickUpRequest( self, whomID ):
+    ...
+    self.addTimer( 5, 0, DroppedItem.DESTROY_TIMER )
+
+def onTimer( self, timerId, userId ):
+    ...
+    if ( userId == DroppedItem.DESTROY_TIMER ):
+        self.destroy()</pre></li></ul></div></li><li><p>The item has been added to the player inventory in both the
+          client and the server. All clients draw the item in player&#8217;s right
+          hand. The dropped item has been removed from the server.</p></li></ol></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Locking_Inventory_Items"></a>2.6.&nbsp;Locking inventory items</h2></div></div></div><p>If the game design calls for some sort of asynchronous transactions
+    to be carried out with inventory items, it will be necessary to implement
+    locking of items inside the inventory.</p><p>During asynchronous transactions, like those taking place over a
+    mobile device or web interface, a player may offer one or more items for
+    trading. A second player may, at his own time, inspect the items being
+    offered and in turn reply the offer with one or more of his items. When
+    the first player inspects and accepts the items in the reply offer, the
+    transaction can be carried out.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Although this is not a requirement for asynchronous transactions,
+      locking also offers a way to reference a set of items (and maybe also
+      some amount of currency) using a convenient single handle.</p></div><p>From first offer to final acceptance, a finite amount of time will
+    have passed, from a couple of seconds to several hours or even days.
+    Problems will occur if the items initially offered are no longer available
+    when both parties accept the transaction (if, for example, one of the
+    players drops, consumes or trades with a third player any of the offered
+    items).</p><p>One approach to avoid the problem is to lock the items inside the
+    inventory once they have been committed to a trade offer. Locked items
+    should not be available for dropping, offering on a second trade nor
+    equipping (thus consuming). The player should be free to unlock the items
+    at any time. Unlocking an item should invalidate the trade associated with
+    it.</p><p>In the sample implementation, items are flagged as locked by
+    assigning a valid lock handle to the <span class="literal">lockHandle</span> field
+    in the item&#8217;s entry in the <span class="literal">inventoryItems</span> array. Some
+    amount of gold pieces can also be locked together with the set of items.
+    The gold information is stored in the <span class="literal">inventoryLocks</span>
+    array. Locking items and gold pieces yields a lock handle. This lock
+    handle can than be used to reference the locked lot, either to unlock it
+    or to trade it for gold, other items or a combination of both.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In </em><em class="emphasis"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/common/Inventory.py</span>:</em></p><pre class="programlisting">NOLOCK = -1
+...
+def itemsLock( self, itemsSerials, goldPieces ):
+    lockHandle = self._getNextLockHandle()
+    self.itemsRelock( lockHandle, itemsSerials, goldPieces )
+    return lockHandle
+
+def itemsRelock( self, lockHandle, itemsSerials, goldPieces ):
+    ...
+    itemsIndexes = []
+    for serial in itemsSerials:
+        index = self._itemSerial2Index( serial )
+        if self._entity.inventoryItems[ index ][ "lockHandle" ] != NOLOCK:
+            errorMsg = 'Item item already locked (idx=%d)' 
+            raise LockError, errorMsg % index
+        itemsIndexes.append( index )
+
+    for index in itemsIndexes:
+        self._entity.inventoryItems[ index ][ "lockHandle" ] = lockHandle
+
+    lockedEntry = { "lockHandle": lockHandle, "goldPieces": goldPieces }
+    self._entity.inventoryLockedItems.append( lockedEntry )
+...
+def itemsUnlock( self, lockHandle ):
+    index = self._getLockedItemsIndex( lockHandle )
+    lockedEntry = self._entity.inventoryLockedItems[ index ]
+    self._entity.inventoryLockedItems.pop( index )
+    for entry in self._entity.inventoryItems:
+        if entry[ "lockHandle" ] == lockHandle:
+            entry[ "lockHandle" ] = NOLOCK</pre></li></ul></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e156" href="#d0e156">1</a>] </sup>For more information on the <span class="literal">OTHER_CLIENTS</span>
+        property distribution flag please refer to the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a> chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Properties" class="olink"><i>Properties</i></a>.</p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Trading"></a>Chapter&nbsp;3.&nbsp;Trading</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e871">3.1. Trade Protocol</a></span></dt><dt><span class="section"><a href="#xref_Trading_Supervisor">3.2. Trading Supervisor</a></span></dt><dt><span class="section"><a href="#xref_Dealing_With_Failure_Conditions">3.3. Dealing with failure conditions</a></span></dt><dt><span class="section"><a href="#xref_Creating_And_Destroying_The_Trading_Supervisor">3.4. Creating and destroying the trading supervisor</a></span></dt><dt><span class="section"><a href="#d0e1378">3.5. Scalability</a></span></dt><dt><span class="section"><a href="#d0e1405">3.6. Vulnerabilities</a></span></dt></dl></div><p>This chapter describes one of the possible ways in which players can
+  buy, sell, or exchange goods between themselves or with
+  <em class="emphasis">NPC</em>'s.</p><p>The process is basically the same in both situations. One player will
+  initiate the trade, then a user interface will appear, which can be similar
+  to the <em class="emphasis">Inventory</em> one, but showing the inventory (or
+  partial inventory) of both parties. The two parties can then choose which
+  items to buy, sell, or exchange, and once they both agree on the trade, the
+  changes can be updated on the server.</p><p>Strict transaction control is recommended for trading so that there is
+  little chance for exploitation, cheating, or item loss. Care should also be
+  taken when creating temporary items, since this may lead to the duplication
+  of items. For similar reasons, this control should be done on the server, to
+  ensure that one client does not try to exploit another. Again, the
+  authoritative copy of any inventory should live on the server, so that
+  clients can re-read the information from it if they do not agree on the
+  trade.</p><p>There are many levels of protection that can be obtained in a trading
+  system, with each higher level involving more control overhead.</p><p>A trading system needs protection against hardware and software
+  failures in order to ensure <em class="emphasis">transaction
+  atomicity</em><em class="emphasis">, <em class="emphasis">making sure that an item is
+  neither lost nor duplicated</em></em>. It means that a
+  transaction in progress does not stop half way if a component in the system
+  fails.</p><p>The possible approaches to <em class="emphasis">item trade</em> are listed
+  below, in order of increased cost:</p><p>Simply swap the items, without performing database
+  <em class="emphasis">writes</em>. This approach relies on built-in fault
+  tolerance and disaster recovery, and therefore might have a reasonably large
+  window for item loss or duplication.</p><div class="itemizedlist"><ul type="disc"><li><p>Swap the items and immediately write to the database (two database
+      <em class="emphasis">writes</em> per trade). This approach reduces the window
+      for item loss and duplication.</p></li><li><p>Use a <em class="emphasis">trading supervisor</em> (three database
+      <em class="emphasis">writes</em> per trade), leveraging BigWorld's fault
+      tolerance capabilities. This approach results in a high overhead per
+      item.</p></li><li><p>Make each item an <em class="emphasis">entity</em>.</p></li><li><p>Implement external banking-grade database transaction.</p></li></ul></div><p>Like all forms of insurance, the game implementer must weigh up the
+  importance of losing or duplicating items against the cost of such
+  protection.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e871"></a>3.1.&nbsp;Trade Protocol</h2></div></div></div><p>Before a trade transaction can take place, both parties must agree
+    on the items being traded. If one of the parties is a NPC character, price
+    tables can be used and this is not an issue. If both parties are players,
+    care must be taken so that players cannot cheat one another.</p><p>Player misinterpretation can occur if players are not given the
+    chance to inspect the items offered by their trade partner, or if the
+    player can initiate the transaction after changing his offer once the
+    other has already accepted the trade.</p><p>To avoid player misinterpretation problems, the sample
+    implementation uses a trade protocol that allows players to offer, switch,
+    inspect, accept, and refuse items at will until a consensus is reached and
+    the trade can be processed. The protocol is described bellow.</p><div class="orderedlist"><ol type="1"><li><p>The player offers an item. The item is locked locally and the
+        offer is sent to the cell.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In </em><em class="emphasis"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span>:</em></p><pre class="programlisting">def onTradeOfferItem( self, itemSerial ):
+    ...
+    self._tradeOfferLock = self.inventoryMgr.itemsLock( [itemSerial], 0 )
+    self.cell.tradeOfferItemRequest( self._tradeOfferLock, itemSerial )
+    ...</pre></li></ul></div></li><li><p>The cell tries to confirm the lock with the base.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Avatar.py</code>:</em></p><pre class="programlisting">def tradeOfferItemRequest( self, sourceID, lockHandle, itemSerial ):
+    ...
+    self.tradeOutboundLock = lockHandle
+    self.base.itemsLockRequest( lockHandle, [itemSerial], goldPieces )</pre></li></ul></div></li><li><p>The base repeats the lock done on the client and notifies the
+        cell of the result.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Avatar.py</code>:</em></p><pre class="programlisting">def itemsLockRequest( self, lockHandle, itemsSerials, goldPieces ):
+    ...
+    inventoryMgr = self.inventoryMgr
+    ...
+    inventoryMgr.itemsRelock( lockHandle, itemsSerials, goldPieces )
+    ...
+    self.cell.itemsLockNotify( True, lockHandle,
+            itemsSerials, itemsTypes, goldPieces )
+    ...</pre></li></ul></div></li><li><p><a name="xref_Trade_Protocol_Step_4"></a>If the locking on the base was successful, the cell notifies the
+        partner about the offer.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Avatar.py</code>:</em></p><pre class="programlisting">def itemsLockNotify( self, success, lockHandle ... ):
+    ...
+    partner = self._getModeTarget()
+    ...
+    partner.tradeOfferItem( itemsTypes[0] )
+    ...
+
+def tradeOfferItem( self, itemType ):
+    self.tradeSelfAccepted = False
+    self.client.tradeOfferItemNotify( itemType )</pre></li></ul></div></li><li><p>The player is notified about the offer made by his trade
+        partner. The item is shown on the user interface.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>scripts/client/Avatar.py</code>:</em></p><pre class="programlisting">def tradeOfferItemNotify( self, itemType ):
+    ...
+    self.inventoryGUI.showOfferedItem( itemType )
+    ...</pre></li></ul></div></li><li><p>The player accepts the item offered. The client notifies the
+        cell about the approval.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</code>:</em></p><pre class="programlisting">def onTradeAccept( self, accept ):
+    ...
+    self.cell.tradeAcceptRequest( accept )</pre></li></ul></div></li><li><p>The cell notifies the trade partner about the approval. The
+        notification is immediately forwarded to the client.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Avatar.py</code>:</em></p><pre class="programlisting">def tradeAcceptRequest( self, sourceID, accepted ):
+    ...
+    self.tradeSelfAccepted = accepted
+    partner = self._getModeTarget()
+    partner.tradeAcceptNotify( accepted )
+    ...
+
+def tradeAcceptNotify( self, accepted ):
+    ...
+    self.client.tradeAcceptNotify( accepted )
+    self.tradePartnerAccepted = accepted
+    ...</pre></li></ul></div></li><li><p>The player is notified about the approval by his trade partner.
+        The user interface is updated to reflect that.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</code>:</em></p><pre class="programlisting">def tradeAcceptNotify( self, accepted ):
+    self.inventoryGUI.tradeOfferAccept( accepted )</pre></li></ul></div></li></ol></div><p>Whenever the player's partner offers a new item, its accepted flag
+    is set to <span class="literal">False</span><sup>[<a name="d0e1006" href="#ftn.d0e1006">2</a>]</sup>. This ensures that a trade will never be processed without
+    the explicit approval, from both parties, for the most current item
+    offered.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Trading_Supervisor"></a>3.2.&nbsp;Trading Supervisor</h2></div></div></div><p>Once both parties have agreed on the items to be traded, the trading
+    can take place. The sample implementation makes use of a <em class="emphasis">trading
+    supervisor</em> to coordinate and direct the trade.</p><p>In summary, the trading supervisor works as follows: each
+    participant in a trade has a <em class="emphasis">trade id</em>, which
+    increases monotonically. Before starting a new trade, the supervisor
+    writes and entry for the pending trade into the database. The supervisor
+    then requests the participants to perform the transaction. After
+    completion of the transaction, each participant notifies the supervisor
+    about the trade completed. The entry for pending trade is removed from the
+    database. If the system starts up after a failure, the supervisor lists
+    all pending trades from the database and replays them. The participants
+    use their <em class="emphasis">trade id</em>s to determine whether they have
+    carried out the trade. If they have not, the transaction is performed. If
+    they did have, the redundant request is simply ignored.</p><div class="orderedlist"><ol type="1"><li><p>When both avatar have agreed on items, the active cell instructs
+        the base to initiate the transaction</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Avatar.py</span>:</em></p><pre class="programlisting">def tradeAcceptRequest( self, sourceID, accepted ):
+    ...
+    self._tryTradeBegin()
+
+def _tryTradeBegin( self ):
+    if self.mode == Mode.TRADE_ACTIVE and \
+        self.tradePartnerAccepted and \
+            self.tradeSelfAccepted:
+        ...
+        self.base.tradeCommitActive( self.tradeOutboundLock )
+        partner = self._getModeTarget()
+        partner.tradeCommitPassive( self.base )</pre></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>The sample implementation uses the concept active/passive
+          roles in the trade.</p><p>The <em class="emphasis">active</em> participant will be the one
+          requesting the trade to the trading supervisor. In the sample, the
+          roles are chosen based on who started the trading mode.</p><p>You can use whatever criteria you think is best suited to your
+          design (<em class="emphasis">e.g.</em>, higher entity ID).</p></div></li><li><p>In the base, the avatar in the active participant informs the
+        trading supervisor of the trade ids and the data about items and gold
+        pieces being traded. The data about the trade includes information
+        about each avatar&#8217;s giveaway: serial number and type ids of items and
+        amount of gold pieces.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Avatar.py</code>:</em></p><pre class="programlisting">...
+def tradeSyncRequest( self, partnerBase, partnerTradeParams ):
+    ...
+    ourItemsTypes, ourGoldPieces = \
+        inventoryMgr.itemsLockedRetrieve( self.outItemsLock )
+
+    supervisor = BigWorld.globalBases[ "TradingSupervisor" ]
+
+    selfTradeParams = { "dbID" : self.databaseID, \
+                        "tradeID" : self.lastTradeID + 1, \
+                        "lockHandle": self.outItemsLock, \
+                        "itemsSerials": outItemsSerials, \
+                        "itemsTypes": outItemsTypes, \
+                        "goldPieces": outGoldPieces }
+
+    if supervisor.commenceTrade( self, selfTradeParams,
+            partnerBase, partnerTradeParams ):
+    ...</pre></li></ul></div></li><li><p><a name="xref_Trading_Supervisor_Step_3"></a>The <em class="emphasis">trading supervisor</em> adds the trading
+        data to its list of pending trades and writes itself to the
+        database.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/TradingSupervisor.py</code>:</em></p><pre class="programlisting">...
+def commenceTrade( self, A, paramsA, B, paramsB ):
+    ...
+    tradeLog = { "typeA": A.__class__.__name__, "paramsA": paramsA,
+                 "typeB": B.__class__.__name__, "paramsB": paramsB }
+
+    self.recentTrades.append( tradeLog )
+    self.outstandingTrades.append( [A.id, B.id] )
+
+    def doTradeStep2( *args ):
+        self._tradeStep2( A, paramsA, B, paramsB )
+
+    self.writeToDB( doTradeStep2 )
+    ...</pre></li></ul></div></li><li><p><a name="xref_Trading_Supervisor_Step_4"></a>Once the <em class="emphasis">trading supervisor</em> is notified by
+        the database that <em class="emphasis">write</em> is complete, it instructs
+        both avatars to modify their inventories, in order to reflect the
+        result of the trade.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/TradingSupervisor.py</code>:</em></p><pre class="programlisting">...
+def _tradeStep2( self, A, paramsA, B, paramsB ):
+
+    A.tradeCommit( 
+        self, paramsA[ "tradeID" ], paramsA[ "lockHandle" ],
+        paramsA[ "itemsSerials" ], paramsA[ "goldPieces" ],
+        paramsB[ "itemsTypes" ], paramsB[ "goldPieces" ] )
+    B.tradeCommit( 
+        self, paramsB[ "tradeID" ], paramsB[ "lockHandle" ],
+        paramsB[ "itemsSerials" ], paramsB[ "goldPieces" ],
+        paramsA[ "itemsTypes" ], paramsA[ "goldPieces" ] )</pre></li></ul></div></li><li><p>The avatars modify their inventories, increment their
+        <em class="emphasis">trade id</em>'s, and write themselves to the
+        database.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Avatar.py</code>:</em></p><pre class="programlisting">...
+def tradeCommit( 
+        self, supervisor, tradeID, 
+        outItemsLock, outItemsSerials, inItemsTypes, inGoldPieces ):
+    TradeHelper.tradeCommit( 
+        self, supervisor, tradeID, outItemsLock,
+        outItemsSerials, outGoldPieces,
+        inItemsTypes, inGoldPieces )</pre></li></ul></div><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/TradeHelper.py</code>:</em></p><pre class="programlisting">...
+def tradeCommit( 
+        self, supervisor, tradeID, 
+        outItemsLock, outItemsSerials, inItemsTypes, inGoldPieces ):
+    ...
+    inItemsSerials = base.inventoryMgr.itemsTrade(
+            outItemsSerials, outGoldPieces, inItemsTypes,
+            [], inGoldPieces, outItemsLock )
+    ...</pre></li></ul></div></li><li><p>Once each avatar is notified by the database that its
+        <em class="emphasis">write</em> is complete, it informs the
+        <em class="emphasis">trading supervisor</em>.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/TradeHelper.py</code>:</em></p><pre class="programlisting">...
+def tradeCommit( ... ):
+    ...
+    base.writeToDB( lambda *args: completeTrade( inItemsSerials ) )</pre></li></ul></div></li><li><p><a name="xref_Trading_Supervisor_Step_7"></a>Once the <em class="emphasis">trading supervisor</em> is informed by
+        both parties that their <em class="emphasis">writes</em> are complete, it
+        removes the trade from its list of pending trades.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/TradingSupervisor.py</code>:</em></p><pre class="programlisting">...
+def completeTrade( self, who, tradeID ):
+    nost = []
+    for t in self.outstandingTrades:
+        if t[0] == who.id:
+            if t[1] == 0:
+                self.recentTrades.pop(len(nost))
+                print "TradingSupervisor: trade complete by A"
+            else:
+                nost.append( (0,t[1]) )
+        elif t[1] == who.id:
+            if t[0] == 0:
+                self.recentTrades.pop(len(nost))
+                print "TradingSupervisor: trade complete by B"
+            else:
+                nost.append( (t[0],0) )
+        else:
+            nost.append( t )
+    self.outstandingTrades = nost
+</pre></li></ul></div></li></ol></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>After the <span class="literal">write</span> of a pending trade has been
+      committed into the database<sup>[<a name="d0e1189" href="#ftn.d0e1189">3</a>]</sup>, the trade is guaranteed to be completely carried out on
+      both participant Avatars<sup>[<a name="d0e1195" href="#ftn.d0e1195">4</a>]</sup>, even if the system fails at any time during the execution
+      of the transaction.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Dealing_With_Failure_Conditions"></a>3.3.&nbsp;Dealing with failure conditions</h2></div></div></div><p>The system has been designed to cope with component failure. The
+    sample implementation follows the steps below:</p><div class="orderedlist"><ol type="1"><li><p>Upon start up, the <em class="emphasis">trading supervisor</em>
+        consult its list of pending trades:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/TradingSupervisor.py</code>:</em></p><pre class="programlisting">def __init__( self ):
+    ...
+    if self.recentTrades == []:
+        ...
+    else:
+        ...
+        for trade in self.recentTrades:
+            self._replayTrade( trade ) 
+    ...</pre></li></ul></div></li><li><p>The <em class="emphasis">supervisor</em> extracts from the database
+        the avatars involved in the trades (in case they have not already been
+        extracted):</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/TradingSupervisor.py</code>:</em></p><pre class="programlisting">def __init__( self ):
+    ...
+    for trade in self.recentTrades:
+        self._replayTrade( trade )
+
+def _replayTrade( self, trade ):
+    traderMBs = [None, None]
+    BigWorld.createBaseFromDBID( trade[ "typeA" ], 
+        trade[ "paramsA" ][ "dbID" ],
+        lambda mb, dbID, wasActive: self.__collectMailbox ( trade[ "typeA" ], 
+            trade, traderMBs, 0, mb ) )
+    BigWorld.createBaseFromDBID( trade[ "typeB" ], 
+        trade[ "paramsB" ][ "dbID" ],
+        lambda mb, dbID, wasActive: self.__collectMailbox ( trade[ "typeB" ], 
+            trade, traderMBs, 1, mb ) )
+
+def __collectMailbox ( self, entityType, trade, traderMBs, ind, box ):
+    ...
+    traderMBs[ ind ] = box
+    if traderMBs[ ind^1 ] == None: 
+        return # still missing other mailbox
+
+    self._tradeStep2( traderMBs[0], trade[ "paramsA" ], 
+                      traderMBs[1], trade[ "paramsB" ] )</pre></li></ul></div></li><li><p>It then replays the trades, by instructing the avatars to
+        perform it<sup>[<a name="d0e1248" href="#ftn.d0e1248">5</a>]</sup>.</p></li></ol></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Overall, the procedure is similar to a journal file system,
+      <em class="emphasis">i.e.</em>, the intentions are first written to the
+      database, then the operation is performed, and finally the intentions
+      are marked as complete.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Creating_And_Destroying_The_Trading_Supervisor"></a>3.4.&nbsp;Creating and destroying the trading supervisor</h2></div></div></div><p>In the case of a global trading supervisor, the supervisor must be
+    created when the system is first started. In the sample implementation,
+    that is done in the base personality script
+    <code class="filename">FantasyDemo.py</code>.</p><p>Whenever a new base is started, a three-step procedure is performed
+    to bring up the global <span class="literal">TradingSupervisor</span>.</p><div class="orderedlist"><ol type="1"><li><p><a name="xref_Creating_And_Destroying_The_Trading_Supervisor_Step_1"></a>Check if a global supervisor has not already been
+        created.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/FantasyDemo.py</code>:</em></p><pre class="programlisting">import BigWorld
+...
+def onBaseAppReady( isBootstrap ):
+    ...
+    TradingSupervisor.wakeupTradingSupervisor()
+    ...</pre></li><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/TradingSupervisor.py</code>:</em></p><pre class="programlisting">def wakeupTradingSupervisor():
+    ...
+    if BigWorld.globalBases.has_key( 'TradingSupervisor' ):
+        ...
+    self:
+        doStep2()
+    ...</pre></li></ul></div></li><li><p><a name="xref_Creating_And_Destroying_The_Trading_Supervisor_Step_2"></a>If not, try to load one from the database. If one is found
+        there, the system has failed, and there can be some trades pending.
+        For more details on replaying trades, see <a href="#xref_Dealing_With_Failure_Conditions" title="3.3.&nbsp;Dealing with failure conditions">Dealing with failure conditions</a>.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/TradingSupervisor.py</code>:</em></p><pre class="programlisting">def wakeupTradingSupervisor():
+    ....
+    def doStep2():
+        BigWorld.createBaseFromDB( 'TradingSupervisor', 
+                'TradingSupervisor', doStep3 )
+    ...</pre></li></ul></div></li><li><p>If none was found in the database, create a new supervisor (the
+        system is coming up after a clean shutdown).</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/TradingSupervisor.py</code>:</em></p><pre class="programlisting">def wakeupTradingSupervisor():
+    ....
+    def doStep3( result ):
+        if result:
+            ...
+        else:
+            BigWorld.createEntity( 'TradingSupervisor' )
+    ...</pre><p>The fact that this three-step sequence is performed on every
+            base that comes up allow two or more bases that are starting up
+            simultaneously to create one supervisor each (if all get
+            <span class="literal">False</span> from their query for the global base in
+            <a href="#xref_Creating_And_Destroying_The_Trading_Supervisor" title="3.4.&nbsp;Creating and destroying the trading supervisor">Creating and destroying the trading supervisor</a>).
+            In case two or more supervisors are created, only one of them will
+            be able to register itself globally. The ones that do not will
+            destroy themselves immediately.</p></li><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/TradingSupervisor.py</code>:</em></p><pre class="programlisting">class TradingSupervisor( BigWorld.Base ):
+    ....
+    def __init__( self ):
+        ...
+        def registerGloballyResult( success ):
+            if not success:
+                self.destroy()
+
+        self.registerGlobally( self.globalName, registerGloballyResult )</pre><p>In <a href="#xref_Creating_And_Destroying_The_Trading_Supervisor_Step_2">2</a>
+            in the supervisor startup procedure, the system is assumed to have
+            come from a clear shutdown if the trading supervisor cannot be
+            retrieved from the database. One way to make sure this is always
+            the case is deleting the trading supervisor from the database
+            whenever the system is shutdown.</p></li><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/FantasyDemo.py</code>:</em></p><pre class="programlisting">def destroyTradingSupervisor():
+    ....
+    dbid = supervisor.databaseID
+    supervisor.destroy()
+    ...</pre></li><li><p><em class="emphasis">In
+            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/TradingSupervisor.py</code>:</em></p><pre class="programlisting">def destroyTradingSupervisor():
+    ....
+    dbid = supervisor.databaseID
+    supervisor.destroy()</pre></li></ul></div></li></ol></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1378"></a>3.5.&nbsp;Scalability</h2></div></div></div><p>The example uses only one system-wide <em class="emphasis">trading
+    supervisor</em>. However, it is easily scalable to as many as
+    necessary.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Care should be taken as to not create multiple <em class="emphasis">trading
+      supervisors</em> on a single <span class="literal">BaseApp</span> when
+      restoring them in a controlled startup.</p></div><p>A simple way to do this would be to create one trading supervisor
+    instance per BaseApp, and access it through a Python global variable on
+    that <span class="literal">BaseApp</span>. This could be done in the
+    <span class="literal">onBaseAppReady</span> callback of the personality script or
+    via an accessor that creates it on first access.</p><p>There are also alternatives to how this idea is implemented. For
+    example, the pending trade could be stored with one of the traders. This
+    reduces the number of writes to the database and avoids scalability
+    issues. An extra field would be required per Avatar.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1405"></a>3.6.&nbsp;Vulnerabilities</h2></div></div></div><p>Despite the high level of protection against crashes afforded by
+    this example solution, there are still conditions in which the trade can
+    go awry.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Database corruption</em></p><p>If the database corrupts itself, then the list of pending
+        transactions might not be available. Most databases have good
+        protection against this.</p></li><li><p><em class="emphasis">Scripting errors</em></p><p>Care must also be taken to ensure that the inventory is not
+        modified in other unexpected ways. This may include ensuring any items
+        in a trade are not lost before it is complete. For details, see <a href="#xref_Locking_Inventory_Items" title="2.6.&nbsp;Locking inventory items">Locking inventory items</a>.</p></li></ul></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e1006" href="#d0e1006">2</a>] </sup>See <a href="#xref_Trade_Protocol_Step_4">4</a>.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e1189" href="#d0e1189">3</a>] </sup>See <a href="#xref_Trading_Supervisor_Step_3">3</a>.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e1195" href="#d0e1195">4</a>] </sup>See sections, <a href="#xref_Trading_Supervisor_Step_4">4</a>
+          through to <a href="#xref_Trading_Supervisor_Step_7">7</a>.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e1248" href="#d0e1248">5</a>] </sup>See sections <a href="#xref_Trading_Supervisor_Step_4">4</a> through to <a href="#xref_Trading_Supervisor_Step_7">7</a>.</p></div></div></div></div></div></body></html>

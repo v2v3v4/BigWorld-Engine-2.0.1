@@ -1,0 +1,252 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;17.&nbsp;Controlled Startup and Shutdown</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch16.html" title="Chapter&nbsp;16.&nbsp;Disaster Recovery">
+      <link rel="next" href="ch18.html" title="Chapter&nbsp;18.&nbsp;Transactions and Handling Fault Tolerance and Disaster Recovery">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch17.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;17.&nbsp;Controlled Startup and Shutdown</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch16.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch18.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Controlled_Startup_And_Shutdown"></a>Chapter&nbsp;17.&nbsp;Controlled Startup and Shutdown
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch17.html#d0e12438">17.1. Controlled Shutdown</a></span></dt>
+                  <dt><span class="section"><a href="ch17.html#d0e12555">17.2. Controlled Startup</a></span></dt>
+               </dl>
+            </div>
+            <p>There may be times when the server needs to be shut down and later
+                 restarted in a similar state. This chapter describes the script-related
+                 details of this scenario.
+            </p>
+            <p>For more details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch06.html" class="olink"><i>Controlled Startup and Shutdown</i></a>.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e12438"></a>17.1.&nbsp;Controlled Shutdown
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The process of controlled shutdown is described in the list
+                      below:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p><span class="literal">USR1</span> signal is received by LoginApp
+                                   processes.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The LoginApp processes shut down immediately.</p>
+                     </li>
+                     <li>
+                        <p>The CellAppMgr receives a message to schedule the shutdown (in
+                                   game time).
+                        </p>
+                     </li>
+                     <li>
+                        <p>The CellAppMgr sends a message to the other processes informing
+                                   them when the shutdown is scheduled for.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The callback <code class="methodname">onCellAppShuttingDown</code> on
+                                   the CellApp personality script is invoked.
+                        </p>
+                        <p>The personality scripts on this step and the next should perform
+                                   the appropriate finishing tasks, like ending long running tasks such
+                                   as combats or trades, informing the players, and stopping new long
+                                   running tasks from starting.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The callback <code class="methodname">onBaseAppShuttingDown</code> on
+                                   the BaseApp personality script is invoked.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Once these callbacks have been executed, calls to method
+                                   <code class="classname">BigWorld</code>.<code class="methodname">isShuttingDown</code>
+                                   will return <span class="literal">True</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The other server processes (CellApps, BaseAppMgr, BaseApps,
+                                   Backup BaseApps, DBMgr, Reviver) do not stop immediately, instead
+                                   performing any finishing tasks.
+                        </p>
+                        <p>This delay can be specified in the file
+                                   <code class="filename">res/server/bw.xml</code> by using the configuration
+                                   option <code class="property">&lt;shuttingDownDelay&gt;</code>. For more
+                                   details on this option, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Shutdown game time is reached.</p>
+                     </li>
+                     <li>
+                        <p>Game stops running, but the processes not.</p>
+                        <p>This means that the game time is no longer incremented, and no
+                                   game object is ticked.
+                        </p>
+                     </li>
+                     <li>
+                        <p>When ready to shut down, CellAppMgr writes the spaces, their
+                                   data, and the game time to the database.
+                        </p>
+                     </li>
+                     <li>
+                        <p>This step takes place in parallel with step <em class="emphasis">11</em>.
+                        </p>
+                        <p>Each BaseApp performs the following steps:</p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p>Receives a message to disconnect any connected
+                                                clients.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>Invokes the callback
+                                                <code class="methodname">onBaseAppShutDown</code> with an argument of
+                                                <span class="literal">0</span> before disconnecting the clients.
+                                 </p>
+                                 <p>For each disconnected client, the proxy's callback
+                                                <code class="methodname">onClientDeath</code> is invoked.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>Invokes the callback
+                                                <code class="methodname">onBaseAppShutDown</code> with an argument of
+                                                <span class="literal">1</span>, before writing to the database each entity
+                                                with a database entry.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>Invokes the callback
+                                                <code class="methodname">onBaseAppShutDown</code> with an argument of
+                                                <span class="literal">2</span>.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                     <li>
+                        <p>All server process shut down.</p>
+                     </li>
+                  </ol>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e12555"></a>17.2.&nbsp;Controlled Startup
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>When starting up, the DBMgr initially waits until all components are
+                      ready. A minimum number of BaseApp and CellApp processes can be specified
+                      in <code class="filename">bw.xml</code> via the options
+                      <code class="property">&lt;desiredBaseApps&gt;</code> and
+                      <code class="property">&lt;desiredCellApps&gt;</code><sup>[<a name="d0e12568" href="#ftn.d0e12568">30</a>]</sup>. Once ready, the DBMgr loads the spaces and their data back
+                      into the system.
+               </p>
+               <p>Entities stored from a previous session are then loaded into the
+                      system by creating the base entities. The script function
+                      <code class="classname">BigWorld</code>.<code class="methodname">hasStarted</code> will
+                      return <span class="literal">False</span> during this stage. This can be handy for
+                      implementing different behaviour in the method
+                      <code class="methodname">__init__</code> of restored entities.
+               </p>
+               <p>It is up to the script to create the cell entity, if desired.
+                      Creating a cell entity during startup is often different from doing so
+                      during other times. Usually the method
+                      <code class="classname">Base</code>.<code class="methodname">createCellEntity</code> is
+                      called with a cell entity mailbox to indicate the entity's space. But
+                      during startup, the entity's space ID is restored and set in the
+                      <code class="classname">Base</code>.<code class="varname">cellData</code> map. The base
+                      entity script may use this by calling the method
+                      <code class="classname">Base</code>.<code class="methodname">createCellEntity</code> with
+                      no arguments.
+               </p>
+               <p>Once the server is ready to start running, the callbacks
+                      <code class="methodname">onBaseAppReady</code> and
+                      <code class="methodname">onCellAppReady</code> from the personality script are
+                      called on the BaseApps and CellApps, respectively.
+               </p>
+               <p>The game recovery function can be disabled by setting the
+                      <code class="property">&lt;dbMgr/clearRecoveryData&gt;</code><sup>[<a name="d0e12627" href="#ftn.d0e12627">31</a>]</sup> configuration option to <span class="literal">true</span>. When game
+                      recovery is disabled, the game is restarted with a single default space
+                      with no entities. For information on how to re-populate the game, see
+                      <a href="ch12.html#xref_Initialisation_Personality_Script_eload_And_runscript" title="12.4.&nbsp;Initialisation: Personality script, eload, and runscript">Initialisation: Personality script, eload, and runscript</a>.
+               </p>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e12568" href="#d0e12568">30</a>] </sup>For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html#xref_General_Configuration_Options" class="olink">General Configuration Options</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e12627" href="#d0e12627">31</a>] </sup>For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html#xref_DBMgr_Configuration_Options" class="olink">DBMgr Configuration Options</a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch16.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch18.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;16.&nbsp;Disaster Recovery&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;18.&nbsp;Transactions and Handling Fault Tolerance and Disaster Recovery</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

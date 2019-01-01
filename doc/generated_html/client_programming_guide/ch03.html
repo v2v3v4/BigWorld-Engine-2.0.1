@@ -1,0 +1,179 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;3.&nbsp;Cameras</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;User Input">
+      <link rel="next" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Terrain">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch03.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Cameras</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Cameras"></a>Chapter&nbsp;3.&nbsp;Cameras
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch03.html#d0e709">3.1. The Cursor Camera</a></span></dt>
+                  <dt><span class="section"><a href="ch03.html#d0e720">3.2. The Free Camera</a></span></dt>
+                  <dt><span class="section"><a href="ch03.html#d0e725">3.3. The FlexiCam</a></span></dt>
+               </dl>
+            </div>
+            <p>The placement of the camera update within the general update process
+               is a delicate matter, because the camera depends on some components having
+                 been updated before it, whilst other components depend on the camera being
+                 updated before them.
+            </p>
+            <p>Conceptually, there are four types of camera: fixed camera, FlexiCam,
+                 cursor camera, and free camera. The first three are client-controlled views,
+                 ranging from minimum user interaction to maximum user interaction. The last
+                 camera is completely user-controlled, but is not part of actual game
+                 play.
+            </p>
+            <p>There are however just three camera classes:
+                 <code class="classname">FlexiCam</code>, <code class="classname">CursorCamera</code>, and
+                 <code class="classname">FreeCamera</code>. The fixed camera is implemented with a
+                 <code class="classname">FlexiCam</code> object. They all derive from a common
+                 <code class="classname">BaseCamera</code> class.
+            </p>
+            <p>There is only ever one active camera at a time. The personality script
+                 usually handles camera management, since the camera is a global, but any
+                 script can also manipulate the camera, and the player script often does
+                 (although usually indirectly, through the personality script)
+            </p>
+            <p>The base class and all the derived classes are fully accessible to
+                 Python. Any camera can be created and set to whatever position a script
+                 desires, including to the position of another camera. This is particularly
+                 useful when switching camera types to remove any unwanted
+                 'jump-cuts'.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e709"></a>3.1.&nbsp;The Cursor Camera
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The cursor camera is a camera that follows the character in the game
+                      world. It always positions itself on a sphere centred on the character's
+                      head. It works primarily with the direction cursor so as to face the
+                      camera in the direction of the character's head. You may use any
+                      MatrixProvider in place of the direction cursor, and you may use any
+                      MatrixProvider in place of the player's head.
+               </p>
+               <p>The direction cursor is an input handler that translates device
+                      input from the user into the manipulation of an imaginary cursor that
+                      travels on an invisible sphere. This cursor is described by its pitch and
+                      yaw. It produces a pointing vector extending from the head position of the
+                      player's avatar in world space, in the direction of the cursor's pitch and
+                      yaw. The direction cursor is a useful tool to allow a targeting method
+                      across different devices. Rather than have each device affect the camera
+                      and character mesh, each device talks to the direction cursor, affecting
+                      its look-at vector in the world. The cursor camera, target tracker, and
+                      action matcher then read the direction cursor for information on what
+                      needs to be done.
+               </p>
+               <p>The cursor camera takes the position of the direction cursor on the
+                      sphere, extends the line back towards the character's head, and follows
+                      that line until it intersects with the sphere on the other side. This
+                      intersection point is the cursor camera's position. The direction of the
+                      camera is always that of the direction cursor.
+               </p>
+               <p>The cursor camera is an instance of the abstract concept
+                      InputCursor. There can be only one active InputCursor at any time, and
+                      BigWorld automatically forwards keyboard, joystick, and mouse events to
+                      it. Upon startup, the cursor camera is the active InputCursor by default.
+                      You can change the active InputCursor at any time, using the method
+                      BigWorld.setCursor (for example to change the InputCursor to be a mouse
+                      pointer instead).
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e720"></a>3.2.&nbsp;The Free Camera
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The Free Camera is a free roaming camera that is neither tied to a
+                      fixed point in space nor following the player's avatar. It is controlled
+                      by the mouse (for direction) and keyboard (for movement), and allows the
+                      user to fly about the world. The free camera has inertia in order to
+                      provide smooth, gradual transitions in movement. It is not a gameplay
+                      camera, but is useful for debugging, development, and demonstration of the
+                      game.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e725"></a>3.3.&nbsp;The FlexiCam
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The FlexiCam is a flexible camera that follows the character in the
+                      game world. It always positions itself at a specified point, relative to
+                      the character orientation, and always looks at a specified orientation,
+                      relative to the character's feet direction.
+               </p>
+               <p>It is called FlexiCam because it has a certain amount of elasticity
+                      to its movement, allowing the sensation of speed to be visualised. This
+                      makes it especially useful for chasing vehicles.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;User Input&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;Terrain</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

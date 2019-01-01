@@ -1,0 +1,212 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;33.&nbsp;MySQL Database Schema</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt02.html" title="Part&nbsp;II.&nbsp;Server C++ Programming Guide">
+      <link rel="prev" href="ch32.html" title="Chapter&nbsp;32.&nbsp;Non-Blocking Socket I/O Using Mercury">
+      <link rel="next" href="pt03.html" title="Part&nbsp;III.&nbsp;Extending WebConsole">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch33.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;33.&nbsp;MySQL Database Schema</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch32.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;II.&nbsp;Server C++ Programming Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="pt03.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_MySQL_Database_Schema"></a>Chapter&nbsp;33.&nbsp;MySQL Database Schema
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch33.html#xref_Entity_Tables">33.1. Entity Tables</a></span></dt>
+                  <dt><span class="section"><a href="ch33.html#xref_Non_Entity_Tables">33.2. Non-Entity Tables</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Entity_Tables"></a>33.1.&nbsp;Entity Tables
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Entity tables store the persistent entity data. The name of all
+                      entity tables if prefixed by <span class="literal">tbl_</span>.
+               </p>
+               <p>Every entity type has one main table and zero or more sub-tables. An
+                      entity type's main table is named
+                      <span class="literal">tbl_<em class="replaceable"><code>&lt;entity_type_name&gt;</code></em></span>.
+                      The main table name is the prefix for the names any sub-tables of that
+                      entity type.
+               </p>
+               <p>For details, see <a href="ch08.html#xref_Mapping_BigWorld_Properties_Into_SQL" title="8.3.&nbsp;Mapping BigWorld Properties Into SQL">Mapping BigWorld Properties Into SQL</a>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Non_Entity_Tables"></a>33.2.&nbsp;Non-Entity Tables
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld uses a number of tables to keep track of various internal
+                      states <span class="symbol">&#8208;</span> these tables' names are prefixed
+                      by <span class="literal">bigworld</span>. Accessing or modifying these tables is
+                      strongly discouraged.
+               </p>
+               <p>BigWorld non-entity tables are described below:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">bigworldEntityTypes</span></em></p>
+                        <p>Maps entity names to internal entity type numbers.</p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">name</span></em> -
+                                                The name of the entity type.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">typeID</span></em> -
+                                                An id that is maintained over changes to
+                                                <span class="literal"><code class="filename">entities.xml</code></span>.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">bigworldID</span></em> - An id that
+                                                indicates this type's position in
+                                                <code class="filename">entities.xml</code>.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">bigworldGameTime</span></em></p>
+                        <p>Stores the current game time.</p>
+                        <p>This information is used during crash recovery.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">bigworldInfo</span></em></p>
+                        <p>Stores the version number of the schema.</p>
+                        <p>This number is incremented if a new version of BigWorld uses an
+                                   incompatible schema that will require migration of data.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">bigworldLogOnMapping</span></em></p>
+                        <p>Used during the login process to determine whether to allow
+                                   access to a user.
+                        </p>
+                        <p>For details, see <a href="ch20.html#xref_Bypassing_bigworldLogOnMapping_And_Using_Account_Entity" title="20.2.&nbsp;Authentication via a Base entity">Authentication via a Base entity</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">bigworldLogOns</span></em></p>
+                        <p>Stores information about entities that are currently
+                                   active.
+                        </p>
+                        <p>This information is used to construct mailboxes to active
+                                   entities <span class="symbol">&#8208;</span> every active entity with a
+                                   non-zero <span class="literal">databaseID</span> (including non-Proxy entities
+                                   <span class="symbol">&#8208;</span> will have an entry in this
+                                   table.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">bigworldNewID</span></em></p>
+                        <p>Together with <span class="literal">bigWorldUserID</span>s, this table is
+                                   used to keep track of the object IDs currently in use by the
+                                   system.
+                        </p>
+                        <p>This information is used during crash recovery to prevent
+                                   allocation of duplicate object IDs.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">bigworldSecondaryDatabases</span></em></p>
+                        <p>Each row in this table represents an unconsolidated secondary
+                                   database. When the server is shutdown this information will be used by
+                                   the data consolidation process to retrieve the secondary databases.
+                                   When the data consolidation completes, this table will be
+                                   cleared.
+                        </p>
+                        <p>For more details about secondary databases, see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="index.html" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="ch08.html#xref_Secondary_Databases" class="olink">Secondary Databases</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">bigworldSpaceData</span></em></p>
+                        <p>Together with <span class="literal">bigworldSpaces</span>, this table
+                                   contains a backup of the space data.
+                        </p>
+                        <p>This information is used during crash recovery.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">bigworldSpaces</span></em></p>
+                        <p>See <span class="literal">bigworldSpaceData</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">bigworldTableMetadata</span></em></p>
+                        <p>Stores meta information about the database schema.</p>
+                        <p>This table is a candidate for obsolescence, since MySQL already
+                                   provides APIs for retrieving database meta data.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">bigworldUsedIDs</span></em></p>
+                        <p>See <span class="literal">bigworldNewID</span>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch32.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt02.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="pt03.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;32.&nbsp;Non-Blocking Socket I/O Using Mercury&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Part&nbsp;III.&nbsp;Extending WebConsole</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

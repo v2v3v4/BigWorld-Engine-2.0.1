@@ -1,0 +1,1826 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;8.&nbsp;The Database Layer</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch07.html" title="Chapter&nbsp;7.&nbsp;Entity Instantiation and Destruction">
+      <link rel="next" href="ch09.html" title="Chapter&nbsp;9.&nbsp;Character Sets and Encodings">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch08.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;8.&nbsp;The Database Layer</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_The_Database_Layer"></a>Chapter&nbsp;8.&nbsp;The Database Layer
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch08.html#d0e6520">8.1. Persistent Properties</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch08.html#xref_Non_Persistent_Properties">8.1.1. Non-Persistent Properties</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#xref_Built_In_Properties">8.1.2. Built-In Properties</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#xref_The_Identifier_Tag">8.1.3. The Identifier Tag</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch08.html#xref_Reading_And_Writing_Entities">8.2. Reading and Writing Entities</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#xref_Mapping_BigWorld_Properties_Into_SQL">8.3. Mapping BigWorld Properties Into SQL</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch08.html#d0e6998">8.3.1. Entity Tables</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#d0e7024">8.3.2. The <code class="varname">databaseID</code> property</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#d0e7038">8.3.3. Simple Data Types</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#d0e7135">8.3.4. <span class="type">VECTOR</span> Data Types</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#xref_STRING_UNICODE_STRING_BLOB_and_data_types">8.3.5. <span class="type">STRING</span>, <span class="type">UNICODE_STRING</span>,
+                                       <span class="type">BLOB</span>, and <span class="type">PYTHON</span> Data Types</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#d0e7477">8.3.6. <span class="type">PATROL_PATH</span> and <span class="type">UDO_REF</span> Data
+                                       Types</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#d0e7514">8.3.7. <span class="type">ARRAY</span>s and <span class="type">TUPLE</span>s</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#xref_FIXED_DICTs">8.3.8. <span class="type">FIXED_DICT</span>s</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#d0e7845">8.3.9. <span class="type">USER_TYPE</span>s</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch08.html#d0e8523">8.4. Execute Arbitrary Commands on Database</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch08.html#d0e8536">8.4.1. Execute Commands on SQL Database</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#d0e8622">8.4.2. Execute Commands on XML Database</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch08.html#xref_Secondary_Databases">8.5. Secondary Databases</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch08.html#xref_Data_Consolidation">8.5.1. Data Consolidation</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#xref_Database_Snapshot">8.5.2. Database Snapshot</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>The database layer is BigWorld's persistent storehouse of entities. It
+                 allows writing specific entities into online storage (usually into a
+                 database table or disk file), and retrieving them back into the world again
+                 later.
+            </p>
+            <p>The database layer is not intended to be accessed frequently by each
+                 entity, but instead only at entity creation and destruction times (and
+                 perhaps at critical trade points). You should not attempt to access the
+                 database in response to every action a character performs <span class="symbol">&#8208;</span> let the disaster recovery mechanisms handle game
+                 integrity.
+            </p>
+            <p>This chapter provides details on how to store and retrieve entities
+                 from the database.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e6520"></a>8.1.&nbsp;Persistent Properties
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The first step to make an entity persistent is to edit its
+                      definition file (named
+                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>)
+                      and specify the properties to be made persistent.
+               </p>
+               <p>The persistent set of properties is often a small subset of the
+                      entity properties. For example, a role playing game typically has a set of
+                      core attributes (strength, dexterity, etc...), and a set of derived
+                      attributes that need to be modified transiently (maybe the character
+                      always gets full vitality when logging on, and so vitality points need not
+                      be persisted).
+               </p>
+               <p>To mark an entity property as persistent, it needs the tag
+                      <code class="property">&lt;Persistent&gt;</code> added to it, as illustrated
+                      below:
+               </p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;Properties&gt;
+    ...
+    &lt;<em class="emphasis"><em class="replaceable"><code>somePersistentProperty</code></em></em>&gt;
+      &lt;Type&gt;       TYPENAME &lt;/Type&gt;
+      &lt;Flags&gt;      FLAGS    &lt;/Flags&gt;
+      &lt;<em class="emphasis">Persistent</em>&gt; <em class="emphasis">true</em>     &lt;/Persistent&gt;
+    &lt;/<em class="replaceable"><code>somePersistentProperty</code></em>&gt;
+    ...
+  &lt;/Properties&gt; 
+  ...
+&lt;/root&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                         <span class="symbol">&#8208;</span> Marking a property as
+                         persistent</span></p>
+               <p>If the type is <span class="type">FIXED_DICT</span>, then the
+                      <code class="property">&lt;Persistent&gt;</code> tag can be specified for each
+                      property of the <span class="type">FIXED_DICT</span> data type.
+               </p>
+               <p>For example:</p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;Properties&gt;
+    ...
+    &lt;<em class="emphasis"><em class="replaceable"><code>someFixedDictProperty</code></em></em>&gt;
+      &lt;Type&gt;    FIXED_DICT
+        &lt;Properties&gt;
+          &lt;a&gt; &lt;Type&gt; TYPENAME &lt;/Type&gt; &lt;/a&gt;
+          &lt;b&gt; 
+            &lt;Type&gt; TYPENAME &lt;/Type&gt;
+            &lt;<em class="emphasis">Persistent</em>&gt; <em class="emphasis">false</em> &lt;/Persistent&gt;
+          &lt;/b&gt;
+        &lt;/Properties&gt;
+      &lt;/Type&gt;
+      &lt;Flags&gt;    FLAGS      &lt;/Flags&gt;
+      &lt;<em class="emphasis">Persistent</em>&gt;  <em class="emphasis">true</em>    &lt;/Persistent&gt;  
+    &lt;/<em class="replaceable"><code>somePersistentProperty</code></em>&gt;
+    ...
+  &lt;/Properties&gt;
+  ...
+&lt;/root&gt;</pre><p>In the above example,
+                      <code class="classname">someFixedDictProperty</code>.<code class="varname">a</code> is
+                      persistent, but
+                      <code class="classname">someFixedDictProperty</code>.<code class="varname">b</code> is not.
+                      If the <code class="property">&lt;Persistent&gt;</code> tag at the
+                      <code class="property">&lt;someFixedDictProperty&gt;</code> level is
+                      <span class="literal">false</span>, then neither <code class="varname">a</code> nor
+                      <code class="varname">b</code> will be persistent. By default, the
+                      <code class="property">&lt;Persistent&gt;</code> tag at the <span class="type">FIXED_DICT</span>
+                      field level is <span class="literal">true</span>, so it is not necessary to specify
+                      it, except for selectively turning off the persistence of some
+                      fields.
+               </p>
+               <p>Other parameters can be set for persistent properties for the MySQL
+                      database engine. For more details, see <a href="ch08.html#xref_Mapping_BigWorld_Properties_Into_SQL" title="8.3.&nbsp;Mapping BigWorld Properties Into SQL">Mapping BigWorld Properties Into SQL</a>.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Non_Persistent_Properties"></a>8.1.1.&nbsp;Non-Persistent Properties
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Properties that are reset each time the entity is created should
+                           not be made persistent. For example, entity's A.I. and GUI states are
+                           usually non-persistent. Reducing the number of persistent properties
+                           will reduce the load on the database. If a property is not persistent,
+                           its value will be set to its default value when the entity is loaded
+                           from the database (see <a href="ch08.html#xref_Reading_And_Writing_Entities" title="8.2.&nbsp;Reading and Writing Entities">Reading and Writing Entities</a>).
+                  </p>
+                  <p>A <span class="type">MAILBOX</span> property is always non-persistent.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Built_In_Properties"></a>8.1.2.&nbsp;Built-In Properties
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The following built-in properties are persistent: </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">Base</em> :
+                                          <code class="varname">databaseID</code> .
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Cell</em> :
+                                          <code class="varname">position</code> , <code class="varname">direction</code> and
+                                          <code class="varname">spaceID</code> .
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>All other built-in properties are non-persistent.</p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>The entity's built-in <code class="varname">id</code> property is not
+                                persistent. It will change each time the entity is re-created. This
+                                includes the case where the entity is re-created automatically by the
+                                disaster recovery mechanism (see <a href="ch16.html" title="Chapter&nbsp;16.&nbsp;Disaster Recovery"><i xmlns:xlink="http://www.w3.org/1999/xlink">Disaster Recovery</i></a>). Therefore, when storing entity
+                                IDs of other entities, they should be stored in non-persistent
+                                properties so that they will be automatically reset to the properties'
+                                default value when the entity is re-created by the disaster recovery
+                                mechanism. This avoids the possibility of storing invalid entity
+                                IDs.
+                     </p>
+                     <p>The entity's <code class="varname">id</code> property is unchanged when
+                                the entity is restored by our fault tolerance mechanism (see <a href="ch15.html" title="Chapter&nbsp;15.&nbsp;Fault Tolerance"><i xmlns:xlink="http://www.w3.org/1999/xlink">Fault Tolerance</i></a>).
+                     </p>
+                     <p>Use the entity's database ID for a long term reference to the
+                                entity.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_The_Identifier_Tag"></a>8.1.3.&nbsp;The Identifier Tag
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The <code class="property">&lt;Identifier&gt;</code> tag is an optional tag
+                           for persistent <span class="type">STRING</span> or <span class="type">BLOB</span> entity
+                           properties. It specifies a property to be the identifier for that entity
+                           type. Entities can be retrieved from the database by using their
+                           identifier instead of their database ID. For this reason, all entities
+                           of the same type must have unique identifiers. At most one property per
+                           entity can be tagged as an identifier.
+                  </p>
+                  <p>For example, assuming the entity definition file below:</p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;Properties&gt;
+    ...
+    &lt;playerNickname&gt; 
+      &lt;Type&gt;       STRING &lt;/Type&gt;
+      &lt;Flags&gt;      Flags  &lt;/Flags&gt;
+      &lt;Persistent&gt; true   &lt;/Persistent&gt;
+      &lt;<em class="emphasis">Identifier</em>&gt; <em class="emphasis">true</em>   &lt;/Identifier&gt;
+    &lt;/playerNickname&gt;
+
+    &lt;someProperty1&gt; 
+      &lt;Type&gt;       UINT32 &lt;/Type&gt;
+    &lt;/someProperty1&gt;
+
+    &lt;someProperty2&gt; 
+      &lt;Type&gt;       STRING &lt;/Type&gt;
+      &lt;Persistent&gt; true   &lt;/Persistent&gt;
+    &lt;someProperty2&gt;
+    ...</pre><p><span class="citetitle">Example
+                              <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                              <span class="symbol">&#8208;</span> Setting the Identifier
+                              property</span></p>
+                  <p>Then assuming that there are three instances of the above entity
+                           type, they could be represented like in the table below:
+                  </p>
+                  <div class="altrow"><a name="d0e6743"></a><p class="title"><b>Table&nbsp;8.1.&nbsp;Entity data with its <code class="property">&lt;Identifier&gt;</code>
+                                   property.</b></p>
+                     <div class="altrow-contents">
+                        <table summary="Entity data with its <Identifier&gt;&#xA;        property." border="0" width="40%">
+                           <colgroup>
+                              <col width="60%">
+                              <col width="40%">
+                           </colgroup>
+                           <thead>
+                              <tr>
+                                 <th align="left">playerNickname</th>
+                                 <th align="left">someProperty2</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr>
+                                 <td align="left"><code class="varname">playerNickname1</code></td>
+                                 <td align="left">"cfeh"</td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><code class="varname">playerNickname2</code></td>
+                                 <td align="left">"fwep"</td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><code class="varname">playerNickname3</code></td>
+                                 <td align="left">"fwep"</td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div><br class="altrow-break"><p>Note that <code class="property">&lt;someProperty1&gt;</code> is not
+                           represented in the database because it is not specified as being
+                           persistent.
+                  </p>
+                  <p>Entity types with an <code class="property">&lt;Identifier&gt;</code>
+                           property can be searched by name, using methods such as
+                           <code class="classname">BigWorld</code>.<code class="methodname">lookUpBaseByName</code>
+                           and
+                           <code class="classname">BigWorld</code>.<code class="methodname">createBaseFromDB</code>.
+                           For details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/baseapp/index.html" class="olink">BaseApp Python API</a>.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Reading_And_Writing_Entities"></a>8.2.&nbsp;Reading and Writing Entities
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The database provides the means of saving entities and bringing them
+                      back into the world at a later time. It also guarantees that each saved
+                      entity can have only one instance within the world. This assures that any
+                      writes to the database for the entity will be correctly carried
+                      out.
+               </p>
+               <p>In order to use this functionality, you must first create a
+                      persistent entity. Such an entity must exist on a BaseApp, and could be of
+                      type <code class="classname">BigWorld</code>.<code class="classname">Base</code> or
+                      <code class="classname">BigWorld</code>.<code class="classname">Proxy</code>. You can
+                      create it with any of the normal techniques. For more details, see <a href="ch07.html#xref_Entity_Instantiation_On_The_BaseApp" title="7.1.&nbsp;Entity Instantiation on the BaseApp">Entity Instantiation on the BaseApp</a>.
+               </p>
+               <p>The key for persisting an entity is its property
+                      <code class="varname">databaseID</code>, combined with its entity type. The property
+                      <code class="varname">databaseID</code> is a 64-bit integer that is unique among
+                      entities of the same type, and usually corresponds to an auto-increment
+                      field in a database table. When an entity is created with any of the usual
+                      techniques, its <code class="varname">databaseID</code> is set to 0, indicating that
+                      it has never been written to the database.
+               </p>
+               <p>To add a newly created entity to the database, its method
+                      <code class="methodname">writeToDB</code> has to be invoked (from either cell or
+                      base).
+               </p>
+               <p>If invoked on the base entity, <code class="methodname">writeToDB</code>
+                      receives an optional argument specifying the callback method. Upon
+                      completion, <code class="methodname">writeToDB</code> will invoke the callback,
+                      passing a Boolean argument indicating if writing to the database succeeded
+                      or failed, and the base entity that invoked the method. A notification
+                      method is used, as the database write is an asynchronous operation.
+               </p>
+               <p>The code fragments below illustrate the use of method
+                      <code class="methodname">writeToDB</code> from the base.
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>In <code class="classname">someEntity</code>'s base script
+                                   (<code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/someEntity.py</code>),
+                                   define callback method for <code class="methodname">writeToDB</code>:
+                        </p><pre class="programlisting">import BigWorld
+
+class <em class="emphasis">someEntity</em>( BigWorld.Base )
+  ...
+  def <em class="emphasis">onWriteToDBComplete</em>( successful, entity ):
+    if successful:
+      print "write %i OK. databaseID = %i" % (entity.id, databaseID)
+    else:
+      print "write %i was not successful" % entity.id
+  ...</pre></li>
+                     <li>
+                        <p>Invoke methods to create base and add it to database:</p><pre class="programlisting">ent = BigWorld.createBase( <em class="emphasis">"someEntity"</em> )
+ent.<em class="emphasis">writeToDB</em>( <em class="emphasis">onWriteToDBComplete</em> )</pre></li>
+                     <li>
+                        <p>The result displayed in BaseApp:</p><pre class="programlisting">write 92 OK. databaseID = 376182</pre></li>
+                  </ol>
+               </div>
+               <p>Next time this entity is destroyed (by invoking method
+                      <code class="varname">ent</code>.<code class="methodname">destroy</code>), it will be
+                      'logged off' <span class="symbol">&#8208;</span> the database layer keeps
+                      track of whether the entity is in the world.
+               </p>
+               <p>A destroyed entity can later be brought back to the world using the
+                      method
+                      <code class="classname">BigWorld</code>.<code class="methodname">createBaseFromDBID</code>
+                      and the properties stored in the database, as illustrated below:
+               </p><pre class="programlisting">BigWorld.<em class="emphasis">createBaseFromDBID</em>( "someEntity", 376182, optionalCallbackMethod )</pre><p>Since loading a destroyed entity from the database is also an
+                      asynchronous operation, if you wish to be notified of the completion of
+                      this process, you need to pass a callback function as the third argument
+                      of method
+                      <code class="classname">BigWorld</code>.<code class="methodname">createBaseFromDBID</code>.
+                      The callback function receives the entity identifier as the only argument,
+                      which is the <code class="varname">databaseID</code> if entity was successfully
+                      loaded, or <span class="literal">None</span>, otherwise.
+               </p>
+               <p>The code fragments below illustrate the request to reload entities
+                      from the database:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>In <code class="classname">someEntity</code>'s base script
+                                   (<code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/someEntity.py</code>),
+                                   define callback method for
+                                   <code class="methodname">createBaseFromDBID</code>:
+                        </p><pre class="programlisting">import BigWorld
+
+def <em class="emphasis">onComplete</em>( entity ):
+  if entity is not None:
+    print "entity successfully created" 
+  else:
+    print "entity was not created" </pre></li>
+                     <li>
+                        <p>Call <code class="methodname">createBaseFromDBID</code> with a valid
+                                   <code class="varname">databaseID</code>:
+                        </p><pre class="programlisting">BigWorld.<em class="emphasis">createBaseFromDBID</em>( "someEntity", 376182, onComplete )</pre></li>
+                     <li>
+                        <p>The result displayed in BaseApp:</p><pre class="programlisting">entity successfully created</pre></li>
+                     <li>
+                        <p>Call <code class="methodname">createBaseFromDBID</code> with an invalid
+                                   <code class="varname">databaseID</code>:
+                        </p><pre class="programlisting">BigWorld.<em class="emphasis">createBaseFromDBID</em>( "someEntity", 10000000000, onComplete )</pre></li>
+                     <li>
+                        <p>The result displayed in BaseApp:</p><pre class="programlisting">entity was not created</pre></li>
+                  </ol>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Mapping_BigWorld_Properties_Into_SQL"></a>8.3.&nbsp;Mapping BigWorld Properties Into SQL
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>When designing persistent properties, it is useful to understand how
+                      the mapping from BigWorld types to SQL types is performed by the database
+                      layer. This information can be used for performance tuning, or in manually
+                      modifying the database.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6998"></a>8.3.1.&nbsp;Entity Tables
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Each entity type will have a main entity table, and zero or more
+                           sub-tables in the database.
+                  </p>
+                  <p>An entity type's main table is named
+                           <span class="literal">tbl_<em class="replaceable"><code>&lt;entity_type_name&gt;</code></em></span>.
+                           Data for the majority of BigWorld types will be stored in the columns of
+                           the main table. Types like <span class="type">ARRAY</span> and <span class="type">TUPLE</span>,
+                           however, require the use of additional tables, referred to as sub-tables
+                           in this document.
+                  </p>
+                  <p>Except for <span class="type">ARRAY</span> and <span class="type">TUPLE</span> properties,
+                           data for each entity is stored as a single row in the entity type's main
+                           table.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7024"></a>8.3.2.&nbsp;The <code class="varname">databaseID</code> property
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The <code class="varname">databaseID</code> property of an entity is stored
+                           in the id column in the main table <span class="symbol">&#8208;</span> this
+                           is why entities without persistent properties still have a main entity
+                           table.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7038"></a>8.3.3.&nbsp;Simple Data Types
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A property with a simple data type is mapped to a single SQL
+                           column (named
+                           <span class="literal">sm_<em class="replaceable"><code>&lt;property_name&gt;</code></em></span>)
+                           with a type that accommodates.
+                  </p>
+                  <p>The table below describes each BigWorld simple data type, and
+                           which MySQL type it is mapped to:
+                  </p>
+                  <div class="altrow"><a name="d0e7050"></a><p class="title"><b>Table&nbsp;8.2.&nbsp;Mapping of simple BigWorld data types to SQL.</b></p>
+                     <div class="altrow-contents">
+                        <table summary="Mapping of simple BigWorld data types to SQL." border="0" width="50%">
+                           <colgroup>
+                              <col width="33%">
+                              <col width="67%">
+                           </colgroup>
+                           <thead>
+                              <tr>
+                                 <th align="left">BigWorld data type</th>
+                                 <th align="left">Mapped to MySQL type (column
+                                                  sm_&lt;property_type&gt;)
+                                 </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr>
+                                 <td align="left"><span class="type">INT8</span></td>
+                                 <td align="left"><span class="type">TINYINT</span></td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="type">UINT8</span></td>
+                                 <td align="left"><span class="type">TINYINT UNSIGNED</span></td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="type">INT16</span></td>
+                                 <td align="left"><span class="type">SMALLINT</span></td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="type">UINT16</span></td>
+                                 <td align="left"><span class="type">SMALLINT UNSIGNED</span></td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="type">INT32</span></td>
+                                 <td align="left"><span class="type">INT</span></td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="type">UINT32</span></td>
+                                 <td align="left"><span class="type">INT UNSIGNED</span></td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="type">INT64</span></td>
+                                 <td align="left"><span class="type">BIGINT</span></td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="type">UINT64</span></td>
+                                 <td align="left"><span class="type">BIGINT UNSIGNED</span></td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="type">FLOAT32</span></td>
+                                 <td align="left"><span class="type">FLOAT</span></td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="type">FLOAT64</span></td>
+                                 <td align="left"><span class="type">DOUBLE</span></td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div><br class="altrow-break"></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7135"></a>8.3.4.&nbsp;<span class="type">VECTOR</span> Data Types
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Properties with vector types are mapped to the appropriate number
+                           of columns of MySQL type <span class="type">FLOAT</span> <span class="symbol">&#8208;</span> named
+                           <span class="literal">vm_<em class="replaceable"><code>&lt;index&gt;</code></em>_<em class="replaceable"><code>&lt;property_name&gt;</code></em></span>,
+                           where <span class="literal"><em class="replaceable"><code>&lt;index&gt;</code></em></span> is a
+                           number from 0 to the size of the vector minus 1.
+                  </p>
+                  <p>The list below describes each BigWorld <span class="type">VECTOR</span> data
+                           type, and which MySQL type it is mapped to:
+                  </p>
+                  <div class="altrow"><a name="d0e7165"></a><p class="title"><b>Table&nbsp;8.3.&nbsp;Mapping of BigWorld <span class="type">VECTOR</span> data types to
+                                   MySQL.</b></p>
+                     <div class="altrow-contents">
+                        <table summary="Mapping of BigWorld VECTOR data types to&#xA;        MySQL." border="0" width="60%">
+                           <colgroup>
+                              <col width="25%">
+                              <col width="25%">
+                              <col width="50%">
+                           </colgroup>
+                           <thead>
+                              <tr>
+                                 <th align="left">BigWorld data type</th>
+                                 <th align="left"># of columns</th>
+                                 <th align="left">Mapped to MySQL type (column
+                                                  vm_&lt;index&gt;_&lt;property_name&gt;)
+                                 </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr>
+                                 <td align="left"><span class="type">VECTOR2</span></td>
+                                 <td align="left"><span class="literal">2</span></td>
+                                 <td align="left"><span class="type">FLOAT</span></td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="type">VECTOR3</span></td>
+                                 <td align="left"><span class="literal">3</span></td>
+                                 <td align="left"><span class="type">FLOAT</span></td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="type">VECTOR4</span></td>
+                                 <td align="left"><span class="literal">4</span></td>
+                                 <td align="left"><span class="type">FLOAT</span></td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div><br class="altrow-break"></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_STRING_UNICODE_STRING_BLOB_and_data_types"></a>8.3.5.&nbsp;<span class="type">STRING</span>, <span class="type">UNICODE_STRING</span>,
+                                    <span class="type">BLOB</span>, and <span class="type">PYTHON</span> Data Types
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Properties of types <span class="type">STRING</span>,
+                           <span class="type">UNICODE_STRING</span>, <span class="type">BLOB</span>, and <span class="type">PYTHON</span>
+                           will be mapped to column
+                           <span class="literal">sm_<em class="replaceable"><code>&lt;property_name&gt;</code></em></span>,
+                           with the type being dependent on the
+                           <code class="property">&lt;DatabaseLength&gt;</code> attribute of the property
+                           specified in the entity definition file (for details, see <a href="ch02.html#xref_The_Definition_File" title="2.2.&nbsp;The Entity Definition File">The Entity Definition File</a>, and <a href="ch04.html" title="Chapter&nbsp;4.&nbsp;Properties"><i xmlns:xlink="http://www.w3.org/1999/xlink">Properties</i></a>), as it determines the width of the column
+                           when the type is mapped to SQL.
+                  </p>
+                  <p>The list below summarises the mapping of <span class="type">STRING</span>,
+                           <span class="type">UNICODE_STRING</span>, <span class="type">BLOB</span>, and <span class="type">PYTHON</span>
+                           data types:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">PYTHON</span></em></p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">DatabaseLength</span>
+                                                        &lt; 256 </em><span class="symbol">&#8208;</span>
+                                                     <span class="literal">TINYBLOB</span></p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">DatabaseLength</span>
+                                                        &gt;= 256 and &lt; 65536</em> <span class="symbol">&#8208;</span> <span class="literal">BLOB</span></p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">DatabaseLength</span>
+                                                        &gt;= 65536 and &lt; 16777215</em> <span class="symbol">&#8208;</span> <span class="literal">MEDIUMBLOB</span></p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">STRING</span></em></p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">DatabaseLength</span>
+                                                        &lt; 256</em> <span class="symbol">&#8208;</span>
+                                                     <span class="literal">VARBINARY</span></p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">DatabaseLength</span>
+                                                        &gt;= 256 and &lt; 65536</em> <span class="symbol">&#8208;</span> <span class="literal">BLOB</span></p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">DatabaseLength</span>
+                                                        &gt;= 65536 and &lt; 16777215</em> <span class="symbol">&#8208;</span> <span class="literal">MEDIUMBLOB</span></p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">DatabaseLength</span>
+                                                        &gt;= 16777216</em> <span class="symbol">&#8208;</span>
+                                                     <span class="literal">LONGBLOB</span></p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">UNICODE_STRING</span></em></p>
+                           <p>The <span class="type">UNICODE_STRING</span> type maps to the MySQL string
+                                        types outlined below. The character encoding used for storing these
+                                        strings in the database is determined by the value of the
+                                        <code class="filename">bw.xml</code> option
+                                        <span class="literal">dbMgr/unicodeString/characterSet</span><sup>[<a name="d0e7381" href="#ftn.d0e7381">13</a>]</sup>. For more details on the
+                                        <span class="literal">UNICODE_STRING</span> and the issues involved when
+                                        dealing with character sets, please refer to the chapter <a href="ch09.html" title="Chapter&nbsp;9.&nbsp;Character Sets and Encodings"><i xmlns:xlink="http://www.w3.org/1999/xlink">Character Sets and Encodings</i></a>. The
+                                        <span class="literal">UNICODE_STRING</span> type has similar storage
+                                        requirements to the <span class="type">STRING</span> type as shown below:
+                           </p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">(DatabaseLength</span> x
+                                                        3) &lt; 256</em> <span class="symbol">&#8208;</span>
+                                                     <span class="literal">VARCHAR</span></p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">(DatabaseLength</span> x
+                                                        3) &gt;= 256 and &lt; 65536</em> <span class="symbol">&#8208;</span> <span class="literal">TEXT</span></p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">(DatabaseLength</span> x
+                                                        3) &gt;= 65536 and &lt; 16777215</em> <span class="symbol">&#8208;</span> <span class="literal">MEDIUMTEXT</span></p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis"><span class="literal">DatabaseLength</span>
+                                                        &gt;= 16777216</em> <span class="symbol">&#8208;</span>
+                                                     <span class="literal">LONGTEXT</span></p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The definition of <code class="property">&lt;DatabaseLength&gt;</code> is
+                           illustrated below:
+                  </p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;Properties&gt;
+    ...
+    &lt;someProperty&gt;
+      &lt;Type&gt;            STRING  &lt;/Type&gt;
+      &lt;Persistent&gt;      true    &lt;/Persistent&gt;
+      &lt;<em class="emphasis">DatabaseLength</em>&gt;  <em class="emphasis">16</em>      &lt;/DatabaseLength&gt;
+    &lt;/someProperty&gt;
+    ...</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                              <span class="symbol">&#8208;</span> Defining property's mapped SQL
+                              type</span></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7477"></a>8.3.6.&nbsp;<span class="type">PATROL_PATH</span> and <span class="type">UDO_REF</span> Data
+                                    Types
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The <span class="type">PATROL_PATH</span> type has been deprecated in favor of
+                           the use of User Data Objects and should be avoided as they will be
+                           removed in a future release. The <code class="property">&lt;PatrolNode&gt;</code>
+                           User Data Object replaces the station nodes of the old system.
+                  </p>
+                  <p>Properties with <span class="type">UDO_REF</span> type are mapped to a column
+                           of type <span class="type">BINARY</span>, named
+                           <span class="literal">sm_<em class="replaceable"><code>&lt;property_name&gt;</code></em></span>.
+                           The column width is 16 bytes, which corresponds to the 128-bit GUID that
+                           identifies a Patrol Path or User Data Object type.
+                  </p>
+                  <p>The 128-bit GUID is stored in the column as four groups of 32-bit
+                           unsigned integers. Each integer is in little endian order. For example,
+                           if the GUID is <span class="literal">00112233.44556677.8899AABB.CCDDEEFF</span>,
+                           then the byte values in the column will be
+                           <span class="literal">3322110077665544BBAA9988FFEEDDCC</span>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7514"></a>8.3.7.&nbsp;<span class="type">ARRAY</span>s and <span class="type">TUPLE</span>s
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Each <span class="type">ARRAY</span> or <span class="type">TUPLE</span> property is mapped
+                           to an SQL table, referred to as sub-tables of the entity's main table,
+                           and named
+                           <span class="literal"><em class="replaceable"><code>&lt;parent_table_name&gt;</code></em>_<em class="replaceable"><code>&lt;property_name&gt;</code></em></span>.
+                  </p>
+                  <p><span class="literal"><em class="replaceable"><code>&lt;parent_table_name&gt;</code></em></span>
+                           is the name of the entity type's main table, unless the
+                           <span class="type">ARRAY</span> or <span class="type">TUPLE</span> is nested in another
+                           <span class="type">ARRAY</span> or <span class="type">TUPLE</span> property, in which case
+                           <span class="literal"><em class="replaceable"><code>&lt;parent_table_name&gt;</code></em></span>
+                           is the name of the parent <span class="type">ARRAY</span>'s or <span class="type">TUPLE</span>'s
+                           table.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>Although BigWorld does not impose a limit on nesting
+                                <span class="type">ARRAY</span> or <span class="type">TUPLE</span> types, MySQL has a limit of
+                                64 characters on table names.
+                     </p>
+                     <p>As sub-table names are always prefixed with their parent table
+                                name, this effectively limits the nesting depth.
+                     </p>
+                  </div>
+                  <p><span class="type">ARRAY</span> or <span class="type">TUPLE</span> sub-tables have a
+                           <span class="literal">parentID</span> column that stores the id of the row in the
+                           parent table associated with the data. The sub-table will also have an
+                           id column to maintain the order of the elements, as well as to provide a
+                           row identifier in case there are sub-tables of this sub-table.
+                  </p>
+                  <p>The other columns of the sub-table will be determined by the
+                           <span class="type">ARRAY</span>'s or <span class="type">TUPLE</span>'s element type
+                           (<em class="emphasis">e.g.</em>, an <span class="literal">ARRAY &lt;of&gt; INT8
+                              &lt;/of&gt;</span> will result in one additional column of type
+                           <span class="type">TINYINT</span>). Most BigWorld types only require one additional
+                           column, which will be called <span class="literal">sm_value</span>. For details on
+                           how an <span class="type">ARRAY</span> or <span class="type">TUPLE</span> of
+                           <span class="type">FIXED_DICT</span> is mapped into the database, see <a href="ch08.html#xref_FIXED_DICTs" title="8.3.8.&nbsp;FIXED_DICTs"><span class="type">FIXED_DICT</span>s</a>.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Storing_Arrays_And_Tuples_As_Blob"></a>8.3.7.1.&nbsp;Storing ARRAYs and TUPLEs as a BLOB
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Instead of storing ARRAY and TUPLE data in a separate tables,
+                                each ARRAY or TUPLE can be configured to stored their data in an
+                                internal binary format inside a MEDIUMBLOB column. This behaviour is
+                                controlled by the <code class="property">&lt;persistAsBlob&gt;</code>
+                                option:
+                     </p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;Properties&gt;
+    ...
+    &lt;someProperty&gt;
+      &lt;Type&gt; 
+        ARRAY &lt;of&gt; INT32 &lt;/of&gt; 
+        <em class="emphasis">&lt;persistAsBlob&gt; true &lt;/persistAsBlob&gt;</em>
+      &lt;/Type&gt;
+    &lt;/someProperty&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                                   <span class="symbol">&#8208;</span> Storing an ARRAY property as a
+                                   blob</span></p>
+                     <p><code class="property">&lt;persistAsBlob&gt;</code> is
+                                <span class="literal">false</span> by default.
+                     </p>
+                     <p>Storing the data as a blob can improve database performance
+                                significantly, especially for deeply nested arrays. However, the
+                                binary data is in BigWorld's internal format and should not be
+                                modified directly using SQL statements. The data should only be
+                                modified by loading the entity into BigWorld, modifying the data in
+                                Python and then writing the entity back to the database.
+                     </p>
+                     <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                        <h3 class="title">Note</h3>
+                        <p>There is currently no way of migrating the ARRAY or TUPLE data
+                                     from separate tables into the MEDIUMBLOB binary format or vice
+                                     versa. When switching <code class="property">&lt;persistAsBlob&gt;</code>
+                                     between <span class="literal">true</span> and <span class="literal">false</span>, the
+                                     data in the database associated with the ARRAY or TUPLE will be
+                                     lost. Therefore, the &lt;persistAsBlob&gt; option should not be
+                                     changed lightly.
+                        </p>
+                     </div>
+                     <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                        <h3 class="title">Note</h3>
+                        <p>Changing the element type of the ARRAY or TUPLE will
+                                     invalidate the data in the database. This will cause the entity
+                                     which contains the ARRAY or TUPLE to fail to load. This problem
+                                     exists even when changing between elements of similar types, for
+                                     example from an <span class="literal">ARRAY &lt;of&gt; INT32
+                                        &lt;/of&gt;</span> to an <span class="literal">ARRAY &lt;of&gt; INT16
+                                        &lt;/of&gt;</span>. It is recommended that you:
+                        </p>
+                        <div class="orderedlist">
+                           <ol type="1">
+                              <li>
+                                 <p>Set <code class="property">&lt;persistAsBlob&gt;</code> to
+                                                  <span class="literal">false</span>.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>Run the sync_db tool. For more details, see Server
+                                                  Programming Guide's <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch11.html#xref_Initialise_Database_With_Entity_Definitions" class="olink">Synchronise Database With Entity Definitions</a>.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>Change the ARRAY or TUPLE element type and set
+                                                  <code class="property">&lt;persistAsBlob&gt;</code> to
+                                                  <span class="literal">true</span>.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>Run the sync_db tool again.</p>
+                              </li>
+                           </ol>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e7701"></a>8.3.7.2.&nbsp;The <code class="property">&lt;DatabaseLength&gt;</code>
+                                         Attribute
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <code class="property">&lt;DatabaseLength&gt;</code> attribute of an
+                                <span class="type">ARRAY</span> or <span class="type">TUPLE</span> property is applied to the
+                                element type of the array if the element type is <span class="type">STRING</span>,
+                                <span class="type">BLOB</span> or <span class="type">PYTHON</span>.
+                     </p>
+                     <p>Other types either disregard the
+                                <code class="property">&lt;DatabaseLength&gt;</code> modifier or, as in the
+                                case of <span class="type">FIXED_DICT</span>, have their own method of specifying
+                                the <code class="property">&lt;DatabaseLength&gt;</code>.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_FIXED_DICTs"></a>8.3.8.&nbsp;<span class="type">FIXED_DICT</span>s
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>If an entity type contains a <span class="type">FIXED_DICT</span> property,
+                           then that property's fields are mapped to the database as though they
+                           where properties of the entity.
+                  </p>
+                  <p><span class="type">FIXED_DICT</span> columns have more elaborate names than
+                           non-<span class="type">FIXED_DICT</span> columns:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><span class="literal">sm_<em class="replaceable"><code>&lt;property_name&gt;</code></em>_<em class="replaceable"><code>&lt;field_name&gt;</code></em></span></p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>If the <span class="type">FIXED_DICT</span> property contains an
+                           <span class="type">ARRAY</span> or <span class="type">TUPLE</span> field then the name of the
+                           sub-table is correspondingly more elaborate:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><span class="literal"><em class="replaceable"><code>&lt;parent_table_name&gt;</code></em>_<em class="replaceable"><code>&lt;property_name&gt;</code></em>_<em class="replaceable"><code>&lt;field_name&gt;</code></em></span>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>If a <span class="type">FIXED_DICT</span> type is used as an element of an
+                           <span class="type">ARRAY</span> or <span class="type">TUPLE</span>, then the fields are mapped
+                           into the columns of the <span class="type">ARRAY</span>'s or <span class="type">TUPLE</span>'s
+                           sub-table. The columns will be named <span class="literal">sm_&lt;field
+                              name&gt;</span>.
+                  </p>
+                  <p>If the <span class="type">FIXED_DICT</span> property has the
+                           <code class="property">&lt;AllowNone&gt;</code> attribute set to
+                           <span class="literal">true</span>, then an additional column called
+                           <span class="literal">fm_<em class="replaceable"><code>&lt;property_name&gt;</code></em></span>
+                           will be added to the table. This column will have the value
+                           <span class="literal">0</span> when the property's value is
+                           <span class="literal">None</span>, or <span class="literal">1</span> otherwise.
+                  </p>
+                  <p>The <code class="property">&lt;DatabaseLength&gt;</code> attribute should
+                           be specified at the field level of a <span class="type">FIXED_DICT</span> property
+                           <span class="symbol">&#8208;</span> the one specified at the property level
+                           is ignored.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7845"></a>8.3.9.&nbsp;<span class="type">USER_TYPE</span>s
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>If you have a <span class="type">USER_TYPE</span> data type, then you can
+                           specify how it should be mapped to SQL. For more details on custom data
+                           types, see <a href="ch04.html#xref_Implementing_Custom_Property_Data_Types" title="4.4.&nbsp;Implementing Custom Property Data Types">Implementing Custom Property Data Types</a>.
+                  </p>
+                  <p>In order to provide this mapping, a method called
+                           <code class="methodname">bindSectionToDB</code> needs to be implemented in the
+                           <span class="type">USER_TYPE</span> implementation. This method receives an object as
+                           its argument to be used to declare the data binding. For example, for a
+                           <span class="type">USER_TYPE</span> implemented by an instance of the type
+                           <span class="type">TestUserType</span>:
+                  </p><pre class="programlisting">...
+  class <em class="emphasis">TestUserType</em>:
+    ...
+    def addToStream( self, obj ):
+      ...
+
+    def <em class="emphasis">bindSectionToDB</em>( self, <em class="emphasis">binder</em> ):
+      ...
+
+instance = TestUserType()</pre><p><span class="citetitle">Defining <span class="type">USER_TYPE</span> database mapping
+                              method.</span></p>
+                  <p>The object received by <code class="methodname">bindSectionToDB</code> to
+                           perform the type mapping (<em class="parameter"><code>binder</code></em> in the preceding
+                           example) provides the following methods:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><code class="methodname">bind</code>(
+                                           <em class="parameter"><code>property</code></em>, <em class="parameter"><code>type</code></em>,
+                                           <em class="parameter"><code>databaseLength</code></em> )</em></p>
+                           <p>Binds a property (based on name) from the data section to a
+                                        field (or fields) in the current SQL table, and creates a column
+                                        called
+                                        <span class="literal">sm_<em class="replaceable"><code>&lt;property_name&gt;</code></em></span>.
+                           </p>
+                           <p>The parameter type is a string that corresponds to the
+                                        <span class="literal">&lt;Type&gt;</span> field of the XML definition of the
+                                        property. For example:
+                           </p>
+                           <div class="altrow"><a name="d0e7924"></a><p class="title"><b>Table&nbsp;8.4.&nbsp;Examples of <span class="literal">type</span> mapped to
+                                                string.</b></p>
+                              <div class="altrow-contents">
+                                 <table summary="Examples of type mapped to&#xA;            string." border="0" width="75%">
+                                    <colgroup>
+                                       <col width="11%">
+                                       <col width="44%">
+                                       <col width="45%">
+                                    </colgroup>
+                                    <thead>
+                                       <tr>
+                                          <th align="left">Data type</th>
+                                          <th align="left">XML</th>
+                                          <th align="left"><span class="literal">type</span></th>
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+                                       <tr>
+                                          <td align="left">Simple</td>
+                                          <td align="left"><span class="literal">&lt;Type&gt; INT
+                                                                  &lt;/Type&gt;</span></td>
+                                          <td align="left"><span class="type">INT</span></td>
+                                       </tr>
+                                       <tr>
+                                          <td align="left"><span class="type">ARRAY</span></td>
+                                          <td align="left"><span class="literal">&lt;Type&gt; ARRAY &lt;of&gt;
+                                                                  INT&lt;/of&gt; &lt;/Type&gt;</span></td>
+                                          <td align="left"><span class="literal">ARRAY &lt;of&gt;
+                                                                  INT&lt;/of&gt;</span></td>
+                                       </tr>
+                                       <tr>
+                                          <td align="left">Custom</td>
+                                          <td align="left"><span class="literal">&lt;Type&gt; USER_TYPE
+                                                                  &lt;implementedBy&gt; module.instance &lt;/implementedBy&gt;
+                                                                  &lt;/Type&gt;</span></td>
+                                          <td align="left"><span class="literal">USER_TYPE &lt;implementedBy&gt;
+                                                                  module.instance &lt;/implementedBy&gt;</span></td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </div>
+                           </div><br class="altrow-break"><p>The parameter <em class="parameter"><code>databaseLength</code></em> is
+                                        optional (defaulting to 255), and determines the size and data type
+                                        of <span class="type">STRING</span> mapped. For more details, see <a href="ch08.html#xref_STRING_UNICODE_STRING_BLOB_and_data_types" title="8.3.5.&nbsp;STRING, UNICODE_STRING, BLOB, and PYTHON Data Types"><span class="type">STRING</span>, <span class="type">UNICODE_STRING</span>,
+                                       <span class="type">BLOB</span>, and <span class="type">PYTHON</span> Data Types</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><code class="methodname">beginTable</code>(
+                                           <em class="parameter"><code>property</code></em> )</em></p>
+                           <p>Starts the specification of a new SQL table (called
+                                        <span class="literal"><em class="replaceable"><code>&lt;current_table_name&gt;</code></em>_<em class="replaceable"><code>&lt;property_name&gt;</code></em></span>)
+                                        for binding Python compound objects <em class="emphasis">e.g.</em> lists,
+                                        tuples, dictionaries. Any calls to the method
+                                        <code class="methodname">bind</code> following a
+                                        <code class="methodname">beginTable</code> call will bind to fields in the
+                                        new table until <code class="methodname">endTable</code> is called.
+                           </p>
+                           <p>Typically, <code class="methodname">beginTable</code> is only used
+                                        for binding Python compound objects that contains a variable number
+                                        of compound objects <em class="emphasis">e.g.</em> list of tuples. For
+                                        simple lists and tuples, it is sufficient to call bind with
+                                        '<span class="literal">ARRAY &lt;of&gt;&lt;simple_type&gt;&lt;/of&gt;</span>'
+                                        as the type. For compound objects that contain a fixed number of
+                                        items, it is more efficient to bind each item as a separate field in
+                                        parent table instead of creating a new table.
+                           </p>
+                           <p>All tables created by <code class="methodname">beginTable</code> will
+                                        have an additional field called <em class="parameter"><code>parentID</code></em> used
+                                        in associating rows in the new table with the parent table.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><code class="methodname">endTable</code>()</em></p>
+                           <p>Finishes the specification of new SQL table started by method
+                                        <code class="methodname">beginTable</code>.
+                           </p>
+                           <p>Upon completion, specification of the parent table is
+                                        resumed.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The implementation of the method
+                           <code class="methodname">bindSectionToDB</code> must match the implementation
+                           of the method <code class="methodname">addToStream</code>. The order and the
+                           parameter type of calls to <code class="methodname">bind</code> must match the
+                           order in which the properties are serialised.
+                  </p>
+                  <p>The table below shows the <code class="methodname">addToStream</code>
+                           implementation followed by the corresponding
+                           <code class="methodname">bindSectionToDB</code> implementation:
+                  </p>
+                  <div class="altrow">
+                     <table border="0">
+                        <colgroup>
+                           <col width="50%">
+                           <col width="50%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th align="left"><code class="methodname">addToStream</code>
+                                                 implementation
+                              </th>
+                              <th align="left">Corresponding
+                                                 <code class="methodname">bindSectionToDB</code>
+                                                 implementation
+                              </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td align="left"><code class="code">stream += struct.pack(
+                                                    </code><em class="emphasis"><code class="code">"b"</code></em><code class="code">, obj.intValue
+                                                    )</code></td>
+                              <td align="left"><code class="code">binder.bind( "intValue",
+                                                    </code><em class="emphasis"><code class="code">"INT8"</code></em><code class="code">
+                                                    )</code></td>
+                           </tr>
+                           <tr>
+                              <td align="left"><code class="code">stream += struct.pack(
+                                                    </code><em class="emphasis"><code class="code">"B"</code></em><code class="code">, obj.intValue
+                                                    )</code></td>
+                              <td align="left"><code class="code">binder.bind( "intValue",
+                                                    </code><em class="emphasis"><code class="code">"UINT8"</code></em><code class="code">
+                                                    )</code></td>
+                           </tr>
+                           <tr>
+                              <td align="left"><code class="code">stream += struct.pack(
+                                                    </code><em class="emphasis"><code class="code">"h"</code></em><code class="code">, obj.intValue
+                                                    )</code></td>
+                              <td align="left"><code class="code">binder.bind( "intValue",
+                                                    </code><em class="emphasis"><code class="code">"INT16"</code></em><code class="code">
+                                                    )</code></td>
+                           </tr>
+                           <tr>
+                              <td align="left"><code class="code">stream += struct.pack(
+                                                    </code><em class="emphasis"><code class="code">"H"</code></em><code class="code">, obj.intValue
+                                                    )</code></td>
+                              <td align="left"><code class="code">binder.bind( "intValue",
+                                                    </code><em class="emphasis"><code class="code">"UINT16"</code></em><code class="code">
+                                                    )</code></td>
+                           </tr>
+                           <tr>
+                              <td align="left"><code class="code">stream += struct.pack(
+                                                    </code><em class="emphasis"><code class="code">"i"</code></em><code class="code">, obj.intValue
+                                                    )</code></td>
+                              <td align="left"><code class="code">binder.bind( "intValue",
+                                                    </code><em class="emphasis"><code class="code">"INT32"</code></em><code class="code">
+                                                    )</code></td>
+                           </tr>
+                           <tr>
+                              <td align="left"><code class="code">stream += struct.pack(
+                                                    </code><em class="emphasis"><code class="code">"I"</code></em><code class="code">, obj.intValue
+                                                    )</code></td>
+                              <td align="left"><code class="code">binder.bind( "intValue",
+                                                    </code><em class="emphasis"><code class="code">"UINT32"</code></em><code class="code">
+                                                    )</code></td>
+                           </tr>
+                           <tr>
+                              <td align="left"><code class="code">stream += struct.pack(
+                                                    </code><em class="emphasis"><code class="code">"q"</code></em><code class="code">, obj.intValue
+                                                    )</code></td>
+                              <td align="left"><code class="code">binder.bind( "intValue",
+                                                    </code><em class="emphasis"><code class="code">"INT64"</code></em><code class="code">
+                                                    )</code></td>
+                           </tr>
+                           <tr>
+                              <td align="left"><code class="code">stream += struct.pack(
+                                                    </code><em class="emphasis"><code class="code">"Q"</code></em><code class="code">, obj.intValue
+                                                    )</code></td>
+                              <td align="left"><code class="code">binder.bind( "intValue",
+                                                    </code><em class="emphasis"><code class="code">"UINT64"</code></em><code class="code">
+                                                    )</code></td>
+                           </tr>
+                           <tr>
+                              <td align="left"><code class="code">stream += struct.pack(
+                                                    </code><em class="emphasis"><code class="code">"f"</code></em><code class="code">, obj.floatValue
+                                                    )</code></td>
+                              <td align="left"><code class="code">binder.bind( "floatValue",
+                                                    </code><em class="emphasis"><code class="code">"FLOAT32"</code></em><code class="code">)</code></td>
+                           </tr>
+                           <tr>
+                              <td align="left"><code class="code">stream += struct.pack(
+                                                    </code><em class="emphasis"><code class="code">"b"</code></em><code class="code">,
+                                                    len(obj.stringValue) ) + stringValue</code></td>
+                              <td align="left"><code class="code">binder.bind( "stringValue",
+                                                    </code><em class="emphasis"><code class="code">"STRING"</code></em><code class="code">,
+                                                    50)</code></td>
+                           </tr>
+                           <tr>
+                              <td align="left"><code class="code">stream += struct.pack ( "i",
+                                                    len(obj.listValue) ) for item in obj.listValue stream +=
+                                                    struct.pack ( "f", item )</code></td>
+                              <td align="left">
+                                 <p> <code class="code">binder.beginTable(
+                                                       "listValue" ) binder.bind( "value", "FLOAT32" )</code> 
+                                 </p>
+                                                 
+                                 <p> <code class="code">binder.endTable()</code> 
+                                 </p> 
+                                 <p>
+                                                    <em class="emphasis">or</em> 
+                                 </p> 
+                                 <p> <code class="code">binder.bind(
+                                                       "listValue", "ARRAY &lt;of&gt; FLOAT32 &lt;/of&gt;" )</code>
+                                                    
+                                 </p>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <p> <span class="citetitle">Implementation of method
+                              <code class="methodname">addToStream</code> and corresponding
+                              <code class="methodname">bindSectionToDB</code>.</span></p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e8289"></a>8.3.9.1.&nbsp;Examples
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis">Mapping a simple user-defined data
+                                                type</em></p>
+                              <p>The example below illustrates a simple user data type that
+                                             represents a UTF-8 string.
+                              </p>
+                              <p>It maps the Python type <span class="type">unicode</span> to a BigWorld
+                                             data type. The method <code class="methodname">bindSectionToDB</code>
+                                             binds the property to a 50-byte SQL string column. Since this type
+                                             requires only one column, there is no need to give it a name, thus
+                                             the property argument can be an empty string.
+                              </p><pre class="programlisting">class <em class="emphasis">UTF8String</em>():
+  "
+  UTF8(unicode) string
+  "
+  def <em class="emphasis">addToStream</em>( self, obj ):
+    # obj is a Python Unicode object.
+    string = obj.encode( "utf-8" ) <a name="db_layer_UTFEncodingNote" href="ch08.html#db_layer_UTFEncodingNote_desc"><img src="../images/callouts/1.png" alt="1" border="0"></a>
+    return struct.pack( "b", len(string) ) + string
+
+  def <em class="emphasis">addToSection</em>( self, object, section ):
+    # Since UTF-8 is compatible to C strings(no NULL characters)
+    # it is safe to store a Unicode string as C string.
+    # The asString setter/getter method stores the value in the
+    # root of DataSection 'section'.
+    section.asString = obj.encode( "utf-8" )
+
+  def <em class="emphasis">createFromStream</em>( self, stream ):
+    # Return a Python Unicode object.
+    (length,) = struct.unpack( "b", stream[0] )
+    string = stream[ 1 : length+1 ]
+    return string.decode( "utf-8" )
+
+  def <em class="emphasis">createFromSection</em>( self, section ):
+    # The asString method returns the value of section root
+    # as a simple C string.
+    # Return a Python Unicode object.
+    return section.asString.decode( "utf-8" )
+
+  def <em class="emphasis">bindSectionToDB</em>( self, binder ):
+    # The empty string represents the root of DataSection.
+    # The value in the DataSection root will be stored in
+    # SQL database as a column of STRING type
+    binder.bind( "", "STRING", 50 )
+
+  def <em class="emphasis">defaultValue</em>( self ):
+    # Return an empty Python Unicode object.
+    return u""
+
+instance = UTF8String()</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/common/UTF8String.py</code></span></p>
+                              <div class="calloutlist">
+                                 <table border="0" summary="Callout list">
+                                    <tr>
+                                       <td width="5%" valign="top" align="left"><a name="db_layer_UTFEncodingNote_desc"></a><a href="#db_layer_UTFEncodingNote"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                                       </td>
+                                       <td valign="top" align="left">
+                                          <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                                             <h3 class="title">Note</h3>
+                                             <p>In order to enable the utf-8 encode operation, the
+                                                                  Python <span class="literal">encodings</span> module will need to be
+                                                                  imported from
+                                                                  <code class="filename">fantasydemo/res/scripts/common/BWAutoImport.py</code>.
+                                             </p>
+                                          </div>
+                                       </td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </li>
+                        </ul>
+                     </div>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis">Mapping </em><em class="emphasis">a complex user-defined type</em></p>
+                              <p>The example below implements the class
+                                             <code class="classname">Test</code>, and the class
+                                             <code class="classname">TestDataType</code>, which accesses the values on
+                                             <code class="classname">Test</code>.
+                              </p>
+                              <p><code class="classname">Test</code> contains three member
+                                             variables:
+                              </p>
+                              <div class="itemizedlist">
+                                 <ul type="circle">
+                                    <li>
+                                       <p>An integer.</p>
+                                    </li>
+                                    <li>
+                                       <p>A string.</p>
+                                    </li>
+                                    <li>
+                                       <p>A dictionary.</p>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <p><code class="classname">TestDataType</code>'s method
+                                             <code class="methodname">addToSection</code> will represent the
+                                             attributes of <code class="classname">Test</code> objects like the
+                                             following <code class="property">&lt;DataSection&gt;</code>:
+                              </p><pre class="programlisting">&lt;testData&gt;
+
+  &lt;intValue&gt;    100        &lt;/intValue&gt;
+
+  &lt;stringValue&gt; opposites  &lt;/stringValue&gt;
+
+  &lt;dictValue&gt;
+    &lt;value&gt;
+      &lt;key&gt;    good     &lt;/key&gt;
+      &lt;value&gt;  bad      &lt;/value&gt;
+    &lt;/value&gt;
+     &lt;value&gt;
+      &lt;key&gt;    old      &lt;/key&gt;
+      &lt;value&gt;  new      &lt;/value&gt;
+    &lt;/value&gt;
+    &lt;value&gt;
+      &lt;key&gt;    big      &lt;/key&gt;
+      &lt;value&gt;  small    &lt;/value&gt;
+    &lt;/value&gt;
+  &lt;/dictValue&gt;
+
+&lt;/testData&gt;</pre><p><span class="citetitle"><code class="classname">Test</code> object's
+                                                <code class="classname">DataSection</code> </span></p>
+                              <p><code class="classname">TestDataType</code>'s method
+                                             <code class="methodname">createFromSection</code> will create
+                                             <code class="classname">Test</code> objects from
+                                             <code class="classname">DataSection</code>s like the one above.
+                              </p>
+                              <p><code class="classname">TestDataType</code>'s method
+                                             <code class="methodname">bindSectionToDB</code> will bind the
+                                             <code class="classname">Test</code> object's integer and string variables
+                                             to two columns, and add a child table for the dictionary member,
+                                             as illustrated below:
+                              </p>
+                              <div class="informalfigure">
+                                 <div class="mediaobject"><img src="images/representation_of_test_entity_data.png"><span class="caption">
+                                       <p>Representation of Test entity data in the MySQL
+                                                          database
+                                       </p></span></div>
+                              </div>
+                              <p>The classes <code class="classname">Test</code> and
+                                             <code class="classname">TestDataType</code> are defined as below:
+                              </p><pre class="programlisting">import struct
+
+class <em class="emphasis">Test</em>:
+  def <em class="emphasis">__init__</em>( self, intValue, stringValue, dictValue ):
+    self.intValue = intValue
+    self.stringValue = stringValue
+    self.dictValue = dictValue
+
+  def <em class="emphasis">writePascalString</em>( string ):
+    return struct.pack( "b", len(string) ) + string
+
+  def <em class="emphasis">readPascalString</em>( stream ):
+    (length,) = struct.unpack( "b", stream[0] )
+    string = stream[1:length+1]
+    stream = stream[length+1:]
+    return (string, stream)
+
+class <em class="emphasis">TestDataType</em>:
+  def <em class="emphasis">addToStream</em>( self, obj ):
+    if not obj: obj = self.defaultValue()
+    stream = struct.pack( "i", obj.intValue )
+    stream += writePascalString( obj.stringValue )
+    stream += struct.pack( "i", len( obj.dictValue ) ) <a name="db_layer_streamSizeNote" href="ch08.html#db_layer_streamSizeNote_desc"><img src="../images/callouts/1.png" alt="1" border="0"></a>
+    for key in obj.dictValue.keys():
+      stream += writePascalString( key )
+      stream += writePascalString( obj.dictValue[key] )
+    return stream
+  
+  def <em class="emphasis">createFromStream</em>( self, stream ):
+    (intValue,) = struct.unpack( "i", stream[:4] )
+    stream = stream[4:]
+    stringValue, stream = readPascalString( stream )
+    dictValue = {}
+    size = struct.unpack( "i", stream[:4] )
+    stream = stream[4:]
+    while len( stream ):
+      key, stream = readPascalString( stream )
+      value, stream = readPascalString( stream )
+      dictValue[key] = value
+    return Test( intValue, stringValue, dictValue )
+
+  def <em class="emphasis">addToSection</em>( self, obj, section ):
+    if not obj: obj = self.defaultValue()
+    section.writeInt( "intValue", obj.intValue )
+    section.writeString( "stringValue", obj.stringValue )
+    s = section.createSection( "dictValue" )
+    for key in obj.dictValue.keys():
+      v = s.createSection( "value" )
+      print key, obj.dictValue[key]
+      v.writeString( "key", key )
+      v.writeString( "value", obj.dictValue[key] )
+
+
+  def <em class="emphasis">createFromSection</em>( self, section ): <a name="db_layer_createFromSectionNote" href="ch08.html#db_layer_createFromSectionNote_desc"><img src="../images/callouts/2.png" alt="2" border="0"></a>
+    intValue = section.readInt( "intValue" )
+    if intValue is None:
+      return self.defaultValue()
+    stringValue = section.readString( "stringValue" )
+    dictValue = {}
+    for value in section["dictValue"].values():
+      dictValue[value["key"].asString] = value["value"].asString
+    return Test( intValue, stringValue, dictValue )
+
+  def <em class="emphasis">fromStreamToSection</em>( self, stream, section ):
+    o = self.createFromStream( stream )
+    self.addToSection( o, section )
+
+  def <em class="emphasis">fromSectionToStream</em>( self, section ):
+    o = self.createFromSection( section )
+    return self.addToStream( o )
+
+  def <em class="emphasis">bindSectionToDB</em>( self, binder ):
+    binder.bind( "intValue", "INT32" )
+    binder.bind( "stringValue", "STRING", 50 )
+    binder.beginTable( "dictValue" )
+    binder.bind( "key", "STRING", 50 )
+    binder.bind( "value", "STRING", 50 )
+    binder.endTable()
+
+  def <em class="emphasis">defaultValue</em>( self ):
+    return Test(100, "opposites", {"happy":"sad", "big":"small", "good":"bad"})
+
+instance = TestDataType()</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/common/TestDataType.py
+                                                   </code></span></p>
+                              <p>For details on methods supported for
+                                             <code class="classname">DataSection</code> objects, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/baseapp/index.html" class="olink">BaseApp Python API</a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/cellapp/index.html" class="olink">CellApp Python API</a>, and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>'s entry <em class="emphasis">Class list <span class="symbol">&#8594;</span>
+                                                DataSection</em>.
+                              </p>
+                              <div class="calloutlist">
+                                 <table border="0" summary="Callout list">
+                                    <tr>
+                                       <td width="5%" valign="top" align="left"><a name="db_layer_streamSizeNote_desc"></a><a href="#db_layer_streamSizeNote"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                                       </td>
+                                       <td valign="top" align="left">
+                                          <p>While it is important to stream and destream the size of
+                                                             dictionaries and array's correctly in Python, it is also
+                                                             important to realise that there is a C++ assumption of these
+                                                             sizes existing on the stream in order for entities to be sent
+                                                             to the DBMgr for persistent storage.
+                                          </p>
+                                       </td>
+                                    </tr>
+                                    <tr>
+                                       <td width="5%" valign="top" align="left"><a name="db_layer_createFromSectionNote_desc"></a><a href="#db_layer_createFromSectionNote"><img src="../images/callouts/2.png" alt="2" border="0"></a> 
+                                       </td>
+                                       <td valign="top" align="left">
+                                          <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                                             <h3 class="title">Note</h3>
+                                             <p>This script function does not process the input
+                                                                  command and its corresponding output <span class="symbol">&#8208;</span> the input command is handled by the
+                                                                  database management system.
+                                             </p>
+                                             <p>It is the user's responsibility to ensure that the
+                                                                  command is compatible with the underlying database. The
+                                                                  command's output should be processed by the callback
+                                                                  function provided by the user.
+                                             </p>
+                                          </div>
+                                       </td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e8523"></a>8.4.&nbsp;Execute Arbitrary Commands on Database
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld provides a facility for developers to execute arbitrary
+                      commands on the underlying database. By using the method
+                      <code class="classname">BigWorld</code>.<code class="methodname">executeRawDatabaseCommand</code>
+                      you can execute custom statements or commands, and access data that do not
+                      conform to the standard BigWorld database schema.
+               </p>
+               <p>Each database interface can interpret the data (command) and convert
+                      it to the expected format. For example, the MySQL interface expects an SQL
+                      statement, and the XML interface expects a Python statement.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8536"></a>8.4.1.&nbsp;Execute Commands on SQL Database
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When executing a command on a SQL database, the method
+                           <code class="classname">BigWorld</code>.<code class="methodname">executeRawDatabaseCommand</code>
+                           has the following signature:
+                  </p><pre class="programlisting">BigWorld.executeRawDatabaseCommand( sql_statement, sqlResultCallback )</pre><p>It has the following parameters:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><em class="parameter"><code>sql_statement</code></em></em></p>
+                           <p>The SQL statement to execute. For example: '<span class="literal">select *
+                                           from tbl_Avatar</span>'.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><em class="parameter"><code>sqlResultCallback</code></em>
+                                           </em></p>
+                           <p>The Python callback to be invoked with the result from
+                                        SQL.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The callback will be invoked with the following parameters:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><em class="parameter"><code>resultSet</code></em> (List
+                                           of list of strings)</em></p>
+                           <p>For SQL statements that return a result set (such as
+                                        <span class="literal">SELECT</span>), this is a list of rows, with each row
+                                        being a list of strings.
+                           </p>
+                           <p>For SQL statements that do not return a result set (such as
+                                        <span class="literal">DELETE</span>), this is <span class="literal">None</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><em class="parameter"><code>affectedRows</code></em>
+                                           (Integer)</em></p>
+                           <p>For SQL statements that return a result set (such as
+                                        <span class="literal">SELECT</span>), this is <span class="literal">None</span>.
+                           </p>
+                           <p>For SQL statements that do not return a result set (such as
+                                        <span class="literal">DELETE</span>),this is the number of affected
+                                        rows
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><em class="parameter"><code>error</code></em>
+                                           (String)</em></p>
+                           <p>If there was an error in executing the SQL statement, this is
+                                        the error message. Otherwise, this is
+                                        <span class="literal">None</span>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8622"></a>8.4.2.&nbsp;Execute Commands on XML Database
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When executing a command on a XML database, the method
+                           <code class="classname">BigWorld</code>.<code class="methodname">executeRawDatabaseCommand</code>
+                           has the following signature:
+                  </p><pre class="programlisting">BigWorld.executeRawDatabaseCommand( python_statement, pythonResultCallback )</pre><p>It has the following parameters:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><em class="parameter"><code>python_statement</code></em></em></p>
+                           <p>The Python expression to execute</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><em class="parameter"><code>pythonResultCallback</code></em>
+                                           </em></p>
+                           <p>The Python callback to be invoked with the result from the
+                                        Python expression.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The XML database is stored in a global data section named
+                           <code class="property">BigWorld.dbRoot</code>. The structure of the data section
+                           is defined by the entity definition files
+                           (<code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>).
+                  </p>
+                  <p>The callback is called with three parameters:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">resultSet</span> (List of
+                                           list of strings)</em></p>
+                           <p>Output of the Python expression, as a string.</p>
+                           <p>The string is embedded inside two levels of lists, so
+                                        <span class="literal">resultSet[0][0]</span> retrieves the string.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">affectedRows</span>
+                                           (Integer)</em></p>
+                           <p>This parameter will always be <span class="literal">None</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">error</span>
+                                           (String)</em></p>
+                           <p>If there was an error in executing the Python expression, this
+                                        is the error message. Otherwise, this is
+                                        <span class="literal">None</span>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The code fragments below execute a command on the XML
+                           database:
+                  </p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Request the health level of an avatar called
+                                        '<span class="literal">Fred</span>':
+                           </p><pre class="programlisting">BigWorld.executeRawDatabaseCommand(
+    "[a[1]['health'].asInt for a in BigWorld.dbRoot.items() if a[0]=='Avatar' and a[1]['playerName'].asString == 'Fred']", <em class="emphasis">healthCallback</em> )</pre></li>
+                        <li>
+                           <p>Implement the Python callback:</p><pre class="programlisting">def <em class="emphasis">healthCallback</em>( result, dummy, error ):
+    if (error):
+         print "Error:", error
+         return
+    print "Health:", result[0][0]</pre></li>
+                        <li>
+                           <p>If the avatar's health level is 87, then the output will
+                                        be:
+                           </p><pre class="programlisting">Health: [87]</pre></li>
+                     </ol>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Secondary_Databases"></a>8.5.&nbsp;Secondary Databases
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Secondary databases are an optional feature that can be used to help
+                      reduce load on the primary database by distributing database writes onto
+                      machines with BaseApp processes. After an entity has been loaded from the
+                      primary database onto a BaseApp they are considered
+                      <em class="emphasis">active</em> and store any property modifications into a
+                      secondary database stored on the same machine as their associated BaseApp.
+                      Secondary databases will write back their contents to the primary database
+                      after an active entity is destroyed, becoming inactive.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/flow_of_persistent_data_secondary_database.png"><span class="caption">
+                        <p>Flow of persistent entity data when secondary databases
+                                   are enabled
+                        </p></span></div>
+               </div>
+               <p>Each BaseApp has its own secondary database, including machines
+                      which may host more than one BaseApp. A secondary database is an SQLite
+                      database file on the BaseApp machine's local disk. Secondary databases can
+                      be enabled or disabled using the
+                      <code class="property">&lt;baseApp/secondaryDB/enable&gt;</code> configuration
+                      option. For details on this option, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html#xref_BaseApp_Secondary_Database_Configuration_Options" class="olink">Secondary Database Configuration Options</a>
+                      .
+               </p>
+               <p>Entities are currently stored in raw binary form inside secondary
+                      databases and should only be manipulated using BigWorld tools like the
+                      data consolidation tool <span><strong class="command">consolidate_dbs</strong></span>.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Data_Consolidation"></a>8.5.1.&nbsp;Data Consolidation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In case of a complete system failure, active entities may not have
+                           the opportunity to flush their data to the primary database. The data
+                           consolidation tool is run to transfer the active entity data from
+                           secondary databases to the primary database.
+                  </p>
+                  <p>The data consolidation process is automatically run during system
+                           shutdown to transfer the persistent data of entities that were active
+                           when the system was shutdown.
+                  </p>
+                  <p>The data consolidation tool is automatically run during start-up
+                           if the system was not shutdown successfully.
+                  </p>
+                  <p>Unlike the BigWorld server, which uses UDP for interprocess
+                           communications, the data consolidation tool uses TCP connections to
+                           transfer the secondary databases from the BaseApp machines to the DBMgr
+                           machine. If there is a firewall on the DBMgr machine, it needs to be
+                           configured to allow TCP connections from BaseApp machines.
+                  </p>
+                  <p>For more details on the data consolidation tool, see the document
+                           <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch05.html#xref_Data_Consolidation_Tool" class="olink">Data Consolidation Tool</a>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Database_Snapshot"></a>8.5.2.&nbsp;Database Snapshot
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Due to the existence of secondary databases, the data in the
+                           primary database may be quite stale. A backup made of the primary
+                           database may be considered too stale for functional use. As a solution
+                           to this issue, a secondary database snapshot tool is provided to make
+                           more up-to-date backups by backing up data from secondary databases as
+                           well. For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch05.html#xref_Database_Snapshot_Tool" class="olink">Database Snapshot Tool</a>.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>Despite the name of the tool, it does not generate a true
+                                snapshot of the system. The tool does not ensure that all active
+                                entities have flushed their data to the secondary databases before
+                                taking a copy of the secondary database. It makes a best effort at
+                                copying the primary and all the secondary databases at close to the
+                                same time.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e7381" href="#d0e7381">13</a>] </sup>For more details see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>, chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a>, section
+                                   <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html#xref_DBMgr_Configuration_Options" class="olink">DBMgr Configuration Options</a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;7.&nbsp;Entity Instantiation and Destruction&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;9.&nbsp;Character Sets and Encodings</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

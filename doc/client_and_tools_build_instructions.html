@@ -1,0 +1,264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link href="bigworld.css" rel="stylesheet" type="text/css">
+	<title>BigWorld Technology Client &amp; Tools Build Instructions</title>
+</head>
+<body>
+<div id="bigworld-header">
+	<img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/client_and_tools_build_instructions.html $" alt="bw logo"/>
+</div>
+
+<div class="titlepage">
+<!-- BIGWORLD TECHNOLOGY CLIENT & TOOLS BUILD INSTRUCTIONS -->
+<h1>BigWorld Technology Client &amp; Tools Build Instructions</h1>
+
+<!-- TABLE OF CONTENTS -->
+<hr>
+<div class="toc">
+  <p><b>Table of Contents</b></p>
+  <dl>
+    <dt><span class="chapter"><a href="#Overview"       >1. Overview</a></span></dt>
+    <dt><span class="chapter"><a href="#Requirements"   >2. Requirements</a></span></dt>
+    <dt><span class="chapter"><a href="#Installing"     >3. Installing BigWorld Client and Tools</a></span></dt>
+    <dt><span class="chapter"><a href="#Configuring"    >4. Installing and Configuring Required Software</a></span></dt>
+    <dt><span class="chapter"><a href="#CompilingClient">5. Compiling the Client</a></span></dt>
+    <dt><span class="chapter"><a href="#CompilingTools" >6. Compiling the Tools</a></span></dt>
+  </dl>
+</div>
+<hr>
+<!-- OVERVIEW -->
+<h2><a name="Overview">1. Overview</a></h2>
+
+<p>This document describes how to set up the BigWorld Technology build environment, 
+and build the client and tools.</p>
+
+<!-- REQUIREMENTS -->
+<h2><a name="Requirements">2. Requirements</a></h2>
+<div class="itemizedlist">
+The minimum requirements for the client are:
+<ul>
+<li><p>Windows Operating System (XP, Vista, or Windows 7)</p></li>
+<li><p>1GHz CPU</p></li>
+<li><p>256 MB RAM</p></li>
+<li><p>GeForce3 or GeForce4 Ti video card</p></li>
+<li><p>Visual Studio 2005 or Visual Studio 2008 &ndash; required to build the client</p></li>
+<li><p>DirectX 9 SDK                &ndash; required to build the client</p></li>
+<li><p>Platform SDK 6.0 or newer &ndash; required to build the client</p></li>
+</ul>
+The minimum requirements for the tools are:
+<ul>
+<li><p>Windows Operating System (XP, Vista, or Windows 7)</p></li>
+<li><p>2GHz CPU</p></li>
+<li><p>1 GB RAM</p></li>
+<li><p>GeForce 5 series or Shader Model 2.0 video card</p></li>
+<li><p>Visual Studio 2005 or Visual Studio 2008 &ndash; required to build the tools</p></li>
+<li><p>DirectX 9 SDK                &ndash; required to build the tools</p></li>
+<li><p>Platform SDK 6.0 or newer &ndash; required to build the tools</p></li>
+<li><p>3ds Max 2008/2009/2010/2011 SDK          &ndash; required to build the Max exporters</p></li>
+<li><p>Maya 2008/2009/2010/2011 SDK    &ndash; required to build the Maya exporters</p></li>
+</ul>
+</div>
+
+<!-- INSTALLING BIGWORLD CLIENT AND TOOLS -->
+<h2><a name="Installing">3. Installing BigWorld Client and Tools</a></h2>
+
+<div class="itemizedlist">
+<ul>
+<li><p>Check out the BigWorld package from the official Subversion repository.</p>
+</li>
+<li><p>If running on a machine without developer tools installed, be sure to install DirectX 
+and Visual C++ runtimes which can be found in the BigWorld package:</p>
+	<ul>
+		<li><p><code>PackageRoot\vc80-redist\vcredist_x86.exe</code></p></li>
+		<li><p><code>PackageRoot\directx-redist\DXSETUP.exe</code></p></li>
+	</ul>
+</li>
+<li>
+	<p> Vista note: If you are changing operating system (for example, going from Windows XP to Vista),
+		and leaving the old build folders in place, then be sure to completely clean all previous 
+		output files (.OBJ) and executables from the output folders. You should also remove all 
+		previous compiled FX files (.FXO) from the RES path of your project.
+	</p>
+</li>
+</ul>
+</div>
+
+
+<!-- INSTALLING AND CONFIGURING REQUIRED SOFTWARE -->
+<h2><a name="Configuring">4. Installing and Configuring Required Software</a></h2>
+
+<p><b>Note: These instructions refer to Visual Studio 2005 but 
+are equally applicable to Visual Studio 2008. Be sure to substitute refrences to
+<code>*2005.sln</code> to <code>*2008.sln</code>.</b></p>
+
+<div class="itemizedlist">
+<ul>
+<li><p>Install Visual Studio 2005.</p></li>
+<li><p>Install Visual Studio 2005 Service Pack 1.</p></li>
+<li><p>Vista only: Install Visual Studio 2005 Service Pack 1 Update for Windows Vista.</p></li>
+
+<li><p>Install the DirectX SDK.
+	<ul>
+	<li><p>Make sure that DirectX SDK's <code>include</code> directory is added to Visual Studio's C++ <code>includes</code>
+		search path (see below).</li>
+	<li><p>Make sure that DirectX SDK's <code>library</code> directory is added to Visual Studio's C++ <code>libraries</code>
+		search path (see below).</li>
+	<li><p>If you have installed MSVC++ after installing DirectX, then make sure that 
+	the DirectX folders are listed before the other default folders in the <code>include</code> and
+	<code>link</code> lists, to give them preference during compiling and linking.</li>
+	</ul>
+</li>
+
+<li><p>Install the Windows Platform SDK version 6.0 or later, and make sure this has been added to
+Visual Studio's C++ <code>includes</code> and <code>libraries</code> paths at a higher priority
+than the standard Visual Studio paths.</p></li>
+
+<li><p>BigWorld's source code ships with support for SpeedTree, Umbra and other third-party
+libraries turned off by default. 
+In order to turn support on in BigWorld's game client and tools, see the Third-Party Integrations document.
+</p></li>
+	 
+<li><p>To add a directory to Visual Studio's C++ <code>includes</code> and <code>libraries</code> search paths, follow the 
+    steps below:</p>
+    <ul>
+	     <li><p>Select menu item <b>Tools&rarr;Options</b>.</p></li>
+	     <li><p>In the <b>Options</b> dialog, select <b>Projects and Solutions</b>
+            (or <b>Projects</b>, in earlier versions) list item, then 
+            <b>VC++ Directories</b>.</p></li>
+	     <li><p>In the <b>Show Directories For</b> drop-down list box, select 
+            <b>Include files</b> or <b>Library files</b>.</p></li>
+		  <li><p>Add the required directories to the list.</p></li>
+	 </ul>
+
+<li><p>Install the 3ds Max SDK.</p>
+    <p>The 3ds Max visual and animation exporters make use of the <code>3dsMax_sdk/samples/modifiers/morpher/resource.h</code>
+    header file in order to expose the morpher modifier.  A small edit must be made in order for
+    the exporters to compile without errors.  Since this file forms part of the 3dsMaxSDK, it
+    do not form part of the BigWorld distributable.  The required edit is as follows:</p>
+    <ul>
+        <li><p>Comment the following line in <code>maxsdk/samples/modifiers/morpher/resource.h</code> <b>(line 5)</b>:
+            <p><i>From:</i>
+                <pre>005 #define IDS_LIBDESCRIPTION 1</pre>
+            <p><i>To:</i>
+                <pre>005 <b>//</b>#define IDS_LIBDESCRIPTION 1</pre>
+		</p></li>
+<li><p>Make sure that in the VC++ options, the DirectX SDK folders are listed 
+    higher up than the 3ds Max ones.</p></li>
+    </ul>
+
+</ul>
+
+</div>
+
+<!-- COMPILING THE CLIENT -->
+<h2><a name="CompilingClient">5. Compiling the Client</a></h2>
+
+<div class="itemizedlist">
+<ul>
+<li><p>In Visual Studio, load <code>bigworld/src/client/bwclient2005.sln</code>. 
+
+<li><p>Set the <code>bwclient</code> project as the startup project.
+
+<li><p>Build the <code>bwclient</code> project.
+
+<li><p>Set the <b>Solution Configuration</b> to <code>Release</code>.
+
+<li><p>To test the client, run <code>bigworld/bin/bwclient.exe</code>.</p>
+    <p>If you are running the game from within Visual Studio, then set the working 
+    folder to <code>bigworld/bin/client</code>.</p>
+
+</ul>
+</div>
+
+<p>Note: The client can also be compiled as a Python extension module. For more
+information on how to do this, please refer to the <b>Client Programming Guide</b>'s section on <b>Interactive debugging</b>.
+
+<!-- COMPILING THE TOOLS -->
+<h2><a name="CompilingTools">6. Compiling the Tools</a></h2>
+<div class="itemizedlist">
+<ul>
+<li><p>Compile ModelEditor
+   <ul>
+	 <li><p>Open Visual Studio 2005</p></li>
+   <li><p>Load <code>bigworld/src/tools/modeleditor/modeleditor2005.sln</code>.</p></li>
+   <li><p>Select the <b>Editor Hybrid Win32</b> solution configuration.</p></li>
+   <li><p>Select <b>Build All</b> (<code>SHIFT+CTRL+B</code>).</p></li>
+	 <li><p>The executable <code>modeleditor.exe</code> is created in 
+       <code>bigworld\tools\modeleditor</code>.</p></li>
+	</li>
+   </ul>
+
+<li><p>Compile WorldEditor
+   <ul>
+	 <li><p>Open Visual Studio 2005</p></li>
+   <li><p>Load <code>bigworld/src/tools/worldeditor/worldeditor2005.sln</code>.</p></li>
+   <li><p>Select the <b>Editor Hybrid Win32</b> solution configuration.</p></li>
+   <li><p>Select <b>Build All</b> (<code>SHIFT+CTRL+B</code>).</p></li>
+	 <li><p>The executable <code>worldeditor.exe</code> is created in 
+       <code>bigworld\tools\worldeditor</code>.</p></li>
+	</li>
+</ul>
+
+<li><p>Compile ParticleEditor
+   <ul>
+   <li><p>Open Visual Studio 2005.</p></li>
+   <li><p>Load <code>bigworld/src/tools/particle_editor/particle_editor2005.sln</code>.</p></li>
+   <li><p>Select the <b>Editor Hybrid Win32</b> solution configuration (only Editor
+       configurations are supported).</p></li>
+   <li><p>Select <code>Build All</code> (<code>SHIFT+CTRL+B</code>).</p></li>
+    <li><p>The executable <code>particleeditor.exe</code> is created in 
+       <code>bigworld\tools\particleeditor</code>.</p></li>
+	</li>
+   </ul>
+
+<li><p>Compile the Animation Exporter
+   <ul>
+   <li><p>Open Visual Studio 2005
+   <li><p>Load <code>bigworld/src/tools/animationexporter/animationexporter.sln</code> or <code>bigworld/src/tools/animationexporter/animationexporter_2005.sln</code>.</p></li>
+   <li><p>Select the appropriate solution configuration depending on which version of Max you are building for, i.e. <b>Max2011 Release</b>.</p></li>
+   <li><p>Make sure the maxsdk <code>include</code> and <code>library</code> folders are set up properly for the configuration</li></p>
+   <li><p>Select <code>Build All</code> (<code>SHIFT+CTRL+B</code>).</p></li>
+   </ul>
+
+<li><p>Compile the Visual Exporter
+   <ul>
+   <li><p>Open Visual Studio 2005</p></li>
+   <li><p>Load <code>bigworld/src/tools/visualexporter/visualexporter.sln</code> or <code>bigworld/src/tools/visualexporter/visualexporter_2005.sln</code></p></li>
+   <li><p>Set <code>visualexporter</code> as the startup project.</p></li>
+   <li><p>Select the appropriate solution configuration depending on which version of Max you are building for, i.e. <b>Max2011 Release</b>.</p></li>
+   <li><p>Make sure the maxsdk <code>include</code> and <code>library</code> folders are set up properly for the configuration.</li></p>
+   <li><p>Select <code>Build All</code> (<code>SHIFT+CTRL+B</code>).</p></li>
+   </ul>
+   
+<li><p>Compile the Maya Visual Exporter
+   <ul>
+   <li><p>Open Visual Studio 2005</p></li>
+   <li><p>Load <code>bigworld/src/tools/mayavisualexporter/mayavisualexporter.sln</code> or <code>bigworld/src/tools/mayavisualexporter/mayavisualexporter_2005.sln</code>.</p></li>
+   <li><p>Set <code>visualexporter</code> as the startup project.</p></li>
+   <li><p>Select the appropriate solution configuration depending on which version of Maya you are building for, i.e. <b>Maya 2011 Release</b>.</p></li>
+   <li><p>Make sure the Maya <code>include</code> and <code>library</code> folders are set up properly for the configuration.</li></p>
+   <li><p>Select <code>Build All</code> (<code>SHIFT+CTRL+B</code>).</p></li>
+   </ul>
+
+<li><p>Compile NavGen
+   <ul>
+   <li><p>Open Visual Studio 2005</p></li>
+   <li><p>Load <code>bigworld/src/tools/navgen/navgen.sln</code>.</p></li>
+   <li><p>Select the <b>Hybrid Win32</b> solution configuration.</p></li>
+   <li><p>Select <code>Build All</code> (<code>SHIFT+CTRL+B</code>).</p></li>
+   <li><p>The executable <code>navgen.exe</code> is created in 
+       <code>bigworld/src/tools/misc</code>.</p></li>
+   </ul>
+
+<li><p>To test the tools, run the executables in the appropriate folder under
+    <code>bigworld/tools</code>.</p></li>
+</ul>
+</div>
+
+</div>
+</body>
+</html>
+

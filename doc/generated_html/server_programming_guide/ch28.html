@@ -1,0 +1,354 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;28.&nbsp;Encrypting Client-Server Traffic</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt02.html" title="Part&nbsp;II.&nbsp;Server C++ Programming Guide">
+      <link rel="prev" href="ch27.html" title="Chapter&nbsp;27.&nbsp;Updatable Objects">
+      <link rel="next" href="ch29.html" title="Chapter&nbsp;29.&nbsp;Mercury Packet Structure">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch28.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;28.&nbsp;Encrypting Client-Server Traffic</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch27.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;II.&nbsp;Server C++ Programming Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch29.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Encrypting_Client_Server_Traffic"></a>Chapter&nbsp;28.&nbsp;Encrypting Client-Server Traffic
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch28.html#xref_Generating_RSA_Keypair">28.1. Generating your own RSA keypair</a></span></dt>
+                  <dt><span class="section"><a href="ch28.html#d0e16240">28.2. Working with multiple keys</a></span></dt>
+                  <dt><span class="section"><a href="ch28.html#d0e16254">28.3. Customising the symmetric encryption algorithm</a></span></dt>
+                  <dt><span class="section"><a href="ch28.html#xref_How_Packet_Filters_Work">28.4. How PacketFilters work</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch28.html#d0e16289">28.4.1. High-level requirements</a></span></dt>
+                        <dt><span class="section"><a href="ch28.html#d0e16313">28.4.2. Filtering mechanics and requirements</a></span></dt>
+                        <dt><span class="section"><a href="ch28.html#d0e16416">28.4.3. Extra space for filtering</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>BigWorld guarantees the security of the client-server session in two
+                 important ways:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>The login handshake is RSA-encrypted using a public key stored in
+                              the client resources.
+                     </p>
+                  </li>
+                  <li>
+                     <p>The client-proxy channel is symmetrically encrypted using
+                              Blowfish.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>As a result, it is impossible for an attacker to:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Steal a player's password</p>
+                  </li>
+                  <li>
+                     <p>Hijack a player's session</p>
+                  </li>
+                  <li>
+                     <p>Inject upstream packets into the player's traffic to disrupt
+                              his/her session
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Generating_RSA_Keypair"></a>28.1.&nbsp;Generating your own RSA keypair
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This security framework is provided to work out-of-the-box, and
+                      BigWorld ships with an RSA keypair that we have pre-generated for you
+                      (<code class="filename">bigworld/res/server/loginapp.privkey</code> and
+                      <code class="filename">bigworld/res/loginapp.pubkey</code>).
+               </p>
+               <p>Before making any kind of public game release, it is critical to
+                      replace this keypair with a new keypair generated by your own company. As
+                      all BigWorld clients receive the same default keypair BigWorld cannot
+                      guarantee that this keypair is secure. Generating a new keypair with the
+                      <code class="filename">openssl</code> command-line utility (which should be
+                      available in all modern Linux distributions) is simple:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Generate a new RSA keypair as follows:</p><pre class="programlisting">$ openssl genrsa <em class="replaceable"><code>[numbits]</code></em> &gt; loginapp.privkey</pre><p>BigWorld recommends using a 2048-bit key.</p>
+                     </li>
+                     <li>
+                        <p>Strip out the public part of your keypair as follows:</p><pre class="programlisting">$ openssl rsa -pubout &lt; loginapp.privkey &gt; loginapp.pubkey</pre></li>
+                  </ol>
+               </div>
+               <p>The private key should be placed into your server game resources,
+                      and the public part should be placed in your client game resources.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>Ensure your private key is never shipped with your game client
+                           resources.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e16240"></a>28.2.&nbsp;Working with multiple keys
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>You may want to ship multiple public keys with your game client (for
+                      instance, you may want to have a different key for each shard of your game
+                      world). The <code class="function">BigWorld.connect()</code> function in the Client
+                      API allows you to specify which public key to use when logging into the
+                      server using the <code class="code">publicKeyPath</code> attribute of the
+                      <code class="code">loginParams</code> object. Please see the Client API documentation
+                      for more details.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e16254"></a>28.3.&nbsp;Customising the symmetric encryption algorithm
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The Client-Proxy Channel is encrypted using 128-bit Blowfish by
+                      default. This encryption method was selected as it was the most secure,
+                      high-performance symmetric cipher offered in the standard OpenSSL
+                      distribution. Should you wish to use a different encryption algorithm, you
+                      should be able to edit
+                      <code class="filename">src/lib/network/encryption_filter.cpp</code> to change the
+                      encryption algorithm without needing to modify any header files.
+               </p>
+               <p>You will probably want to leave the stream-padding operations in
+                      <code class="function">EncryptionFilter::send()</code> and
+                      <code class="function">EncryptionFilter::recv()</code> as they are; all you should
+                      need to edit is the initialisation method
+                      (<code class="function">EncryptionFilter::initKey()</code>) and the
+                      encryption/decryption methods
+                      (<code class="function">EncryptionFilter::encrypt()</code> and
+                      <code class="function">EncryptionFilter::decrypt()</code>).
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_How_Packet_Filters_Work"></a>28.4.&nbsp;How PacketFilters work
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>In previous versions of BigWorld, encryption support was not
+                      automatically provided, and the task of implementing it was left to each
+                      individual customer. In recognition of the importance of online security
+                      and the sensitivity of game data in today's online games, a standard
+                      implementation is now included with BigWorld.
+               </p>
+               <p>This documentation used to describe the specifics of how to
+                      implement your own <code class="classname">Mercury::PacketFilter</code> to provide
+                      end-to-end encryption for a Client-Proxy Channel. A lot of this
+                      documentation is now irrelevant, however the description of how
+                      PacketFilters work is still accurate and is retained for
+                      completeness.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e16289"></a>28.4.1.&nbsp;High-level requirements
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Packet filters do not allow arbitrary encryption algorithms to be
+                           used <span class="symbol">&#8208;</span> the algorithm implemented
+                           must work within the mechanics of Mercury. Mercury processes each data
+                           packet individually, and has mechanisms for coping with packet loss and
+                           similar problems. Since packet filters are called as the last stage of
+                           sending a packet, and as the first stage of receiving a packet,
+                           algorithms implemented within a packet filter should work under the
+                           normal constraints of UDP, which are:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Packets may be delivered out of order.</p>
+                        </li>
+                        <li>
+                           <p>Packets may be delivered more than once.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>For this reason, encryption algorithms that assume a continuous
+                           transport byte stream are not appropriate. The appropriate encryption
+                           algorithms are the ones that work on a single block (packet) at a time
+                           within a window, and include algorithms like DES block encryption (as
+                           used in the secure PPP protocol), Blowfish, TwoFish, or similar
+                           protocols used in wireless Ethernet technology (SSL is not appropriate,
+                           since it assumes a continuous stream). The previously mentioned block
+                           algorithms can support packet loss and prevent packet replayability,
+                           among other features.
+                  </p>
+                  <p>Mercury takes care of the particulars of a UDP environment <span class="symbol">&#8208;</span> the packet filter only has to perform
+                           its filtering function. It uses sequence numbers of its own to discard
+                           duplicate packets (assuming that the packet filter itself has not
+                           discarded the packet). It also detects dropped packets, and resends them
+                           if they contained reliable information (so the packet filter should not
+                           do this). When Mercury needs to resend messages, it will sometimes
+                           resend the whole packet unmodified, and at other times (if there is
+                           space) it will piggyback just the reliable messages of the dropped
+                           packet into the body of the next new packet. Packet filters must be able
+                           to cope with both of these types of resending.
+                  </p>
+                  <p>Packet filters are always associated with channels, like the ones
+                           between a proxy and a client.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e16313"></a>28.4.2.&nbsp;Filtering mechanics and requirements
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>For every sent packet associated with a <span class="literal">Channel</span>
+                           object, the <span class="literal">send</span> method of the associated
+                           <span class="literal">PacketFilter</span> is called, with the packet as one of the
+                           parameters. This happens after all other processing on the packet.
+                           Similarly, the <span class="literal">recv</span> method of the
+                           <span class="literal">PacketFilter</span> instance is called for every packet that
+                           is received over the channel by the Nub, before any other processing
+                           occurs on it. This method should undo any modifications made to the
+                           packet by the <span class="literal">send</span> method, and then call the base
+                           class <span class="literal">PacketFilter::recv</span> method.
+                  </p>
+                  <p>Since packets may be received out of order, the
+                           <span class="literal">PacketFilter</span> instance must be able to reconstruct any
+                           packet received within the <span class="literal">Channel</span>'s window.
+                           Duplicate packets may also be received, and these must also be
+                           reconstructed when within the window, so that they can be acknowledged
+                           (in case the ACK for the original packet was lost).
+                  </p>
+                  <p>Note that a <span class="literal">PacketFilter</span> must not modify a
+                           packet to be sent <span class="symbol">&#8208;</span> or at least if
+                           it does so, it then must undo the modifications afterwards. If it were
+                           to leave a packet modified, and that packet needed to be resent (or
+                           partially resent), then it would be filtering the data twice. Depending
+                           on the nature of the modifications being made to the
+                           <span class="literal">Packet</span>'s data, it may make sense to do the desired
+                           changes, or it may make more sense to simply grab a new
+                           <span class="literal">Packet</span> from the <span class="literal">PacketPool</span>, write
+                           the filtered data to that packet, and then send it. This notice does not
+                           apply to packets that are received <span class="symbol">&#8208;</span> the <span class="literal">PacketFilter</span> may
+                           modify received packets in-place if it so chooses, especially if it is
+                           efficient to do so.
+                  </p>
+                  <p>The <span class="literal">PacketFilter</span> base class'
+                           <span class="literal">send</span> implementation sends the packets over the Nub's
+                           socket with the usual accounting, error checking, and retries.
+                  </p>
+                  <p>Do not use the Nub's socket directly. The
+                           <span class="literal">PacketFilter</span> base class' <span class="literal">recv</span>
+                           implementation submits the packet for normal internal processing. If you
+                           do not call it, then you must give the packet back to the
+                           <span class="literal">PacketPool</span> (with
+                           <span class="literal"><span class="literal">PacketPool::give</span></span>), or the packet
+                           will be leaked.
+                  </p>
+                  <p>New packets may be obtained and old ones returned at any time via
+                           the <span class="literal">PacketPool</span> object.
+                           <span class="literal">PacketFilter</span> instances may use and store packets for
+                           any purpose that they see fit. Also, the <span class="literal">PacketFilter</span>
+                           base class' methods <span class="literal">send</span> and <span class="literal">recv</span>
+                           may be called as many times as desired from the corresponding derived
+                           methods <span class="literal">send</span> and <span class="literal">recv</span>, if that is
+                           what the filter needs to do.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e16416"></a>28.4.3.&nbsp;Extra space for filtering
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Normally, when messages are added to a bundle, the full size of
+                           the packet may be used. This would deny many potential filtering uses,
+                           which might want to add data to packets after this. The virtual method
+                           <span class="literal">maxSpareSize</span> may be implemented in this case to
+                           specify the minimum amount of space to leave spare in each packet
+                           (<em class="emphasis">i.e.</em>, the maximum amount of space required by the
+                           <span class="literal">PacketFilter</span>).
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch27.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt02.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch29.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;27.&nbsp;Updatable Objects&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;29.&nbsp;Mercury Packet Structure</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

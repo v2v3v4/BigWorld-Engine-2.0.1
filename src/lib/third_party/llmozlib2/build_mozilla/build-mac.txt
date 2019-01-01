@@ -1,0 +1,12 @@
+Prerequisite libraries (IDL and GLib) can be installed via the "macports" tool available here:
+
+http://www.macports.org/
+
+I did an install using the Leopard disk image, then:
+
+sudo /opt/local/bin/port sync
+sudo /opt/local/bin/port install libidl
+
+This installed expat, libiconv, gettext, pkgconfig, glib2, libIDL
+
+After installing macports, I had to make sure /opt/local/bin was in my path (which involved closing and reopening my terminal window).

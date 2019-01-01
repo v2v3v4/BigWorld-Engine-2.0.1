@@ -1,0 +1,372 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;36.&nbsp;.visual</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch35.html" title="Chapter&nbsp;35.&nbsp;ual_config.xml">
+      <link rel="next" href="ch37.html" title="Chapter&nbsp;37.&nbsp;visual_rules.xml">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch36.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;36.&nbsp;<span class="literal">.visual</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch35.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch37.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_item_visual"></a>Chapter&nbsp;36.&nbsp;<span class="literal">.visual</span></h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch36.html#xref_NodeSection">36.1. NodeSection</a></span></dt>
+                  <dt><span class="section"><a href="ch36.html#xref_PortalSection">36.2. PortalSection</a></span></dt>
+               </dl>
+            </div>
+            <p>Defined in various sub-folders under the resource tree
+                 <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span> (for example,
+                 <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/environments</span>,
+                 <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/flora</span>,
+                 <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/sets/vehicles</span>,
+                 etc...), the <span class="literal">.visual</span> file format specification is
+                 illustrated below:
+            </p><pre class="programlisting">&lt;root&gt;
+
+  <em class="emphasis">NodeSection </em><a name="co3670"></a><img src="../images/callouts/1.png" alt="1" border="0">
+
+   &lt;renderSet&gt;
+     &lt;treatAsWorldSpaceObject&gt; [true|false]  &lt;/treatAsWorldSpaceObject&gt;
+    +&lt;node&gt;                     <em class="replaceable"><code>string</code></em>       &lt;/node&gt;
+     &lt;geometry&gt;
+       &lt;vertices&gt;       <em class="replaceable"><code>object.vertices</code></em>  &lt;/vertices&gt;
+       &lt;primitive&gt;      <em class="replaceable"><code>object.indices</code></em>   &lt;/primitive&gt;
+      +&lt;primitiveGroup&gt; <em class="replaceable"><code>integer</code></em>
+         &lt;material&gt;
+           <em class="emphasis">EffectMaterial </em><a name="co3680"></a><img src="../images/callouts/2.png" alt="2" border="0">
+         &lt;/material&gt;
+       &lt;/primitiveGroup&gt;
+     &lt;/geometry&gt;
+   &lt;/renderSet&gt;
+
+   &lt;boundingBox&gt;
+    &lt;min&gt;   <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>   &lt;/min&gt;
+    &lt;max&gt;   <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>   &lt;/max&gt;
+   &lt;/boundingBox&gt;
+
+  *<em class="emphasis">PortalSection </em><a name="co3691"></a><img src="../images/callouts/3.png" alt="3" border="0">
+
+  *&lt;boundary&gt;
+     &lt;normal&gt; <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/normal&gt;
+     &lt;d&gt;      <em class="replaceable"><code>float</code></em>              &lt;/d&gt;
+    ?<em class="emphasis">PortalSection </em><a name="co3696"></a><img src="../images/callouts/4.png" alt="4" border="0">
+   &lt;/boundary&gt;
+  
+&lt;/root&gt;</pre><p><span class="citetitle">Grammar of visual file</span></p>
+            <div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co3670"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>See <a href="ch36.html#xref_NodeSection" title="36.1.&nbsp;NodeSection">NodeSection</a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co3680"><img src="../images/callouts/2.png" alt="2" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>See <a href="ch11.html" title="Chapter&nbsp;11.&nbsp;EffectMaterial section"><i xmlns:xlink="http://www.w3.org/1999/xlink">EffectMaterial section</i></a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co3691"><img src="../images/callouts/3.png" alt="3" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>See <a href="ch36.html#xref_PortalSection" title="36.2.&nbsp;PortalSection">PortalSection</a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co3696"><img src="../images/callouts/4.png" alt="4" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>See <a href="ch36.html#xref_PortalSection" title="36.2.&nbsp;PortalSection">PortalSection</a>.
+                        </p>
+                     </td>
+                  </tr>
+               </table>
+            </div>
+            <p>The list below describes the tags in the visual file:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">boundary</span></em></p>
+                     <p>Section describing the planes surrounding the visual, much like
+                              the boundingBox section.
+                     </p>
+                     <p>These planes define a convex hull around the visual.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">boundingBox</span></em></p>
+                     <p>Minimum and maximum XYZ coordinates of the model's bounding
+                              box.
+                     </p>
+                     <p>If visual has skinned vertices or animation, then this section is
+                              the visual's initial pose's bounding box.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">d</span> (section
+                                 <span class="literal">boundary</span>)</em></p>
+                     <p>Distance along the normal between boundary and origin.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">EffectMaterial</em></p>
+                     <p>For details, see <a href="ch11.html" title="Chapter&nbsp;11.&nbsp;EffectMaterial section"><i xmlns:xlink="http://www.w3.org/1999/xlink">EffectMaterial section</i></a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">geometry</span> (section
+                                 <span class="literal">renderSet</span>)</em></p>
+                     <p>List of geometries used by this renderSet.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">material</span> (section
+                                 <span class="literal">renderSet/geometry/primitiveGroup</span>)</em></p>
+                     <p>Properties for the primitive group's material, such as shader,
+                              collision flags, maps, etc...
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">max</span> (section
+                                 <span class="literal">boundingBox</span>)</em></p>
+                     <p>Maximum extents of model's bounding box</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">min</span> (section
+                                 <span class="literal">boundingBox</span>)</em></p>
+                     <p>Minimum extents of model's bounding box</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">node</span> (section
+                                 <span class="literal">renderSet</span>)</em></p>
+                     <p>Node referenced by this <span class="literal">renderSet</span>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">NodeSection</em></p>
+                     <p>For details, see <a href="ch36.html#xref_NodeSection" title="36.1.&nbsp;NodeSection">NodeSection</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">normal</span> (section
+                                 <span class="literal">boundary</span>)</em></p>
+                     <p>Normal of the plane surrounding the visual.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">PortalSection (main section, and
+                                 <span class="literal">boundary</span>)</em></p>
+                     <p>For details, see <a href="ch36.html#xref_PortalSection" title="36.2.&nbsp;PortalSection">PortalSection</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">primitive</span> (section
+                                 <span class="literal">renderSet/geometry</span>)</em></p>
+                     <p>The name of the primitives used by this geometry (loaded from
+                              <span class="literal">.primitives</span> file &#8212; for details on this file's
+                              grammar, see <a href="ch29.html" title="Chapter&nbsp;29.&nbsp;.primitives"><i xmlns:xlink="http://www.w3.org/1999/xlink"><span class="literal">.primitives</span></i></a>).
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">primitiveGroup</span> (section
+                                 <span class="literal">renderSet/geometry</span>)</em></p>
+                     <p>Settings for primitive group.</p>
+                     <p>Primitive group is a group of triangles that share the same
+                              material properties.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">renderSet</span></em></p>
+                     <p>Section for one or more objects with same transforms.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">treatAsWorldSpaceObject</span>
+                                 (section <span class="literal">renderSet</span>)</em></p>
+                     <p>Determines if lighting and other position-based properties are
+                              passed to shader in world space.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">vertices</span> (section
+                                 <span class="literal">renderSet/geometry</span>)</em></p>
+                     <p>The name of the vertices used by this geometry (loaded from
+                              <span class="literal">.primitives</span> file &#8212; for details on this file's
+                              grammar, see <a href="ch29.html" title="Chapter&nbsp;29.&nbsp;.primitives"><i xmlns:xlink="http://www.w3.org/1999/xlink"><span class="literal">.primitives</span></i></a>).
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_NodeSection"></a>36.1.&nbsp;NodeSection
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The grammar for the <em class="emphasis">NodeSection</em> is
+                      described below:
+               </p><pre class="programlisting">&lt;node&gt;
+
+   &lt;identifier&gt; <em class="replaceable"><code>string</code></em> &lt;/identifier&gt;
+
+   &lt;transform&gt;
+     &lt;row0&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/row0&gt;
+     &lt;row1&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/row1&gt;
+     &lt;row2&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/row2&gt;
+     &lt;row3&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/row3&gt;
+   &lt;/transform&gt;
+    
+  *<em class="emphasis">NodeSection</em>
+
+&lt;/node&gt;</pre><p><span class="citetitle">Grammar of <em class="emphasis">NodeSection</em>
+                         in visual file</span></p>
+               <p>The list below describes the tags in <em class="emphasis">NodeSection</em>:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">identifier</span></em></p>
+                        <p>Node's unique ID.</p>
+                        <p>The root node must be called Scene Root.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">row0</span></em>,
+                                   <em class="emphasis"><span class="literal">row1</span></em>, <em class="emphasis"><span class="literal">row2</span></em>, <em class="emphasis"><span class="literal">row3</span></em></p>
+                        <p>Node's transform matrices.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">transform</span></em></p>
+                        <p>3x4 matrix defining node's transform relative to the parent
+                                   node.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_PortalSection"></a>36.2.&nbsp;PortalSection
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Portals describe the line of sight into neighbouring chunk, and
+                      should be present only in shells.
+               </p>
+               <p>The grammar for the <em class="emphasis">PortalSection</em>
+                      is described below:
+               </p><pre class="programlisting">&lt;portal&gt; [heaven|invasive|Empty]
+
+    &lt;uAxis&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/uAxis&gt;
+  +3&lt;point&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/point&gt;
+
+&lt;/portal&gt;</pre><p><span class="citetitle">Grammar of <em class="emphasis">PortalSection</em>
+                         in visual file</span></p>
+               <p>The list below describes the tags in <em class="emphasis">PortalSection</em>:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">point</span></em></p>
+                        <p>XYZ coordinates of one of portal's corners.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">type</span></em></p>
+                        <p>Describes the type of portal being defined.</p>
+                        <p>Can have the following values:</p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">heaven</span></em></p>
+                                 <p>Outside lighting will be applied to shell, and from inside
+                                                it you will be able to see outside chunks.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">invasive</span></em></p>
+                                 <p>Portal will have same properties as a heaven portal, but
+                                                shell will also be visible from outside chunks.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">Empty</span></em></p>
+                                 <p>Portal will be purely a connecting one. This type can only
+                                                be linked to other connecting portals.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">uAxis</span></em></p>
+                        <p>The cross vector for the coordinate system of the portal
+                                   points.
+                        </p>
+                        <p>The up vector is calculated by taking the cross product of the
+                                   boundary's normal and the <span class="literal">uAxis</span>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch35.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch37.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;35.&nbsp;<span class="literal">ual_config.xml</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;37.&nbsp;<span class="literal">visual_rules.xml</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

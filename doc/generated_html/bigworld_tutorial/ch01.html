@@ -1,0 +1,228 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;1.&nbsp;Overview</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Tutorial">
+      <link rel="up" href="index.html" title="Tutorial">
+      <link rel="prev" href="index.html" title="Tutorial">
+      <link rel="next" href="ch02.html" title="Chapter&nbsp;2.&nbsp;A Basic Client-Only Game (CLIENT_ONLY)">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/bigworld_tutorial/ch01.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Overview</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Overview"></a>Chapter&nbsp;1.&nbsp;Overview
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch01.html#d0e35">1.1. Conventions</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch01.html#d0e38">1.1.1. Files and directories</a></span></dt>
+                        <dt><span class="section"><a href="ch01.html#d0e66">1.1.2. Linux development environment</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch01.html#d0e85">1.2. Provided files</a></span></dt>
+                  <dt><span class="section"><a href="ch01.html#d0e149">1.3. Debugging</a></span></dt>
+               </dl>
+            </div>
+            <p>This tutorial provides a brief overview of the minimum steps needed to
+               get a basic game working from scratch. Game developers and technical artists
+                 working with BigWorld for the first time should work through this tutorial
+                 to get a feel for the way the various files and directories fit together to
+                 produce a working game.
+            </p>
+            <p>The game demo that ships with the BigWorld package is called
+                 FantasyDemo. If you are reading this tutorial, you have probably already
+                 spent some time playing through it and seeing some of the things that the
+                 BigWorld engine can do. Unfortunately for new developers, FantasyDemo is
+                 actually a rather large and involved project, so using it as a reference
+                 point for implementing a new game can be quite confusing. In general, it is
+                 not obvious what can and cannot be stripped out to create a skeleton
+                 game.
+            </p>
+            <p>Instead, this document will work from an empty directory and build the
+                 project file by file, to give you a clear understanding of what each file
+                 and directory is for.
+            </p>
+            <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+               <h3 class="title">Note</h3>
+               <p>For details on BigWorld terminology, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../glossary_of_terms/index.html" class="olink">Glossary of Terms</a>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e35"></a>1.1.&nbsp;Conventions
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e38"></a>1.1.1.&nbsp;Files and directories
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This document uses Unix filesystem conventions for file naming
+                           <em class="emphasis">i.e.</em>, files will be named
+                           <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/db.xml</code>,
+                           and not
+                           <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>\scripts\db.xml</code>.
+                           You should follow this practice when developing your game, whether or
+                           not you are dealing with client-side or server-side scripts and/or
+                           assets.
+                  </p>
+                  <p>This tutorial assumes you are working on a Windows box, with the
+                           files mounted on a local filesystem. The early stages of the tutorial
+                           are entirely client-side, so any issues regarding the synchronisation of
+                           files between the client and server are not addressed here. Cross
+                           machine synchronisation is discussed in <a href="ch03.html#xref_Windows_Linux_File_Sharing" title="3.1.&nbsp;Server Installation and Configuration">Server Installation and Configuration</a>.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>This tutorial assumes that the BigWorld package was extracted to
+                                the directory <code class="filename">C:\BigWorld</code>.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e66"></a>1.1.2.&nbsp;Linux development environment
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This tutorial assumes that you are using a UNIX user account
+                           called <span class="literal">Fred</span>. The parts of this tutorial that involve
+                           resources mounted on a Linux filesystem assume that they are mounted at
+                           <code class="filename"><code class="envar">$HOME</code>/mf</code>
+                           (<em class="emphasis">i.e.</em>, <code class="filename">/home/fred/mf</code>).
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e85"></a>1.2.&nbsp;Provided files
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>All files used in this tutorial are provided in the <code class="filename">tutorial</code> directory of your BigWorld
+                      package.
+               </p>
+               <p>As shipped, the files represent the final state of the completed
+                      tutorial. If you are new to BigWorld development, then you probably want
+                      to see the minimal set of files required at each stage of the tutorial,
+                      instead of just diving into the completed tutorial (which while much
+                      simpler than FantasyDemo, still consists of a fair number of files). To
+                      help you with this, BigWorld provides a utility
+                      (<code class="filename">tutorial/generate_res_trees.py</code>) that strips down the
+                      resource tree to the minimal state needed for a particular stage of the
+                      tutorial. If you run the utility with the symbolic name of a chapter
+                      (<em class="emphasis">e.g.</em>, <span class="literal">./tutorial.py
+                         CLIENT_SERVER</span>), then the stripped resources are extracted to an
+                      appropriately named <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em></code>
+                      directory in the tutorial directory (<em class="emphasis">e.g.</em>,
+                      <code class="filename">tutorial/res_client_server</code>). You can then alter the
+                      <code class="filename">paths.xml</code><sup>[<a name="d0e116" href="#ftn.d0e116">1</a>]</sup> and <code class="filename">.bwmachined.conf</code><sup>[<a name="d0e129" href="#ftn.d0e129">2</a>]</sup> settings to point to these stripped trees.
+               </p>
+               <p>Even if you are doing the final stage of the tutorial, it may be
+                      helpful to run this stripping utility before looking through the source
+                      code, as it removes all inclusion/exclusion steps that we have inserted to
+                      facilitate the stripping process and makes the code easier to read.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>The symbolic constants for each chapter are given in the chapter
+                           heading <em class="emphasis">e.g.</em>,
+                           <span class="literal">CLIENT_ONLY</span>.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e149"></a>1.3.&nbsp;Debugging
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>There may be times while working through the tutorial that the
+                      client won't start due to some error in the scripts. In order to discover
+                      the cause of the error, use a program such as DebugView (available on the
+                      Microsoft website) which captures and displays debug output.
+               </p>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e116" href="#d0e116">1</a>] </sup>For details on how to configure <code class="filename">paths.xml</code>,
+                             see <a href="ch02.html#xref_Setting_Up_The_Client_Executable_Folder" title="2.2.&nbsp;Defining resource paths">Defining resource paths</a> ,
+                             and <a href="ch02.html#xref_A_Simple_Space" title="2.7.&nbsp;A simple space">A simple space</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e129" href="#d0e129">2</a>] </sup>For details on how to configure
+                             <code class="filename">.bwmachined.conf</code>, see <a href="ch03.html#xref_Starting_And_Connecting_To_The_Server" title="3.8.&nbsp;Starting and connecting to the server">Starting and connecting to the server</a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Tutorial&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;A Basic Client-Only Game (<span class="literal">CLIENT_ONLY</span>)
+                  </td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

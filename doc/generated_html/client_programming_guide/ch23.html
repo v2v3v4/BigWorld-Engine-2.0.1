@@ -1,0 +1,337 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;23.&nbsp;Job System</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch22.html" title="Chapter&nbsp;22.&nbsp;Post Processing">
+      <link rel="next" href="ch24.html" title="Chapter&nbsp;24.&nbsp;Debugging">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch23.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;23.&nbsp;Job System</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch22.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch24.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Job_System"></a>Chapter&nbsp;23.&nbsp;Job System
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch23.html#d0e10621">23.1. Overview</a></span></dt>
+                  <dt><span class="section"><a href="ch23.html#d0e10632">23.2. Under the Hood</a></span></dt>
+                  <dt><span class="section"><a href="ch23.html#d0e10643">23.3. Wrapper API</a></span></dt>
+                  <dt><span class="section"><a href="ch23.html#d0e10670">23.4. Job System API</a></span></dt>
+                  <dt><span class="section"><a href="ch23.html#d0e10694">23.5. An Example</a></span></dt>
+                  <dt><span class="section"><a href="ch23.html#d0e10731">23.6. Implementing it</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10621"></a>23.1.&nbsp;Overview
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The job system allows additional cores in multicore systems to
+                      execute code and calculate data for rendering just in time. It also moves
+                      the issue of D3D commands onto its own core, with the main thread simply
+                      recording them for execution in the next frame.
+               </p>
+               <p>The rendering of a frame is divided into blocks. Blocks are rendered
+                      in order. Each block begins only after the previous block has
+                      finished.
+               </p>
+               <p>Each block consists of any D3D rendering commands and associated
+                      vertex and index buffers, textures, shader constants or any other data.
+                      The block can be produced as a combination of conventional D3D rendering
+                      from the main thread and output from jobs running in parallel on cores
+                      allocated to run jobs.
+               </p>
+               <p>Any number of jobs can produce the input for a block. Since only one
+                      block is rendering at a time and jobs execute in parallel you should use
+                      at least as many jobs as there are cores, otherwise there will be idle
+                      cores. Jobs within a block can finish in any order, but the block will not
+                      be rendered until all jobs are complete. While the jobs are executing D3D
+                      executes the previous block. Thus the job cores and the D3D core are
+                      constantly working while at the same time the main thread is preparing
+                      another frame of blocks and their corresponding jobs.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10632"></a>23.2.&nbsp;Under the Hood
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>All rendering commands and jobs are stored in a command buffer. This
+                      is accomplished by wrapping D3D. All D3D function calls go to the wrapper
+                      which records them to be executed on the next frame while at the same time
+                      the commands from the previous frame are executed in another thread on the
+                      D3D core.
+               </p>
+               <p>When flushed the D3D core first stalls for the results of the first
+                      block's jobs. Meanwhile each core in the job cluster starts grabbing jobs
+                      from the block. There is no central dispatch mechanism. The cores grab
+                      jobs and atomically decrement a counter for that block when they finish
+                      writing their results. Note that jobs are grabbed in order but they are
+                      not necessarily finished in order. For example, if the first job takes a
+                      long time the second might finish first and that core can begin on another
+                      job. This means that the output is not guaranteed to be contiguous until
+                      after the last job finishes and decrements the counter to zero.
+               </p>
+               <p>Only then can the D3D core begin to process the results of the first
+                      block, while the cluster begins to operate on the second block, outputting
+                      the results into another buffer.
+               </p>
+               <p>If the D3D core finishes first it retires the buffer and stalls
+                      until its next buffer is ready. If the cluster finishes first it stalls
+                      until the D3D core retires the buffer it is consuming so it can receive
+                      output from the cluster.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10643"></a>23.3.&nbsp;Wrapper API
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>In addition to wrapping D3D the wrapper has a small API to control
+                      its behaviour.
+               </p>
+               <p><code class="code">DX::newBlock()</code>: Starts a new block. All rendering from
+                      the previous block will finish before this one will begin and all job
+                      output that was used to render the previous block will no longer be
+                      accessible. What this means is that all jobs producing output for this
+                      block must be allocated before the next call to
+                      <code class="code">DX::newBlock()</code>.
+               </p>
+               <p><code class="code">DX::setWrapperFlags()</code> and
+                      <code class="code">DX::getWrapperFlags()</code>: These functions get and set flags that
+                      control the behaviour of the wrapper.
+               </p>
+               <p><code class="code">IMMEDIATE_LOCK</code>: Flush the command buffer and then
+                      execute the lock in the main thread. This is required if you are not going
+                      to fill in the entire locked region. It is an extremely expensive way to
+                      lock and should be avoided where possible.
+               </p>
+               <p><code class="code">DEFERRED_LOCK</code>: This flag is used to lock a buffer that
+                      will be filled in with a job. The pointer that a lock returns can only be
+                      used to store into a job and then accessed when the job executes. The
+                      actual lock occurs in the next frame when the job executes.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10670"></a>23.4.&nbsp;Job System API
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The Job System API is accessed through the JobSystem singleton. It
+                      is obtained with <code class="code">JobSystem::instance()</code>.
+               </p>
+               <p><code class="code">allocJob()</code>: This method places a job into the list of
+                      jobs for the current block and returns a user implemented class derived
+                      from Job. This has a virtual function called <code class="code">execute()</code> which
+                      actually performs the job. The derived class stores anything necessary for
+                      the execution of the job. Note that the jobs within a block will not
+                      execute in order.
+               </p>
+               <p><code class="code">allocOutput()</code>: The job will need to produce output and
+                      this is allocated up front with <code class="code">allocOutput()</code>. It is called
+                      from the main thread and its result is placed into the Job object. The
+                      memory for the output is not actually allocated at this time, but it will
+                      be made ready at the time that the job is executed next frame.
+               </p>
+               <p>Within a block you can have any mix of job and output allocations.
+                      For example, you may allocate one output and divide it between many jobs
+                      or vice versa or any combination you like. The only rule is that the
+                      output and the jobs must all come from the same block.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10694"></a>23.5.&nbsp;An Example
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Let us imagine that we are updating and rendering a simple particle
+                      system. This will be done in one block. The particle system consists of
+                      4096 points, each of which will be updated and generate one vertex into a
+                      vertex buffer for rendering.
+               </p>
+               <p>Our block will consist of setting a vertex bufferer and calling
+                      DrawPrimitive on it. The vertex buffer will be filled using jobs. The
+                      vertex buffer will be divided into 8 parts of 512 vertices each. Each part
+                      will be filled in with one job.
+               </p>
+               <p>Main thread:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>New Block</p>
+                     </li>
+                     <li>
+                        <p>Lock vertex buffer of 4096 points using the
+                                   <code class="code">DEFERRED_LOCK</code> flag
+                        </p>
+                     </li>
+                     <li>
+                        <p>Set 8 jobs, each filling in 512 points</p>
+                     </li>
+                     <li>
+                        <p>Set rendering states</p>
+                     </li>
+                     <li>
+                        <p>DrawPrimitive</p>
+                     </li>
+                     <li>
+                        <p>Reset wrapper flags</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>All of the above steps are not immediately executed but rather
+                      recorded for execution on the next frame.
+               </p>
+               <p>Jobs and D3D core:</p>
+               <p>During the next frame the default block renders until the new block
+                      for the particles is reached. At the same time the 8 jobs to fill the
+                      vertex buffers are executed. When the new block is reached and the jobs
+                      are completed the particles are rendered. At the same time the jobs for
+                      the next block are executed.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10731"></a>23.6.&nbsp;Implementing it
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Now that we understand how this example works we can go through the
+                      steps of implementing it.
+               </p>
+               <p>First we need to implement our job object.</p><pre class="programlisting">class PointSpriteParticleJob : public Job
+{
+public:
+    void set( Particle* particles, Moo::VertexXYZDP* pVertex, uint nPoints );
+    virtual void execute();
+
+private:
+    Particle* particles_;
+    Moo::VertexXYZDP* pVertex_;
+    uint nPoints_;
+};
+</pre><p>The job object inherits the virtual <code class="code">execute()</code> method
+                      which gets called in the next frame just before the output of the job will
+                      be needed for consumption by the D3D core.
+               </p>
+               <p>We also implement a <code class="code">set()</code> method which gets called from
+                      the main thread and stores all the information that will be needed in
+                      <code class="code"> execute()</code>.
+               </p>
+               <p>The <code class="code">execute()</code> method will do two things. It will update
+                      the positions of the particles and output the new positions into a vertex
+                      buffer. Each given job object will do this for only a part of the particle
+                      system and vertex buffer so that the entire task can be divided into
+                      several jobs and execute in parallel on several cores.
+               </p>
+               <p>Now we are ready to use the job class in our rendering code.</p>
+               <p>We begin this with a new block.</p><pre class="programlisting">DX::newBlock();
+</pre><p>Now we are ready to queue our rendering commands.</p>
+               <p>First we need to lock a deferred vertex buffer, and to do this we
+                      need to set the appropriate wrapper flag before locking.
+               </p>
+               <p>Normally when locking you get a pointer that you can use immediately
+                      to write vertex data. However our vertex data will be calculated in the
+                      next frame by jobs, so the lock actually has to occur at that time.
+                      Therefore we use a deferred lock which returns a pointer now but does not
+                      perform the lock until required.
+               </p><pre class="programlisting">uint32 oldFlags = DX::getWrapperFlags();
+DX::setWrapperFlags( DX::WRAPPER_FLAG_DEFERRED_LOCK );
+
+Moo::DynamicVertexBufferBase2&lt;Moo::VertexXYZDP&gt;&amp; vb = Moo::DynamicVertexBufferBase2&lt;Moo::VertexXYZDP&gt;::instance();
+Moo::VertexXYZDP* pVertex = vb.lock2( 4096 );
+</pre><p>Now we are ready to allocate and set up our jobs. The pointer from
+                      the lock is used to set up the jobs.
+               </p><pre class="programlisting">for ( uint i = 0; i &lt; 8; i++ )
+{
+    job = jobSystem.allocJob&lt;UpdateParticlesJob&gt;();
+    job.set( particles + i*512, vertices + i*512, 512 );
+}
+</pre><p>Finally we can unlock the buffer, reset the wrapper flags and
+                      render.
+               </p>
+               <p>At this point we can render as if the jobs that we have allocated
+                      and set are complete, since the following rendering commands will not be
+                      executed until that time.
+               </p><pre class="programlisting">vb.unlock();
+uint32 lockIndex = vb.lockIndex();
+
+DX::setWrapperFlags( oldFlags );
+
+vb.set( 0 );
+Moo::rc().drawPrimitive( D3DPT_POINTLIST, lockIndex, nPoints );
+</pre></div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch22.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch24.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;22.&nbsp;Post Processing&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;24.&nbsp;Debugging</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

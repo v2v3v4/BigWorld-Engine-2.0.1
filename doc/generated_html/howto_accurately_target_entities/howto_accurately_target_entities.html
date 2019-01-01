@@ -1,0 +1,97 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>How To Perform Accurate Targeting Of Entities</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_AccurateTargeting"></a>How To Perform Accurate Targeting Of Entities</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Introduction">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#xref_CreatingTargetingBoxes">2. Creating the targeting boxes</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e34">2.1. Setup</a></span></dt><dt><span class="section"><a href="#d0e44">2.2. Creating the boxes</a></span></dt><dt><span class="section"><a href="#d0e87">2.3. Tweaking the boxes</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_UsingSkeletonCollider">3. Using the <span class="literal">SkeletonCollider</span></a></span></dt><dd><dl><dt><span class="section"><a href="#d0e124">3.1. Creating the <span class="literal">SkeletonCollider</span></a></span></dt><dt><span class="section"><a href="#d0e157">3.2. Enabling skeleton checking</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d0e168">4. Saving/loading the <span class="literal">SkeletonCollider</span></a></span></dt><dd><dl><dt><span class="section"><a href="#d0e173">4.1. Saving</a></span></dt><dt><span class="section"><a href="#d0e198">4.2. Loading</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Introduction"></a>Chapter&nbsp;1.&nbsp;Introduction</h2></div></div></div><p>By default BigWorld uses the entities bounding boxes for targeting.
+    This works well for most cases, but some times more accurate targeting is
+    needed. This document describes a way of performing accurate targeting of
+    entities using the inbuilt <span class="literal">SkeletonCollider</span>
+    functionality. The <span class="literal">SkeletonCollider</span> uses hit-boxes
+    attached to the entity skeleton for collisions, rather than using the
+    entities bounding boxes.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_CreatingTargetingBoxes"></a>Chapter&nbsp;2.&nbsp;Creating the targeting boxes</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e34">2.1. Setup</a></span></dt><dt><span class="section"><a href="#d0e44">2.2. Creating the boxes</a></span></dt><dt><span class="section"><a href="#d0e87">2.3. Tweaking the boxes</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e34"></a>2.1.&nbsp;Setup</h2></div></div></div><p>To set up the accurate targeting, the easiest option is to use the
+      <span class="literal">BigWorld</span> python console. The first thing we need to
+      do is the create an instance of the model we want to create targeting
+      boxes for. You can create an offline instance of an entity at the
+      players position like this: (in this example we are creating an offline
+      instance of the creature entity) </p><pre class="programlisting">player = BigWorld.player
+entityDict = {'creatureType':1,'creatureName':'MyTarget'}
+entityId = BigWorld.createEntity(type, player.spaceID, 0, player.position, (0,0,0), entityDict)
+creature = BigWorld.entities[entityId]</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e44"></a>2.2.&nbsp;Creating the boxes</h2></div></div></div><p>After creating our model we need to create
+      <span class="literal">BoxAttachment</span> objects that the
+      <span class="literal">SkeletonCollider</span> can use for the collisions. We give
+      the attachments the same name as the node they are to be attached to so
+      they are easier to manage. We also give the box attachments a rough
+      starting size.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>To get the names of the nodes you can enable the watcher
+        <span class="literal">"render/Draw Node Labels"</span>, this will display the
+        node names on the screen.</p></div><pre class="programlisting">headBox = BigWorld.BoxAttachment()
+headBox.name = 'biped Head'
+headBox.minBounds = (-0.1, -0.1, -0.1)
+headBox.maxBounds = (0.1, 0.1, 0.1)
+pelvisBox.name = 'biped Pelvis'
+pelvisBox.minBounds = (-0.2, -0.2, -0.2)
+pelvisBox.maxBounds = (0.2, 0.2, 0.2)</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>For simplicity this example only uses two
+        <span class="literal">BoxAttachment</span> objects. In a real world game you
+        would probably want to use more than two boxes, and you are free to
+        use as many or as few bounding boxes that you like</p></div><p>The boxes are then attached to the entity's nodes so that we can
+      use them for targeting.</p><pre class="programlisting">creature.model.node(headBox.name).attach(headBox)
+creature.model.node(pelvisBox.name).attach(pelvisBox)</pre><p>We can now display the boxes by enabling the watcher
+      <span class="literal">"Client Settings/displayImpactBoxes"</span>, this can be
+      done by entering the following in the python console</p><pre class="programlisting">BigWorld.setWatcher('Client Settings/displayImpactBoxes',True)</pre><div class="informalfigure"><div class="mediaobject"><img src="images/initial_boxes.png"><span class="caption"><p>Displaying the impact boxes</p></span></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e87"></a>2.3.&nbsp;Tweaking the boxes</h2></div></div></div><p>There are two boxes attached to the body, we would like them to
+      match the parts of the body they are meant to cover. To do this we need
+      to tweak the boxes. There are some visual queues to which values are not
+      correct, the bounding box <span class="literal">x-axis</span> is
+      <span class="literal">red</span>, the <span class="literal">y-axis</span> is
+      <span class="literal">green</span> and the <span class="literal">z-axis</span> is
+      <span class="literal">blue</span>. We can change the min and max bounds of the
+      boxes to something that fits the objects better:</p><pre class="programlisting">headBox.minBounds=(0,-0.1,-0.05)
+headBox.maxBounds=(0.2,0.1,0.3)
+pelvisBox.minBounds=(-0.3,-0.2,-0.2)
+pelvisBox.maxBounds=(0.4,0.2,0.2)</pre><div class="informalfigure"><div class="mediaobject"><img src="images/fixed_boxes.png"><span class="caption"><p>The fixed impact boxes</p></span></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_UsingSkeletonCollider"></a>Chapter&nbsp;3.&nbsp;Using the <span class="literal">SkeletonCollider</span></h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e124">3.1. Creating the <span class="literal">SkeletonCollider</span></a></span></dt><dt><span class="section"><a href="#d0e157">3.2. Enabling skeleton checking</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e124"></a>3.1.&nbsp;Creating the <span class="literal">SkeletonCollider</span></h2></div></div></div><p>Now that we have created our bounding boxes we need to create the
+      <span class="literal">SkeletonCollider</span> for the object and make it interact
+      with the box attachments. A new instance of the
+      <span class="literal">SkeletonCollider</span> class needs be created and added to
+      the entity's <span class="literal">skeletonCollider</span> property, we also need
+      to add the <span class="literal">BoxAttachments</span> to the
+      <span class="literal">SkeletonCollider</span> so it knows which boxes to use for
+      targeting.</p><pre class="programlisting">#Create the Skeleton Collider object
+creature.skeletonCollider=BigWorld.SkeletonCollider()
+#Add our colliders to it
+creature.skeletonCollider.addCollider(headBox)
+creature.skeletonCollider.addCollider(pelvisBox)</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>It is important that the new <span class="literal">SkeletonCollider</span>
+        object is assigned to the entity's <span class="literal">skeletonCollider</span>
+        property as this is recognised by the targeting system.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e157"></a>3.2.&nbsp;Enabling skeleton checking</h2></div></div></div><p>Now the only thing we need to do is to enable skeleton checking in
+      the targeting system. This will mean that any entity that has a
+      <span class="literal">skeletonCollider</span> attribute will use this for
+      targeting rather than the model bounding box. This will need to be done
+      from script whenever you want to enable skeleton targeting.
+      </p><pre class="programlisting">#enable skeleton checks
+BigWorld.target.skeletonCheckEnabled=True</pre><p>You should now only
+      be able to target the creature entity when looking at its head or
+      body.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e168"></a>Chapter&nbsp;4.&nbsp;Saving/loading the <span class="literal">SkeletonCollider</span></h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e173">4.1. Saving</a></span></dt><dt><span class="section"><a href="#d0e198">4.2. Loading</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e173"></a>4.1.&nbsp;Saving</h2></div></div></div><p>The <span class="literal">SkeletonCollider</span> can be saved to a
+      <span class="literal">DataSection</span> by using the <span class="literal">save</span>
+      method. The following python code will create a new xml section called
+      <span class="literal">creature_skeleton.xml</span> in the folder
+      <span class="literal">data</span> and save the <span class="literal">SkeletonCollider</span>
+      to it. </p><pre class="programlisting">import ResMgr
+ds=ResMgr.openSection('data/creature_skeleton.xml',True)
+creature.skeletonCollider.save(ds)
+ds.save()</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e198"></a>4.2.&nbsp;Loading</h2></div></div></div><p>The <span class="literal">SkeletonCollider</span> can be loaded from a
+      <span class="literal">DataSection</span> by using the <span class="literal">load</span>
+      method. After loading the <span class="literal">SkeletonCollider</span>, the
+      <span class="literal">colliders</span> need to be attached to the appropriate
+      nodes in the model. This is why it is important to name your
+      <span class="literal">BoxAttachments</span> using the actual node names from the
+      model.</p><pre class="programlisting">import ResMgr
+ds=ResMgr.openSection('data/creature_skeleton.xml')
+
+# Create and load the SkeletonCollider
+creature.skeletonCollider=BigWorld.SkeletonCollider()
+creature.skeletonCollider.load(ds)
+
+# Attach the collider objects to the model
+for i in range(0,creature.skeletonCollider.nColliders()):
+  collider=creature.skeletonCollider.getCollider(i)
+  creature.model.node(collider.name).attach(collider)</pre></div></div></div></div></body></html>

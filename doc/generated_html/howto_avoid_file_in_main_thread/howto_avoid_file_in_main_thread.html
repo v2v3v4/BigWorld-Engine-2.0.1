@@ -1,0 +1,212 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>How To Avoid Files Being Loaded in the Main Thread</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_Avoid_File_In_Main_Thread"></a>How To Avoid Files Being Loaded in the Main Thread</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Entity_Preloads">1. Entity Preloads</a></span></dt><dt><span class="chapter"><a href="#xref_Entity_Prerequisites">2. <code class="methodname">Entity.prerequisites()</code></a></span></dt><dd><dl><dt><span class="section"><a href="#d0e118">2.1. Using <code class="methodname">Entity.prerequisites()</code></a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Dynamically_Loading_Resources">3. Dynamically loading resources</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e224">3.1. Using <code class="varname">Entity.prerequisites</code> and
+    <code class="methodname">BigWorld.loadResourceListBG()</code></a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Entity_Preloads"></a>Chapter&nbsp;1.&nbsp;Entity Preloads</h2></div></div></div><p>When the client starts up, it will query each entity Python module for
+  a function named <code class="code">preload</code>. Resource names returned by this
+  function will be loaded on client startup and kept in memory for the entire
+  life-time of the client (i.e. it will be instantly available for use at any
+  time). This is useful for commonly used assets to avoid potentially loading
+  and re-loading at a later time. The tradeoff, however, is that the client
+  will take longer to start and will use more memory (if the resource isn't
+  actually being used at some point).</p><p>To use the preloads mechanism, create a global function called
+  <code class="code">preload</code> in the relevant entity module. It must take a single
+  parameter which is a Python list containing resource to preload. Modify this
+  list in place (e.g. using list.append or list concatenation), inserting the
+  string names of each resource to be preloaded by the client.</p><p>For example, <code class="code"> </code></p><pre class="programlisting"># Avatar.py
+import BigWorld
+
+class Avatar( BigWorld.Entity ):
+    def __init__( self ):
+        ...
+
+def preload( list ):
+    list.append( "characters/avatars/human_avatar.model" )
+    list.append( "system/maps/fx_flare_glow.tga" )
+    ...
+ </pre><p><code class="code">The type of resources which can be preloaded are,</code></p><div class="itemizedlist"><ul type="disc"><li><p>Fonts</p></li><li><p>Textures</p></li><li><p>Shaders</p></li><li><p>Models</p></li></ul></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Entity_Prerequisites"></a>Chapter&nbsp;2.&nbsp;<code class="methodname">Entity.prerequisites()</code></h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e118">2.1. Using <code class="methodname">Entity.prerequisites()</code></a></span></dt></dl></div><p>Assets may also be loaded from specific requests issued by the
+  scripted logic. For instance, when the player equips a special item for the
+  first time, that item's model and texture will have to be in memory before
+  it can be displayed. In these cases, if that resource is not already
+  resident, then the main thread will pause, waiting for the load request to
+  complete.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>To prevent this kind of problems from creeping into the game, the
+    BigWorld Client issues a warning in the debug output whenever an access to
+    disk is requested from the main thread while the 3D scene is
+    visible<sup>[<a name="d0e65" href="#ftn.d0e65">1</a>]</sup>. Programmers are encouraged to fix these warnings as soon as
+    they start to pop-up.</p></div><p>The <code class="methodname">prerequisites()</code> method is the recommended
+  method of pre-loading the resources that may be required by the scripts in
+  order to avoid pauses in the gameplay. It allows gameplay programmers to
+  specify which assets can potentially be used by an entity instance. It will
+  guarantee that the entity will not enter the world until all required
+  resources have been loaded from disk, and are ready to be used by the main
+  thread .</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>In a truly dynamic game environment it is not possible to anticipate
+    which resources will be requested by the scripts. In these cases,
+    <code class="methodname">BigWorld.loadResourceListBG()</code> can be used to load
+    further resources.</p></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Although the entity entry into the world may be delayed, that
+    usually is not noticeable, since most entities enter the player AoI at a
+    great distance. Even when that is not the case (after teleporting to a
+    location close to the player, for instance), that is still better than
+    pausing the game or having avatars swing invisible swords</p></div><p>The function differs from <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Entity_Preloads" class="olink">Preloads</a> by working on a per-entity instance
+  basis, instead of globally. That allows a much more rational management of
+  resources, since only assets with real potential of being used are stored in
+  memory at any one time. Entity preloads on the other hand, are kept in
+  memory for the whole life of the client application.</p><p>The fact that prerequisites work on a per-entity instance basis, as
+  opposed to per-entity type, allows programmers to customize the
+  prerequisites list depending on the state of the entity, further adding to
+  the efficiency of the system. When a non-player entity enters the player
+  AoI, for instance, only those items that the entity is currently carrying
+  would be required to load. The Entity Manager system guarantees that the
+  entity's properties are up-to-date before the prerequisites list is
+  requested.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>For details on this function, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html#Client_Python_API" class="olink">Client Python API</a>'s entry <em class="emphasis">Class List
+    <span class="symbol">&#8594;</span> Entity</em>, section <em class="emphasis">Callback Method Documentation</em>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e118"></a>2.1.&nbsp;Using <code class="methodname">Entity.prerequisites()</code></h2></div></div></div><p>The <code class="methodname">Entity.prerequisites()</code> method is, in
+    fact, very straightforward to use. After an entity is initialised,
+    alongside its properties, but before the
+    <code class="methodname">onEnterWorld()</code> method is called, the
+    <code class="classname">EntityManager</code> class calls the
+    <code class="methodname">prerequisites()</code> method on the entity. The method
+    must return a list of all assets that must be loaded before the entity
+    enters the world.</p><p>A simple example is illustrated below:</p><pre class="programlisting">class TradeKiosk( BigWorld.Entity ):
+  MODEL = 'models\kiosk.model'
+
+  def prerequisites( self ):
+    # return list even if it is just a single file
+    return [ TradeKiosk.MODEL ]
+
+  def onEnterWorld( self, prerequisites ):
+    self.model = prerequisites[ TradeKiosk.MODEL ]</pre><p><span class="citetitle">Simple example of loading prerequisite
+    assets</span></p><p>A more realistic scenario is when the required resources vary
+    according to the entity state. In this case, a single entity type is used
+    to model all types of pickable flowers. The <span class="literal">type</span>
+    property is used to differentiate each instance. Since
+    <span class="literal">type</span> is guaranteed to be initialised when the
+    <span class="literal">prerequisites</span> method is called, the script can
+    customise which resources are loaded. In this case, the type property will
+    not change over the lifetime of this particular entity, so we only need to
+    load resource once.</p><pre class="programlisting">class PickableFlower( BigWorld.Entity ):
+  ASSETS = {
+    'lili' : ('models\lili.model', 'effects\sparkles.xml')
+    'daisy' : ('models\daisy.model', 'effects\spirits.xml')
+    'orchid' : ('models\orchid.model', 'effects\petals.xml')
+  }
+
+  PICK_SOUND = 'sounds\pick_flower.wav'
+
+  def prerequisites( self ):
+    prereq = []
+    prereq.append(PickableFlower.ASSETS[self.type][0])
+    prereq.append(PickableFlower.ASSETS[self.type][1])
+    prereq.append(PickableFlower.PICK_SOUND)
+    return prereq
+
+  def onEnterWorld( self, prerequisites ):
+    # model varies according to the type of flower.
+    # prerequisites can be accessed like a map, and returns python objects.
+    # in this case, we know that .model files become PyModels.
+    self.model = prerequisites[ PickableFlower.ASSETS[self.type][0] ]
+    
+    # it is up to us whether or not to hold onto the PyResourceRefs instance
+    # passed into onEnterWorld.  In this case, we will be using the particle
+    # system at a later date, so we'll simply hold onto the object until it
+    # is needed.
+    self.prerequisites = prerequisites
+
+  def onPickEvent( self ):
+    # picking sound effect is constant between types
+    self.model.playSound( PickableFlower.PICK_SOUND )
+
+    # particle effect varies according to the type of flower
+    particles = self.prerequisites[ PickableFlower.ASSETS[self.type][1] ]
+    self.model.root.attach( particles )
+    particles.force(1)</pre><p><span class="citetitle">Another example of load prerequisite
+    assets</span></p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e65" href="#d0e65">1</a>] </sup>For details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html#Client_Python_API" class="olink">Client Python API</a>'s
+        entry <em class="emphasis">Modules <span class="symbol">&#8594;</span> BigWorld</em>, section <em class="emphasis">Member Functions</em>, function <em class="emphasis"><code class="methodname">BigWorld.worldDrawEnabled</code></em>.</p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Dynamically_Loading_Resources"></a>Chapter&nbsp;3.&nbsp;Dynamically loading resources</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e224">3.1. Using <code class="varname">Entity.prerequisites</code> and
+    <code class="methodname">BigWorld.loadResourceListBG()</code></a></span></dt></dl></div><p>There are times when you will need to dynamically load resources for
+  an entity, instead of just when they enter the world. This might be due to a
+  property change causing the entity's model to change, or perhaps the entity
+  switches an item it is holding to one not yet seen before. In these cases,
+  you will need to load and display a new model or other resource, and you
+  will need load them in the background thread.</p><p>The <code class="methodname">BigWorld.loadResourceListBG()</code> method
+  works just like a dynamic version of
+  <code class="varname">Entity.prerequisites</code>, it returns an object which
+  existence ties the lifetime of the requested resources to itself. The actual
+  resource loaded can be retrieved from the
+  <code class="classname">PyResourceRefs</code> instance that is passed into the
+  callback function. The types of Python resources that can be retrieved
+  are:</p><div class="itemizedlist"><ul type="disc"><li><p>Models ( type : PyModel )</p></li><li><p>Particle Systems ( type : PyMetaParticleSystem)</p></li><li><p>Textures ( type : PyTextureProvider )</p></li><li><p>XML files ( type : PyDataSection )</p></li><li><p>FX files ( type : PyMaterial )</p></li></ul></div><p>The <code class="methodname">BigWorld.fetchModel()</code> method can be used
+  to asynchronously load just a <code class="classname">PyModel</code>. For details on
+  this method, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html#Client_Python_API" class="olink">Client Python API</a>.</p><p>The <code class="methodname">Pixie.loadBG</code> method can be used to
+  asynchronously load a <code class="classname">PyMetaParticleSystem</code>. For
+  details on this method, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html#Client_Python_API" class="olink">Client Python API</a>.</p><p>Additionally <code class="methodname">BigWorld.loadResourceListBG()</code>
+  can be used to hold onto C++ only resources, when you know that these are
+  causing a problem. Here are the following types that can be loaded, and held
+  onto, but not retrieved in Python:</p><div class="itemizedlist"><ul type="disc"><li><p>Visuals</p></li><li><p>Lens Effects</p></li></ul></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e224"></a>3.1.&nbsp;Using <code class="varname">Entity.prerequisites</code> and
+    <code class="methodname">BigWorld.loadResourceListBG()</code></h2></div></div></div><p>The <code class="methodname">BigWorld.loadResourceListBG()</code> method is
+    useful for more complicated entities. For example, say you have an entity
+    that can change its look at anytime to any of a large number of
+    combinations. In this case, you can setup your initial look using
+    prerequisites, but there is no way of knowing at which resources will be
+    required in the future.</p><p>In order to implement this case, load the model asynchronously when
+    needed, as in the following example:</p><pre class="programlisting">class PickableFlower( BigWorld.Entity ):
+  ASSETS = {
+    'lili' : ('models\lili.model', 'effects\sparkles.xml')
+    'daisy' : ('models\daisy.model', 'effects\spirits.xml')
+    'orchid' : ('models\orchid.model', 'effects\petals.xml')
+  }
+
+  PICK_SOUND = 'sounds\pick_flower.wav'
+
+  def __init__(self):
+    pass
+
+
+  # This event handler is called after the entity is initialised,
+  # and its initial properties have been set.  We should return
+  # a list of resources that must be loaded into memory before
+  # onEnterWorld is called.
+  def prerequisite(self):
+    prereqs = []
+    prereqs += PickableFlower.PICK_SOUND
+    prereqs += PickableFlower.ASSETS[self.type]
+    return prereqs
+
+
+  # This event handler is called when the entity is first visible to
+  # the client, and when the prerequisite resources have been loaded.
+  # The prerequisites parameter is a PyResourceRefs instance, and
+  # can be used both to access the loaded resources, and to manage
+  # their lifetime.
+  def onEnterWorld(self, prerequisites):
+    self.set_type(-1, prerequisites)
+
+
+  # This event handler is called whenever the entity type property
+  # is changed.  This can occur at anytime.  If we are calling this
+  # directly from onEnterWorld, the resources are already loaded and
+  # we can use them directly.  Otherwise we must queue up an
+  # asynchronous load of the required resources.
+  def set_type( self, old_type, prerequisites = None ):
+    if self.type != old_type:
+        if prerequisites == None:
+            resourceList = PickableFlower.ASSETS[self.type]
+            BigWorld.loadResourceListBG( resourceList, self.onLoad )
+        else:
+            self.onLoad( prerequisites )
+
+
+  # This user-defined callback function is called either when the
+  # loadResourceListBg method has finished, or is called by ourselves
+  # from enterWorld.
+  def onLoad( self, resourceRefs ):
+    self.model = resourceRefs[ PickableFlower.ASSETS[self.type][0] ]
+    self.particles = resourceRefs[ PickableFlower.ASSETS[self.type][1] ]
+    self.model.root.attach( self.particles )
+
+
+  def onPickEvent(self):
+    # picking sound effect is constant between types
+    self.model.playSound(PickableFlower.PICK_SOUND)
+    self.particles.force(1)</pre><p><span class="citetitle">Asynchronously loading the model</span></p></div></div></div></div></body></html>

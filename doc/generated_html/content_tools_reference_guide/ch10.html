@@ -1,0 +1,1858 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;10.&nbsp;NavGen</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Content Tools Reference Guide">
+      <link rel="up" href="index.html" title="Content Tools Reference Guide">
+      <link rel="prev" href="ch09.html" title="Chapter&nbsp;9.&nbsp;Panel System">
+      <link rel="next" href="ch11.html" title="Chapter&nbsp;11.&nbsp;3ds Max and Maya Exporters">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/content_tools_reference_guide/ch10.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;10.&nbsp;NavGen</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch09.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch11.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_NavGen"></a>Chapter&nbsp;10.&nbsp;NavGen
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch10.html#xref_Navpoly_Generator_Menu_Items">10.1. NavPoly Generator menu items</a></span></dt>
+                  <dt><span class="section"><a href="ch10.html#d0e29321">10.2. NavPoly Generator status bar</a></span></dt>
+                  <dt><span class="section"><a href="ch10.html#d0e29448">10.3. NavPoly Generator keyboard shortcuts</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch10.html#d0e29453">10.3.1. Symbols</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch10.html#xref_Navpoly_Renderer_Keyboard_Shortcuts">10.4. NavPoly Renderer keyboard shortcuts</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch10.html#d0e29541">10.4.1. Key modifiers</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e29555">10.4.2. Edit keys</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e29592">10.4.3. Symbols</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e29728">10.4.4. Alphabetic keys</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch10.html#d0e29774">10.5. NavPoly Generator mouse controls</a></span></dt>
+                  <dt><span class="section"><a href="ch10.html#xref_Navpoly_Renderer_Mouse_Controls">10.6. NavPoly Renderer mouse controls</a></span></dt>
+                  <dt><span class="section"><a href="ch10.html#xref_Statistics_Dialog_Box">10.7. Statistics dialog box</a></span></dt>
+                  <dt><span class="section"><a href="ch10.html#xref_Cluster_Generate_Dialog_Box">10.8. Cluster Generate dialog box</a></span></dt>
+                  <dt><span class="section"><a href="ch10.html#xref_Navpoly_Info_Dialog_Box">10.9. Navpoly Info dialog box</a></span></dt>
+                  <dt><span class="section"><a href="ch10.html#xref_Navpolys_Vertices_And_Adjacency">10.10. Navpolys, vertices and adjacency</a></span></dt>
+                  <dt><span class="section"><a href="ch10.html#xref_Generating_The_Navmesh_On_Multiple_Machines">10.11. Generating the navmesh on multiple machines</a></span></dt>
+                  <dt><span class="section"><a href="ch10.html#xref_Generating_The_Navmesh">10.12. Generating the navmesh</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch10.html#xref_Processing_Time">10.12.1. Processing time</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e30494">10.12.2. Inspecting the navmesh</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch10.html#xref_Moving_Entities">10.13. Moving entities</a></span></dt>
+                  <dt><span class="section"><a href="ch10.html#xref_Changing_Settings">10.14. Changing settings</a></span></dt>
+                  <dt><span class="section"><a href="ch10.html#d0e30710">10.15. Discontinuous navmesh</a></span></dt>
+               </dl>
+            </div>
+            <p>NavGen is the BigWorld tool used to create the navigation mesh. The
+                 navigation mesh is a space-covering connected set of polygonal prisms. It
+                 allows an entity to navigate between any two arbitrary points in the
+                 scene.
+            </p>
+            <p>After you have created a space with WorldEditor, or changed a chunk,
+                 you can open NavGen and generate the navigation mesh.
+            </p>
+            <p>NavGen uses the exclusive locks acquired in WorldEditor with the Lock
+                 Server (<span class="literal">bwlockd</span>). &#8212; for details, see <a href="ch12.html" title="Chapter&nbsp;12.&nbsp;Lock Server (BWLockD)"><i xmlns:xlink="http://www.w3.org/1999/xlink">Lock Server (BWLockD)</i></a>.
+            </p>
+            <p>When you open NavGen, you are presented with two main windows and an
+                 error log:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">NavPoly Renderer</em> &#8212; Displays the
+                              3D scene of the space.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">NavPoly Generator</em> &#8212; Displays the
+                              output from the navpoly generation.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Error Log</em> &#8212; Outputs information
+                              messages and error messages.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>The main windows both use the following colours to draw the chunk
+                 elements:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">Blue</em> &#8212; Navpoly
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Red</em> &#8212; Selected navpoly
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Black</em> &#8212; Empty space
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>Both windows are illustrated below:</p>
+            <div class="informalfigure">
+               <div class="mediaobject"><img src="images/navgen_navpoly_renderer_main_window.png" height=""><span class="caption">
+                     <p>Navpoly Renderer</p></span></div>
+            </div>
+            <div class="informalfigure">
+               <div class="mediaobject"><img src="images/navgen_navpoly_generator_main_window.png" height=""><span class="caption">
+                     <p>Navpoly Generator</p></span></div>
+            </div>
+            <p>A navpoly might be selected in either window, and is rendered in red
+                 in both of them
+            </p>
+            <p>Double-clicking a navpoly on either window invokes the Navpoly Info
+                 dialog box, with height, and vertex coordinates and adjacency information on
+                 the selected navpoly. For more details, see <a href="ch10.html#xref_Navpoly_Info_Dialog_Box" title="10.9.&nbsp;Navpoly Info dialog box">Navpoly Info dialog box</a>.
+            </p>
+            <p>Each edge on a navpoly can be shared with the edge of an adjacent
+                 region. Alternatively, an edge may be marked as being adjacent to a
+                 different chunk. This means that movement between these two regions is
+                 allowed.
+            </p>
+            <div class="informalfigure">
+               <div class="mediaobject"><img src="images/navgen_navpoly_edge_demarcation_diagram.png" height=""><span class="caption">
+                     <p>Navpoly edge demarcation</p></span></div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Navpoly_Generator_Menu_Items"></a>10.1.&nbsp;NavPoly Generator menu items
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The list below describes the menu items available in NavPoly
+                      Generator:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">File <span class="symbol">&#8594;</span>
+                                      Open space</em></p>
+                        <p>Used to open a space inside NavGen.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">File <span class="symbol">&#8594;</span>
+                                      Open</em></p>
+                        <p>Opens the Open dialog box, where you can select the adjacency
+                                   map or chunk file that you want to load.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">File <span class="symbol">&#8594;</span>
+                                      Remove all NavGen data</em></p>
+                        <p>Removes the NavGen data for the current space.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">File <span class="symbol">&#8594;</span>
+                                      Generate all</em></p>
+                        <p>Generates the navigation mesh for all chunks in the space that
+                                   have changed since the last generation.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">File <span class="symbol">&#8594;</span>
+                                      Generate all overwrite</em></p>
+                        <p>Generates the navigation mesh for all chunks in the space,
+                                   regardless of whether it has changed since the last generation.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">File <span class="symbol">&#8594;</span>
+                                      Cluster generate</em></p>
+                        <p>Opens the <em class="emphasis">Cluster Generate</em>
+                                   dialog box (for details, see <a href="ch10.html#xref_Cluster_Generate_Dialog_Box" title="10.8.&nbsp;Cluster Generate dialog box">Cluster Generate dialog box</a>), which allows you to
+                                   generate the navigation mesh in parallel (across multiple computers)
+                                   for all chunks in the space that have changed since the last
+                                   generation.
+                        </p>
+                        <p>For details, see <a href="ch10.html#xref_Generating_The_Navmesh_On_Multiple_Machines" title="10.11.&nbsp;Generating the navmesh on multiple machines">Generating the navmesh on multiple machines</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">File <span class="symbol">&#8594;</span>
+                                      Exit</em></p>
+                        <p>Quits the application.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">View <span class="symbol">&#8594;</span>
+                                      Adjacencies</em></p>
+                        <p>Toggles the visibility of grid point adjacencies as white lines
+                                   overlaying the chunk.
+                        </p>
+                        <p>These points are created during the flood fill phase of the
+                                   generation of the navigation mesh &#8212; for details see <a href="ch10.html#xref_Navpolys_Vertices_And_Adjacency" title="10.10.&nbsp;Navpolys, vertices and adjacency">Navpolys, vertices and adjacency</a>.
+                        </p>
+                        <p>Like BSP nodes, adjacencies will not be visible if the chunk was
+                                   loaded from a chunk file; only when directly generated for a single
+                                   chunk or loaded from a <span class="literal">.tga</span> file.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">View <span class="symbol">&#8594;</span>
+                                      BSP nodes</em></p>
+                        <p>Toggles the visibility of BSP nodes to a given depth of the BSP
+                                   tree.
+                        </p>
+                        <p>These nodes are created during the generation of the navigation
+                                   mesh &#8212; for details see <a href="ch10.html#xref_Generating_The_Navmesh" title="10.12.&nbsp;Generating the navmesh">Generating the navmesh</a>.
+                        </p>
+                        <p>Like adjacencies, BSP nodes will not be visible if the chunk was
+                                   loaded from a chunk file; only when directly generated for a single
+                                   chunk or loaded from a <span class="literal">.tga</span> file.
+                        </p>
+                        <p>The <span class="literal">.</span> (Period) and <span class="literal">,</span>
+                                   (Comma) keys increase and decrease the depth displayed,
+                                   respectively.
+                        </p>
+                        <p>The BSP node is drawn as a polygonal prism with an additive
+                                   colour. The list below describes how the BSP nodes will be
+                                   displayed:
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><em class="emphasis">Blue</em></p>
+                                 <p>The node is completely traversable,
+                                                <em class="emphasis">i.e.</em>, it is a navpoly.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis">Green</em></p>
+                                 <p>The node is a combination of traversable and non-traversable
+                                                regions.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis">Transparent</em></p>
+                                 <p>The node is completely non-traversable.</p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">View <span class="symbol">&#8594;</span>
+                                      Polygon area</em></p>
+                        <p>Toggles the visibility of the navpolys on both the <em class="emphasis">Renderer</em> and the <em class="emphasis">Generator</em> windows.
+                        </p>
+                        <p>If selected, the navpolys in the chunk will be rendered in blue,
+                                   and the selected one in red.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">View <span class="symbol">&#8594;</span>
+                                      Polygon borders</em></p>
+                        <p>Toggles the visibility of the borders of the navpolys on both
+                                   the <em class="emphasis">Renderer</em> and the <em class="emphasis">Generator</em> windows.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">View <span class="symbol">&#8594;</span>
+                                      Statistics</em></p>
+                        <p>Opens the <em class="emphasis">Statistics</em> dialog
+                                   box, with information about the chunk.
+                        </p>
+                        <p>For more details, see <a href="ch10.html#xref_Statistics_Dialog_Box" title="10.7.&nbsp;Statistics dialog box">Statistics dialog box</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">View <span class="symbol">&#8594;</span>
+                                      NavPoly info</em></p>
+                        <p>Opens the <em class="emphasis">Navpoly Info</em> dialog
+                                   box, with information about the selected navpoly.
+                        </p>
+                        <p>For more details, see <a href="ch10.html#xref_Navpoly_Info_Dialog_Box" title="10.9.&nbsp;Navpoly Info dialog box">Navpoly Info dialog box</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">View <span class="symbol">&#8594;</span>
+                                      Rendered scene</em></p>
+                        <p>Opens the <em class="emphasis">NavPoly Renderer</em>
+                                   window (if it is closed) and brings it to the front.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">View <span class="symbol">&#8594;</span>
+                                      Error log</em></p>
+                        <p>Toggles the display of the <em class="emphasis">Error
+                                      Log</em> dialog box.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Zoom <span class="symbol">&#8594;</span>
+                                      In on navmesh</em></p>
+                        <p>Zooms in the chunk view in the <em class="emphasis">NavPoly
+                                      Generator</em> window.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Zoom <span class="symbol">&#8594;</span>
+                                      Out on navmesh</em></p>
+                        <p>Zooms out the chunk view in the <em class="emphasis">NavPoly
+                                      Generator</em> window.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Chunk <span class="symbol">&#8594;</span>
+                                      Display<sup>A</sup></em></p>
+                        <p>Loads the navigation mesh for the chunk in which the camera
+                                   currently is, and displays it.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Chunk <span class="symbol">&#8594;</span>
+                                      Generate<sup>A</sup></em></p>
+                        <p>Generates the navigation mesh for the chunk in which the camera
+                                   currently is, and displays it.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Chunk <span class="symbol">&#8594;</span> Generate
+                                      shrunk<sup>A</sup></em></p>
+                        <p>Performs the same operation as the <em class="emphasis">Generate</em> menu item (this item was implemented
+                                   for previous versions, when multiple girths were not
+                                   supported).
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Chunk <span class="symbol">&#8594;</span>
+                                      Reannotate<sup>A</sup></em></p>
+                        <p>Reannotates the disconnected edges of the navigation mesh for
+                                   the current chunk (annotation is the final step of navigation mesh
+                                   generation).
+                        </p>
+                        <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                           <h3 class="title">Note</h3>
+                           <p>This functionality is now <em class="emphasis">deprecated</em>.
+                           </p>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Help <span class="symbol">&#8594;</span>
+                                      Help</em></p>
+                        <p>Opens the <em class="emphasis">Help</em> dialog
+                                   box.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p><em class="emphasis"><em class="emphasis">A</em> &#8212; The shortcuts
+                         available for these menu items must be used in the <em class="emphasis">NavPoly Renderer</em> window. For details, see <a href="ch10.html#xref_Navpoly_Renderer_Keyboard_Shortcuts" title="10.4.&nbsp;NavPoly Renderer keyboard shortcuts">NavPoly Renderer keyboard shortcuts</a>.</em></p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e29321"></a>10.2.&nbsp;NavPoly Generator status bar
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The status bar displays information about the current chunk. A
+                      typical status bar is illustrated below:
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/navgen_navpoly_generator_status_bar.png" height=""><span class="caption">
+                        <p>NavPoly Generator status bar</p></span></div>
+               </div>
+               <p>The list below describes the pieces of information displayed in the
+                      status bar, as they appear:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Mesh's girth label</em> (in the
+                                   example, <em class="emphasis">Girth 0.5</em>)
+                        </p>
+                        <p>Girth label of the navigation mesh currently displayed, as
+                                   configured in the file
+                                   <span class="literal">bigworld/tools/misc/navgen_settings.xml</span>. For more
+                                   details, see <a href="ch10.html#xref_Changing_Settings" title="10.14.&nbsp;Changing settings">Changing settings</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Local chunk coordinates</em> (in the
+                                   example, <em class="emphasis">Lpoint (2.61, 4.31)</em>)
+                        </p>
+                        <p>Location of the mouse cursor in local chunk coordinates.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Global space coordinates</em> (in
+                                   the example, <em class="emphasis">Point (-97.39,
+                                      4.31)</em>)
+                        </p>
+                        <p>Location of the mouse cursor in global space coordinates.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Local navigation mesh
+                                      coordinates</em> (in the example, <em class="emphasis">Grid
+                                      (6,10)</em>)
+                        </p>
+                        <p>Location of the mouse cursor in local navigation mesh
+                                   coordinates.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>In addition, when calculations are done (via <em class="emphasis">Generate All</em>, <em class="emphasis">Generate All
+                         Overwrite</em>, or <em class="emphasis">Generate Cluster</em>
+                      menu items &#8212; for more details, see <a href="ch10.html#xref_Navpoly_Generator_Menu_Items" title="10.1.&nbsp;NavPoly Generator menu items">NavPoly Generator menu items</a>), the status bar displays
+                      the following information:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Number of chunk being processed</em>
+                                   (Text: <em class="emphasis">Calculating chunk
+                                      <span class="literal"><em class="replaceable"><code>n1</code></em></span> of
+                                      <span class="literal"><em class="replaceable"><code>n2</code></em></span></em>)
+                        </p>
+                        <p>Number of chunks that have been calculated, and how many are to
+                                   do in total.
+                        </p>
+                        <p>During cluster generation<sup>A</sup>, the
+                                   number of calculated chunks includes the number of chunks skipped by
+                                   your computer (these chunks are calculated by other computers in the
+                                   cluster).
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Progress of calculation of current
+                                      chunk</em> (Text: <em class="emphasis">Generation Status:
+                                      <span class="literal"><em class="replaceable"><code>stage</code></em></span>: Processed
+                                      <span class="literal"><em class="replaceable"><code>n1</code></em></span> points (current stack
+                                      size
+                                      <span class="literal"><em class="replaceable"><code>n2</code></em></span>)</em>)
+                        </p>
+                        <p>Rough estimate of how much calculation has been done in the
+                                   current chunk.
+                        </p>
+                        <p>There are usually about 40,000 points to process in a
+                                   chunk.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p><em class="emphasis"><em class="emphasis">A</em> &#8212; For details, see
+                         <a href="ch10.html#xref_Generating_The_Navmesh_On_Multiple_Machines" title="10.11.&nbsp;Generating the navmesh on multiple machines">Generating the navmesh on multiple machines</a>.</em></p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e29448"></a>10.3.&nbsp;NavPoly Generator keyboard shortcuts
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The sections below list the keyboard shortcuts available for NavPoly
+                      Generator.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e29453"></a>10.3.1.&nbsp;Symbols
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">+</span> (Plus
+                                           sign)</em></p>
+                           <p>Zooms into the chunk view in the <em class="emphasis">NavPoly
+                                           Generator</em> window.
+                           </p>
+                           <p>Performs the same function as the <em class="emphasis">Zoom
+                                           <span class="symbol">&#8594;</span> In</em> menu
+                                        item.<sup>A</sup></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">-</span> (Minus
+                                           sign)</em></p>
+                           <p>Zooms out of the chunk view in the <em class="emphasis">NavPoly Generator</em> window.
+                           </p>
+                           <p>Performs the same function as <em class="emphasis">Zoom
+                                           <span class="symbol">&#8594;</span> Out</em> menu
+                                        item.<sup>A</sup></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">[</span> (Square left
+                                           bracket)</em></p>
+                           <p>Decreases the girth for which to display the navigation
+                                        mesh.<sup>B</sup></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">]</span> (Square right
+                                           bracket)</em></p>
+                           <p>Increases the girth for which to display the navigation
+                                        mesh.<sup>B</sup></p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p><em class="emphasis"><em class="emphasis">A</em> &#8212; For more
+                              details, see <a href="ch10.html#xref_Navpoly_Generator_Menu_Items" title="10.1.&nbsp;NavPoly Generator menu items">NavPoly Generator menu items</a>.</em></p>
+                  <p><em class="emphasis"><em class="emphasis">B</em> &#8212; The available
+                              values for girth are defined in
+                              <span class="literal">bigworld/tools/misc/navgen_settings.xml</span>. For more
+                              details, see <a href="ch10.html#xref_Changing_Settings" title="10.14.&nbsp;Changing settings">Changing settings</a>.</em></p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Navpoly_Renderer_Keyboard_Shortcuts"></a>10.4.&nbsp;NavPoly Renderer keyboard shortcuts
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The sections below list the keyboard shortcuts available for NavPoly
+                      Renderer.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e29541"></a>10.4.1.&nbsp;Key modifiers
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span></em></p>
+                           <p>Increases the navigation speed by a factor of 5. Can be used
+                                        in conjunction with <span class="literal">Caps Lock</span>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e29555"></a>10.4.2.&nbsp;Edit keys
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Caps
+                                              Lock</span></em></p>
+                           <p>Increases the navigation speed by a factor of 10. Can be used
+                                        in conjunction with <span class="literal">Ctrl</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Enter</span></em></p>
+                           <p>Performs the same function as the <em class="emphasis">Chunk
+                                           <span class="symbol">&#8594;</span> Display</em> menu
+                                        item<sup>A</sup>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p><em class="emphasis"><em class="emphasis">A</em> &#8212; For more
+                              details, see <a href="ch10.html#xref_Navpoly_Generator_Menu_Items" title="10.1.&nbsp;NavPoly Generator menu items">NavPoly Generator menu items</a>.</em></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e29592"></a>10.4.3.&nbsp;Symbols
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">!</span> (Exclamation
+                                           mark)</em></p>
+                           <p>Generates the navigation mesh for the chunk in which the
+                                        camera is, and displays it.
+                           </p>
+                           <p>Performs the same function as the <em class="emphasis">NavPoly Generator's Chunk <span class="symbol">&#8594;</span> Generate</em> menu
+                                        item<sup>A</sup>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">*</span>
+                                           (Asterisk)</em></p>
+                           <p>Reannotates the disconnected edges of the navigation mesh for
+                                        the current chunk.
+                           </p>
+                           <p>Performs the same function as the <em class="emphasis">NavPoly Generator's Chunk <span class="symbol">&#8594;</span> Reannotate</em> menu
+                                        item<sup>A</sup>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">,</span>
+                                           (Comma)</em></p>
+                           <p>Increases the depth displayed of the BSP nodes.</p>
+                           <p>To display BSP nodes, select the <em class="emphasis">NavPoly
+                                           Generator's View <span class="symbol">&#8594;</span> BSP
+                                           Nodes</em> menu item<sup>A</sup>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">.</span>
+                                           (Period)</em></p>
+                           <p>Decreases the depth displayed of the BSP nodes.</p>
+                           <p>To display BSP nodes, select the <em class="emphasis">NavPoly
+                                           Generator's View <span class="symbol">&#8594;</span> BSP
+                                           Nodes</em> menu item<sup>A</sup>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">@</span> (At
+                                           sign)</em></p>
+                           <p>Generates the navigation mesh for the chunk in which the
+                                        camera is, and displays it.
+                           </p>
+                           <p>Performs the same function as the <em class="emphasis">NavPoly Generator's Chunk <span class="symbol">&#8594;</span> Generate Shrunk</em> menu
+                                        item<sup>A</sup>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">[</span> (Left square
+                                           bracket)</em></p>
+                           <p>Decreases the girth for which to display the navigation
+                                        mesh.<sup>B</sup></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">]</span> (Right square
+                                           bracket)</em></p>
+                           <p>Increases the girth for which to display the navigation
+                                        mesh.<sup>B</sup></p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p><em class="emphasis"><em class="emphasis">A</em> &#8212; For details, see
+                              <a href="ch10.html#xref_Navpoly_Generator_Menu_Items" title="10.1.&nbsp;NavPoly Generator menu items">NavPoly Generator menu items</a>.</em></p>
+                  <p><em class="emphasis"><em class="emphasis">B</em> &#8212; The available
+                              values for girth are defined in
+                              <span class="literal">bigworld/tools/misc/navgen_settings.xml</span>. For details,
+                              see <a href="ch10.html#xref_Changing_Settings" title="10.14.&nbsp;Changing settings">Changing settings</a>.</em></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e29728"></a>10.4.4.&nbsp;Alphabetic keys
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">A</span></em></p>
+                           <p>Moves the camera to the left</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">D</span></em></p>
+                           <p>Moves the camera to the right.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">E</span></em></p>
+                           <p>Moves the camera upwards.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Q</span></em></p>
+                           <p>Moves the camera downwards.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">S</span></em></p>
+                           <p>Moves the camera backwards</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">W</span></em></p>
+                           <p>Moves the camera forward.</p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e29774"></a>10.5.&nbsp;NavPoly Generator mouse controls
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The list below describes the mouse controls available for NavPoly
+                      Generator.
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Left button click</em></p>
+                        <p>Selects the navpoly.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Left button double-click</em></p>
+                        <p>Opens the <em class="emphasis">NavPoly Info</em> dialog
+                                   box for the selected navpoly.
+                        </p>
+                        <p>For more details, see <a href="ch10.html#xref_Navpoly_Info_Dialog_Box" title="10.9.&nbsp;Navpoly Info dialog box">Navpoly Info dialog box</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Right button drag</em></p>
+                        <p>Moves the navigation mesh in the direction of the mouse
+                                   movement.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Scroll wheel rotate</em></p>
+                        <p>Zooms the navigation mesh in and out, according to the direction
+                                   of scroll.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Navpoly_Renderer_Mouse_Controls"></a>10.6.&nbsp;NavPoly Renderer mouse controls
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The list below describes the mouse controls available for NavPoly
+                      Renderer.
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Left button click</em></p>
+                        <p>Selects the navpoly.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Left button double-click</em></p>
+                        <p>Opens the <em class="emphasis">NavPoly Info</em> dialog
+                                   box for the selected navpoly.
+                        </p>
+                        <p>For more details, see <a href="ch10.html#xref_Navpoly_Info_Dialog_Box" title="10.9.&nbsp;Navpoly Info dialog box">Navpoly Info dialog box</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Right button drag</em></p>
+                        <p>Rotates the camera in the direction of the drag.</p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Statistics_Dialog_Box"></a>10.7.&nbsp;Statistics dialog box
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This dialog box is accessed via the <em class="emphasis">View
+                         <span class="symbol">&#8594;</span> Statistics</em> menu item (for
+                      details, see <a href="ch10.html#xref_Navpoly_Generator_Menu_Items" title="10.1.&nbsp;NavPoly Generator menu items">NavPoly Generator menu items</a>), and
+                      displays statistics regarding the current chunk.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/navgen_dialog_box_statistics.png" height=""><span class="caption">
+                        <p>Statistics dialog box</p></span></div>
+               </div>
+               <p>The list below describes the information displayed in the dialog
+                      box:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">BSP nodes</em></p>
+                        <p>Number of BSP nodes in the navigation mesh.</p>
+                        <p>These nodes are created during the generation of the navigation
+                                   mesh &#8212; for more details see <a href="ch10.html#xref_Generating_The_Navmesh" title="10.12.&nbsp;Generating the navmesh">Generating the navmesh</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Navigation polygons</em></p>
+                        <p>Number of navpolys in the navigation mesh.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Navpoly vertices</em></p>
+                        <p>Sum of the number of vertices of all navpolys in the navigation
+                                   mesh.
+                        </p>
+                        <p>Most vertices will be counted more than once, since they might
+                                   belong to more than one navpoly. This way, the number displayed for
+                                   this field is the number of <span class="literal">&lt;vertex&gt;</span> tags
+                                   present in the generated <span class="literal">.chunk</span> file for the chunk
+                                   navigation mesh.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Navpoly adjacencies</em></p>
+                        <p>Number of adjacencies of the vertices of all navpolys in the
+                                   navigation mesh.
+                        </p>
+                        <p>Note that adjacency is not generated for a vertex bordering an
+                                   empty space.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Binary file size</em></p>
+                        <p>Size of the navigation mesh in the <span class="literal">.cdata</span>
+                                   binary file.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Cluster_Generate_Dialog_Box"></a>10.8.&nbsp;Cluster Generate dialog box
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This dialog box is accessed via the <em class="emphasis">File
+                         <span class="symbol">&#8594;</span> Cluster Generate</em> menu
+                      item, and displays options to run NavGen on the space across multiple
+                      machines (for details, see <a href="ch10.html#xref_Generating_The_Navmesh_On_Multiple_Machines" title="10.11.&nbsp;Generating the navmesh on multiple machines">Generating the navmesh on multiple machines</a>).
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/navgen_dialog_box_cluster_generate.png" height=""><span class="caption">
+                        <p>Cluster Generate dialog box</p></span></div>
+               </div>
+               <p>The list below describes the information displayed in the dialog
+                      box:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Total number of
+                                      computers</em></p>
+                        <p>Number of computers processing space data in parallel.</p>
+                        <p>This number should be the same in all computers.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">My index</em></p>
+                        <p>Unique identifier for the computer processing space data.</p>
+                        <p>This number should be unique.</p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Navpoly_Info_Dialog_Box"></a>10.9.&nbsp;Navpoly Info dialog box
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This dialog box is accessed via the <em class="emphasis">View
+                         <span class="symbol">&#8594;</span> Navpoly Info</em> menu item,
+                      or by double-clicking a navpoly on either window, and displays height and
+                      vertex coordinate and adjacency information for the selected
+                      navpoly.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/navgen_dialog_box_navpoly_info.png" height=""><span class="caption">
+                        <p>Navpoly Info dialog box</p></span></div>
+               </div>
+               <p>The list below describes the information displayed in the dialog
+                      box:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Navpoly ID</em></p>
+                        <p>Integer used as a unique identifier for the navpoly in the
+                                   chunk.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Height</em></p>
+                        <p>Vertical range of the navpoly prism.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Vertex table</em></p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><em class="emphasis">Index</em></p>
+                                 <p>Vertex sequential number</p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis">Local x</em>, <em class="emphasis">Local z</em></p>
+                                 <p>XY coordinates of the vertex in local coordinates.</p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis">World x</em>, <em class="emphasis">World z</em></p>
+                                 <p>XY coordinates of the vertex in world coordinates.</p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis">Adjacent ID</em></p>
+                                 <p>ID of the element adjacent to the vertex.</p>
+                                 <p>The list below displays how the possible elements adjacent
+                                                to the vertex are displayed:
+                                 </p>
+                                 <div class="itemizedlist">
+                                    <ul type="square">
+                                       <li>
+                                          <p><em class="emphasis">Other navpoly in same
+                                                                chunk</em></p>
+                                          <p><em class="emphasis">Displayed as:</em> Navpoly
+                                                             ID
+                                          </p>
+                                       </li>
+                                       <li>
+                                          <p><em class="emphasis">Empty area</em></p>
+                                          <p><em class="emphasis">Displayed as:</em>
+                                                             Blank
+                                          </p>
+                                       </li>
+                                       <li>
+                                          <p><em class="emphasis">Chunk</em></p>
+                                          <p><em class="emphasis">Displayed as:</em> Literal
+                                                             <span class="literal">'Other Chunk'</span></p>
+                                       </li>
+                                       <li>
+                                          <p><em class="emphasis">Obstacle</em></p>
+                                          <p><em class="emphasis">Displayed as:</em> Literal
+                                                             <span class="literal">'Ahead: [S|M|R|C][S|M|R|C] [S|M|R|C][S|M|R|C]
+                                                                [S|M|R|C][S|M|R|C]'</span></p>
+                                          <p>The text after the literal contains information about
+                                                             obstacles ahead, 45&deg; to the left, and 45&deg; to the right of the
+                                                             vertex.
+                                          </p>
+                                          <p>It consists of three pairs of obstacle information: the
+                                                             first letter of the pair contains information about the bottom
+                                                             half of the corresponding direction, while the second letter
+                                                             contains information about the top half of the corresponding
+                                                             direction.
+                                          </p>
+                                          <p>The list below describes the possible values of the
+                                                             pairs' letters and the corresponding obstacle status:
+                                          </p>
+                                          <div class="itemizedlist">
+                                             <ul type="disc">
+                                                <li>
+                                                   <p><em class="emphasis">S</em> &#8212; Solid
+                                                   </p>
+                                                </li>
+                                                <li>
+                                                   <p><em class="emphasis">M</em> &#8212; Mixed
+                                                   </p>
+                                                </li>
+                                                <li>
+                                                   <p><em class="emphasis">R</em> &#8212; Reserved
+                                                   </p>
+                                                </li>
+                                                <li>
+                                                   <p><em class="emphasis">C</em> &#8212; Clear
+                                                   </p>
+                                                </li>
+                                             </ul>
+                                          </div>
+                                          <p>For example, an Adjacent ID column with value of
+                                                             <span class="literal">'Ahead: SM SC MM'</span> stands for the following
+                                                             information about obstacles and the vertex:
+                                          </p>
+                                          <div class="itemizedlist">
+                                             <ul type="disc">
+                                                <li>
+                                                   <p><em class="emphasis">Ahead</em></p>
+                                                   <div class="itemizedlist">
+                                                      <ul type="circle">
+                                                         <li>
+                                                            <p><em class="emphasis">Bottom half</em> &#8212;
+                                                                                       Solid
+                                                            </p>
+                                                         </li>
+                                                         <li>
+                                                            <p><em class="emphasis">Top half</em> &#8212;
+                                                                                       Mixed
+                                                            </p>
+                                                         </li>
+                                                      </ul>
+                                                   </div>
+                                                </li>
+                                                <li>
+                                                   <p><em class="emphasis">45&ordm; to the
+                                                                             left</em></p>
+                                                   <div class="itemizedlist">
+                                                      <ul type="circle">
+                                                         <li>
+                                                            <p><em class="emphasis">Bottom half</em> &#8212;
+                                                                                       Solid
+                                                            </p>
+                                                         </li>
+                                                         <li>
+                                                            <p><em class="emphasis">Top half</em> &#8212;
+                                                                                       Clear
+                                                            </p>
+                                                         </li>
+                                                      </ul>
+                                                   </div>
+                                                </li>
+                                                <li>
+                                                   <p><em class="emphasis">45&ordm; to the
+                                                                             right</em></p>
+                                                   <div class="itemizedlist">
+                                                      <ul type="circle">
+                                                         <li>
+                                                            <p><em class="emphasis">Bottom half</em> &#8212;
+                                                                                       Mixed
+                                                            </p>
+                                                         </li>
+                                                         <li>
+                                                            <p><em class="emphasis">Top half</em> &#8212;
+                                                                                       Mixed
+                                                            </p>
+                                                         </li>
+                                                      </ul>
+                                                   </div>
+                                                </li>
+                                             </ul>
+                                          </div>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Navpolys_Vertices_And_Adjacency"></a>10.10.&nbsp;Navpolys, vertices and adjacency
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>A chunk is divided into navpolys, which are convex polygons. The
+                      polygon indicates an area where it is clear to move. Therefore, if a room
+                      is completely empty, it will have a single navpoly. However, if it has a
+                      bench in the middle, then it will have four navpolys, to avoid covering
+                      the bench &#8212;<em class="emphasis">i.e.</em>, there will be a hole in the passable
+                      area of that chunk. Entities can move around a navpoly, and between
+                      adjacent ones.
+               </p>
+               <p>The polygons have a height too, so they are actually polygonal
+                      prisms. The navigation mesh works in 3D for scene elements such as
+                      staircases and overhangs. Even though it can be used for flying entities,
+                      enhancements are needed for better support.
+               </p>
+               <p>For NavGen, a vertex is a continuous portion of the navpoly border
+                      that is adjacent to only one other navpoly, chunk, object, or empty space.
+                      It means that if one side of a navpoly is adjacent to 2 others, then that
+                      side has 2 vertices.
+               </p>
+               <p>In the illustration below, note the following:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Navpoly 2 has one side that is adjacent to navpolys 6 and 7.
+                                   NavGen will generate one vertex for each navpoly adjacency.
+                        </p>
+                     </li>
+                     <li>
+                        <p>NavGen might generate a vertex with no adjacency for vertices
+                                   that are bordering an empty space. For the portion of the side of
+                                   navpoly 3 that is adjacent to an empty space, NavGen will generate 1
+                                   vertex, but no adjacency.
+                        </p>
+                     </li>
+                     <li>
+                        <p>NavGen generates vertex data for each navpoly at a time. That
+                                   means that vertices shared between navpolys in the same chunk are
+                                   present in the resulting <span class="literal">.chunk</span> files twice &#8212; once
+                                   for each navpoly. This excludes vertices that are adjacent to another
+                                   chunk.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The illustration below shows an example of a chunk with 11 navpolys
+                      and 2 empty spaces, and a table with the number of vertices and
+                      adjacencies for each of them.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/navgen_navpolys_vertices_and_adjacency_diagram.png" height=""><span class="caption">
+                        <p>Navpolys In Chunk vs. Chunk Statistics</p></span></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Generating_The_Navmesh_On_Multiple_Machines"></a>10.11.&nbsp;Generating the navmesh on multiple machines
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Running NavGen on large spaces can take some time to process. To
+                      reduce processing time, it is possible to divide the computation across
+                      multiple computers, each one working only on a subset of chunks (first
+                      make sure that each computer has an up-to-date copy of the space being
+                      calculated). It is best to use cluster generation in conjunction with a
+                      version control system, such as CVS or SVN.
+               </p>
+               <p>Select the <em class="emphasis">File <span class="symbol">&#8594;</span> Cluster Generate</em> menu item (for
+                      details, see <a href="ch10.html#xref_Navpoly_Generator_Menu_Items" title="10.1.&nbsp;NavPoly Generator menu items">NavPoly Generator menu items</a>), then in
+                      the <em class="emphasis">Cluster Generate</em> dialog box (for
+                      details, see <a href="ch10.html#xref_Cluster_Generate_Dialog_Box" title="10.8.&nbsp;Cluster Generate dialog box">Cluster Generate dialog box</a>), enter
+                      the number of computers that will be generating the cluster, and a unique
+                      index for each of them. The computers will proceed individually (there is
+                      no coordination between machines). To get the results from each computer
+                      back into one space use the version control system's check-in
+                      functionality (<em class="emphasis">e.g.</em>, <span class="literal">cvs commit</span>).
+                      There should be no overlap between the computers over the changed files,
+                      so merging individual files should be unnecessary.
+               </p>
+               <p>If you stop the process (because, for example, NavGen did not finish
+                      overnight and you wish to use the machines again), then you can continue
+                      the calculation process when convenient. In this case, NavGen will quickly
+                      skip over already calculated chunks.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Generating_The_Navmesh"></a>10.12.&nbsp;Generating the navmesh
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Besides generating the navigation mesh for the whole space, it is
+                      also possible to generate it just for a specific chunk.
+               </p>
+               <p>To do so, position the camera in the desired chunk, then select the
+                      <em class="emphasis">Chunk <span class="symbol">&#8594;</span>
+                         Generate</em> menu item. This method of mesh generation does not
+                      display progress status.
+               </p>
+               <p>When generating the navigation mesh for the space (via the <em class="emphasis">File <span class="symbol">&#8594;</span> Generate
+                         All</em> or <em class="emphasis">File <span class="symbol">&#8594;</span> Generate All Overwrite</em> menu
+                      item), the first chunk to be processed is the one where the camera is in.
+                      Upon completion of the chunk, the adjacent ones will be processed. Only
+                      chunks changed in WorldEditor since the last generation will be
+                      processed.
+               </p>
+               <p>The generation process takes approximately 3 to 5 minutes per chunk,
+                      and if all chunks are being processed, then a real-time view of the
+                      progress is displayed in the window.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/navgen_generating_the_navmesh_step_1.png" height=""><span class="caption">
+                        <p>Progress of navigation mesh generation &#8212; Step
+                                   1
+                        </p></span></div>
+               </div>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/navgen_generating_the_navmesh_step_2.png" height=""><span class="caption">
+                        <p>Progress of navigation mesh generation &#8212; Step
+                                   2
+                        </p></span></div>
+               </div>
+               <p>Once the navigation mesh has been generated, the results can be
+                      viewed on a chunk-by-chunk basis. In the NavPoly Renderer window, navigate
+                      to the desired chunk, then press <span class="literal">Enter</span> &#8212; this will
+                      display the navigation mesh for that chunk (for details, see <a href="ch10.html#xref_Navpoly_Renderer_Keyboard_Shortcuts" title="10.4.&nbsp;NavPoly Renderer keyboard shortcuts">NavPoly Renderer keyboard shortcuts</a>).
+               </p>
+               <p>For more details on the format of the generated
+                      <span class="literal">.chunk</span> files, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html" class="olink"><i>Server Components</i></a> <span class="symbol">&#8594;</span>
+                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Server_Components_CellApp" class="olink">CellApp</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Navigation_System" class="olink">Navigation System</a>.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Processing_Time"></a>10.12.1.&nbsp;Processing time
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The process of generating the navigation mesh for a space is a
+                           time-consuming one, due to the amount of calculation necessary for a
+                           fast and efficient final product.
+                  </p>
+                  <p>For completely flat chunks without obstacles, the generated mesh
+                           will be composed of a single large navpoly. But any other geometry
+                           requires an initial matrix of collision scene tests from each direction
+                           to every other one, followed by a BSP-based reduction scheme to arrive
+                           at the final navpolys. The time invested in creating an efficient mesh
+                           is greatly compensated by the result of a fast navigation through the
+                           space.
+                  </p>
+                  <p>Please note that while this may seem slow, the time spent on
+                           adding scene elements to the world via WorldEditor will in most cases
+                           amount to much longer than the time taken to generate the navigation
+                           mesh for it. Furthermore, the navmesh generation can occur
+                           overnight
+                  </p>
+                  <p>On the other hand, if you have written your own tools to
+                           auto-generate large parts of your world (and server-controlled entities
+                           can roam freely over those parts), then this equation could change. If
+                           that is your case, then contact the BigWorld support engineers so that
+                           they can guide you in auto-generating your world and the navigation mesh
+                           at the same time.
+                  </p>
+                  <p>Based on terrain and other geometric information in the chunk
+                           files, NavGen creates the convex navpoly polygons in three main
+                           phases:
+                  </p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>It flood fills each chunk, using client physics rules.</p>
+                        </li>
+                        <li>
+                           <p>It uses a BSP algorithm to recursively subdivide the space and
+                                        form convex polygonal prisms.
+                           </p>
+                        </li>
+                        <li>
+                           <p>It then annotates the polygon edges and writes the results
+                                        back into the binary .cdata files.
+                           </p>
+                        </li>
+                     </ol>
+                  </div>
+                  <p>The following sub-sections describe this process in
+                           details.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Adjacency_And_Height_Map_Calculation"></a>10.12.1.1.&nbsp;Adjacency and height map calculation (from black to
+                                         blue)
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The flood fill algorithm currently samples the chunk geometry
+                                using a grid of 0.5 metre resolution.
+                     </p>
+                     <p>This is the default resolution, and whilst it is configurable
+                                via <span class="literal">bigworld/tools/misc/ navgen_settings.xml</span>, it is
+                                ideal for human-sized entities, since a courser resolution would be
+                                less accurate, and a finer resolution would end up generating
+                                excessive navpolys. Also, since the same point in the grid may exist
+                                at several heights within each chunk (in case of elements such as
+                                tunnels and bridges), 16 grids are used to describe the connectedness
+                                of the scene in each chunk.
+                     </p>
+                     <p>Within each grid, the movement is tested from each point on the
+                                grid to its eight neighbours. As an intermediate step, this
+                                information is saved to a TGA file (the file is saved in the folder
+                                specified by the option <span class="literal">floodResultPath</span> in
+                                <span class="literal">bigworld/tools/misc/navgen_settings.xml</span>). For more
+                                details, see <a href="ch10.html#xref_Adjacency_Map_Filtering_Blue" title="10.12.1.2.&nbsp;Adjacency map filtering (blue)">Adjacency map filtering (blue)</a>.).
+                                NavGen also saves the origin point, the sample resolution, and the
+                                y-values for each grid point to the TGA header. This means that the
+                                polygons can be generated from the TGA file alone &#8212; the TGA file could
+                                be viewed with an ordinary TGA viewing program if only one grid was
+                                used.
+                     </p>
+                     <p>The flood fill algorithm currently only allows bi-directional
+                                movements, <em class="emphasis">i.e.</em>, movements allowed in only one
+                                direction &#8212; such as jumping off a cliff &#8212; are not accepted.
+                     </p>
+                     <p>The algorithm also checks the hulls of neighbouring chunks. It
+                                stops flooding when it crosses to another hull (actually it stops
+                                flooding just after crossing). Thus, each chunk's grids slightly
+                                overlap another one by one flood movement unit, and as far as navpoly
+                                are concerned this is how chunk adjacencies are calculated. For more
+                                details, see <a href="ch10.html#xref_Adjacency_Map_Filtering_Blue" title="10.12.1.2.&nbsp;Adjacency map filtering (blue)">Adjacency map filtering (blue)</a>.
+                     </p>
+                     <p>The following points are the seed points for the flood
+                                fill:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>Centre of the chunk.</p>
+                           </li>
+                           <li>
+                              <p>Points along the perimeter of the chunk and its internal
+                                             portals &#8212; they are moved in slightly towards the centre of the
+                                             chunk along the portal plane normal.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Points where an entity has been placed in the scene.</p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>Having multiple seed points is necessary in cases where a chunk
+                                is composed of multiple disjoint but internally connected
+                                regions.
+                     </p>
+                     <p>After the calculation, each chunk will have a 3D bitmap
+                                representing an adjacency grid.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Adjacency_Map_Filtering_Blue"></a>10.12.1.2.&nbsp;Adjacency map filtering (blue)
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Smoothing filters are applied to this adjacency grid bitmap, to
+                                smooth it out and remove any artifacts that would lead to degenerate
+                                polygons.
+                     </p>
+                     <p>In general, this step only removes connections &#8212; it does not add
+                                them. If the <span class="literal">floodResultPath</span> configuration option
+                                is defined in <span class="literal">bigworld/tools/misc/
+                                   navgen_settings.xml</span>, then TGA files are saved to that path.
+                                These files represent the states before and after filtering.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e30352"></a>10.12.1.3.&nbsp;Navpoly generation (yellow)
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>This step reduces the filtered adjacency grid bitmap into a set
+                                of convex polygonal prisms. The fewer resulting prisms the better,
+                                since less geometry will need to be loaded by the server during the
+                                game.
+                     </p>
+                     <p>The basic approach is to sub-divide the space by generating a 3D
+                                BSP, until each leaf node is entirely traversable,
+                                (<em class="emphasis">i.e.</em>, it presents no obstructions for
+                                navigating), or entirely non-traversable. It makes the process easier
+                                that all leaf nodes of a BSP are guaranteed to be convex (a nice side
+                                effect of this approach is that, given a point, the BSP could be used
+                                to quickly find its navpoly. Such feature is not currently
+                                implemented, because performance has not been an issue &#8212; and the BSP
+                                would take extra memory &#8212; but it is good to keep this ability in
+                                mind).
+                     </p>
+                     <p>The heuristic for splitting the space has two goals:</p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>Try to produce a balanced tree, by splitting the space near
+                                             the centre.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Try to split the space along boundaries between traversable
+                                             and non-traversable regions.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>For each point in the region, if the point has an adjacency in
+                                one direction (<em class="emphasis">e.g.</em>, north), but none along one
+                                of the neighbouring directions (<em class="emphasis">e.g.</em>, northwest
+                                or northeast), then mark a possible split along the line from north to
+                                south. The split is given a value according to its distance from the
+                                centre of the region, and the split closest to the centre is
+                                chosen.
+                     </p>
+                     <p>To make the tree more balanced initially, if the region is
+                                larger than the value of constant
+                                <span class="literal">EVEN_SPLIT_THRESHOLD</span> (defined in C++ source file
+                                src/lib/waypoint/ waypoint_generator.cpp, with a default value of 25
+                                metres) in any dimension, then it is split in half along the shortest
+                                axis. In some cases, a vertical split must be made.
+                     </p>
+                     <p>After having generated the BSP, the process of forming the
+                                polygons is simple, consisting of the following sub-steps:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis">Vertices are created wherever lines
+                                                intersect.</em></p>
+                              <p>The edge of a polygon will be split if it is adjacent to
+                                             more than one polygon, since each vertex can have only a single
+                                             adjacency.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis">If the resulting polygon is convex,
+                                                then adjacent polygons are joined.</em></p>
+                              <p>This sub-step is repeated until it is no longer possible to
+                                             combine any polygons. Often, 50% of polygons can be joined.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis">Chunk adjacencies are
+                                                calculated.</em></p>
+                              <p>This sub-step calculates chunk adjacencies.</p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>As mentioned in section <a href="ch10.html#xref_Adjacency_And_Height_Map_Calculation" title="10.12.1.1.&nbsp;Adjacency and height map calculation (from black to blue)">Adjacency and height map calculation (from black to
+                                   blue)</a>, chunks may
+                                overlap each other by one flood movement unit. This way, NavGen can
+                                use this information and determine that if both sides of an edge are
+                                inside the hull of a neighbouring chunk, then this edge is marked as
+                                adjacent to that chunk.
+                     </p>
+                     <p>Note that the adjacency will be marked in the .cdata file as
+                                being related to a chunk, but not which one. This is because a space
+                                might be connected to another one in the server, in which case the
+                                adjacent chunk will not be assigned until runtime.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e30413"></a>10.12.1.4.&nbsp;Edge annotation (yellow)
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>With help from the GPU, the edges of navpolys that are not
+                                adjacent to another one (<em class="emphasis">i.e.</em>, adjacent to a
+                                non-traversable region) are annotated with the situation visible from
+                                that edge.
+                     </p>
+                     <p>The scene looking out from that edge is rendered
+                                orthographically into an offscreen buffer and then analysed. The
+                                situation is represented with two bits for each of the top half and
+                                the bottom half of the screen.
+                     </p>
+                     <p>The following list describes the possible values for these two
+                                bits:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis">Completely clear</em></p>
+                              <p>The edge has visibility to the navpoly ahead of it, even
+                                             though the navpolys are not adjacent.
+                              </p>
+                              <p><em class="emphasis">Example:</em> A chasm between
+                                             the two navpolys.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Completely blocked</em></p>
+                              <p>The edge has no visibility to other navpolys.</p>
+                              <p><em class="emphasis">Example:</em> A wall between the
+                                             navpolys.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Partially blocked</em></p>
+                              <p>The edge has visibility to some navpolys, but not to
+                                             others.
+                              </p>
+                              <p><em class="emphasis">Example:</em> A tree between the
+                                             navpolys, so some of them are visible through the branches.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>This procedure is performed considering three directions for
+                                each edge (resulting in 12 bits of information per non-adjacent
+                                edge):
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis">Straight ahead</em></p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">45&ordm; to the left</em></p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">45&ordm; to the right</em></p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>The illustration below describes the assembling of the navpoly
+                                adjacent ID <span class="literal">ABCDEF</span>:
+                     </p>
+                     <div class="informalfigure">
+                        <div class="mediaobject"><img src="images/navgen_assembling_of_navpoly_adjacent_id_diagram.png" height=""><span class="caption">
+                              <p>Assembling of navpoly adjacent ID field with value
+                                             <span class="literal">ABCDEF</span></p></span></div>
+                     </div>
+                     <p>The actual value stored in the .chunk file for the vertex's
+                                adjacent_ID field is the logical NOT of this 12-bit value, since
+                                BigWorld considers all negative adjacency values as meaning that none
+                                exists.
+                     </p>
+                     <p>The purpose of annotation is to provide hints about the world to
+                                AI algorithms on the cell that go beyond simply what regions are
+                                traversable and which are not. At the moment, the method findCover is
+                                the only one that takes advantage of this situational information.
+                                Adding others, however, will be trivial if the need arises.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e30489"></a>10.12.1.5.&nbsp;Saving (orange)
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The navigation mesh is generated in binary format and saved in
+                                .cdata files, since it can become very large for outside
+                                chunks.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e30494"></a>10.12.2.&nbsp;Inspecting the navmesh
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>After generating the space's navmesh, you may want to examine the
+                           result. You can do this by doing the following:
+                  </p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>In the <em class="emphasis">NavPoly Generator</em>
+                                        window, select the <em class="emphasis">View <span class="symbol">&#8594;</span> Rendered Scene</em> menu item
+                                        (for details, see <a href="ch10.html#xref_Navpoly_Generator_Menu_Items" title="10.1.&nbsp;NavPoly Generator menu items">NavPoly Generator menu items</a>) &#8212; this will move
+                                        focus to the <em class="emphasis">NavPoly Renderer</em>
+                                        window.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Inspect the navmesh</p>
+                           <div class="itemizedlist">
+                              <ul type="disc">
+                                 <li>
+                                    <p>In the <em class="emphasis">NavPoly Renderer</em>
+                                                     window, navigate to the point of interest using either the
+                                                     keyboard or the mouse (for a compete list of keyboard shortcuts
+                                                     and mouse controls available in NavPoly Renderer, see <a href="ch10.html#xref_Navpoly_Renderer_Keyboard_Shortcuts" title="10.4.&nbsp;NavPoly Renderer keyboard shortcuts">NavPoly Renderer keyboard shortcuts</a> and <a href="ch10.html#xref_Navpoly_Renderer_Mouse_Controls" title="10.6.&nbsp;NavPoly Renderer mouse controls">NavPoly Renderer mouse controls</a>).
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Display the navmesh by pressing
+                                                     <span class="literal">Enter</span>.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Navmeshes of different girths can be selected using the
+                                                     <span class="literal">[</span> (left square bracket) and
+                                                     <span class="literal">]</span> (right square bracket) keys.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ol>
+                  </div>
+                  <p>The navmesh is displayed as a collection of blue polygons.</p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/navgen_generated_navmesh_navpoly_generator.png" height=""><span class="caption">
+                           <p>Generated navmesh &#8212; Navpoly
+                                        Generator
+                           </p></span></div>
+                  </div>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/navgen_generated_navmesh_navpoly_renderer.png" height=""><span class="caption">
+                           <p>Generated navmesh &#8212; Navpoly Renderer</p></span></div>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Moving_Entities"></a>10.13.&nbsp;Moving entities
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Once there is a navigation mesh for the space, you can use the
+                      Entity.navigate and Entity.navigateStep methods in cell scripts to move
+                      the entities. For more details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/cellapp/index.html" class="olink">CellApp Python API</a>'s entry <em class="emphasis">Main Page
+                         <span class="symbol">&#8594;</span> Cell <span class="symbol">&#8594;</span> BigWorld <span class="symbol">&#8594;</span> Classes <span class="symbol">&#8594;</span><span class="literal"> Entity</span> <span class="symbol">&#8594;</span><span class="literal">
+                            navigate</span></em>.
+               </p>
+               <p>You should use the filter <code class="classname">AvatarDropFilter</code> on
+                      the client for such entities. This is because the position sent by the
+                      server is the top of the navpoly prism, which is dropped up to two
+                      metres<sup>[<a name="d0e30595" href="#ftn.d0e30595">2</a>]</sup> to find the real position on the ground. This saves the
+                      server from doing many ground position tests, and improves the client's
+                      interpolation, so that interpolated positions can also look right. If you
+                      do not use this filter, then the entities will hover slightly above
+                      hills.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Changing_Settings"></a>10.14.&nbsp;Changing settings
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The settings for NavGen are stored in the
+                      <span class="literal">bigworld/tools/misc/navgen_settings.xml</span> file<sup>[<a name="d0e30607" href="#ftn.d0e30607">3</a>]</sup>.
+               </p><pre class="programlisting">&lt;navgen_settings.xml&gt;
+
+  &lt;space&gt;  spaces/desert    &lt;/space&gt; <a name="co2946"></a><img src="../images/callouts/1.png" alt="1" border="0">
+
+  &lt;girth&gt; 0.5 <a name="co2948"></a><img src="../images/callouts/2.png" alt="2" border="0">
+    &lt;always&gt;        &lt;/always&gt;
+    &lt;width&gt;   0.90  &lt;/width&gt;
+    &lt;height&gt;  1.95  &lt;/height&gt;
+    &lt;depth&gt;   0.65  &lt;/depth&gt;
+  &lt;/girth&gt;
+
+  &lt;girth&gt; 4.0 <a name="co2955"></a><img src="../images/callouts/3.png" alt="3" border="0">
+    &lt;width&gt;   4.0   &lt;/width&gt;
+    &lt;height&gt;  4.0   &lt;/height&gt;
+    &lt;depth&gt;   2.0   &lt;/depth&gt;    
+  &lt;/girth&gt;
+
+  &lt;bwlockd&gt;     server1:8168  &lt;/bwlockd&gt;    <a name="co2961"></a><img src="../images/callouts/4.png" alt="4" border="0">
+  &lt;standalone&gt;  false         &lt;/standalone&gt; <a name="co2962"></a><img src="../images/callouts/5.png" alt="5" border="0">
+
+  &lt;floodResultPath&gt; \mf\fantasydemo\res &lt;/floodResultPath&gt; <a name="co2964"></a><img src="../images/callouts/6.png" alt="6" border="0">
+
+&lt;/navgen_settings.xml&gt;</pre><p><span class="citetitle">Example file
+                         <span class="literal">bigworld/tools/misc/navgen_settings.xml</span></span></p>
+               <div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a href="#co2946"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>Space to load.</p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a href="#co2948"><img src="../images/callouts/2.png" alt="2" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>Entity girth definitions.</p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a href="#co2955"><img src="../images/callouts/3.png" alt="3" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>Entity girth definitions.</p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a href="#co2961"><img src="../images/callouts/4.png" alt="4" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>WorldEditor Lock Server (<span class="literal">bwlockd</span>) control.
+                                      For details, see <a href="ch12.html" title="Chapter&nbsp;12.&nbsp;Lock Server (BWLockD)"><i xmlns:xlink="http://www.w3.org/1999/xlink">Lock Server (BWLockD)</i></a></p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a href="#co2962"><img src="../images/callouts/5.png" alt="5" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>WorldEditor Lock Server (<span class="literal">bwlockd</span>) control.
+                                      For details, see <a href="ch12.html" title="Chapter&nbsp;12.&nbsp;Lock Server (BWLockD)"><i xmlns:xlink="http://www.w3.org/1999/xlink">Lock Server (BWLockD)</i></a></p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a href="#co2964"><img src="../images/callouts/6.png" alt="6" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>Path where the pre-filter and post-filter TGA files are
+                                      generated. For more details, see <a href="ch10.html#xref_Adjacency_Map_Filtering_Blue" title="10.12.1.2.&nbsp;Adjacency map filtering (blue)">Adjacency map filtering (blue)</a>.
+                           </p>
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+               <p>Each <span class="literal">&lt;girth&gt;</span> tag defines the profile of an
+                      entity that will use that layer of navigation mesh. In each chunk, NavGen
+                      generates a mesh for each girth specified in
+                      <span class="literal">navgen_settings.xml</span>.
+               </p>
+               <p>Using smaller girths allows paths to pass closer to obstacles. A
+                      mesh for the default girth of 0.5 metres should always be defined in the
+                      settings file. Additional girths can be also be specified for use by
+                      non-human-sized entities, such as vehicles, which might use a girth of 4.0
+                      metres. Each additional girth defined can significantly add to the amount
+                      of memory needed by the server.
+               </p>
+               <p>The navmesh used at runtime is the one whose girth matches that
+                      given in the call to the navigation function. The girth must exactly match
+                      one that has been generated, or the navigation attempt will fail.
+               </p>
+               <p>The number of the girth (the default is 0.5) in current versions of
+                      NavGen is just a label, but it was originally the girth
+                      (<em class="emphasis">i.e.</em>, radius) of the entity. The cell once attempted
+                      to dynamically apply the girth of the entity moving through the navmesh
+                      when calculating its movement path, so that entities with a large girth
+                      would be prevented from passing through openings too narrow for them.
+                      However, this behaviour has been removed since no reliable fast algorithm
+                      could be found for reusing the navmesh generated by one girth in another.
+                      Now the navmesh must be generated for each girth independently, and no
+                      interpretation of the actual girth floating-point value ever
+                      occurs.
+               </p>
+               <p>The <span class="literal">&lt;girth&gt;</span> section contains the tags
+                      <span class="literal">&lt;width&gt;</span>, <span class="literal">&lt;height&gt;</span> and
+                      <span class="literal">&lt;depth&gt;</span> of that entity's profile. These should be
+                      the same values as those used to control
+                      <span class="literal">BigWorld.Physics</span> objects on the client. The optional
+                      tag <span class="literal">&lt;always&gt;</span> can also be defined in the
+                      <span class="literal">&lt;girth&gt;</span> section, to cause it to be always
+                      generated.
+               </p>
+               <p>It is recommended to leave the girth settings at their default
+                      values until the actual models that will need to use them have been tested
+                      in the game.
+               </p>
+               <p>Each additional layer of girth adds to the processing cost to
+                      generate it, as well as to the size of its .cdata files and the RAM they
+                      take up when loaded by the server. Navigation mesh information does not
+                      affect client performance at all in a production environment, since it is
+                      stripped by the resource packager before <span class="literal">.cdata</span> files
+                      are sent to the client.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e30710"></a>10.15.&nbsp;Discontinuous navmesh
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The final space might contain areas that are not reachable on foot
+                      from other areas, examples might be the roofs of buildings, ledges, or
+                      pits.
+               </p>
+               <p>Entities should be placed in islands of navigable terrain to ensure
+                      that their navigation mesh is generated. Also, be aware that unreachable
+                      areas that span multiple chunks will still have navmesh generated for
+                      them, even if there are no placed entities present.
+               </p>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e30595" href="#d0e30595">2</a>] </sup>Navpolys cannot be taller than two metres
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e30607" href="#d0e30607">3</a>] </sup>For details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch24.html" class="olink"><i><span class="literal">navgen_settings.xml</span></i></a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch09.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch11.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;9.&nbsp;Panel System&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;11.&nbsp;3ds Max and Maya Exporters</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

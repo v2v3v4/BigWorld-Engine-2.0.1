@@ -1,0 +1,457 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;7.&nbsp;.cdata</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch06.html" title="Chapter&nbsp;6.&nbsp;capabilities.xml">
+      <link rel="next" href="ch08.html" title="Chapter&nbsp;8.&nbsp;.chunk">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch07.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;7.&nbsp;<span class="literal">.cdata</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch06.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch08.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_chunk_cdata"></a>Chapter&nbsp;7.&nbsp;<span class="literal">.cdata</span></h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch07.html#d0e1302">7.1. Contents</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch07.html#xref_terrain2_section">7.1.1. <span class="literal">terrain2</span> resources</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>Named as
+                 <span class="literal"><em class="replaceable"><code>&lt;chunk&gt;</code></em>.cdata</span>, these
+                 files are defined under folder
+                 <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/spaces/<em class="replaceable"><code>&lt;space&gt;</code></em></code>,
+                 and contain binary terrain and lighting data.
+            </p>
+            <p>For details on the information held by this and other chunk files, see
+                 the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/index.html" class="olink">Client Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch06.html" class="olink"><i>Chunks</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch06.html#xref_Implementation_Files" class="olink">Implementation files</a>.
+            </p>
+            <p>For details on this and other zip files' grammar, see <a href="ch04.html" title="Chapter&nbsp;4.&nbsp;ZipSection files"><i xmlns:xlink="http://www.w3.org/1999/xlink"><span class="literal">ZipSection</span> files</i></a>.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1302"></a>7.1.&nbsp;Contents
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_terrain2_section"></a>7.1.1.&nbsp;<span class="literal">terrain2</span> resources
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A <span class="literal">terrain2</span> section is contained in a chunk's
+                       <span class="literal">.cdata</span> file. It contains all the resources for the
+                       terrain in a chunk. The different types of terrain data are described in
+                       <span class="literal">BNF</span> format in the following chapter.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1321"></a>7.1.1.1.&nbsp;<span class="literal">heights</span> sections
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">heights</span> sections stores the height map for
+                            the terrain block. Multiple <span class="literal">heights</span> sections are stored
+                            in the block, one for each LOD level, each <span class="literal">heights</span>
+                            section stores data at half the resolution of the previous one. The
+                            <span class="literal">heights</span> sections are named as "
+                            <span class="literal">heights?</span> " where <span class="literal">?</span> is replaced by a
+                            number. The highest res height map is stored in a section named heights
+                            the second highest in a section called heights1 all the way down to a map
+                            that stores 2x2 heights. This way if the height map resolution is 128x128,
+                            7 height maps are stored in the file (heights, heights1, ...
+                            heights6)
+                     </p><pre class="programlisting">&lt;heightMap&gt; ::= &lt;header&gt;&lt;<em class="emphasis">heightData</em>&gt;
+&lt;header&gt; ::= &lt;<em class="emphasis">magic</em>&gt;&lt;<em class="emphasis">width</em>&gt;&lt;<em class="emphasis">height</em>&gt;&lt;<em class="emphasis">compression</em>&gt;&lt;<em class="emphasis">version</em>&gt;&lt;<em class="emphasis">minHeight</em>&gt;&lt;<em class="emphasis">maxHeight</em>&gt;&lt;<em class="emphasis">padding</em>&gt;</pre><div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;magic&gt;</span></em></p>
+                              <p>uint32 <span class="literal">0x00706d68</span> (string "hmp\0")
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;width&gt;</span></em></p>
+                              <p>uint32 containing the width of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;height&gt;</span></em></p>
+                              <p>uint32 containing the height of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;compression&gt;</span></em></p>
+                              <p>(unused) uint32 containing the compression type</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;version&gt;</span></em></p>
+                              <p>uint32 containing the version of the data, currently 4</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;minHeight&gt;</span></em></p>
+                              <p>float containing the minimum height of this block</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;maxHeight&gt;</span></em></p>
+                              <p>float containing the maximum height of this block</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;padding&gt;</span></em></p>
+                              <p>4 bytes of padding to make the header 16-byte aligned</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;heightData&gt;</span></em></p>
+                              <p>PNG compressed block of int32 storing the height in millimetres,
+                                         dimensions = width * height from the header
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1442"></a>7.1.1.2.&nbsp;<span class="literal">layer</span> sections
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">layer</span> sections store the texture layers for
+                            the terrain block. Multiple <span class="literal">layer</span> sections are stored
+                            in the terrain block. Each section describes one texture layer. The
+                            <span class="literal">layer</span> sections are named " <span class="literal">layer ?</span> "
+                            where <span class="literal">?</span> is replaced by a number greater than 1. I.e if
+                            the block has 3 layers, three layer sections will be stored ("layer 1",
+                            "layer 2", "layer 3")
+                     </p><pre class="programlisting">&lt;textureLayer&gt; ::= &lt;header&gt;&lt;textureName&gt;&lt;<em class="emphasis">blendData</em>&gt;
+&lt;header&gt; ::= &lt;<em class="emphasis">magic</em>&gt;&lt;<em class="emphasis">width</em>&gt;&lt;<em class="emphasis">height</em>&gt;&lt;<em class="emphasis">bpp</em>&gt;&lt;<em class="emphasis">uProjection</em>&gt;&lt;<em class="emphasis">vProjection</em>&gt;&lt;<em class="emphasis">version</em>&gt;&lt;<em class="emphasis">padding</em>&gt;
+&lt;textureName&gt; ::= &lt;<em class="emphasis">length</em>&gt;&lt;<em class="emphasis">string</em>&gt;</pre><div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;magic&gt;</span></em></p>
+                              <p>uint32 0x00646c62 (string bld/0")</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;width&gt;</span></em></p>
+                              <p>uint32 containing the width of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;height&gt;</span></em></p>
+                              <p>uint32 containing the height of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;bpp&gt;</span></em></p>
+                              <p>(unused) uint32 containing the size of the entries in the layer
+                                         data
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;uProjection&gt;</span></em></p>
+                              <p>Vector4 containing the projection of the u coordinate of the
+                                         texture layer
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;vProjection&gt;</span></em></p>
+                              <p>Vector4 containing the projection of the v coordinate of the
+                                         texture layer
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;version&gt;</span></em></p>
+                              <p>uint32 containing the version of the data, currently 2</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;padding&gt;</span></em></p>
+                              <p>12 bytes of padding to make the header 16-byte aligned</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;length&gt;</span></em></p>
+                              <p>the length of the texturename string</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;string&gt;</span></em></p>
+                              <p>the name of the texture used by this layer</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;blendData&gt;</span></em></p>
+                              <p>png compressed block of uint8 defining the strength of this
+                                         texture layer at each x/z position
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1577"></a>7.1.1.3.&nbsp;<span class="literal">normals</span> &amp; <span class="literal">lodNormals</span>
+                                     sections
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">normals</span> section stores the high resolution
+                            normal map for the terrain block. The <span class="literal">lodNormals</span>
+                            section stores the LOD normals for the height block, the LOD normals are
+                            generally 1/16th of the size of the normals.
+                     </p><pre class="programlisting">&lt;normals&gt; ::= &lt;header&gt;&lt;<em class="emphasis">data</em>&gt;
+&lt;header&gt; ::= &lt;<em class="emphasis">magic</em>&gt;&lt;<em class="emphasis">version</em>&gt;&lt;<em class="emphasis">padding</em>&gt;</pre><div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;magic&gt;</span></em></p>
+                              <p>uint32 0x006d726e (string "nrm/0")</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;version&gt;</span></em></p>
+                              <p>uint32 containing the version of the data, currently 1</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;padding&gt;</span></em></p>
+                              <p>8 bytes of padding to make the header 16-byte aligned</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;data&gt;</span></em></p>
+                              <p>png compressed block storing 2 signed bytes per entry for the x
+                                         and z components of the normal the y component is calculate in the
+                                         shader
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1636"></a>7.1.1.4.&nbsp;<span class="literal">holes</span> section
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">holes</span> section stores the holemap for the
+                            terrain block, this section is only stored when a terrain block has holes
+                            in it.
+                     </p><pre class="programlisting">&lt;holes&gt; ::= &lt;header&gt;&lt;<em class="emphasis">data</em>&gt;
+&lt;header&gt; ::= &lt;<em class="emphasis">magic</em>&gt;&lt;<em class="emphasis">width</em>&gt;&lt;<em class="emphasis">height</em>&gt;&lt;<em class="emphasis">version</em>&gt;</pre><div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;magic&gt;</span></em></p>
+                              <p>uint32 0x006c6f68 (string "hol/0")</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;width&gt;</span></em></p>
+                              <p>uint32 containing the width of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;height&gt;</span></em></p>
+                              <p>uint32 containing the height of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;version&gt;</span></em></p>
+                              <p>uint32 containing the version of the data, currently 1</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;data&gt;</span></em></p>
+                              <p>The hole data stored in a bit field of width * height, each row
+                                         in the data is rounded up to 1 byte. If a bit is set to 1 it denotes a
+                                         hole in the map.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1699"></a>7.1.1.5.&nbsp;<span class="literal">horizonShadows</span> section
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">horizonShadows</span> section stores the horizon
+                            shadows for the terrain block.
+                     </p><pre class="programlisting">&lt;shadows&gt; ::= &lt;header&gt;&lt;<em class="emphasis">data</em>&gt;
+&lt;header&gt; ::= &lt;<em class="emphasis">magic</em>&gt;&lt;<em class="emphasis">width</em>&gt;&lt;<em class="emphasis">height</em>&gt;&lt;<em class="emphasis">bpp</em>&gt;&lt;<em class="emphasis">version</em>&gt;&lt;<em class="emphasis">padding</em>&gt;</pre><div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;magic&gt;</span></em></p>
+                              <p>uint32 0x00646873 (string "shd/0")</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;width&gt;</span></em></p>
+                              <p>uint32 containing the width of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;height&gt;</span></em></p>
+                              <p>uint32 containing the height of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;bpp&gt;</span></em></p>
+                              <p>(unused)uint32 containing the bits per entry in the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;version&gt;</span></em></p>
+                              <p>uint32 containing the version of the data, currently 1</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;padding&gt;</span></em></p>
+                              <p>12 bytes of padding to make the header 16-byte aligned</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;data&gt;</span></em></p>
+                              <p>The shadow data, (uint16,uint16) * width * height, the horizon
+                                         shadow data stores two angles between which there is no occlusion from
+                                         any terrain or objects.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1782"></a>7.1.1.6.&nbsp;<span class="literal">lodTexture.dds</span> section
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">lodTexture.dds</span> section stores the LOD
+                            texture for the terrain block. The LOD texture is a low resolution
+                            snapshot of all the texture layers blended together. The texture is stored
+                            in the DXT5 format. For more information about the dds texture format
+                            please refer to the DirectX documentation.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1792"></a>7.1.1.7.&nbsp;<span class="literal">dominantTextures</span> section
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">dominantTextures</span> section stores the dominant
+                            texture map. The dominant texture map stores the texture with the highest
+                            blend for each x/z location in the terrain block.
+                     </p><pre class="programlisting">&lt;dominant&gt; ::=&lt;header&gt;&lt;<em class="emphasis">texNames</em>&gt;&lt;<em class="emphasis">data</em>&gt;
+&lt;header&gt; ::= &lt;<em class="emphasis">magic</em>&gt;&lt;<em class="emphasis">version</em>&gt;&lt;<em class="emphasis">numTextures</em>&gt;&lt;<em class="emphasis">texNameSize</em>&gt;&lt;<em class="emphasis">width</em>&gt;&lt;<em class="emphasis">height</em>&gt;&lt;<em class="emphasis">padding</em>&gt;</pre><div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;magic&gt;</span></em></p>
+                              <p>uint32 0x0074616d (string "mat/0")</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;version&gt;</span></em></p>
+                              <p>uint32 containing the version of the data, currently 1</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;numTextures&gt;</span></em></p>
+                              <p>uint32 containing the number of textures referenced by the
+                                         dominant texture map
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;texNameSize&gt;</span></em></p>
+                              <p>uint32 containing the size of the texture entries</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;width&gt;</span></em></p>
+                              <p>uint32 containing the width of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;height&gt;</span></em></p>
+                              <p>uint32 containing the height of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;padding&gt;</span></em></p>
+                              <p>8 bytes of padding to make the header 16-byte aligned</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;texNames&gt;</span></em></p>
+                              <p><span class="literal">numTextures</span> entries of
+                                         <span class="literal">texNameSize</span> size containing the names of the
+                                         dominant textures referred to in this map. Texture names shorter than
+                                         <span class="literal">texNameSize</span> are padded with
+                                         <span class="literal">0</span></p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;data&gt;</span></em></p>
+                              <p>stored as a compressed bin section. byte array of width *
+                                         height, each entry is an index into the texture names which indexes
+                                         the dominant texture at the x/z location of the entry
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch06.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch08.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;6.&nbsp;<span class="literal">capabilities.xml</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;8.&nbsp;<span class="literal">.chunk</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,302 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>How To Move Entities</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_Move_Entities"></a>How To Move Entities</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Introduction">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#xref_Navigation_Mesh">2. Navigation Mesh</a></span></dt><dt><span class="chapter"><a href="#xref_How_To_Move_Server_Controlled_Entities">3. How to Move Server-Controlled Entities</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e118">3.1. <span class="literal">moveToPoint</span></a></span></dt><dt><span class="section"><a href="#d0e146">3.2. Navigation</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e155">3.2.1. <span class="literal">canNavigateTo()</span></a></span></dt><dt><span class="section"><a href="#d0e170">3.2.2. <span class="literal">navigateStep()</span></a></span></dt><dt><span class="section"><a href="#d0e199">3.2.3. <span class="literal">navigateFollow()</span></a></span></dt><dt><span class="section"><a href="#d0e210">3.2.4. <span class="literal">navigate()</span></a></span></dt></dl></dd><dt><span class="section"><a href="#d0e222">3.3. Example navigating cell entity</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e227">3.3.1. Loading</a></span></dt><dt><span class="section"><a href="#d0e247">3.3.2. Moving</a></span></dt><dt><span class="section"><a href="#d0e269">3.3.3. Client-side</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#xref_Filters">4. Filters</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_AvatarFilter">4.1. <code class="classname">AvatarFilter</code></a></span></dt><dt><span class="section"><a href="#xref_AvatarDropFilter">4.2. <code class="classname">AvatarDropFilter</code></a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_How_To_Move_Client_Controlled_Entities">5. How to Move Client-Controlled Entities</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e358">5.1. <code class="methodname">seek()</code></a></span></dt><dd><dl><dt><span class="section"><a href="#d0e362">5.1.1. Mouse click movement</a></span></dt><dt><span class="section"><a href="#d0e387">5.1.2. Coordinated actions</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e403">5.2. <code class="methodname">chase()</code></a></span></dt><dd><dl><dt><span class="section"><a href="#d0e415">5.2.1. Handling the command</a></span></dt><dt><span class="section"><a href="#d0e429">5.2.2. Stopping the pursuit</a></span></dt></dl></dd></dl></dd><dt><span class="appendix"><a href="#xref_Source_Files">A. Source files</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e459">A.1. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/RandomNavigator.py</span></a></span></dt><dt><span class="section"><a href="#d0e467">A.2. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/RandomNavigator.py</span></a></span></dt><dt><span class="section"><a href="#d0e475">A.3. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/RandomNavigator.py</span></a></span></dt><dt><span class="section"><a href="#d0e483">A.4. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/editor/RandomNavigator.py</span></a></span></dt><dt><span class="section"><a href="#d0e491">A.5. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/defs/RandomNavigator.def</span></a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Introduction"></a>Chapter&nbsp;1.&nbsp;Introduction</h2></div></div></div><p>Moving entities is one of the most fundamental processes in
+  implementing a game. BigWorld provides two main mechanisms to accomplish
+  this task: navigation and seeking.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Navigation</em></p><p>This is the primary way to move NPCs (non-player characters)
+      around the world. It uses a map of navigation information generated in
+      an offline process, and can take into account the size of the
+      entity.</p></li><li><p><em class="emphasis">Seek</em></p><p>This is a client-side function used to line up the player for
+      interactions with other entities.</p></li></ul></div><p>Navigation can take into account the size of the navigating object,
+  and thus follow paths that do not pass too close to obstacles. The
+  pre-generated navigation information is known as the navigation mesh
+  (navmesh), as it is a collection of polygons generated in an offline tool
+  called NavGen (for details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#Content_Tools_Reference_Guide" class="olink">Content Tools Reference Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#xref_NavGen" class="olink"><i>NavGen</i></a>).</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>The NavGen's executable <span class="literal">navgen.exe</span> can be found
+    under the <span class="literal">bigworld/tools/misc</span> folder.</p></div><p>This document describes the steps necessary to make an entity navigate
+  from one point to another in a sensible manner, taking into account their
+  environment.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Navigation_Mesh"></a>Chapter&nbsp;2.&nbsp;Navigation Mesh</h2></div></div></div><p>Use of the server-side navigation functions require the navigation
+  mesh (or navmesh) be generated for the space. The navmesh is a collection of
+  interconnected convex polygons parallel to the XZ plane. These
+  <em class="emphasis">navpolys</em> are generated using the tool NavGen, and are
+  stored in the <code class="filename">.cdata</code> chunk files of
+  the space.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>The chunk files are stored under the <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/spaces/<em class="replaceable"><code>&lt;space&gt;</code></em></code>,
+    and contain binary terrain and lighting data.</p><p>For details on the information held by this and other chunk files,
+    see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#Client_Programming_Guide" class="olink">Client Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Chunks" class="olink"><i>Chunks</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Implementation_Files" class="olink">Implementation files</a>.</p><p>For details on this and other binary files' grammar, see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/file_grammar_guide.html#File_Grammar_Guide" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/file_grammar_guide.html#xref_BinSection_Files" class="olink"><i><span class="literal">BinSection</span> files</i></a>.</p></div><p>For details on the generation of navmesh, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#Content_Tools_Reference_Guide" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#xref_NavGen" class="olink"><i>NavGen</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#xref_Generating_The_Navmesh" class="olink">Generating the navmesh</a>.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_How_To_Move_Server_Controlled_Entities"></a>Chapter&nbsp;3.&nbsp;How to Move Server-Controlled Entities</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e118">3.1. <span class="literal">moveToPoint</span></a></span></dt><dt><span class="section"><a href="#d0e146">3.2. Navigation</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e155">3.2.1. <span class="literal">canNavigateTo()</span></a></span></dt><dt><span class="section"><a href="#d0e170">3.2.2. <span class="literal">navigateStep()</span></a></span></dt><dt><span class="section"><a href="#d0e199">3.2.3. <span class="literal">navigateFollow()</span></a></span></dt><dt><span class="section"><a href="#d0e210">3.2.4. <span class="literal">navigate()</span></a></span></dt></dl></dd><dt><span class="section"><a href="#d0e222">3.3. Example navigating cell entity</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e227">3.3.1. Loading</a></span></dt><dt><span class="section"><a href="#d0e247">3.3.2. Moving</a></span></dt><dt><span class="section"><a href="#d0e269">3.3.3. Client-side</a></span></dt></dl></dd></dl></div><p>The server can move entities via either navigation functions, or a
+  simple <span class="literal">moveToPoint</span>.</p><p>Navigation provides full path finding using special mesh data
+  generated by NavGen, while <span class="literal">moveToPoint</span> simply moves the
+  entity in a straight line, without taking obstacles or terrain into
+  account.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e118"></a>3.1.&nbsp;<span class="literal">moveToPoint</span></h2></div></div></div><p>This is the simplest movement system available &#8212; taking a
+    destination, it moves the entity in a straight line until that point is
+    reached.</p><p>An example of an entity that uses this mechanism is the
+    <span class="literal">MovingPlatform</span> , which follows a series of patrol
+    nodes, using <span class="literal">moveToPoint</span> at each one to move to the
+    next.</p><pre class="programlisting">self.moveToPoint( self.patrolNode[1], self.travelSpeed, 0, self.faceDirection, True )</pre><p><span class="citetitle"><span class="literal">cell/MovingPlatform.py</span></span></p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>For details on the <code class="classname">MovingPlatform</code> entity,
+      see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_build_moving_platform/howto_build_moving_platform.html#HowTo_Moving_Platform" class="olink">How To Build a Server-Controlled Moving Platform</a>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e146"></a>3.2.&nbsp;Navigation</h2></div></div></div><p>Navigation is a path-finding service available to entities running
+    on the CellApps. Navigation uses a heuristically guided breadth first
+    search (A*), initially across the chunks, and then in the navigation mesh
+    within the chunks.</p><p>For detailed information on all functions below, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/cellapp/index.html#Client_Python_API" class="olink">Client Python API</a>.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e155"></a>3.2.1.&nbsp;<span class="literal">canNavigateTo()</span></h3></div></div></div><p>Before using any <span class="literal">navigate</span> function, you should
+      check that the destination can be reached. The function
+      <span class="literal">canNavigateTo</span> finds the nearest point to the
+      destination that can be reached by traversing the navigation mesh. If
+      navigation is attempted to a point that cannot be reached, then the
+      entity will instead navigate to the nearest point, then call
+      <span class="literal">onNavigateFailed</span>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e170"></a>3.2.2.&nbsp;<span class="literal">navigateStep()</span></h3></div></div></div><p>This function (just as <span class="literal">navigateFollow</span>) creates
+      a movement controller that moves the entity toward the destination. Each
+      time the entity enters a new navpoly, or travels the specified maximum
+      distance, the controller releases and calls <span class="literal">onMove</span>
+      callback.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>The paths generated by calling <span class="literal">navigateStep</span>
+        are cached, making subsequent calls to the same destination
+        inexpensive.</p></div><p>To reach the destination, you will have to re-call
+      <span class="literal">navigateStep</span> each time the entity stops.</p><pre class="programlisting">self.controllerId = self.navigateStep( destination, velocity, maximumMovement ) </pre><p><span class="citetitle"><span class="literal">cell/Guard.py</span></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e199"></a>3.2.3.&nbsp;<span class="literal">navigateFollow()</span></h3></div></div></div><p>Similar to <span class="literal">navigateStep</span>, except in that it
+      derives its destination from an entity, instead.</p><pre class="programlisting">self.controllerId = self.navigateFollow(    entity, 
+                        offsetAngle,
+                        offsetDistance,
+                        velocity, 
+                        maximumMovement )</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e210"></a>3.2.4.&nbsp;<span class="literal">navigate()</span></h3></div></div></div><p>Navigate is an older function for navigating entities across
+      spaces. New code should use <span class="literal">navigateStep</span> or
+      <span class="literal">navigateFollow</span>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e222"></a>3.3.&nbsp;Example navigating cell entity</h2></div></div></div><p>To demonstrate the navigation mechanism, we have constructed a
+    simple example. The example entity randomly picks a location around its
+    current position, then navigates to it. Upon arrival, it chooses a new
+    destination and continues.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e227"></a>3.3.1.&nbsp;Loading</h3></div></div></div><p>The entity could be created before the rest of the chunk data is
+      loaded. If you use navigation immediately in the<span class="literal">
+      __init__</span> method, then the start location might be unresolved,
+      causing an exception. Instead, we wait for the navigation mesh to load,
+      using a timer and testing with <span class="literal">canNavigateTo</span>.</p><pre class="programlisting">def __init__( self ):
+ BigWorld.Entity .__init__( self )
+ self.destination = self.position
+ self.addTimer( 5.0, 0, RandomNavigator.TIMER_WAITING_FOR_NAVMESH )
+
+def onTimer(self, timerId, userId):
+ if self.canNavigateTo( self.position ) == None:
+  self.addTimer( 5.0, 0, RandomNavigator.TIMER_WAITING_FOR_NAVMESH )
+ else:
+  self.navigateStep( self.destination, 5.0, 10.0 )</pre><p><span class="citetitle"><span class="literal">cell/RandomNavigator.py</span></span></p><p><span class="citetitle">Example navigation during chunk data
+      load</span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e247"></a>3.3.2.&nbsp;Moving</h3></div></div></div><p>Calling the first <span class="literal">navigateStep</span> will result in
+      the <span class="literal">onMove</span> callback being triggered. At this time,
+      the entity may or may not have reached its destination, so we check how
+      close the entity is. In this example, we require it to be within 0.1
+      metre of the target before picking a new destination.</p><p>Note the use of <span class="literal">canNavigateTo</span> &#8212; this
+      function clamps the destination to the point closest to the destination,
+      and that is accessible via the navigation mesh. The entity then
+      perpetually follows this cycle of picking a destination, running to it
+      and then picking another.</p><pre class="programlisting">def onMove(self, controllerId, userId):
+ if ( self.position - self.destination ).length &gt; 0.1:
+  self.navigateStep( self.destination, 5.0, 10.0 )
+ else:
+  self.destination = None
+  while self.destination == None:
+   randomDestination = ( 
+    self.position.x + random.randrange(-400, 400, 1.0),
+    self.position.y,
+    self.position.z + random.randrange(-400, 400, 1.0) )
+   self.destination = self.canNavigateTo( randomDestination )
+
+  self.navigateStep( self.destination, 5.0, 10.0 ) </pre><p><span class="citetitle"><span class="literal">cell/RandomNavigator.py</span></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e269"></a>3.3.3.&nbsp;Client-side</h3></div></div></div><p>To be able to correctly display the entity on the client machine,
+      we require two things:</p><div class="itemizedlist"><ul type="disc"><li><p>A model.</p></li><li><p>The correct filter.</p></li></ul></div><p>The default filter is <span class="literal">DumbFilter</span>, which simply
+      places the entity at the location most recently received from the
+      server, thus producing a stuttering motion as it moves about the world.
+      You might also notice that its height above the ground appears to go up
+      in steps &#8212; this is the movement of the entity on the server as it
+      traverses the navigation mesh covering slopes.</p><p>Instead, we will use <span class="literal">AvatarDropFilter</span>, which
+      produces fluid movement for the Action Matcher, with the addition that
+      it locks the entity to the ground. For details on
+      <span class="literal">AvatarDropFilter</span>, see <a href="#xref_AvatarDropFilter" title="4.2.&nbsp;AvatarDropFilter"><code class="classname">AvatarDropFilter</code></a>.</p><pre class="programlisting">def onEnterWorld( self, prereqs ):
+ self.model = BigWorld.Model( RandomNavigator.stdModel )
+ BigWorld.addShadowEntity( self )
+ self.filter = BigWorld.AvatarDropFilter()
+
+def onLeaveWorld( self ):
+ BigWorld.delShadowEntity( self )
+ self.model = None </pre><p><span class="citetitle"><span class="literal">client/RandomNavigator.py</span></span></p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Filters"></a>Chapter&nbsp;4.&nbsp;Filters</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#xref_AvatarFilter">4.1. <code class="classname">AvatarFilter</code></a></span></dt><dt><span class="section"><a href="#xref_AvatarDropFilter">4.2. <code class="classname">AvatarDropFilter</code></a></span></dt></dl></div><p>Although an in-depth look at filters is beyond the scope of this
+  document, it is important to mention their existence at this point.</p><p>Filters process position and rotation updates from the server into a
+  smooth movement on the client machine. They can also be used to make
+  assumptions about the movement of entities, as is the case with
+  <code class="classname">AvatarDropFilter</code><sup>[<a name="d0e311" href="#ftn.d0e311">1</a>]</sup>.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_AvatarFilter"></a>4.1.&nbsp;<code class="classname">AvatarFilter</code></h2></div></div></div><p>This filter produces movement on the client that corresponds to the
+    one on the server.</p><p>Use this filter for entities that do not remain stuck to the ground,
+    such as other players and flying vehicles.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_AvatarDropFilter"></a>4.2.&nbsp;<code class="classname">AvatarDropFilter</code></h2></div></div></div><p>This filter places the client-side entity on the ground, even if the
+    server places it in the air.</p><p>It is suitable for entities using navigation, as the navigation mesh
+    is always slightly raised above the terrain.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e311" href="#d0e311">1</a>] </sup>For details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html#Client_Python_API" class="olink">Client Python API</a>'s
+      entries Class List <span class="symbol">&#8594;</span>
+      <code class="classname">AvatarDropFilter</code> and Class List <span class="symbol">&#8594;</span>
+      <code class="classname">AvatarFilter</code>.</p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_How_To_Move_Client_Controlled_Entities"></a>Chapter&nbsp;5.&nbsp;How to Move Client-Controlled Entities</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e358">5.1. <code class="methodname">seek()</code></a></span></dt><dd><dl><dt><span class="section"><a href="#d0e362">5.1.1. Mouse click movement</a></span></dt><dt><span class="section"><a href="#d0e387">5.1.2. Coordinated actions</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e403">5.2. <code class="methodname">chase()</code></a></span></dt><dd><dl><dt><span class="section"><a href="#d0e415">5.2.1. Handling the command</a></span></dt><dt><span class="section"><a href="#d0e429">5.2.2. Stopping the pursuit</a></span></dt></dl></dd></dl></div><p>All client-side movement is done using the physics object that acts
+  like a controller, sending position updates to the server.</p><p>The navigation mesh is not present on the client, so the functions
+  <code class="methodname">seek()</code> and <code class="methodname">chase()</code> must be
+  used. They provide simple direct movement, following the terrain and
+  colliding with obstacles.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e358"></a>5.1.&nbsp;<code class="methodname">seek()</code></h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e362"></a>5.1.1.&nbsp;Mouse click movement</h3></div></div></div><p>In this example we will use <span class="literal">seek</span> to implement a
+      simple mouse click-based movement.</p><p>To access this functionality in the FantasyDemo, press
+      <span class="literal">Z</span> to bring up the cursor, and right-click on the
+      terrain to move.</p><pre class="programlisting">def moveKey( self, isDown ):
+ if isDown:
+  mp = GUI.mcursor().position
+  type, target = collide.collide( mp.x, mp.y )
+  if type == collide.COLLIDE_TERRAIN:
+   self._movePlayer( target )
+  elif type == collide.COLLIDE_ENTITY:
+   self._movePlayer( target.position )
+
+def _movePlayer( self, position ):
+ player   = BigWorld.player()
+ velocity = player.runFwdSpeed
+ timeout  = 1.5 * (position - player.position).length / velocity
+ curr_yaw = (position - player.position).yaw
+ destination = (position[0], position[1], position[2], curr_yaw)
+ player.physics.velocity = (0, 0, velocity)
+ player.physics.seek( destination, timeout, 10, self._seekCallback )
+ self.isMoving = True</pre><p><span class="citetitle"><code class="filename">client/MouseControl.py</code></span></p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>The destination needed by <code class="methodname">seek()</code> is a
+        four-member tuple containing the position and yaw.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e387"></a>5.1.2.&nbsp;Coordinated actions</h3></div></div></div><p>The <span class="literal">seek</span> method is often used in conjunction
+      with coordinated actions. These are actions involving two models, such
+      as a handshake.</p><p>The position and yaw needed for the actions to line up can be
+      extracted from the action, as in the following excerpt:</p><pre class="programlisting">self.physics.seek( partner.model.Shake_B_Accept.seekInv, 5.0, 0.10, onSeek )
+self.physics.velocity = ( 0, 0, self.walkFwdSpeed )</pre><p><span class="citetitle"><span class="literal">client/Avatar.py</span></span></p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e403"></a>5.2.&nbsp;<code class="methodname">chase()</code></h2></div></div></div><p>To demonstrate the <span class="literal">chase</span> function we will
+    implement a <span class="literal">/follow</span> chat console command in
+    FantasyDemo. The command will cause the player to follow the targeted
+    entity, until they press a movement key breaking the pursuit.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e415"></a>5.2.1.&nbsp;Handling the command</h3></div></div></div><p>The Fantasy Demo chat console will automatically resolve the typed
+      &#8216;/follow&#8217; command to a function call. All we need to do is add the
+      following function to the <span class="literal">ConsoleCommands.py</span>
+      module.</p><pre class="programlisting">def follow( player, string ):
+    # Follow the current target
+    if BigWorld.target() != None:
+        player.physics.chase( BigWorld.target(), 2.0, 0.5 )
+        player.physics.velocity = ( 0, 0, 6.0 )</pre><p><span class="citetitle"><span class="literal">client/Helpers/ConsoleCommands.py</span></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e429"></a>5.2.2.&nbsp;Stopping the pursuit</h3></div></div></div><p>To cancel the chase action, we need to add the code below to
+      <span class="literal">PlayerAvatar</span>'s <span class="literal">moveForward</span>,
+      <span class="literal">moveBackward</span>, <span class="literal">moveLeft</span> and
+      <span class="literal">moveRight</span> functions as in the excerpt below.</p><pre class="programlisting">def moveForward(self, isDown):
+    if isDown:
+        if self.mouseControl.isMoving:
+            self.mouseControl.cancel()
+        
+        if self.physics.chasing:
+            self.physics.stop()
+
+        self.forwardMagnitude = min(self.forwardMagnitude+1.0,1.0)
+        if self.mode == Mode.COMBAT_CLOSE:
+            if self.stance == Avatar.STANCE_BACKWARD:
+                nst = Avatar.STANCE_NEUTRAL
+            else:
+                nst = Avatar.STANCE_FORWARD
+            self.takeStance( nst )
+    else:
+        self.forwardMagnitude = max(self.forwardMagnitude-1.0,-1.0)</pre><p><span class="citetitle"><span class="literal">client/Avatar.py</span></span></p></div></div></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Source_Files"></a>Appendix&nbsp;A.&nbsp;Source files</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e459">A.1. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/RandomNavigator.py</span></a></span></dt><dt><span class="section"><a href="#d0e467">A.2. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/RandomNavigator.py</span></a></span></dt><dt><span class="section"><a href="#d0e475">A.3. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/RandomNavigator.py</span></a></span></dt><dt><span class="section"><a href="#d0e483">A.4. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/editor/RandomNavigator.py</span></a></span></dt><dt><span class="section"><a href="#d0e491">A.5. <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/defs/RandomNavigator.def</span></a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e459"></a>A.1.&nbsp;<span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/RandomNavigator.py</span></h2></div></div></div><pre class="programlisting">import BigWorld
+import math
+import random
+import Math
+
+
+class RandomNavigator( BigWorld.Entity ):
+
+    TIMER_WAITING_FOR_NAVMESH = 1
+    
+    #---------------------------------------------------------------------
+    # Constructor.
+    #---------------------------------------------------------------------
+    def __init__( self ):
+        BigWorld.Entity .__init__( self )
+        self.destination = self.position
+        self.addTimer( 5.0, 0, RandomNavigator.TIMER_WAITING_FOR_NAVMESH )
+
+    #---------------------------------------------------------------------
+    # This method is called when a timer expires.
+    #---------------------------------------------------------------------
+    def onTimer(self, timerId, userId):
+        if userId == RandomNavigator.TIMER_WAITING_FOR_NAVMESH:
+            if self.canNavigateTo( self.position ) == None:
+                self.addTimer( 5.0, 0, RandomNavigator.TIMER_WAITING_FOR_NAVMESH )
+            else:
+                self.navigateStep( self.destination, 5.0, 10.0 )
+
+
+    #---------------------------------------------------------------------
+    # This method is called when we've finished moving to a point.
+    #---------------------------------------------------------------------
+    def onMove(self, controllerId, userId):
+        if ( self.position - self.destination ).length &gt; 0.1:
+            self.navigateStep( self.destination, 5.0, 10.0 )
+        else:
+            self.destination = None
+            while self.destination == None:
+                randomDestination = ( 
+                    self.position.x + random.randrange(-400, 400, 1.0),
+                    self.position.y,
+                    self.position.z + random.randrange(-400, 400, 1.0) )
+                self.destination = self.canNavigateTo( randomDestination )
+
+            self.navigateStep( self.destination, 5.0, 10.0 )
+
+# RandomNavigator.py</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e467"></a>A.2.&nbsp;<span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/RandomNavigator.py</span></h2></div></div></div><pre class="programlisting">import math
+import BigWorld
+from keys import *
+
+
+# --------------------------------------------------------------------------
+# Section: class RandomNavigator
+# --------------------------------------------------------------------------
+
+
+class RandomNavigator( BigWorld.Entity ):
+    stdModel = 'characters/avatars/base/base.model'
+
+    def __init__( self ):
+        BigWorld.Entity.__init__( self )
+
+
+    def prerequisites( self ):
+        return [ RandomNavigator.stdModel ]
+
+
+    def enterWorld( self ):
+        self.model = BigWorld.Model( RandomNavigator.stdModel )
+        BigWorld.addShadowEntity( self )
+        self.targetCaps = [ CAP_CAN_HIT , CAP_CAN_USE ]
+        self.filter = BigWorld.AvatarDropFilter()
+        
+
+    def leaveWorld( self ):
+        BigWorld.delShadowEntity( self )
+        self.model = None
+
+
+    def use( self ):
+        pass
+
+
+#RandomNavigator.py</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e475"></a>A.3.&nbsp;<span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/RandomNavigator.py</span></h2></div></div></div><pre class="programlisting">import FantasyDemo
+
+# --------------------------------------------------------------------------
+# Section: class RandomNavigator
+# --------------------------------------------------------------------------
+
+class RandomNavigator( FantasyDemo.Base ):
+
+    def __init__( self ):
+        FantasyDemo.Base.__init__( self )
+
+
+# RandomNavigator.py  </pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e483"></a>A.4.&nbsp;<span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/editor/RandomNavigator.py</span></h2></div></div></div><pre class="programlisting">class RandomNavigator:
+    def modelName( self, props ):
+        return 'characters/avatars/base/base.model'
+
+# RandomNavigator.py</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e491"></a>A.5.&nbsp;<span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/defs/RandomNavigator.def</span></h2></div></div></div><pre class="programlisting">&lt;root&gt;
+    &lt;Volatile&gt;
+        &lt;position/&gt;
+        &lt;yaw/&gt;
+    &lt;/Volatile&gt;
+
+    &lt;Properties&gt;
+
+        &lt;destination&gt;
+            &lt;Type&gt;            PYTHON                &lt;/Type&gt;
+            &lt;Flags&gt;            CELL_PRIVATE        &lt;/Flags&gt;
+        &lt;/destination&gt;
+
+    &lt;/Properties&gt;
+
+    &lt;ClientMethods&gt;
+    &lt;/ClientMethods&gt;
+
+    &lt;CellMethods&gt;
+    &lt;/CellMethods&gt;
+&lt;/root&gt;</pre></div></div></div></div></body></html>

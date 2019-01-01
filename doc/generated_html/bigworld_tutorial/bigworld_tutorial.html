@@ -1,0 +1,1291 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Tutorial</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="BigWorld_Tutorial"></a>Tutorial</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Overview">1. Overview</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e35">1.1. Conventions</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e38">1.1.1. Files and directories</a></span></dt><dt><span class="section"><a href="#d0e66">1.1.2. Linux development environment</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e85">1.2. Provided files</a></span></dt><dt><span class="section"><a href="#d0e149">1.3. Debugging</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_A_Basic_Client_Only_Game">2. A Basic Client-Only Game (<span class="literal">CLIENT_ONLY</span>)</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e174">2.1. Creating a new project</a></span></dt><dt><span class="section"><a href="#xref_Setting_Up_The_Client_Executable_Folder">2.2. Defining resource paths</a></span></dt><dt><span class="section"><a href="#d0e237">2.3. Creating the resources directory</a></span></dt><dt><span class="section"><a href="#d0e251">2.4. Creating our first entity</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_entities_xml">2.4.1. <span class="literal">entities.xml</span></a></span></dt><dt><span class="section"><a href="#xref_Defining_The_Avatar_Entity_Type">2.4.2. Defining the Avatar entity type</a></span></dt><dt><span class="section"><a href="#d0e411">2.4.3. Implementing the <span class="literal">Avatar</span> entity type</a></span></dt></dl></dd><dt><span class="section"><a href="#xref_The_Personality_Script">2.5. The personality script</a></span></dt><dt><span class="section"><a href="#d0e568">2.6. XML configuration files</a></span></dt><dt><span class="section"><a href="#xref_A_Simple_Space">2.7. A simple space</a></span></dt><dt><span class="section"><a href="#d0e790">2.8. Running the client for the first time</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_A_Basic_Client_Server_Game">3. A basic client-server game (<span class="literal">CLIENT_SERVER</span>)</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_Windows_Linux_File_Sharing">3.1. Server Installation and Configuration</a></span></dt><dt><span class="section"><a href="#d0e842">3.2. A <span class="literal">Space</span> entity.</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e852">3.2.1. entities.xml</a></span></dt><dt><span class="section"><a href="#d0e866">3.2.2. Entity definition</a></span></dt><dt><span class="section"><a href="#d0e885">3.2.3. Base part</a></span></dt><dt><span class="section"><a href="#d0e904">3.2.4. Cell part</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e923">3.3. Server-side personality scripts</a></span></dt><dt><span class="section"><a href="#d0e981">3.4. The server-side <span class="literal">Avatar</span> scripts</a></span></dt><dt><span class="section"><a href="#d0e1049">3.5. Connecting the client to the server</a></span></dt><dt><span class="section"><a href="#d0e1122">3.6. Going 3<sup>rd</sup> person</a></span></dt><dt><span class="section"><a href="#d0e1157">3.7. Server-side XML configuration</a></span></dt><dt><span class="section"><a href="#xref_Starting_And_Connecting_To_The_Server">3.8. Starting and connecting to the server</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1242">3.8.1. Indie Edition</a></span></dt><dt><span class="section"><a href="#d0e1274">3.8.2. Commercial/Indie Source Edition</a></span></dt><dt><span class="section"><a href="#d0e1306">3.8.3. Starting a Server</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#xref_Implementing_A_Chat_System">4. Implementing a chat system (<span class="literal">CHAT_CONSOLE</span>)</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_Basic_GUI_Text_Console">4.1. GUI text console</a></span></dt><dt><span class="section"><a href="#d0e1340">4.2. Modifications to the <span class="literal">Avatar</span> entity</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d0e1444">5. EntityLoader (<span class="literal">ENTITY_LOADER</span>)</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1460">5.1. Implementation</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d0e1521">6. A Basic NPC Entity (<span class="literal">BASIC_NPC</span>)</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1529">6.1. Design</a></span></dt><dt><span class="section"><a href="#d0e1563">6.2. Art</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1582">6.2.1. Exporting the model</a></span></dt><dt><span class="section"><a href="#d0e1616">6.2.2. Configuring the model</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1677">6.3. Scripts</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1693">6.3.1. entities.xml</a></span></dt><dt><span class="section"><a href="#d0e1713">6.3.2. Entity definition</a></span></dt><dt><span class="section"><a href="#d0e1800">6.3.3. Base part</a></span></dt><dt><span class="section"><a href="#d0e1828">6.3.4. Cell part</a></span></dt><dt><span class="section"><a href="#d0e1863">6.3.5. Client part</a></span></dt><dt><span class="section"><a href="#d0e1998">6.3.6. Editor script</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e2010">6.4. Testing</a></span></dt><dt><span class="section"><a href="#d0e2045">6.5. Possible improvements</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Overview"></a>Chapter&nbsp;1.&nbsp;Overview</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e35">1.1. Conventions</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e38">1.1.1. Files and directories</a></span></dt><dt><span class="section"><a href="#d0e66">1.1.2. Linux development environment</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e85">1.2. Provided files</a></span></dt><dt><span class="section"><a href="#d0e149">1.3. Debugging</a></span></dt></dl></div><p>This tutorial provides a brief overview of the minimum steps needed to
+  get a basic game working from scratch. Game developers and technical artists
+  working with BigWorld for the first time should work through this tutorial
+  to get a feel for the way the various files and directories fit together to
+  produce a working game.</p><p>The game demo that ships with the BigWorld package is called
+  FantasyDemo. If you are reading this tutorial, you have probably already
+  spent some time playing through it and seeing some of the things that the
+  BigWorld engine can do. Unfortunately for new developers, FantasyDemo is
+  actually a rather large and involved project, so using it as a reference
+  point for implementing a new game can be quite confusing. In general, it is
+  not obvious what can and cannot be stripped out to create a skeleton
+  game.</p><p>Instead, this document will work from an empty directory and build the
+  project file by file, to give you a clear understanding of what each file
+  and directory is for.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>For details on BigWorld terminology, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../glossary_of_terms/glossary_of_terms.html#Glossary_Of_Terms" class="olink">Glossary of Terms</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e35"></a>1.1.&nbsp;Conventions</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e38"></a>1.1.1.&nbsp;Files and directories</h3></div></div></div><p>This document uses Unix filesystem conventions for file naming
+      <em class="emphasis">i.e.</em>, files will be named
+      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/db.xml</code>,
+      and not
+      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>\scripts\db.xml</code>.
+      You should follow this practice when developing your game, whether or
+      not you are dealing with client-side or server-side scripts and/or
+      assets.</p><p>This tutorial assumes you are working on a Windows box, with the
+      files mounted on a local filesystem. The early stages of the tutorial
+      are entirely client-side, so any issues regarding the synchronisation of
+      files between the client and server are not addressed here. Cross
+      machine synchronisation is discussed in <a href="#xref_Windows_Linux_File_Sharing" title="3.1.&nbsp;Server Installation and Configuration">Server Installation and Configuration</a>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>This tutorial assumes that the BigWorld package was extracted to
+        the directory <code class="filename">C:\BigWorld</code>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e66"></a>1.1.2.&nbsp;Linux development environment</h3></div></div></div><p>This tutorial assumes that you are using a UNIX user account
+      called <span class="literal">Fred</span>. The parts of this tutorial that involve
+      resources mounted on a Linux filesystem assume that they are mounted at
+      <code class="filename"><code class="envar">$HOME</code>/mf</code>
+      (<em class="emphasis">i.e.</em>, <code class="filename">/home/fred/mf</code>).</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e85"></a>1.2.&nbsp;Provided files</h2></div></div></div><p>All files used in this tutorial are provided in the <code class="filename">tutorial</code> directory of your BigWorld
+    package.</p><p>As shipped, the files represent the final state of the completed
+    tutorial. If you are new to BigWorld development, then you probably want
+    to see the minimal set of files required at each stage of the tutorial,
+    instead of just diving into the completed tutorial (which while much
+    simpler than FantasyDemo, still consists of a fair number of files). To
+    help you with this, BigWorld provides a utility
+    (<code class="filename">tutorial/generate_res_trees.py</code>) that strips down the
+    resource tree to the minimal state needed for a particular stage of the
+    tutorial. If you run the utility with the symbolic name of a chapter
+    (<em class="emphasis">e.g.</em>, <span class="literal">./tutorial.py
+    CLIENT_SERVER</span>), then the stripped resources are extracted to an
+    appropriately named <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em></code>
+    directory in the tutorial directory (<em class="emphasis">e.g.</em>,
+    <code class="filename">tutorial/res_client_server</code>). You can then alter the
+    <code class="filename">paths.xml</code><sup>[<a name="d0e116" href="#ftn.d0e116">1</a>]</sup> and <code class="filename">.bwmachined.conf</code><sup>[<a name="d0e129" href="#ftn.d0e129">2</a>]</sup> settings to point to these stripped trees.</p><p>Even if you are doing the final stage of the tutorial, it may be
+    helpful to run this stripping utility before looking through the source
+    code, as it removes all inclusion/exclusion steps that we have inserted to
+    facilitate the stripping process and makes the code easier to read.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>The symbolic constants for each chapter are given in the chapter
+      heading <em class="emphasis">e.g.</em>,
+      <span class="literal">CLIENT_ONLY</span>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e149"></a>1.3.&nbsp;Debugging</h2></div></div></div><p>There may be times while working through the tutorial that the
+    client won't start due to some error in the scripts. In order to discover
+    the cause of the error, use a program such as DebugView (available on the
+    Microsoft website) which captures and displays debug output.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e116" href="#d0e116">1</a>] </sup>For details on how to configure <code class="filename">paths.xml</code>,
+        see <a href="#xref_Setting_Up_The_Client_Executable_Folder" title="2.2.&nbsp;Defining resource paths">Defining resource paths</a> ,
+        and <a href="#xref_A_Simple_Space" title="2.7.&nbsp;A simple space">A simple space</a>.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e129" href="#d0e129">2</a>] </sup>For details on how to configure
+        <code class="filename">.bwmachined.conf</code>, see <a href="#xref_Starting_And_Connecting_To_The_Server" title="3.8.&nbsp;Starting and connecting to the server">Starting and connecting to the server</a>.</p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_A_Basic_Client_Only_Game"></a>Chapter&nbsp;2.&nbsp;A Basic Client-Only Game (<span class="literal">CLIENT_ONLY</span>)</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e174">2.1. Creating a new project</a></span></dt><dt><span class="section"><a href="#xref_Setting_Up_The_Client_Executable_Folder">2.2. Defining resource paths</a></span></dt><dt><span class="section"><a href="#d0e237">2.3. Creating the resources directory</a></span></dt><dt><span class="section"><a href="#d0e251">2.4. Creating our first entity</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_entities_xml">2.4.1. <span class="literal">entities.xml</span></a></span></dt><dt><span class="section"><a href="#xref_Defining_The_Avatar_Entity_Type">2.4.2. Defining the Avatar entity type</a></span></dt><dt><span class="section"><a href="#d0e411">2.4.3. Implementing the <span class="literal">Avatar</span> entity type</a></span></dt></dl></dd><dt><span class="section"><a href="#xref_The_Personality_Script">2.5. The personality script</a></span></dt><dt><span class="section"><a href="#d0e568">2.6. XML configuration files</a></span></dt><dt><span class="section"><a href="#xref_A_Simple_Space">2.7. A simple space</a></span></dt><dt><span class="section"><a href="#d0e790">2.8. Running the client for the first time</a></span></dt></dl></div><p>This chapter describes how to get a bare-bones client up and running
+  with its own resources and scripts. This involves:</p><div class="itemizedlist"><ul type="disc"><li><p>Creating a new BigWorld project directory.</p></li><li><p>Creating files and directories necessary to define a single
+      client-side player entity.</p></li><li><p>Creating a new space.</p></li></ul></div><p>By the end of this part of the tutorial, it will be possible to walk
+  around a trivial space in the client using a first-person view.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e174"></a>2.1.&nbsp;Creating a new project</h2></div></div></div><p>The FantasyDemo project is located in the <code class="filename">fantasydemo</code> directory in <code class="filename">C:\BigWorld</code>. Following that convention, we
+    will start our new tutorial project in the same directory, by creating a
+    new directory called <code class="filename">tutorial</code> in
+    <code class="filename">C:\BigWorld</code>. All resources and scripts specific to
+    this project will be located within this directory.</p><p>Please note that the tutorial project is shipped as part of your
+    package. A skeleton project called <code class="filename">my_game</code> is also shipped as part of the Indie
+    edition, in order to allow you to start a new project easily. Please
+    review the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../getting_started/getting_started.html#Getting_Started" class="olink">Getting Started</a> document for more
+    details.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Setting_Up_The_Client_Executable_Folder"></a>2.2.&nbsp;Defining resource paths</h2></div></div></div><p>The BigWorld client is a generic executable, located at
+    <code class="code">bigworld\bin\client\bwclient.exe</code>. Since it is independent of
+    the game resources it loads, it needs to be instructed as to where to find
+    your project's resources.</p><p>The easiest way to go about this is to use the
+    <code class="option">--res</code> command line switch in conjunction with a batch
+    file to provide a convenient way to start the client for your particular
+    game. A benefit of doing it this way is that it also keeps the resource
+    path configuration self contained within your project folder. Typically,
+    you would create a batch file named <code class="code">run.bat</code> and it would be
+    located at the root level of your project folder (i.e. in
+    <code class="code">my_game</code>) and would look something like:</p><pre class="programlisting">"..\bigworld\bin\client\bwclient.exe" --res %~dp0res;../../../bigworld/res</pre><p>Keep
+    in mind that paths are relative to the executable location,
+    <em class="emphasis">not</em> the current working directory. The above example
+    uses <code class="code">%~dp0</code> to grab the batch file's directory as an absolute
+    path in order to keep the batch file generic.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Remember, the %~dp0 trick will only work in a .BAT file. If you
+      want to launch the from the command prompt directly, you will need to
+      specifiy the full path explicitly.</p></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>For details on how the client searches for resources, see the
+      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Resource_Search_Paths" class="olink">Resource search paths</a> section in the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#Client_Programming_Guide" class="olink">Client Programming Guide</a>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e237"></a>2.3.&nbsp;Creating the resources directory</h2></div></div></div><p>Resource directories for BigWorld games are typically named
+    <code class="filename">res</code>, therefore you can simply
+    create a directory called <code class="filename">res</code> in
+    the <code class="filename">tutorial</code> directory. This top-level resources
+    directory will contain all game-specific scripts, assets, and
+    configuration files.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e251"></a>2.4.&nbsp;Creating our first entity</h2></div></div></div><p>Entities are game objects that have a position. Not every class that
+    you write in your game must be an entity, but most objects that are part
+    of the game mechanics will be. Examples of entities would be the player,
+    NPCs, chat rooms, dropped items, etc.... Examples of objects that need not
+    be entities might be helper classes that are only attached to/used by a
+    single entity type.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>For details on this and other BigWorld server terms, see the
+      document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../glossary_of_terms/glossary_of_terms.html#Glossary_Of_Terms" class="olink">Glossary of Terms</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_entities_xml"></a>2.4.1.&nbsp;<span class="literal">entities.xml</span></h3></div></div></div><p>Entity scripts for a BigWorld game must reside in a <code class="filename">res/scripts</code> directory. One of the files
+      that must exist in this directory is
+      <code class="filename">entities.xml</code><sup>[<a name="d0e272" href="#ftn.d0e272">3</a>]</sup>, which lists the game entities that will be used.</p><p>Create a basic
+      <code class="filename">tutorial/res/scripts/entities.xml</code> file that
+      contains a player entity called <code class="classname">Avatar</code>:</p><pre class="programlisting">&lt;root&gt;
+   &lt;Avatar/&gt;
+&lt;/root&gt;</pre><p><span class="citetitle">Example
+      <code class="filename">tutorial/res/scripts/entities.xml</code></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_Defining_The_Avatar_Entity_Type"></a>2.4.2.&nbsp;Defining the Avatar entity type</h3></div></div></div><p>The other directory that must exist is <code class="filename">res/scripts/entity_defs</code>, which contains the
+      <code class="filename">.def</code><sup>[<a name="d0e308" href="#ftn.d0e308">4</a>]</sup> files, with definitions of the properties and methods for
+      each entity.</p><p>It might be helpful to think of these definition files as being
+      similar to C/C++ header files as they specify the types of properties
+      and the method calls attached to the entity.</p><p>Create the
+      <code class="filename">tutorial/res/scripts/entity_defs/Avatar.def</code> file,
+      with the following contents:</p><pre class="programlisting">&lt;root&gt;
+   &lt;Volatile&gt;
+      &lt;position/&gt;
+      &lt;yaw/&gt;
+   &lt;/Volatile&gt;
+   &lt;Properties&gt;
+      &lt;playerName&gt;
+         &lt;Type&gt;   UNICODE_STRING       &lt;/Type&gt;
+         &lt;Flags&gt;  ALL_CLIENTS  &lt;/Flags&gt;
+      &lt;/playerName&gt;
+   &lt;/Properties&gt;
+   &lt;ClientMethods&gt;
+   &lt;/ClientMethods&gt;
+   &lt;CellMethods&gt;
+   &lt;/CellMethods&gt;
+   &lt;BaseMethods&gt;
+   &lt;/BaseMethods&gt;
+&lt;/root&gt;</pre><p><span class="citetitle">Example
+      <code class="filename">tutorial/res/scripts/entity_defs/Avatar.def</code></span></p><p>This is a very basic entity definition which defines properties
+      for the entity, but no methods. Notice that the properties are separated
+      into two sections: <em class="emphasis">volatile</em> and
+      <em class="emphasis">non-volatile</em>.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e341"></a>2.4.2.1.&nbsp;Volatile properties</h4></div></div></div><p>For a BigWorld entity, volatile properties are
+        positional/directional properties. They are described as
+        <em class="emphasis">volatile</em> because they are constantly changing.
+        The volatile properties' current value are only considered to be
+        important thing while the history of changes on the property is less
+        important. In a bandwidth-constrained environment only the current
+        value should be sent.</p><p>The supported volatile properties are
+        <code class="varname">position</code>, <code class="varname">yaw</code>,
+        <code class="varname">pitch</code>, and <code class="varname">roll</code>. For simplicity,
+        the <code class="filename">tutorial/res/scripts/entity_defs/Avatar.def</code>
+        that we have just defined only sends <code class="varname">position</code> and
+        <code class="varname">yaw</code> of the <code class="classname">Avatar</code>
+        entity.</p><p>For details on volatile properties, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Properties" class="olink"><i>Properties</i></a>, in
+        <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Properties" class="olink"><i>Properties</i></a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e383"></a>2.4.2.2.&nbsp;Non-volatile properties</h4></div></div></div><p>In contrast to volatile properties, regular properties tend to
+        change infrequently, and therefore all changes to a particular
+        property should be sent down to the client. Each property can be named
+        as you wish, and can have a number of different settings attached to
+        it.</p><p>We have defined a simple property for storing the player's name,
+        and for simplicity, we are only using the most necessary property
+        settings, specifying the type <span class="literal">STRING</span> and
+        distribution flags <span class="literal">ALL_CLIENTS</span>. The
+        <span class="literal">ALL_CLIENTS</span> tags means that this property will be
+        visible to the player controlling the client entity, as well as any
+        other player that can see his entity. For details on this and other
+        distribution flags, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Properties" class="olink"><i>Properties</i></a>, in
+        <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Properties" class="olink"><i>Properties</i></a>.</p><p>For details on entity properties, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Properties" class="olink"><i>Properties</i></a>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e411"></a>2.4.3.&nbsp;Implementing the <span class="literal">Avatar</span> entity type</h3></div></div></div><p>The scripts that control the client-side entity logic are located
+      in the <code class="filename">res/scripts/client</code>, and
+      the ones that control the server-side entity logic are located in
+      <code class="filename">res/scripts/cell</code> and <code class="filename">res/scripts/base</code> directories.</p><p>Create each of these directories within the <code class="filename">tutorial/res/scripts</code> directory. Your
+      directory structure should now look like this:</p><pre class="programlisting">tutorial
++-res
+  +-scripts
+    +-base
+    +-cell
+    +-client
+    +-entity_defs</pre><p><span class="citetitle">Folder structure at this stage of the
+      tutorial</span></p><p>For details on the exact structure and mechanics of the <code class="filename">scripts</code> directory, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Physical_Entity_Structure_For_Scripting" class="olink"><i>Physical Entity Structure for Scripting</i></a>.</p><p>Up to this point, we have declared the
+      <code class="classname">Avatar</code> entity in
+      <code class="filename">tutorial/res/scripts/entities.xml</code><sup>[<a name="d0e454" href="#ftn.d0e454">5</a>]</sup> and defined it in
+      <code class="filename">tutorial/scripts/entity_defs/Avatar.def</code><sup>[<a name="d0e462" href="#ftn.d0e462">6</a>]</sup>Now we must provide (at least part of) the script
+      implementation of that entity. Since we are working only on the
+      client-side at the moment, just create the
+      <code class="filename">tutorial/res/scripts/client/Avatar.py</code>
+      script:</p><pre class="programlisting">import BigWorld
+
+# These are constants for identifying keypresses, mouse movement etc
+import Keys
+
+class Avatar( BigWorld.Entity ):
+
+   def onEnterWorld( self, prereqs ):
+      pass
+
+class PlayerAvatar( Avatar ):
+
+   def onEnterWorld( self, prereqs ):
+
+      Avatar.onEnterWorld( self, prereqs )
+
+      # Set the position/movement filter to correspond to an player avatar
+      self.filter = BigWorld.PlayerAvatarFilter()
+
+      # Setup the physics for the Avatar
+      self.physics = BigWorld.STANDARD_PHYSICS
+      self.physics.velocityMouse = "Direction"
+      self.physics.collide = True
+      self.physics.fall = True
+
+   def handleKeyEvent( self, event ):
+
+      # Get the current velocity
+      v = self.physics.velocity
+
+      # Update the velocity depending on the key input
+      if event.key == Keys.KEY_W:
+         v.z = event.isKeyDown() * 5.0
+      elif event.key == Keys.KEY_S:
+         v.z = event.isKeyDown() * -5.0
+      elif event.key == Keys.KEY_A:
+         v.x = event.isKeyDown() * -5.0
+      elif event.key == Keys.KEY_D:
+         v.x = event.isKeyDown() * 5.0
+
+      # Save back the new velocity
+      self.physics.velocity = v</pre><p><span class="citetitle">Example
+      <code class="filename">tutorial/res/scripts/client/Avatar.py</code></span></p><p>Notice that the script declares two classes:
+      <code class="classname">Avatar</code> and <code class="classname">PlayerAvatar</code>.
+      These two classes are required to satisfy a hard-coded requirement in
+      the BigWorld client that any entity type that can act as a client proxy
+      must have a sub-class called
+      <code class="classname">Player<em class="replaceable"><code>&lt;class&gt;</code></em></code>
+      that is used when attaching to the client.</p><p>We are only interested in the player at the moment, so the
+      implementation of the base <code class="classname">Avatar</code> class is left
+      blank. For the moment, we have just provided implementations of
+      callbacks for initialisation (where we set up the position filter and
+      player physics) and keyboard events (where we provide basic
+      <span class="literal">WASD</span> controls).</p><p>Notice that the <code class="classname">Avatar</code> script imports a
+      module called <code class="classname">Keys</code>. This module defines constants
+      for things like keyboard character codes, mouse events, joystick events,
+      and other commonly used constants. It is located in <code class="filename">bigworld/res/scripts/client</code>, so we do not
+      need to copy it or do anything special to access it from our
+      scripts.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_The_Personality_Script"></a>2.5.&nbsp;The personality script</h2></div></div></div><p>The next required script for our basic client is the
+    <em class="emphasis">personality</em> script. The easiest way to think of this
+    script is as the bootstrap script for each component of a BigWorld
+    system.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>For details on this and other BigWorld client terms, see the
+      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../glossary_of_terms/glossary_of_terms.html#Glossary_Of_Terms" class="olink">Glossary of Terms</a>.</p></div><p>There should be one personality script in each script directory
+    (<em class="emphasis">i.e.</em>, for cell, base, and client) and they are used
+    for defining callbacks to be called on startup and shutdown, as well as
+    other global, non-entity-related functionality. On the client, this might
+    include menu systems, user input management, camera control, etc...</p><p>For details on the client personality script, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#Client_Programming_Guide" class="olink">Client Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Scripting" class="olink"><i>Scripting</i></a>, in <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Personality_Script" class="olink">Personality script</a>.</p><p>Save the basic personality script below as
+    <code class="filename">tutorial/res/scripts/client/BWPersonality.py</code>:</p><div class="informalexample"><pre class="programlisting"># This is the client personality script for the BigWorld tutorial.  Think of
+# it as the bootstrap script for the client.  It contains functions that
+# are called on initialisation, shutdown, and handlers for various input
+# events.
+import BigWorld
+
+# ----------------------------------------------------------------------------
+# Section: Required callbacks
+# ----------------------------------------------------------------------------
+# The init function is called as part of the BigWorld initialisation process.
+# It receives the BigWorld xml config files as arguments.  This is the best
+# place to configure all the application-specific BigWorld components, like
+# initial camera view, etc...
+def init( scriptConfig, engineConfig, prefs ):
+
+   initOffline( scriptConfig )
+
+   # Hide the mouse cursor and restrict it to the client area of the window.
+   GUI.mcursor().clipped = True
+   GUI.mcursor().visible = False
+
+# This is called immediately after init() finishes.  We're done with all our
+# init code, so this is a no-op.
+def start():
+   pass
+
+# This method is called just before the game shuts down.
+def fini():
+   pass
+
+# This is called by BigWorld when player moves from an inside to an outside
+# environment, or vice versa.  It should be used to adapt any personality
+# related data (eg, camera position/nature, etc).
+def onChangeEnvironments( inside ):
+   pass
+
+# This is called by the engine when a system generated message occurs.
+def addChatMsg( msg ):
+   print "addChatMsg:", msg
+
+# Keyboard event handler
+def handleKeyEvent( event ):
+   return False
+
+# Mouse event handler
+def handleMouseEvent( event ):
+    return False
+
+# Joystick event handler
+def handleAxisEvent( event ):
+    return False
+
+# ----------------------------------------------------------------------------
+# Section: Helper methods
+# ----------------------------------------------------------------------------
+def initOffline( scriptConfig ):
+
+   # Create a space for the client to inhabit
+   spaceID = BigWorld.createSpace()
+
+   # Load the space that is named in script_config.xml
+   BigWorld.addSpaceGeometryMapping(
+      spaceID, None, scriptConfig.readString( "space" ) )
+
+   # Create the player entity, using positions from script_config.xml
+   playerID = BigWorld.createEntity( scriptConfig.readString( "player/entityType" ),
+                                     spaceID, 0,
+                                     scriptConfig.readVector3( "player/startPosition" ),
+                                     scriptConfig.readVector3( "player/startDirection" ),
+                                     {} )
+
+   BigWorld.player( BigWorld.entities[ playerID ] )
+
+   # Use first person mode since we are not using models yet.
+   BigWorld.camera().firstPerson = True</pre></div><p><span class="citetitle">Example
+    <span class="literal">tutorial/res/scripts/client/BWPersonality.py</span></span></p><p>This personality script provides an
+    <code class="methodname">initOffline</code> method that contains enough code to
+    get a basic client going, as well as stub implementations of all other
+    required callbacks. The initialisation code expects various configuration
+    files to be passed to it, and expects
+    <code class="methodname">scriptConfig</code> to contain particular settings, such
+    as <span class="literal">space</span>, <span class="literal">player/entityType</span>, and so
+    on.</p><p>The following sections describe how to set up those files, so they
+    will be ready to be passed to the personality script on startup.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e568"></a>2.6.&nbsp;XML configuration files</h2></div></div></div><p>At a minimum, the BigWorld client expects three XML configuration
+    files to be passed into the personality script at startup:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="literal"><em class="replaceable"><code>&lt;engine_config&gt;</code></em>.xml</span></p></li><li><p><span class="literal"><em class="replaceable"><code>&lt;scripts_config&gt;</code></em>.xml</span></p></li><li><p><span class="literal"><em class="replaceable"><code>&lt;preferences&gt;</code></em>.xml</span></p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>For details on these files, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#Client_Programming_Guide" class="olink">Client Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Scripting" class="olink"><i>Scripting</i></a>, in <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Personality_Script" class="olink">Personality script</a>, sub-sections <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_File_engine_config_xml" class="olink">File
+      <span class="literal"><em class="replaceable"><code>&lt;engine_config&gt;</code></em>.xml</span></a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_File_scripts_config_xml" class="olink">File
+      <span class="literal"><em class="replaceable"><code>&lt;scripts_config&gt;</code></em>.xml</span></a>, and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_File_preferences_xml" class="olink">File
+      <span class="literal"><em class="replaceable"><code>&lt;preferences&gt;</code></em>.xml</span></a> respectively.</p></div><p>The
+    <code class="code"><em class="replaceable"><code>&lt;engine_config&gt;</code></em>.xml</code> file is
+    used for setting various configurable properties on the client engine,
+    including the name of the game's personality. We will re-use the engine
+    settings used for FantasyDemo by copying
+    <code class="code">fantasydemo/res/engine_config.xml</code> to
+    <code class="code">tutorial/res/engine_config.xml</code>, ensuring that we change the
+    <code class="code">&lt;personality&gt;</code> setting to <code class="code">BWPersonality.
+    </code>Notice that this corresponds to the file
+    <code class="code">BWPersonality.py</code> that we created in <a href="#xref_The_Personality_Script" title="2.5.&nbsp;The personality script">The personality script</a>).</p><p>The
+    <code class="code"><em class="replaceable"><code>&lt;scripts_config&gt;</code></em>.xml</code> file is
+    used to define the settings that the personality script is expecting
+    &#8212; save the following into
+    <code class="code">tutorial/res/scripts_config.xml</code>:</p><pre class="programlisting">&lt;scripts_config.xml&gt;
+   &lt;!-- The contents of this file are passed to the personality script
+        as the first argument in the init function (as a data section). Its
+        grammar is solely defined by the personality script. --&gt;
+   &lt;space&gt; spaces/main &lt;/space&gt;
+   &lt;player&gt;
+      &lt;entityType&gt; Avatar &lt;/entityType&gt;
+      &lt;!-- This is the entity type of the player that will be created. You must implement
+           a Player&lt;class&gt; type (e.g. PlayerAvatar) to use this type as a client proxy. The following options --&gt;
+      &lt;startPosition&gt;  0.0 1.25 0.0 &lt;/startPosition&gt;
+      &lt;startDirection&gt; 1.0 0.0  0.0 &lt;/startDirection&gt;
+      &lt;!-- are used by the personality script to provide a start position and
+           facing dir for players if there is no space specific spawn point. --&gt;
+    &lt;/player&gt;
+&lt;/scripts_config.xml&gt;</pre><p><span class="citetitle">Example
+    <span class="literal">tutorial/res/scripts_config.xml</span></span></p><p>At this stage, the values for the configuration settings expected by
+    the personality script's <code class="code">init</code> method have been provided. The
+    only thing still missing for our basic client is the actual space data.
+    The script configuration passes the string <span class="literal">spaces/main</span>
+    into the personality script as the space in which the client entity will
+    be created, so next we will create a basic space to walk around in.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_A_Simple_Space"></a>2.7.&nbsp;A simple space</h2></div></div></div><p>Before starting World Editor, you will need to tell it where to find
+    the resources for your particular project. To do this, open
+    <code class="filename">bigworld/tools/worldeditor/paths.xml</code> and replace the
+    reference to FantasyDemo to your own project. For example, </p><pre class="programlisting">&lt;root&gt;
+    &lt;Paths&gt;
+        &lt;Path&gt;../../../tutorial/res&lt;/Path&gt;
+        &lt;Path&gt;../../../bigworld/res&lt;/Path&gt;
+    &lt;/Paths&gt;
+&lt;/root&gt;</pre><p><span class="citetitle">Example
+    <span class="literal">bigworld/worldeditor/paths.xml</span></span></p><p>To create a simple space that can be navigated, follow the steps
+    below:</p><div class="itemizedlist"><ul type="disc"><li><p>Start WorldEditor
+        (<code class="filename">bigworld/tools/worldeditor/worldeditor.exe</code>).</p></li><li><p>In the <em class="emphasis">Open Space</em> dialog box ,
+        click the <em class="emphasis">Create</em> button.</p><div class="informalfigure"><div class="mediaobject"><img src="images/open_space_dialog_box.png" height=""><span class="caption"><p>Open Space dialog box</p></span></div></div></li><li><p>In the <em class="emphasis">New Space</em> dialog
+        box:</p><div class="itemizedlist"><ul type="circle"><li><p>Set the <em class="emphasis">Space Name</em> field to
+            <em class="emphasis">main</em>.</p></li><li><p>Set the <em class="emphasis">Space Dimensions</em>
+            group box's <em class="emphasis">Width</em> and <em class="emphasis">Height</em> fields to <em class="emphasis">5</em>.</p></li><li><p>Set the <em class="emphasis">Default Terrain
+            Texture</em> field to a texture of your choosing.</p></li><li><p>Click the <em class="emphasis">Create</em>
+            button.</p></li></ul></div><div class="informalfigure"><div class="mediaobject"><img src="images/new_space_dialog_box.png" height=""><span class="caption"><p>New Space dialog box</p></span></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>For details on this dialog box, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#Content_Tools_Reference_Guide" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#xref_we_Dialog_Boxes" class="olink">Dialog boxes</a>, in <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#xref_we_New_Space_Dialog_Box" class="olink">New Space dialog box</a>.</p></div></li><li><p>The new space <span class="literal">main</span> will be created and
+        displayed in WorldEditor, as displayed below.</p><div class="informalfigure"><div class="mediaobject"><img src="images/the_main_space.png" height=""><span class="caption"><p>The <span class="literal">main</span> space</p></span></div></div></li><li><p>Select the <em class="emphasis">File <span class="symbol">&#8594;</span> Save</em> menu item to save the
+        new space</p></li><li><p>Select the <em class="emphasis">File <span class="symbol">&#8594;</span> Exit</em> menu item to close
+        WorldEditor.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e790"></a>2.8.&nbsp;Running the client for the first time</h2></div></div></div><p>Having carried out the steps in the previous sections of this
+    tutorial, you can now run the client . To do that, use the
+    <code class="filename">run.bat</code> you created earlier. You should have a basic
+    first-person player that can walk around a space using mouse-look and
+    <span class="literal">WASD</span> controls.</p><div class="informalfigure"><div class="mediaobject"><img src="images/a_simple_first_person_client.png" height=""><span class="caption"><p>A simple first-person client</p></span></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e272" href="#d0e272">3</a>] </sup>For details on this file, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Physical_Entity_Structure_For_Scripting" class="olink"><i>Physical Entity Structure for Scripting</i></a> in <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_The_entities_xml_File" class="olink">The entities.xml File</a>.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e308" href="#d0e308">4</a>] </sup>For details on these files, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Physical_Entity_Structure_For_Scripting" class="olink"><i>Physical Entity Structure for Scripting</i></a>, in
+          <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_The_Definition_File" class="olink">The Entity Definition File</a>.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e454" href="#d0e454">5</a>] </sup>See <a href="#xref_entities_xml" title="2.4.1.&nbsp;entities.xml"><span class="literal">entities.xml</span></a>.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e462" href="#d0e462">6</a>] </sup>See <a href="#xref_Defining_The_Avatar_Entity_Type" title="2.4.2.&nbsp;Defining the Avatar entity type">Defining the Avatar entity type</a>.</p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_A_Basic_Client_Server_Game"></a>Chapter&nbsp;3.&nbsp;A basic client-server game (<span class="literal">CLIENT_SERVER</span>)</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#xref_Windows_Linux_File_Sharing">3.1. Server Installation and Configuration</a></span></dt><dt><span class="section"><a href="#d0e842">3.2. A <span class="literal">Space</span> entity.</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e852">3.2.1. entities.xml</a></span></dt><dt><span class="section"><a href="#d0e866">3.2.2. Entity definition</a></span></dt><dt><span class="section"><a href="#d0e885">3.2.3. Base part</a></span></dt><dt><span class="section"><a href="#d0e904">3.2.4. Cell part</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e923">3.3. Server-side personality scripts</a></span></dt><dt><span class="section"><a href="#d0e981">3.4. The server-side <span class="literal">Avatar</span> scripts</a></span></dt><dt><span class="section"><a href="#d0e1049">3.5. Connecting the client to the server</a></span></dt><dt><span class="section"><a href="#d0e1122">3.6. Going 3<sup>rd</sup> person</a></span></dt><dt><span class="section"><a href="#d0e1157">3.7. Server-side XML configuration</a></span></dt><dt><span class="section"><a href="#xref_Starting_And_Connecting_To_The_Server">3.8. Starting and connecting to the server</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1242">3.8.1. Indie Edition</a></span></dt><dt><span class="section"><a href="#d0e1274">3.8.2. Commercial/Indie Source Edition</a></span></dt><dt><span class="section"><a href="#d0e1306">3.8.3. Starting a Server</a></span></dt></dl></dd></dl></div><p>In <a href="#xref_A_Basic_Client_Only_Game" title="Chapter&nbsp;2.&nbsp;A Basic Client-Only Game (CLIENT_ONLY)"><i xmlns:xlink="http://www.w3.org/1999/xlink">A Basic Client-Only Game (<span class="literal">CLIENT_ONLY</span>)</i></a> we set up a basic
+  client resources tree that would allow us to walk around a simple space
+  using a first-person view. In this chapter of the tutorial we will extend
+  the game to the server, so that multiple clients can log in and see each
+  other walking around.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Windows_Linux_File_Sharing"></a>3.1.&nbsp;Server Installation and Configuration</h2></div></div></div><p>Prior to progressing through this part of the tutorial it is
+    necessary to install and configure the BigWorld server. If you haven't
+    already done this please proceed to the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/server_installation_guide.html#Server_Installation_Guide" class="olink">Server Installation Guide</a></p><p>At this point it is also relevant to address the issue of sharing
+    files between Linux and Windows machines. Since there are many files that
+    are read by both the client and the server
+    (<code class="filename">tutorial/res/scripts/entity_defs/<em class="replaceable"><code>*</code></em></code>,
+    space data, etc), it is necessary to keep them all on a single file system
+    that is shared between the client and server, rather than having to keep
+    them synchronised manually. Please refer to the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#Client_Programming_Guide" class="olink">Client Programming Guide</a>'s section on <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Simplified_Server_Usage" class="olink"><i>Shared Development Environments</i></a> for more information on this
+    topic.</p><p>For the purposes of this tutorial, we will assume that you have
+    mounted your Windows directory tree at <code class="filename"><code class="envar">$HOME</code>/bigworld_windows_share</code>
+    on your Linux file system.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e842"></a>3.2.&nbsp;A <span class="literal">Space</span> entity.</h2></div></div></div><p>In BigWorld, spaces are separate coordinate systems. Each space can
+    have one or more geometry mappings (as created in the World Editor). Cell
+    entities are associated with a single space at any one time. These may be
+    used to implement things like planets, mission instances, apartments or
+    game sharding.</p><p>A new space is created by creating a cell entity in a new space. It
+    is typical to have an entity type that is responsible for space
+    creation.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e852"></a>3.2.1.&nbsp;entities.xml</h3></div></div></div><p>Every entity must be defined in the
+      <code class="filename">entities.xml</code> file located at <code class="filename">tutorial/res</code> path.</p><pre class="programlisting">&lt;root&gt;
+    &lt;Space/&gt;
+    &lt;Avatar/&gt;
+&lt;/root&gt;</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e866"></a>3.2.2.&nbsp;Entity definition</h3></div></div></div><p>The <code class="classname">Space</code> entity type has a single string
+      property <code class="varname">spaceDir</code>. This will be used to indicate
+      which space geometry to load.</p><pre class="programlisting">&lt;root&gt;
+   &lt;Properties&gt;
+      &lt;spaceDir&gt;
+         &lt;Type&gt;          STRING          &lt;/Type&gt;
+         &lt;Flags&gt;         BASE            &lt;/Flags&gt;
+      &lt;/spaceDir&gt;
+   &lt;/Properties&gt;
+
+   &lt;ClientMethods&gt;
+   &lt;/ClientMethods&gt;
+
+   &lt;CellMethods&gt;
+      &lt;addGeometryMapping&gt;
+         &lt;Arg&gt;           STRING          &lt;/Arg&gt;
+      &lt;/addGeometryMapping&gt;
+   &lt;/CellMethods&gt;
+
+   &lt;BaseMethods&gt;
+   &lt;/BaseMethods&gt;
+&lt;root&gt;</pre><p><span class="citetitle">Example
+      <code class="filename">tutorial/res/scripts/entity_defs/Space.def</code></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e885"></a>3.2.3.&nbsp;Base part</h3></div></div></div><p>The base entity calls
+      <code class="methodname">self.createInNewSpace()</code> to create a new space,
+      put its cell entity in it, and tells the cell to add a space geometry
+      mapping. It registers itself globally as
+      <span class="literal">"DefaultSpace"</span> so that the base entity can easily be
+      found later.</p><pre class="programlisting">import BigWorld
+
+class Space( BigWorld.Base ):
+
+    def __init__( self ):
+        
+        BigWorld.Base.__init__( self )
+
+        # Create this entity in a new space
+        self.createInNewSpace()
+        self.cell.addGeometryMapping( self.spaceDir )
+    
+        self.registerGlobally( "DefaultSpace", self.onRegistered )
+    
+    def onRegistered( self, succeeded ):
+        if not succeeded:
+            print "Failed to register space."
+            self.destroyCellEntity()
+
+    def onLoseCell( self ):
+
+        # Once our cell entity is destroyed, it's safe to clean up the Proxy.
+        # We can't just call self.destroy() in onClientDeath() above, as
+        # destroyCellEntity() is asynchronous and the cell entity would still
+        # exist at that point.
+        self.destroy()</pre><p><span class="citetitle">Example
+      <code class="filename">tutorial/res/scripts/base/Space.py</code></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e904"></a>3.2.4.&nbsp;Cell part</h3></div></div></div><p>The cell entity maps the geometry to load after receiving a call
+      from the base to <code class="function">addGeometryMapping()</code>, with an
+      appropriate path to a geometry (e.g.
+      <code class="filename">spaces/main</code>).</p><pre class="programlisting">import BigWorld
+
+class Space( BigWorld.Entity ):
+        
+    def __init__( self, nearbyEntity ):
+        BigWorld.Entity.__init__( self )
+
+        # This is the first entity created for the space
+        assert( nearbyEntity is None )
+        
+    def onDestroy( self ):
+        # Destroy the space and all entities in it
+        self.destroySpace()
+
+    def addGeometryMapping( self, geometryToMap ):
+        # The base informs us what geometry to map.
+        BigWorld.addSpaceGeometryMapping( self.spaceID, None, geometryToMap )
+</pre><p><span class="citetitle">Example
+      <code class="filename">tutorial/res/scripts/cell/Space.py</code></span></p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e923"></a>3.3.&nbsp;Server-side personality scripts</h2></div></div></div><p>Just like the client, the server uses personality scripts to perform
+    bootstrap functionality on each CellApp and BaseApp. For the moment, we
+    are only interested in the <code class="methodname">onBaseAppReady</code>
+    callback in the BaseApp personality script, which we will use to create a
+    space.</p><p>Our initial revision of
+    <code class="filename">tutorial/res/scripts/base/BWPersonality.py</code> is
+    displayed below:</p><pre class="programlisting"># Base bootstrap script
+import BigWorld
+
+def onInit( isReload ):
+   pass
+
+def onBaseAppReady( isBootstrap, didAutoLoadEntitiesFromDB ):
+   # Only on the first baseapp
+   if isBootstrap:
+     # Create a Space entity that will create a space with our geometry.
+     BigWorld.createBaseLocally( "Space", spaceDir = "spaces/main" )
+</pre><p><span class="citetitle">Example
+    <code class="filename">tutorial/res/scripts/base/BWPersonality.py</code></span></p><p>A <code class="classname">Space</code> entity is created with the
+    <code class="property">spaceDir</code> property set to
+    <span class="literal">"spaces/main"</span>.</p><p>Our initial revision of
+    <code class="filename">tutorial/res/scripts/cell/BWPersonality.py</code> is
+    displayed below:</p><pre class="programlisting"># Base bootstrap script
+import BigWorld
+
+def onInit( isReload ):
+   pass
+
+def onCellAppReady( isFromDB ):
+   pass</pre><p><span class="citetitle">Example
+    <code class="filename">tutorial/res/scripts/cell/BWPersonality.py</code></span></p><p>Our implementation of the scripts is trivial and provides only stub
+    implementations of callbacks that will be explained later.</p><p>For a complete list of the available personality script callbacks,
+    see the documentation for the <code class="classname">BWPersonality</code> module
+    in <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/baseapp/index.html#Client_Python_API" class="olink">Client Python API</a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/cellapp/index.html#Client_Python_API" class="olink">Client Python API</a>, and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html#Client_Python_API" class="olink">Client Python API</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e981"></a>3.4.&nbsp;The server-side <span class="literal">Avatar</span> scripts</h2></div></div></div><p>The next step is to define the server-side logic that goes with our
+    <code class="classname">Avatar</code> class. Even if we did not want to define any
+    server-side logic for our <code class="classname">Avatar</code>, we would still
+    need to provide at least stub implementations of
+    <code class="filename">Avatar.py</code> in the <code class="filename">base</code> and <code class="filename">cell</code> directories so that the base and cell
+    parts of our <code class="classname">Avatar</code> entity can be created.</p><p>First we need to define the base part of the Avatar in
+    <code class="filename">tutorial/res/scripts/base/Avatar.py</code>:</p><pre class="programlisting">import BigWorld
+
+# Must derive from BigWorld.Proxy instead of BigWorld.Base if this entity type
+# is to be controlled by the player.
+class Avatar( BigWorld.Proxy ):
+
+   def __init__( self ):
+      BigWorld.Proxy.__init__( self )
+
+      # Set our spawn position.
+      self.cellData[ "position" ] = (0,0,0)
+
+      # Spawn in the default space.
+      self.createCellEntity( BigWorld.globalBases[ "DefaultSpace" ].cell )
+
+   def onClientDeath( self ):
+      # We ensure our cell entity is destroyed when the client disconnects. 
+      self.destroyCellEntity()
+
+   def onLoseCell( self ):
+      # Once our cell entity is destroyed, it is safe to clean up the Proxy. We cannot
+      # just call self.destroy() in onClientDeath() above, as destroyCellEntity() 
+      # is asynchronous and the cell entity would still exist at that point.
+      self.destroy()</pre><p><span class="citetitle">Example
+    <code class="filename">tutorial/res/scripts/base/Avatar.py</code></span></p><p>The constructor for the base entity creates the cell entity in our
+    space created earlier. It was registered in
+    <code class="varname">BigWorld.globalBases</code> as
+    <span class="literal">"DefaultSpace"</span>.</p><p>There is a little bit of housekeeping here too &#8212; we have
+    provided implementations for the <code class="methodname">onClientDeath</code>
+    and <code class="methodname">onLoseCell</code> callbacks, which clean up the cell
+    and base parts of the entity when the client disconnects from the
+    server.</p><p>At this stage we do not need to define any interesting logic on the
+    cell entity, so we provide a stub implementation in
+    <code class="filename">tutorial/res/scripts/cell/Avatar.py</code>:</p><pre class="programlisting">import BigWorld
+
+class Avatar( BigWorld.Entity ):
+   def __init__( self, nearbyEntity ):
+      BigWorld.Entity.__init__( self )</pre><p><span class="citetitle">Example
+    <code class="filename">tutorial/res/scripts/cell/Avatar.py</code></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1049"></a>3.5.&nbsp;Connecting the client to the server</h2></div></div></div><p>We need to add code to our basic client to have it connect to a
+    server. If you have used FantasyDemo, you will have experienced the
+    various GUI-based methods that can be used to connect to a server. Since
+    we are not writing GUI code yet, we will just enter the address of our
+    server into <code class="filename">tutorial/res/scripts_config.xml</code> and have
+    the personality script read it from there.</p><p>We will also add an entry to control whether the client should
+    attempt to connect to a server, or just explore the space offline as in
+    the previous stage of the tutorial.</p><p>The relevant changes to
+    <code class="filename">tutorial/res/scripts_config.xml</code> are displayed
+    below:</p><pre class="programlisting">...
+   &lt;server&gt;
+      &lt;online&gt; true &lt;/online&gt;
+      &lt;!-- Whether the client actually connects to the server. --&gt;
+      &lt;host&gt; 10.40.3.23 &lt;/host&gt;
+      &lt;!-- The server to connect to. Ideally we would allow this to be entered via an in-game
+           GUI (or leverage the server discovery stuff) but for now we'll just hardcode it. --&gt;
+   &lt;/server&gt;
+...</pre><p><span class="citetitle">Example
+    <code class="filename">tutorial/res/scripts_config.xml</code></span></p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>If you are using multiple users on the same server machine, you
+      will need to specify the port as well as the IP address. The port for
+      the LoginApp can be found by inspecting the
+      <code class="filename">loginapp/nubExternal/address</code> watcher value on the
+      Web Console. For example, if the IP address is <code class="code">10.40.3.23</code>
+      and it is on port <code class="code">20013</code>, then put
+      <code class="code">10.40.3.23:20013</code> inside the <code class="code">&lt;host&gt;</code> tag.
+      You may need to update the port after restarting the server.</p></div><p>The next step is to implement the function call
+    <code class="methodname">initOnline</code> in the client personality script
+    <code class="filename">tutorial/res/scripts/client/BWPersonality.py</code> and
+    switch between calling it and calling <code class="methodname">initOffline</code>
+    based on the <span class="literal">online</span> option in
+    <code class="filename">tutorial/res/scripts_config.xml</code>.</p><p>To achieve that, make the changes to
+    <code class="filename">tutorial/res/scripts/client/BWPersonality.py</code> as
+    illustrated below.</p><pre class="programlisting">...
+def init( scriptConfig, engineConfig, prefs ):
+   if scriptConfig.readBool( "server/online" ):
+      initOnline( scriptConfig )
+   else:
+      initOffline( scriptConfig )
+...
+
+def initOnline( scriptConfig ):
+   class LoginParams( object ):
+      pass
+
+   def onConnect( stage, step, err = "" ):
+      pass
+
+   # Connect to the server with an empty username and password.  This works
+   # because the server has been set up to allow logins for any user/pass.
+   BigWorld.connect( scriptConfig.readString( "server/host" ),
+                     LoginParams(), onConnect )</pre><p><span class="citetitle">Example
+    <code class="filename">tutorial/res/scripts/client/BWPersonality.py</code></span></p><p>Notice that we no longer need to do client-side space creation,
+    geometry mapping, or entity creation; these functions now happen on the
+    server side. The client will automatically perform the necessary
+    client-side actions based on the server-side game state.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1122"></a>3.6.&nbsp;Going 3<sup>rd</sup> person</h2></div></div></div><p>The last line of <code class="methodname">initOffline</code> in the
+    personality script sets the camera to use first-person mode. We chose to
+    do this in the first part of the tutorial because we wanted to get a
+    client up and running as quickly and simply as possible, and using
+    first-person mode allowed us to ignore the issue of rendering the player
+    himself.</p><p>However, since we are now implementing a client-server game where
+    multiple clients can log in and inhabit the same space, it will be helpful
+    if they have models so that they can see each other!</p><p>We have provided a basic biped model in
+    <code class="filename">res/characters/bipedgirl.model</code>, which we will use for
+    all Avatars. Edit the <code class="methodname">enterWorld</code> callback for the
+    <code class="classname">Avatar</code> class in
+    <code class="filename">tutorial/res/scripts/client/Avatar.py</code> as
+    follows:</p><pre class="programlisting">...
+class Avatar( BigWorld.Entity ):
+
+   def enterWorld( self ):
+
+      # Set the position/movement filter to correspond to an avatar
+      self.filter = BigWorld.AvatarFilter()
+
+      # Load up the bipedgirl model
+      self.model = BigWorld.Model( "characters/bipedgirl.model" )
+...</pre><p><span class="citetitle">Example
+    <code class="filename">tutorial/res/scripts/client/Avatar.py</code></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1157"></a>3.7.&nbsp;Server-side XML configuration</h2></div></div></div><p>The BigWorld server uses the file
+    <code class="filename"><em class="replaceable"><code>your_game</code></em>/res/server/bw.xml</code>
+    for configuring options on the various server components. For a
+    comprehensive list of configuration options along with a detailed
+    description, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s
+    section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Server_Configuration_With_bw_xml" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a>.</p><p>Typically, the <code class="filename">bw.xml</code> file
+    <em class="emphasis">includes</em> a BigWorld provided default configuration
+    file which contains recommended default values for all the available
+    configuration options. This is achived by using the
+    <span class="literal">&lt;parentFile&gt;</span> tag as follows:</p><pre class="programlisting">&lt;root&gt;
+   ...
+   &lt;parentFile&gt; server/development_defaults.xml &lt;/parentFile&gt;</pre><p>You will notice that in the example above, the included file is
+    <code class="filename">development_defaults.xml</code>. This file provides good
+    working defaults for a game development environment that will generate
+    more warnings and intentionally crash the server in certain circumstances
+    to ensure that critical issues are caught prior to the release of a game.
+    The development defaults file however is only a small file that modifies a
+    subset of values from the file
+    <code class="filename">bigworld/res/server/production_defaults.xml</code>. The
+    production defaults file aims to provide a comprehensive set of options
+    and default values to be used for a game in a live production environment
+    and can be used as a reference point when searching for a specific
+    option.</p><p>While it is anticipated that the majority of configuration options
+    will not need to be modified, if you need to change a value or are simply
+    curious as to the purpose of an option, complete documentation for the
+    BigWorld server configuration options can be found in the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Server_Configuration_With_bw_xml" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a>.</p><p>To get our basic game up and running, we need to set a few options
+    to specify what entity type the player should be connected to once logged
+    in, and to allow players to log in with unknown usernames (just for
+    convenience while developing).</p><p>Save the following in
+    <code class="filename">tutorial/res/server/bw.xml</code>:</p><pre class="programlisting">&lt;root&gt;
+   &lt;parentFile&gt; server/development_defaults.xml &lt;/parentFile&gt;
+   &lt;billingSystem&gt;
+      &lt;entityTypeForUnknownUsers&gt;  Avatar &lt;/entityTypeForUnknownUsers&gt;
+      &lt;shouldAcceptUnknownUsers&gt;   true   &lt;/shouldAcceptUnknownUsers&gt;
+      &lt;shouldRememberUnknownUsers&gt; false  &lt;/shouldRememberUnknownUsers&gt;
+   &lt;/billingSystem&gt;
+&lt;/root&gt;</pre><p><span class="citetitle">Example
+    <code class="filename">tutorial/res/server/bw.xml</code></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Starting_And_Connecting_To_The_Server"></a>3.8.&nbsp;Starting and connecting to the server</h2></div></div></div><p>At this point of the tutorial, it is assumed that you have set up
+    your Linux machine as described in the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/server_installation_guide.html#Server_Installation_Guide" class="olink">Server Installation Guide</a>. In particular, this assumes you
+    have installed BWMachined on your Linux machine and have installed the Web
+    Console somewhere on the local network. For details on Web Console see the
+    <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Admin_Tools" class="olink"><i>Cluster Administration Tools</i></a>, in
+    <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_WebConsole" class="olink">WebConsole</a>).</p><p>Before we can start the server, we need to specify where the server
+    should get its binaries and resources from. This is a concept similar to
+    the <code class="filename">paths.xml</code> files used by the client and
+    tools.</p><p>We firstly need to know the directory the game resources are located
+    on the Linux machine. If you have been developing the game resources on
+    your Windows machine and have shared them using the setup_win_dev script,
+    the resources are most likely located in <code class="filename"><code class="envar">$HOME</code>/bigworld_windows_share</code>.
+    Check the directory where you believe the resources are located actually
+    contain the correct files. For example:</p><pre class="programlisting">$ ls $HOME/bigworld_windows_share
+bigworld  fantasydemo  my_game  readme.html  server_installation  template  tutorial</pre><p>We now run the bw_configure script providing the location of the
+    game resources we wish to use. This will differ slightly depending on the
+    BigWorld Edition you are using.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1242"></a>3.8.1.&nbsp;Indie Edition</h3></div></div></div><pre class="programlisting">$ bw_configure
+Game resource path [~/my_game/res]: <em class="emphasis">~/bigworld_windows_share/tutorial/res</em>
+Writing to /home/fred/.bwmachined.conf succeeded
+
+Installation root : /opt/bigworld/current/server
+BigWorld resources: /opt/bigworld/current/server/res
+Game resources    : /home/fred/bigworld_windows_share/tutorial/res</pre><p>The contents of the file
+      <code class="filename"><code class="envar">$HOME</code>/.bwmachined.conf</code><sup>[<a name="d0e1256" href="#ftn.d0e1256">7</a>]</sup> has now become:</p><pre class="programlisting"># Generated by ./bw_configure
+/opt/bigworld/current/server;/home/fred/bigworld_windows_share/tutorial/res:/opt/bigworld/current/server/res</pre><p><span class="citetitle">Example
+      <code class="filename"><code class="envar">$HOME</code>/.bwmachined.conf</code></span></p><p>This file can then be edited whenever required to update the
+      resource paths as your game development proceeds.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1274"></a>3.8.2.&nbsp;Commercial/Indie Source Edition</h3></div></div></div><pre class="programlisting">$ bw_configure
+Installation root [~/mf]: ~/mf
+Game resource path [~/my_game/res]: <em class="emphasis">~/mf/tutorial/res</em>
+Writing to /home/fred/.bwmachined.conf succeeded
+
+Installation root : /home/fred/mf
+BigWorld resources: /home/fred/mf/bigworld/res
+Game resources    : /home/fred/mf/tutorial/res</pre><p>The contents of the file
+      <code class="filename"><code class="envar">$HOME</code>/.bwmachined.conf</code><sup>[<a name="d0e1288" href="#ftn.d0e1288">8</a>]</sup> has now become:</p><pre class="programlisting"># Generated by ./bw_configure
+/opt/bigworld/current/server;/home/fred/bigworld_windows_share/tutorial/res:/opt/bigworld/current/server/res</pre><p><span class="citetitle">Example
+      <code class="filename"><code class="envar">$HOME</code>/.bwmachined.conf</code></span></p><p>This file can then be edited whenever required to update the
+      resource paths as your game development proceeds.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1306"></a>3.8.3.&nbsp;Starting a Server</h3></div></div></div><p>You can now use the WebConsole's ClusterControl module to start
+      the server. You should see six active processes in the process listing.
+      Once the server is up and running, run the client and you should be able
+      to connect to the server and control a basic biped Avatar from a
+      3<sup>rd</sup> person perspective. Connect multiple
+      clients and watch each other moving around.</p></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e1256" href="#d0e1256">7</a>] </sup>Note the leading <span class="literal">.</span> in the filename.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e1288" href="#d0e1288">8</a>] </sup>Note the leading <span class="literal">.</span> in the filename.</p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Implementing_A_Chat_System"></a>Chapter&nbsp;4.&nbsp;Implementing a chat system (<span class="literal">CHAT_CONSOLE</span>)</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#xref_Basic_GUI_Text_Console">4.1. GUI text console</a></span></dt><dt><span class="section"><a href="#d0e1340">4.2. Modifications to the <span class="literal">Avatar</span> entity</a></span></dt></dl></div><p>At this stage we have a basic client-server game working, so it is a
+  good time to write our first entity methods and learn how method calls
+  propagate in BigWorld.</p><p>As an easy first example, we will write a simple chat system that
+  allows players to talk to the other players around them. The implementation
+  is in two parts:</p><div class="itemizedlist"><ul type="disc"><li><p>Implementing a basic GUI for displaying and entering chat
+        messages on the client.</p></li><li><p>Writing the entity methods to propagate the messages between
+        clients and the server.</p></li></ul></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Basic_GUI_Text_Console"></a>4.1.&nbsp;GUI text console</h2></div></div></div><p>The example tutorial scripts currently use the deprecated
+    ConsoleGUIComponent. Please refer to the Fantasy Demo scripts for an
+    example chat console implementation
+    (<code class="code">fantasydemo/res/scripts/client/FDGUI/ChatConsole.py</code>) for
+    reference on implementing a fully featured chat window.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1340"></a>4.2.&nbsp;Modifications to the <span class="literal">Avatar</span> entity</h2></div></div></div><p>We need to implement methods on both the client and the server to
+    make our chat system work:</p><div class="itemizedlist"><ul type="disc"><li><p>The server-side methods are responsible for receiving messages
+        and forwarding them to other clients whose player entities are close
+        enough to the speaker.</p></li><li><p>The client-side methods are responsible for displaying incoming
+        messages on-screen.</p></li></ul></div><p>Before implementing these methods, they need to be declared in
+    <code class="filename">tutorial/res/scripts/entity_defs/Avatar.def</code>:</p><pre class="programlisting">...
+   &lt;ClientMethods&gt;
+      &lt;!-- Chat to people within 50 metres --&gt;
+      &lt;say&gt;
+         &lt;Arg&gt; UNICODE_STRING &lt;/Arg&gt; &lt;!-- message --&gt;
+         &lt;DetailDistance&gt; 50     &lt;/DetailDistance&gt;
+      &lt;/say&gt;
+   &lt;/ClientMethods&gt;
+   &lt;CellMethods&gt;
+      &lt;!-- Cell part of the chat implementation --&gt;
+      &lt;say&gt;
+         &lt;Exposed/&gt;
+         &lt;Arg&gt;            UNICODE_STRING &lt;/Arg&gt;
+      &lt;/say&gt;
+   &lt;/CellMethods&gt;
+...</pre><p><span class="citetitle">Example
+    <code class="filename">tutorial/res/scripts/entity_defs/Avatar.def</code></span></p><p>The step above adds the method definitions to the previously empty
+    client and cell method sections. The cell method definition includes the
+    <span class="literal">&lt;Exposed/&gt;</span> tag, which exposes the method to the
+    client. Without this, the method cannot be called from the client. The
+    definition file also uses BigWorld's method LODing feature, by declaring a
+    <span class="literal">&lt;DetailDistance&gt;</span> of 50m, which means that
+    referring to <code class="varname">self.allClients</code> or
+    <code class="varname">self.otherClients</code> from within this method will not
+    refer to all clients in that entity's AoI, just those within 50m.</p><p>Having declared these methods, we must now provide their
+    implementations. In
+    <code class="filename">tutorial/res/scripts/cell/Avatar.py</code>, add the
+    following:</p><pre class="programlisting">...
+   def say( self, id, message ):
+      if self.id == id:
+         self.otherClients.say( message )</pre><p><span class="citetitle">Example
+    <code class="filename">tutorial/res/scripts/cell/Avatar.py</code></span></p><p>Even though we prototyped the cell method to take only the message
+    as an argument in the definition file, our implementation expects another
+    argument (<code class="varname">id</code>) before the declared arguments. This is
+    because this method was declared as <span class="literal">&lt;Exposed/&gt;</span>,
+    and the ID passed as an argument is that of the client who called the
+    exposed method. Please note that this may not be the client who is
+    attached to this <code class="classname">Avatar</code>, so we add a check to make
+    sure the calling client is in fact the owner of this entity.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>We only forward the message to
+      <code class="varname">self.otherClients</code>, not to
+      <code class="varname">self.allClients</code>. This is because in our earlier
+      implementation of <code class="methodname">ChatConsole.editCallback</code> in
+      <code class="filename">tutorial/res/scripts/client/Helpers/ChatConsole.py</code>
+      (for details, see <a href="#xref_Basic_GUI_Text_Console" title="4.1.&nbsp;GUI text console">GUI text console</a>) when
+      the user enters a line of text it is immediately displayed on his
+      client, so we do not want to send the message back to him. Therefore, we
+      only need to call the <code class="methodname">say</code> method on other
+      clients.</p></div><p>Now we implement the client entity's <code class="methodname">say</code>
+    method in
+    <code class="filename">tutorial/res/scripts/client/Avatar.py</code>:</p><pre class="programlisting">class Avatar( BigWorld.Entity ):
+   ...
+   def say( self, msg ):
+      chatConsole.write( "%d says: %s" % (self.id, msg) )</pre><p><span class="citetitle">Example
+    <code class="filename">tutorial/res/scripts/client/Avatar.py</code></span></p><p>Now you should have a basic usable chat system. Connect a couple of
+    clients to a running server and test it out!</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e1444"></a>Chapter&nbsp;5.&nbsp;EntityLoader (<span class="literal">ENTITY_LOADER</span>)</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e1460">5.1. Implementation</a></span></dt></dl></div><p>Currently, the server loads the spaces/main space as the default space
+  on startup. However, it is only the CellApp which is loading the space, and
+  it is only loading the space geometry. In order to be able to place entities
+  in World Editor and have them appear on the server, we need to create a more
+  advanced space loading mechanism. To this end, we will make a helper class
+  called EntityLoader which will be used by the Space entity. It will be the
+  responsibility of this class to parse the space <code class="filename">.chunk</code> files and create entity instances for
+  every entity encountered.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>You may be wondering why the engine doesn't just create entities
+    automatically. While it could, this would remove flexibility from the
+    scripts. This way, the game specific scripts are able to tailor how and
+    when entities are created.</p></div><p>While at the end of this chapter it will appear to the end-user that
+  nothing has changed, we will have laid the groundwork for the next chapter
+  which covers creation of a editor placeable entity. Inspecting the BaseApp
+  logs after running this server shows that it was unable to actually load the
+  Greeter entity. This is added in the next chapter.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1460"></a>5.1.&nbsp;Implementation</h2></div></div></div><p>The EntityLoader class exists only on the base entity, and in this
+    tutorial will be implemented in the same Python module file as the Space
+    entity. The following operations are performed:</p><div class="itemizedlist"><ul type="disc"><li><p>The Space entity creates a new instance of the
+        <code class="classname">EntityLoader</code> class, and passes that instance
+        into the <code class="methodname">BigWorld.fetchEntitiesFromChunks</code>
+        function. This function instructs the BaseApp to parse all <code class="filename">.chunk</code> files in the given path, which is
+        done asynchronously in the background loading thread (in order to
+        avoid IO from blocking the main thread).</p></li><li><p>Whenever a non client only <span class="literal">&lt;entity&gt;</span>
+        section is encountered within the <code class="filename">.chunk</code> files, the engine will call
+        <code class="methodname">EntityLoader.onSection</code> with the relevant
+        <span class="literal">&lt;DataSection&gt;</span>.</p></li><li><p>The script uses the properties passed in to the onSection method
+        in order to create an entity instance using
+        <code class="methodname">BigWorld.createBaseAnywhere</code>. It passes the
+        <code class="classname">Space</code> entity's cell mailbox so that the new
+        entity knows which space to create itself in. Note that this paradigm
+        assumes that all entity scripts will accept
+        <code class="varname">createOnCell</code> as a property.</p></li><li><p>The engine notifies the <code class="classname">EntityLoader</code> when
+        chunks have finished being parsed via the
+        <code class="methodname">onFinish</code> callback.</p></li></ul></div><pre class="programlisting"># scripts/base/Space.py
+
+class Space( BigWorld.Base ):
+    ...
+
+    def onGetCell( self ):        
+        print "Space.onGetCell loading entities from '%s'" % self.spaceDir
+        BigWorld.fetchEntitiesFromChunks( self.spaceDir,
+            EntityLoader( self ) )
+    ...
+
+class EntityLoader( object ):
+    def __init__( self, spaceEntity ):
+        self.spaceEntity = spaceEntity
+
+    def onSection( self, entity, matrix ):
+        entityType = entity.readString( "type" )
+        properties = entity[ "properties" ]
+        pos = matrix.applyToOrigin()
+
+        # Create entity base
+        BigWorld.createBaseAnywhere( entityType,
+            properties,
+            createOnCell = self.spaceEntity.cell,
+            position = pos,
+            direction = (matrix.roll, matrix.pitch, matrix.yaw) )
+
+    def onFinish( self ):
+        print "Finished loading entities for space", self.spaceEntity.spaceDir
+</pre><p><span class="citetitle">Adjusted example
+    <code class="filename">tutorial/res/scripts/base/Space.py</code></span></p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e1521"></a>Chapter&nbsp;6.&nbsp;A Basic NPC Entity (<span class="literal">BASIC_NPC</span>)</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e1529">6.1. Design</a></span></dt><dt><span class="section"><a href="#d0e1563">6.2. Art</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1582">6.2.1. Exporting the model</a></span></dt><dt><span class="section"><a href="#d0e1616">6.2.2. Configuring the model</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1677">6.3. Scripts</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1693">6.3.1. entities.xml</a></span></dt><dt><span class="section"><a href="#d0e1713">6.3.2. Entity definition</a></span></dt><dt><span class="section"><a href="#d0e1800">6.3.3. Base part</a></span></dt><dt><span class="section"><a href="#d0e1828">6.3.4. Cell part</a></span></dt><dt><span class="section"><a href="#d0e1863">6.3.5. Client part</a></span></dt><dt><span class="section"><a href="#d0e1998">6.3.6. Editor script</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e2010">6.4. Testing</a></span></dt><dt><span class="section"><a href="#d0e2045">6.5. Possible improvements</a></span></dt></dl></div><p>This chapter will cover the basic steps of creating a non-player
+  entity. While the entity presented is quite simple in terms of
+  functionality, it covers all the common essentials required in order to get
+  a new entity up and running in the engine (including exporting the model
+  from 3D Studio Max and configuring the model to work correctly).</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1529"></a>6.1.&nbsp;Design</h2></div></div></div><p>Before creating an entity, we need to determine what functionality
+    is required. For this tutorial we will to create an NPC which will greet a
+    player when they get within a certain radius (think of a person who stands
+    in a supermarket entrance greeting people).</p><p>Entity requirements: </p><div class="itemizedlist"><ul type="disc"><li><p>It should be placeable in the World Editor so that the
+          run-time instance is created by the SpaceLoader entity on the
+          server.</p></li><li><p>Model should be loaded asynchronously on the client.</p></li><li><p>The entity will not move. It should stand on the spot as
+          placed in the World Editor.</p></li><li><p>A server-side trap should be used to trigger a greet action.
+          The server should notify all clients in the area that it has greeted
+          a player (including which player).</p></li><li><p>When the entity greets a player, a wave animation should be
+          played on all clients in the area.</p></li><li><p>A message, generated on the server, should be displayed above
+          the Greeter's head for a couple of seconds.</p></li><li><p>It should be possible to deactivate (and reactivate) the
+          Greeter from the client, but only if the client is within the
+          trigger radius.</p></li></ul></div><p>We shall give this entity the class name
+    <code class="classname">Greeter</code>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1563"></a>6.2.&nbsp;Art</h2></div></div></div><p>For this tutorial, we have provided the 3D Studio Max source file to
+    the Barbarian model (a fantasy themed human). The model needs to prepared
+    for use by the engine and needs to be configured to satisfy the
+    requirements of the Greeter entity. This section assumes the BigWorld
+    exporters have already been installed (see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#Content_Tools_Reference_Guide" class="olink">Content Tools Reference Guide</a>).</p><p>Detailed documentation about the exporters and tools can be found in
+    the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#Content_Tools_Reference_Guide" class="olink">Content Tools Reference Guide</a> and the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//content_creation.chm#Content_Creation_Manual" class="olink">Content Creation Manual</a>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>If you want to skip this section, the barbarian model has been
+      pre-prepared for this tutorial (in <code class="filename">C:/bigworld/tutorial/res/characters</code>).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1582"></a>6.2.1.&nbsp;Exporting the model</h3></div></div></div><div class="orderedlist"><ol type="1"><li><p>Open <code class="filename">tutorial/sourceart/barbarian.max</code> in
+          3D Studio Max.</p></li><li><p>Copy the textures to <code class="filename">tutorial/res/characters</code>. The textures
+          must be in the target directory before exporting (the exporter will
+          display an error message and fail if they are not).</p></li><li><p>Re-apply the textures to the model so that the Max scene
+          points to the textures copied in the step above.</p></li><li><p>Go to <em class="emphasis">File <span class="symbol">&#8594;</span> Export</em> and choose the
+          BigWorld visual exporter.</p></li><li><p>Save the model to
+          <code class="filename">tutorial/res/characters/barbarian.model</code>.</p></li></ol></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1616"></a>6.2.2.&nbsp;Configuring the model</h3></div></div></div><p>In order to automatically play an idle animation and to create the
+      action required for the Greeter entity to wave, we need to add
+      animations to the model and configure the appropriate actions. This is
+      done in the Model Editor.</p><p>While an animation is a raw sequence of key frames, an action is a
+      higher level concept. Actions are animation wrappers that contain extra
+      information such as animation blending and what game-play situations
+      will trigger the animation (e.g. idling, walking or running based on the
+      velocity of the entity).</p><p>The Greeter will have two actions: an Idle action which is
+      automatically selected when the entity is standing still, and a Wave
+      action which will be explicitly invoked from the Greeter's Python
+      scripts.</p><div class="orderedlist"><ol type="1"><li><p>Open up
+          <code class="filename">tutorial/res/characters/barbarian.model</code> in
+          Model Editor.</p></li><li><p>Before we can setup the actions, we need to add references to
+          the idle and wave animations. In the Animations tab, click the "New
+          animation" button and select the
+          <code class="filename">tutorial/res/characters/idle_a.animation</code>
+          animation file. A new animation will be added to the list which can
+          be previewed in the 3D view. Repeat this for the
+          <code class="filename">m_waveonehand.animation</code> file.</p></li><li><p>To setup an Idle action that is automatically invoked when the
+          entity is standing still,</p><div class="orderedlist"><ol type="a"><li><p>Open the Actions tab in Model Editor.</p></li><li><p>Click the New Action button and select the m_idle
+              animation in the pop-up dialog. Set the action name to
+              Idle.</p></li><li><p>Select the new Idle action from the list.</p></li><li><p>Setup the parameters in the Match section to allow the
+              action matcher to automatically select the action when the
+              entity is not moving. To do this set the following values:
+              </p><div class="itemizedlist"><ul type="disc"><li><p>Minimum speed=0.0, Maximum speed=0.0</p></li><li><p>Minimum turn=-360.0, Maximum turn=360.0</p></li><li><p>Minimum direction=-360.0, Maximum
+                    direction=360.0</p></li></ul></div><p> As you can see, the action will be picked
+              whenever the speed of the entity is exactly zero and is facing
+              in any direction.</p></li></ol></div></li><li><p>To setup a Wave action that is invoked explicitly by the
+          Python scripts (i.e. not automatically picked by the engine),</p><div class="itemizedlist"><ul type="disc"><li><p>Click the New Action button and select the m_wave
+              animation in the pop-up dialog. Set the action name to
+              Wave.</p></li></ul></div><p>No match settings need to be set for this action since we will
+          manually invoke the action from the Python scripts.</p></li></ol></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1677"></a>6.3.&nbsp;Scripts</h2></div></div></div><p>In order to insert the model as an entity into a space, we need to
+    create the entity scripts. These are written in Python and perform
+    game-specific logic and are split up into three parts: base, cell, and
+    client.</p><p>Please refer to the Python API reference documents<sup>[<a name="d0e1684" href="#ftn.d0e1684">9</a>]</sup> for detailed information on the API's mentioned here.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1693"></a>6.3.1.&nbsp;entities.xml</h3></div></div></div><p>First off, we need to tell the engine about our new entity. Every
+      entity must be defined in the <code class="filename">entities.xml</code> file
+      located at <code class="filename">tutorial/res</code>
+      path.</p><p>Simply add a new empty tag between the
+      <span class="literal">&lt;root&gt;</span>: </p><pre class="programlisting">&lt;root&gt;
+    &lt;Space/&gt;
+    &lt;Avatar/&gt;
+    &lt;Greeter/&gt;
+&lt;/root&gt;</pre><p>Remember that since the entity name corresponds with a Python
+      class name, the name used here must conform with Python naming
+      rules.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1713"></a>6.3.2.&nbsp;Entity definition</h3></div></div></div><p>In order to allow the engine to know what methods and properties
+      the entity has, we need to create a special file known as the entity
+      definition file. In some ways this file is the most important part of an
+      entity, as it defines how properties and methods are handled by the
+      engine (e.g. property type, whether or not a property or method is
+      exposed to clients, prioritisation of remote method calls and property
+      updates, and configuring distance based LoD parameters for individual
+      properties).</p><p>See the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a> chapter
+      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_The_Definition_File" class="olink">The Entity Definition File</a> for a detailed description of
+      entity definitions.</p><p>For the Greeter entity, create a new file named
+      <code class="filename">Greeter.def</code> and place it in <code class="filename">tutorial/res/scripts/entity_defs/</code>. We will
+      define the following information for our entity:</p><div class="itemizedlist"><ul type="disc"><li><p>Three properties:</p><div class="itemizedlist"><ul type="circle"><li><p>A <code class="varname">radius</code> property which controls the
+              trigger region for the Greeter. This is exposed to the World
+              Editor so that it can be tweaked by the world builder. Its type
+              is <span class="literal">FLOAT</span>, it has a default value of 3 metres
+              and is declared as <span class="literal">CELL_PRIVATE</span> (since this
+              property is only needed on the cell part of the entity and does
+              not need to be publicly accessible by other entities). </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>To provide a more intuitive interface for the World
+                  Editor, some extra meta-data has been defined for this
+                  property. The <span class="literal">RADIUS</span> widget allows the
+                  property to be manipulated via a visual spherical
+                  widget.</p></div></li><li><p>A property named <code class="varname">activated</code> which is a
+              boolean property representing whether or not the Greeter is
+              currently active. It's flags is set to
+              <span class="literal">ALL_CLIENTS</span> so that changes to this property
+              on the cell are automatically propagated to the clients.</p></li><li><p>The <code class="varname">createOnCell</code> property which
+              indicates which space the entity should be created in (a
+              requirement for entities loaded via the
+              <code class="classname">SpaceLoader</code> entity).</p></li></ul></div></li><li><p>Two methods:</p><div class="itemizedlist"><ul type="circle"><li><p>A client-side method named <code class="methodname">greet</code>.
+              This will be remotely called by the server on all nearby clients
+              whenever the entity greets a player (i.e. whenever the
+              server-side trap is triggered). It takes two parameters, the ID
+              of the entity is greeting, and a personalised greet
+              message.</p></li><li><p>A method called <code class="methodname">toggleActive</code>
+              which is exposed to the client which allows the client to toggle
+              the Greeter on and off. By default methods are not callable by
+              the client (for security purposes), so the
+              <span class="literal">&lt;Exposed&gt;</span> keyword is used to explicitly
+              expose it to clients. It does not take any arguments.</p></li></ul></div></li></ul></div><pre class="programlisting">&lt;root&gt;
+    &lt;Properties&gt;
+        &lt;radius&gt;
+            &lt;Type&gt;          FLOAT
+                &lt;Widget&gt;    RADIUS
+                    &lt;colour&gt;    255 0 0 192   &lt;/colour&gt;
+                    &lt;gizmoRadius&gt;    2        &lt;/gizmoRadius&gt;
+                &lt;/Widget&gt;
+            &lt;/Type&gt;
+            &lt;Flags&gt;          CELL_PRIVATE    &lt;/Flags&gt;
+            &lt;Default&gt;        3.0             &lt;/Default&gt;
+            &lt;Editable&gt;       true            &lt;/Editable&gt;
+        &lt;/radius&gt;
+        
+        &lt;activated&gt;
+            &lt;Type&gt;           INT8            &lt;/Type&gt;
+            &lt;Flags&gt;          ALL_CLIENTS     &lt;/Flags&gt;
+            &lt;Default&gt;        1               &lt;/Default&gt;
+        &lt;/activated&gt;
+
+        &lt;createOnCell&gt;
+             &lt;Type&gt;    MAILBOX        &lt;/Type&gt;
+             &lt;Flags&gt;   BASE           &lt;/Flags&gt;
+        &lt;/createOnCell&gt;
+    &lt;/Properties&gt;
+
+    &lt;ClientMethods&gt;
+        &lt;greet&gt;
+            &lt;Arg&gt; UINT32 &lt;/Arg&gt; &lt;!-- Entity ID of who we are greeting --&gt;
+            &lt;Arg&gt; STRING &lt;/Arg&gt; &lt;!-- Our greeting message --&gt;
+        &lt;/greet&gt;
+    &lt;/ClientMethods&gt;
+
+    &lt;CellMethods&gt;
+        &lt;toggleActive&gt;
+            &lt;Exposed/&gt;
+        &lt;/toggleActive&gt;
+    &lt;/CellMethods&gt;
+
+    &lt;BaseMethods&gt;
+    &lt;/BaseMethods&gt;
+&lt;/root&gt;</pre><p><span class="citetitle">Example
+      <code class="filename">tutorial/res/scripts/entity_defs/Greeter.def</code></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1800"></a>6.3.3.&nbsp;Base part</h3></div></div></div><p>The base part of the entity is the first part that gets created by
+      the server. The base is created on one of the BaseApp processes, and is
+      used to define entity logic which does not require spatial information
+      (e.g. character inventory). The base part of an entity does not migrate
+      between BaseApps after it has been created.</p><p>The base script for the Greeter entity is very simple and performs
+      two tasks:</p><div class="itemizedlist"><ul type="disc"><li><p>It creates the cell part of the entity within the cell
+          specified by the <code class="varname">createOnCell</code> property (as setup
+          by the <code class="classname">EntityLoader</code> class when it loads the
+          entity information from the space's chunk file).</p></li><li><p>It destroys itself when the cell part of the entity
+          disappears.</p></li></ul></div><pre class="programlisting">import BigWorld
+
+class Greeter( BigWorld.Base ):
+    def __init__( self ):
+        BigWorld.Base.__init__( self )
+        self.createCellEntity( self.createOnCell )
+
+    def onLoseCell( self ):
+        self.destroy()</pre><p><span class="citetitle">Example
+      <code class="filename">tutorial/res/scripts/base/Greeter.py</code></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1828"></a>6.3.4.&nbsp;Cell part</h3></div></div></div><p>The cell part of an entity represents the current position,
+      orientation, and movement for an entity within a particular space.
+      Managed by the CellApp processes, the cell part of an entity can be
+      moved between CellApp processes at any time based on CPU load.
+      Generally, all entity logic that requires access to spatial information
+      is implemented in the cell part of an entity (e.g. any code that needs
+      to find out about other nearby entities, such as AI).</p><p>The cell part of the Greeter performs the following tasks:</p><div class="itemizedlist"><ul type="disc"><li><p>Creates a trap when the entity is created using the radius
+          specified in the World Editor.</p></li><li><p>Greets any Avatars that walk into the trap by calling
+          <code class="methodname">greet</code> on all clients that have the Greeter
+          entity within their AoI.</p></li><li><p>Allow clients to toggle <code class="varname">activated</code> state of
+          the entity, but only if they are within the radius. Note that
+          exposing a method to the client implicitly adds an argument which is
+          the ID of the Avatar entity which invoked the method. This can (and
+          should) be used to validate that the Avatar is actually allowed to
+          perform the desired command (remember, never trust the
+          client).</p></li></ul></div><p>Cell entities must derive from the
+      <code class="classname">BigWorld.Entity</code> class.</p><pre class="programlisting">import BigWorld
+import Avatar
+import random
+
+MESSAGES = [ "Hello BigWorld", "Have a nice day" ]
+
+class Greeter( BigWorld.Entity ):
+
+    def __init__( self ):
+        BigWorld.Entity.__init__( self )
+
+        # Setup the trap
+        self.addProximity( self.radius, 0 )
+
+    def onEnterTrap( self, entityEntering, range, controllerID ):
+        # If we are not active, do nothing.
+        if not self.activated:
+            return
+
+        # Filter by entity class type
+        if not isinstance( entityEntering, Avatar.Avatar ):
+            return
+
+        # Notify clients.
+        self.allClients.greet( entityEntering.id, random.choice(MESSAGES) )
+
+    def toggleActive( self, sourceID ):
+        # Get the entity who called us. If the entity can't be found then they
+        # obviously not near by so just bail out.
+        try:
+            sourceEntity = BigWorld.entities[ sourceID ]
+        except KeyError:
+            return
+            
+        # Get the distance between ourself and the Avatar
+        dist = sourceEntity.position.distTo( self.position )
+        
+        # Do a check to make sure they are close enough.
+        if dist &gt; self.radius:
+            return
+            
+        # All good, toggle our state. The activated property will be automatically 
+        # propagated to all clients once this server tick is complete.
+        self.activated = not self.activated</pre><p><span class="citetitle">Example
+      <code class="filename">tutorial/res/scripts/cell/Greeter.py</code></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1863"></a>6.3.5.&nbsp;Client part</h3></div></div></div><p>The client part of the entity is automatically created by the
+      engine whenever an entity appears within your Avatar's area of interest
+      (AoI). It is the job of the client scripts to coordinate all resources
+      and logic required to represent the entity on the client based on the
+      information provided by the server.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1868"></a>6.3.5.1.&nbsp;Entity module</h4></div></div></div><p>The client-side of an entity must derive from
+        <code class="classname">BigWorld.Entity</code>. The bare-bones Greeter module
+        script looks like this:</p><pre class="programlisting"># Greeter.py
+
+import BigWorld
+import GUI
+import Math
+
+class Greeter( BigWorld.Entity ):
+    def __init__( self ):
+        BigWorld.Entity.__init__( self )</pre><p><span class="citetitle">Basic
+        structure of
+        <code class="filename">tutorial/res/scripts/cell/Greeter.py</code></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1883"></a>6.3.5.2.&nbsp;Prerequisites list</h4></div></div></div><p>To avoid stalling the main thread client when the entity is
+        created, we will use the prerequisites functionality to load the model
+        asynchronously in the background loading thread. This is done by
+        implementing the <code class="methodname">prerequisites</code> method which
+        returns a list of resources to be loaded. This means that whenever the
+        server notifies the client that a Greeter entity has entered the AoI
+        for the client, the client will first schedule the resources to be
+        loaded asynchronously.</p><pre class="programlisting">GREETER_MODEL_NAME = "characters/barbarian.model"
+
+class Greeter( BigWorld.Entity ):
+    ....
+
+    def prerequisites( self ):
+        return [ GREETER_MODEL_NAME ]</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1894"></a>6.3.5.3.&nbsp;Entering and leaving the world</h4></div></div></div><p>Once the prerequisite resources have been loaded, the
+        <code class="methodname">onEnterWorld</code> method is called. Since the
+        entity class instance can leave the AoI and then re-enter the AoI, the
+        bulk of the initialisation code will be done in here rather than in
+        <code class="methodname">__init__</code> (so it can re-initialised each
+        time).</p><p>For the <code class="classname">Greeter</code> entity, the primary
+        entity model (<code class="varname">Entity.model</code>) is set, and a network
+        filter is setup. Since the entity will not be moving around, we can
+        use a simple <code class="classname">DumbFilter</code> which simply snaps the
+        entity to the last network update.</p><pre class="programlisting">class Greeter( BigWorld.Entity ):
+    ....
+
+    def onEnterWorld( self, prereqs ):
+        # Setup our model.
+        self.model = BigWorld.Model( GREETER_MODEL_NAME )
+
+        # Setup an appropriate filter.
+        self.filter = BigWorld.DumbFilter()
+
+    def onLeaveWorld( self ):
+        # Clean up.
+        self.model = None
+        self.filter = None</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1918"></a>6.3.5.4.&nbsp;Implementing greet</h4></div></div></div><p>The bulk of the client-side logic for the Greeter entity will go
+        in the implementation of the <code class="methodname">greet</code> method.
+        This method is remotely called from the cell part whenever an
+        <code class="classname">Avatar</code> enters the trap.</p><pre class="programlisting">class Greeter( BigWorld.Entity ):
+    ....
+
+    def greet( self, targetID, msg ):
+        # Grab the entity instance, if for some reason we don't have it just do nothing.
+        try:
+            targetEntity = BigWorld.entities[targetID]
+        except KeyError:
+            return
+            
+        # Try to play the Wave action. If it doesn't exist, print a warning.
+        try:
+            self.model.Wave()
+        except AttributeError:
+            print "WARNING: Greeter model missing Wave action (%s)" % self.model.sources
+    
+        # Display the greet message above our head.
+        addressee = targetEntity.name        
+        if targetID == BigWorld.player().id:
+            addressee += "! Yes you"
+            
+        self._displayMessage( "Hey %s! '%s'!" % (addressee, msg) )</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1931"></a>6.3.5.5.&nbsp;Displaying the message</h4></div></div></div><p>The script that displays a text message above the Greeter's head
+        will be implemented in a private helper method called
+        <code class="methodname">_displayMessage</code> (note the usage of an
+        underscore to denote a private member - this is not required but it is
+        a useful convention to follow). The
+        <code class="classname">TextGUIComponent</code> class from the GUI module will
+        be used and will be inserted into the 3D scene using the
+        <code class="classname">GUI.Attachment</code> class (as opposed to being
+        rendered in screen space). The text is attached to the root node of
+        the entity model and is positioned above the head of the model by
+        inspecting the model's <code class="varname">height</code> attribute.</p><pre class="programlisting">class Greeter( BigWorld.Entity ):
+    ....
+
+    def _displayMessage( self, msg ):
+        # First make sure any previous message is cleared.
+        self._clearMessage()
+        
+        # Create our text component. Since we want to display it in the world
+        # we shall explicitly set our width and height in world units.
+        text = GUI.Text( msg )
+        text.explicitSize = True
+        text.size = ( 0, 0.5 )             # Specifying 0 for x to auto-calculate aspect ratio.
+        text.colour = (255, 0, 0, 255)     # Change the colour.
+        text.filterType = "LINEAR"         # Don't use point filtering.
+        text.verticalAnchor = "BOTTOM"     # Position relative to the bottom of the text.
+        
+        # The origin of our model is at our feet. To place the text above
+        # our head, move it up on the Y by our model's height.
+        text.position = (0, self.model.height + 0.1, 0)
+        
+        # Setup our GUI-&gt;World attachment. Tell it that we want the GUI 
+        # component to always face the camera.
+        atch = GUI.Attachment()
+        atch.component = text
+        atch.faceCamera = True
+        
+        # Attach to our model's root node.
+        self.model.root.attach( atch )
+        
+        # Save a reference to the attachment so we can clean it up later.
+        self._messageAttachment = atch
+        
+        # Setup the timer.
+        self._setMessageHideTimer()</pre><p>To make the message disappear after a certain amount of time,
+        the <code class="methodname">BigWorld.callback</code> function is used. The
+        hide message timer functionality is wrapped up in some additional
+        helper methods. </p><div class="itemizedlist"><ul type="disc"><li><p><code class="methodname">_clearMessage</code> clears any existing
+              message attachment above the entity's head.</p></li><li><p><code class="methodname">_setMessageHideTimer</code> sets up the
+              timer, while first cancelling any existing timer.</p></li><li><p><code class="methodname">_cancelMessageTimer</code> cancels the
+              timer by passing the previously created timer handle into
+              <code class="methodname">BigWorld.cancelCallback</code>.</p></li><li><p><code class="methodname">_handleMessageHideTimer</code> is the
+              Python callable that is given to
+              <code class="methodname">BigWorld.callback</code>. It is executed after
+              the timer has elapsed, clearing the stored timer handle and
+              removing the current message.</p></li></ul></div><p> </p><pre class="programlisting">class Greeter( BigWorld.Entity ):
+    ....
+
+    def _clearMessage( self ):
+        self._cancelMessageTimer()
+        if self._messageAttachment is not None:
+            self.model.root.detach( self._messageAttachment )
+            self._messageAttachment = None
+
+    def _setMessageHideTimer( self, timeout=5.0 ):
+        self._cancelMessageTimer()
+        self._messageTimerHandle = \
+            BigWorld.callback( timeout, self._handleMessageHideTimer )
+
+    def _cancelMessageTimer( self ):
+        if self._messageTimerHandle is not None:
+            BigWorld.cancelCallback( self._messageTimerHandle )
+            self._messageTimerHandle = None
+
+    def _handleMessageHideTimer( self ):
+        self._messageTimerHandle = None
+        self._clearMessage()</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1985"></a>6.3.5.6.&nbsp;Handling activation change</h4></div></div></div><p>The engine will automatically notify the entity script whenever
+        a property has been changed by the server. It does this by looking for
+        a method on the entity class named
+        <code class="methodname">set_propertyName</code> which is expected to take a
+        single parameter for the previous value of the property. The Greeter
+        script will take advantage of this notification and display a message
+        whenever the <code class="varname">activated</code> state has changed.</p><pre class="programlisting">    def set_activated( self, oldValue ):
+        if self.activated:
+            self._displayMessage( "Alright! I'm now ready to GREET." )
+        else:
+            self._displayMessage( "Shutting up now." )</pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1998"></a>6.3.6.&nbsp;Editor script</h3></div></div></div><p>The editor script for an entity allows programmatic control over
+      how the entity behaves in the World Editor. For the Greeter entity, the
+      script will simply override the default model used to represent the
+      entity in the editor (it otherwise defaults to a red box).</p><p>Editor scripts are located in <code class="filename">res/scripts/editor</code>.</p><pre class="programlisting">class Greeter:
+    def modelName( self, props ):
+        return "characters/barbarian.model"
+</pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e2010"></a>6.4.&nbsp;Testing</h2></div></div></div><p>To test the entity it will first need to be placed into a space in
+    World Editor. Open the <span class="literal">spaces/main</span> and place the entity
+    by dragging the Greeter entity into the scene from the Resources tab. Save
+    the space.</p><p>If you are not using a Windows mount, update the resources on the
+    server side and then restart the server. If all is well, you should be
+    able to connect as per-normal and see the Greeter in the space.</p><div class="informalfigure"><div class="mediaobject"><img src="images/greeter_npc.png" height=""><span class="caption"><p>Greeter entity in action</p></span></div></div><p>If you do not see the entity, there are a couple of things to
+    check:</p><div class="itemizedlist"><ul type="disc"><li><p>Check the server startup logs for any Python exceptions.</p></li><li><p>Check the cell logs to make sure the entity is actually being
+        created. You should see a message along the lines of:</p><pre class="programlisting">CellApp INFO Cell::createEntity: New Greeter
+        (2)</pre></li><li><p>Check the client for any client-side Python errors (e.g. bring
+        up the in-game client console or use Debug View).</p></li></ul></div><p>Note that at this point the only way to toggle the activation state
+    is to use the in-game Python console. For example, on the
+    client,</p><pre class="programlisting">&gt;&gt;&gt; $B.entities.items() # Find the ID for the Greeter
+[(2402, Greeter at 0x088CFFE8), (2405, PlayerAvatar at 0x088CFC10)]
+&gt;&gt;&gt; greeter = $B.entities[2402]
+&gt;&gt;&gt; greeter.cell.toggleActive()</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e2045"></a>6.5.&nbsp;Possible improvements</h2></div></div></div><p>While the entity satisfies the basic requirements, there are some
+    improvements that could be made.</p><div class="itemizedlist"><ul type="disc"><li><p>The most obvious improvement would be to allow the user to
+        toggle the active state of the Greeter entity by clicking on the
+        entity. This could be achieved by leveraging the entity targeting
+        system of the client. See the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html#Client_Python_API" class="olink">Client Python API</a>
+        documentation for <code class="varname">BigWorld.target</code>.</p></li><li><p>If many player entities enter the trap at the same time, the
+        client will try to greet everyone at once. Instead of simply playing
+        the wave animation immediately when the <code class="methodname">greet</code>
+        method is called on the client, the client-side script could be
+        designed so that greets are queued up so that the next greet will not
+        commence until the previous greet has completed. This could be
+        achieved by passing a callback into
+        <code class="methodname">model.Wave()</code> so that the scripts get notified
+        when the current action has completed. See the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html#Client_Python_API" class="olink">Client Python API</a> for
+        <code class="methodname">ActionQueuer.__call__</code> for information on how
+        you can use action callbacks.</p></li><li><p>Currently the Greeter entity simply plays the Wave action. It
+        would be nice if the entity looked towards you while it is greeting
+        you. A head tracker can be created by using the
+        <code class="classname">BigWorld.Tracker</code> class coupled with the
+        <code class="classname">BigWorld.TrackerNodeInfo</code> class.</p></li><li><p>The player can cause the Greeter to spam greetings if they
+        quickly move in and out of the trap radius. To avoid this problem, the
+        cell part of the entity should keep track of recent greets (associate
+        an entity ID with a time stamp). It should only re-greet a player if
+        some time has elapsed since the previous greeting. This list should be
+        added as a new property in <code class="filename">Greeter.def</code>, and
+        additional logic placed in
+        <code class="methodname">Greeter.onEnterTrap</code>.</p></li></ul></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e1684" href="#d0e1684">9</a>] </sup><a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/baseapp/index.html#Client_Python_API" class="olink">Client Python API</a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/cellapp/index.html#Client_Python_API" class="olink">Client Python API</a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html#Client_Python_API" class="olink">Client Python API</a>.</p></div></div></div></div></div></body></html>

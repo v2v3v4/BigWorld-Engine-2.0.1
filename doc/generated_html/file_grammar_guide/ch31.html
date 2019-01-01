@@ -1,0 +1,168 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;31.&nbsp;space.settings</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch30.html" title="Chapter&nbsp;30.&nbsp;shadows.xml">
+      <link rel="next" href="ch32.html" title="Chapter&nbsp;32.&nbsp;.texanim">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch31.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;31.&nbsp;<span class="literal">space.settings</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch30.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch32.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_space_settings"></a>Chapter&nbsp;31.&nbsp;<span class="literal">space.settings</span></h2>
+                  </div>
+               </div>
+            </div>
+            <p>Contains environment settings, bounding rectangle of grid squares,
+                 etc...
+            </p>
+            <p>Mentioned in document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/index.html" class="olink">Client Programming Guide</a>'s
+                 section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch06.html" class="olink"><i>Chunks</i></a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch06.html#xref_Implementation_Files" class="olink">Implementation files</a>.
+            </p>
+            <p>The grammar for <span class="literal">space.settings</span> is described
+                 below:
+            </p><pre class="programlisting">&lt;root&gt;
+   &lt;timeOfDay&gt;        <em class="replaceable"><code>file</code></em>  &lt;/timeOfDay&gt;
+   &lt;skyGradientDome&gt;  <em class="replaceable"><code>file</code></em>  
+    ?&lt;farPlane&gt;      <em class="replaceable"><code>float</code></em> &lt;/farPlane&gt;
+   &lt;/skyGradientDome&gt;
+  ?&lt;seas&gt;
+    ?&lt;seaLevel&gt;         <em class="replaceable"><code>float</code></em>                    &lt;/seaLevel&gt;
+    ?&lt;wavePeriod&gt;       <em class="replaceable"><code>float</code></em>                    &lt;/wavePeriod&gt;
+    ?&lt;waveExtent&gt;       <em class="replaceable"><code>float</code></em>                    &lt;/waveExtent&gt;
+    ?&lt;tidePeriod&gt;       <em class="replaceable"><code>float</code></em>                    &lt;/tidePeriod&gt;
+    ?&lt;tideExtent&gt;       <em class="replaceable"><code>float</code></em>                    &lt;/tideExtent&gt;
+    ?&lt;surfaceTopColour&gt; <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/surfaceTopColour&gt;
+    ?&lt;surfaceBotColour&gt; <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/surfaceBotColour&gt;
+    ?&lt;underwaterColour&gt; <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/underwaterColour&gt;
+   &lt;/seas&gt;
+  ?&lt;farPlane&gt;        <em class="replaceable"><code>float</code></em>              &lt;/farPlane&gt;
+  ?&lt;singleDir&gt;       [true|false]       &lt;/singleDir&gt;
+  ?&lt;startPosition&gt;   <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/startPosition&gt;
+  ?&lt;startDirection&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/startDirection&gt;
+  ?&lt;bounds&gt;
+     &lt;minX&gt;  <em class="replaceable"><code>integer</code></em>  &lt;/minX&gt;
+     &lt;minY&gt;  <em class="replaceable"><code>integer</code></em>  &lt;/minY&gt;
+     &lt;maxX&gt;  <em class="replaceable"><code>integer</code></em>  &lt;/maxX&gt;
+     &lt;minY&gt;  <em class="replaceable"><code>integer</code></em>  &lt;/minY&gt;
+   &lt;/bounds&gt;
+&lt;/root&gt;</pre><p><span class="citetitle">Grammar of
+                    <span class="literal">space.settings</span></span></p>
+            <p>The list below describes the tags in
+                 <span class="literal">space.settings</span>:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">bounds</span></em></p>
+                     <p>The bounds in X- and Z-axis - the Y here is actually Z-axis in
+                              world space.
+                     </p>
+                     <p>The unit is the grid size.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">farPlane</span></em></p>
+                     <p>Space's far plane.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">maxX</span> (section
+                                 <span class="literal">bounds</span>)</em></p>
+                     <p>Max grid bounds in X</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">maxY</span> (section
+                                 <span class="literal">bounds</span>)</em></p>
+                     <p>Max grid bounds in Z</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">minX</span> (section
+                                 <span class="literal">bounds</span>)</em></p>
+                     <p>Min grid bounds in X</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">minY</span> (section
+                                 <span class="literal">bounds</span>)</em></p>
+                     <p>Min grid bounds in Z</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">singleDir</span></em></p>
+                     <p>If this is set to true, all chunk files will reside in one folder.
+                              If this is set to false, all chunk files will be put into different
+                              folders ( for large space )
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">skyGradientDome</span></em></p>
+                     <p>Sky configuration file.<sup>A</sup></p>
+                     <p>The path is relative to game's resource folder &#8212;
+                              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">startDirection</span></em></p>
+                     <p>The direction a player faced when he starts game</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">startPosition</span></em></p>
+                     <p>The position a player in when he starts game</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">timeOfDay</span></em></p>
+                     <p>Sky configuration file.<sup>A</sup></p>
+                     <p>The path is relative to game's resource folder &#8212;
+                              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span>.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p><em class="emphasis"><em class="emphasis">A</em> &#8212; For details, see the
+                    document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/index.html" class="olink">Client Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch21.html" class="olink"><i>3D Engine (Moo)</i></a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch21.html#xref_Features" class="olink">Features</a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch21.html#xref_Lighting" class="olink">Lighting</a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch21.html#xref_Light_Maps" class="olink">Light maps</a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch21.html#xref_Sky_Light_Map" class="olink">Sky light map</a>. For
+                    details on file's grammar, see <a href="ch38.html#xref_sky_xml" title="38.8.&nbsp;<sky&gt;.xml"><span class="literal"><em class="replaceable"><code>&lt;sky&gt;</code></em>.xml</span></a>.</em></p>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch30.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch32.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;30.&nbsp;<span class="literal">shadows.xml</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;32.&nbsp;<span class="literal">.texanim</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

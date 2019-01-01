@@ -1,0 +1,635 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;4.&nbsp;SpeedTree</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Third-Party Integrations">
+      <link rel="up" href="index.html" title="Third-Party Integrations">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Scaleform">
+      <link rel="next" href="ch05.html" title="Chapter&nbsp;5.&nbsp;FMOD">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;SpeedTree</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_SpeedTree_Integration"></a>Chapter&nbsp;4.&nbsp;SpeedTree
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch04.html#d0e573">4.1. Building with SpeedTree support</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e587">4.2. Resource files</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e635">4.3. SpeedTrees in WorldEditor</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#xref_we_Wind_Animation">4.4. Wind animation</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#xref_we_Level_Of_Detail">4.5. Level of detail</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e784">4.6. Collision geometry</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#xref_we_XML_File">4.7. XML file</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#xref_we_Watchers">4.8. Watchers</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1071">4.9. Troubleshooting</a></span></dt>
+               </dl>
+            </div>
+            <p>SpeedTree is a third party library used for creating and rendering
+                 vegetation in games and is produced by Interactive Data Visualization, Inc
+                 (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.speedtree.com" target="_top">http://www.speedtree.com/</a>).
+                 SpeedTree is not provided as part of the BigWorld Technology license and
+                 needs to be licensed separately if required.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e573"></a>4.1.&nbsp;Building with SpeedTree support
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld's source code ships with support for SpeedTree turned off
+                      by default. In order to turn SpeedTree support on in BigWorld's game
+                      client and tools, in
+                      <code class="filename">bigworld/src/lib/speedtree/speedtree_config.hpp</code>, set
+                      the <code class="varname">SPEEDTREE_SUPPORT</code> macro to <span class="literal">1</span>.
+                      You will also need to have SpeedTreeRT SDK 4.2 properly installed and
+                      configured.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e587"></a>4.2.&nbsp;Resource files
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>For a SpeedTree to be available in WorldEditor, or to be loaded from
+                      a chunk file into a space within the game client, the following resource
+                      files need to exist in the resources tree:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>The SpeedTree file (<span class="literal">.spt</span>).
+                        </p>
+                     </li>
+                     <li>
+                        <p>The branch texture map file.</p>
+                     </li>
+                     <li>
+                        <p>The composite texture map file.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>For each tree, these files should reside in the same folder. More
+                      than one tree can coexist in the same folder, as long as no filename clash
+                      occurs.
+               </p>
+               <p>For performance reasons, we assume that all trees use a composite
+                      map for the frond, leaf, and billboard textures. For details on how to
+                      have a tree to use composite maps, see the SpeeTreeCAD's User
+                      Manual.
+               </p>
+               <p>To take advantage of SpeedTreeCAD's alpha noise cross-fading feature
+                      (a fundamental feature which use we highly recommend), you will also need
+                      an accompanying <span class="literal">.texformat</span><sup>[<a name="d0e613" href="#ftn.d0e613">1</a>]</sup> filefor the composite texture map, or an appropriate
+                      wildcard entry in
+                      <code class="filename"><em class="replaceable"><code>&lt;texture_detail_levels&gt;</code></em>.xml</code>.
+                      For details, see <a href="ch04.html#xref_we_Level_Of_Detail" title="4.5.&nbsp;Level of detail">Level of detail</a>.
+               </p>
+               <p>Optionally, you can have a <code class="filename">SpeedWind.ini</code> file
+                      in this same folder if you require finer control over how this tree wind
+                      animates. For details, see <a href="ch04.html#xref_we_Wind_Animation" title="4.4.&nbsp;Wind animation">Wind animation</a>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e635"></a>4.3.&nbsp;SpeedTrees in WorldEditor
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Once the resource files are in place, trees are ready to be used
+                      within WorldEditor. To insert a tree, either drag a
+                      <span class="literal">.spt</span> file from the <em class="emphasis">Asset
+                         Browser</em> panel<sup>[<a name="d0e646" href="#ftn.d0e646">2</a>]</sup> into the viewport, or select the desired
+                      <span class="literal">.spt</span> file and press <span class="literal">Enter</span>.
+               </p>
+               <p>Once a tree has been added, it can be selected, moved, rotated, and
+                      scaled like any other model in WorldEditor. You can do this interactively
+                      (see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html#xref_we_Mouse_Controls" class="olink">Mouse controls</a>) or by editing the trees' properties
+                      in the <em class="emphasis">Properties</em> panel (see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html#xref_we_Properties_Panel" class="olink">Properties panel</a>). In the <em class="emphasis">Properties</em> panel, you can also edit the name of the
+                      <span class="literal">.spt</span> file and the seed number used to generate the tree
+                      geometry. The results of editing a tree's properties can be immediately
+                      previewed in the viewport.
+               </p>
+               <p>If a tree cannot be loaded during chunk loading then a red box model
+                      will be rendered in its place. The box can still be manipulated and most
+                      of its properties edited with the exception of its seed. Any changes will
+                      be saved and restored if that tree is loaded in the future.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_we_Wind_Animation"></a>4.4.&nbsp;Wind animation
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld uses SpeedTree's new SpeedWind library to animate trees
+                      swaying to the wind. SpeedWind's parameters can be tuned and previewed
+                      from within SpeedTreeCAD, and then saved as a .ini file. This file can
+                      then be loaded into BigWorld's 3D engine to control how trees
+                      animate.
+               </p>
+               <p>A global .ini file is used by default for all trees. Optionally, a
+                      unique SpeedWind.ini file can be tied to a specific tree, by placing it in
+                      the same folder as the .spt file (the name of the file is required to be
+                      <span class="literal">SpeedWind.ini</span>). If neither file is present, then
+                      SpeedWind's engine will be setup with its default parameters.
+               </p>
+               <p>Although SpeedWind's parameters define how a tree should animate
+                      given a wind of certain direction and strength, the actual wind's
+                      direction and strength fed into SpeedWind's engine is provided by
+                      BigWorld's dynamic weather system, conveying a convincing and immersive
+                      experience for the player.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_we_Level_Of_Detail"></a>4.5.&nbsp;Level of detail
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld's 3D engine fully supports SpeedTree's LOD model. Branches
+                      and fronds switch detail levels discretely, while leaves and billboards
+                      LODs cross-fade according to the distance to the camera.
+               </p>
+               <p>By default, the actual LOD level of a tree &#8212; a value that
+                      ranges from 0 (minimum detail) to 1 (maximum detail) &#8212; is a linear
+                      function based on the distance from the tree's origin to the camera's eye
+                      position. The lodFar and lodNear parameters define the distance interval
+                      within which the trees' LOD levels will vary. In the default LOD mode, the
+                      LOD function is the same for all trees.
+               </p>
+               <p>Optionally, you can rely on SpeedTree's engine to compute the LOD
+                      level for each tree based on parameters contained in the .spt file (which
+                      can be edited from SpeedTreeCAD). Roughly speaking, they work in the same
+                      way as explained above, but with specific near and far values for each
+                      tree. This allows a more fine-grained control of LOD transitions, and a
+                      better match between what is previewed on SpeedTreeCAD and what is
+                      rendered on the tools and the client. The only drawback is that relying on
+                      SpeedTreeRT for the LOD computation is a bit slower than letting BigWorld
+                      do it.
+               </p>
+               <p>You can switch between this two LOD modes by editing the
+                      <span class="literal">lodMode</span> parameter in SpeedTree's XML file (for details,
+                      see <a href="ch04.html#xref_we_XML_File" title="4.7.&nbsp;XML file">XML file</a>) or interactively, via watchers
+                      (for details, see <a href="ch04.html#xref_we_Watchers" title="4.8.&nbsp;Watchers">Watchers</a>). The parameters
+                      <span class="literal">lodNear</span> and <span class="literal">lodFar </span>are also
+                      accessible this way.
+               </p>
+               <p>The <span class="literal">lodOverlap</span> parameter defines how much
+                      overlapping should happen during the cross-fading of LOD levels. The valid
+                      range goes from 0 to 2. The default value is 1. This parameter is also
+                      accessible via XML file and watchers.
+               </p>
+               <p>Leaves and billboards, when phasing in or out their LODs, cross-fade
+                      their alpha test values in order to smooth level transitions. This
+                      technique requires composite texture maps with homogeneous noise baked
+                      into the alpha channel and pre-generated mipmaps. Also, BigWorld's auto
+                      mipmapping generation should be disabled for this texture map.
+               </p>
+               <p>To disable the automatic generation of mipmaps in BigWorld, you will
+                      need to setup a <code class="filename">.texformat</code><sup>[<a name="d0e722" href="#ftn.d0e722">3</a>]</sup> file for each tree's composite texture map, which is
+                      illustrated below:
+               </p><pre class="programlisting">&lt;root&gt;
+  &lt;mipCount&gt;       -1    &lt;/mipCount&gt;
+  &lt;horizontalMips&gt; true  &lt;/horizontalMips&gt;
+  &lt;mipSize&gt;        0     &lt;/mipSize&gt;
+&lt;/root&gt;</pre><p><span class="citetitle">Example <span class="literal">.texformat</span>
+                         file</span></p>
+               <p>The example above configures the following:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">mipCount</span></em></p>
+                        <p>-1 ensures that all mipmap levels baked into the texture will be
+                                   used.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">horizontalMips</span></em></p>
+                        <p>Should always be true for SpeedTreeCAD's generated
+                                   mipmaps.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">mipSize</span></em></p>
+                        <p>Width of the top-most level mipmap. If set to zero, then will
+                                   use half the width of the original texture file, which is right for
+                                   composite maps exported from SpeedTreeCAD.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>A more general way of achieving this is by adding a wildcard entry
+                      to
+                      <code class="filename"><em class="replaceable"><code>&lt;texture_detail_levels&gt;</code></em>.xml</code>.
+                      The entry should match all composite maps used by SpeedTree, and define
+                      the same attributes shown above. An example of a wildcard entry is
+                      illustrated below:
+               </p><pre class="programlisting">&lt;detailLevel &gt;
+  &lt;prefix&gt;         speedtree &lt;/prefix&gt;
+  &lt;contains&gt;       composite &lt;/contains&gt;
+  &lt;mipCount&gt;       -1        &lt;/mipCount&gt;
+  &lt;horizontalMips&gt; true      &lt;/horizontalMips&gt;
+  &lt;mipSize&gt;        0         &lt;/mipSize&gt;
+&lt;/detailLevel &gt;</pre><p><span class="citetitle">Example
+                         <span class="literal"><em class="replaceable"><code>&lt;texture_detail_levels&gt;</code></em>.xml</span>
+                         entry</span></p>
+               <p>For details on how to create texture maps with alpha noise and
+                      pre-generated mipmaps, see SpeedTreeCAD' <em class="emphasis">User
+                         Manual</em>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e784"></a>4.6.&nbsp;Collision geometry
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The first time a tree is loaded, BigWorld uses the collision
+                      geometry specified in the .spt file to generate the BSP trees that will
+                      populate the collision scene in a space. In the game client, you can
+                      preview these BSP trees by enabling the <span class="literal">SpeedTree/BSP</span>
+                      watcher (for details, see <a href="ch04.html#xref_we_Watchers" title="4.8.&nbsp;Watchers">Watchers</a>). In
+                      WorldEditor, enable the <em class="emphasis">General Options</em>
+                      panel's <em class="emphasis">Show</em> list box's <em class="emphasis">Scenery <span class="symbol">&#8594;</span> BSP</em>
+                      item (for details, see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html#xref_we_General_Options_Panel" class="olink">General Options panel</a>).
+               </p>
+               <p>If the engine has write access to the resource path, then a cache of
+                      the BSP tree will be saved, to speed upload time in the future. This cache
+                      file will be re-created whenever the <span class="literal">.spt</span> file is
+                      modified.
+               </p>
+               <p>Once a tree's BSP tree has been inserted into the collision scene,
+                      it will be used in all collision queries in the engine, including
+                      line-of-sight, navigation paths generation, static lighting, and more.
+                      When loaded from within WorldEditor, if a tree has no collision geometry
+                      defined, then a temporary BSP tree in the shape of a box will be created,
+                      to allow the world builder to select and interact with the tree. This
+                      temporary BSP tree is not cached, and will not be created when the tree is
+                      loaded into the game client.
+               </p>
+               <p>For details on how to define a tree's collision geometry, see
+                      SpeedTreeCAD's User Manual.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>Although higher numbers of volumes defining a tree's geometry
+                           result in higher load on the physics system, no BSP traversal is done if
+                           the collision query falls outside the bounding box of the tree.
+                  </p>
+                  <p>Thus, using more volumes is not as expensive as it may at first
+                           seem (although it definitely more expensive than using little or no
+                           volumes at all).
+                  </p>
+               </div>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>Due to the nature of BSP trees, spheres and cylinders can be
+                           inefficient in terms of memory and runtime performance when compiled
+                           into a BSP.
+                  </p>
+                  <p>To compensate that, BigWorld uses low-resolution tessellation when
+                           generating them.
+                  </p>
+                  <p>For this same reason, whenever possible you should try to use
+                           boxes instead of cylinders and spheres to approximate the collision
+                           geometry of a tree.
+                  </p>
+               </div>
+               <p>Normally, the server is not built to use SpeeTreeRT, and requires
+                      the BSP files to be present in the resource path in order to load
+                      SpeedTrees into the collision scene. The recommended approach is to check
+                      all SpeedTree BSPs into the repository so that they will be accessible to
+                      the server. When running the server, if the associated BSP file is not
+                      available when loading a SpeedTree, then it will fail to load (the chunk
+                      will be loaded successfully, though).
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_we_XML_File"></a>4.7.&nbsp;XML file
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>All game-specific settings related to rendering SpeedTrees are
+                      defined in a XML file, which actual name is defined in
+                      <span class="literal">resources.xml</span> (for details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/index.html" class="olink">Client Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch01.html" class="olink"><i>Overview</i></a><span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch01.html#xref_Configuration_Files" class="olink">Configuration files</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch01.html#xref_File_resources_xml" class="olink">File <span class="literal">resources.xml</span></a>) , under the
+                      <span class="literal">system/speedTreeXML</span> tag, and defaults to
+                      <span class="literal">speedtree/speedtree.xml</span>.
+               </p>
+               <p>This file is read upon initialisation of BigWorld's 3D engine. For
+                      details on these tags, please see inline comments in
+                      <span class="literal">fantasydemo/res/speedtree/speedtree.xml</span>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_we_Watchers"></a>4.8.&nbsp;Watchers
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>In both the game client and WorldEditor, several watchers (for
+                      details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/index.html" class="olink">Client Programming Guide</a>'s
+                      section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch24.html" class="olink"><i>Debugging</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch24.html#xref_Watchers" class="olink">Watchers</a>) are
+                      available to instantly customise and debug the behaviour of
+                      SpeedTrees.
+               </p>
+               <p>The list below describes them (all watchers listed are prefixed by
+                      <span class="literal">SpeedTree/</span>):
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Batched rendering</em></p>
+                        <p>Toggles batched rendering. Default is on.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">BB Optimiser/ Active
+                                      buffers</em></p>
+                        <p>Number of buffers in pool that are currently active &#8212;
+                                   these are not available for recycling. Read-only.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">BB Optimiser/ Frames to
+                                      recycle</em></p>
+                        <p>Number of frames during which a billboard optimiser buffer
+                                   should stay unchanged before it is set for recycling.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">BB Optimiser/ Frames to
+                                      delete</em></p>
+                        <p>Number of frames during which a billboard optimiser buffer
+                                   should stay unchanged before it is set for deleting.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">BB Optimiser/ Pool size</em></p>
+                        <p>Number of buffers in pool. Read-only.</p>
+                        <p>This number minus the number of active buffers (BB
+                                   Optimiser/Active buffers) is the total number of buffers currently
+                                   available for recycling.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">BB Optimiser/ Visible
+                                      buffers</em></p>
+                        <p>Number of buffers in pool that are currently visible.
+                                   Read-only.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Bounding boxes</em></p>
+                        <p>Toggles the rendering of trees' bounding boxes. Default is
+                                   off.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">BSP Trees</em></p>
+                        <p>Toggles the rendering of trees' BSP trees. Default is
+                                   off.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Counters/Instances</em></p>
+                        <p>Total number of trees instantiated. Read-only.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Counters/Species</em></p>
+                        <p>Number of speed tree files currently loaded. Read-only.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Counters/Unique</em></p>
+                        <p>Number of unique tree models currently loaded. Read-only.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Counters/Visible</em></p>
+                        <p>Number of trees currently visible in the scene.
+                                   Read-only.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Draw billboards</em></p>
+                        <p>Toggles the rendering of billboards. Default is on.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Draw branches</em></p>
+                        <p>Toggles the rendering of branches. Default is on.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Draw fronds</em></p>
+                        <p>Toggles the rendering of fronds. Default is on.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Draw leaves</em></p>
+                        <p>Toggles the rendering of leaves. Default is on.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Draw trees</em></p>
+                        <p>Toggle the rendering of speed trees. Default is on.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">LOD far</em></p>
+                        <p>Distance for minimum LOD.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">LOD Mode</em></p>
+                        <p>Mode of handling of LODs. Value range is:</p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><em class="emphasis">-1</em> &#8212; Dynamic &#8212;
+                                                near and far LOD defined per tree.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis">-2 </em>&#8212; Dynamic &#8212;
+                                                uses global near and far LOD values.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis">0.0 to 1.0</em> &#8212; Forces
+                                                static value.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">LOD near</em></p>
+                        <p>Distance for maximum LOD.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">LOD overlap</em></p>
+                        <p>LOD overlap value. Value range is 0.0 to 2.0.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Optimise billboards</em></p>
+                        <p>Toggles billboard compounding. Default is on.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Play animation</em></p>
+                        <p>Toggles wind animation. Default is on.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Texturing</em></p>
+                        <p>Toggles texturing. Default is on.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The watchers <em class="emphasis">LOD Mode</em>, <em class="emphasis">LOD Near</em>, <em class="emphasis">LOD Far</em>,
+                      and <em class="emphasis">LOD Overlap</em> are read from SpeedTree's
+                      XML file when the engine is initialised. Modifying them via WebConsole's
+                      <em class="emphasis">ClusterControl</em> module (for details, see
+                      the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch03.html" class="olink"><i>Cluster Administration Tools</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch03.html#xref_WebConsole" class="olink">WebConsole</a>) does not modify the contents written into
+                      the file.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1071"></a>4.9.&nbsp;Troubleshooting
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The list below describes some errors that you might come across when
+                      implementing SpeedTree:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Speed trees are not
+                                      rendered.</em></p>
+                        <p>SpeedTreeRT SDK is not installed.</p>
+                        <p><em class="emphasis">&#8212;or&#8212;</em></p>
+                        <p>SpeedTreeRT SDK license has expired.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Leaves are textured with whole composite
+                                      map, instead of just the leaf part.</em></p>
+                        <p>Trees have not been correctly exported for real-time use.</p>
+                        <p>The best approach is to export the tree to a folder different
+                                   from the original tree. This will guarantee that all files in the
+                                   exported folder are for real-time use, and also preserve the original
+                                   tree files.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Cross-fading of leaves and billboards does
+                                      not look correct (leaves on current LOD disappear before next LOD
+                                      leaves are displayed).</em></p>
+                        <p>Composite texture map was not generated with alpha noise.</p>
+                        <p><em class="emphasis">&#8212;or&#8212;</em></p>
+                        <p>BigWorld's automatic generation of mipmap is enabled. For the
+                                   cross-fading with alpha noise to work correctly, you must generate the
+                                   composite texture map with pre-generated mipmaps, and instruct
+                                   BigWorld to use them, instead of automatically generating the mipmaps
+                                   on load. For more details, see <a href="ch04.html#xref_we_Level_Of_Detail" title="4.5.&nbsp;Level of detail">Level of detail</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Terrain vertex shadow is not
+                                      correct</em></p>
+                        <p>Trees do not have collision geometry, and BigWorld uses the
+                                   collision scene to calculate terrain shadows.
+                        </p>
+                        <p>Note that, because of a known limitation in BigWorld's outdoor
+                                   static lighting model, shadows of tree-like objects may not look
+                                   correct under some sun angles.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e613" href="#d0e613">1</a>] </sup>For details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch33.html" class="olink"><i><span class="literal">.texformat</span></i></a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e646" href="#d0e646">2</a>] </sup>For details on the Asset Panel see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html#xref_we_Asset_Browser_Panel" class="olink">Asset Browser panel</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e722" href="#d0e722">3</a>] </sup>For details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch33.html" class="olink"><i><span class="literal">.texformat</span></i></a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Scaleform&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;FMOD</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

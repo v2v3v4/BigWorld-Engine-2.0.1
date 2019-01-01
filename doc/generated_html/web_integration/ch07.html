@@ -1,0 +1,436 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;7.&nbsp;Python</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="BigWorld Web Integration Reference">
+      <link rel="up" href="index.html" title="BigWorld Web Integration Reference">
+      <link rel="prev" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Deployment">
+      <link rel="next" href="ch08.html" title="Chapter&nbsp;8.&nbsp;PHP">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/web_integration/ch07.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;7.&nbsp;Python</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch06.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch08.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Python"></a>Chapter&nbsp;7.&nbsp;Python
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch07.html#d0e205">7.1. Apache/mod_python</a></span></dt>
+                  <dt><span class="section"><a href="ch07.html#xref_Python_Building_The_Module_From_Source">7.2. Building the Module From Source</a></span></dt>
+                  <dt><span class="section"><a href="ch07.html#d0e252">7.3. Testing the Module</a></span></dt>
+                  <dt><span class="section"><a href="ch07.html#xref_UID_and_Resource_Paths">7.4. BigWorld UID and Resource Paths</a></span></dt>
+                  <dt><span class="section"><a href="ch07.html#d0e314">7.5. Python API</a></span></dt>
+                  <dt><span class="section"><a href="ch07.html#d0e426">7.6. Remote Methods</a></span></dt>
+                  <dt><span class="section"><a href="ch07.html#d0e462">7.7. Mailboxes and Persistent Session Storage</a></span></dt>
+                  <dt><span class="section"><a href="ch07.html#d0e506">7.8. Example Scripts</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e205"></a>7.1.&nbsp;Apache/mod_python
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>An extension called mod_python is available for Apache HTTP servers
+                      that allows for web scripting using Python. There are many frameworks that
+                      can use Apache/mod_python as the server base architecture
+                      (<em class="emphasis">e.g.</em>, CherryPy-based frameworks such as TurboGears),
+                      although not using Apache/mod_python is also an option
+                      (<em class="emphasis">e.g.,</em> using the CherryPy's Python-based web
+                      server).
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Python_Building_The_Module_From_Source"></a>7.2.&nbsp;Building the Module From Source
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The sources for the Python extension module are located in
+                      <span class="literal">bigworld/src/server/web/python</span>.
+               </p>
+               <p>To build the module from source, follow the steps below:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Change to the source directory.</p>
+                     </li>
+                     <li>
+                        <p>Run <span class="literal">make</span> to build the module &#8212; this should
+                                   result in the dynamic library file <span class="literal">BigWorld.so</span>
+                                   being created in <span class="literal">bigworld/bin/web/Hybrid</span>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>By default, the source includes header files from the version of
+                      Python shipped with BigWorld (Python 2.6). When running with older Python
+                      versions (<em class="emphasis">e.g.</em>, Python 2.4), warning messages such as
+                      the following may appear:
+               </p><pre class="programlisting">__main__:1: RuntimeWarning: Python C API version mismatch for module BigWorld: This Python has API version 1012, module BigWorld has version 1013.
+__main__:1: RuntimeWarning: Python C API version mismatch for module Math: This Python has API version 1012, module Math has version 1013.
+__main__:1: RuntimeWarning: Python C API version mismatch for module ResMgr: This Python has API version 1012, module ResMgr has version 1013.
+__main__:1: RuntimeWarning: Python C API version mismatch for module _BWp: This Python has API version 1012, module _BWp has version 1013.</pre><p><span class="citetitle">Example warning messages that might be displayed when
+                         running older Python versions</span></p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e252"></a>7.3.&nbsp;Testing the Module
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To test the module, change to the output directory
+                      <span class="literal">bigworld/bin/web/python/Hybrid</span>, then run the following
+                      command:
+               </p><pre class="programlisting">python2.5 &#8211;c "import BigWorld"</pre><p>If no error messages are issued, then it means that you have
+                      successfully built the Python module.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_UID_and_Resource_Paths"></a>7.4.&nbsp;BigWorld UID and Resource Paths
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld processes from a particular user ID can only communicate
+                      with other BigWorld processes from that same user ID, and this applies to
+                      the Python web integration module. You can override this by changing the
+                      <span class="literal">UID</span> environment variable before importing
+                      <span class="literal">BigWorld</span>, as illustrated below:
+               </p><pre class="programlisting">import os
+os.environ['UID'] = 500 <em class="emphasis"># substitute with desired user ID</em> 
+import BigWorld</pre><p><span class="citetitle">Changing <span class="literal">UID</span> before importing the
+                         <span class="literal">BigWorld</span> module</span></p>
+               <p>The BigWorld resource paths also need to be accessible to the web
+                      integration module, and they have to be matched to the resources that the
+                      server is using. The resource paths are read from the
+                      <span class="literal">$(HOME)/.bwmachined.conf</span> configuration file (for
+                      details on BWMachined configuration, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>'s section
+                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html" class="olink"><i>Server Components</i></a>
+                      <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_BWMachined" class="olink">BWMachined</a>).
+               </p>
+               <p>As with with the <span class="literal">UID</span> environment variable, you
+                      can override the <span class="literal">HOME</span> environment variable to determine
+                      where to load <span class="literal">.bwmachined.conf</span> from.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e314"></a>7.5.&nbsp;Python API
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The functions and attributes available in the BigWorld Python API
+                      are listed below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="function">BigWorld.logOn(
+                                      <em class="parameter"><code>username</code></em>, <em class="parameter"><code>password</code></em>, <em class="parameter"><code>allow_already_logged_on=False</code></em>
+                                      )</code></p>
+                        <p>Logs on a username/password combination, and either returns
+                                   <span class="literal">None</span> (on success) or raises an exception (on
+                                   failure). The exception type reflects the kind of error that occurred,
+                                   and can be one of the following values: <span class="literal">IOError</span>,
+                                   <span class="literal">ValueError</span> and
+                                   <span class="literal">SystemError</span>.
+                        </p>
+                        <p>If the <span class="literal">allow_already_logged_on</span> parameter is
+                                   <span class="literal">True</span>, then this function does not raise an
+                                   exception if the BigWorld server cluster reports that the user is
+                                   already logged on.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="function">BigWorld.lookUpEntityByName(
+                                      <em class="parameter"><code>entityType</code></em>,  <em class="parameter"><code>entityName</code></em>
+                                      )</code></p>
+                        <p>Queries the DBMgr to look up an entity base for a given entity
+                                   type and entity name &#8212; if the entity exists and the entity base is
+                                   loaded, then it returns a mailbox object pointing to the entity base
+                                   that can be used for invoking remote methods. If the entity exists,
+                                   but is not loaded, then the function returns <span class="literal">True</span>;
+                                   otherwise it returns <span class="literal">False</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="function">BigWorld.setDefaultKeepAliveSeconds (
+                                      <em class="parameter"><code>defaultKeepAliveSeconds</code></em> )</code></p>
+                        <p>Sets the default keep-alive interval for new mailboxes.</p>
+                        <p>This interval can also be adjusted per-mailbox through the
+                                   <span class="literal">keepAliveSeconds</span> attribute.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="function">BigWorld.resetNetworkInterface(
+                                      <em class="parameter"><code>port</code></em> )</code></p>
+                        <p>Recreates the network interface (including its socket) and
+                                   resets any addresses to BigWorld services that it has cached.
+                        </p>
+                        <p>The socket is bound to the given port, unless the given port is
+                                   zero, in which case the socket is bound to a random port.
+                        </p>
+                     </li>
+                     <li>
+                        <p><span class="literal"><code class="classname">MailBox</code>.<code class="varname">keepAliveSeconds</code></span></p>
+                        <p>The keep-alive interval (in seconds) of the specified entity
+                                   mailbox.
+                        </p><pre class="programlisting">mailbox.keepAliveSeconds = newKeepAliveSeconds</pre></li>
+                     <li>
+                        <p><code class="classname">MailBox</code>.<code class="methodname">serialise()</code></p>
+                        <p>Serialise this mailbox to a string.</p>
+                     </li>
+                     <li>
+                        <p><code class="function">BigWorld.deserialise(
+                                      <em class="parameter"><code>serialisedMailbox</code></em> )</code></p>
+                        <p>Deserialise the serialised mailbox string to a mailbox.</p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e426"></a>7.6.&nbsp;Remote Methods
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Invocations of remote methods with defined return values return a
+                      dictionary of those return values with the names of the defined return
+                      values as keys.
+               </p><pre class="programlisting">&lt;root&gt;
+   ...
+   &lt;BaseMethods&gt;
+      ...
+      &lt;getGoldAndInventory&gt;
+         &lt;Arg&gt;  INT32  &lt;/Arg&gt;  &lt;!-- bag ID --&gt;
+         &lt;ReturnValues&gt;
+            &lt;goldPieces&gt;    UINT32                          &lt;/goldPieces&gt;
+            &lt;inventoryList&gt; ARRAY &lt;of&gt; INVENTORY_ITEM &lt;/of&gt; &lt;/inventoryList&gt;
+         &lt;/ReturnValues&gt;
+      &lt;/getGoldAndInventory&gt;
+      ...
+   &lt;/BaseMethods&gt;
+   ...
+&lt;/root&gt;</pre><p><span class="citetitle">Example remote entity method
+                         definition</span></p>
+               <p>Remote methods can be invoked on a mailbox directly, as illustrated
+                      below:
+               </p><pre class="programlisting">player = BigWorld.lookUpEntityByName( 'Avatar', &#8216;bob' )  <em class="emphasis"># mailbox to Avatar 'bob'</em>
+bagID = 0
+result = player.getGoldAndInventory( bagID )     # <em class="emphasis">argument is integer</em>
+gold = result['goldPieces']                      <em class="emphasis"># integer</em>
+inventoryList = result['inventoryList']          <em class="emphasis"># list of inventory items</em></pre><p><span class="citetitle">Example invocation of a remote entity method with return
+                         values in Python</span></p>
+               <p>The remote method <span class="literal">getGoldAndInventory</span> is called
+                      using the previous looked-up mailbox of the Avatar entity named
+                      <span class="literal">bob</span>. The lookup involves a query to DBMgr, which gives
+                      the mailbox (which locates the entity object amongst the BaseApps) and the
+                      method call itself is directed to the entity base, through the BaseApp
+                      that it resides on.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e462"></a>7.7.&nbsp;Mailboxes and Persistent Session Storage
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Apache/mod_python provides a mechanism for storing Python objects in
+                      the server-side persistent session variables. This makes it unnecessary to
+                      look entities up on every page request, when the mailbox can be stored in
+                      the session variables on look-up, and restored on page load. This also
+                      means that entity mailboxes are shared across all child processes of
+                      Apache. You use the mailbox's <code class="methodname">serialise()</code> method
+                      to get the mailbox serialised form as a string, and save this string to
+                      the persistent session. On subsequent requests, you can re-constitute the
+                      mailbox via the <code class="methodname">BigWorld.deserialise()</code>
+                      method.
+               </p>
+               <p>An example is displayed below:</p><pre class="programlisting">from mod_python import Session
+...
+import BigWorld
+...
+def handler( req ):
+   session = Session.Session( req )
+
+   if not 'player_mailbox' in session:
+      # they aren't logged in yet, login if they have supplied credentials
+      if not 'username' in req.fields or not 'password' in req.fields:
+         req.write( "login credentials required" )
+         return
+
+      playerName = req.fields['username']
+      password = req.fields['password']
+
+      try:
+         BigWorld.logOn( playerName, password )
+      except:
+         req.write( "Login failed" )
+         return
+
+      mailbox = BigWorld.lookUpEntityByName( 'Avatar', playerName )
+      if type( mailbox ) == bool:
+         req.write( "Login error" )
+         return
+
+      session['player_mailbox'] = mailbox.serialise()<a name="MailboxPersistenceSerialise"></a><img src="../images/callouts/1.png" alt="1" border="0">
+   else:
+      # we are already logged in, mailbox is in session
+      mailbox = BigWorld.deserialise( session['player_mailbox'] )<a name="MailboxPersistenceDeserialise"></a><img src="../images/callouts/2.png" alt="2" border="0">
+
+   res = mailbox.getGoldAndInventory()
+   ...</pre><div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a href="#MailboxPersistenceSerialise"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>The <code class="methodname">serialise()</code> method is called here
+                                      on a mailbox that has just been retrieved via
+                                      <code class="methodname">BigWorld.lookUpEntityByName()</code>. The entity was
+                                      created when authentication of
+                                      <code class="methodname">BigWorld.logOn()</code> succeeded. The string is
+                                      stored away in the persistent session under the key
+                                      <span class="literal">player_mailbox</span>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a href="#MailboxPersistenceDeserialise"><img src="../images/callouts/2.png" alt="2" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>The <code class="methodname">deserialise()</code> method is called here
+                                      on the serialised string stored in the persistent session under the
+                                      key <span class="literal">player_mailbox</span>, and the mailbox is
+                                      re-constituted.
+                           </p>
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e506"></a>7.8.&nbsp;Example Scripts
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Example scripts demonstrating how to use the BigWorld Python
+                      extension module to integrate with mod_python are located in
+                      <span class="literal">fantasydemo/src/web/mod_python.</span></p>
+               <p>To try out these scripts, you can add the following lines to your
+                      Apache configuration, changing the root of the the paths (fill in the
+                      ellipsis below):
+               </p><pre class="programlisting"><em class="lineannotation"><span class="lineannotation"># Create a convenient path to these scripts</span></em>
+Alias /bw-python-example <em class="replaceable"><code>...</code></em>fantasydemo/src/web/mod_python
+<em class="lineannotation"><span class="lineannotation"># Directory containing game scripts</span></em>
+&lt;Directory <em class="replaceable"><code>...</code></em>fantasydemo/src/web/mod_python &gt;
+    <em class="lineannotation"><span class="lineannotation"># Automatically look up index.py</span></em>
+    DirectoryIndex index.py
+    <em class="lineannotation"><span class="lineannotation"># Allow MultiViews to make "page" reach "page.py"</span></em>
+    Options Indexes MultiViews
+    <em class="lineannotation"><span class="lineannotation"># Filter all python scripts through mod_python</span></em>
+    AddHandler mod_python .py
+    <em class="lineannotation"><span class="lineannotation"># Use module bwmain to execute our scripts</span></em>
+    PythonHandler bwmain
+    <em class="lineannotation"><span class="lineannotation"># Allow debugging info</span></em>
+    PythonDebug On
+    <em class="lineannotation"><span class="lineannotation"># Use Python sub-interpreter called "bigworld"</span></em>
+    PythonInterpreter bigworld
+    <em class="lineannotation"><span class="lineannotation"># Let Python find its modules</span></em>
+    PythonPath "sys.path + ['<em class="replaceable"><code>...</code></em>fantasydemo/src/web/mod_python', '<em class="replaceable"><code>...</code></em>bigworld/bin/web/Hybrid']"
+    <em class="lineannotation"><span class="lineannotation"># These Python scripts output HTML</span></em>
+    AddType text/html .py
+&lt;/Directory&gt;</pre><p>Please consult the Apache manual and/or your distribution's
+                      documentation on how to add configuration directives to your Apache
+                      configuration.
+               </p>
+               <p>You also must edit
+                      <code class="filename">fantasydemo/src/web/mod_python/lib/BigWorldConstants.py</code>
+                      to set the correct UID to connect to your server (see <a href="ch07.html#xref_UID_and_Resource_Paths" title="7.4.&nbsp;BigWorld UID and Resource Paths">BigWorld UID and Resource Paths</a>).
+               </p>
+               <p>The example script above assumes that the mod_python module is
+                      installed and loaded. For more details, see the Apache configuration file
+                      documentation and the mod_python installation documentation. The
+                      configuration template above will make the example scripts available at
+                      <span class="literal">http://<em class="replaceable"><code>&lt;hostname&gt;</code></em>/bw-python-example</span>.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/mod_python_example_scripts_login_page.png"><span class="caption">
+                        <p>mod_python example scripts login page</p></span></div>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch06.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch08.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;6.&nbsp;Deployment&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;8.&nbsp;PHP</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

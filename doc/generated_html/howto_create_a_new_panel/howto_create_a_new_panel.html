@@ -1,0 +1,68 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>How To Add New Panels</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_Add_New_Panels"></a>How To Add New Panels</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Introduction">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#xref_Sample_Panel">2. Sample Panel</a></span></dt><dt><span class="chapter"><a href="#xref_Detailed_Steps">3. Detailed Steps</a></span></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Introduction"></a>Chapter&nbsp;1.&nbsp;Introduction</h2></div></div></div><p>Three content creation tools, World Editor Model Editor and Particle
+  Editor, use a custom tear-off panel system developed by BigWorld. This
+  system allows for easy creating of new panels from C++ which can then be
+  docked, teared off and resized by the user. For more information, please see
+  the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#Content_Tools_Reference_Guide" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#xref_Panel_System" class="olink"><i>Panel System</i></a>.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Sample_Panel"></a>Chapter&nbsp;2.&nbsp;Sample Panel</h2></div></div></div><p>We have included a barebones panel template example in the World
+  Editor Visual Studio project that can be used either in World Editor, Model
+  Editor or Particle Editor. It is implemented in the file
+  <code class="filename">src/tools/worldeditor/gui/pages/page_my_panel.cpp</code> and
+  its corresponding header file. The code is well documented, and includes
+  comments about how to convert that template into an actual panel in the
+  tool.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Detailed_Steps"></a>Chapter&nbsp;3.&nbsp;Detailed Steps</h2></div></div></div><p>It is always best to start by looking at one of the other panels, or
+  from the self-explanatory sample panel template described above, but it is
+  also important to know the detailed steps involved in the process.</p><p>First, you start from either a <code class="classname">CDialog</code> or a
+  <code class="classname">CFormView</code>. A <code class="classname">CDialog</code> is
+  simpler and won't show scrollbars if the tab is resized too small.
+  <code class="classname">CDialog</code> classes are great if you make your dialog's
+  controls to expand / shrink with the panel. A <code class="classname">CDialog</code>
+  based example would be <code class="classname">PageOptionsHistogram</code>, in
+  <code class="filename">src/tools/bigbang/page_options_histogram.?pp</code>. A
+  <code class="classname">CFormView</code> creates scrollbars as needed, so it's great
+  for when you want to keep your controls the same size and position inside
+  the dialog, and show scrollbars if the tab is smaller than a certain size.
+  An example of this would be <code class="classname">PageOptionsWeather</code>, in
+  <code class="filename">src/tools/bigbang/page_options_weather.?pp</code>. It is
+  probably possible to inherit from other MFC classes, but those are the two
+  we use.</p><p>Whatever MFC base class you use, you also need to inherit from
+  <code class="classname">GUITABS::Content</code>, which is the base class that allows
+  the <code class="classname">GUITABS</code> Manager to handle tab/panel
+  docking/floating of your dialog. <code class="classname">GUITABS::Content</code> is
+  pure virtual, but there are some macros that were written afterwards that
+  implement all its methods with reasonable default implementations. These
+  macros are defined in <code class="filename">src/lib/guitabs/content.hpp</code>, and
+  are well documented there. For example,
+  <code class="classname">PageOptionsWeather</code> uses the
+  <span class="literal">IMPLEMENT_BASIC_CONTENT</span> macro at the beginning of the
+  class' declaration.</p><p>You also need to declare a factory for your dialog. Again, some handy
+  macros found in <code class="filename">src/lib/guitabs/content_factory.hpp</code>
+  will be sufficient in most cases. Note that there's a special macro for
+  <code class="classname">CDialog</code> derived panels, called
+  <span class="literal">IMPLEMENT_CDIALOG_CONTENT_FACTORY</span>.</p><p>Once you have done all this, you are ready to go. All it's left is to
+  register the factory, and to create a the panel manually in case a previous
+  <code class="filename">layout.xml</code> file doesn't exist. Both these things are
+  done in the <code class="classname">PanelManager</code> class, which for World
+  Editor is in <code class="filename">src/tools/bigbang/panel_manager.?pp</code>. In
+  the method <code class="methodname">PanelManager::initPanels</code>, the factories
+  are registered. For example, the <code class="classname">PageOptionsWeather</code>
+  factory is registered like this:</p><pre class="programlisting">GUITABS::Manager::instance()-&gt;registerFactory(
+       new PageOptionsWeatherFactory() );</pre><p>You must also manually insert the panel inside
+  <span class="literal">PanelManager::loadDefaultPanels</span> like this:</p><pre class="programlisting">p = GUITABS::Manager::instance()-&gt;insertPanel(
+       PageOptionsWeather::contentID, GUITABS::TAB, p );</pre><p>Last, there's a map that we build manually to keep track of the panels
+  currently supported in the tool. This is handy for when a new panel is
+  added, the tool will detect that it's missing in the
+  <code class="filename">layout.xml</code> file, and will reload the default panel
+  layout which should bring up the new panel (because you add it there with
+  <code class="methodname">insertPanel()</code> as described above). This is done in
+  the <code class="classname">PanelManager</code> constructor, so simply add your
+  panel there. Particle Editor has its own way of checking for missing dialogs
+  as well, in <code class="methodname">PanelManager::finishLoad()</code>.</p><p>Once you do all this, the tool will take care of all the docking /
+  floating of your panel, plus it will save your last panel layout to disk or
+  load the default layout when it needs to (i.e. the user requests it by
+  clicking on the appropriate menu item).</p></div></div></div></body></html>

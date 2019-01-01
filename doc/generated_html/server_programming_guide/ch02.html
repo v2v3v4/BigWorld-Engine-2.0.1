@@ -1,0 +1,553 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;2.&nbsp;Physical Entity Structure for Scripting</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Overview">
+      <link rel="next" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Physical User Data Object Structure for Scripting">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch02.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;2.&nbsp;Physical Entity Structure for Scripting</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Physical_Entity_Structure_For_Scripting"></a>Chapter&nbsp;2.&nbsp;Physical Entity Structure for Scripting
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch02.html#xref_The_entities_xml_File">2.1. The entities.xml File</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#xref_The_Definition_File">2.2. The Entity Definition File</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#xref_The_Script_Files">2.3. The Script Files</a></span></dt>
+               </dl>
+            </div>
+            <p>Entities are the objects that make up the game world. Using entities,
+                 you can create players, NPCs, loot, chat rooms, and many other interactive
+                 elements in your games.
+            </p>
+            <p>Each entity type is implemented as a collection of Python scripts, and
+                 an XML-based definition file that ties the scripts together. These scripts
+                 are located in the resource tree under the folder <code class="filename">scripts</code> (<em class="emphasis">i.e.</em>, <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts
+                    </code>, where <em class="replaceable"><code>&lt;res&gt;</code></em> is the virtual
+                 tree defined <code class="filename">~/.bwmachined.conf</code>).
+            </p>
+            <p>The list below summarises the important files and directories for
+                 entities in <em class="replaceable"><code>&lt;res&gt;</code></em>:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><em class="replaceable"><code>&lt;res&gt;</code></em>
+                                 </em> <span class="symbol">&#8208;</span> Resource tree
+                              defined in <code class="filename">~/.bwmachined.conf </code>.
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">scripts</span></em>
+                                           <span class="symbol">&#8208;</span> Folder containing all entity
+                                           files.
+                              </p>
+                              <div class="itemizedlist">
+                                 <ul type="square">
+                                    <li>
+                                       <p><em class="emphasis"><span class="literal">db.xml</span></em>
+                                                        <span class="symbol">&#8208;</span> Persistent state for the
+                                                        XML database system.
+                                       </p>
+                                    </li>
+                                    <li>
+                                       <p><em class="emphasis"><code class="filename">entities.xml</code></em> <span class="symbol">&#8208;</span> Lists all entities to load into
+                                                        the client or the server at start-up time.
+                                       </p>
+                                    </li>
+                                    <li>
+                                       <p><em class="emphasis"><span class="literal">base</span></em>
+                                                        <span class="symbol">&#8208;</span> Folder contains Python
+                                                        scripts for entities with a base component.
+                                       </p>
+                                    </li>
+                                    <li>
+                                       <p><em class="emphasis"><span class="literal">cell</span></em>
+                                                        <span class="symbol">&#8208;</span> Folder contains Python
+                                                        scripts for entities with a cell component.
+                                       </p>
+                                    </li>
+                                    <li>
+                                       <p><em class="emphasis"><span class="literal">client</span></em>
+                                                        <span class="symbol">&#8208;</span> Folder contains Python
+                                                        scripts for entities with a client component.
+                                       </p>
+                                    </li>
+                                    <li>
+                                       <p><em class="emphasis"><span class="literal">common</span></em>
+                                                        <span class="symbol">&#8208;</span> Folder listed in the
+                                                        Python search path for all components. Used for common game
+                                                        code.
+                                       </p>
+                                       <div class="itemizedlist">
+                                          <ul type="disc">
+                                             <li>
+                                                <p><em class="emphasis"><span class="literal">lib</span></em> <span class="symbol">&#8208;</span> Folder listed in the
+                                                                       Python search path for all components. Used for common
+                                                                       game code.
+                                                </p>
+                                             </li>
+                                          </ul>
+                                       </div>
+                                    </li>
+                                    <li>
+                                       <p><em class="emphasis"><span class="literal">entity_defs</span></em> <span class="symbol">&#8208;</span> Contains an XML <code class="filename">.def</code> file for each entity listed in
+                                                        file
+                                                        <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entities.xml</code>.
+                                       </p>
+                                       <div class="itemizedlist">
+                                          <ul type="disc">
+                                             <li>
+                                                <p><em class="emphasis"><code class="filename">alias.xml</code></em>
+                                                                     <span class="symbol">&#8208;</span> Data types aliases
+                                                                     used in the project.
+                                                </p>
+                                             </li>
+                                             <li>
+                                                <p><em class="emphasis"><code class="filename"><em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code></em>
+                                                                     <span class="symbol">&#8208;</span> Entity definition
+                                                                     file. There is one such file for each entity defined in
+                                                                     <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entities.xml</span>.
+                                                </p>
+                                             </li>
+                                             <li>
+                                                <p><em class="emphasis"><span class="literal">interfaces</span></em> <span class="symbol">&#8208;</span> Entity interface definition
+                                                                     files
+                                                </p>
+                                             </li>
+                                          </ul>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </div>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">server</span></em>
+                                           <span class="symbol">&#8208;</span> System-wide settings.
+                              </p>
+                              <div class="itemizedlist">
+                                 <ul type="square">
+                                    <li>
+                                       <p>Default values for the system.</p>
+                                    </li>
+                                 </ul>
+                              </div>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_The_entities_xml_File"></a>2.1.&nbsp;The entities.xml File
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The file
+                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entities.xml</code>
+                      is used by the BigWorld engine to determine the types of entities
+                      available for use.
+               </p>
+               <p>Each tag in this file represents an entity type, and must have a
+                      corresponding definition file in the directory <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs</code>,
+                      and at least one Python script file in either the <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base</code>
+                      or
+                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell</code>
+                      directory. It may also have a script file in <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client</code>.
+               </p>
+               <p>The order in which the entity types are declared in this file
+                      corresponds to the final entity ID associated with each entity
+                      type.
+               </p>
+               <p>In its simplest form, the entities file has one tag listed for each
+                      entity to be loaded.
+               </p>
+               <p>To define an entity called <code class="classname">NewEntityType</code>,
+                      simply add a line like the one below:
+               </p><pre class="programlisting">&lt;root&gt;
+  ...
+  <em class="emphasis">&lt;NewEntityType/&gt;</em>
+&lt;/root&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entities.xml</code>
+                         <span class="symbol">&#8208;</span> Entity
+                         definition</span></p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_The_Definition_File"></a>2.2.&nbsp;The Entity Definition File
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The entity definition file
+                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                      determines how your scripts communicate in BigWorld. This allows the
+                      BigWorld system to abstract the tasks of sending and receiving messages
+                      into simply calling different script methods on your entities. In a sense,
+                      the definition file provides an interface to your entity, and the Python
+                      scripts provide the implementation.
+               </p>
+               <p>The following diagram shows the conceptual parts of a BigWorld
+                      entity:
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/conceptual_parts_of_an_entity.png"><span class="caption">
+                        <p>Conceptual parts of an entity</p></span></div>
+               </div>
+               <p>Each entity type has a corresponding definition file, named after
+                      the entity's type name followed by the extension '<code class="filename">.def</code>'. For example, a
+                      <code class="classname">Seat</code> entity type would have a file called
+                      <code class="filename">Seat.def</code>.
+               </p>
+               <p>It is useful then, to have a 'minimal' definition file to aid in
+                      quickly defining a new entity, as well as to assist in explaining what the
+                      document's section is trying to accomplish.
+               </p>
+               <p>The following file is a minimal entity definition file:</p><pre class="programlisting">&lt;root&gt;
+
+  <em class="emphasis">&lt;Parent&gt;</em> optional parent entity &lt;/Parent&gt; <a name="co186" href="ch02.html#co186_desc"><img src="../images/callouts/1.png" alt="1" border="0"></a>
+
+  <em class="emphasis">&lt;Implements&gt;</em> <a name="co188" href="ch02.html#co188_desc"><img src="../images/callouts/2.png" alt="2" border="0"></a>
+     &lt;!-- interface references --&gt;
+   &lt;/Implements&gt;
+
+  <em class="emphasis">&lt;ClientName&gt;</em> optional client type &lt;/ClientName&gt; <a name="co192" href="ch02.html#co192_desc"><img src="../images/callouts/3.png" alt="3" border="0"></a>
+  
+  <em class="emphasis">&lt;Volatile&gt;</em> <a name="co195" href="ch02.html#co195_desc"><img src="../images/callouts/4.png" alt="4" border="0"></a>
+     &lt;!-- volatile definitions --&gt;
+   &lt;/Volatile&gt;
+
+   <em class="emphasis">&lt;Properties&gt;</em> <a name="co199" href="ch02.html#co199_desc"><img src="../images/callouts/5.png" alt="5" border="0"></a>
+     &lt;!-- properties --&gt;
+   &lt;/Properties&gt;
+
+  <em class="emphasis">&lt;ClientMethods&gt;</em> <a name="co203" href="ch02.html#co203_desc"><img src="../images/callouts/6.png" alt="6" border="0"></a>
+     &lt;!-- declaration --&gt; 
+   &lt;/ClientMethods&gt;
+
+  <em class="emphasis">&lt;CellMethods&gt;</em> <a name="co207" href="ch02.html#co207_desc"><img src="../images/callouts/7.png" alt="7" border="0"></a>
+     &lt;!-- declaration --&gt; 
+   &lt;/CellMethods&gt;
+
+  <em class="emphasis">&lt;BaseMethods&gt;</em> <a name="co211" href="ch02.html#co211_desc"><img src="../images/callouts/8.png" alt="8" border="0"></a>
+     &lt;!-- declaration --&gt; 
+   &lt;/BaseMethods&gt;
+
+  <em class="emphasis">&lt;LoDLevels&gt;</em> <a name="co215" href="ch02.html#co215_desc"><img src="../images/callouts/9.png" alt="9" border="0"></a>
+    &lt;!-- levels of detail --&gt;
+   &lt;/LODLevels&gt;
+
+  <em class="emphasis">&lt;NetworkCompression&gt;</em> <a name="co219" href="ch02.html#co219_desc"><img src="../images/callouts/10.png" alt="10" border="0"></a>
+    &lt;!-- internal and external network compression --&gt;
+   &lt;/NetworkCompression&gt;
+&lt;/root&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;/</code></em>scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                         <span class="symbol">&#8208;</span> Minimal entity definition
+                         file</span></p>
+               <div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co186_desc"></a><a href="#co186"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a href="ch06.html#xref_Entity_Parents" title="6.3.&nbsp;Entity Parents">Entity Parents</a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co188_desc"></a><a href="#co188"><img src="../images/callouts/2.png" alt="2" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a href="ch06.html#xref_Entity_Interfaces" title="6.2.&nbsp;Entity Interfaces">Entity Interfaces</a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co192_desc"></a><a href="#co192"><img src="../images/callouts/3.png" alt="3" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a href="ch06.html#xref_Client_Entity_Reuse" title="6.4.&nbsp;Client Entity Reuse">Client Entity Reuse</a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co195_desc"></a><a href="#co195"><img src="../images/callouts/4.png" alt="4" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a href="ch04.html#xref_Volatile_Properties" title="4.5.&nbsp;Volatile Properties">Volatile Properties</a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co199_desc"></a><a href="#co199"><img src="../images/callouts/5.png" alt="5" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a href="ch04.html" title="Chapter&nbsp;4.&nbsp;Properties"><i xmlns:xlink="http://www.w3.org/1999/xlink">Properties</i></a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co203_desc"></a><a href="#co203"><img src="../images/callouts/6.png" alt="6" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a href="ch05.html" title="Chapter&nbsp;5.&nbsp;Methods"><i xmlns:xlink="http://www.w3.org/1999/xlink">Methods</i></a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co207_desc"></a><a href="#co207"><img src="../images/callouts/7.png" alt="7" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a href="ch05.html" title="Chapter&nbsp;5.&nbsp;Methods"><i xmlns:xlink="http://www.w3.org/1999/xlink">Methods</i></a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co211_desc"></a><a href="#co211"><img src="../images/callouts/8.png" alt="8" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a href="ch05.html" title="Chapter&nbsp;5.&nbsp;Methods"><i xmlns:xlink="http://www.w3.org/1999/xlink">Methods</i></a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co215_desc"></a><a href="#co215"><img src="../images/callouts/9.png" alt="9" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a href="ch04.html#xref_LOD_Level_Of_Detail_On_Properties" title="4.6.&nbsp;LOD (Level of Detail) on Properties">LOD (Level of Detail) on Properties</a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co219_desc"></a><a href="#co219"><img src="../images/callouts/10.png" alt="10" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s
+                                      chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html#xref_General_Configuration_Options" class="olink">General Configuration Options</a> for the
+                                      <span class="literal">networkCompression</span> options.
+                           </p>
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+               <p>By the end of this chapter, we should be able to replace all
+                      placeholders (denoted by italics) in the example file above with actual
+                      code.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_The_Script_Files"></a>2.3.&nbsp;The Script Files
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld Technology divides processing of entities in a game world
+                      into three different execution contexts:
+               </p>
+               <div class="altrow">
+                  <table border="0">
+                     <colgroup>
+                        <col width="33%">
+                        <col width="33%">
+                        <col width="34%">
+                     </colgroup>
+                     <thead>
+                        <tr>
+                           <th align="center">Entity type</th>
+                           <th align="center">Script file location</th>
+                           <th align="center">Description</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td align="left">Cell</td>
+                           <td align="left"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell</code></td>
+                           <td align="left">Takes care of the portions of an entity that
+                                            affect the space around it. Processing takes place on the server
+                                            cluster.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td align="left">Base</td>
+                           <td align="left"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base</code></td>
+                           <td align="left">Takes care of the portions of an entity that
+                                            do not affect the space around it (as well as possibly acting as
+                                            a proxy for a player). Processing takes place on the server
+                                            cluster.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td align="left">Client</td>
+                           <td align="left"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client</code></td>
+                           <td align="left">Takes care of the portions of an entity that
+                                            require heavy awareness of the surrounding environment.
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <p><span class="citetitle">Entity Types</span></p>
+               <p>It is possible for some entity instances to not have one of these
+                      three parts. Furthermore, some entity types may not support ever having
+                      one of these parts. For each entity type, there is a script file for each
+                      of CellApp, BaseApp, and Client, if that type supports that execution
+                      context.
+               </p>
+               <p>These script files are named after the entity type, followed by the
+                      extension '<code class="filename">.py</code>'. This file must
+                      contain a class with the name of the entity type.
+               </p>
+               <p>For example, if you have an entity type <code class="classname">Seat</code>
+                      that can have cell, base and client execution contexts, there would be
+                      three script files, each with the implementation of the class:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Seat.py</code></p>
+                     </li>
+                     <li>
+                        <p><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Seat.py</code></p>
+                     </li>
+                     <li>
+                        <p><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Seat.py</code></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The entity's base class defined in the script file is determined by
+                      the execution context that the file represents, as described below:
+               </p>
+               <div class="altrow">
+                  <table border="0">
+                     <colgroup>
+                        <col width="50%">
+                        <col width="50%">
+                     </colgroup>
+                     <thead>
+                        <tr>
+                           <th align="center">Script file execution context</th>
+                           <th align="center">Entity's base class</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td align="left">Cell</td>
+                           <td align="left"><code class="classname">BigWorld.Entity</code></td>
+                        </tr>
+                        <tr>
+                           <td align="left">Base</td>
+                           <td align="left"><code class="classname">BigWorld.Base</code>
+                                            <em class="emphasis">or</em>
+                                            <code class="classname">BigWorld.Proxy</code></td>
+                        </tr>
+                        <tr>
+                           <td align="left">Client</td>
+                           <td align="left"><code class="classname">BigWorld.Entity</code></td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <p><span class="citetitle">Entity's base class per execution
+                         context</span></p>
+               <p>For more details about the difference between the
+                      <code class="classname">Base</code> and <code class="classname">Proxy</code> classes, see
+                      <a href="ch11.html" title="Chapter&nbsp;11.&nbsp;Proxies and Players"><i xmlns:xlink="http://www.w3.org/1999/xlink">Proxies and Players</i></a>.
+               </p>
+               <p>The start of the script for a <code class="classname">Seat</code> entity
+                      could be implemented as below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Cell script file <span class="symbol">&#8208;</span>
+                                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Seat.py</code></em></p><pre class="programlisting">import BigWorld
+
+class <em class="emphasis">Seat</em>( <em class="emphasis">BigWorld.Entity</em> ):
+  def __init__( self ):
+    BigWorld.Entity.__init__( self )</pre></li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Base script file <span class="symbol">&#8208;</span>
+                                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Seat.py</code></em></p><pre class="programlisting">import BigWorld
+
+class <em class="emphasis">Seat</em>( <em class="emphasis">BigWorld.Base</em> ):
+  def __init__( self ):
+    BigWorld.Base.__init__( self )</pre></li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Client script file <span class="symbol">&#8208;</span>
+                                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Seat.py</code></em></p><pre class="programlisting">import BigWorld
+
+class <em class="emphasis">Seat</em>( <em class="emphasis">BigWorld.Entity</em> ):
+  def __init__( self ):
+    BigWorld.Entity.__init__( self )</pre></li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Overview&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;Physical User Data Object Structure for Scripting</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

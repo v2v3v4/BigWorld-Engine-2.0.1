@@ -1,0 +1,219 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>File Grammar Guide</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="next" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Overview">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/index.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">File Grammar Guide</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left">&nbsp;</td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch01.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="book" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h1 class="title"><a name="File_Grammar_Guide"></a>File Grammar Guide
+                     </h1>
+                  </div>
+                  <div>
+                     <p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p>
+                  </div>
+                  <div>
+                     <p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p>
+                  </div>
+                  <div>
+                     <div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+                           is restricted to authorised users. This document is protected by
+                           copyright laws of Australia, other countries and international treaties.
+                           Unauthorised use, reproduction or distribution of this document, or any
+                             portion of this document, may result in the imposition of civil and
+                             criminal penalties as provided by law.
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <hr>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="chapter"><a href="ch01.html">1. Overview</a></span></dt>
+                  <dt><span class="chapter"><a href="ch02.html">2. <span class="literal">alias.xml</span></a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch02.html#xref_TypeDefinition_Section">2.1. <span class="literal">TypeDefinition</span> section</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch03.html">3. <span class="literal">BinSection</span> files</a></span></dt>
+                  <dt><span class="chapter"><a href="ch04.html">4. <span class="literal">ZipSection</span> files</a></span></dt>
+                  <dt><span class="chapter"><a href="ch05.html">5. <span class="literal">Brush</span> files</a></span></dt>
+                  <dt><span class="chapter"><a href="ch06.html">6. <span class="literal">capabilities.xml</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch07.html">7. <span class="literal">.cdata</span></a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch07.html#d0e1302">7.1. Contents</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch07.html#xref_terrain2_section">7.1.1. <span class="literal">terrain2</span> resources</a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch08.html">8. <span class="literal">.chunk</span></a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch08.html#xref_TransformSection">8.1. TransformSection</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch09.html">9. <span class="literal">common_options.xml</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch10.html">10. <span class="literal">dxenum.xml</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch11.html">11. EffectMaterial section</a></span></dt>
+                  <dt><span class="chapter"><a href="ch12.html">12. <span class="literal">exporter.xml</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch13.html">13. <span class="literal">filters.xml</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch14.html">14. <span class="literal">flags.xml</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch15.html">15. <span class="literal">.font</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch16.html">16. <span class="literal">.gui</span></a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch16.html#d0e4551">16.1. SimpleGUIComponentSection</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch17.html">17. <span class="literal">gui.xml</span></a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch17.html#d0e4668">17.1. ItemSection</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch18.html">18. LightMapSection</a></span></dt>
+                  <dt><span class="chapter"><a href="ch19.html">19. <span class="literal">material_kinds.xml</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch20.html">20. <span class="literal">.mfm</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch21.html">21. <span class="literal">.model</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch22.html">22. <span class="literal">modules.xml</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch23.html">23. <span class="literal">.mvl</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch24.html">24. <span class="literal">navgen_settings.xml</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch25.html">25. <span class="literal">options.xml</span></a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch25.html#xref_options_xml_CAT">25.1. CAT</a></span></dt>
+                        <dt><span class="section"><a href="ch25.html#xref_options_xml_ModelEditor">25.2. ModelEditor</a></span></dt>
+                        <dt><span class="section"><a href="ch25.html#xref_options_xml_ParticleEditor">25.3. ParticleEditor</a></span></dt>
+                        <dt><span class="section"><a href="ch25.html#xref_options_xml_WorldEditor">25.4. WorldEditor</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch26.html">26. <span class="literal">PackedSection</span> files</a></span></dt>
+                  <dt><span class="chapter"><a href="ch27.html">27. <span class="literal">paths.xml</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch28.html">28. <code class="filename">.ppchain</code></a></span></dt>
+                  <dt><span class="chapter"><a href="ch29.html">29. <span class="literal">.primitives</span></a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch29.html#d0e16704">29.1. Vertex data section</a></span></dt>
+                        <dt><span class="section"><a href="ch29.html#d0e16760">29.2. Index data section</a></span></dt>
+                        <dt><span class="section"><a href="ch29.html#d0e16902">29.3. BSP data section</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch30.html">30. <span class="literal">shadows.xml</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch31.html">31. <span class="literal">space.settings</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch32.html">32. <span class="literal">.texanim</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch33.html">33. <span class="literal">.texformat</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch34.html">34. <span class="literal">texture_detail_levels.xml</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch35.html">35. <span class="literal">ual_config.xml</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch36.html">36. <span class="literal">.visual</span></a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch36.html#xref_NodeSection">36.1. NodeSection</a></span></dt>
+                        <dt><span class="section"><a href="ch36.html#xref_PortalSection">36.2. PortalSection</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch37.html">37. <span class="literal">visual_rules.xml</span></a></span></dt>
+                  <dt><span class="chapter"><a href="ch38.html">38. <span class="literal">.xml</span></a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch38.html#xref_effect_xml">38.1. <span class="literal"><em class="replaceable"><code>&lt;effect&gt;</code></em>.xml</span></a></span></dt>
+                        <dt><span class="section"><a href="ch38.html#xref_enumeration_xml">38.2. <span class="literal"><em class="replaceable"><code>&lt;enumeration&gt;</code></em>.xml</span></a></span></dt>
+                        <dt><span class="section"><a href="ch38.html#xref_flora_xml">38.3. <span class="literal"><em class="replaceable"><code>&lt;flora&gt;</code></em>.xml</span></a></span></dt>
+                        <dt><span class="section"><a href="ch38.html#xref_graphics_settings_xml">38.4. <span class="literal"><em class="replaceable"><code>&lt;graphics_settings&gt;</code></em>.xml</span></a></span></dt>
+                        <dt><span class="section"><a href="ch38.html#xref_light_xml">38.5. <span class="literal"><em class="replaceable"><code>&lt;light&gt;</code></em>.xml</span></a></span></dt>
+                        <dt><span class="section"><a href="ch38.html#xref_mouse_cursors_xml">38.6. <span class="literal"><em class="replaceable"><code>&lt;mouse_cursors&gt;</code></em>.xml</span></a></span></dt>
+                        <dt><span class="section"><a href="ch38.html#xref_particle_xml">38.7. <span class="literal"><em class="replaceable"><code>&lt;particle&gt;</code></em>.xml</span></a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch38.html#d0e20111">38.7.1. Sub system components</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#d0e21046">38.7.2. Particle renderers</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#d0e21274">38.7.3. Position/velocity vector generators</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch38.html#xref_sky_xml">38.8. <span class="literal"><em class="replaceable"><code>&lt;sky&gt;</code></em>.xml</span></a></span></dt>
+                        <dt><span class="section"><a href="ch38.html#xref_fx_xml">38.9. <span class="literal"><em class="replaceable"><code>&lt;fx&gt;</code></em>.xml</span></a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch38.html#xref_LightSection">38.9.1. Light Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_ModelSection">38.9.2. Model Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_ParticleSystemSection">38.9.3. ParticleSystem Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_DummyModelSection">38.9.4. DummyModel Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_EntitySection">38.9.5. Entity Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_HardPointSection">38.9.6. HardPoint Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_ModelRootSection">38.9.7. ModelRoot Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_NodeSection2">38.9.8. Node Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_AddDecalSection">38.9.9. AddDecal Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_AlignModelSection">38.9.10. AlignModel Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_ClearParticlesSection">38.9.11. ClearParticles Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_CorrectMotionTriggeredParticlesSection">38.9.12. CorrectMotionTriggeredParticles Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_FadeSection">38.9.13. Fade Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_FlickerSection">38.9.14. Flicker Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_FlickeringLightSection">38.9.15. FlickeringLight Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_ForceParticleSection">38.9.16. ForceParticle Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_PlayActionSection">38.9.17. PlayAction Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_RampTimeTriggeredParticlesSection">38.9.18. RampTimeTriggeredParticles Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_RandomDelaySection">38.9.19. RandomDelay Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_ResetTimeTriggeredParticlesSection">38.9.20. ResetTimeTriggeredParticles Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_SetBasisSection">38.9.21. SetBasis Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_SetColourSection">38.9.22. SetColour Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_SetOrbitorPointSection">38.9.23. SetOrbitorPoint Section</a></span></dt>
+                              <dt><span class="section"><a href="ch38.html#xref_SwarmTargetsSection">38.9.24. SwarmTargets Section</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch38.html#xref_weather_xml">38.10. <span class="literal"><em class="replaceable"><code>&lt;weather&gt;</code></em>.xml</span></a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left">&nbsp;</td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch01.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">&nbsp;</td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;1.&nbsp;Overview</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

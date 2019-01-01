@@ -1,0 +1,211 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;4.&nbsp;Implementing a chat system (CHAT_CONSOLE)</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Tutorial">
+      <link rel="up" href="index.html" title="Tutorial">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;A basic client-server game (CLIENT_SERVER)">
+      <link rel="next" href="ch05.html" title="Chapter&nbsp;5.&nbsp;EntityLoader (ENTITY_LOADER)">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/bigworld_tutorial/ch04.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Implementing a chat system (<span class="literal">CHAT_CONSOLE</span>)
+                  </th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Implementing_A_Chat_System"></a>Chapter&nbsp;4.&nbsp;Implementing a chat system (<span class="literal">CHAT_CONSOLE</span>)
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch04.html#xref_Basic_GUI_Text_Console">4.1. GUI text console</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1340">4.2. Modifications to the <span class="literal">Avatar</span> entity</a></span></dt>
+               </dl>
+            </div>
+            <p>At this stage we have a basic client-server game working, so it is a
+                 good time to write our first entity methods and learn how method calls
+                 propagate in BigWorld.
+            </p>
+            <p>As an easy first example, we will write a simple chat system that
+                 allows players to talk to the other players around them. The implementation
+                 is in two parts:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Implementing a basic GUI for displaying and entering chat
+                                messages on the client.
+                     </p>
+                  </li>
+                  <li>
+                     <p>Writing the entity methods to propagate the messages between
+                                clients and the server.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Basic_GUI_Text_Console"></a>4.1.&nbsp;GUI text console
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The example tutorial scripts currently use the deprecated
+                      ConsoleGUIComponent. Please refer to the Fantasy Demo scripts for an
+                      example chat console implementation
+                      (<code class="code">fantasydemo/res/scripts/client/FDGUI/ChatConsole.py</code>) for
+                      reference on implementing a fully featured chat window.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1340"></a>4.2.&nbsp;Modifications to the <span class="literal">Avatar</span> entity
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>We need to implement methods on both the client and the server to
+                      make our chat system work:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>The server-side methods are responsible for receiving messages
+                                   and forwarding them to other clients whose player entities are close
+                                   enough to the speaker.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The client-side methods are responsible for displaying incoming
+                                   messages on-screen.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Before implementing these methods, they need to be declared in
+                      <code class="filename">tutorial/res/scripts/entity_defs/Avatar.def</code>:
+               </p><pre class="programlisting">...
+   &lt;ClientMethods&gt;
+      &lt;!-- Chat to people within 50 metres --&gt;
+      &lt;say&gt;
+         &lt;Arg&gt; UNICODE_STRING &lt;/Arg&gt; &lt;!-- message --&gt;
+         &lt;DetailDistance&gt; 50     &lt;/DetailDistance&gt;
+      &lt;/say&gt;
+   &lt;/ClientMethods&gt;
+   &lt;CellMethods&gt;
+      &lt;!-- Cell part of the chat implementation --&gt;
+      &lt;say&gt;
+         &lt;Exposed/&gt;
+         &lt;Arg&gt;            UNICODE_STRING &lt;/Arg&gt;
+      &lt;/say&gt;
+   &lt;/CellMethods&gt;
+...</pre><p><span class="citetitle">Example
+                         <code class="filename">tutorial/res/scripts/entity_defs/Avatar.def</code></span></p>
+               <p>The step above adds the method definitions to the previously empty
+                      client and cell method sections. The cell method definition includes the
+                      <span class="literal">&lt;Exposed/&gt;</span> tag, which exposes the method to the
+                      client. Without this, the method cannot be called from the client. The
+                      definition file also uses BigWorld's method LODing feature, by declaring a
+                      <span class="literal">&lt;DetailDistance&gt;</span> of 50m, which means that
+                      referring to <code class="varname">self.allClients</code> or
+                      <code class="varname">self.otherClients</code> from within this method will not
+                      refer to all clients in that entity's AoI, just those within 50m.
+               </p>
+               <p>Having declared these methods, we must now provide their
+                      implementations. In
+                      <code class="filename">tutorial/res/scripts/cell/Avatar.py</code>, add the
+                      following:
+               </p><pre class="programlisting">...
+   def say( self, id, message ):
+      if self.id == id:
+         self.otherClients.say( message )</pre><p><span class="citetitle">Example
+                         <code class="filename">tutorial/res/scripts/cell/Avatar.py</code></span></p>
+               <p>Even though we prototyped the cell method to take only the message
+                      as an argument in the definition file, our implementation expects another
+                      argument (<code class="varname">id</code>) before the declared arguments. This is
+                      because this method was declared as <span class="literal">&lt;Exposed/&gt;</span>,
+                      and the ID passed as an argument is that of the client who called the
+                      exposed method. Please note that this may not be the client who is
+                      attached to this <code class="classname">Avatar</code>, so we add a check to make
+                      sure the calling client is in fact the owner of this entity.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>We only forward the message to
+                           <code class="varname">self.otherClients</code>, not to
+                           <code class="varname">self.allClients</code>. This is because in our earlier
+                           implementation of <code class="methodname">ChatConsole.editCallback</code> in
+                           <code class="filename">tutorial/res/scripts/client/Helpers/ChatConsole.py</code>
+                           (for details, see <a href="ch04.html#xref_Basic_GUI_Text_Console" title="4.1.&nbsp;GUI text console">GUI text console</a>) when
+                           the user enters a line of text it is immediately displayed on his
+                           client, so we do not want to send the message back to him. Therefore, we
+                           only need to call the <code class="methodname">say</code> method on other
+                           clients.
+                  </p>
+               </div>
+               <p>Now we implement the client entity's <code class="methodname">say</code>
+                      method in
+                      <code class="filename">tutorial/res/scripts/client/Avatar.py</code>:
+               </p><pre class="programlisting">class Avatar( BigWorld.Entity ):
+   ...
+   def say( self, msg ):
+      chatConsole.write( "%d says: %s" % (self.id, msg) )</pre><p><span class="citetitle">Example
+                         <code class="filename">tutorial/res/scripts/client/Avatar.py</code></span></p>
+               <p>Now you should have a basic usable chat system. Connect a couple of
+                      clients to a running server and test it out!
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;A basic client-server game (<span class="literal">CLIENT_SERVER</span>)&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;EntityLoader (<span class="literal">ENTITY_LOADER</span>)
+                  </td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

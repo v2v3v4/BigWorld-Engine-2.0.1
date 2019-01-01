@@ -1,0 +1,286 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;31.&nbsp;Debug Message Macros</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt02.html" title="Part&nbsp;II.&nbsp;Server C++ Programming Guide">
+      <link rel="prev" href="ch30.html" title="Chapter&nbsp;30.&nbsp;The Watcher Interface">
+      <link rel="next" href="ch32.html" title="Chapter&nbsp;32.&nbsp;Non-Blocking Socket I/O Using Mercury">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch31.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;31.&nbsp;Debug Message Macros</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch30.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;II.&nbsp;Server C++ Programming Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch32.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Debug_Message_Macros"></a>Chapter&nbsp;31.&nbsp;Debug Message Macros
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch31.html#d0e17094">31.1. Centralised Logging</a></span></dt>
+                  <dt><span class="section"><a href="ch31.html#xref_Filtering_By_Priority">31.2. Filtering by Priority</a></span></dt>
+                  <dt><span class="section"><a href="ch31.html#d0e17145">31.3. Message Priority</a></span></dt>
+               </dl>
+            </div>
+            <p>Debug message macros (defined in header file
+                 <span class="literal">src/lib/cstdmf/debug.hpp</span>) are designed to be used in
+                 place of <span class="literal">printf()</span> for outputting debug
+                 information.
+            </p>
+            <p>The use of debug message macros instead of <span class="literal">printf()</span>
+                 allows for more systematic treatment of debug messages. For example,
+                 BigWorld server supports centralised logging and filtering for debug
+                 messages.
+            </p>
+            <p>Before being able to use a debug message macro, you must include one
+                 of the following declarations in your .cpp file:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><span class="literal">DECLARE_DEBUG_COMPONENT( modulePriority )</span>,
+                              or
+                     </p>
+                  </li>
+                  <li>
+                     <p><span class="literal">DECLARE_DEBUG_COMPONENT2( watcherLocation, modulePriority
+                                 )</span></p>
+                  </li>
+               </ul>
+            </div>
+            <p>The argument <span class="literal">modulePriority</span> is a number (usually 0)
+                 used for filtering debug messages. For more details, see <a href="ch31.html#xref_Filtering_By_Priority" title="31.2.&nbsp;Filtering by Priority">Filtering by Priority</a>.
+            </p>
+            <p>These macros also create a watcher entry allowing the modulePriority
+                 to be modified. The watcher entry is one of the following:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><span class="literal">logger/cppThresholds/<em class="replaceable"><code>&lt;source_filename&gt;</code></em></span>,
+                              or
+                     </p>
+                  </li>
+                  <li>
+                     <p><span class="literal">logger/cppThresholds/watcherLocation/<em class="replaceable"><code>&lt;source_filename&gt;</code></em></span></p>
+                  </li>
+               </ul>
+            </div>
+            <p>Debug output macros accept the same parameters as
+                 <span class="literal">printf()</span>. The <span class="literal">printf()</span> function has
+                 the syntax below:
+            </p><pre class="programlisting">int printf( const char * format [argument]... )</pre><p>An example usage of a debug output macro:</p><pre class="programlisting">TRACE_MSG( "%s is %d", someString, someInteger );</pre><p>There are several debug message macros, named in the form
+                 &lt;priority&gt;_MSG, as described below:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">TRACE_MSG</span> <span class="symbol">&#8208;</span> Priority: 0</em></p>
+                     <p>Tracing program flow, <em class="emphasis">e.g.</em>, entering a
+                              method.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">DEBUG_MSG</span> <span class="symbol">&#8208;</span> Priority: 1</em></p>
+                     <p>Displaying debugging information, <em class="emphasis">e.g.</em>,
+                              showing the value of a variable.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">INFO_MSG</span> <span class="symbol">&#8208;</span> Priority: 2</em></p>
+                     <p>Displaying general information, <em class="emphasis">e.g.</em>, the
+                              start of a process.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">NOTICE_MSG</span> <span class="symbol">&#8208;</span> Priority: 3</em></p>
+                     <p>Displaying information that is more important than INFO, but
+                              definitely not an error.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">WARNING_MSG</span> <span class="symbol">&#8208;</span> Priority: 4</em></p>
+                     <p>Displaying potential errors.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">ERROR_MSG</span> <span class="symbol">&#8208;</span> Priority: 5</em></p>
+                     <p>Displaying definite errors.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">CRITICAL_MSG</span> <span class="symbol">&#8208;</span> Priority: 6</em></p>
+                     <p>Displaying critical errors (<em class="emphasis">i.e.</em>, errors that
+                              cause the program to stop running).
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">HACK_MSG</span> <span class="symbol">&#8208;</span> Priority: 7</em></p>
+                     <p>Temporary messages used during development. Reserved for BigWorld
+                              internal use only.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">SCRIPT_MSG</span> <span class="symbol">&#8208;</span> Priority: 8</em></p>
+                     <p>Messages printed from a Python script. Reserved for BigWorld
+                              internal use only.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>Debug messages are output to the console on Linux and to the debugger
+                 on Windows. For components with access to the game time (such as BaseApp and
+                 CellApp), it is automatically added to the start of the message.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e17094"></a>31.1.&nbsp;Centralised Logging
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>In addition to outputting to the console (or debugger), the debug
+                      messages are also sent to all MessageLogger processes on the
+                      network.
+               </p>
+               <p>Apart from the filtering options available in MessageLogger, logging
+                      (<em class="emphasis">i.e.</em>, the sending of messages) to a particular
+                      MessageLogger can be disabled by specifying the IP address of the
+                      MessageLogger machine in the watcher value logger/del. For details on
+                      MessageLogger, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch03.html" class="olink"><i>Cluster Administration Tools</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch03.html#xref_MessageLogger" class="olink">Message Logger</a>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Filtering_By_Priority"></a>31.2.&nbsp;Filtering by Priority
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The amount of debug output generated by a server component can be
+                      controlled through a combination of module priority and filter threshold.
+                      A debug message is discarded if its priority is less than the value of
+                      variable <span class="literal">filterThreshold</span> added to
+                      <span class="literal">modulePriority</span>.
+               </p>
+               <p>The variable <span class="literal">modulePriority</span> is initialised by the
+                      macro <span class="literal">DECLARE_DEBUG_COMPONENT</span>, but can be later changed
+                      using the watcher value
+                      <span class="literal">logger/cppThresholds/<em class="replaceable"><code>&lt;source_filename&gt;</code></em></span>.
+               </p>
+               <p>The variable <span class="literal">filterThreshold</span> is initialised to
+                      zero, but can be changed using the watcher value
+                      <span class="literal">logger/filterThreshold</span>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e17145"></a>31.3.&nbsp;Message Priority
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>All log messages have an explicit priority value. The
+                      <span class="literal">DebugMessagePriority</span> enumeration in header file
+                      <span class="literal">src/lib/cstdmf/debug.hpp</span> defines these values as
+                      below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">0</em> <span class="symbol">&#8208;</span>
+                                   <span class="literal">MESSAGE_PRIORITY_TRACE</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">1</em> <span class="symbol">&#8208;</span>
+                                   <span class="literal">MESSAGE_PRIORITY_DEBUG</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">2</em> <span class="symbol">&#8208;</span>
+                                   <span class="literal">MESSAGE_PRIORITY_INFO</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">3</em> <span class="symbol">&#8208;</span>
+                                   <span class="literal">MESSAGE_PRIORITY_NOTICE</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">4</em> <span class="symbol">&#8208;</span>
+                                   <span class="literal">MESSAGE_PRIORITY_WARNING</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">5</em> <span class="symbol">&#8208;</span>
+                                   <span class="literal">MESSAGE_PRIORITY_ERROR</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">6</em> <span class="symbol">&#8208;</span>
+                                   <span class="literal">MESSAGE_PRIORITY_CRITICAL</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">7</em> <span class="symbol">&#8208;</span>
+                                   <span class="literal">MESSAGE_PRIORITY_HACK</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">8</em> <span class="symbol">&#8208;</span>
+                                   <span class="literal">MESSAGE_PRIORITY_SCRIPT</span></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>This value is used to filter the messages that are printed and sent
+                      to the logger. If the message priority is greater than, or equal to the
+                      filter threshold value, then the message is allowed. For example, a
+                      threshold of <span class="literal">MESSAGE_PRIORITY_INFO</span> only allows
+                      <span class="literal">INFO</span> messages, and higher <span class="symbol">&#8208;</span> which means that <span class="literal">TRACE</span>
+                      and <span class="literal">DEBUG</span> messages will be filtered out.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch30.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt02.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch32.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;30.&nbsp;The Watcher Interface&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;32.&nbsp;Non-Blocking Socket I/O Using Mercury</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

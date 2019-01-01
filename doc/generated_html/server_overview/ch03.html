@@ -1,0 +1,281 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;3.&nbsp;Concepts</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Overview">
+      <link rel="up" href="index.html" title="Server Overview">
+      <link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Rules of Thumb">
+      <link rel="next" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Design Introduction">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_overview/ch03.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Concepts</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Concepts"></a>Chapter&nbsp;3.&nbsp;Concepts
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch03.html#d0e92">3.1. Location of an Object's Data</a></span></dt>
+                  <dt><span class="section"><a href="ch03.html#d0e131">3.2. Actions</a></span></dt>
+                  <dt><span class="section"><a href="ch03.html#d0e169">3.3. Latency</a></span></dt>
+                  <dt><span class="section"><a href="ch03.html#d0e191">3.4. Spaces and Cells</a></span></dt>
+                  <dt><span class="section"><a href="ch03.html#xref_Coordinate_system">3.5. Coordinate System</a></span></dt>
+               </dl>
+            </div>
+            <p>This section explains general concepts and issues relevant to the
+                 design.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e92"></a>3.1.&nbsp;Location of an Object's Data
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>There are four main locations for the active data of an
+                      object:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Associated with the cell part of an entity.</p>
+                     </li>
+                     <li>
+                        <p>Associated with the base part of an entity.</p>
+                     </li>
+                     <li>
+                        <p>In the persistent world database.</p>
+                     </li>
+                     <li>
+                        <p>On the client.</p>
+                     </li>
+                  </ol>
+               </div>
+               <p>Data associated with an entity on a cell can be categorised
+                      as:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Internal data</em></p>
+                        <p>Used and stored only on the cell in which it lives.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Server (or ghosted) data</em></p>
+                        <p>Available to other entities on the server.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Client data</em></p>
+                        <p>Available to (at least some) client machines.</p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e131"></a>3.2.&nbsp;Actions
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>From the client's perspective, there are conceptually four types of
+                      action:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p><em class="emphasis">Server action</em></p>
+                        <p>This is an unsolicited action that comes from the server, and is
+                                   not generated by this client.
+                        </p>
+                        <p>For example, another avatar jumping.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Local action</em></p>
+                        <p>This is an action that only occurs locally on the client, and
+                                   does not need to be communicated to the server or other
+                                   clients.
+                        </p>
+                        <p>For example, special effects like particles bouncing or a flame
+                                   slightly flaring.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Undoable action</em></p>
+                        <p>This is an action that the client takes immediately, under the
+                                   assumption that it is correct, and then communicates to the server.
+                                   The server has the ability to disallow the action and make the client
+                                   rollback the action.
+                        </p>
+                        <p>For example, the client stepping forward.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Server-confirmed action</em></p>
+                        <p>This is an action that needs to receive confirmation from the
+                                   server to be performed on the client.
+                        </p>
+                        <p>For example, the player wanting to shake hands with another
+                                   player. Another example may be hitting a player (and thinking that it
+                                   is dead) but not showing this until the server has confirmed it (this
+                                   has some similarity to the Server action, except that the origin of
+                                   the action was from this client).
+                        </p>
+                     </li>
+                  </ol>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e169"></a>3.3.&nbsp;Latency
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The game designer needs to hide the latency from the player using as
+                      many latency-hiding tricks as possible. There are two main sources of
+                      latency:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p><em class="emphasis">Internet latency</em></p>
+                        <p>All information that travels between clients goes via the
+                                   server, and so must have two trips on the Internet.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Server latency</em></p>
+                        <p>This is the time between information being received by the
+                                   server, processing it, and responding back to the client. In an MMOG
+                                   environment with large numbers of players, bandwidth is a precious
+                                   resource, so not all new information can be sent out immediately. In
+                                   BigWorld, the Priority Queue manages this.
+                        </p>
+                     </li>
+                  </ol>
+               </div>
+               <p>The Priority Queue can be tuned to reduce the latency on critical
+                      information caused by the server. This does not affect the Internet
+                      latency, though.
+               </p>
+               <p>Latency can also be introduced on the client side. This can occur if
+                      the developer allows a delay between receiving data and sending it to the
+                      server, or between receiving data and displaying it.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e191"></a>3.4.&nbsp;Spaces and Cells
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The game world is made up of multiple spaces. Each space is a
+                      continuous Euclidean region, spanned by a single coordinate system.
+               </p>
+               <p>Spaces may be always present, or be dynamically created to enable a
+                      group of one or more players to adventure in isolation from other players.
+                      There may be many instances of a given space running the same geometry
+                      simultaneously and independently.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/visualisation_of_spaces_and_division_in_cells.png"><span class="caption">
+                        <p>Visualisation of spaces and division in cells (cell
+                                   boundaries marked in dotted lines)
+                        </p></span></div>
+               </div>
+               <p>The space is a logical concept, dealt with in game script.</p>
+               <p>Cells exist at a more physical level. They divide large game spaces
+                      geometrically, for the purpose of load balancing across multiple
+                      CellApps.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/a_large_space_divided_into_cells.png"><span class="caption">
+                        <p>A large space divided into cells</p></span></div>
+               </div>
+               <p>For a small space, a single cell is enough to cover it.</p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/a_small_space_covered_by_only_one_cell.png"><span class="caption">
+                        <p>A small space covered by only one cell</p></span></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Coordinate_system"></a>3.5.&nbsp;Coordinate System
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld uses a left-hand coordinate system. The x-axis points
+                      <em class="emphasis">"left"</em>, the y-axis points <em class="emphasis">"up"</em>
+                      and the z-axis points <em class="emphasis">"forward"</em>.
+               </p>
+               <p><em class="emphasis">yaw</em> is rotation around the y-axis. Positive is
+                      to the right, negative is to the left.
+               </p>
+               <p><em class="emphasis">pitch</em> is rotation around the x-axis. Positive
+                      is nose pointing down, negative is nose pointing up.
+               </p>
+               <p><em class="emphasis">roll</em> is rotation around the z-axis. Positive is
+                      to the left, negative is to the right.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;Rules of Thumb&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;Design Introduction</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

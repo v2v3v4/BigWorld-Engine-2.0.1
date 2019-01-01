@@ -1,0 +1,317 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;11.&nbsp;MySQL Support</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Operations Guide">
+      <link rel="up" href="index.html" title="Server Operations Guide">
+      <link rel="prev" href="ch10.html" title="Chapter&nbsp;10.&nbsp;Multiple BigWorld Servers in a Single LAN">
+      <link rel="next" href="ch12.html" title="Chapter&nbsp;12.&nbsp;RPM">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_operations_guide/ch11.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;11.&nbsp;MySQL Support</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch10.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch12.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_DBMgr_MySQL_Support"></a>Chapter&nbsp;11.&nbsp;MySQL Support
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch11.html#xref_Compiling_DBMgr_With_MySQL_Support">11.1. Compiling DBMgr with MySQL Support</a></span></dt>
+                  <dt><span class="section"><a href="ch11.html#d0e9133">11.2. Update <code class="filename">bw.xml</code> To Use MySQL</a></span></dt>
+                  <dt><span class="section"><a href="ch11.html#xref_Initialise_Database_With_Entity_Definitions">11.3. Synchronise Database With Entity Definitions</a></span></dt>
+                  <dt><span class="section"><a href="ch11.html#xref_Enabling_Secondary_Databases">11.4. Enabling Secondary Databases</a></span></dt>
+                  <dt><span class="section"><a href="ch11.html#xref_MySQL_Privileges">11.5. Privileges</a></span></dt>
+                  <dt><span class="section"><a href="ch11.html#d0e9332">11.6. The ClearAutoLoad tool</a></span></dt>
+               </dl>
+            </div>
+            <p>Following is described the minimal set of steps required to enable
+                 MySQL support for a server cluster. They assume that a MySQL database has
+                 been installed and configured as outlined in the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/index.html" class="olink">Server Installation Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/ch04.html" class="olink"><i>Installing the BigWorld Server</i></a>, section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/ch04.html#xref_Configure_MySQL_Server" class="olink">Configure MySQL Server</a>.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Compiling_DBMgr_With_MySQL_Support"></a>11.1.&nbsp;Compiling DBMgr with MySQL Support
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The DBMgr binary provided with the default BigWorld package does not
+                      have MySQL support built-in. This allows users to quickly start using
+                      BigWorld Technology without having to configure a production database to
+                      test a simple package. See the licensing_information.txt document for
+                      MySQL licensing considerations.
+               </p>
+               <p>First, to enable compilation of DBMgr, make sure that the MySQL
+                      development files are installed on the build system. To do this, as root,
+                      run the following command:
+               </p><pre class="programlisting"># yum install mysql-devel</pre><p>Next, the DBMgr makefile needs to be modified, to enable MySQL
+                      support. Edit <code class="filename">bigworld/src/server/dbmgr/Makefile</code> and
+                      change the variable definition from <em class="emphasis"><span class="literal">USE_MYSQL=0</span></em> to <em class="emphasis"><span class="literal">USE_MYSQL=1</span></em>. When enabling MySQL
+                      the <span class="literal">USE_XML</span> option can be left enabled without any
+                      adverse side effects.
+               </p>
+               <p>After these alterations, it will be possible to rebuild DBMgr. From
+                      within the <code class="filename">bigworld/src/server/dbmgr</code> directory, issue the
+                      following command:
+               </p><pre class="programlisting">$ make</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e9133"></a>11.2.&nbsp;Update <code class="filename">bw.xml</code> To Use MySQL
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Once DBMgr has been compiled to communicate with a MySQL server, the
+                      game resource configuration file
+                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/server/bw.xml</code>
+                      needs to be updated with details on <code class="property">username</code>,
+                      <code class="property">password</code> and the <code class="property">host</code> machine
+                      the MySQL server is running on.
+               </p>
+               <p>The example below illustrates FantasyDemo configuration (via
+                      <code class="filename">fantasydemo/res/server/bw.xml</code>):
+               </p><pre class="programlisting">&lt;dbMgr&gt;
+    &lt;type&gt;     mysql                     &lt;/type&gt;
+    &lt;host&gt;     my_mysql_server_machine &lt;/host&gt;
+    &lt;username&gt; bigworld &lt;/username&gt;
+    &lt;password&gt; my_pass &lt;/password&gt;
+    &lt;databaseName&gt;     fantasydemo &lt;/databaseName&gt;
+&lt;/dbMgr&gt;</pre><p><span class="citetitle">Example
+                         <code class="filename">fantasydemo/res/server/bw.xml</code></span></p>
+               <p>For details on these fields and other relevant configuration options
+                      for your production environment, see <a href="ch02.html" title="Chapter&nbsp;2.&nbsp;Server Configuration with bw.xml"><i xmlns:xlink="http://www.w3.org/1999/xlink">Server Configuration with <span class="literal">bw.xml</span></i></a>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Initialise_Database_With_Entity_Definitions"></a>11.3.&nbsp;Synchronise Database With Entity Definitions
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>DBMgr requires the MySQL database table structure to be synchronised
+                      with the current entity definitions. To initialise the MySQL database with
+                      the correct table structure run the <span class="literal">sync_db</span>
+                      tool:
+               </p><pre class="programlisting">$ <em class="replaceable"><code>$MF_ROOT</code></em>/bigworld/bin/Hybrid64/commands/sync_db</pre><p>This tool will not run if there are unconsolidated secondary
+                      databases. For details on data consolidation, see <a href="ch05.html#xref_Data_Consolidation_Tool" title="5.3.&nbsp;Data Consolidation Tool">Data Consolidation Tool</a>.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>A SyncDB binary is not shipped by default with BigWorld releases.
+                           In order to use SyncDB you will need to compile the binary from
+                           <code class="filename">bigworld/src/server/tools/sync_db</code>, or have
+                     	  already built DBMgr with MySQL support enabled.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Enabling_Secondary_Databases"></a>11.4.&nbsp;Enabling Secondary Databases
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Secondary databases can only be enabled when MySQL support is
+                      enabled. Please see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch08.html#xref_Secondary_Databases" class="olink">Secondary Databases</a> for details about secondary
+                      databases.
+               </p>
+               <p>To enable secondary database support, you must:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Enable MySQL support (see above).</p>
+                     </li>
+                     <li>
+                        <p>Build the data consolidation tool by issuing the
+                                     <span><strong class="command">make</strong></span> command from within the <code class="filename">bigworld/src/server/tools/consolidate_dbs</code>
+                                     directory.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Set the <code class="filename">bw.xml</code> option
+                                     <code class="property">&lt;baseApp&gt;/&lt;secondaryDB&gt;/&lt;enable&gt;</code>
+                                     to <span class="literal">true</span>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_MySQL_Privileges"></a>11.5.&nbsp;Privileges
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Below are the MySQL privileges required for each BigWorld component
+                      that communicates with a MySQL database.
+               </p>
+               <div class="altrow">
+                  <table border="0">
+                     <colgroup>
+                        <col width="15%">
+                        <col width="37%">
+                        <col width="48%">
+                     </colgroup>
+                     <thead>
+                        <tr>
+                           <th>Component</th>
+                           <th>Required Privileges</th>
+                           <th>User</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td>DBMgr</td>
+                           <td>SELECT, INSERT, UPDATE, DELETE</td>
+                           <td>
+                              <p>dbMgr/username</p>
+                              <p>(<code class="filename">bw.xml</code>)
+                              </p>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>sync_db</td>
+                           <td>UPDATE, ALTER, CREATE, DROP, INDEX</td>
+                           <td>
+                              <p>dbMgr/username</p>
+                              <p>(<code class="filename">bw.xml</code>)
+                              </p>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>snapshot.py</td>
+                           <td>SELECT</td>
+                           <td>
+                              <p>dbMgr/username</p>
+                              <p>(<code class="filename">bw.xml</code>)
+                              </p>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>snapshot_helper</td>
+                           <td>RELOAD</td>
+                           <td>
+                              <p>dbMgr/username</p>
+                              <p>(<code class="filename">bw.xml</code>)
+                              </p>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>StatLogger</td>
+                           <td>SELECT, INSERT, UPDATE, DELETE, CREATE</td>
+                           <td>
+                              <p>preferences/options/dbUser</p>
+                              <p>(<code class="filename">bigworld/tools/server/stat_logger/preferences.xml</code>)
+                              </p>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>WebConsole</td>
+                           <td>SELECT, INSERT, UPDATE, DELETE, CREATE</td>
+                           <td>
+                              <p>sqlobject.dburiame</p>
+                              <p>(<code class="filename">bigworld/tools/server/web_console/[dev|prod].cfg</code>)
+                              </p>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <p>Use MySQL's GRANT command to set privileges for a user.</p><pre class="programlisting">$ mysql -u root
+mysql&gt; GRANT SELECT, INSERT, UPDATE, DELETE ON fantasydemo.* TO 'bigworld'@'localhost' IDENTIFIED BY 'bigworld_passwd';</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e9332"></a>11.6.&nbsp;The ClearAutoLoad tool
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Over the course of a server run, entities may be marked for
+                      auto-loading so that subsequent server startups will automatically create
+                      these entities and the spaces that they inhabited, with the entity data
+                      and space data that was present in those spaces at the time that the
+                      server was shut down. Additionally, the server game time is
+                      persistent.
+               </p>
+               <p>It is sometimes desirable to clear that data so that the server
+                      starts from a clean slate without auto-loading any entity data, and reset
+                      the server game time to 0. There is a command tool called
+                      <span><strong class="command">clear_auto_load</strong></span> which can clear this data. It is
+                      located in
+                      <code class="filename">bigworld/bin/Hybrid64/commands/clear_auto_load</code>.
+                      Running it without command line arguments will clear the auto-load data in
+                      the database specified in the <code class="filename">bw.xml</code> for the current
+                      user.
+               </p><pre class="programlisting">$ bigworld/bin/Hybrid64/commands/clear_auto_load</pre><p>You cannot run this tool while there is an instance of DBMgr or
+                      other BigWorld tool accessing the database.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>A ClearAutoLoad binary is not shipped by default with BigWorld
+                           releases. In order to use ClearAutoLoad you will need to compile the
+                           binary from <code class="filename">bigworld/src/server/tools/clear_auto_load</code>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch10.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch12.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;10.&nbsp;Multiple BigWorld Servers in a Single LAN&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;12.&nbsp;RPM</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

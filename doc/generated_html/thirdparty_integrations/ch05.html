@@ -1,0 +1,457 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;5.&nbsp;FMOD</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Third-Party Integrations">
+      <link rel="up" href="index.html" title="Third-Party Integrations">
+      <link rel="prev" href="ch04.html" title="Chapter&nbsp;4.&nbsp;SpeedTree">
+      <link rel="next" href="ch06.html" title="Chapter&nbsp;6.&nbsp;OpenAutomate">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;5.&nbsp;FMOD</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_FMod_Integration"></a>Chapter&nbsp;5.&nbsp;FMOD
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch05.html#d0e1156">5.1. Overview</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#xref_Sound_Engine_Configuration">5.1.1. Sound Engine Configuration</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e1242">5.1.2. Python API</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch05.html#d0e1254">5.2. Loading Sound Banks</a></span></dt>
+                  <dt><span class="section"><a href="ch05.html#d0e1269">5.3. Sound Playback</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e1279">5.3.1. FMOD.Sound Object</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e1294">5.3.2. Sound Playback Functions</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>FMOD is a third party library for music and sound effects by Firelight
+                 Technologies (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.fmod.org" target="_top">www.fmod.org</a>).
+                 BigWorld provides sound support via the FMOD sound library. A license to use
+                 FMOD is not included with BigWorld. Thus in order to release a title using
+                 FMOD, a separate licensing agreement with Firelight Technologies needs to be
+                 entered into.
+            </p>
+            <p>Whilst FMOD is enabled in BigWorld Fantasy Demo, it is disabled in the
+                 shipped source by default. To enable FMOD, edit
+                 <code class="filename">bigworld/src/lib/fmodsound/fmod_config.hpp</code> and set
+                 <span class="literal">FMOD_SUPPORT</span> to <span class="literal">1</span> and rebuild the
+                 client. If FMOD support has been disabled, the FMOD Python module will still
+                 be available, however none of the function calls will succeed.
+            </p>
+            <p>This documentation provides an overview of how to use the FMOD sound
+                 features exposed by BigWorld Technology, which is essentially a thin
+                 interface to the FMOD Designer API. For documentation related to general
+                 FMOD design principles and sound issues, please see the FMOD documentation
+                 itself.
+            </p>
+            <p>The features exposed by the engine are:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Loading of one more more sound banks (preloaded or
+                              streamed).
+                     </p>
+                  </li>
+                  <li>
+                     <p>Playback of 2D and 3D sound events.</p>
+                  </li>
+                  <li>
+                     <p>Remotely connecting to the BigWorld client using the FMOD Designer
+                              in order to tweak event parameters in real time and view profiling
+                              metrics.
+                     </p>
+                  </li>
+                  <li>
+                     <p>Spatial reverb using reverb presets as defined in the FMOD
+                              Designer.
+                     </p>
+                  </li>
+                  <li>
+                     <p>Access to the FMOD dynamic music system.</p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1156"></a>5.1.&nbsp;Overview
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Sound_Engine_Configuration"></a>5.1.1.&nbsp;Sound Engine Configuration
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>High level settings can be configured by editing the soundMgr
+                           section in the engine_config.xml file. Fantasy Demo provides an engine
+                           configuration file which can be used as an example.
+                  </p>
+                  <p>The following is a list of available settings.</p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1166"></a>5.1.1.1.&nbsp;enabled
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>This controls whether sound support is enabled. When this is set
+                                to false, the SoundManager will not be initialised on startup.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1171"></a>5.1.1.2.&nbsp;errorLevel
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>This can be set to either 'silent', 'warning', or 'exception' to
+                                control what happens when FMOD calls (such as
+                                <span class="literal">Entity.playSound</span> or
+                                <span class="literal">FMOD.playSound</span>) hit an error.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1182"></a>5.1.1.3.&nbsp;channels
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Defines the number of virtual channels to be made available to
+                                FMOD. Please see the FMOD documentation for
+                                <span class="literal">EventSystem::init</span> for a detailed description on
+                                channels.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1190"></a>5.1.1.4.&nbsp;mediaPath
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The directory inside the res tree where your sound banks reside.
+                                Note that FMOD requires that all your sound banks be in the same
+                                directory, and so only the first directory in your res path that
+                                matches the <span class="literal">&lt;mediaPath&gt;</span> will be used for
+                                loading sounds.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1198"></a>5.1.1.5.&nbsp;soundBanks
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>This defines the sound banks to be made available, and which
+                                will be preloaded when the engine starts up. This section is made up
+                                of one or more <span class="literal">project</span> tags. The schema for each
+                                <span class="literal">project</span> tag is:
+                     </p><pre class="programlisting">&lt;project&gt;
+    &lt;name&gt; project_name &lt;/name&gt;
+    &lt;preload&gt; true|false &lt;/preload&gt;
+&lt;/project&gt;</pre><p>The project name is the name of the <span class="literal">.fdp</span> file
+                                located in the <span class="literal">mediaPath</span> excluding the
+                                extension.
+                     </p>
+                     <p>If <span class="literal">preload</span> is set to true, then the sound
+                                bank will be registered on startup. If it is set to false, then it
+                                will only be registered when requested by the
+                                <code class="code">BigWorld.loadSoundBankIntoMemory</code> Python API.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1227"></a>5.1.1.6.&nbsp;networkUpdates
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Enables/disables whether or not the FMOD Designer tool can
+                                connect to the client and make live updates to properties on existing
+                                sound events. This is always disabled on consumer release
+                                builds.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1232"></a>5.1.1.7.&nbsp;enableProfiler
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Enables/disables external access (using FMOD Designer or FMOD
+                                Profiler) to view, in real-time, information such as memory usage, CPU
+                                usage and the DSP network graph in. This is always disabled on
+                                consumer release builds.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1237"></a>5.1.1.8.&nbsp;maxSpeed
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>This controls the maximum speed for 3D sounds. If the speed
+                                exceeds this value, then the sound system will assume the sound source
+                                has been teleported. This prevents audio glitches from excessive
+                                changes in object speeds, you should set this value to some realistic
+                                maximum for your application. If any 3D sound source exceeds this
+                                speed the Doppler effect will be zero.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1242"></a>5.1.2.&nbsp;Python API
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The FMOD API can be accessed from Python by importing the FMOD
+                           module. See the client Python API documentation for a description of
+                           what is available in this module.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1247"></a>5.1.2.1.&nbsp;Backwards compatability
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>For backwards compatability with previous versions of BigWorld,
+                                the FMOD module will alias legacy sound functions into the BigWorld
+                                module (e.g. FMOD.playSound is the same as calling
+                                BigWorld.playSound). To make sure this function aliasing occurs as
+                                early as possible, be sure to import the FMOD module at the top of
+                                your personality script.
+                     </p>
+                     <p>Since these older API functions will be deprecated, we encourage
+                                you to use the new FMOD module.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1254"></a>5.2.&nbsp;Loading Sound Banks
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To implement sounds in your game, an FMOD sound bank needs to be
+                      created using the FMOD Designer tool. A very small example sound bank
+                      project is provided, and is located at
+                      <code class="filename">fantasydemo/audio/fd_sound.fdp</code>. Please see the
+                      documentation for FMOD Designer for details on how to create and edit your
+                      own sound banks.
+               </p>
+               <p>Sound banks must be specified in the engine configuration XML file.
+                      Multiple sound bank projects can be specified, and can be configured to
+                      load on client startup or only by request from the scripts. See <a href="ch05.html#xref_Sound_Engine_Configuration" title="5.1.1.&nbsp;Sound Engine Configuration">Sound Engine Configuration</a> for more detail on
+                      this.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>If an FMOD sound bank has been configured to stream from disk, it
+                           cannot be packed within a zip file system and must reside within an
+                           operating system directory.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1269"></a>5.3.&nbsp;Sound Playback
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld provides easy to use functions for playing back sound
+                      events defined by the FMOD Designer tool.
+               </p>
+               <p>See the Client Python API documentation for more details on these
+                      functions and the <code class="classname">FMOD.Sound</code> object.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1279"></a>5.3.1.&nbsp;FMOD.Sound Object
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1282"></a>5.3.1.1.&nbsp;Just Fail If Quietest
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The FMOD Event system provides a variety of max playback
+                                behaviour modes. These determine the behvaiour when the maximum number
+                                of instances of an event have been generated and then another is
+                                requested. One of the these is "just fail if quietest". This means
+                                that once the maximum number of concurrent instances of a sound event
+                                has been reached, the next attempt to playback that event will fail if
+                                it's the quietest. If it is not the quietest, it will succeed by
+                                stealing the handle from the quietest instance. The SoundManager will
+                                update all these events each frame so that only the quietest ones will
+                                be virtual.
+                     </p>
+                     <p>In other words, JFIQ ensures that the loudest N instances of the
+                                event are audible at any point in time, where N is the max playbacks
+                                property of that event. Loudness is determined by the distance from
+                                the listener as well as any sound cone/listener angle effects and
+                                occlusion geometry. When an event is set to have the behaviour 'just
+                                fail if quietest' there is no limit to the number of Sounds which can
+                                be placed in the world using that event. Calling the following methods
+                                on Sounds which are virtual will return errors: volume, pitch, paused,
+                                muted, duration. There is an <code class="methodname">isVirtual</code> method
+                                provided to check if a Sound is virtual or not.
+                     </p>
+                     <p>An example of when to use JFIQ would be if you have 100 torches
+                                crackling in a room you would only need to hear a few of the nearest
+                                (loudest) torches to get the desired effect.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1294"></a>5.3.2.&nbsp;Sound Playback Functions
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>For 2D sound events (e.g. GUI sounds), use FMOD.playSound and
+                                        pass in the full path to the desired sound event (e.g. "ui/boop").
+                                        It returns an FMOD.Sound object representing the sound event being
+                                        played.
+                           </p>
+                        </li>
+                        <li>
+                           <p>For 3D sounds, use:</p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p>PyModel.playSound, which will play a sound at the location
+                                                     of the model (it will track the model's current position). It
+                                                     will return an <span class="literal">FMOD.Sound</span> object representing
+                                                     the sound event being played.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>FMOD.getSound to retrieve an <span class="literal">FMOD.Sound</span>
+                                                     handle, set its position attribute, and then call its
+                                                     <span class="literal">play</span> method directly. This technique has the
+                                                     disadvantage that it will not take advantage of the FMOD channel
+                                                     virtualisation features, as a single
+                                                     <span class="literal">FMOD.Sound</span> object represents a single virtual
+                                                     sound instance.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;4.&nbsp;SpeedTree&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;6.&nbsp;OpenAutomate</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

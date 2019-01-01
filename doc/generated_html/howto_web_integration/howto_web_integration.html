@@ -1,0 +1,599 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>How To Implement Web Integration</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_Web_Integration"></a>How To Implement Web Integration</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Overview">1. Overview</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e111">1.1. Build and configuration</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d0e134">2. Use Cases</a></span></dt><dt><span class="chapter"><a href="#d0e160">3. BigWorld Python Scripting Layer</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e202">3.1. Item and inventory system</a></span></dt><dt><span class="section"><a href="#xref_Retrieving_Real_Time_Player_Data">3.2. Retrieving real-time player data</a></span></dt><dt><span class="section"><a href="#xref_Auction_House_Data_Types_Persistence_And_Aliases">3.3. Auction house data types, persistence and aliases</a></span></dt><dt><span class="section"><a href="#d0e382">3.4. Auction life cycle and logic</a></span></dt><dt><span class="section"><a href="#d0e587">3.5. Web method conventions</a></span></dt><dt><span class="section"><a href="#d0e617">3.6. Callbacks</a></span></dt><dt><span class="section"><a href="#xref_The_Auction_House_Abstraction">3.7. The Auction House abstraction</a></span></dt><dt><span class="section"><a href="#xref_Searching_And_Search_Criteria">3.8. Searching and search criteria</a></span></dt><dt><span class="section"><a href="#d0e886">3.9. <code class="classname">Avatar</code> entity</a></span></dt><dt><span class="section"><a href="#d0e1054">3.10. <code class="classname">AuctionHouse</code> entity</a></span></dt><dt><span class="section"><a href="#d0e1215">3.11. <code class="classname">TradingSupervisor</code> entity</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d0e1231">4. PHP Presentation Layer</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1239">4.1. Overview</a></span></dt><dt><span class="section"><a href="#d0e1259">4.2. Device-specific handling and WURFL</a></span></dt><dt><span class="section"><a href="#d0e1271">4.3. Constants in <code class="filename">Constants.php</code></a></span></dt><dt><span class="section"><a href="#d0e1291">4.4. XHTML-MP helper functions</a></span></dt><dt><span class="section"><a href="#d0e1403">4.5. Debugging PHP example scripts</a></span></dt><dt><span class="section"><a href="#d0e1463">4.6. <code class="classname">XHTMLMPPage</code> objects</a></span></dt><dt><span class="section"><a href="#d0e1506">4.7. <code class="classname">AuthenticatedXHTMLMPPage</code> objects</a></span></dt><dt><span class="section"><a href="#d0e1549">4.8. <code class="classname">BWAuthenticator</code> objects</a></span></dt><dt><span class="section"><a href="#d0e1595">4.9. <code class="filename">Login.php</code></a></span></dt><dt><span class="section"><a href="#d0e1623">4.10. <code class="filename">Characters.php</code></a></span></dt><dt><span class="section"><a href="#d0e1665">4.11. <code class="filename">News.php</code></a></span></dt><dt><span class="section"><a href="#d0e1681">4.12. <code class="filename">Character.php</code></a></span></dt><dt><span class="section"><a href="#d0e1701">4.13. <code class="filename">Inventory.php</code></a></span></dt><dt><span class="section"><a href="#d0e1743">4.14. <code class="filename">PlayerAuctions.php</code></a></span></dt><dt><span class="section"><a href="#d0e1761">4.15. <code class="filename">SearchAuctions.php</code></a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Overview"></a>Chapter&nbsp;1.&nbsp;Overview</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e111">1.1. Build and configuration</a></span></dt></dl></div><p>This document describes how to implement a web interface to a running
+  BigWorld game cluster, and how to implement a web auctioning system in order
+  to illustrate functions accessible from the BigWorld web integration module,
+  such as:</p><div class="itemizedlist"><ul type="disc"><li><p>Authentication of player login details.</p></li><li><p>Retrieval of an entity mailbox.</p></li><li><p>Access to base methods that exist on a base entity through a
+      mailbox.</p></li><li><p>Passing parameters to and receiving data from the BigWorld Python
+      scripting layer from the web scripting layer.</p></li></ul></div><p>For details on the integration of BigWorld functionality into a web
+  server, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../web_integration/web_integration.html#Web_Integration" class="olink">BigWorld Web Integration Reference</a>.</p><p>The example platform used in this document is the PHP scripting
+  language, combined with the Apache HTTP server. This guide uses a variety of
+  well-documented techniques for web applications (such as handling session
+  variables). Features and techniques used in the example code are common to
+  other web scripting languages; thus the techniques presented can also be
+  used in other web scripting environments, such as mod_python.</p><p>We provide examples on querying the player for inventory and character
+  statistics. The item and inventory system is based on the BigWorld
+  FantasyDemo item and inventory system. Any item or inventory system with
+  similar concepts of item serial numbers, item types and item locking can be
+  adapted for the web scripts. Other extensions to this model are
+  possible.</p><p>We provide a working example of an Auction House, which the player can
+  interact with to:</p><div class="itemizedlist"><ul type="disc"><li><p>Create auctions.</p></li><li><p>Search for auctions.</p></li><li><p>Bid on auctions.</p></li></ul></div><p>Auctions have the following characteristics:</p><div class="itemizedlist"><ul type="disc"><li><p>Refer to individual items in a player's inventory.</p></li><li><p>Have a starting bid, and may optionally have a buyout
+      price.</p></li><li><p>Have adjustable expiry times specified when they are
+      created.</p></li><li><p>Every player can bid on auctions made by other players.</p></li><li><p>Players can specify a maximum value for their bid &#8212; the system
+      will automatically bid in increments on behalf of the player, up to the
+      specified maximum.</p><p>This is known as proxy bidding, and this Auction House model is
+      common in other popular Internet-based auction houses. In the code, it
+      is referred to as an <code class="classname">IncrementalAuction</code>. When
+      entering a maximum bid, the entire amount is considered to be passed to
+      the auction house; on auction resolution, the difference between the
+      maximum bid amount and the actual bid amount is returned back to the
+      player.</p></li></ul></div><p>We will walk through the source and highlight the salient areas
+  relevant to building a trading system. This example consists of a
+  presentation layer written in PHP, and a logic layer that is implemented as
+  part of the base entity scripts for the appropriate entities, namely
+  <code class="classname">Avatar</code>, <code class="classname">TradingSupervisor</code> and
+  <code class="classname">AuctionHouse</code>.</p><div class="informalfigure"><div class="mediaobject"><img src="images/block_system_diagram.png"><span class="caption"><p>Block system diagram</p></span></div></div><p>The logic for the <code class="classname">AuctionHouse</code> entity is
+  implemented in the game scripting layer in Python, alongside other entity
+  logic in a BigWorld game. With some alterations, the example code used in
+  this document can be adapted for use in a game that already has a currency
+  and inventory system.</p><p>This document assumes that the reader has read the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a> and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../web_integration/web_integration.html#Web_Integration" class="olink">BigWorld Web Integration Reference</a>, and is familiar with BigWorld Python
+  scripting and has a basic operation of how return-value methods work.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e111"></a>1.1.&nbsp;Build and configuration</h2></div></div></div><p>The Python web extension and the PHP web extension are both required
+    to be built &#8212; for details on how to do that, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../web_integration/web_integration.html#Web_Integration" class="olink">BigWorld Web Integration Reference</a>'s sections <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../web_integration/web_integration.html#xref_Python" class="olink"><i>Python</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../web_integration/web_integration.html#xref_Python_Building_The_Module_From_Source" class="olink">Building the Module From Source</a> and sections
+    <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../web_integration/web_integration.html#xref_PHP" class="olink"><i>PHP</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../web_integration/web_integration.html#xref_PHP_Building_The_Module_From_Source" class="olink">Building the Module From Source</a>.</p><p>The PHP web extension provides a compatibility layer for PHP to use
+    the functions present in the Python web extension.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e134"></a>Chapter&nbsp;2.&nbsp;Use Cases</h2></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>The player supplies a username and password to log in, and
+        becomes authenticated against the BigWorld game system &#8212; this gives
+        access to character selection, and for a chosen character,
+        character-specific views and operations.</p></li><li><p>The player views their character statistics in real-time.</p></li><li><p>The player views their inventory and current gold pieces.</p></li><li><p>The player nominates an item in their inventory for which he
+        wishes to create an auction, then sets its expiry time, initial bid
+        price, and an optional buyout price.</p></li><li><p>The player searches for auctions matching an item type name
+        and/or bid range.</p></li><li><p>The player selects an auction and specifies a maximum
+        bid.</p></li><li><p>The player logs out.</p></li></ul></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e160"></a>Chapter&nbsp;3.&nbsp;BigWorld Python Scripting Layer</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e202">3.1. Item and inventory system</a></span></dt><dt><span class="section"><a href="#xref_Retrieving_Real_Time_Player_Data">3.2. Retrieving real-time player data</a></span></dt><dt><span class="section"><a href="#xref_Auction_House_Data_Types_Persistence_And_Aliases">3.3. Auction house data types, persistence and aliases</a></span></dt><dt><span class="section"><a href="#d0e382">3.4. Auction life cycle and logic</a></span></dt><dt><span class="section"><a href="#d0e587">3.5. Web method conventions</a></span></dt><dt><span class="section"><a href="#d0e617">3.6. Callbacks</a></span></dt><dt><span class="section"><a href="#xref_The_Auction_House_Abstraction">3.7. The Auction House abstraction</a></span></dt><dt><span class="section"><a href="#xref_Searching_And_Search_Criteria">3.8. Searching and search criteria</a></span></dt><dt><span class="section"><a href="#d0e886">3.9. <code class="classname">Avatar</code> entity</a></span></dt><dt><span class="section"><a href="#d0e1054">3.10. <code class="classname">AuctionHouse</code> entity</a></span></dt><dt><span class="section"><a href="#d0e1215">3.11. <code class="classname">TradingSupervisor</code> entity</a></span></dt></dl></div><p>There are three entity types that are involved in an auction
+  transaction:</p><div class="itemizedlist"><ul type="disc"><li><p>The player <code class="classname">Avatar</code>.</p></li><li><p>The <code class="classname">AuctionHouse</code> entity.</p></li><li><p>The <code class="classname">TradingSupervisor</code>.</p></li></ul></div><p>For details on how to implement safe atomic trading transactions
+  between two entities instantaneously, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_items/howto_items.html#HowTo_Items_And_Trading" class="olink">How To Implement Items And Trading</a>.</p><p>The Auction House example code can be traced by following the
+  <code class="classname">AuctionHouseCommon</code> debug output &#8212; if the
+  <code class="varname">AuctionHouseCommon.DEBUG</code> module attribute is set to
+  <span class="literal">True</span>, then those statements are output to the BaseApp
+  console. You can set this by editing the
+  <code class="filename">fantasydemo/res/scripts/common/AuctionHouseCommon.py</code>
+  Python module file.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e202"></a>3.1.&nbsp;Item and inventory system</h2></div></div></div><p>In FantasyDemo, items have a numerical item type and an entity-wide
+    serial number (<em class="emphasis">i.e.</em> the serial number is specific to
+    that entity), and can be locked under a lock handle. For details on how
+    items are implemented in FantasyDemo, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_items/howto_items.html#HowTo_Items_And_Trading" class="olink">How To Implement Items And Trading</a>.</p><p>In FantasyDemo, when an item is locked, it is un-equipped on the
+    cell if the player cell entity exists and it has that item equipped, and
+    it cannot be used by the client entity until unlocked. Gold pieces can
+    also be locked in conjunction with a set of items.</p><p>The example code for the Auction House system is loosely tied to
+    this scheme. Items are passed loosely as Python tuples, and appropriate
+    callbacks and hooks are used that can be replaced. With relatively minor
+    modifications, developers can use the example code to provide their own
+    inventory system, and use the item locking hook to do any
+    pre-transactional checks and actions.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Retrieving_Real_Time_Player_Data"></a>3.2.&nbsp;Retrieving real-time player data</h2></div></div></div><p>In FantasyDemo, there are two scenarios when a player log on to the
+    web interface: either they have a cell entity, they are running around the
+    world, or they are not instantiated on any cell, and only the Base entity
+    exists on the server.</p><p>In FantasyDemo, the cell data that we expose to the web interface
+    consists of:</p><div class="itemizedlist"><ul type="disc"><li><p>The player's name.</p></li><li><p>The player's health and maximum health.</p></li><li><p>The frags, or the number of kills made by the player.</p></li><li><p>Position vector and direction vector of the player.</p></li></ul></div><p>When there is no cell entity present, the values of the player name
+    health, maximum health, and frags exist in a dictionary on the base called
+    <span class="literal">cellData</span>. However, when there is a cell entity present,
+    the values are required to be queried from the cell &#8212; via the
+    <code class="methodname">Avatar.getPlayerInfoBaseRequest()</code> cell method and
+    the <code class="methodname">Avatar.onPlayerInfo()</code> callback method on the
+    base.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Auction_House_Data_Types_Persistence_And_Aliases"></a>3.3.&nbsp;Auction house data types, persistence and aliases</h2></div></div></div><p>There are some data type aliases specific to the Auction House
+    system which are defined in
+    <code class="filename">fantasydemo/res/scripts/entity_defs/alias.xml</code>:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="literal">AUCTIONID</span></p></li><li><p><span class="literal">AUCTIONEXPIRY</span></p></li><li><p><span class="literal">AUCTIONBIDDER</span></p></li><li><p><span class="literal">AUCTIONBIDDERS</span></p></li><li><p><span class="literal">AUCTION</span></p></li><li><p><span class="literal">AUCTIONMAPPING</span></p></li><li><p><span class="literal">AUCTIONS</span></p></li><li><p><span class="literal">AUCTIONINFO</span></p></li></ul></div><p>For details on the entity definitions alias file and advanced
+    persistence of user-defined data types, see the document the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a> 's section the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Alias_Of_Data_Types" class="olink">Alias of Data Types</a>.</p><p>Notice that the <code class="code">AUCTIONID</code> data type is aliased to a
+    <code class="code">STRING</code>. In the example code, the <code class="code">AUCTIONID</code> is
+    comprised of the following string format:</p><pre class="programlisting"><em class="replaceable"><code>&lt;player entity database ID&gt;</code></em>/<em class="replaceable"><code>&lt;BigWorld game time&gt;</code></em></pre><p>For example:</p><pre class="programlisting">432/456.23</pre><p><code class="classname">IncrementalAuction</code> objects are defined in
+    Python in the <code class="classname">AuctionHouseCommon</code> module, and are
+    database-persistent. The corresponding <span class="literal">AUCTION</span> data
+    type is aliased to a class-customised <span class="literal">FIXED_DICT</span> type;
+    the Python scripts for streaming and de-streaming
+    <code class="classname">Auction</code> objects to and from the database are in the
+    <code class="classname">AuctionDataTypes</code> module located in
+    <code class="filename">fantasydemo/res/common</code>, in the class
+    <code class="classname">AuctionDataType</code>.</p><p>Items in <code class="classname">IncrementalAuction</code> are represented
+    as a 3-tuple, as displayed below:</p><pre class="programlisting">( lockHandle, itemType, itemSerial )</pre><p>There also exists a collections data type for holding a map of
+    auction IDs to auction objects. This is the type of the auctions base
+    property on the <code class="classname">AuctionHouse</code> entity that holds all
+    auctions specific to that auction house.</p><p>The <span class="literal">AUCTIONS</span> data type manifests itself as a
+    dictionary from auction IDs to <code class="classname">IncrementalAuction</code>
+    objects to the Python scripts. The corresponding
+    <span class="literal">AUCTIONS</span> entity data type is aliased to a
+    class-customised <span class="literal">FIXED_DICT</span> implemented by a class in
+    the <code class="classname">AuctionDataTypes</code> module, in the class
+    <span class="literal"><code class="classname">AuctionsDataType</code></span>. It consists of
+    an array of <span class="literal">AUCTIONMAPPING</span>, which is aliased to an
+    non-customised <span class="literal">FIXED_DICT</span> data type with auction ID and
+    auction object properties. These alias definitions are present in
+    <code class="filename">fantasydemo/res/scripts/entity_defs/alias.xml</code>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e382"></a>3.4.&nbsp;Auction life cycle and logic</h2></div></div></div><p>The life cycle of an auction follows the steps described
+    below:</p><div class="orderedlist"><ol type="1"><li><p>Auctions are created by player <code class="classname">Avatar</code>
+        entities by passing to
+        <code class="methodname">Avatar.webCreateAuction()</code> the serial number
+        of the item that they wish to sell along with the auction parameters,
+        such as expiry, the start bid price, and the optional buyout
+        price.</p><p>The player <code class="classname">Avatar</code> entity locks the item
+        and receives a lock handle.</p></li><li><p>The player <code class="classname">Avatar</code> entity makes a request
+        to the <code class="classname">AuctionHouse</code> entity via
+        <code class="methodname">AuctionHouse.createAuction()</code> to create an
+        auction with the item's type, serial and lock handle in a 3-tuple, and
+        the auction parameters.</p><p>The <code class="classname">Avatar</code> entity also supplies itself as
+        a mailbox so that it can be called back on when the auction has been
+        registered, or if there was an error &#8212; in case of error, the
+        <code class="classname">Avatar</code> entity can unlock the item.</p></li><li><p>The <code class="classname">AuctionHouse</code> entity registers the new
+        auction, and makes it available for searching by other players by
+        adding it to its <code class="varname">AuctionHouse.auctions</code> collection
+        member property.</p><p>It also sets the auction's expiry time to after the specified
+        expiry period after the current
+        <code class="methodname">BigWorld.time()</code>, then writes itself to the
+        database.</p></li><li><p>Other players can search for auctions by creating criteria (for
+        details, see <a href="#xref_Searching_And_Search_Criteria" title="3.8.&nbsp;Searching and search criteria">Searching and search criteria</a>) and
+        applying them to
+        <code class="methodname">AuctionHouse.webSearchAuctions()</code>, which
+        returns an array of auction IDs, rather than auction descriptors
+        (which are returned by
+        <code class="methodname">AuctionHouse.webGetAuctionInfo()</code>).</p><p>This is to support implementations of paging through search
+        results on the web interface.</p></li><li><p>The bidder <code class="classname">Avatar</code> entity locks the
+        maximum bid amount once a bidder player has selected an auction and
+        has bid on it through the web interface (via
+        <code class="methodname">Avatar.webBidOnAuction()</code>, by supplying the
+        auction ID and the maximum bid amount). If this fails due to
+        insufficient funds:</p><div class="itemizedlist"><ul type="disc"><li><p>Control is returned to the web scripting layer.</p></li><li><p>The bidding player is notified of failure due to
+            insufficient funds.</p></li><li><p>No further action or change is taken.</p></li></ul></div></li><li><p>If the bid is successful, the lock handle is passed to the
+        <code class="classname">AuctionHouse</code> entity through the
+        <code class="methodname">AuctionHouse.bidOnAuction()</code> method to
+        register the bid with the auction ID, bidder player mailbox, and the
+        bidder's maximum bid amount lock handle.</p></li><li><p>If the auction has no current bidder, then the bidder entity
+        becomes the new highest bidder, and the bidding price is incremented
+        once. Otherwise, in the case of a bidder bidding against an existing
+        highest bidder, the auction bidding is done incrementally up to the
+        minimum of the maximum bids of the two competing bidders.</p></li><li><p>If the bid is successful, then this bidder becomes the new
+        highest bidder, and the bid price may increment up to the amount of
+        the maximum bid before this bidder becomes outbid.</p><p>If this bidder outbids another bidder, then that bidder's entity
+        is found, and has the method
+        <code class="methodname">Avatar.onAuctionOutbid()</code> called on it to
+        notify that <code class="classname">Avatar</code> entity that it has been
+        outbid, which unlocks their maximum bid's lock handle, effectively
+        returning the gold back to the outbid bidder player.</p><p>Otherwise, if the bid has failed, then the contesting bidder has
+        <code class="methodname">Avatar.onAuctionOutbid()</code> called on its
+        entity, which unlocks the lock handle to return the gold back to the
+        contesting bidder player.</p></li><li><p>Auctions are checked periodically with a BigWorld timer that is
+        set through <code class="methodname">Base.addTimer()</code> every
+        <code class="varname">AuctionHouse.AUCTION_CHECK_PERIOD</code> (a Python
+        module-level property) seconds.</p><p>When an auction expires, if at the time of expiry, it does not
+        have a bidder registered:</p><div class="itemizedlist"><ul type="disc"><li><p>The auction is considered expired and is removed.</p></li><li><p>The seller entity has
+            <code class="methodname">Avatar.onAuctionExpired()</code> called back
+            on.</p></li><li><p>The item is unlocked.</p></li></ul></div><p>If it has a bidder at the time of expiry:</p><div class="itemizedlist"><ul type="disc"><li><p>The auction is won by the current bidder.</p></li><li><p>The item locked by the seller must be exchanged by the
+            amount of gold pieces that the auction has been won at. This can
+            be lower than the maximum bid amount entered by the highest
+            bidder, and so there is a mechanism to relock a lower amount of
+            gold in order to complete the auction transaction.</p><p>The <code class="methodname">Avatar.lockAuctionGold()</code>
+            accomplishes this by being passed from the
+            <code class="classname">AuctionHouse</code> entity:</p><div class="itemizedlist"><ul type="circle"><li><p>The auction ID.</p></li><li><p>The actual amount of gold pieces that the auction was
+                won at.</p></li><li><p>The pre-existing lock handle for the maximum bid amount,
+                in gold pieces.</p></li></ul></div></li><li><p>This causes the old lock on the maximum bid amount to be
+            unlocked, and since the actual amount that the auction expired at
+            is always less than or equal to the maximum bid amount, this is
+            guaranteed to succeed.</p><p>This auction bid amount at expiry is relocked, and is passed
+            back to the <code class="classname">AuctionHouse</code> entity through its
+            <code class="methodname">AuctionHouse.completeAuction()</code> method,
+            along with this player's mailbox and the auction ID.</p></li><li><p>The <code class="classname">AuctionHouse</code> entity locates the
+            seller entity and the bidder entity for exchanging locked
+            items.</p><p>The actual exchange is carried out by re-using functionality
+            from the FantasyDemo <code class="classname">TradingSupervisor</code>
+            entity, which handles atomic exchanges between two
+            <code class="classname">Avatar</code> entities and locks on items held by
+            the respective entities (for details on how the
+            <code class="classname">TradingSupervisor</code> exchanges items, see the
+            document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_items/howto_items.html#HowTo_Items_And_Trading" class="olink">How To Implement Items And Trading</a>'s section
+            <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_items/howto_items.html#xref_Trading" class="olink"><i>Trading</i></a> <span class="symbol">&#8594;</span>
+            <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_items/howto_items.html#xref_Trading_Supervisor" class="olink">Trading Supervisor</a>).</p></li><li><p>The auction is removed.</p></li></ul></div></li></ol></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e587"></a>3.5.&nbsp;Web method conventions</h2></div></div></div><p>The convention used in the base entity scripts for implementing web
+    methods is to prefix each method by the string <span class="literal">web</span> (for
+    example, <code class="methodname">webGetPlayerInfo()</code>). Please note that
+    this is only a convention used in our example code, and it is not a
+    requirement.</p><p>Many of the web return-value methods also have return values for
+    returning the status of the operation back to the web scripting
+    layer:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="parameter"><code>success</code></em>::<span class="type">BOOL</span> &#8212;
+        Whether the operation succeeded.</p></li><li><p><em class="parameter"><code>errMsg</code></em>::<span class="type">STRING</span> &#8212; Error
+        message string, describing the reason for the failure.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e617"></a>3.6.&nbsp;Callbacks</h2></div></div></div><p>There are some callback methods that are invoked by the
+    <code class="classname">AuctionHouse</code> entity to the
+    <code class="classname">Avatar</code> entity in response to
+    <code class="classname">AuctionHouse</code> requests, for creating auctions,
+    bidding on, and buying out auctions.</p><p>In the <code class="classname">Avatar</code> entity scripts, there is a
+    Python property set at <code class="methodname">__init__()</code> time called
+    <code class="varname">tradingCallbacks</code>. This is a map of callback names to
+    maps of unique identifiers (depending on what kind of call it is) to
+    callbacks implemented by <code class="classname">functools.partial</code>
+    instances and arguments. This is partly to avoid sending unnecessary
+    context across to the <code class="classname">AuctionHouse</code> entity by
+    preserving it in the memory space of the <code class="classname">Avatar</code>
+    entity and have that context restored when the
+    <code class="classname">AuctionHouse</code> calls back. The
+    <code class="classname">Avatar</code> entity de-multiplexes on these callbacks
+    based on a unique key for that set of transactions.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_The_Auction_House_Abstraction"></a>3.7.&nbsp;The Auction House abstraction</h2></div></div></div><p>In the <span class="package">AuctionHouseCommon</span> module, there are some
+    non-BigWorld-specific helper classes that are intended to be sub-classed
+    and functionality to be overwritten. These classes cover the underlying
+    logic of auctions and auction houses, but are not tied to any persistence
+    mechanism. There is a sample of an
+    <code class="classname">InMemoryAuctionHouse</code>, which maintains lists of
+    auctions in memory. Different auction types can be added. Different buyers
+    and seller objects can be used, as long as they adhere to the
+    protocol.</p><p>The abstraction consists of:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="classname">AbstractAuctionHouse</code></p><div class="itemizedlist"><ul type="circle"><li><p>Handles requests for searching auctions.</p></li><li><p>Auction administration and persistence.</p></li></ul></div></li><li><p><code class="classname">Auction</code></p><div class="itemizedlist"><ul type="circle"><li><p>Handles the auction mechanics of bidding.</p></li><li><p>Holds a reference to the seller interface instance.</p></li><li><p>Holds a reference to the item object.</p></li><li><p>Holds a reference to the bidder interface instance, if one
+            exists.</p></li><li><p>Holds a reference to the auction house object.</p></li><li><p>Holds the auction data, such as expiry, bidding price,
+            etc.</p></li></ul></div></li><li><p><code class="classname">Seller</code></p><div class="itemizedlist"><ul type="circle"><li><p>Auction seller interface.</p></li><li><p>Hook for client code to receive auction house events for
+            sellers.</p></li></ul></div></li><li><p><code class="classname">Bidder</code></p><div class="itemizedlist"><ul type="circle"><li><p>Auction bidder interface.</p></li><li><p>Hook for client code to receive auction house events for
+            bidders.</p></li></ul></div></li><li><p><code class="classname">AuctionSearchCriteria</code></p><div class="itemizedlist"><ul type="circle"><li><p>Definition of the protocol for search criteria to be used
+            when filtering auctions for a search query.</p></li></ul></div></li></ul></div><p>Some generic sub-classes are present for these abstractions:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="classname">AuctionHouse</code></p><p>Entity that is a BigWorld implementation of
+        <code class="interfacename">AbstractAuctionHouse</code>, using the
+        BigWorld persistence engine.</p></li><li><p><code class="classname">FantasyDemoSeller</code></p><p>Implementation of the <code class="classname">Seller</code> interface
+        &#8212; this sub-class holds the database ID of the seller
+        <code class="classname">Avatar</code> entity.</p></li><li><p><code class="classname">FantasyDemoBidder</code></p><p>Implementation of the <code class="classname">Bidder</code> interface
+        &#8212; this sub-class holds the database ID of the bidder
+        <code class="classname">Avatar</code> entity, as well as the lock handle for
+        the bidder's maximum bid.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Searching_And_Search_Criteria"></a>3.8.&nbsp;Searching and search criteria</h2></div></div></div><p>In order to support arbitrary Boolean operations on auctions, search
+    criteria objects are created to filter matching auctions. They are
+    supported on the BigWorld server side by Python objects of type
+    <code class="classname">AuctionSearchCriteria</code>, and passed to the web
+    scripting layer as Python pickled strings of those criteria objects. The
+    web scripting layer constructs instances of these criteria objects, and
+    can store instances of them as Python pickled strings &#8212; they pass
+    them back to the <code class="classname">AuctionHouse</code> entity when
+    retrieving auction search results.</p><p>The <code class="interfacename">AuctionSearchCriteria</code> class has
+    one method to be overridden by sub-classes: the
+    <code class="methodname">filter()</code> method:</p><pre class="programlisting">class SomeSearchCriteria( AuctionHouseCommon.AuctionSearchCriteria ):
+   def filter( self, auction ):
+      """
+      Return True if the given auction satisfies this criteria, otherwise False. 
+      """
+
+      # test the auction and return either True or False
+      return ...</pre><p>There are a few criteria types already defined. The definitions for
+    these classes can be found in:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">fantasydemo/res/scripts/common/AuctionHouseCommon.py</code></p></li><li><p><code class="filename">fantasydemo/res/scripts/base/AuctionHouse.py</code></p></li></ul></div><p>The web return-value method declarations can be found in the entity
+    definitions file
+    <code class="filename">fantasydemo/res/scripts/entity_defs/AuctionHouse.def</code>.</p><p>It is fairly easy to add new filtering criteria by implementing the
+    interface presented in
+    <code class="interfacename">AuctionSearchCriteria</code> for other item and
+    inventory subsystems:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="literal">ItemTypeCriteria</span></p><p>Search for auctions with an item type in the list of given item
+        types. This is specific to FantasyDemo, but a similar criteria for
+        matching items in other item and inventory systems could also be
+        written.</p><p>Created by the base return-value method
+        <code class="methodname">webCreateItemTypeCriteria()</code>.</p></li><li><p><span class="literal">BidRangeSearchCriteria</span></p><p>Search for auctions that satisfy a given bid range.</p><p>Created by the base return-value method
+        <code class="methodname">webCreateBidRangeCriteria()</code>, taking as
+        arguments the minimum and maximum in the bid range (either argument is
+        optional, but not both).</p></li><li><p><span class="literal">BidderCriteria</span></p><p>Search for auctions of the bidder identified by the specified
+        database ID.</p><p>Created by the base return-value method
+        <code class="methodname">webCreateBidderCriteria()</code>.</p></li><li><p><span class="literal">SellerCriteria</span></p><p>Search for auctions of the seller identified by the specified
+        database ID.</p><p>Created by the base return-value method
+        <code class="methodname">webCreateSellerCriteria()</code>.</p></li><li><p><span class="literal">AndSearchCriteria</span>,
+        <span class="literal">OrSearchCriteria</span></p><p>Composite criteria classes available for chaining criteria
+        together in arbitrary ways.</p><p>These criteria can be accessed through the
+        <code class="classname">AuctionHouse</code> base return-value methods
+        <code class="methodname">webCombineAnd</code>() and
+        <code class="methodname">webCombineOr()</code>, and providing each with two
+        pickled criteria objects to be combined using the given Boolean
+        operation.</p><p>Other pickled instances of
+        <code class="classname">OrSearchCriteria</code> and
+        <code class="classname">AndSearchCriteria</code> can also be supplied.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e886"></a>3.9.&nbsp;<code class="classname">Avatar</code> entity</h2></div></div></div><p>The web interface scripts deal with the Avatar entity (the player's
+    entity) when doing player-specific actions, such as querying player
+    inventory and statistics, or bidding using a certain item in the player's
+    inventory.</p><p>The <code class="classname">Avatar</code> base entity implements
+    return-value methods meant to be accessible from the web for returning
+    inventory information, querying player data, and executing requests for
+    bidding on other players' auctions. These are:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="methodname">Avatar.webGetPlayerInfo()</code></p><p>Retrieves information about the player, such as:</p><div class="itemizedlist"><ul type="circle"><li><p>Database ID.</p></li><li><p>Player name.</p></li><li><p>Online status.</p></li><li><p>Position in the world, if they are online.</p></li><li><p>Direction facing in the world, if they are online.</p></li><li><p>Health.</p></li><li><p>Maximum health.</p></li><li><p>Number of frags.</p></li></ul></div><p>If the player is online, then the information is
+        collected from the cell entity, via the cell method
+        <code class="methodname">Avatar.getPlayerInfoBaseRequest()</code>, which
+        returns the information via the base method
+        <code class="methodname">Avatar.onPlayerInfo()</code>.</p></li><li><p><code class="methodname">Avatar.webGetGoldAndInventory()</code></p><p>Retrieves the available gold pieces and the state of the
+        inventory. The inventory items are returned as a list of dictionaries
+        with information about the type, serial number and lock state of each
+        item in the player's inventory.</p></li><li><p><code class="methodname">Avatar.webCreateAuction()</code></p><p>Locks an item in the inventory identified by serial number, and
+        creates an auction on the <span class="literal">AuctionHouse</span> singleton
+        entity with the given auction parameters (<em class="emphasis">e.g.</em>,
+        expiry, starting bid, optional buyout amount).</p></li><li><p><code class="methodname">Avatar.webBidOnAuction()</code></p><p>Lodges a maximum bid on, or to buyout, an auction with the given
+        auction ID.</p></li></ul></div><p>There are callbacks used to notify the player
+    <span class="literal">Avatar</span> entity about auction house events:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="methodname">Avatar.onCreateAuction()</code></p><p>Called in response to creating a new auction by the
+        player.</p></li><li><p><code class="methodname">Avatar.onBidOnAuction()</code></p><p>Called in response to bidding on another player's
+        auction.</p></li><li><p><code class="methodname">Avatar.onBuyoutAuction()</code></p><p>Called in response to buying out another player's
+        auction.</p></li><li><p><code class="methodname">Avatar.onAuctionWon()</code></p><p>Called when an auction has been won by this player.</p></li><li><p><code class="methodname">Avatar.onAuctionOutbid()</code></p><p>Called when an auction has been outbid on by another
+        player.</p></li><li><p><code class="methodname">Avatar.onAuctionExpired()</code></p><p>Called when an auction created by this player has expired
+        without any other player bidding on it.</p></li></ul></div><p>In addition, the <code class="methodname">Avatar.lockAuctionGold()</code>
+    method is used by the <code class="classname">AuctionHouse</code> entity for
+    auction resolution. It relocks a lower bid amount of gold pieces for an
+    auction at the bid price that the auction was won at. Also supplied is an
+    existing lock handle for the maximum bid amount committed to by a bidder;
+    the difference between the maximum bid and the bid amount at time of
+    auction expiry is returned to the player this way.
+    <code class="methodname">AuctionHouse.completeAuction()</code> is called back
+    from <code class="methodname">Avatar.lockAuctionGold()</code> when the new lock
+    has been created.</p><p>There are also two methods used for querying character statistics,
+    some of which exist on the cell, from the base:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="methodname">Avatar.getPlayerInfoBaseRequest()</code></p><p>Cell method called by the base to request character statistics
+        from the cell.</p></li><li><p><code class="methodname">Avatar.onPlayerInfo()</code></p><p>Base method called back by the cell to supply character
+        statistics from the cell.</p></li></ul></div><p>The actual locked item swapping mechanism uses the methods:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="methodname">Avatar.tradeCommitActive()</code></p></li><li><p><code class="methodname">Avatar.tradeCommitPassive()</code></p></li></ul></div><p>For details on how the swapping works via these methods, see the
+    document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_items/howto_items.html#HowTo_Items_And_Trading" class="olink">How To Implement Items And Trading</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_items/howto_items.html#xref_Trading" class="olink"><i>Trading</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_items/howto_items.html#xref_Trading_Supervisor" class="olink">Trading Supervisor</a>).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1054"></a>3.10.&nbsp;<code class="classname">AuctionHouse</code> entity</h2></div></div></div><p><code class="classname">AuctionHouse</code> is a subclass of
+    <code class="classname">BigWorld.Base</code> and
+    <code class="classname">AuctionHouseCommon.AbstractAuctionHouse</code>, and is
+    responsible for:</p><div class="itemizedlist"><ul type="disc"><li><p>Holding auctions.</p></li><li><p>Bidding on auctions.</p></li><li><p>Checking auction expiries.</p></li><li><p>Responding to requests from <code class="classname">Avatar</code>
+          entities for creating auctions.</p></li><li><p>Responding to requests for searching through auctions.</p></li></ul></div><p>This is a base-only singleton entity &#8212; uniqueness is
+    controlled through looking up global bases at
+    <code class="methodname">__init__()</code> time and self-destructing if a global
+    base called <code class="code">AuctionHouse</code> already exists. On BaseApp start-up,
+    <code class="methodname">AuctionHouse.wakeup</code> is called to load the
+    <code class="classname">AuctionHouse</code> entity if it does not already exist
+    (for details, see <code class="methodname">FantasyDemo.onBaseAppReady()</code> in
+    the FantasyDemo personality script
+    <code class="filename">fantasydemo/res/scripts/base/FantasyDemo.py</code>).</p><p>The entity definitions file for this entity can be located at
+    <code class="filename">fantasydemo/res/scripts/entity_defs/AuctionHouse.def</code>.</p><p>The base script for the <code class="classname">AuctionHouse</code> entity
+    can be located at
+    <code class="filename">fantasydemo/res/scripts/base/AuctionHouse.py</code>.</p><p>The <code class="classname">AuctionHouse</code> base entity contains the
+    base property auctions which is an instance of the <code class="code">AUCTIONS</code>
+    collection data type (for details on how the different data types used in
+    the auction house system interact, see <a href="#xref_Auction_House_Data_Types_Persistence_And_Aliases" title="3.3.&nbsp;Auction house data types, persistence and aliases">Auction house data types, persistence and aliases</a>)
+    .</p><p>The <code class="classname">AuctionHouseCommon</code> module is imported by
+    <code class="classname">AuctionDataTypes</code> in order to support database
+    persistence of auction house data. For details, see <a href="#xref_Auction_House_Data_Types_Persistence_And_Aliases" title="3.3.&nbsp;Auction house data types, persistence and aliases">Auction house data types, persistence and aliases</a> and
+    <a href="#xref_The_Auction_House_Abstraction" title="3.7.&nbsp;The Auction House abstraction">The Auction House abstraction</a>).</p><p>The <code class="classname">AuctionHouse</code> entity exposes the following
+    methods to the web interface scripting layer:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="methodname">AuctionHouse.webGetTime()</code></p><p>Retrieves the <code class="methodname">BigWorld.time</code> value to
+        the web scripting layer.</p></li><li><p><code class="methodname">AuctionHouse.webSearchAuctions()</code></p><p>Searches for auctions that match the given criteria object, and
+        returns only the auction IDs.</p></li><li><p><code class="methodname">AuctionHouse.webGetAuctionInfo()</code></p><p>Returns information about the given auction IDs in the form of a
+        dictionary of properties.</p></li><li><p><code class="methodname">AuctionHouse.webCombineAnd()</code></p><p>Combines two criteria objects together using the
+        <span class="literal">AND</span> Boolean function.</p></li><li><p><code class="methodname">AuctionHouse.webCombineOr()</code></p><p>Combines two criteria objects together using the
+        <span class="literal">OR</span> Boolean function.</p></li><li><p><code class="methodname">AuctionHouse.webCreateItemTypeCriteria()</code></p><p>Creates a criteria that matches auctions based on item
+        types.</p></li><li><p><code class="methodname">AuctionHouse.webCreateBidRangeCriteria()</code></p><p>Creates a criteria that matches auctions base on the bid price.
+        Ranges can be open (<em class="emphasis">i.e.</em>, either the top or the
+        bottom limits can be omitted).</p></li><li><p><code class="methodname">AuctionHouse.webCreateSellerCriteria()</code></p><p>Creates a criteria that matches auctions based on the seller's
+        database ID.</p></li><li><p><code class="methodname">AuctionHouse.webCreateBidderCriteria()</code></p><p>Creates a criteria that matches auctions based on the bidder's
+        database ID.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1215"></a>3.11.&nbsp;<code class="classname">TradingSupervisor</code> entity</h2></div></div></div><p>This entity oversees and facilitates in-game trading and atomic swap
+    transactions. For details on this entity's design and implementation, see
+    the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_items/howto_items.html#HowTo_Items_And_Trading" class="olink">How To Implement Items And Trading</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_items/howto_items.html#xref_Trading" class="olink"><i>Trading</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_items/howto_items.html#xref_Trading_Supervisor" class="olink">Trading Supervisor</a>.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e1231"></a>Chapter&nbsp;4.&nbsp;PHP Presentation Layer</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e1239">4.1. Overview</a></span></dt><dt><span class="section"><a href="#d0e1259">4.2. Device-specific handling and WURFL</a></span></dt><dt><span class="section"><a href="#d0e1271">4.3. Constants in <code class="filename">Constants.php</code></a></span></dt><dt><span class="section"><a href="#d0e1291">4.4. XHTML-MP helper functions</a></span></dt><dt><span class="section"><a href="#d0e1403">4.5. Debugging PHP example scripts</a></span></dt><dt><span class="section"><a href="#d0e1463">4.6. <code class="classname">XHTMLMPPage</code> objects</a></span></dt><dt><span class="section"><a href="#d0e1506">4.7. <code class="classname">AuthenticatedXHTMLMPPage</code> objects</a></span></dt><dt><span class="section"><a href="#d0e1549">4.8. <code class="classname">BWAuthenticator</code> objects</a></span></dt><dt><span class="section"><a href="#d0e1595">4.9. <code class="filename">Login.php</code></a></span></dt><dt><span class="section"><a href="#d0e1623">4.10. <code class="filename">Characters.php</code></a></span></dt><dt><span class="section"><a href="#d0e1665">4.11. <code class="filename">News.php</code></a></span></dt><dt><span class="section"><a href="#d0e1681">4.12. <code class="filename">Character.php</code></a></span></dt><dt><span class="section"><a href="#d0e1701">4.13. <code class="filename">Inventory.php</code></a></span></dt><dt><span class="section"><a href="#d0e1743">4.14. <code class="filename">PlayerAuctions.php</code></a></span></dt><dt><span class="section"><a href="#d0e1761">4.15. <code class="filename">SearchAuctions.php</code></a></span></dt></dl></div><p>The presentation layer is written in PHP, and handles requests from
+  web user agents (such as mobile phones and PC browsers) and presents
+  information from the game. The example code PHP sources are found at
+  <code class="filename">fantasydemo/src/web/php</code>.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1239"></a>4.1.&nbsp;Overview</h2></div></div></div><p>PHP pages in the example code are represented as PHP objects, and
+    the PHP class definition for
+    <span class="literal"><em class="replaceable"><code>&lt;class&gt;</code></em></span> is located in
+    <span class="literal"><em class="replaceable"><code>&lt;class&gt;</code></em>.php</span>.
+    Generally, after the class definition an instance of the page object is
+    created and asked to render itself.</p><p>We do not recommend this way of structuring a web interface &#8212; the
+    purpose of this PHP construction is to illustrate, as clearly as possible,
+    solutions to common problems encountered when implementing a web interface
+    to a BigWorld game instance. It is not meant to illustrate best practices
+    in web interface implementation.</p><p>Developers can use any frameworks that they wish to implement a web
+    interface in PHP or Python &#8212; BigWorld does not limit the use of
+    third-party frameworks, from complex systems such as Zope to simple
+    templating engines such as PHP Smarty.</p><p>The examples adhere to the XHTML-MP standard (XHTML Mobile
+    Profile).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1259"></a>4.2.&nbsp;Device-specific handling and WURFL</h2></div></div></div><p>Since there is a large variability in the device capabilities of
+    each user agent, we present a solution for handling multiple device types
+    using WURFL.</p><p>WURFL is a database of user agents and their capabilities, and given
+    the user agent string, we can access the device's capabilities (such as
+    screen resolution) and adjust our presentation accordingly. WURFL has
+    script support in PHP and Python (among other languages). The latest
+    release of WURFL can be downloaded from <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://wurfl.sourceforge.net" target="_top">http://wurfl.sourceforge.net</a>.</p><p>WURFL requires some initial set-up before it can be used in PHP; in
+    particular, the device capabilities cache needs to be created. For details
+    on how to install and update the cache, see the WURFL
+    documentation.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1271"></a>4.3.&nbsp;Constants in <code class="filename">Constants.php</code></h2></div></div></div><p>Configuration constants and static data are defined in
+    <code class="filename">Constants.php</code>. Among other things, it
+    contains:</p><div class="itemizedlist"><ul type="disc"><li><p>The static item type data (such as URLs to image icons, image
+        statistics, etc.) that are used when displaying player
+        inventory.</p></li><li><p>The URL of the login page.</p></li><li><p>The URL of the welcome page after authentication.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1291"></a>4.4.&nbsp;XHTML-MP helper functions</h2></div></div></div><p><span class="literal">XHTML-MP-functions.php</span> contains functions for
+    commonly used XHTML-MP (XHTML Mobile Profile) element constructs. The
+    simple base ones are listed below:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="function">xhtmlMpSingleTag( <em class="parameter"><code>$name</code></em>, 
+        <em class="parameter"><code>$className=''</code></em>, 
+        <em class="parameter"><code>$attrString=''</code></em> )</code></p><p>Returns the element source of a single unenclosed XHTML element
+        with the given name, class and attribute string.</p></li><li><p><code class="function">xhtmlMpTag( <em class="parameter"><code>$name</code></em>, 
+        <em class="parameter"><code>$contents</code></em>,  <em class="parameter"><code>$className=''</code></em>, 
+        <em class="parameter"><code>$attrString=''</code></em> )</code></p><p>Returns the element source of a single enclosed XHTML element
+        with the given name, contents, class and attribute string.</p></li><li><p><code class="function">xhtmlMpAddAttribute(
+        <em class="parameter"><code>$attrString=''</code></em>,  <em class="parameter"><code>$key</code></em>, 
+        <em class="parameter"><code>$value</code></em> )</code></p><p>Adds a key value attribute to an attribute string and returns
+        it.</p></li></ul></div><p>From these, the other common XHTML elements are built. Here are some
+    examples:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="function">xhtmlMpHeading( <em class="parameter"><code>$contents</code></em>, 
+        <em class="parameter"><code>$level=1</code></em>,  <em class="parameter"><code>$className=''</code></em>, 
+        <em class="parameter"><code>$attrString=''</code></em> )</code></p><p>Returns the element source of a single unenclosed XHTML element
+        with the given name, class and attribute string.</p></li><li><p><code class="function">xhtmlMpDiv( <em class="parameter"><code>$contents</code></em>, 
+        <em class="parameter"><code>$className=''</code></em>, 
+        <em class="parameter"><code>$attrString=''</code></em> )</code></p><p>Returns the element source for a XHTML <span class="literal">DIV</span>
+        element with the given optional class and attribute string.</p></li><li><p><code class="function">xhtmlMpPara( <em class="parameter"><code>$contents</code></em>, 
+        <em class="parameter"><code>$className=''</code></em> $attrString )</code></p><p>Returns the element source for a XHTML paragraph.</p></li></ul></div><p>There is also a <code class="classname">XHTMLMPForm</code> class for
+    creating XHTML MP forms.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1403"></a>4.5.&nbsp;Debugging PHP example scripts</h2></div></div></div><p>There is a debug library implemented in
+    <code class="filename">Debug.php</code> that is used throughout the code example.
+    You can use this to trace the flow of the example scripts using the
+    various debugging output options.</p><p>Generally, debug output is displayed in a page as a XHTML
+    comment.</p><pre class="programlisting">class SomePage extends AuthenticatedXHTMLMPPage
+{
+...
+   function renderBody() 
+   {
+      ...
+      debug( "this is a test" );
+      ...
+   }
+...
+}</pre><p><span class="citetitle">Example PHP using the debug function</span></p><p>The code above will generate HTTP output like this:</p><pre class="programlisting">&lt;!--
+this is a test
+--&gt;</pre><p><span class="citetitle">Example HTTP output</span></p><p>Additionally, you may use this in an overridden
+    <code class="methodname">XHTMLMPPage::initialise</code> method. Because
+    <code class="methodname">initialise</code> does not write output except for HTTP
+    headers in order to perform actions such as HTTP redirects, debug output
+    is deferred until the rendering stage of the page, where you will see
+    debug output as:</p><pre class="programlisting">&lt;!-- deferred error output follows
+debug output instance 1
+debug output instance 2
+debug output instance 3
+deferred error output above --&gt;</pre><p><span class="citetitle">Example HTTP output</span></p><p>There are also some helpful debugging functions for getting
+    representations of more complex PHP objects such as Arrays and class
+    instance objects:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="methodname">debugStringObj</code></p><p>Returns the string output.</p></li><li><p><code class="methodname">debugObj</code></p><p>Sends the string output through
+        <code class="function">debug()</code>.</p></li></ul></div><p>Both these functions generate debug strings representing the
+    objects. This is useful for PHP Arrays and PHP class instance
+    objects.</p><p>There is also a registered error handler that prints errors through
+    <code class="function">debug()</code>, including information such as stack trace,
+    function line numbers, and passed parameter values.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1463"></a>4.6.&nbsp;<code class="classname">XHTMLMPPage</code> objects</h2></div></div></div><p>These are abstractions of a page, and are the basis for all viewable
+    pages on the web interface &#8212; their definition is in
+    <code class="filename">Page.php</code>.</p><p>There are methods designed to be overridden for the processing stage
+    and the output stage.</p><p>The <code class="methodname">XHTMLMPPage::initialise()</code> method is
+    called by <code class="methodname">XHTMLMPPage::render()</code> for processing
+    before any page source is output. Its purpose is to usually set up the
+    page and provide a processing hook for processing HTTP GET/POST request
+    parameters, and initialise page instance variables so they can be easily
+    rendered in the output stage.</p><p><code class="methodname">XHTMLMPPage::initialise()</code> allows you to set
+    redirections from a page to another URL &#8212;
+    <code class="methodname">XHTMLMPPage::setRedirect()</code> takes a parameter
+    <em class="parameter"><code>$url</code></em> for this purpose. After calling
+    <code class="methodname">initialise()</code>, if a redirection has been set, then
+    the browser redirects via the HTTP header <code class="code">Location</code>.</p><p><code class="methodname">XHTMLMPPage::renderBody()</code> (called from
+    <code class="methodname">XHTMLMPPage::render()</code>) renders the page, and
+    outputs the XHTML element for the page content.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1506"></a>4.7.&nbsp;<code class="classname">AuthenticatedXHTMLMPPage</code> objects</h2></div></div></div><p>Authenticated XHTML Page inherited objects (class
+    <code class="classname">AuthenticatedXHTMLMPPage</code> in
+    <code class="filename">AuthenticatedPage.php</code>) are pages that only
+    authenticated users can view. Authentication is performed by an instance
+    of <code class="classname">Authenticator</code>, with the name of the
+    <code class="classname">Authenticator</code> class used to do this (which is
+    configured in <code class="filename">Constants.php</code>). For FantasyDemo
+    scripts, it is the <code class="classname">BWAuthenticator</code> class.</p><p><code class="classname">Authenticator</code> objects also provide a means of
+    storing key-value pairs as server-side session variables.</p><p>The absence of authentication token variables set in the session
+    indicates that the user is not logged in, which instructs the client
+    browser to redirect to the login page configured in
+    <code class="filename">Constants.php</code>. This login page must process requests
+    for logging in so that an authenticator object be created that
+    authenticates the user and their password and creates the necessary
+    authentication token variables.</p><p>There is also a timeout for an authenticated session; if no access
+    has been made for a configured amount of time (for details, see
+    <code class="filename">Constants.php</code>), then the session is invalidated, and
+    browsers that have timed out are redirected back to the configured login
+    page with an error message stating that their session has expired.</p><p>Authenticators are used by authenticated pages to check the presence
+    of a valid authentication token:</p><pre class="programlisting">if ($this-&gt;auth-&gt;doesAuthTokenExist()) 
+{
+   $authErr = $this-&gt;auth-&gt;authenticateSessionToken();
+   ...
+}</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1549"></a>4.8.&nbsp;<code class="classname">BWAuthenticator</code> objects</h2></div></div></div><p>This class provides an example of how to perform authentication with
+    the BigWorld system. It involves invoking the
+    <code class="function">bw_logon()</code> method with the user's name and
+    password:</p><pre class="programlisting">$logonResult = bw_logon( $username, $pass, 
+    /* allow_already_logged_on */ TRUE );</pre><p>The result returned by <code class="function">bw_logon()</code> is
+    <code class="code">TRUE</code> if it succeeded, or an error message with the reason why
+    the logon operation failed.</p><pre class="programlisting">$mailbox = bw_look_up_entity_by_name( "Account", $username );</pre><p>We then retrieve the mailbox by calling
+    <code class="function">bw_look_up_entity_by_name()</code>. We know it is of the
+    <code class="classname">Account</code> type because that is the initial entity
+    type when a user logs in (this is defined in <code class="filename">bw.xml</code>
+    option <span class="literal">dbMgr/entityType</span>).</p><pre class="programlisting">bw_set_keep_alive_seconds( $mailbox, AUTHENTICATOR_INACTIVITY_PERIOD );</pre><p>A keep-alive period is set on this mailbox after we have retrieved
+    it.</p><pre class="programlisting">function &amp;getMailbox()
+{
+   $mailboxSerialised =&amp; $this-&gt;getVariable(
+      BW_AUTHENTICATOR_TOKEN_KEY_MAILBOX );
+   ...
+   return bw_deserialise( $mailboxSerialised );
+}</pre><p>Authenticated pages can access this mailbox by their authentication
+    object:</p><pre class="programlisting">$playerMailbox = $this-&gt;auth-&gt;getMailbox();</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1595"></a>4.9.&nbsp;<code class="filename">Login.php</code></h2></div></div></div><p>This page is responsible for collecting the user name and password
+    to be authenticated against the BigWorld server. Thus, any user name and
+    password that is valid when logging in with the FantasyDemo client is also
+    valid here, so that the <span class="literal">bw.xml</span> configuration options
+    <span class="literal">dbMgr/createUnknown</span> and
+    <span class="literal">dbMgr/rememberUnknown</span> become relevant (for details on
+    these configuration options, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Server_Configuration_With_bw_xml" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_DBMgr_Configuration_Options" class="olink">DBMgr Configuration Options</a>).</p><p>Authentication is performed by making a request to the authenticator
+    object, for example:</p><pre class="programlisting">$this-&gt;auth-&gt;authenticateUserPass( $_REQUEST['username'], $_REQUEST['password'] );</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1623"></a>4.10.&nbsp;<code class="filename">Characters.php</code></h2></div></div></div><p>Once the user authenticates using a username and password, the
+    <code class="classname">Account</code> mailbox is queried for its list of
+    associated <code class="classname">Avatar</code> characters. This is done as
+    follows:</p><pre class="programlisting">$player = $this-&gt;auth-&gt;getMailbox();
+$res = bw_exec( $player, "webGetCharacterList" );</pre><p>This returns the list of character descriptors in
+    <code class="code">$res['characters']</code>. Each character descriptor is a dictionary
+    with keys <span class="literal">name</span> and <span class="literal">type</span> (of entity,
+    usually <code class="classname">Avatar</code>).</p><p>You can also create characters via this page:</p><pre class="programlisting">$res = bw_exec( $player, "webCreateCharacter", $_GET['new_character_name'] );</pre><p>You choose a character to progress. Once chosen, the session player
+    <code class="classname">Account</code> mailbox is replaced by a mailbox to the
+    player <code class="classname">Avatar</code> entity and the keep-alive period is
+    set on the newly made character mailbox.</p><pre class="programlisting">$res = bw_exec( $player, "webChooseCharacter", $_GET['character'], "Avatar" );
+$mailbox = $res['character'];
+bw_set_keep_alive_seconds( $mailbox, AUTHENTICATOR_INACTIVITY_PERIOD );</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1665"></a>4.11.&nbsp;<code class="filename">News.php</code></h2></div></div></div><p>This page is the entry point after a user has logged in and chosen a
+    character. Currently, this is a static PHP page, but one possible
+    extension to this is to have a <code class="classname">News</code> entity in the
+    world, which is queried by this page each time it loads up.</p><p>A hook for doing this is present in the
+    <code class="methodname">NewsPage::initialise()</code> method:</p><pre class="programlisting">// the articles could also come from an entity
+// e.g.
+// $newsagent = bw_lookup_entity_by_name( "NewsAgent", &#8220;NewsAgent" );
+// $res = bw_exec( $newsagent, "getNewsArticles" );
+// $this-&gt;articles = $res['articles'];</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1681"></a>4.12.&nbsp;<code class="filename">Character.php</code></h2></div></div></div><p>This page queries the player <code class="classname">Avatar</code> mailbox
+    in real-time via the <code class="methodname">Avatar.webGetPlayerInfo()</code>
+    web method for the current statistics of the player for display:</p><pre class="programlisting">$player = $this-&gt;auth-&gt;getMailbox();
+$res = bw_exec( $player, "webGetPlayerInfo" );</pre><p>For details on how this is implemented in BigWorld Python script,
+    see <a href="#xref_Retrieving_Real_Time_Player_Data" title="3.2.&nbsp;Retrieving real-time player data">Retrieving real-time player data</a>.</p><p>The position and the direction the player is currently facing is
+    also reported back through this page if the player is online.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1701"></a>4.13.&nbsp;<code class="filename">Inventory.php</code></h2></div></div></div><p>This page queries the player character mailbox via the
+    <code class="methodname">Avatar.webGetGoldAndInventory()</code> web method. This
+    method is defined in the entity definitions file for the
+    <code class="classname">Avatar</code> entity type, in
+    <code class="filename">fantasydemo/res/scripts/entity_defs/Avatar.def</code>:</p><pre class="programlisting">&lt;webGetGoldAndInventory&gt;
+   &lt;ReturnValues&gt;
+      &lt;!-- The Avatar's available gold pieces. --&gt;
+      &lt;goldPieces&gt;        GOLDPIECES  &lt;/goldPieces&gt;
+
+      &lt;!-- List of item descriptions as dictionaries with keys:
+           'serial': the serial number of the item
+           'itemType': the item type
+           'lockHandle' : lock handle associated with this item
+      --&gt;
+      &lt;inventoryItems&gt;    PYTHON      &lt;/inventoryItems&gt;
+
+      &lt;!-- List of dictionary with keys:
+          'serials': a list of serial numbers of locked items
+          'goldPieces': the gold pieces locked
+      --&gt;
+      &lt;lockedItems&gt;       PYTHON      &lt;/lockedItems&gt;
+    &lt;/ReturnValues&gt;
+&lt;/webGetGoldAndInventory&gt;</pre><p>The excerpt above shows that
+    that the return value to the PHP scripting layer is an Array with keys
+    <code class="varname">goldPieces</code>, <code class="varname">inventoryItems</code> and
+    <code class="varname">lockedItems</code>. We store them in the class instance
+    variable <code class="varname">$this-&gt;inventory</code>:</p><pre class="programlisting">$mailbox =&amp; $this-&gt;auth-&gt;getMailbox();
+...
+$this-&gt;inventory = bw_exec( $mailbox, "webGetInventoryAndGold" );</pre><p>
+    The gold pieces are accessible from this instance variable when displaying
+    its value to the user: </p><pre class="programlisting">echo(
+   xhtmlMpDiv(
+      'Gold: '. $this-&gt;inventory['goldPieces'],
+         'goldRow'
+    )
+);</pre><p> This page is also responsible for handling requests for
+    creating auctions from the player. The player nominates an item in their
+    inventory, based on its serial number, then sets the initial auction
+    parameters through the form and on submission, and creating the auction is
+    a case of invoking the
+    <code class="methodname">Avatar.webCreateAuction</code>:</p><pre class="programlisting">$res = bw_exec( $mailbox, 'webCreateAuction',
+   $itemSerialToAuction, $expiry, $bidPrice, $buyout );</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1743"></a>4.14.&nbsp;<code class="filename">PlayerAuctions.php</code></h2></div></div></div><p>This page enables players to see the state of auctions they have
+    created. The search criteria used is an instance of
+    <code class="classname">SellerCriteria</code> with the current player's database
+    ID. This is retrieved from
+    <code class="methodname">Avatar.webGetPlayerInfo()</code>:</p><pre class="programlisting">$res = bw_exec( $this-&gt;player, "webGetPlayerInfo" );
+$this-&gt;playerDBID = $res['databaseID'];</pre><p> The result is used
+    in constructing and applying the <code class="classname">SellerCriteria</code> for
+    getting search results to present to the user.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1761"></a>4.15.&nbsp;<code class="filename">SearchAuctions.php</code></h2></div></div></div><p>This page enables players to search for auctions by using the
+    singleton <code class="classname">AuctionHouse</code> entity, and allows for
+    bidding of searched auctions.</p><p>Search criteria objects are built up using various methods in
+    AuctionHouse, for example:</p><pre class="programlisting">$res = bw_exec( $this-&gt;auctionHouse,
+    "webCreateItemTypeCriteria", $itemTypesList );
+...
+$searchCriteria = $res['criteria'];
+...
+$res = bw_exec( $this-&gt;auctionHouse,
+    "webCreateBidRangeCriteria",
+    $searchMinBid, $searchMaxBid );
+$bidRangeCriteria = $res['criteria'];
+$res = bw_exec( $this-&gt;auctionHouse,
+    "webCombineAnd",
+    $searchCriteria, $bidRangeCriteria );
+$searchCriteria = $res['criteria'];</pre><p>The <code class="varname">$searchCriteria</code> object contains the combined
+    search criteria. It can be applied to a search via the
+    <code class="methodname">AuctionHouse.webSearchAuctions()</code> method. This
+    method returns a list of auction IDs that match the criteria.</p><p>To retrieve the auction descriptors (which contains information such
+    as the seller player, the current bid amount, the item type), we use the
+    <code class="methodname">AuctionHouse.webGetAuctionInfo()</code> which takes a
+    list of auction IDs and returns a list of auction descriptors.
+    </p><pre class="programlisting">$res = bw_exec( $this-&gt;auctionHouse, 'webSearchAuctions', $searchCriteria );
+...
+$res = bw_exec( $this-&gt;auctionHouse, 'webGetAuctionInfo', 
+    $res['searchedAuctions'] );
+...
+// store the auctions in an associative array by auction ID
+$this-&gt;searchResults = Array();
+foreach ($res['auctionInfo'] ) as $auctionInfo)
+{
+    $this-&gt;searchResults[$auctionInfo['auctionID'] = $auctionInfo;
+}
+...</pre></div></div></div></div></body></html>

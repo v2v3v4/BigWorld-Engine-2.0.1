@@ -1,0 +1,1188 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;16.&nbsp;Graphical User Interface (GUI)</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch15.html" title="Chapter&nbsp;15.&nbsp;Water">
+      <link rel="next" href="ch17.html" title="Chapter&nbsp;17.&nbsp;Fonts">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch16.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;16.&nbsp;Graphical User Interface (GUI)</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch15.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch17.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Graphical_User_Interface_GUI"></a>Chapter&nbsp;16.&nbsp;Graphical User Interface (GUI)
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch16.html#xref_C_GUI_Support">16.1. C++ GUI support</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch16.html#d0e5606">16.1.1. SimpleGUIComponent</a></span></dt>
+                        <dt><span class="section"><a href="ch16.html#d0e5617">16.1.2. GUIShader</a></span></dt>
+                        <dt><span class="section"><a href="ch16.html#d0e5637">16.1.3. SimpleGUI</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch16.html#xref_Python_GUI_Support">16.2. Python GUI support</a></span></dt>
+                  <dt><span class="section"><a href="ch16.html#d0e5689">16.3. XML</a></span></dt>
+                  <dt><span class="section"><a href="ch16.html#xref_XML_And_Python">16.4. XML and Python</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch16.html#d0e5729">16.4.1. <span class="literal">onLoad(self,section)</span></a></span></dt>
+                        <dt><span class="section"><a href="ch16.html#d0e5742">16.4.2. <span class="literal">onBound(self)</span></a></span></dt>
+                        <dt><span class="section"><a href="ch16.html#d0e5762">16.4.3. <span class="literal">onSave(self,section)</span></a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch16.html#xref_Input_Events">16.5. Input events</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch16.html#d0e5890">16.5.1. Keyboard Events</a></span></dt>
+                        <dt><span class="section"><a href="ch16.html#d0e5941">16.5.2. Axis Events</a></span></dt>
+                        <dt><span class="section"><a href="ch16.html#d0e5979">16.5.3. Mouse Events</a></span></dt>
+                        <dt><span class="section"><a href="ch16.html#d0e6136">16.5.4. Drag-and-drop events</a></span></dt>
+                        <dt><span class="section"><a href="ch16.html#d0e6333">16.5.5. Component PyGUI</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch16.html#xref_Mouse_Cursor">16.6. Mouse cursor</a></span></dt>
+               </dl>
+            </div>
+            <p>The BigWorld GUI can be broken into standalone (menu and options
+                 interfaces) and in-game overlays.
+            </p>
+            <p>The in-game overlays require 3D integration, and thus have a separate
+                 design. The unique features of the in-game interface are support for:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Linking to in-game objects (specifically models' bounding
+                              boxes),
+                     </p>
+                  </li>
+                  <li>
+                     <p>Alpha blending, or superimposing over the scene,</p>
+                  </li>
+                  <li>
+                     <p>Special effects like scaling, rotation, colour change, fading
+                              in/out, and motion blur.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>The most important feature of the in-game interface is the ability to
+                 fade away when not in use. This allows the game designer to create a more
+                 immersive game world experience. Whilst a GUI is required to relate
+                 important information to the player, it should only do so when that
+                 information is required. At other times, the player should not be distracted
+                 by overlays, but immersed fully in the 3D world.
+            </p>
+            <p>Some examples of in-game interfaces would be:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Targeting</p>
+                  </li>
+                  <li>
+                     <p>Current item display</p>
+                  </li>
+                  <li>
+                     <p>Player health and damage</p>
+                  </li>
+                  <li>
+                     <p>Chat window</p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_C_GUI_Support"></a>16.1.&nbsp;C++ GUI support
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>There are two C++ base classes for GUI support:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>SimpleGUIComponent</p>
+                     </li>
+                     <li>
+                        <p>GUIShader</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>There is also one management class:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>SimpleGUI</p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5606"></a>16.1.1.&nbsp;SimpleGUIComponent
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The SimpleGUIComponent class is simply a textured rectangle. The
+                           derived class TextGUIComponent draws text, and the also derived class
+                           FrameGUIComponent draws a resizable frame using three bitmaps (corner,
+                           edge, background).
+                  </p>
+                  <p>SimpleGUIComponent has many properties, mostly accessed from
+                           Python and XML files. For more details, see <a href="ch16.html#xref_Python_GUI_Support" title="16.2.&nbsp;Python GUI support">Python GUI support</a>.
+                  </p>
+                  <p>Components are hierarchical only in that parents draw their
+                           children; children do not inherit their parents' transform.
+                           WindowGUIComponent is an exception to this rule &#8212; children are
+                           automatically clipped and translated by their parent. Note that this is
+                           a feature of WindowGUIComponent, not the GUI system in general.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5617"></a>16.1.2.&nbsp;GUIShader
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The GUIShader class alters the way that components are drawn, in
+                           an analogous form to vertex shaders (in fact, 99% of GUI shaders operate
+                           only on temporary variables instead of vertices, hardware TnL
+                           support).
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>ClipGUIShader clips GUIComponents to a proportion of its
+                                        original length, which is useful for making health bars.
+                           </p>
+                        </li>
+                        <li>
+                           <p>ColourGUIShader colours a component.</p>
+                        </li>
+                        <li>
+                           <p>AlphaGUIShader fades a component.</p>
+                        </li>
+                        <li>
+                           <p>MatrixGUIShader transforms a component.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Shaders are applied to all children &#8212; so use a MatrixGUIShader to
+                           implement windowing, and an AlphaGUIShader to fade in/out a whole tree
+                           of components.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5637"></a>16.1.3.&nbsp;SimpleGUI
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This is the GUI root, and it is ticked and drawn at every
+                           frame.
+                  </p>
+                  <p>Use SimpleGUI::addSimpleComponent() and
+                           SimpleGUI::removeSimpleComponent() to build your tree of GUI components.
+                           Note that you would normally never call these methods from C++, as they
+                           are mostly called by scripts.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Python_GUI_Support"></a>16.2.&nbsp;Python GUI support
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>You probably will create GUIs using Python and XML most of the time.
+                      There is no BigWorld GUI editor, thus all GUI is currently created using
+                      the Python console in game.
+               </p>
+               <p>The code below shows an example:</p><pre class="programlisting">import GUI
+ 
+#create a simple GUI component
+s=GUI.Simple( "maps/guis/stats_bar.dds" )
+
+#width/height initially in pixels. can use widthRelative/heightRelative
+#to designate the component uses clip coordinates ( -1 .. +1 ) instead.
+s.width = 64
+s.height = 16
+
+#colour attribute is ( r,g,b,a )
+s.colour = ( 255, 128, 0, 255 )
+
+#the materialFX is simply the blend mode. can be "BLEND","SOLID","ADD"... 
+s.materialFX = "BLEND"
+
+#the position is always in clip coordinates ( -1 .. +1 )
+s.position = ( 0, 0.85, 0.5 )
+
+#the anchors determine what the position means with respect to the width 
+#and height. in this example, the position of (0,0.85,0.5) and anchors
+#"TOP,CENTER" means that the top centre of the component will rest at 
+#the given position.
+#The component will hang down from y=0.85, and will be centred on x=0.0
+s.verticalAnchor = "TOP"
+s.horizontalAnchor = "CENTER"
+ 
+#create a clipper for the health amount. clip shaders are used to
+#implement stats bars. the constructor parameter "RIGHT" means the 
+#shader will clip the component from the right hand side.
+c=GUI.ClipShader( "RIGHT" )
+
+#all shaders animate their values. the speed indicates how long the
+#internal parameter will change from the old value to the new. This speed
+#indicates the health bar will always take 1/2 a second to change.
+c.speed = 0.5
+
+#the value is what the game normally changes if player's health changes.
+c.value = 1.0
+
+#this line adds the shader. Note that you can call your shader any name
+#you like. Internally, the simple GUI component sees you are trying to 
+#add a GuiShader to it, under the name of clipper.
+#Internally it will call SimpleGUIComponent::addShader()
+s.clipper = c
+ 
+#create a colourer for the health amount
+c=GUI.ColourShader()
+
+#the start,middle and end simply represent colours to blend to when the
+# value parameter is 1.0, 0.5 and 0.0 respectively.
+c.start=(255,0,0,192)
+c.middle=(255,255,0,192)
+c.end=(0,255,0,192)
+c.speed=0.5
+c.value=1.0
+s.colourer=c
+ 
+#and make the health bar be drawn
+GUI.addRoot( s )</pre><p><span class="citetitle">Example of GUI creation</span></p>
+               <p>You can then customize the new health bar simply by setting the
+                      appropriate values in the shaders:
+               </p><pre class="programlisting"># player's health went down to 80%
+s.clipper.value = s.colourer.value = 0.8</pre><p>Finally, you can associate a script with the GUI component, in order
+                      to handle input and I/O events, and to build high-level functionality onto
+                      it. Associate a script object with the component using the script
+                      attribute:
+               </p><pre class="programlisting">s.script = PyGUI.Button( s )</pre><p>For more details about GUI scripts, see <a href="ch16.html#xref_XML_And_Python" title="16.4.&nbsp;XML and Python">XML and Python</a>, and <a href="ch16.html#xref_Input_Events" title="16.5.&nbsp;Input events">Input events</a>.
+                      For more details on attributes, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>'s entry <em class="emphasis">Main Page
+                         <span class="symbol">&#8594;</span> Client <span class="symbol">&#8594;</span> GUI <span class="symbol">&#8594;</span>
+                         Classes <span class="symbol">&#8594;</span>
+                         <span class="literal">SimpleGUIComponent</span></em>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e5689"></a>16.3.&nbsp;XML
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>GUI can also be represented as XML files. They can be saved in the
+                      folder <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/guis</span> once
+                      constructed, for example, using the method described above.
+               </p>
+               <p>The advantage of the Python interface is that once you have created
+                      the GUI, simply call:
+               </p><pre class="programlisting">s.save( "guis/health_bar.gui" )</pre><p>An XML file will be created encapsulating the GUI component, its
+                      shaders, and all of its children. Once you have done this, write:
+               </p><pre class="programlisting">GUI.delRoot( s )
+s = None
+s = GUI.load( "guis/health_bar.gui" )
+GUI.addRoot( s )</pre><p>After that, you will have exactly the same component, with all its
+                      shaders and children set up.
+               </p>
+               <p>Advanced users will find creating XML by hand the quickest way to
+                      create your GUI. Alternatively, a GUI editor can be entirely created in
+                      Python.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_XML_And_Python"></a>16.4.&nbsp;XML and Python
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>When you have a GUI component with a script saved in XML, your
+                      Python script must implement the following methods (at the very least to
+                      stub them out):
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><span class="literal">def onLoad( self, section )</span></p>
+                     </li>
+                     <li>
+                        <p><span class="literal">def onBound( self )</span></p>
+                     </li>
+                     <li>
+                        <p><span class="literal">def onSave( self, section )</span></p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5729"></a>16.4.1.&nbsp;<span class="literal">onLoad(self,section)</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The <span class="literal">onLoad</span> method is called just after the C++
+                           load method has been called, the standard member variables have been
+                           setup, and the associated script has already been constructed.
+                  </p>
+                  <p>The data section that the GUI component is being loaded from is
+                           passed into the method. This allows the definition of custom attributes,
+                           especially for loading custom data into the script object.
+                  </p>
+                  <p>Note that the method is called before any children components or
+                           shaders have been loaded.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5742"></a>16.4.2.&nbsp;<span class="literal">onBound(self)</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The <span class="literal">onBound</span> method is called after the load is
+                           complete.
+                  </p>
+                  <p>The main difference between this method and
+                           <span class="literal">onLoad</span> is that by the time <span class="literal">onBound</span>
+                           is called, the whole GUI component tree has been created. Thus in the
+                           <span class="literal">onBound</span> method you can write custom script handling
+                           to manipulate child components. For example, you could invoke your own
+                           custom Layout Manager in this method.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5762"></a>16.4.3.&nbsp;<span class="literal">onSave(self,section)</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The <span class="literal">onSave</span> method is called just after the C++
+                           save method has saved all standard GUI component members, but before the
+                           shaders and children are saved.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Input_Events"></a>16.5.&nbsp;Input events
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p><span class="literal">SimpleGUI</span> offers support for keyboard, joystick,
+                      and mouse input. To capture events, a component needs to have its property
+                      focus set to true, and an associated Python script attached.
+               </p>
+               <p>When loading a component from a GUI file, the attribute of a
+                      <span class="literal">SimpleGUIComponent</span> is automatically set if the XML
+                      declares a script field. The value of the field is used to instantiate the
+                      script object (it must be a callable receiving one parameter &#8212; the
+                      <span class="literal">SimpleGUIComponent</span> being created &#8212; , and returning a
+                      Python object). The Python object returned will be the one assigned as the
+                      script object for the newly created component.
+               </p>
+               <p>The script attribute can also be set manually for an existing
+                      component, like in the example below:
+               </p><pre class="programlisting"># instantiate a new PyGUI Button class, and make it the component's 
+# script attribute. note most scripts are passed the GUI component 
+# in their constructor so they can perform operations on them.
+s.script = PyGUI.Button( s )</pre><p>There are separate focus properties for each category of input
+                      events, as described below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">focus</span></em></p>
+                        <p><em class="emphasis">Associated with:</em> Keyboard
+                                   events (including character events), joystick (axis) events, and
+                                   global mouse button events.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">mouseButtonFocus</span></em></p>
+                        <p><em class="emphasis">Associated with:</em> Mouse button
+                                   events that occur while the mouse position is contained within the
+                                   region of the component.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">crossFocus</span></em></p>
+                        <p><em class="emphasis">Associated with:</em> Mouse
+                                   <em class="emphasis">enter</em> events, and mouse
+                                   <em class="emphasis">leave</em> events.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">moveFocus</span></em></p>
+                        <p><em class="emphasis">Associated with:</em> Mouse
+                                   <em class="emphasis">move</em> events.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">dragFocus</span></em></p>
+                        <p><em class="emphasis">Associated with:</em> Drag
+                                   events.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">dropFocus</span></em></p>
+                        <p><em class="emphasis">Associated with:</em> Drop
+                                   events.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>To make a component start receiving input events, you must set the
+                      appropriate property to True, and to have it no longer receiving events
+                      set it to False, as illustrated below:
+               </p><pre class="programlisting"># start receiving key/axis events
+c.focus = True
+
+# stop receiving mouse enter/leave events
+c.crossFocus = False</pre><p>When a component has a script and it has focus enabled, the script
+                      will start capturing input events.
+               </p>
+               <p>The script must define the appropriate methods to handle the events.
+                      The example below illustrated a script defining the methods to handle
+                      keyboard and joystick (axis) events:
+               </p><pre class="programlisting">class Button:
+   def handleKeyEvent( self, event ):
+      # do whatever, and return 1 if 
+      # this key event was consumed
+
+   def handleAxisEvent( self, event ):
+      # do whatever, and return 1 
+      # if this axis event was consumed</pre><p>The following sub-sections describe the events supported by
+                      <span class="literal">SimpleGUI</span>. For more details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>'s entry <em class="emphasis">Main Page
+                         <span class="symbol">&#8594;</span> Client <span class="symbol">&#8594;</span> GUI <span class="symbol">&#8594;</span>
+                         Classes <span class="symbol">&#8594;</span>
+                         <span class="literal">SimpleGUIComponent</span></em>.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5890"></a>16.5.1.&nbsp;Keyboard Events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Keyboard events are related to input from keyboard, mouse, and
+                           joystick buttons. They are reported to script objects through the
+                           <span class="literal">handleKeyEvent</span> method:
+                  </p><pre class="programlisting">def handleKeyEvent( self, event )</pre><p>The parameters are described below:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">event</span></em></p>
+                           <p><span class="literal">PyKeyEvent</span> containing information about
+                                        this event.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>A return value of <span class="literal">True</span> means that the event has
+                           been consumed, thus effectively preventing it from being propagated to
+                           other components or game scripts. A return value of
+                           <span class="literal">False</span> allows further propagation.
+                  </p>
+                  <p>To receive key events, a component must have the property
+                           <span class="literal">focus</span> set to True.
+                  </p>
+                  <p>Note that mouse button events reported through the method
+                           <span class="literal">handleKeyEvent</span> differ from those reported through
+                           <span class="literal">handleMouseButtonEvent</span> in that the mouse cursor does
+                           not have to be inside the area defined by a component for that component
+                           to capture the event. The only requirements for the capture are to have
+                           the property <span class="literal">focus</span> set to True, and not having
+                           another component consuming the event earlier in the focus list.
+                  </p>
+                  <p>Character events are attached to key events. Check the
+                           <span class="literal">PyKeyEvent.character</span> parameter, which will be a
+                           string containing the fully translated character. It will otherwise it
+                           will be None. Keep in mind that due to more complex input methods (e.g.
+                           dead-keys) the length of the character string can be greater than
+                           1.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5941"></a>16.5.2.&nbsp;Axis Events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Axis events are related to joystick axis input. They are reported
+                           to script objects through the <span class="literal">handleAxisEvent</span>
+                           method:
+                  </p><pre class="programlisting">def handleAxisEvent( self, axis, value, dTime )</pre><p>The parameters are described below:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">event</span></em></p>
+                           <p><code class="code">PyAxisEvent</code> containing information about this
+                                        event.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>A return value of <span class="literal">True</span> means that the event has
+                           been consumed, effectively preventing it to be propagated to other
+                           components or game scripts. A return value of <span class="literal">False</span>
+                           allows further propagation.
+                  </p>
+                  <p>To receive axis events, a component must have the property
+                           <span class="literal">focus</span> set to <span class="literal">True</span>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5979"></a>16.5.3.&nbsp;Mouse Events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Mouse events can be grouped into three categories:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Button events</p>
+                        </li>
+                        <li>
+                           <p>Cross events</p>
+                        </li>
+                        <li>
+                           <p>Move events.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Mouse events are propagated from the top-most component under the
+                           mouse cursor down to the bottom component until it is handled by a
+                           component (by returning True in one of its event handling
+                           methods).
+                  </p>
+                  <p>The following sub-sections describe how to handle input from each
+                           category of mouse event.
+                  </p>
+                  <p>Note that mouse events are only generated when the object
+                           MouseCursor is active. For more details, see <a href="ch16.html#xref_Mouse_Cursor" title="16.6.&nbsp;Mouse cursor">Mouse cursor</a>.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e6002"></a>16.5.3.1.&nbsp;Button events
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Button events are related to mouse buttons input. They are
+                                reported to the script objects through the methods
+                                handleMouseButtonEvent and handleMouseClickEvent methods.
+                     </p>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="d0e6007"></a>16.5.3.1.1.&nbsp;<span class="literal">handleMouseButtonEvent</span></h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>This method is called by SimpleGUI on the top most component
+                                     under the mouse that has <code class="code">mouseButtonFocus</code> set to
+                                     True:
+                        </p><pre class="programlisting">def handleMouseButtonEvent( self, comp, event )</pre><p>The parameters are described below:</p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">comp</span></em></p>
+                                 <p>Component over which the button was pressed or
+                                                  released.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">event</span></em></p>
+                                 <p>PyKeyEvent containing information about this event.</p>
+                              </li>
+                           </ul>
+                        </div>
+                        <p>A return value of True means that the event has been consumed,
+                                     effectively preventing it to be propagated to other components or
+                                     game scripts. A return value of False allows further
+                                     propagation.
+                        </p>
+                        <p>To receive mouse button events, a component must have the
+                                     property mouseButtonFocus set to True.
+                        </p>
+                     </div>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="d0e6039"></a>16.5.3.1.2.&nbsp;<span class="literal">handleMouseClickEvent</span></h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>This method is called by SimpleGUI when the left mouse button
+                                     was pressed and released over the component.
+                        </p><pre class="programlisting">def handleMouseClickEvent( self, comp, pos )</pre><p>The parameters are described below:</p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">comp</span></em></p>
+                                 <p>Component over which the button was pressed.</p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">pos</span></em></p>
+                                 <p>Position of the mouse on the instant of the mouse button
+                                                  click.
+                                 </p>
+                                 <p>Value is a 2-tuple of floats in clip-space, ranging from
+                                                  -1.0 (leftmost in x-axis, top in y-axis) to 1.0 (rightmost in
+                                                  x-axis, bottom in y-axis).
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                        <p>A return value of True means that the event has been consumed,
+                                     effectively preventing it to be propagated to other components or
+                                     game scripts. A return value of False allows further
+                                     propagation.
+                        </p>
+                        <p>To receive mouse click events, a component must have the
+                                     property focus set to True.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e6070"></a>16.5.3.2.&nbsp;Cross events
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Cross events are related to the mouse pointer entering or
+                                leaving the region defined by the component in the screen. They are
+                                reported to the script objects through the methods
+                                handleMouseEnterEvent and handleMouseLeaveEvent.
+                     </p>
+                     <p>The signature for handleMouseEnterEvent is described
+                                below:
+                     </p><pre class="programlisting">def handleMouseEnterEvent( self, comp, pos )</pre><p>The signature for handleMouseLeaveEvent is described
+                                below:
+                     </p><pre class="programlisting">def handleMouseLeaveEvent( self, comp, pos )</pre><p>The parameters for both methods are described below:</p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">comp</span></em></p>
+                              <p>Component that the mouse entered or left.</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">pos</span></em></p>
+                              <p>First position of the mouse when entering or leaving the
+                                             component.
+                              </p>
+                              <p>Value is a 2-tuple of floats in clip-space, ranging from
+                                             -1.0 (leftmost in x-axis, top in y-axis) to 1.0 (rightmost in
+                                             x-axis, bottom in y-axis).
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>A return value of True means that the event has been consumed,
+                                effectively preventing it to be propagated to other components or game
+                                scripts. A return value of False allows further propagation.
+                     </p>
+                     <p>To receive mouse enter and leave events, a component must have
+                                the properties focus and crossFocus set to True.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e6106"></a>16.5.3.3.&nbsp;Move events
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Move events are related to the mouse pointer hovering over the
+                                region defined by the component in the screen. They are reported to
+                                the script objects through the handleMouseEvent method:
+                     </p><pre class="programlisting">def handleMouseEvent( self, comp, event )</pre><p>The parameters are described below:</p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">comp</span></em></p>
+                              <p>Component over which the mouse cursor hovered.</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">event</span></em></p>
+                              <p><code class="code">PyMouseEvent</code> containing information about this
+                                             event.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>A return value of True means that the event has been consumed,
+                                effectively preventing it to be propagated to other components or game
+                                scripts. A return value of False allows further propagation.
+                     </p>
+                     <p>To receive mouse move events, a component must have the property
+                                focus and moveFocus set to True.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6136"></a>16.5.4.&nbsp;Drag-and-drop events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>SimpleGUI offers support for drag-and-drop functionality.
+                           Drag-and-drop events can be grouped into two categories:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Drag events</p>
+                        </li>
+                        <li>
+                           <p>Drop events</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The following sub-sections describe how to handle input from each
+                           category of drag-and-drop event.
+                  </p>
+                  <p>Note that drag-and-drop events are only generated when the
+                           MouseCursor is active. For more details, see <a href="ch16.html#xref_Mouse_Cursor" title="16.6.&nbsp;Mouse cursor">Mouse cursor</a>.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e6154"></a>16.5.4.1.&nbsp;Drag events
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Drag events are related to a component being dragged by the
+                                user. They are always generated on the component being dragged and
+                                reported through the methods handleDragStartEvent and
+                                handleDragStopEvent.
+                     </p>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="d0e6159"></a>16.5.4.1.1.&nbsp;<span class="literal">handleDragStartEvent</span></h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>This method is called when the user is trying to drag the
+                                     component:
+                        </p><pre class="programlisting">def handleDragStartEvent( self, comp, pos )</pre><p>The parameters are described below:</p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">comp</span></em></p>
+                                 <p>Component that the user is trying to drag.</p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">pos</span></em></p>
+                                 <p>Position of the mouse on the instant of the event.</p>
+                                 <p>Value is a 2-tuple of floats in clip-space, ranging from
+                                                  -1.0 (leftmost in x-axis, top in y-axis) to 1.0 (rightmost in
+                                                  x-axis, bottom in y-axis).
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                        <p>A return value of True signals to the GUI manager that this
+                                     component is willing to be dragged, and consumes the event. A return
+                                     value of False prevents the component from being dragged, and allows
+                                     further propagation of the event.
+                        </p>
+                        <p>To receive this event, a component must have the property
+                                     dragFocus set to True.
+                        </p>
+                     </div>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="d0e6190"></a>16.5.4.1.2.&nbsp;<span class="literal">handleDragStopEvent</span></h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>This method is called when the user released the mouse left
+                                     button, and therefore wants to drop the component:
+                        </p><pre class="programlisting">def handleDragStopEvent( self, comp, pos )</pre><p>The parameters are described below:</p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">comp</span></em></p>
+                                 <p>Component being dragged.</p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">pos</span></em></p>
+                                 <p>Position of the mouse on the instant of the event.</p>
+                                 <p>Value is a 2-tuple of floats in clip-space, ranging from
+                                                  -1.0 (leftmost in x-axis, top in y-axis) to 1.0 (rightmost in
+                                                  x-axis, bottom in y-axis).
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                        <p>The return value from this method is always ignored, and the
+                                     originating mouse button event is allowed to propagate
+                                     further.
+                        </p>
+                        <p>To receive this event, a component must have the property
+                                     dragFocus set to True.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e6221"></a>16.5.4.2.&nbsp;Drop events
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Drop events are related to a component being dropped over
+                                another one. They are always generated on the recipient component and
+                                reported through the handleDragEnterEvent, handleDragEnterEvent and
+                                handleDropEvent methods.
+                     </p>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="d0e6226"></a>16.5.4.2.1.&nbsp;<span class="literal">handleDragEnterEvent</span></h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>This method is called when the user just dragged another
+                                     component over this one, but has not dropped it yet:
+                        </p><pre class="programlisting">def handleDragEnterEvent( self, comp, pos, dropped )</pre><p>The parameters are described below:</p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">comp</span></em></p>
+                                 <p>Component about to receive the drop.</p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">pos</span></em></p>
+                                 <p>Position of the mouse on the instant of the event.</p>
+                                 <p>Value is a 2-tuple of floats in clip-space, ranging from
+                                                  -1.0 (leftmost in x-axis, top in y-axis) to 1.0 (rightmost in
+                                                  x-axis, bottom in y-axis).
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">dragged</span></em></p>
+                                 <p>Component being dragged.</p>
+                              </li>
+                           </ul>
+                        </div>
+                        <p>The return value from this method is used to determine if the
+                                     recipient component is willing to accept the drop. This event is
+                                     always considered consumed when first triggered, and the originating
+                                     mouse move event is propagated no further.
+                        </p>
+                        <p>To receive this event, a component must have the property
+                                     dropFocus set to True. Arguments
+                        </p>
+                     </div>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="d0e6264"></a>16.5.4.2.2.&nbsp;<span class="literal">handleDragLeaveEvent</span></h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>This method is called when the dragged component is no longer
+                                     over this one:
+                        </p><pre class="programlisting">def handleDragLeaveEvent( self, comp, pos )</pre><p>The parameters are described below:</p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">comp</span></em></p>
+                                 <p>Component that was about to receive the drop.</p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">pos</span></em></p>
+                                 <p>Position of the mouse on the instant of the event.</p>
+                                 <p>Value is a 2-tuple of floats in clip-space, ranging from
+                                                  -1.0 (leftmost in x-axis, top in y-axis) to 1.0 (rightmost in
+                                                  x-axis, bottom in y-axis).
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                        <p>A return value of True means that the event has been consumed,
+                                     effectively preventing the originating mouse event to be propagated
+                                     to other components or game scripts. A return value of False allows
+                                     further propagation.
+                        </p>
+                        <p>To receive this event, a component must have the property
+                                     dropFocus set to True.
+                        </p>
+                     </div>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="d0e6295"></a>16.5.4.2.3.&nbsp;<span class="literal">handleDropEvent</span></h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>This method is called when the user has dropped a component
+                                     over this one:
+                        </p><pre class="programlisting">def handleDropEvent( self, comp, pos, dropped )</pre><p>The parameters are described below:</p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">comp</span></em></p>
+                                 <p>Component receiving the drop.</p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">pos</span></em></p>
+                                 <p>Position of the mouse on the instant of the event.</p>
+                                 <p>Value is a 2-tuple of floats in clip-space, ranging from
+                                                  -1.0 (leftmost in x-axis, top in y-axis) to 1.0 (rightmost in
+                                                  x-axis, bottom in y-axis).
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">dropped</span></em></p>
+                                 <p>Component receiving the drop.</p>
+                              </li>
+                           </ul>
+                        </div>
+                        <p>The return value from this method is always ignored, and the
+                                     originating mouse button event is allowed to propagate
+                                     further.
+                        </p>
+                        <p>To receive this event, a component must have the property
+                                     dropFocus set to True.
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6333"></a>16.5.5.&nbsp;Component PyGUI
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>You might find it useful to build your own Python module with
+                           custom GUI components. To do that, the best starting point is the module
+                           PyGUI.
+                  </p>
+                  <p>PyGUI is the informal Python module for basic GUI elements,
+                           created for the Citizen Zero project, and defined in
+                           <span class="literal">fantasydemo/res/scripts/client/Helpers/PyGUI</span>.
+                  </p>
+                  <p>Starting from the basic functionality offered by SimpleGUI native
+                           components, you can code your own GUI toolkit in Python. Below are some
+                           examples of widgets you can create:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Page control</p>
+                        </li>
+                        <li>
+                           <p>Drop-down List</p>
+                        </li>
+                        <li>
+                           <p>Edit field</p>
+                        </li>
+                        <li>
+                           <p>Multi-line text field</p>
+                        </li>
+                        <li>
+                           <p>Check box</p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Mouse_Cursor"></a>16.6.&nbsp;Mouse cursor
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>It is possible to control the behaviour and appearance of the mouse
+                      cursor from the game scripts. Mouse cursor-related functions and
+                      properties can be accessed though the MouseCursor object.
+               </p>
+               <p>The MouseCursor object is a singleton, and can be obtained using the
+                      method <code class="code">GUI.mcursor.</code></p>
+               <p>The properties published by it are described below:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">position</span></em> &#8212;
+                                   Read/write
+                        </p>
+                        <p>Mouse cursor position</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">shape</span></em> &#8212;
+                                   Read/write
+                        </p>
+                        <p>Mouse cursor shape</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">visible</span></em> &#8212;
+                                   Read/write
+                        </p>
+                        <p>Mouse cursor visibility status</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">active</span></em> &#8212;
+                                   Read-only
+                        </p>
+                        <p>Mouse activity status</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">clipped</span></em> &#8212;
+                                   Read/write
+                        </p>
+                        <p>When set to true, the mouse cursor will be clipped to the region
+                                   of the client window.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The MouseCursor is an instance of the abstract concept InputCursor.
+                      There can only be one active InputCursor at any given time.
+               </p>
+               <p>To activate the MouseCursor, use the method BigWorld.setCursor. To
+                      deactivate it, activate another input cursor, or pass None to
+                      BigWorld.setCursor.
+               </p>
+               <p>Mouse and drag-and-drop events are only propagated to GUI components
+                      while the MouseCursor is active.
+               </p>
+               <p>The code below illustrates how to use the MouseCursor:</p><pre class="programlisting"># access and modify the mouse cursor
+import GUI
+import BigWorld
+
+mc = GUI.mcursor()
+mc.shape = "arrow"
+mc.visible = True
+if not mc.active:
+   lastPosition = mc.position
+   mc.position = ( 0.0, 0.0 )
+   BigWorld.setCursor( mc )
+   # mc.active is now True</pre><p><span class="citetitle">Example of how to use <span class="literal">MouseCursor</span>
+                         object</span></p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch15.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch17.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;15.&nbsp;Water&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;17.&nbsp;Fonts</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

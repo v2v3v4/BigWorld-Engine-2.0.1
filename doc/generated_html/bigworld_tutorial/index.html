@@ -1,0 +1,182 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Tutorial</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Tutorial">
+      <link rel="next" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Overview">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/bigworld_tutorial/index.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Tutorial</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left">&nbsp;</td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch01.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="book" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h1 class="title"><a name="BigWorld_Tutorial"></a>Tutorial
+                     </h1>
+                  </div>
+                  <div>
+                     <p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p>
+                  </div>
+                  <div>
+                     <p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p>
+                  </div>
+                  <div>
+                     <div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+                           is restricted to authorised users. This document is protected by
+                           copyright laws of Australia, other countries and international treaties.
+                           Unauthorised use, reproduction or distribution of this document, or any
+                             portion of this document, may result in the imposition of civil and
+                             criminal penalties as provided by law.
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <hr>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="chapter"><a href="ch01.html">1. Overview</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch01.html#d0e35">1.1. Conventions</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch01.html#d0e38">1.1.1. Files and directories</a></span></dt>
+                              <dt><span class="section"><a href="ch01.html#d0e66">1.1.2. Linux development environment</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch01.html#d0e85">1.2. Provided files</a></span></dt>
+                        <dt><span class="section"><a href="ch01.html#d0e149">1.3. Debugging</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch02.html">2. A Basic Client-Only Game (<span class="literal">CLIENT_ONLY</span>)</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch02.html#d0e174">2.1. Creating a new project</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_Setting_Up_The_Client_Executable_Folder">2.2. Defining resource paths</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e237">2.3. Creating the resources directory</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e251">2.4. Creating our first entity</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch02.html#xref_entities_xml">2.4.1. <span class="literal">entities.xml</span></a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#xref_Defining_The_Avatar_Entity_Type">2.4.2. Defining the Avatar entity type</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#d0e411">2.4.3. Implementing the <span class="literal">Avatar</span> entity type</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch02.html#xref_The_Personality_Script">2.5. The personality script</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e568">2.6. XML configuration files</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_A_Simple_Space">2.7. A simple space</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e790">2.8. Running the client for the first time</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch03.html">3. A basic client-server game (<span class="literal">CLIENT_SERVER</span>)</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#xref_Windows_Linux_File_Sharing">3.1. Server Installation and Configuration</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e842">3.2. A <span class="literal">Space</span> entity.</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch03.html#d0e852">3.2.1. entities.xml</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#d0e866">3.2.2. Entity definition</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#d0e885">3.2.3. Base part</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#d0e904">3.2.4. Cell part</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch03.html#d0e923">3.3. Server-side personality scripts</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e981">3.4. The server-side <span class="literal">Avatar</span> scripts</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e1049">3.5. Connecting the client to the server</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e1122">3.6. Going 3<sup>rd</sup> person</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e1157">3.7. Server-side XML configuration</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_Starting_And_Connecting_To_The_Server">3.8. Starting and connecting to the server</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch03.html#d0e1242">3.8.1. Indie Edition</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#d0e1274">3.8.2. Commercial/Indie Source Edition</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#d0e1306">3.8.3. Starting a Server</a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch04.html">4. Implementing a chat system (<span class="literal">CHAT_CONSOLE</span>)</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#xref_Basic_GUI_Text_Console">4.1. GUI text console</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e1340">4.2. Modifications to the <span class="literal">Avatar</span> entity</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch05.html">5. EntityLoader (<span class="literal">ENTITY_LOADER</span>)</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e1460">5.1. Implementation</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch06.html">6. A Basic NPC Entity (<span class="literal">BASIC_NPC</span>)</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch06.html#d0e1529">6.1. Design</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e1563">6.2. Art</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch06.html#d0e1582">6.2.1. Exporting the model</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e1616">6.2.2. Configuring the model</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch06.html#d0e1677">6.3. Scripts</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch06.html#d0e1693">6.3.1. entities.xml</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e1713">6.3.2. Entity definition</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e1800">6.3.3. Base part</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e1828">6.3.4. Cell part</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e1863">6.3.5. Client part</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e1998">6.3.6. Editor script</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch06.html#d0e2010">6.4. Testing</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e2045">6.5. Possible improvements</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left">&nbsp;</td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch01.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">&nbsp;</td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;1.&nbsp;Overview</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

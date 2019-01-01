@@ -1,0 +1,175 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;5.&nbsp;EntityLoader (ENTITY_LOADER)</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Tutorial">
+      <link rel="up" href="index.html" title="Tutorial">
+      <link rel="prev" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Implementing a chat system (CHAT_CONSOLE)">
+      <link rel="next" href="ch06.html" title="Chapter&nbsp;6.&nbsp;A Basic NPC Entity (BASIC_NPC)">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;5.&nbsp;EntityLoader (<span class="literal">ENTITY_LOADER</span>)
+                  </th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="d0e1444"></a>Chapter&nbsp;5.&nbsp;EntityLoader (<span class="literal">ENTITY_LOADER</span>)
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch05.html#d0e1460">5.1. Implementation</a></span></dt>
+               </dl>
+            </div>
+            <p>Currently, the server loads the spaces/main space as the default space
+               on startup. However, it is only the CellApp which is loading the space, and
+               it is only loading the space geometry. In order to be able to place entities
+               in World Editor and have them appear on the server, we need to create a more
+               advanced space loading mechanism. To this end, we will make a helper class
+                 called EntityLoader which will be used by the Space entity. It will be the
+                 responsibility of this class to parse the space <code class="filename">.chunk</code> files and create entity instances for
+                 every entity encountered.
+            </p>
+            <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+               <h3 class="title">Note</h3>
+               <p>You may be wondering why the engine doesn't just create entities
+                      automatically. While it could, this would remove flexibility from the
+                      scripts. This way, the game specific scripts are able to tailor how and
+                      when entities are created.
+               </p>
+            </div>
+            <p>While at the end of this chapter it will appear to the end-user that
+                 nothing has changed, we will have laid the groundwork for the next chapter
+                 which covers creation of a editor placeable entity. Inspecting the BaseApp
+                 logs after running this server shows that it was unable to actually load the
+                 Greeter entity. This is added in the next chapter.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1460"></a>5.1.&nbsp;Implementation
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The EntityLoader class exists only on the base entity, and in this
+                      tutorial will be implemented in the same Python module file as the Space
+                      entity. The following operations are performed:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>The Space entity creates a new instance of the
+                                   <code class="classname">EntityLoader</code> class, and passes that instance
+                                   into the <code class="methodname">BigWorld.fetchEntitiesFromChunks</code>
+                                   function. This function instructs the BaseApp to parse all <code class="filename">.chunk</code> files in the given path, which is
+                                   done asynchronously in the background loading thread (in order to
+                                   avoid IO from blocking the main thread).
+                        </p>
+                     </li>
+                     <li>
+                        <p>Whenever a non client only <span class="literal">&lt;entity&gt;</span>
+                                   section is encountered within the <code class="filename">.chunk</code> files, the engine will call
+                                   <code class="methodname">EntityLoader.onSection</code> with the relevant
+                                   <span class="literal">&lt;DataSection&gt;</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The script uses the properties passed in to the onSection method
+                                   in order to create an entity instance using
+                                   <code class="methodname">BigWorld.createBaseAnywhere</code>. It passes the
+                                   <code class="classname">Space</code> entity's cell mailbox so that the new
+                                   entity knows which space to create itself in. Note that this paradigm
+                                   assumes that all entity scripts will accept
+                                   <code class="varname">createOnCell</code> as a property.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The engine notifies the <code class="classname">EntityLoader</code> when
+                                   chunks have finished being parsed via the
+                                   <code class="methodname">onFinish</code> callback.
+                        </p>
+                     </li>
+                  </ul>
+               </div><pre class="programlisting"># scripts/base/Space.py
+
+class Space( BigWorld.Base ):
+    ...
+
+    def onGetCell( self ):        
+        print "Space.onGetCell loading entities from '%s'" % self.spaceDir
+        BigWorld.fetchEntitiesFromChunks( self.spaceDir,
+            EntityLoader( self ) )
+    ...
+
+class EntityLoader( object ):
+    def __init__( self, spaceEntity ):
+        self.spaceEntity = spaceEntity
+
+    def onSection( self, entity, matrix ):
+        entityType = entity.readString( "type" )
+        properties = entity[ "properties" ]
+        pos = matrix.applyToOrigin()
+
+        # Create entity base
+        BigWorld.createBaseAnywhere( entityType,
+            properties,
+            createOnCell = self.spaceEntity.cell,
+            position = pos,
+            direction = (matrix.roll, matrix.pitch, matrix.yaw) )
+
+    def onFinish( self ):
+        print "Finished loading entities for space", self.spaceEntity.spaceDir
+</pre><p><span class="citetitle">Adjusted example
+                         <code class="filename">tutorial/res/scripts/base/Space.py</code></span></p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;4.&nbsp;Implementing a chat system (<span class="literal">CHAT_CONSOLE</span>)&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;6.&nbsp;A Basic NPC Entity (<span class="literal">BASIC_NPC</span>)
+                  </td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

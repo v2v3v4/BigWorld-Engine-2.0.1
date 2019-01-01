@@ -1,0 +1,82 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>How To Write a Bot Movement Controller</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_Control_Bot_Movement"></a>How To Write a Bot Movement Controller</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_What_Is_A_Movement_Controller">1. What is a Movement Controller?</a></span></dt><dt><span class="chapter"><a href="#d0e71">2. The <code class="classname">MovementFactory</code></a></span></dt><dd><dl><dt><span class="section"><a href="#d0e87">2.1. Constructor and global registration</a></span></dt><dt><span class="section"><a href="#xref_The_create_Method">2.2. The <code class="methodname">create()</code> method</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d0e159">3. The MovementController</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e188">3.1. The <code class="methodname">nextStep()</code> method</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d0e222">4. Useful Utility Classes</a></span></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_What_Is_A_Movement_Controller"></a>Chapter&nbsp;1.&nbsp;What is a Movement Controller?</h2></div></div></div><p>A <em class="emphasis">movement controller</em> is an object that
+    controls the movement of a bot.</p><p>More specifically, it must sub-class the
+    <code class="classname">MovementController</code> class defined in
+    <code class="filename">bigworld/src/server/tools/bots/movement_controller.<em class="replaceable"><code>[ch]</code></em>pp</code>,
+    and therefore implement the virtual method
+    <code class="methodname">nextStep()</code>, which supplies position and
+    orientation updates for that bot.</p><p>Additionally, you will need to implement a sub-class of
+    <code class="classname">MovementFactory</code> (defined in the same source files
+    as <code class="classname">MovementController</code>) to supply
+    <code class="classname">MovementController</code> objects to bots, either at bot
+    instantiation time, or on change of movement controller, via the virtual
+    method <code class="methodname">create()</code>. For details, see <a href="#xref_The_create_Method" title="2.2.&nbsp;The create() method">The <code class="methodname">create()</code> method</a>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>The Patrol movement controller is recommended as a reference
+      companion to this document.</p><p>It can be found in
+      <code class="filename">src/server/tools/bots/patrol_graph.<em class="replaceable"><code>[ch]</code></em>pp</code>.</p><p>This file also contains useful classes other than the movement
+      controller and factory referenced in this document.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e71"></a>Chapter&nbsp;2.&nbsp;The <code class="classname">MovementFactory</code></h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e87">2.1. Constructor and global registration</a></span></dt><dt><span class="section"><a href="#xref_The_create_Method">2.2. The <code class="methodname">create()</code> method</a></span></dt></dl></div><p>We will deal with the implementation of the
+    <code class="classname">MovementFactory</code> first because you cannot test your
+    <code class="classname">MovementController</code> without a working one, and it
+    also illustrates the parameters that will be available to your
+    <code class="classname">MovementController</code> when it is instantiated.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e87"></a>2.1.&nbsp;Constructor and global registration</h2></div></div></div><p>The <code class="classname">MovementFactory</code> need not be declared in
+      your <code class="classname">MovementController</code>'s header file, as it will
+      never be instantiated directly. Instead, you will declare a single
+      static instance of the <code class="classname">MovementFactory</code> following
+      its definition, whose constructor globally registers it as the factory
+      for that controller type.</p><p>For example, in
+      <code class="filename">src/server/tools/bots/patrol_graph.cpp</code>:</p><pre class="programlisting">/* Source abbreviated for illustrative purposes */
+namespace
+{
+    class PatrolFactory : public MovementFactory
+    {
+    public:
+        PatrolFactory() : MovementFactory( "Patrol" ) 
+        {
+            /* any required init, usually unnecessary */
+        }
+
+        MovementController *create( const std::string &amp; data, float &amp; speed, Vector3 &amp; position ) 
+        { 
+            /* parse data string and create concrete subclass of MovementController */
+        }
+    };
+
+    PatrolFactory s_patrolFactory;
+}</pre><p>The constructor for <span class="literal">PatrolFactory</span> calls the
+      constructor of <span class="literal">MovementFactory</span> to globally register
+      the object as the factory for generating
+      <span class="literal">MovementController</span> objects of type
+      <span class="literal">Patrol</span>.</p><p>After the class definition, we declare a single instance of the
+      factory class, which will associate itself with the name
+      <span class="literal">Patrol</span> from that point on. It is useful to declare
+      the <span class="literal">MovementFactory</span> class in an anonymous namespace
+      (or declare it static) to avoid polluting the top-level namespace with
+      the name of the declared instance.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_The_create_Method"></a>2.2.&nbsp;The <code class="methodname">create()</code> method</h2></div></div></div><p>The first parameter passed to this method (<span class="literal">const
+      std::string &amp; data</span>) is the parameter passed to the
+      <span class="literal">setDefaultControllerData</span> and
+      <span class="literal">updateMovement</span> watchers when controlling bots. The
+      <code class="methodname">create()</code> method needs to parse this string, and
+      then use the parsed data to create an instance of the movement
+      controller.</p><p>Additionally, the method receives the speed and position of the
+      bot, which is usually passed to the constructor of the movement
+      controller.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>For more details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Stress_Testing_With_Bots" class="olink"><i>Stress Testing with Bots</i></a>.</p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e159"></a>Chapter&nbsp;3.&nbsp;The MovementController</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e188">3.1. The <code class="methodname">nextStep()</code> method</a></span></dt></dl></div><p>The movement controller needs to maintain a set of state variables
+    that are used to control the bot's movements.</p><p>For example, the <code class="classname">GraphTraverser</code> movement
+    controller in
+    <code class="filename">src/server/tools/bots/patrol_graph.<em class="replaceable"><code>[ch]</code></em>pp</code>
+    keeps track of the following information:</p><div class="itemizedlist"><ul type="disc"><li><p>A graph that the bot is traversing.</p></li><li><p>The node towards which the bot is heading.</p></li><li><p>A position near that node toward which it is actually
+        heading.</p></li><li><p>A timer for spending time at a given node.</p></li></ul></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e188"></a>3.1.&nbsp;The <code class="methodname">nextStep()</code> method</h2></div></div></div><p>The most important part of the movement controller is the
+      <code class="methodname">nextStep()</code> method:</p><pre class="programlisting">bool nextStep( float &amp; speed, float dTime, Vector3 &amp; pos, Direction3D &amp; dir )</pre><p>The <code class="varname">dTime</code> parameter is the time elapsed since
+      the last call to <code class="methodname">nextStep()</code>.</p><p>Aside from updating any state variables as necessary, the general
+      function of this method is to establish some unit vector the bot is
+      moving down, and to update <code class="varname">pos</code> and
+      <code class="varname">dir</code> appropriately, according to the formula
+      below:</p><div class="blockquote"><blockquote class="blockquote"><p>pos += unitvec * (speed * dTime);</p><p>dir.yaw = unitvec.yaw()</p></blockquote></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e222"></a>Chapter&nbsp;4.&nbsp;Useful Utility Classes</h2></div></div></div><p>Reusing the graph classes defined in
+    <code class="filename">bigworld/src/server/tools/bots/patrol_graph.<em class="replaceable"><code>[ch]</code></em>pp</code>
+    may considerably speed your controller implementation.</p><p>Among other things, it provides useful methods to randomly select
+    nodes to travel to, and also to generate random positions within a node
+    according to XML-defined graphs. For more details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Stress_Testing_With_Bots" class="olink"><i>Stress Testing with Bots</i></a> section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Controlling_Movement" class="olink">Controlling Movement</a>.</p></div></div></div></body></html>

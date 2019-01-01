@@ -1,0 +1,185 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;23.&nbsp;.mvl</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch22.html" title="Chapter&nbsp;22.&nbsp;modules.xml">
+      <link rel="next" href="ch24.html" title="Chapter&nbsp;24.&nbsp;navgen_settings.xml">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch23.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;23.&nbsp;<span class="literal">.mvl</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch22.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch24.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_light_mvl"></a>Chapter&nbsp;23.&nbsp;<span class="literal">.mvl</span></h2>
+                  </div>
+               </div>
+            </div>
+            <p>MVL files are specific to ModelEditor. They are only used to view
+               models under different lighting conditions. You can create, load, save, and
+               configure them as required, but they are only used in ModelEditor.
+                 WorldEditor uses XML files to describe lights.
+            </p>
+            <p>Mentioned in document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html" class="olink"><i>ModelEditor</i></a>
+                 <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html#xref_me_Panel_Summary" class="olink">Panel summary</a> <span class="symbol">&#8594;</span>
+                 <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html#xref_me_Material_Settings_Panel" class="olink">Materials Settings panel</a>.
+            </p>
+            <p>The grammar for the MVL light configuration files is described
+                 below:
+            </p><pre class="programlisting">&lt;root&gt;
+  &lt;Lights&gt;
+    +&lt;Light&gt;
+       ?&lt;Type&gt;     [Ambient|Directional|Omni|Spot|Empty] &lt;/Type&gt;
+       ?&lt;Color&gt;    <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>                     &lt;/Color&gt;
+       ?&lt;Enabled&gt;  [true|false]                          &lt;/Enabled&gt;
+
+        &lt;! If Type != Ambient &gt;
+        &lt;Location&gt; <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>                     &lt;/Location&gt;
+
+       &lt;! If Type = Directional or Type = Spot &gt;
+       ?&lt;Orientation&gt; <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> &lt;/Orientation&gt;
+       
+        &lt;! If Type = Omni or Type = Empty &gt;
+       ?&lt;Full_Radius&gt;    <em class="replaceable"><code>float</code></em>  &lt;/Full_Radius&gt;
+       ?&lt;Falloff_Radius&gt; <em class="replaceable"><code>float</code></em>  &lt;/Falloff_Radius&gt;
+
+        &lt;! If Type = Spot &gt;
+       ?&lt;Cone_Size&gt; <em class="replaceable"><code>float</code></em> &lt;/ConeSize&gt;
+
+     &lt;/Light&gt;
+  &lt;/Lights&gt;
+&lt;/root&gt;</pre><p><span class="citetitle">Grammar of MVL light configuration file</span></p>
+            <p>The list below describes the tags in the MVL light configuration
+                 file:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Color</span> (Available for
+                                 Ambient, Directional, Omni, and Spot)</em></p>
+                     <p>Colour of the light,</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Cone_Size</span> (Available for
+                                 Spot)</em></p>
+                     <p>Size of the cone of light generated by spot light.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Enabled</span> (Available for
+                                 Ambient, Directional, Omni, and Spot)</em></p>
+                     <p>Boolean specifying if light is activated.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Falloff_Radius</span> (Available
+                                 for Omni)</em></p>
+                     <p>Total area influenced by light.</p>
+                     <p>Must be greater than <span class="literal">Full_Radius</span>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Full_Radius</span> (Available
+                                 for Omni)</em></p>
+                     <p>Area over which the light will be at full intensity.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Light</span></em></p>
+                     <p>Section containing settings for a specific light.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Lights</span></em></p>
+                     <p>Section containing definition of one or more <em class="emphasis">Light</em> sections.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Location</span> (Available for
+                                 Directional, Omni, and Spot)</em></p>
+                     <p>Point of origin for the light.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Orientation</span> (Available
+                                 for Directional and Spot)</em></p>
+                     <p>Direction at which light will be projected.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Type</span></em></p>
+                     <p>Type of light being set. Possible values are:</p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis">Ambient &#8212; </em>Covers entire scene
+                                           with omnidirectional light.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Directional &#8212; </em>Allows you to
+                                           direct a wide area of radiance at a particular area or
+                                           object.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Omni &#8212; </em>Radiates from a
+                                           three-dimensional point, giving more control over the concentration
+                                           of light in certain areas.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Spot &#8212; </em>Produces a small,
+                                           concentrated, and directed source of light.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Empty &#8212; </em>Defaults to
+                                           Omni.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch22.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch24.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;22.&nbsp;<span class="literal">modules.xml</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;24.&nbsp;<span class="literal">navgen_settings.xml</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

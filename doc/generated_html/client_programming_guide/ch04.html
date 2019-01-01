@@ -1,0 +1,1232 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;4.&nbsp;Terrain</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Cameras">
+      <link rel="next" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Cloud shadows">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch04.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Terrain</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Terrain"></a>Chapter&nbsp;4.&nbsp;Terrain
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch04.html#d0e737">4.1. Advanced Terrain</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#d0e740">4.1.1. Overview</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e745">4.1.2. Key Features</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e780">4.1.3. Texturing</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e788">4.1.4. Lighting</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e794">4.1.5. Shadows</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e802">4.1.6. LOD</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e838">4.1.7. Memory footprint</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#xref_terrain2_section">4.1.8. <span class="literal">terrain2</span> resources</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#xref_Space_terrain_section">4.1.9. <span class="literal">terrain</span> section in
+                                       <span class="literal">space.settings</span></a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch04.html#d0e1702">4.2. Simple Terrain</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#d0e1705">4.2.1. Key features</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e1739">4.2.2. Overview</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e1747">4.2.3. Chunking</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e1752">4.2.4. Disk footprint</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e1825">4.2.5. Memory footprint</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e1832">4.2.6. Texture spacing</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch04.html#xref_TerrainSpecular">4.3. Terrain specular lighting</a></span></dt>
+               </dl>
+            </div>
+            <p>The terrain system employed by the BigWorld client integrates neatly
+                 with the chunking system. It allows a wide variety of terrains to be created
+                 in an artistic manner and managed efficiently. There are two different
+                 terrain renderers available that target different machine specifications.
+                 They are called Advanced Terrain and Simple Terrain.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e737"></a>4.1.&nbsp;Advanced Terrain
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e740"></a>4.1.1.&nbsp;Overview
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The advanced terrain engine uses a height map split up into blocks
+                           of 100 by 100 metres. Each block consists of height and texture
+                           information, normals, a hole map and LOD information.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e745"></a>4.1.2.&nbsp;Key Features
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Configurable height map resolution</p>
+                        </li>
+                        <li>
+                           <p>Unlimited number of texture levels with configurable blend
+                                        resolution and projection angles
+                           </p>
+                        </li>
+                        <li>
+                           <p>Configurable normal map resolution</p>
+                        </li>
+                        <li>
+                           <p>Configurable hole map resolution</p>
+                        </li>
+                        <li>
+                           <p>Per pixel lighting</p>
+                        </li>
+                        <li>
+                           <p>LOD System</p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p>Geo mip-mapping with geo-morphing</p>
+                                 </li>
+                                 <li>
+                                    <p>Normal map LOD</p>
+                                 </li>
+                                 <li>
+                                    <p>Texture LOD</p>
+                                 </li>
+                                 <li>
+                                    <p>Height map LOD</p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e780"></a>4.1.3.&nbsp;Texturing
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Texturing is done by blending multiple textures layers together,
+                           each texture layer has its own projection angle and blend values for
+                           blending with other texture layers. The resolution of the blend values
+                           is configurable per space and the layers themselves are stored per
+                           chunk. The textures are assumed to be <em class="emphasis">rgba</em> with the
+                           alpha channel used for the specular value.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e788"></a>4.1.4.&nbsp;Lighting
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The lighting of the advanced terrain is performed per pixel. A
+                           normal map is stored per block, which is used in the lighting
+                           calculations, this is combined with the blended texture to output the
+                           final colour. The terrain allows up to 8 diffuse and 6 specular lights
+                           per block. For details of how the specular lighting is calculated see
+                           <a href="ch04.html#xref_TerrainSpecular" title="4.3.&nbsp;Terrain specular lighting">Terrain specular lighting</a></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e794"></a>4.1.5.&nbsp;Shadows
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The terrain uses a <em class="emphasis">horizon shadow map</em> for
+                           shadowing, this map stores two angles (east-west) between which there is
+                           an unobstructed view of the sky from the terrain. In the terrain shader,
+                           these angles are checked against the sun angle and the sun light is only
+                           applied if the sun angle falls between the horizon angles.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e802"></a>4.1.6.&nbsp;LOD
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The purpose of the LOD system is to reduce the amount of cpu and
+                           gpu time spent rendering terrain and to reduce the memory footprint of
+                           the terrain. The terrain LOD system achieves this by reducing geometric
+                           and texture detail in the distance and loading/unloading high resolution
+                           resources as they are needed. The LODing is broken up by resource so
+                           that texture and geometric detail can be streamed separately. The LOD
+                           distances are configurable in the space.settings file, please see <a href="ch04.html#xref_Space_terrain_section" title="4.1.9.&nbsp;terrain section in space.settings"><span class="literal">terrain</span> section in
+                              <span class="literal">space.settings</span></a> for more information.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e809"></a>4.1.6.1.&nbsp;Geometry
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Geometry LOD is achieved by using <span class="literal">geo-mipmaps</span>
+                                and <span class="literal">geo-morphing</span>. <span class="literal">Geo-mipmaps</span>
+                                are generated from the high resolution normal map for the terrain
+                                block. Depending on the x/z distance from the camera a lower
+                                resolution version of the terrain block is displayed. To avoid popping
+                                when changing between the different resolutions of the height map,
+                                geo-morphing is used, this allows the engine to smoothly interpolate
+                                between two height map levels. Degenerate triangles are inserted
+                                between blocks of differing sizes to avoid sparkles.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e823"></a>4.1.6.2.&nbsp;Collision Geometry
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Collision geometry is streamed in using two distinct
+                                resolutions. The low resolution collisions are always available,
+                                whereas the higher resolution collisions are streamed in depending on
+                                their x-z distance from the camera.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e828"></a>4.1.6.3.&nbsp;Texture
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Texture LOD is performed by substituting the multi-layer
+                                blending with a single top-down image of the terrain block. The LOD
+                                image is smoothly blended in based on the x-z distance from the
+                                camera. The top-down image is generated in the World Editor.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e833"></a>4.1.6.4.&nbsp;Normal maps
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Normal map LOD is performed by using low-resolution and high
+                                resolution maps. The low resolution normal map is always available and
+                                the high resolution map is streamed in and blended based on the x-z
+                                distance from the camera. The normal maps are generated in the World
+                                Editor. The size of the LOD normal map is a 16th of the resolution of
+                                the normal map or 32x32 whichever value is larger.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e838"></a>4.1.7.&nbsp;Memory footprint
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Since the advanced terrain allows for a number of configuration
+                           options the memory footprint of the terrain depends on the options
+                           selected.
+                  </p>
+                  <p>In the Fantasydemo example provided, the terrain overhead is as
+                           follows (this information was captured using the resource counters in
+                           the Fantasydemo client, the graphics settings were set to high and the
+                           far plane was set to 1500 metres):
+                  </p>
+                  <p>(<em class="emphasis">this includes the textures used by the texture layers,
+                              which may also be used by other assets</em>)
+                  </p>
+                  <div class="altrow">
+                     <table border="0" width="50%">
+                        <colgroup>
+                           <col width="64%">
+                           <col width="36%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Component</th>
+                              <th>Size</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>Collision data</td>
+                              <td>42,453,517</td>
+                           </tr>
+                           <tr>
+                              <td>Vertex buffers</td>
+                              <td>6,169,008</td>
+                           </tr>
+                           <tr>
+                              <td>Index buffers</td>
+                              <td>536,352</td>
+                           </tr>
+                           <tr>
+                              <td>Texture layers</td>
+                              <td>57,541,905</td>
+                           </tr>
+                           <tr>
+                              <td>Shadow maps</td>
+                              <td>26,361,856</td>
+                           </tr>
+                           <tr>
+                              <td>LOD textures</td>
+                              <td>35,148,605</td>
+                           </tr>
+                           <tr>
+                              <td>Hole maps</td>
+                              <td>4,096</td>
+                           </tr>
+                           <tr>
+                              <td>Normal maps</td>
+                              <td>6,572,032</td>
+                           </tr>
+                           <tr>
+                              <td><em class="emphasis">Total</em></td>
+                              <td><em class="emphasis">174,787,371</em></td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <p> <span class="citetitle">Terrain memory usage</span></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_terrain2_section"></a>4.1.8.&nbsp;<span class="literal">terrain2</span> resources
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A <span class="literal">terrain2</span> section is contained in a chunk's
+                       <span class="literal">.cdata</span> file. It contains all the resources for the
+                       terrain in a chunk. The different types of terrain data are described in
+                       <span class="literal">BNF</span> format in the following chapter.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e930"></a>4.1.8.1.&nbsp;<span class="literal">heights</span> sections
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">heights</span> sections stores the height map for
+                            the terrain block. Multiple <span class="literal">heights</span> sections are stored
+                            in the block, one for each LOD level, each <span class="literal">heights</span>
+                            section stores data at half the resolution of the previous one. The
+                            <span class="literal">heights</span> sections are named as "
+                            <span class="literal">heights?</span> " where <span class="literal">?</span> is replaced by a
+                            number. The highest res height map is stored in a section named heights
+                            the second highest in a section called heights1 all the way down to a map
+                            that stores 2x2 heights. This way if the height map resolution is 128x128,
+                            7 height maps are stored in the file (heights, heights1, ...
+                            heights6)
+                     </p><pre class="programlisting">&lt;heightMap&gt; ::= &lt;header&gt;&lt;<em class="emphasis">heightData</em>&gt;
+&lt;header&gt; ::= &lt;<em class="emphasis">magic</em>&gt;&lt;<em class="emphasis">width</em>&gt;&lt;<em class="emphasis">height</em>&gt;&lt;<em class="emphasis">compression</em>&gt;&lt;<em class="emphasis">version</em>&gt;&lt;<em class="emphasis">minHeight</em>&gt;&lt;<em class="emphasis">maxHeight</em>&gt;&lt;<em class="emphasis">padding</em>&gt;</pre><div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;magic&gt;</span></em></p>
+                              <p>uint32 <span class="literal">0x00706d68</span> (string "hmp\0")
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;width&gt;</span></em></p>
+                              <p>uint32 containing the width of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;height&gt;</span></em></p>
+                              <p>uint32 containing the height of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;compression&gt;</span></em></p>
+                              <p>(unused) uint32 containing the compression type</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;version&gt;</span></em></p>
+                              <p>uint32 containing the version of the data, currently 4</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;minHeight&gt;</span></em></p>
+                              <p>float containing the minimum height of this block</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;maxHeight&gt;</span></em></p>
+                              <p>float containing the maximum height of this block</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;padding&gt;</span></em></p>
+                              <p>4 bytes of padding to make the header 16-byte aligned</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;heightData&gt;</span></em></p>
+                              <p>PNG compressed block of int32 storing the height in millimetres,
+                                         dimensions = width * height from the header
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1051"></a>4.1.8.2.&nbsp;<span class="literal">layer</span> sections
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">layer</span> sections store the texture layers for
+                            the terrain block. Multiple <span class="literal">layer</span> sections are stored
+                            in the terrain block. Each section describes one texture layer. The
+                            <span class="literal">layer</span> sections are named " <span class="literal">layer ?</span> "
+                            where <span class="literal">?</span> is replaced by a number greater than 1. I.e if
+                            the block has 3 layers, three layer sections will be stored ("layer 1",
+                            "layer 2", "layer 3")
+                     </p><pre class="programlisting">&lt;textureLayer&gt; ::= &lt;header&gt;&lt;textureName&gt;&lt;<em class="emphasis">blendData</em>&gt;
+&lt;header&gt; ::= &lt;<em class="emphasis">magic</em>&gt;&lt;<em class="emphasis">width</em>&gt;&lt;<em class="emphasis">height</em>&gt;&lt;<em class="emphasis">bpp</em>&gt;&lt;<em class="emphasis">uProjection</em>&gt;&lt;<em class="emphasis">vProjection</em>&gt;&lt;<em class="emphasis">version</em>&gt;&lt;<em class="emphasis">padding</em>&gt;
+&lt;textureName&gt; ::= &lt;<em class="emphasis">length</em>&gt;&lt;<em class="emphasis">string</em>&gt;</pre><div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;magic&gt;</span></em></p>
+                              <p>uint32 0x00646c62 (string bld/0")</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;width&gt;</span></em></p>
+                              <p>uint32 containing the width of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;height&gt;</span></em></p>
+                              <p>uint32 containing the height of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;bpp&gt;</span></em></p>
+                              <p>(unused) uint32 containing the size of the entries in the layer
+                                         data
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;uProjection&gt;</span></em></p>
+                              <p>Vector4 containing the projection of the u coordinate of the
+                                         texture layer
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;vProjection&gt;</span></em></p>
+                              <p>Vector4 containing the projection of the v coordinate of the
+                                         texture layer
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;version&gt;</span></em></p>
+                              <p>uint32 containing the version of the data, currently 2</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;padding&gt;</span></em></p>
+                              <p>12 bytes of padding to make the header 16-byte aligned</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;length&gt;</span></em></p>
+                              <p>the length of the texturename string</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;string&gt;</span></em></p>
+                              <p>the name of the texture used by this layer</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;blendData&gt;</span></em></p>
+                              <p>png compressed block of uint8 defining the strength of this
+                                         texture layer at each x/z position
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1186"></a>4.1.8.3.&nbsp;<span class="literal">normals</span> &amp; <span class="literal">lodNormals</span>
+                                     sections
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">normals</span> section stores the high resolution
+                            normal map for the terrain block. The <span class="literal">lodNormals</span>
+                            section stores the LOD normals for the height block, the LOD normals are
+                            generally 1/16th of the size of the normals.
+                     </p><pre class="programlisting">&lt;normals&gt; ::= &lt;header&gt;&lt;<em class="emphasis">data</em>&gt;
+&lt;header&gt; ::= &lt;<em class="emphasis">magic</em>&gt;&lt;<em class="emphasis">version</em>&gt;&lt;<em class="emphasis">padding</em>&gt;</pre><div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;magic&gt;</span></em></p>
+                              <p>uint32 0x006d726e (string "nrm/0")</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;version&gt;</span></em></p>
+                              <p>uint32 containing the version of the data, currently 1</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;padding&gt;</span></em></p>
+                              <p>8 bytes of padding to make the header 16-byte aligned</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;data&gt;</span></em></p>
+                              <p>png compressed block storing 2 signed bytes per entry for the x
+                                         and z components of the normal the y component is calculate in the
+                                         shader
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1245"></a>4.1.8.4.&nbsp;<span class="literal">holes</span> section
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">holes</span> section stores the holemap for the
+                            terrain block, this section is only stored when a terrain block has holes
+                            in it.
+                     </p><pre class="programlisting">&lt;holes&gt; ::= &lt;header&gt;&lt;<em class="emphasis">data</em>&gt;
+&lt;header&gt; ::= &lt;<em class="emphasis">magic</em>&gt;&lt;<em class="emphasis">width</em>&gt;&lt;<em class="emphasis">height</em>&gt;&lt;<em class="emphasis">version</em>&gt;</pre><div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;magic&gt;</span></em></p>
+                              <p>uint32 0x006c6f68 (string "hol/0")</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;width&gt;</span></em></p>
+                              <p>uint32 containing the width of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;height&gt;</span></em></p>
+                              <p>uint32 containing the height of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;version&gt;</span></em></p>
+                              <p>uint32 containing the version of the data, currently 1</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;data&gt;</span></em></p>
+                              <p>The hole data stored in a bit field of width * height, each row
+                                         in the data is rounded up to 1 byte. If a bit is set to 1 it denotes a
+                                         hole in the map.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1308"></a>4.1.8.5.&nbsp;<span class="literal">horizonShadows</span> section
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">horizonShadows</span> section stores the horizon
+                            shadows for the terrain block.
+                     </p><pre class="programlisting">&lt;shadows&gt; ::= &lt;header&gt;&lt;<em class="emphasis">data</em>&gt;
+&lt;header&gt; ::= &lt;<em class="emphasis">magic</em>&gt;&lt;<em class="emphasis">width</em>&gt;&lt;<em class="emphasis">height</em>&gt;&lt;<em class="emphasis">bpp</em>&gt;&lt;<em class="emphasis">version</em>&gt;&lt;<em class="emphasis">padding</em>&gt;</pre><div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;magic&gt;</span></em></p>
+                              <p>uint32 0x00646873 (string "shd/0")</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;width&gt;</span></em></p>
+                              <p>uint32 containing the width of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;height&gt;</span></em></p>
+                              <p>uint32 containing the height of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;bpp&gt;</span></em></p>
+                              <p>(unused)uint32 containing the bits per entry in the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;version&gt;</span></em></p>
+                              <p>uint32 containing the version of the data, currently 1</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;padding&gt;</span></em></p>
+                              <p>12 bytes of padding to make the header 16-byte aligned</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;data&gt;</span></em></p>
+                              <p>The shadow data, (uint16,uint16) * width * height, the horizon
+                                         shadow data stores two angles between which there is no occlusion from
+                                         any terrain or objects.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1391"></a>4.1.8.6.&nbsp;<span class="literal">lodTexture.dds</span> section
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">lodTexture.dds</span> section stores the LOD
+                            texture for the terrain block. The LOD texture is a low resolution
+                            snapshot of all the texture layers blended together. The texture is stored
+                            in the DXT5 format. For more information about the dds texture format
+                            please refer to the DirectX documentation.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1401"></a>4.1.8.7.&nbsp;<span class="literal">dominantTextures</span> section
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">dominantTextures</span> section stores the dominant
+                            texture map. The dominant texture map stores the texture with the highest
+                            blend for each x/z location in the terrain block.
+                     </p><pre class="programlisting">&lt;dominant&gt; ::=&lt;header&gt;&lt;<em class="emphasis">texNames</em>&gt;&lt;<em class="emphasis">data</em>&gt;
+&lt;header&gt; ::= &lt;<em class="emphasis">magic</em>&gt;&lt;<em class="emphasis">version</em>&gt;&lt;<em class="emphasis">numTextures</em>&gt;&lt;<em class="emphasis">texNameSize</em>&gt;&lt;<em class="emphasis">width</em>&gt;&lt;<em class="emphasis">height</em>&gt;&lt;<em class="emphasis">padding</em>&gt;</pre><div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;magic&gt;</span></em></p>
+                              <p>uint32 0x0074616d (string "mat/0")</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;version&gt;</span></em></p>
+                              <p>uint32 containing the version of the data, currently 1</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;numTextures&gt;</span></em></p>
+                              <p>uint32 containing the number of textures referenced by the
+                                         dominant texture map
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;texNameSize&gt;</span></em></p>
+                              <p>uint32 containing the size of the texture entries</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;width&gt;</span></em></p>
+                              <p>uint32 containing the width of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;height&gt;</span></em></p>
+                              <p>uint32 containing the height of the data</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;padding&gt;</span></em></p>
+                              <p>8 bytes of padding to make the header 16-byte aligned</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;texNames&gt;</span></em></p>
+                              <p><span class="literal">numTextures</span> entries of
+                                         <span class="literal">texNameSize</span> size containing the names of the
+                                         dominant textures referred to in this map. Texture names shorter than
+                                         <span class="literal">texNameSize</span> are padded with
+                                         <span class="literal">0</span></p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">&lt;data&gt;</span></em></p>
+                              <p>stored as a compressed bin section. byte array of width *
+                                         height, each entry is an index into the texture names which indexes
+                                         the dominant texture at the x/z location of the entry
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Space_terrain_section"></a>4.1.9.&nbsp;<span class="literal">terrain</span> section in
+                                    <span class="literal">space.settings</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The terrain section in the <span class="literal">space.settings</span> file
+                           contains the configuration options for the terrain. The values in the
+                           <span class="literal">lodInfo</span> and <span class="literal">server</span> sections can be
+                           modified, but the root level values should only be modified by the World
+                           Editor.
+                  </p><pre class="programlisting">    &lt;version&gt; 200 (int) &lt;/version&gt;
+    &lt;heightMapSize&gt; uint &lt;/heightMapSize&gt;
+    &lt;normalMapSize&gt; uint &lt;/normalMapSize&gt;
+    &lt;holeMapSize&gt; uint &lt;/holeMapSize&gt;
+    &lt;shadowMapSize&gt; uint &lt;/shadowMapSize&gt;
+    &lt;blendMapSize&gt; uint &lt;/blendMapSize&gt;
+    &lt;lodInfo&gt;
+      &lt;startBias&gt; float &lt;/startBias&gt;
+      &lt;endBias&gt; float &lt;/endBias&gt;
+      &lt;lodTextureStart&gt; float &lt;/lodTextureStart&gt;
+      &lt;lodTextureDistance&gt; float &lt;/lodTextureDistance&gt;
+      &lt;blendPreloadDistance&gt; float &lt;/blendPreloadDistance&gt;
+      &lt;lodNormalStart&gt; float &lt;/lodNormalStart&gt;
+      &lt;lodNormalDistance&gt; float &lt;/lodNormalDistance&gt;
+      &lt;normalPreloadDistance&gt; float &lt;/normalPreloadDistance&gt;
+      &lt;defaultHeightMapLod&gt; uint &lt;/defaultHeightMapLod&gt;
+      &lt;detailHeightMapDistance&gt; float &lt;/detailHeightMapDistance&gt;
+      &lt;lodDistances&gt;
+        +&lt;distance?&gt; float &lt;/distance?&gt;
+      &lt;/lodDistances&gt;
+      &lt;server&gt;
+        &lt;heightMapLod&gt; uint &lt;/heightMapLod&gt;
+      &lt;/server&gt;
+    &lt;/lodInfo&gt;    </pre><div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;version&gt;</span></em></p>
+                           <p>The version of the terrain, this value is
+                                        <span class="literal">200</span> for advanced terrain
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;heightMapSize&gt;</span></em></p>
+                           <p>The size of the height map per terrain block, this value is a
+                                        power of 2 between 4 and 256
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;normalMapSize&gt;</span></em></p>
+                           <p>The size of the normal map per terrain block, this value is a
+                                        power of 2 between 32 and 256
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;holeMapSize&gt;</span></em></p>
+                           <p>The size of the hole map per terrain block, this can be any
+                                        value up to 256
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;shadowMapSize&gt;</span></em></p>
+                           <p>The size of the shadow map per terrain block, this value is a
+                                        power of 2 between 32 and 256
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;blendMapSize&gt;</span></em></p>
+                           <p>The size of the blend maps per terrain block, this value is a
+                                        power of 2 between 32 and 256
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;lodInfo&gt;</span></em></p>
+                           <p>This section contains the configurations for the terrain LOD
+                                        system
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;startBias&gt;</span></em></p>
+                           <p>This value is the bias value for the start of geo-morphing,
+                                        this value defines where a LOD level starts fading out to the next
+                                        one. This value is a factor of the difference between two
+                                        lodDistances.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;endBias&gt;</span></em></p>
+                           <p>This value is the bias value for the end of geo-morphing, this
+                                        value defines where a LOD level has fully faded out to the next one.
+                                        This value is a factor of the difference between two
+                                        lodDistances.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;lodTextureStart&gt;</span></em></p>
+                           <p>This is the start distance for blending in the LOD texture, up
+                                        until this distance, the blended layers are used for rendering the
+                                        terrain.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;lodTextureDistance&gt;</span></em></p>
+                           <p>This is the distance the lodtexture is blended in over, this
+                                        value relative to <span class="literal">lodTextureStart.</span></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;blendPreloadDistance&gt;</span></em></p>
+                           <p>This is the distance at which the blends are preloaded, this
+                                        value is relative to lodTextureDistance and lodTextureStart
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;lodNormalStart&gt;</span></em></p>
+                           <p>This is the start distance for blending in the LOD
+                                        normals
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;lodNormalDistance&gt;</span></em></p>
+                           <p>This is the distance the full normal map is blended in over,
+                                        this value relative to <span class="literal">lodNormalStart.</span></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;normalPreloadDistance&gt;</span></em></p>
+                           <p>This is the distance at which the full normal maps are
+                                        preloaded. This value is relative to
+                                        <span class="literal">lodNormalStart</span> and
+                                        <span class="literal">lodNormalDistance</span></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;defaultHeightMapLod&gt;</span></em></p>
+                           <p>This is the default LOD level of height map to load, 0 = the
+                                        full height map, 1 = half resolution, 2 = quarter resolution
+                                        etc.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;detailHeightMapDistance&gt;</span></em></p>
+                           <p>This is the distance at which the full height map is
+                                        loaded
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;lodDistances&gt;</span></em></p>
+                           <p>This section contains the geometry LOD distances.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;distance&gt;</span></em></p>
+                           <p>The <span class="literal">distance</span> sections define the distances
+                                        at which each geometry LOD level is blended out. <span class="literal">distance0
+                                           is for the first LOD level, <span class="literal">distance1 for the second LOD
+                                              level etc. The distance between LOD levels must be at least half the
+                                              diagonal distance of a terrain block (~71), this is because we only
+                                              support a difference of 1 LOD level between neighbouring
+                                              blocks.</span></span></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;server&gt;</span></em></p>
+                           <p>This section contains the information used by the
+                                        server
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;heightMapLod&gt;</span></em></p>
+                           <p>This defines which LOD level to load on the server, this value
+                                        is used to speed up loading on the server.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1702"></a>4.2.&nbsp;Simple Terrain
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1705"></a>4.2.1.&nbsp;Key features
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Works with the chunking system.</p>
+                        </li>
+                        <li>
+                           <p>Individual grid squares addressable from disk and
+                                        memory.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Based on a 4x4 metre grid (tiles), which matches portal
+                                        dimensions.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Low memory footprint.</p>
+                        </li>
+                        <li>
+                           <p>Low disk footprint.</p>
+                        </li>
+                        <li>
+                           <p>Fast rendering.</p>
+                        </li>
+                        <li>
+                           <p>Automatic blending.</p>
+                        </li>
+                        <li>
+                           <p>Easy tool integration.</p>
+                        </li>
+                        <li>
+                           <p>Layered terrain with tiled textures for easy strip
+                                        creation.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Uses texture projection to apply texture coordinates to save
+                                        vertex memory.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1739"></a>4.2.2.&nbsp;Overview
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The terrain is a huge height map defined by a regular grid of
+                           height poles, every 4x4 metres. Terrain is organised into terrain blocks
+                           of 100x100 metres. Each of these blocks can have up to four textures,
+                           which are blended on a per-vertex (<em class="emphasis">i.e.</em>, per-pole)
+                           basis. The terrain also is self-shadowing, and allows holes to be cut
+                           out of it, for things like cave openings. The terrain also contains
+                           detail information, so that the detail objects can be matched to the
+                           terrain type.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1747"></a>4.2.3.&nbsp;Chunking
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The terrain integrates properly with the chunking: each terrain
+                           block is 100x100 metres, which is the size of the outside chunks. The
+                           terrain blocks are stored in separate files, so that they can be opened
+                           as needed.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1752"></a>4.2.4.&nbsp;Disk footprint
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Each terrain block covers one chunk, each with dimension of
+                           100x100 metres. It contains 28x28 height, blend, shadow, and detail
+                           values (there are two extra rows and one column to allow for boundary
+                           interpolation). Each terrain block also stores 25x25 hole values, one
+                           for each 4x4m tile.
+                  </p>
+                  <p>The table below display the terrain cost per chunk.</p>
+                  <div class="altrow">
+                     <table border="0">
+                        <colgroup>
+                           <col width="22%">
+                           <col width="62%">
+                           <col width="16%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Component</th>
+                              <th>Size calculation</th>
+                              <th>Size</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>Headers</td>
+                              <td>256 (header) + 128 x 4 (texture names)</td>
+                              <td>768</td>
+                           </tr>
+                           <tr>
+                              <td>Height</td>
+                              <td>28 x 28 x sizeof( float )</td>
+                              <td>3,136</td>
+                           </tr>
+                           <tr>
+                              <td>Blend</td>
+                              <td>28 x 28 x sizeof( dword )</td>
+                              <td>3,136</td>
+                           </tr>
+                           <tr>
+                              <td>Shadow</td>
+                              <td>28 x 28 x sizeof( word )</td>
+                              <td>1,568</td>
+                           </tr>
+                           <tr>
+                              <td>Detail</td>
+                              <td>28 x 28 x sizeof( byte )</td>
+                              <td>784</td>
+                           </tr>
+                           <tr>
+                              <td>Hole</td>
+                              <td>25 x 25 x sizeof( bool )</td>
+                              <td>625</td>
+                           </tr>
+                           <tr>
+                              <td colspan="2">Total</td>
+                              <td>10,017</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <p><span class="citetitle">Terrain cost per chunk</span></p>
+                  <p>For example, for a 15x15 km world the total disk size of the
+                           terrain would be: 10,017 x 150 x 150 ~ 215MB.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1825"></a>4.2.5.&nbsp;Memory footprint
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>With a field of view of 500m, and each terrain block covering
+                           100x100 metres, a typical scene would require roughly 160 terrain blocks
+                           in memory at any one time.
+                  </p>
+                  <p>The memory usage of this much terrain is about 2MB, plus data
+                           management overheads.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1832"></a>4.2.6.&nbsp;Texture spacing
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The <span class="literal">TerrainTextureSpacing</span> tag included in the
+                           <span class="literal">environment</span> section of file
+                           <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/resources.xml</span>
+                           (for details on the precedence of entries in the various copies of file
+                           resources.xml, see <a href="ch01.html#xref_File_resources_xml" title="1.4.1.&nbsp;File resources.xml">File <span class="literal">resources.xml</span></a>) determines
+                           the size (in metres) to which texture map will be stretched/shrunk when
+                           applied to the terrain.
+                  </p>
+                  <p>This value determines both the length and height of the texture
+                           tile.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_TerrainSpecular"></a>4.3.&nbsp;Terrain specular lighting
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The equation for the specular lighting is:</p>
+               <div class="blockquote">
+                  <blockquote class="blockquote">
+                     <p>SpeClr = TerSpeAmt * ( (SpeDfsAmt * TerDfsClr) + SunClr) *
+                              SpeRfl
+                     </p>
+                  </blockquote>
+               </div>
+               <p>The list below describes each variable:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">SpeClr</span> (Specular
+                                      colour)</em></p>
+                        <p>Final colour reflected.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">TerSpeAmt</span> (Specular
+                                      amount)</em></p>
+                        <p>Value is given by the weighted blend of the alpha channel of the
+                                   4 terrain textures.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">SpeDfsAmt</span> (Specular
+                                      diffuse amount)</em></p>
+                        <p>Initial value is stored in the variable
+                                   <span class="literal">specularDiffuseAmount</span> in the effect file
+                                   <span class="literal">bigworld/res/shaders/terrain/terrain.fx</span>.
+                        </p>
+                        <p>Its value can be tweaked during runtime via the watcher
+                                   <span class="literal">render/terrain/specularDiffuseAmount</span>.
+                        </p>
+                        <p>Once the desired result is achieved, the new value can be stored
+                                   in the effect file.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">TerDfsClr</span> (Terrain
+                                      diffuse colour)</em></p>
+                        <p>Value is given by the weighted blend of the RGB channels of the
+                                   4 terrain textures.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">SunClr</span> (Sunlight
+                                      colour)</em></p>
+                        <p>Colour impinged by sunlight.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">SpeFlr</span> (Specular
+                                      reflection)</em></p>
+                        <p>Specular reflection value at the given pixel, adjusted by the
+                                   Specular power coefficient
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>As a result of the formula, a small amount of the<em class="emphasis"> Terrain diffuse colour</em>
+                      (<span class="literal">TerDfsClr</span>) is added to the <em class="emphasis">Sunlight colour</em> (<span class="literal">SunClr</span>) to give
+                      the <em class="emphasis">Specular colour</em>
+                      (<span class="literal">SpeClr</span>).
+               </p>
+               <p>The initial value of the power of specular lighting is stored in the
+                      variable <span class="literal">specularPower</span> in the effect file
+                      <span class="literal">bigworld/res/shaders/terrain/terrain.fx</span>. Its value can
+                      be tweaked during runtime via the watcher
+                      <span class="literal">render/terrain/specularPower</span>. Once the desired result
+                      is achieved, the new value can be stored in the effect file.
+               </p>
+               <p>Note that the <em class="emphasis">Specular power</em> can
+                      only be adjusted for shader hardware version 2.0 and later. Earlier
+                      versions of shader hardware are limited to a <em class="emphasis">Specular power</em> value of 4 (which is the default for
+                      shader hardware version 2.0 and later).
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>The final amount of specular lighting applied to the terrain is
+                           affected by the variable <span class="literal">specMultiplier</span> in file
+                           <span class="literal">bigworld/res/shaders/terrain/terrain.fx</span>.
+                  </p>
+                  <p>Set it to anything other than 1 to rescale the specular lighting,
+                           or 0 to completely disable it.
+                  </p>
+               </div>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>Terrain specular lighting can be turned off via
+                           <span class="literal">TERRAIN_SPECULAR</span> graphics settings.
+                  </p>
+                  <p>For details, see <a href="ch21.html#xref_Graphics_Settings" title="21.9.&nbsp;Graphics settings">Graphics settings</a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Cameras&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Cloud shadows</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

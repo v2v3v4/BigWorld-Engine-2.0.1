@@ -1,0 +1,815 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;12.&nbsp;Lock Server (BWLockD)</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Content Tools Reference Guide">
+      <link rel="up" href="index.html" title="Content Tools Reference Guide">
+      <link rel="prev" href="ch11.html" title="Chapter&nbsp;11.&nbsp;3ds Max and Maya Exporters">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;12.&nbsp;Lock Server (BWLockD)</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch11.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Lock_Server_bwlockd"></a>Chapter&nbsp;12.&nbsp;Lock Server (BWLockD)
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch12.html#d0e32183">12.1. Installation and configuration</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch12.html#xref_we_LockServer_Install_Server">12.1.1. Server</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e32390">12.1.2. Subversion Revision Control Requirements</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e32491">12.1.3. Perforce Revision Control Requirements</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e32502">12.1.4. WorldEditor</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e32544">12.1.5. NavGen</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch12.html#xref_Using_A_Version_Control_System_Stub">12.2. Using a version control system stub</a></span></dt>
+                  <dt><span class="section"><a href="ch12.html#d0e32792">12.3. Enabling spaces for collaborative editing</a></span></dt>
+                  <dt><span class="section"><a href="ch12.html#xref_Locking_An_Area">12.4. Locking an area</a></span></dt>
+               </dl>
+            </div>
+            <p>When creating large worlds in a multi-user environment, it is
+                 necessary to have a mechanism in place that controls the access by multiple
+                 world builders to the same space at the same time.
+            </p>
+            <p>WorldEditor has built-in support for concurrent access, provided by
+                 its lock server <span class="literal">bwlockd</span>. It allows various users to edit
+                 the same space simultaneously, without conflicts.
+            </p>
+            <p>When using the lock server, you will need to lock the regions of the
+                 world that you want to edit, so you have exclusive access to it
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e32183"></a>12.1.&nbsp;Installation and configuration
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To use the Lock Server (also called BWLockD) in WorldEditor, some
+                      steps must be followed both on the server and on the client
+                      machines.
+               </p>
+               <p>The following sub-sections describe these steps.</p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_we_LockServer_Install_Server"></a>12.1.1.&nbsp;Server
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>To enable concurrent editing of the world without conflicts, the
+                           BWLockD service (the Lock Server) has to be running. It should be run on
+                           a Linux server.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e32195"></a>12.1.1.1.&nbsp;Installing and configuring the Lock Server service
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>There is a script at
+                                <code class="filename">bigworld/tools/server/install/bwlockd.sh</code> that can
+                                be used to install the BWLockD service. Run the following command as
+                                root in the <code class="filename">bigworld/tools/server/install</code>
+                                directory.
+                     </p><pre class="programlisting"># ./bwlockd.sh install</pre><p>This will install the lock server init-script into
+                                <code class="filename">/etc/init.d</code>/bw_lockd and install symlinks for the
+                                <code class="filename">/etc/rc*.d</code> directories, such that the lock server
+                                starts up at boot.
+                     </p>
+                     <p>By default, the log file is at
+                                <code class="filename">/var/log/bigworld/bwlockd.log</code>. Check the log for
+                                a text message saying the daemon is listening on port 8168.
+                     </p>
+                     <p>You can edit the installed
+                                <code class="filename">/etc/init.d/bw_lockd</code> to tune the behaviour of the
+                                lock server. In particular, useful variables to change are:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><code class="code">BIND_IP</code>: the interface address the lock server
+                                             binds to
+                              </p>
+                           </li>
+                           <li>
+                              <p><code class="code">PORT</code>: the port the lock server listens
+                                             on
+                              </p>
+                           </li>
+                           <li>
+                              <p><code class="code">LOG_OUTPUT_PATH</code>: the output path for the log,
+                                             by default this is set to
+                                             <code class="filename">/var/log/bigworld/bwlockd.log</code></p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>As a system service, you can query the running state of the Lock
+                                Server.
+                     </p><pre class="programlisting"># /etc/init.d/bw_lockd status</pre></div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e32248"></a>12.1.1.2.&nbsp;Running from the command-line
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>You can also run the lock server from the command line in the
+                                foreground. There are various command-line options as the
+                                <code class="code">--help</code> output shows:
+                     </p><pre class="programlisting">usage: bwlockd.py [options] 
+
+options: 
+
+  -h, --help            show this help message and exit 
+  --daemon              run process in the background (daemon mode) 
+  -I BIND_IP, --bind-ip=BIND_IP 
+                        IP/hostname of interface to bind to (default all 
+                        interfaces) 
+  -p BIND_PORT, --port=BIND_PORT 
+                        port to listen on (default 8168) 
+  --pid=PID_FILE 
+                        default daemon PID file (default "bwlockd.pid") 
+  -o OUT_FILE, --output=OUT_FILE 
+                        default daemon output file (only applies to non-daemon 
+                        mode, default "bwlockd.log") 
+  -v, --verbose         verbose output (only applies to non-daemon output, 
+                        daemon output is always verbose) 
+  --history=HISTORYPATH 
+                        output a history file that contains recent lock server 
+                        operations in XML format </pre><div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="d0e32258"></a>12.1.1.2.1.&nbsp;History File
+                                 </h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>If you run the Lock Server from the command-line, you can pass
+                                     the <code class="code">--history</code> option for the daemon to output a history
+                                     file, which contains a list of recent operations that the Lock
+                                     Server has processed. This is useful for debugging in conjunction
+                                     with the logging output. By default, no history file is
+                                     created.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e32266"></a>12.1.1.3.&nbsp;Keeping the Lock Server up-to-date
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>In the event that you remove a space and recreate it before all
+                                clients have relinquished their locks on the old space, you may need
+                                to clear the locks and restart the lock server.
+                     </p>
+                     <p>BWLockD maintains its state in files with the
+                                <code class="code">.computer</code> suffix for each workstation that has ever
+                                created a lock. Each .computer file is an XML file, such as the one
+                                below.
+                     </p><pre class="programlisting">&lt;?xml version="1.0"?&gt;
+&lt;<em class="emphasis">hostname</em>&gt;
+    &lt;space&gt;
+        &lt;name&gt; <em class="emphasis">space_name</em><a name="LockServerComputerState_SpaceName"></a><img src="../images/callouts/1.png" alt="1" border="0"> &lt;/name&gt;
+        &lt;lock&gt;
+            &lt;rect&gt; <em class="emphasis">left</em> <em class="emphasis">top</em> <em class="emphasis">right</em> <em class="emphasis">bottom</em><a name="LockServerComputerState_RectCoords"></a><img src="../images/callouts/2.png" alt="2" border="0"> &lt;/rect&gt;
+            &lt;username&gt; <em class="emphasis">username</em><a name="LockServerComputerState_Username"></a><img src="../images/callouts/3.png" alt="3" border="0"> &lt;/username&gt;
+            &lt;desc&gt; <em class="emphasis">lock_description</em> <a name="LockServerComputerState_LockDescription"></a><img src="../images/callouts/4.png" alt="4" border="0">&lt;/desc&gt;
+            &lt;time&gt; <em class="emphasis">timestamp</em> <a name="LockServerComputerState_LockTime"></a><img src="../images/callouts/5.png" alt="5" border="0">&lt;/time&gt;
+        &lt;/lock&gt;
+        &lt;lock&gt;
+            ...
+        &lt;/lock&gt;
+        ...
+    &lt;/space&gt;
+    &lt;space&gt;
+        ...
+    &lt;/space&gt;
+    ....
+&lt;/<em class="emphasis">hostname</em>&gt;</pre><div class="calloutlist">
+                        <table border="0" summary="Callout list">
+                           <tr>
+                              <td width="5%" valign="top" align="left"><a href="#LockServerComputerState_SpaceName"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                              </td>
+                              <td valign="top" align="left">
+                                 <p><code class="code">space_name</code>: the name of the space for this
+                                                space element.
+                                 </p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td width="5%" valign="top" align="left"><a href="#LockServerComputerState_RectCoords"><img src="../images/callouts/2.png" alt="2" border="0"></a> 
+                              </td>
+                              <td valign="top" align="left">
+                                 <p><code class="code">left</code>, <code class="code">top</code>, <code class="code">right</code>,
+                                                <code class="code">bottom</code>: the coordinates of the lock rectangle
+                                 </p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td width="5%" valign="top" align="left"><a href="#LockServerComputerState_Username"><img src="../images/callouts/3.png" alt="3" border="0"></a> 
+                              </td>
+                              <td valign="top" align="left">
+                                 <p><code class="code">username</code>: the name of the user who made the
+                                                lock
+                                 </p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td width="5%" valign="top" align="left"><a href="#LockServerComputerState_LockDescription"><img src="../images/callouts/4.png" alt="4" border="0"></a> 
+                              </td>
+                              <td valign="top" align="left">
+                                 <p><code class="code">desc</code>: the description entered by the user at
+                                                the time of the lock creation
+                                 </p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td width="5%" valign="top" align="left"><a href="#LockServerComputerState_LockTime"><img src="../images/callouts/5.png" alt="5" border="0"></a> 
+                              </td>
+                              <td valign="top" align="left">
+                                 <p><code class="code">timestamp</code>: a timestamp (seconds after the
+                                                Epoch) of the lock creation
+                                 </p>
+                              </td>
+                           </tr>
+                        </table>
+                     </div>
+                     <p>For each space the given host has ever locked, there is a
+                                <code class="code">space</code> element that contains a <code class="code">name</code> element
+                                for the space, and multiple <code class="code">lock</code> elements that describe
+                                the locks that the workstation has currently acquired. Each lock
+                                element has a <code class="code">rect</code> element describing the lock rectangle,
+                                who locked the region described by the <code class="code">username</code> element,
+                                the lock description entered when the lock was made in the
+                                <code class="code">desc</code> element, and the lock time in the <code class="code">time</code>
+                                element.
+                     </p>
+                     <p>It may be necessary to clear locks manually by remove sections
+                                from the <code class="code">.computer</code> state files. For example, if a space
+                                is removed and a new space is recreated with the same name, any
+                                existing locks on the old space will be applied incorrectly to the new
+                                space.If modifying the state files is required, you should shut down
+                                the lock server, make your changes, and restart the server.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e32378"></a>12.1.1.4.&nbsp;Removing the BWLockD service
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>You can run the BWLockD init-script with the <code class="code">remove</code>
+                                command line option:
+                     </p><pre class="programlisting">/etc/init.d/bwlockd remove</pre><p>This will stop any running BWLockD service and remove the
+                                startup symlinks so that the service is no longer started on
+                                boot.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e32390"></a>12.1.2.&nbsp;Subversion Revision Control Requirements
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When using Subversion, there are some requirements that need to be
+                           met before using Lock Server to manage world building.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e32395"></a>12.1.2.1.&nbsp;Command line client configuration
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>You will need to install the Subversion command line client.
+                                Note that TortoiseSVN does not ship with one.
+                     </p>
+                     <p>By default, the Subversion stub assumes that you are running the
+                                Subversion client from <code class="filename">C:\Program Files
+                                   (x86)\CollabNet\Subversion Client\svn.exe</code>. If this is not
+                                correct, this can be adjusted by editing the
+                                <code class="filename">bigworld/tools/worldeditor/scripts/svn_stub.py</code>
+                                and then recompiling the stub executable using py2exe (see below in
+                                <a xmlns:xlink="http://www.w3.org/1999/xlink" href="ch12.html#xref_Using_A_Version_Control_System_Stub" class="olink">Using a version control system stub</a>).
+                     </p>
+                     <p>Also keep in mind that Subversion working copies are potentially
+                                not backwards-compatible between different versions. Ensure that the
+                                Subversion command line client is compatible with whichever tool is
+                                used to check out the working copy, such as TortoiseSVN.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e32412"></a>12.1.2.2.&nbsp;Setting up the <span class="literal">svn+ssh</span> scheme
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>There is some additional configuration when using Subversion
+                                server hosted using the <span class="literal">svn+ssh</span> scheme. This is not
+                                required for the <span class="literal">svn</span>, <span class="literal">http</span> or
+                                the <span class="literal">https </span>schemes. As an example of this, you may
+                                have a Subversion URL
+                                <code class="uri">svn+ssh://developer@repository/srv/repos/<em class="replaceable"><code>your_game</code></em>/trunk</code>.
+                                In this case, there is a user called <span class="literal">developer</span> with
+                                an account accessible by SSH on machine called
+                                <span class="literal">repository</span>, and the repository is located at
+                                <code class="filename">/srv/repos/<em class="replaceable"><code>your_game</code></em></code>,
+                                and the trunk branch is at the top-level called
+                                <span class="literal">trunk</span>.
+                     </p>
+                     <p>The Subversion version control stub uses the command line
+                                Subversion client, but by default, the client has no way of
+                                authenticating automatically with your server over SSH. We supply the
+                                authentication mechanism by using PuTTY and its associated utilities
+                                PuTTYgen and PLink. To download these tools, go to
+                                <code class="uri">http://www.chiark.greenend.org.uk/~sgtatham/putty</code>. The
+                                documentation for PuTTY can be found on that site as well.
+                     </p>
+                     <p>Use PuTTYgen to generate a key-pair to use when authenticating
+                                to a Subversion server hosted over SSH. This key-pair can be saved
+                                away on the client machine somewhere memorable (it will be saved into
+                                a file with a <code class="filename">.PPK</code> extension by default). Part of
+                                the output of the key-pair generation will be a string that can be
+                                used in a SSH <code class="filename">authorized_keys</code> file. This string
+                                will need to be added to the user's
+                                <code class="filename">.ssh/authorized_keys</code> on the machine hosting the
+                                repository.
+                     </p>
+                     <p>PuTTY can also protect the key-pair so that a passphrase is
+                                needed to use it. It also comes with a authentication agent called
+                                Pageant that you can use to keep decoded keys in memory so that
+                                key-pairs that are protected can be used after only unlocking them
+                                once per session. Refer to the PuTTY documentation for more
+                                details.
+                     </p>
+                     <p>Subversion has a per-user config file that can usually be
+                                located in the user's directory under <code class="filename">Application
+                                   Data\Subversion\config</code>. A new option needs to be added to
+                                the <span class="literal">[tunnels]</span> section that calls the PLink
+                                executable with the key file that you created in PuTTYgen. For
+                                example:
+                     </p><pre class="programlisting">[tunnels]
+ssh=C:\Program Files\PuTTY\plink -i C:\...\<em class="replaceable"><code>keypair_file</code></em>.ppk</pre><p>The link can be tested by running a command such as <span class="literal">svn
+                                   update</span> on a working copy already checked out (using
+                                TortoiseSVN, for example) using the <span class="literal">svn+ssh</span>
+                                scheme.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e32491"></a>12.1.3.&nbsp;Perforce Revision Control Requirements
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The path to the Perforce command line client is specified in the
+                           <span class="literal">P4_PATH</span> module variable in
+                           <code class="filename">bigworld/tools/worldeditor/resources/scripts/p4_stub.py</code>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e32502"></a>12.1.4.&nbsp;WorldEditor
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>WorldEditor can be configured to use BWLockD server as
+                           follows:
+                  </p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Open WorldEditor's options file -
+                                        <span class="literal">bigworld/tools/worldeditor/options.xml</span> (for
+                                        details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch25.html" class="olink"><i><span class="literal">options.xml</span></i></a>
+                                        <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch25.html#xref_options_xml_WorldEditor" class="olink">WorldEditor</a>).
+                           </p>
+                        </li>
+                        <li>
+                           <p>Update / add the following section as a child to the root
+                                        node:
+                           </p><pre class="programlisting">&lt;bwlockd&gt;
+   &lt;use&gt; true &lt;/use&gt;
+   &lt;host&gt; <em class="replaceable"><code>server_name</code></em>:<em class="replaceable"><code>server_port</code></em> &lt;/host&gt;
+&lt;/bwlockd&gt;</pre><p>The <em class="emphasis">server_name</em> is the name of the
+                                        computer running BWLockD server, and
+                                        <em class="emphasis">server_port</em> is an optional extension used to
+                                        specify a particular port, which defaults to 8168. For additional
+                                        information on changing the port BWLockD server listens on, see
+                                        above in <a href="ch12.html#xref_we_LockServer_Install_Server" title="12.1.1.&nbsp;Server">Server</a>.
+                           </p>
+                        </li>
+                     </ol>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e32544"></a>12.1.5.&nbsp;NavGen
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>NavGen can be configured to use BWLockD server as follows:</p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Open NavGen's options file
+                                        <code class="filename">bigworld/tools/misc/navgen_settings.xml</code> (for
+                                        details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch24.html" class="olink"><i><span class="literal">navgen_settings.xml</span></i></a>).
+                           </p>
+                        </li>
+                        <li>
+                           <p>Update / add the following section as a child to the root
+                                        node:
+                           </p><pre class="programlisting">&lt;bwlockd&gt; <em class="replaceable"><code>server_name</code></em>:<em class="replaceable"><code>server_port</code></em> &lt;/bwlockd&gt;</pre><p>The <em class="emphasis">server_name</em> is the name of the
+                                        computer running BWLockD server, and
+                                        <em class="emphasis">server_port</em> is an optional extension used to
+                                        specify a particular port, which defaults to 8168. For additional
+                                        information on changing the port BWLockD server listens on, see
+                                        above in <a href="ch12.html#xref_we_LockServer_Install_Server" title="12.1.1.&nbsp;Server">Server</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Update / add the following section as a child to the root
+                                        node:
+                           </p><pre class="programlisting">&lt;standalone&gt; false &lt;/standalone&gt;</pre><p>Use of the BWLockD server can be temporarily disabled by
+                                        setting this tag to true.
+                           </p>
+                        </li>
+                     </ol>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Using_A_Version_Control_System_Stub"></a>12.2.&nbsp;Using a version control system stub
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The Lock Server supports the use of stubs for version control
+                      systems, which can be defined in WorldEditor's configuration file
+                      <span class="literal">options.xml</span>(for details on this file's grammar, see the
+                      document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch25.html" class="olink"><i><span class="literal">options.xml</span></i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch25.html#xref_options_xml_WorldEditor" class="olink">WorldEditor</a>.).
+               </p>
+               <p>If no version control system stub is defined, then WorldEditor will
+                      use the default <span class="literal">resources/scripts/svn_stub.exe</span> for
+                      Subversion support. We also provide a<span class="literal"> p4_stub.exe</span>
+                      script for Perforce.
+               </p>
+               <p><em class="emphasis">Important Note:</em> You can use any
+                      executable file or any file that has an associated default program as a
+                      stub. The provided stub exe files are compiled from python files in the
+                      same folder with same name by using <em class="emphasis">py2exe</em>. For more
+                      details visit <em class="emphasis">py2exe</em>'s website at <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.py2exe.org" target="_top">www.py2exe.org</a>. If you want to use .py
+                      file directly, you have to ensure that .py file is associated with a
+                      Python interpreter. The Python installer on Windows will do that
+                      automatically.
+               </p>
+               <p>A stub must support following commands:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">addfile</span></em></p>
+                        <p><em class="emphasis">Syntax:
+                                      <span class="literal"><em class="replaceable"><code>&lt;stubname&gt;</code></em> addfile
+                                         <em class="replaceable"><code>&lt;filename&gt;</code></em></span><sup>A</sup></em></p>
+                        <p>Adds the text file to the repository.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">addbinaryfile</span></em></p>
+                        <p><em class="emphasis">Syntax:
+                                      <span class="literal"><em class="replaceable"><code>&lt;stubname&gt;</code></em> addbinaryfile
+                                         <em class="replaceable"><code>&lt;filename&gt;</code></em></span><sup>A</sup></em></p>
+                        <p>Adds the binary file to the repository.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">removefile</span></em></p>
+                        <p><em class="emphasis">Syntax:
+                                      <span class="literal"><em class="replaceable"><code>&lt;stubname&gt;</code></em> removefile
+                                         <em class="replaceable"><code>&lt;filename&gt;</code></em></span><sup>A</sup></em></p>
+                        <p>Removes the file from repository.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">commitfile</span></em></p>
+                        <p><em class="emphasis">Syntax:
+                                      <span class="literal"><em class="replaceable"><code>&lt;stubname&gt;</code></em> commitfile msg
+                                         <em class="replaceable"><code>&lt;filename&gt;</code></em></span> [
+                                      ,<span class="literal"><em class="replaceable"><code>&lt;filename&gt;</code></em></span> ]*
+                                      <sup>A</sup></em></p>
+                        <p>Commits the files to the repository (the commit operation is
+                                   recursive).
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">updatefile</span></em></p>
+                        <p><em class="emphasis">Syntax:
+                                      <span class="literal"><em class="replaceable"><code>&lt;stubname&gt;</code></em> updatefile
+                                         <em class="replaceable"><code>&lt;filename&gt;</code></em></span> [
+                                      ,<span class="literal"><em class="replaceable"><code>&lt;filename&gt;</code></em></span> ]*
+                                      <sup>A</sup></em></p>
+                        <p>Updates all indicated files.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">updatefolder</span></em></p>
+                        <p><em class="emphasis">Syntax:
+                                      <span class="literal"><em class="replaceable"><code>&lt;stubname&gt;</code></em> updatefolder
+                                         <em class="replaceable"><code>&lt;foldername&gt;</code></em></span></em></p>
+                        <p>Recursively updates all files in the indicated folder.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">refreshfolder</span></em></p>
+                        <p><em class="emphasis">Syntax:
+                                      <span class="literal"><em class="replaceable"><code>&lt;stubname&gt;</code></em> refreshfolder
+                                         <em class="replaceable"><code>&lt;foldername&gt;</code></em></span><sup>A</sup></em></p>
+                        <p>Recursively refreshes the status of all files in the indicated
+                                   folder.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">managed</span></em></p>
+                        <p><em class="emphasis">Syntax:
+                                      <span class="literal"><em class="replaceable"><code>&lt;stubname&gt;</code></em> managed
+                                         <em class="replaceable"><code>&lt;file_or_folder_name&gt;</code></em></span><sup>A</sup></em></p>
+                        <p>Returns 1 if the file or folder is managed by the repository, or
+                                   0 otherwise.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p><em class="emphasis"><em class="emphasis">A</em> &#8212;
+                         <span class="literal">filename</span> may include the wildcard character
+                         <span class="literal">*</span> (asterisk).</em></p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e32792"></a>12.3.&nbsp;Enabling spaces for collaborative editing
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>In order to be able to share your spaces with other world builders,
+                      you need to follow a few simple steps. If the new space is created while
+                      WorldEditor is connected to bwlockd, the whole space will be locked for
+                      editing automatically, but if the space is created while WorldEditor is
+                      disconnected, the whole space will not be locked for editing.
+               </p>
+               <p>When you create a new space while connected to the lock server, you
+                      need to follow these steps in order to share the space:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Go to <em class="emphasis">Project</em> mode, by clicking the
+                                   <em class="emphasis">Project Tool</em> toolbar button
+                                   &#8212;<span class="inlinemediaobject"><img src="images/bwlockd_worldeditor_toolbar_button_project_mode.png"></span>&#8212; (for details, see <a href="ch02.html#xref_we_Toolbar" title="2.2.&nbsp;Toolbar">Toolbar</a>).
+                        </p>
+                     </li>
+                     <li>
+                        <p>Make sure that WorldEditor has successfully connected to the
+                                   Lock Server.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Click anywhere on the space.</p>
+                     </li>
+                     <li>
+                        <p>Enter a commit message and click on <em class="emphasis">Save and
+                                      Commit</em>, and wait for the source control operation to
+                                   complete.
+                        </p>
+                     </li>
+                  </ol>
+               </div>
+               <p>On the other hand, if the space was created before connecting to the
+                      lock server, you will need to follow these steps:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Go to <em class="emphasis">Project</em> mode, make sure that
+                                     WorldEditor has successfully connected to the Lock Server.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Select any area inside the space using click-and-drag.</p>
+                     </li>
+                     <li>
+                        <p>Enter a descriptive message and click the <em class="emphasis">Lock
+                                        Selected Chunks</em> button. Note that even if you select only
+                                     one chunk, the whole space will be locked because it hasn't been
+                                     committed yet.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Finally, if the space is not under source control, enter a
+                                     commit message and click on <em class="emphasis">Save and Commit</em>,
+                                     and wait for the source control operation to complete.
+                        </p>
+                     </li>
+                  </ol>
+               </div>
+               <p>Once these steps have been completed, it will be possible
+                      for other world builders to get the space using the source control tools
+                      and then lock/unlock areas of the space to work on it simultaneously. For
+                      more details please refer to <a href="ch12.html#xref_Locking_An_Area" title="12.4.&nbsp;Locking an area">Locking an area</a>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Locking_An_Area"></a>12.4.&nbsp;Locking an area
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>While in <em class="emphasis">Project</em> mode, you can see the locked
+                      regions of the space. The red regions correspond to chunks locked by other
+                      world builders, while the blue indicates editable regions.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/bwlockd_worldeditor_project_mode.png" height=""><span class="caption">
+                        <p>WorldEditor displaying editable regions in blue and
+                                   non-editable regions in red
+                        </p></span></div>
+               </div>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>As the mouse is hovered over a locked region, a tooltip is
+                           displayed with information on that lock, such as user, machine,
+                           date/time, chunk ID and lock message.
+                  </p>
+               </div>
+               <p>To enable or disable displaying non-editable areas shaded in red,
+                      select the <em class="emphasis">General Options</em> panel's
+                      <em class="emphasis">Shade Read-Only Areas</em> check box (for
+                      details, see <a href="ch02.html#xref_we_General_Options_Panel" title="2.10.13.&nbsp;General Options panel">General Options panel</a>).
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/bwlockd_worldeditor_project_mode_non_editable_areas_shaded_in_red.png" height=""><span class="caption">
+                        <p>Non-editable areas shaded in red</p></span></div>
+               </div>
+               <p>To lock an area for editing, follow the steps below:</p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Click the <em class="emphasis">Project Tool</em> toolbar
+                                   button &#8212;<span class="inlinemediaobject"><img src="images/bwlockd_worldeditor_toolbar_button_project_mode.png"></span>&#8212; to activate the <em class="emphasis">Project</em>
+                                   mode.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Make sure that WorldEditor has successfully connected to the
+                                   Lock Server.
+                        </p>
+                        <p>WorldEditor tries to connect to bwlockd upon startup, using the
+                                   settings specified in
+                                   <span class="literal">bigworld/tools/worldeditor/options.xml</span>. (for
+                                   details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch25.html" class="olink"><i><span class="literal">options.xml</span></i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch25.html#xref_options_xml_WorldEditor" class="olink">WorldEditor</a>).
+                        </p>
+                        <p>If it did not connect successfully, then the <em class="emphasis">Message</em> field will contain the text
+                                   <span class="literal">"failed to connect to bwlock, you cannot use the related
+                                      functionality"</span>, and the <em class="emphasis">Lock Selected
+                                      Chunks</em>, <em class="emphasis">Commit All Changes</em>
+                                   and <em class="emphasis">Discard All Changes</em> buttons will
+                                   be disabled.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Click-and-drag over the area that you want to lock for
+                                   editing.
+                        </p>
+                        <p>The selected area will be shaded, indicating the chunks that
+                                   will be locked <em class="emphasis">and</em> editable.
+                                   Around that area, an area shaded in light grey will be displayed,
+                                   indicating an area that will be locked but non-editable.
+                        </p>
+                        <div class="informalfigure">
+                           <div class="mediaobject"><img src="images/bwlockd_worldeditor_project_mode_chunk_information.png" height=""><span class="caption">
+                                 <p>WorldEditor displaying information about chunks'
+                                                lock and edit status
+                                 </p></span></div>
+                        </div>
+                        <p>The actual editable area of a locked region is smaller by 1
+                                   chunk around the border. This is necessary to prevent tearing in the
+                                   terrain that may occur if two people edit adjacent terrain chunks to
+                                   different heights.
+                        </p>
+                     </li>
+                     <li>
+                        <p>In the <em class="emphasis">Message</em> field, type a
+                                   text indicating the reason for the lock.
+                        </p>
+                        <p>This message will be displayed on a tooltip when other users
+                                   hover over the locked area in WorldEditor while in
+                                   <em class="emphasis">Project</em> mode.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Press the <em class="emphasis">Lock Select Chunks</em>
+                                   button.
+                        </p>
+                        <p>The selected chunks and the ones surrounding it will be shaded
+                                   in blue, to indicate the success of the operation.
+                        </p>
+                     </li>
+                  </ol>
+               </div>
+               <p>This process can be repeated many times if you want to lock an
+                      irregular area.
+               </p>
+               <p>Once the world is complete, you will have to perform a pass over it
+                      to fill in the details in between previously locked sections.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch11.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;11.&nbsp;3ds Max and Maya Exporters&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,193 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;1.&nbsp;Getting Started</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Getting Started">
+      <link rel="up" href="index.html" title="Getting Started">
+      <link rel="prev" href="index.html" title="Getting Started">
+      <link rel="next" href="ch02.html" title="Chapter&nbsp;2.&nbsp;How to Setup Your Development Environment">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Getting Started</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="d0e21"></a>Chapter&nbsp;1.&nbsp;Getting Started
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch01.html#d0e26">1.1. BigWorld Technology Art Pipeline</a></span></dt>
+                  <dt><span class="section"><a href="ch01.html#d0e75">1.2. BigWorld Technology Development Framework</a></span></dt>
+               </dl>
+            </div>
+            <p>BigWorld Technology is a mature middleware platform for developers of
+               Massively Multiplayer Online Games and Virtual Worlds. Development of an
+                 online game usually requires an art pipeline used to create the look and
+                 feel of the game levels, and a development framework to create the game
+                 logic and AI.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e26"></a>1.1.&nbsp;BigWorld Technology Art Pipeline
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The BigWorld Technology art pipeline is used by artist to create
+                      game assets and includes the following steps (see image below):
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Textures are developed using a texture creation tool (Photoshop,
+                                   Gimp or equivalent).
+                        </p>
+                     </li>
+                     <li>
+                        <p>Meshes, animations and morph targets are built using 3ds Max or
+                                   Maya and exported using the supplied exporters.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Particle systems are built using Particle Editor.</p>
+                     </li>
+                     <li>
+                        <p>Model Editor is used to edit specific Models&#8217; parameters
+                                   (including Lod levels, animation blends, material overrides, and
+                                   shader parameters).
+                        </p>
+                     </li>
+                     <li>
+                        <p>World Editor is used to build the final game levels (integrating
+                                   all art assets which were generated in the previous steps).
+                        </p>
+                        <p>World Editor allows creating the scenery of the level as
+                                   follows:
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p>Sculpting outdoor terrain scenery.</p>
+                              </li>
+                              <li>
+                                 <p>Creating indoor shell systems such as dungeons.</p>
+                              </li>
+                              <li>
+                                 <p>Placement of art assets generated and exported using the 3D
+                                                modeling tools mentioned above.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>Placement of particles that have been generated using
+                                                Particle Editor.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>Controlling default weather and lighting of the
+                                                world.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>Other level specific parameters may be also be modified as
+                                                required using World Editor.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/pipeline.png" height=""><span class="caption">
+                        <p>BigWorld Technology Art Pipeline</p></span></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e75"></a>1.2.&nbsp;BigWorld Technology Development Framework
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The BigWorld Technology Development Framework is used by developers
+                      to develop game logic and AI and is based on the Python scripting
+                      language. This Framework includes the following components:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Standard Python is used as the game engine scripting
+                                   language.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The BigWorld Technology engine exposes a rich set of documented
+                                   Python APIs to be used for game scripting.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Distributed Python objects are automatically instantiated on the
+                                   game client and the game server to allow data synchronisation between
+                                   the client and server.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Advanced users can extend either the game client or the game
+                                   server using C++.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Getting Started&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;How to Setup Your Development Environment</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

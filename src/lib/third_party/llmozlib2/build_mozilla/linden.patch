@@ -1,0 +1,1733 @@
+? .mozconfig
+? .mozconfig.mk
+? a.out
+? confdefs.h
+? config.cache
+? config.log
+Index: layout/generic/nsObjectFrame.cpp
+===================================================================
+RCS file: /cvsroot/mozilla/layout/generic/nsObjectFrame.cpp,v
+retrieving revision 1.510.2.17
+diff -u -r1.510.2.17 nsObjectFrame.cpp
+--- layout/generic/nsObjectFrame.cpp	8 Nov 2007 00:08:10 -0000	1.510.2.17
++++ layout/generic/nsObjectFrame.cpp	5 Jan 2008 00:26:58 -0000
+@@ -1784,37 +1784,17 @@
+   return rv;
+ }
+ 
+-NS_IMETHODIMP
+-nsObjectFrame::Paint(nsPresContext*       aPresContext,
+-                     nsIRenderingContext& aRenderingContext,
+-                     const nsRect&        aDirtyRect,
+-                     nsFramePaintLayer    aWhichLayer,
+-                     PRUint32             aFlags)
+-{
+-  if (!GetStyleVisibility()->IsVisibleOrCollapsed())
+-    return NS_OK;
+-  
+-  nsIFrame * child = mFrames.FirstChild();
+-  if (child) {    // if we have children, we are probably not really a plugin
+-    nsObjectFrameSuper::Paint(aPresContext, aRenderingContext, aDirtyRect, aWhichLayer);
+-    return NS_OK;
+-  }
+-
+-  // If we are painting in Print Preview do nothing....
+-  if (aPresContext->Type() == nsPresContext::eContext_PrintPreview) {
+-    return NS_OK;
+-  }
+-
+-  // determine if we are printing
+-  if (aPresContext->Type() == nsPresContext::eContext_Print) {
+-    // UNIX Plugins can't PP at this time, so draw an empty box
+-    // we only want to print on the content layer pass
+-    if (eFramePaintLayer_Content != aWhichLayer)
+-      return NS_OK;
+-
+-    // if we are printing, we need to get the correct nsIPluginInstance
+-    // for THIS content node in order to call ->Print() on the right plugin
+-
++// set values for aPlugWin, aPlugPrint and aPlugInstance
++nsresult
++nsObjectFrame::SetupPrinting(nsIRenderingContext& aRenderingContext,
++                             nsPresContext *aPresContext,
++                             nsPluginWindow &aPlugWin,
++                             nsPluginPrint  &aPlugPrint,
++                             nsIPluginInstance *&aPlugInstance) {
++  // We need to make sure we have the right frame for the plugin. This
++  //   seems silly, but it is actually necessary on some pages. We 
++  //   will actually get a null mPluginInstanceOwner sometimes if we
++  //   don't do this.
+     // first, we need to get the document
+     nsCOMPtr<nsIDocument> doc = mContent->GetDocument();
+     NS_ENSURE_TRUE(doc, NS_ERROR_NULL_POINTER);
+@@ -1837,26 +1817,25 @@
+       objectFrame = GetNextObjectFrame(aPresContext,frame);
+     NS_ENSURE_TRUE(objectFrame,NS_ERROR_FAILURE);
+ 
+-    // finally we can get our plugin instance
+-    nsCOMPtr<nsIPluginInstance> pi;
+-    if (NS_FAILED(objectFrame->GetPluginInstance(*getter_AddRefs(pi))) || !pi)
++  // finally, get our plugin instance
++  nsCOMPtr<nsIPluginInstance> tempPluginInstance;
++  if (NS_FAILED(objectFrame->GetPluginInstance(*getter_AddRefs(tempPluginInstance))) ||
++      !tempPluginInstance)
+       return NS_ERROR_FAILURE;
++  NS_IF_ADDREF(aPlugInstance = tempPluginInstance);
+ 
+     // now we need to setup the correct location for printing
+-    nsresult rv;
+-    nsPluginWindow    window;
+     nsPoint           origin;
+     float             t2p;
+-    window.window =   nsnull;
++  aPlugWin.window = nsnull;
+ 
+     // prepare embedded mode printing struct
+-    nsPluginPrint npprint;
+-    npprint.mode = nsPluginMode_Embedded;
++  aPlugPrint.mode = nsPluginMode_Embedded;
+ 
+     // we need to find out if we are windowless or not
+     PRBool windowless = PR_FALSE;
+-    pi->GetValue(nsPluginInstanceVariable_WindowlessBool, (void *)&windowless);
+-    window.type  =  windowless ? nsPluginWindowType_Drawable : nsPluginWindowType_Window;
++  aPlugInstance->GetValue(nsPluginInstanceVariable_WindowlessBool, (void *)&windowless);
++  aPlugWin.type  =  windowless ? nsPluginWindowType_Drawable : nsPluginWindowType_Window;
+ 
+     // Get the offset of the DC
+     nsTransform2D* rcTransform;
+@@ -1868,12 +1847,54 @@
+ 
+     // set it all up
+     // XXX is windowless different?
+-    window.x = origin.x;
+-    window.y = origin.y;
+-    window.width = NSToCoordRound(mRect.width * t2p);
+-    window.height= NSToCoordRound(mRect.height * t2p);
+-    window.clipRect.bottom = 0; window.clipRect.top = 0;
+-    window.clipRect.left = 0; window.clipRect.right = 0;
++  aPlugWin.x = origin.x;
++  aPlugWin.y = origin.y;
++  aPlugWin.width = NSToCoordRound(mRect.width * t2p);
++  aPlugWin.height= NSToCoordRound(mRect.height * t2p);
++  aPlugWin.clipRect.bottom = 0; aPlugWin.clipRect.top = 0;
++  aPlugWin.clipRect.left = 0; aPlugWin.clipRect.right = 0;
++  aPlugPrint.print.embedPrint.window = aPlugWin;
++
++  return NS_OK;
++}
++
++NS_IMETHODIMP
++nsObjectFrame::Paint(nsPresContext*       aPresContext,
++                     nsIRenderingContext& aRenderingContext,
++                     const nsRect&        aDirtyRect,
++                     nsFramePaintLayer    aWhichLayer,
++                     PRUint32             aFlags)
++{
++  if (!GetStyleVisibility()->IsVisibleOrCollapsed())
++    return NS_OK;
++  
++  nsIFrame * child = mFrames.FirstChild();
++  if (child) {    // if we have children, we are probably not really a plugin
++    nsObjectFrameSuper::Paint(aPresContext, aRenderingContext, aDirtyRect, aWhichLayer);
++    return NS_OK;
++  }
++
++  // If we are painting in Print Preview do nothing....
++  if (aPresContext->Type() == nsPresContext::eContext_PrintPreview) {
++    return NS_OK;
++  }
++
++  if (aPresContext->Type() == nsPresContext::eContext_Print) {
++    // UNIX Plugins can't PP at this time, so draw an empty box
++    // we only want to print on the content layer pass
++    if (eFramePaintLayer_Content != aWhichLayer)
++      return NS_OK;
++
++    // data to pass on to the plugin
++    nsPluginPrint  npprint;
++    nsPluginWindow window;
++    nsCOMPtr<nsIPluginInstance> pi;
++    nsresult rv;
++
++    // sets fields in the plugin structs and gets the plugin instance
++    rv = SetupPrinting(aRenderingContext, aPresContext, window, npprint, (*getter_AddRefs(pi)));
++    if (NS_FAILED(rv))
++      return rv;
+     
+ // XXX platform specific printing code
+ #if defined(XP_MAC) && !TARGET_CARBON
+@@ -1896,7 +1917,6 @@
+     
+     window.window = &port;
+     npprint.print.embedPrint.platformPrint = (void*)window.window;
+-    npprint.print.embedPrint.window = window;
+     // send off print info to plugin
+     rv = pi->Print(&npprint);
+ #elif defined(XP_UNIX) && !defined(XP_MACOSX)
+@@ -1925,7 +1945,6 @@
+     window.y =   aDirtyRect.y;
+     window.width =   aDirtyRect.width;
+     window.height =   aDirtyRect.height;
+-    npprint.print.embedPrint.window        = window;
+     rv = pi->Print(&npprint);
+     if (NS_FAILED(rv)) {
+       PR_LOG(nsObjectFrameLM, PR_LOG_DEBUG, ("error: plugin returned failure %lx\n", (long)rv));
+@@ -1951,7 +1970,6 @@
+       return NS_OK;  // no dc implemented so quit
+ 
+     npprint.print.embedPrint.platformPrint = (void*)pDC;
+-    npprint.print.embedPrint.window = window;
+     // send off print info to plugin
+     rv = pi->Print(&npprint);
+ 
+@@ -1965,9 +1983,13 @@
+ #endif
+ 
+     // XXX Nav 4.x always sent a SetWindow call after print. Should we do the same?
++    /* XXXjgaunt - commenting this out because we lost the frame in
++                 - re-factoring. (setupPrinting())
++                 - Is this really necessary???
+     nsDidReflowStatus status = NS_FRAME_REFLOW_FINISHED; // should we use a special status?
+     frame->DidReflow(shell->GetPresContext(),
+                      nsnull, status);  // DidReflow will take care of it
++    */
+ 
+     return rv;  // done with printing
+   }
+@@ -1978,15 +2000,16 @@
+   if ((NS_FRAME_PAINT_LAYER_FOREGROUND == aWhichLayer) && mInstanceOwner)
+       mInstanceOwner->Paint(aDirtyRect);
+ #elif defined (XP_WIN) || defined(XP_OS2)
+-  if (NS_FRAME_PAINT_LAYER_FOREGROUND == aWhichLayer) {
+     nsCOMPtr<nsIPluginInstance> inst;
+     GetPluginInstance(*getter_AddRefs(inst));
+-    if (inst) {
++  if (!inst)
++    return NS_ERROR_FAILURE;
+       // Look if it's windowless
+       nsPluginWindow * window;
+       mInstanceOwner->GetWindow(window);
+ 
+-      if (window->type == nsPluginWindowType_Drawable) {
++  if (window->type == nsPluginWindowType_Drawable &&
++      NS_FRAME_PAINT_LAYER_FOREGROUND == aWhichLayer) {
+         // check if we need to call SetWindow with updated parameters
+         PRBool doupdatewindow = PR_FALSE;
+ 
+@@ -2058,11 +2081,61 @@
+ #endif
+ 
+           inst->SetWindow(window);        
+-        }
+ 
+         mInstanceOwner->Paint(aDirtyRect, hdc);
+       }
+     }
++  else if (window->type == nsPluginWindowType_Window &&
++           eFramePaintLayer_Content == aWhichLayer) {
++    // This section handles the case of being called from
++    //   nsViewManager::RenderOffscreen(). That call is made
++    //   from the nsCanvas impl as well as for some embedding
++    //   applications.
++    // We must set things up like we are printing and then
++    //   have the plugin render to a DeviceContext created
++    //   in RenderOffscreen()
++    // We may also get here during regular operation. In that
++    //   case the location we tell the plugin to print is
++    //   merely it's own window.
++
++    // data to pass on to the plugin
++    nsPluginPrint  npprint;
++    nsPluginWindow window;
++    nsCOMPtr<nsIPluginInstance> pi;
++    nsresult rv;
++
++    // sets fields in the plugin structs and gets the plugin instance
++    rv = SetupPrinting(aRenderingContext, aPresContext, window, npprint, (*getter_AddRefs(pi)));
++    if (NS_FAILED(rv))
++      return rv;
++
++#ifdef XP_WIN
++    // This will be the plugin's window's DC or one provided by RenderOffscreen
++    PRUint32 pDC = 0;
++    aRenderingContext.RetrieveCurrentNativeGraphicData((void**)&pDC);
++    if (!pDC)
++      return NS_OK;  // no dc implemented so quit
++
++    // set the context to print to
++    npprint.print.embedPrint.platformPrint = (void*) pDC;
++
++    // tell the plugin to render to the DC - works for Flash, not for quicktime
++    rv = pi->Print(&npprint);
++
++ // XXXjgaunt - try sending a WM_PRINTCLIENT w/ PRF_CLIENT in lparam and DC in wparam
++/*
++    nsPluginWindowHelper helper;
++
++    nsPluginEvent pPluginEvent;
++    pPluginEvent.event  = WM_PRINTCLIENT;
++    pPluginEvent.wParam = (PRUint32) pDC;
++    pPluginEvent.lParam = PRF_CLIENT;
++
++    // call the WinProc with the HWND and the event (message,wparam,lparam)
++    helper.LLSendEventToWindow((void*) &window, (void*) mInstanceOwner->GetPluginPort(), (void*) &pPluginEvent);
++*/
++
++#endif /* XP_WIN */
+   }
+ #endif /* !XP_MAC */
+   DO_GLOBAL_REFLOW_COUNT_DSP("nsObjectFrame", &aRenderingContext);
+@@ -2090,7 +2163,22 @@
+   }
+ 
+ #ifdef XP_WIN
++  // XXXjgaunt - added the windowless check
++  PRBool windowless = PR_FALSE;
++  nsCOMPtr<nsIPluginInstance> pluginInstance;
++  GetPluginInstance(*getter_AddRefs(pluginInstance));
++
++  if(pluginInstance)
++    pluginInstance->GetValue(nsPluginInstanceVariable_WindowlessBool,
++                             (void *)&windowless);
++
++  if (windowless) {
+   rv = nsObjectFrameSuper::HandleEvent(aPresContext, anEvent, anEventStatus);
++  }
++  else {
++    *anEventStatus = mInstanceOwner->ProcessEvent(*anEvent);
++    rv = *anEventStatus;
++  }
+   return rv;
+ #endif
+ 
+@@ -3893,17 +3981,42 @@
+ #endif
+ 
+ #ifdef XP_WIN
+-  // this code supports windowless plugins
+   nsPluginEvent * pPluginEvent = (nsPluginEvent *)anEvent.nativeMsg;
+   // we can get synthetic events from the nsEventStateManager... these
+   // have no nativeMsg
+ 
+-  if (pPluginEvent) {
+     PRBool eventHandled = PR_FALSE;
++  if (pPluginEvent) {
++    // XXXjgaunt
++    // Are we windowed? If so, pass the event on to the window
++    PRBool windowless = PR_FALSE;
++    mInstance->GetValue(nsPluginInstanceVariable_WindowlessBool,
++                        (void *)&windowless);
++
++    if (windowless) {
+     mInstance->HandleEvent(pPluginEvent, &eventHandled);
+     if (eventHandled)
+       rv = nsEventStatus_eConsumeNoDefault;
+   }
++    else {
++      // set this here, but it could happen earlier. Right now the only
++      //   case we need to set this is for certain types of embedding 
++      //   that need to translate mouse click locations from screen to
++      //   client coordinates.
++      // Default behavior would be to capture (PR_TRUE)
++      nsPluginWindowHelper helper;
++      if (anEvent.flags & NS_EVENT_FLAG_NO_MOUSE_CAPTURE) {
++        helper.SetMouseCapture(mPluginWindow, PR_FALSE);
++      }
++      else {
++        helper.SetMouseCapture(mPluginWindow, PR_TRUE);
++      }
++      // call the WinProc with the HWND and the event (message,wparam,lparam)
++      helper.LLSendEventToWindow(mPluginWindow, (void*) GetPluginPort(), (void*) pPluginEvent);
++      // XXXjgaunt - not sure if this is right, just following what was above
++      rv = nsEventStatus_eConsumeNoDefault;
++    }
++  }
+ #endif
+ 
+   return rv;
+Index: layout/generic/nsObjectFrame.h
+===================================================================
+RCS file: /cvsroot/mozilla/layout/generic/nsObjectFrame.h,v
+retrieving revision 1.44.12.1
+diff -u -r1.44.12.1 nsObjectFrame.h
+--- layout/generic/nsObjectFrame.h	2 Sep 2005 20:25:54 -0000	1.44.12.1
++++ layout/generic/nsObjectFrame.h	5 Jan 2008 00:26:58 -0000
+@@ -203,6 +203,16 @@
+                            nsHTMLReflowMetrics& aMetrics,
+                            const nsHTMLReflowState& aReflowState);
+ 
++  // called from Paint() to collect functionality that is used in
++  //   mulitple places for drastically different purposes: Printing;
++  //   and painting to a different DC than associated with a 
++  //   windowed plugin.
++  nsresult SetupPrinting(nsIRenderingContext& aRenderingContext,
++                         nsPresContext *aPresContext,
++                         nsPluginWindow &aPlugWin,
++                         nsPluginPrint  &aPlugPrint,
++                         nsIPluginInstance *&aPlugInstance);
++
+   friend class nsPluginInstanceOwner;
+ private:
+   nsPluginInstanceOwner *mInstanceOwner;
+Index: modules/plugin/base/public/npapi.h
+===================================================================
+RCS file: /cvsroot/mozilla/modules/plugin/base/public/npapi.h,v
+retrieving revision 3.40.4.2
+diff -u -r3.40.4.2 npapi.h
+--- modules/plugin/base/public/npapi.h	5 Apr 2007 00:23:27 -0000	3.40.4.2
++++ modules/plugin/base/public/npapi.h	5 Jan 2008 00:27:05 -0000
+@@ -631,9 +631,9 @@
+ #define NPVERS_68K_HAS_LIVECONNECT        11
+ #define NPVERS_HAS_WINDOWLESS             11
+ #define NPVERS_HAS_XPCONNECT_SCRIPTING    13
+-#define NPVERS_HAS_NPRUNTIME_SCRIPTING    14
+-#define NPVERS_HAS_FORM_VALUES            15
+-#define NPVERS_HAS_POPUPS_ENABLED_STATE   16
++#define NPVERS_HAS_NPRUNTIME_SCRIPTING    14
++#define NPVERS_HAS_FORM_VALUES            15
++#define NPVERS_HAS_POPUPS_ENABLED_STATE   16
+ #define NPVERS_HAS_RESPONSE_HEADERS       17
+ 
+ /*----------------------------------------------------------------------*/
+Index: modules/plugin/base/public/nsPluginNativeWindow.h
+===================================================================
+RCS file: /cvsroot/mozilla/modules/plugin/base/public/nsPluginNativeWindow.h,v
+retrieving revision 1.3
+diff -u -r1.3 nsPluginNativeWindow.h
+--- modules/plugin/base/public/nsPluginNativeWindow.h	18 Apr 2004 22:01:00 -0000	1.3
++++ modules/plugin/base/public/nsPluginNativeWindow.h	5 Jan 2008 00:27:19 -0000
+@@ -106,4 +106,53 @@
+ nsresult PLUG_NewPluginNativeWindow(nsPluginNativeWindow ** aPluginNativeWindow);
+ nsresult PLUG_DeletePluginNativeWindow(nsPluginNativeWindow * aPluginNativeWindow);
+ 
++/**
++ * Allows access to platform specific window implementations.
++ *
++ * Because the platform specific definitions are in the implementation files
++ *   it isn't possible to call them directly (and probably a good thing at that).
++ *   This class allows access to those classes without revealing the details of
++ *   implementation underneath.
++ */
++class nsPluginWindowHelper {
++public:
++  nsPluginWindowHelper() {}
++  virtual ~nsPluginWindowHelper() {}
++  /**
++   * The default behavior for mozilla's winowed plugins is to capture
++   *   the mouse input on a mouse down message and to release it on a mouse up.
++   *   this works fine if the input coordinates are in the right coordinate
++   *   system. But in some embedding cases it is necessary to translate the
++   *   actual screen coordinates that get passed in by the sytsem. This method
++   *   allows the embedding application to receive the mouse events first so as
++   *   to perform any coordinate translation that needs to happen.
++   *
++   * See the use of this in nsObjectFrame to see an example of it's use.
++   *
++   * @arg aNativeWindow - a pointer to the nsPluginNativeWindow(Win|Mac|Unix..)
++   *      for the plugin. If aMouseCapture is PR_FALSE, this window
++   *      will receive the mouse events.
++   *
++   * @arg aMouseCapture - PR_TRUE means mozilla will capture mouse events
++   *                      PR_FALSE means it won't.
++   */
++  nsresult SetMouseCapture(void *aNativeWindow, PRBool aMouseCapture);
++
++  /**
++   * This allows a message to be sent directly to the plugin's window. 
++   *
++   * @arg aNativeWindow - a pointer to the nsPluginNativeWindow(Win|Mac|Unix..)
++   *      for the plugin.
++   *
++   * @arg aPluginPort - a pointer to the platform dependant impl of the
++   *      nsPluginPort struct. On Windows this is a HWND. This is the handle
++   *      to the plugin's window that will recieve the message.
++   *
++   * @arg aNativeMessage - The native message for the platform. On windows
++   *      this is a nsPluginEvent pointer (event, wParam, lParam). This is
++   *      the message that will be sent to the plugin's window
++   */
++  nsresult LLSendEventToWindow(void *aNativeWindow, void *aPluginPort, void *aNativeMsg);
++};
++
+ #endif //_nsPluginNativeWindow_h_
+Index: modules/plugin/base/src/nsPluginNativeWindowWin.cpp
+===================================================================
+RCS file: /cvsroot/mozilla/modules/plugin/base/src/nsPluginNativeWindowWin.cpp,v
+retrieving revision 1.15
+diff -u -r1.15 nsPluginNativeWindowWin.cpp
+--- modules/plugin/base/src/nsPluginNativeWindowWin.cpp	13 Jul 2005 19:08:20 -0000	1.15
++++ modules/plugin/base/src/nsPluginNativeWindowWin.cpp	5 Jan 2008 00:27:19 -0000
+@@ -140,15 +140,59 @@
+   nsIEventQueueService *GetEventService();
+   PluginWindowEvent * GetPluginWindowEvent(HWND aWnd, UINT aMsg, WPARAM aWParam, LPARAM aLParam);
+ 
++  // XXXjgaunt
++  void SetMouseCapture(PRBool aCapture) { mCanCaptureMouse = aCapture; }
++  PRBool CanCaptureMouse() { return mCanCaptureMouse; }
++  PRBool CanReleaseMouse() { return mMouseCaptured; }
++  void MouseCaptured() { mMouseCaptured = PR_TRUE; }
++  void MouseReleased() { mMouseCaptured = PR_FALSE; }
++
+ private:
+   WNDPROC mPluginWinProc;
+   nsCOMPtr<nsIEventQueueService> mEventService;
+   PluginWindowEvent mPluginWindowEvent;
++  PRBool mCanCaptureMouse;
++  PRBool mMouseCaptured;
+ 
+ public:
+   nsPluginType mPluginType;
+ };
+ 
++// XXXjgaunt
++// class nsPluginWindowHelper
++nsresult nsPluginWindowHelper::SetMouseCapture(void *aNativeWindow, PRBool aMouseCapture) {
++  nsPluginNativeWindowWin *nativeWin = (nsPluginNativeWindowWin *) aNativeWindow;
++  if (nativeWin) {
++    nativeWin->SetMouseCapture(aMouseCapture);
++    return NS_OK;
++  }
++  return NS_ERROR_FAILURE;
++}
++
++// on windows the incomimg pluginport is an HWND, nativemsg is (msg, wparam, lparam)
++nsresult nsPluginWindowHelper::LLSendEventToWindow(void *aNativeWindow, void *aPluginPort, void *aNativeMsg)
++{
++  nsresult rv = NS_ERROR_FAILURE;
++  nsPluginNativeWindowWin *nativeWin = (nsPluginNativeWindowWin *) aNativeWindow;
++  if (nativeWin) {
++    nsPluginEvent *plugEvent = (nsPluginEvent *) aNativeMsg;
++    if (plugEvent) {
++      if (((nsPluginEvent *) aNativeMsg)->event == 0x0020) {  // the code for WM_SETCURSOR
++        // the wParam for SETCURSOR messages may be set to the parent window, not the plugin's window
++//        rv = PluginWndProc((HWND) aPluginPort, plugEvent->event, (PRUint32)aPluginPort, plugEvent->lParam);
++//        rv = SendMessage((HWND) aPluginPort, plugEvent->event, (PRUint32)aPluginPort, plugEvent->lParam);
++        rv = PostMessage((HWND) aPluginPort, plugEvent->event, (PRUint32)aPluginPort, plugEvent->lParam);
++      }
++      else {
++//        rv = PluginWndProc((HWND) aPluginPort, plugEvent->event, plugEvent->wParam, plugEvent->lParam);
++//        rv = SendMessage((HWND) aPluginPort, plugEvent->event, plugEvent->wParam, plugEvent->lParam);
++        rv = PostMessage((HWND) aPluginPort, plugEvent->event, plugEvent->wParam, plugEvent->lParam);
++      }
++    }
++  }
++  return rv;
++}
++
+ static PRBool sInMessageDispatch = PR_FALSE;
+ static UINT sLastMsg = 0;
+ 
+@@ -208,7 +252,11 @@
+   if (!win)
+     return TRUE;
+ 
+-  // check plugin myme type and cache whether it is Flash or not
++  // XXXjgaunt - so SendMessage() doesn't block
++  if (InSendMessage()) 
++    ReplyMessage(TRUE);
++
++  // check plugin mime-type and cache whether it is Flash or not
+   // Flash will need special treatment later
+   if (win->mPluginType == nsPluginType_Unknown) {
+     nsCOMPtr<nsIPluginInstance> inst;
+@@ -259,8 +307,10 @@
+     case WM_RBUTTONDOWN: {
+       nsCOMPtr<nsIWidget> widget;
+       win->GetPluginWidget(getter_AddRefs(widget));
+-      if (widget)
++      if (widget && win->CanCaptureMouse()) {
+         widget->CaptureMouse(PR_TRUE);
++        win->MouseCaptured();
++      }
+       break;
+     }
+     case WM_LBUTTONUP:
+@@ -271,8 +321,10 @@
+     case WM_RBUTTONUP: {
+       nsCOMPtr<nsIWidget> widget;
+       win->GetPluginWidget(getter_AddRefs(widget));
+-      if (widget)
++      if (widget && win->CanReleaseMouse()) {
+         widget->CaptureMouse(PR_FALSE);
++        win->MouseReleased();
++      }
+       break;
+     }
+     case WM_KEYDOWN:
+@@ -377,6 +429,8 @@
+   mPluginWinProc = NULL;
+   mPluginWindowEvent.SetIsAlloced(PR_FALSE);
+   mPluginType = nsPluginType_Unknown;
++  mCanCaptureMouse = PR_TRUE;
++  mMouseCaptured = PR_FALSE;
+ }
+ 
+ nsPluginNativeWindowWin::~nsPluginNativeWindowWin()
+Index: view/src/nsViewManager.cpp
+===================================================================
+RCS file: /cvsroot/mozilla/view/src/nsViewManager.cpp,v
+retrieving revision 3.411.2.5
+diff -u -r3.411.2.5 nsViewManager.cpp
+--- view/src/nsViewManager.cpp	1 May 2007 01:45:14 -0000	3.411.2.5
++++ view/src/nsViewManager.cpp	5 Jan 2008 00:27:23 -0000
+@@ -1875,6 +1875,7 @@
+     }
+ 
+     UpdateWidgetArea(widgetParent, nsRegion(damagedRect), nsnull);
++
+   } else {
+     // Propagate the update to the root widget of the root view manager, since
+     // iframes, for example, can overlap each other and be translucent.  So we
+@@ -2012,6 +2013,7 @@
+             // Make sure to not send WillPaint notifications while scrolling
+             nsViewManager* rootVM = RootViewManager();
+ 
++
+             nsIWidget *widget = mRootView->GetWidget();
+             PRBool translucentWindow = PR_FALSE;
+             if (widget)
+@@ -2429,13 +2431,8 @@
+   // Determine, for each view, whether it is or contains a ZPlaceholderView
+   ComputePlaceholderContainment(displayRoot);
+ 
+-  // Create the Z-ordered view tree
+-  PRBool paintFloats;
+-  if (aEventProcessing) {
+-    paintFloats = PR_TRUE;
+-  } else {
+-    paintFloats = displayRoot->GetFloating();
+-  }
++  // XXXjgaunt - Linden - Always paint floats
++  PRBool paintFloats = PR_TRUE;
+ 
+   {
+     nsHashtable       PlaceholderHash;
+@@ -3571,8 +3568,9 @@
+   nsAutoVoidArray displayList;
+   PLArenaPool displayArena;
+   PL_INIT_ARENA_POOL(&displayArena, "displayArena", 1024);
++  // XXXjgaunt - Linden - fixes scrollbars, popups, iframes, framesets
+   BuildRenderingDisplayList(view, nsRegion(r), &displayList, displayArena,
+-                            PR_TRUE, PR_TRUE, suppressScrolling);
++                            PR_TRUE, PR_FALSE, suppressScrolling);
+   RenderViews(view, *localcx, nsRegion(aRect), surface, displayList);
+   PL_FreeArenaPool(&displayArena);
+   PL_FinishArenaPool(&displayArena);
+@@ -3710,6 +3708,8 @@
+                                         nsHashtable &aMapPlaceholderViewToZTreeNode,
+                                         PLArenaPool &aPool)
+ {
++  // XXXjgaunt - Linden - always paint floats
++  aPaintFloats = PR_TRUE;
+   PRBool retval = PR_FALSE;
+ 
+   aResult = nsnull;
+Index: widget/public/nsGUIEvent.h
+===================================================================
+RCS file: /cvsroot/mozilla/widget/public/nsGUIEvent.h,v
+retrieving revision 3.121.4.4
+diff -u -r3.121.4.4 nsGUIEvent.h
+--- widget/public/nsGUIEvent.h	25 Jan 2007 23:05:55 -0000	3.121.4.4
++++ widget/public/nsGUIEvent.h	5 Jan 2008 00:27:23 -0000
+@@ -118,6 +118,7 @@
+ #define NS_EVENT_FLAG_SYSTEM_EVENT        0x0200
+ #define NS_EVENT_FLAG_STOP_DISPATCH_IMMEDIATELY 0x0400 // @see nsIDOM3Event::stopImmediatePropagation()
+ #define NS_EVENT_FLAG_DISPATCHING         0x0800
++#define NS_EVENT_FLAG_NO_MOUSE_CAPTURE    0x1000       // XXXjgaunt
+ 
+ #define NS_PRIV_EVENT_UNTRUSTED_PERMITTED 0x8000
+ 
+Index: widget/public/nsIToolkit.idl
+===================================================================
+RCS file: /cvsroot/mozilla/widget/public/nsIToolkit.idl,v
+retrieving revision 1.3
+diff -u -r1.3 nsIToolkit.idl
+--- widget/public/nsIToolkit.idl	18 Apr 2004 22:00:14 -0000	1.3
++++ widget/public/nsIToolkit.idl	5 Jan 2008 00:27:23 -0000
+@@ -43,8 +43,22 @@
+ #include "prthread.h"
+ %}
+ 
++interface nsIWidget;
++
+ [ptr] native PRThread(PRThread);
+ 
++[uuid(792dc3f5-adc0-4ef7-a07d-e0fd9be8cc9f)]
++interface nsIToolkitObserver : nsISupports
++{
++  /**
++   * Called after a native widget has been invalidated, either manually
++   * via nsIWidget::Invalidate or due to a widget being moved, shown or
++   * resized. We pass the coordinates of the rectangle that bounds the
++   * area that has been invalidated, relative to the origin of nsIWidget
++   * in pixels.
++   */
++  void notifyInvalidated(in nsIWidget aWidget, in long x, in long y, in long width, in long height);
++};
+ 
+ [uuid(18032BD0-B265-11d1-AA2A-000000000000)]
+ interface nsIToolkit : nsISupports
+@@ -58,6 +72,8 @@
+    */
+   void Init(in PRThread aThread);
+ 
++  void addObserver(in nsIToolkitObserver aObserver);
++  void removeObserver(in nsIToolkitObserver aObserver);
+ };
+ 
+ 
+Index: widget/public/nsITransferable.idl
+===================================================================
+RCS file: /cvsroot/mozilla/widget/public/nsITransferable.idl,v
+retrieving revision 1.11.8.1
+diff -u -r1.11.8.1 nsITransferable.idl
+--- widget/public/nsITransferable.idl	21 Jun 2006 04:33:32 -0000	1.11.8.1
++++ widget/public/nsITransferable.idl	5 Jan 2008 00:27:23 -0000
+@@ -57,7 +57,7 @@
+ 
+ #define kURLMime                    "text/x-moz-url"        // data contains url\ntitle
+ #define kURLDataMime                "text/x-moz-url-data"   // data contains url only
+-#define kURLDescriptionMime         "text/x-moz-url-desc"   // data contains description
++#define kURLDescriptionMime         "text/x-moz-url-desc"   // data contains description
+ #define kURLPrivateMime             "text/x-moz-url-priv"   // same as kURLDataMime but for private uses
+ #define kNativeImageMime            "application/x-moz-nativeimage"
+ #define kNativeHTMLMime             "application/x-moz-nativehtml"
+Index: widget/src/gtk2/nsAppShell.h
+===================================================================
+RCS file: /cvsroot/mozilla/widget/src/gtk2/nsAppShell.h,v
+retrieving revision 1.6
+diff -u -r1.6 nsAppShell.h
+--- widget/src/gtk2/nsAppShell.h	1 Dec 2004 22:27:00 -0000	1.6
++++ widget/src/gtk2/nsAppShell.h	5 Jan 2008 00:27:23 -0000
+@@ -43,6 +43,8 @@
+ #include "nsIEventQueue.h"
+ #include "nsCOMPtr.h"
+ 
++class nsIToolkit;
++
+ class nsAppShell : public nsIAppShell {
+ public:
+ 
+Index: widget/src/gtk2/nsToolkit.cpp
+===================================================================
+RCS file: /cvsroot/mozilla/widget/src/gtk2/nsToolkit.cpp,v
+retrieving revision 1.5
+diff -u -r1.5 nsToolkit.cpp
+--- widget/src/gtk2/nsToolkit.cpp	18 Apr 2004 22:00:17 -0000	1.5
++++ widget/src/gtk2/nsToolkit.cpp	5 Jan 2008 00:27:23 -0000
+@@ -107,6 +107,43 @@
+     return NS_OK;
+ }
+ 
++//-------------------------------------------------------------------------
++//
++//
++//-------------------------------------------------------------------------
++NS_IMETHODIMP
++nsToolkit::AddObserver(nsIToolkitObserver* aObserver)
++{
++    if (! aObserver)
++        return NS_ERROR_NULL_POINTER;
++
++    if (! mObservers.AppendObject(aObserver)) {
++        return NS_ERROR_FAILURE;
++    }
++
++    return NS_OK;
++}
++
++NS_IMETHODIMP
++nsToolkit::RemoveObserver(nsIToolkitObserver* aObserver)
++{
++    if (! aObserver)
++        return NS_ERROR_NULL_POINTER;
++
++    mObservers.RemoveObject(aObserver);
++
++    return NS_OK;
++
++}
++
++void nsToolkit::NotifyInvalidated(nsIWidget* aWidget, int x, int y, int width, int height)
++{
++    PRInt32 count = mObservers.Count();
++    for (PRInt32 i = 0; i < count; ++i)
++        {
++            (void) mObservers[i]->NotifyInvalidated(aWidget, x, y, width, height);
++        }
++}
+ 
+ //-------------------------------------------------------------------------
+ //
+Index: widget/src/gtk2/nsToolkit.h
+===================================================================
+RCS file: /cvsroot/mozilla/widget/src/gtk2/Attic/nsToolkit.h,v
+retrieving revision 1.4
+diff -u -r1.4 nsToolkit.h
+--- widget/src/gtk2/nsToolkit.h	18 Apr 2004 22:00:17 -0000	1.4
++++ widget/src/gtk2/nsToolkit.h	5 Jan 2008 00:27:23 -0000
+@@ -41,6 +41,7 @@
+ #define TOOLKIT_H
+ 
+ #include "nsIToolkit.h"
++#include "nsCOMArray.h"
+ #include <gtk/gtk.h>
+ 
+ /**
+@@ -62,8 +63,15 @@
+     void          CreateSharedGC(void);
+     GdkGC         *GetSharedGC(void);
+ 
++    NS_IMETHOD      AddObserver(nsIToolkitObserver* aObserver);
++    NS_IMETHOD      RemoveObserver(nsIToolkitObserver* aObserver);
++
++    void            NotifyInvalidated(nsIWidget* aWidget, int x, int y,
++                                      int width, int height);
++
+ private:
+     GdkGC         *mSharedGC;
++    nsCOMArray<nsIToolkitObserver> mObservers;
+ };
+ 
+ 
+Index: widget/src/gtk2/nsWindow.cpp
+===================================================================
+RCS file: /cvsroot/mozilla/widget/src/gtk2/nsWindow.cpp,v
+retrieving revision 1.145.2.14
+diff -u -r1.145.2.14 nsWindow.cpp
+--- widget/src/gtk2/nsWindow.cpp	8 Nov 2007 03:22:32 -0000	1.145.2.14
++++ widget/src/gtk2/nsWindow.cpp	5 Jan 2008 00:27:24 -0000
+@@ -322,6 +322,8 @@
+         mLastDragMotionWindow = NULL;
+     }
+ 
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     delete[] mTransparencyBitmap;
+     mTransparencyBitmap = nsnull;
+ 
+@@ -467,6 +469,7 @@
+ 
+     if (!mShell && mDrawingarea) {
+         moz_drawingarea_reparent(mDrawingarea, newParentWindow);
++        NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+     } else {
+         NS_NOTREACHED("nsWindow::SetParent - reparenting a non-child window");
+     }
+@@ -575,6 +578,8 @@
+         moz_drawingarea_move(mDrawingarea, aX, aY);
+     }
+ 
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     return NS_OK;
+ }
+ 
+@@ -614,6 +619,9 @@
+                 gdk_window_lower(w->mDrawingarea->clip_window);
+         }
+     }
++
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     return NS_OK;
+ }
+ 
+@@ -651,6 +659,8 @@
+ 
+     mSizeState = mSizeMode;
+ 
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     return rv;
+ }
+ 
+@@ -1003,10 +1013,12 @@
+ NS_IMETHODIMP
+ nsWindow::Validate()
+ {
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     // Get the update for this window and, well, just drop it on the
+     // floor.
+-    if (!mDrawingarea)
+-        return NS_OK;
++    if (!mDrawingarea) 
++       return NS_OK;
+ 
+     GdkRegion *region = gdk_window_get_update_area(mDrawingarea->inner_window);
+ 
+@@ -1021,6 +1033,8 @@
+ {
+     GdkRectangle rect;
+ 
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     rect.x = mBounds.x;
+     rect.y = mBounds.y;
+     rect.width = mBounds.width;
+@@ -1054,6 +1068,8 @@
+     LOGDRAW(("Invalidate (rect) [%p]: %d %d %d %d (sync: %d)\n", (void *)this,
+              rect.x, rect.y, rect.width, rect.height, aIsSynchronous));
+ 
++    NotifyInvalidated(aRect);
++
+     if (!mDrawingarea)
+         return NS_OK;
+ 
+@@ -1062,6 +1078,8 @@
+     if (aIsSynchronous)
+         gdk_window_process_updates(mDrawingarea->inner_window, FALSE);
+ 
++    NotifyInvalidated(aRect);
++
+     return NS_OK;
+ }
+ 
+@@ -1082,6 +1100,8 @@
+ 
+         gdk_window_invalidate_region(mDrawingarea->inner_window,
+                                      region, FALSE);
++
++        NotifyInvalidated(nsRect(rect.x, rect.y, rect.width, rect.height));
+     }
+     else {
+         LOGDRAW(("Invalidate (region) [%p] with empty region\n",
+@@ -1094,10 +1114,13 @@
+ NS_IMETHODIMP
+ nsWindow::Update()
+ {
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     if (!mDrawingarea)
+         return NS_OK;
+ 
+     gdk_window_process_updates(mDrawingarea->inner_window, FALSE);
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+     return NS_OK;
+ }
+ 
+@@ -1112,6 +1135,8 @@
+                  PRInt32  aDy,
+                  nsRect  *aClipRect)
+ {
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     if (!mDrawingarea)
+         return NS_OK;
+ 
+@@ -1128,6 +1153,9 @@
+ 
+     // Process all updates so that everything is drawn.
+     gdk_window_process_all_updates();
++
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     return NS_OK;
+ }
+ 
+@@ -1135,10 +1163,15 @@
+ nsWindow::ScrollWidgets(PRInt32 aDx,
+                         PRInt32 aDy)
+ {
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     if (!mDrawingarea)
+         return NS_OK;
+ 
+     moz_drawingarea_scroll(mDrawingarea, aDx, aDy);
++
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     return NS_OK;
+ }
+ 
+@@ -1465,6 +1498,8 @@
+     DispatchEvent(&event, status);
+ 
+     g_free(rects);
++ 
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+ 
+     // check the return value!
+     return TRUE;
+@@ -1513,6 +1548,8 @@
+          (void *)this, aAllocation->x, aAllocation->y,
+          aAllocation->width, aAllocation->height));
+ 
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     nsRect rect(aAllocation->x, aAllocation->y,
+                 aAllocation->width, aAllocation->height);
+ 
+@@ -1528,6 +1565,8 @@
+ 
+     nsEventStatus status;
+     DispatchResizeEvent (rect, status);
++ 
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+ }
+ 
+ void
+@@ -2394,6 +2433,8 @@
+                        nsIToolkit       *aToolkit,
+                        nsWidgetInitData *aInitData)
+ {
++    //    mToolkit = aToolkit;
++
+     // only set the base parent if we're going to be a dialog or a
+     // toplevel
+     nsIWidget *baseParent = aInitData &&
+@@ -2726,6 +2767,8 @@
+     LOG(("nsWindow::NativeResize [%p] %d %d\n", (void *)this,
+          aWidth, aHeight));
+ 
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     ResizeTransparencyBitmap(aWidth, aHeight);
+ 
+     // clear our resize flag
+@@ -2751,6 +2794,8 @@
+                        PRInt32 aWidth, PRInt32 aHeight,
+                        PRBool  aRepaint)
+ {
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     mNeedsResize = PR_FALSE;
+     mNeedsMove = PR_FALSE;
+ 
+@@ -2793,6 +2838,8 @@
+     else if (mDrawingarea) {
+         moz_drawingarea_move_resize(mDrawingarea, aX, aY, aWidth, aHeight);
+     }
++
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+ }
+ 
+ void
+@@ -2840,6 +2887,8 @@
+             moz_drawingarea_set_visibility(mDrawingarea, FALSE);
+         }
+     }
++
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+ }
+ 
+ void
+@@ -3015,6 +3064,8 @@
+ 
+     gtk_widget_shape_combine_mask(mShell, maskBitmap, 0, 0);
+     gdk_bitmap_unref(maskBitmap);
++
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+ }
+ 
+ NS_IMETHODIMP
+Index: widget/src/gtk2/nsWindow.h
+===================================================================
+RCS file: /cvsroot/mozilla/widget/src/gtk2/nsWindow.h,v
+retrieving revision 1.55.2.2
+diff -u -r1.55.2.2 nsWindow.h
+--- widget/src/gtk2/nsWindow.h	16 Jan 2007 17:50:30 -0000	1.55.2.2
++++ widget/src/gtk2/nsWindow.h	5 Jan 2008 00:27:24 -0000
+@@ -39,6 +39,7 @@
+ #ifndef __nsWindow_h__
+ 
+ #include "nsCommonWidget.h"
++#include "nsToolkit.h"
+ 
+ #include "mozcontainer.h"
+ #include "mozdrawingarea.h"
+@@ -286,6 +287,15 @@
+    NS_IMETHOD          UpdateTranslucentWindowAlpha(const nsRect& aRect, PRUint8* aAlphas);
+ #endif
+ 
++protected:
++    void NotifyInvalidated(const nsRect& aRect) {
++        nsToolkit* tk = NS_STATIC_CAST(nsToolkit*, mToolkit);
++        if (tk) {
++            tk->NotifyInvalidated(this, aRect.x, aRect.y, aRect.width, aRect.height);
++        }
++    }
++
++   
+ private:
+     void               GetToplevelWidget(GtkWidget **aWidget);
+     void               GetContainerWindow(nsWindow  **aWindow);
+Index: widget/src/mac/nsToolkitBase.cpp
+===================================================================
+RCS file: /cvsroot/mozilla/widget/src/mac/Attic/nsToolkitBase.cpp,v
+retrieving revision 1.7
+diff -u -r1.7 nsToolkitBase.cpp
+--- widget/src/mac/nsToolkitBase.cpp	6 Jul 2005 01:23:09 -0000	1.7
++++ widget/src/mac/nsToolkitBase.cpp	5 Jan 2008 00:27:24 -0000
+@@ -243,6 +243,46 @@
+   }
+ }
+ 
++NS_IMETHODIMP
++nsToolkitBase::AddObserver(nsIToolkitObserver* aObserver)
++{
++    if (! aObserver)
++        return NS_ERROR_NULL_POINTER;
++
++    if (! mObservers.AppendObject(aObserver)) {
++        return NS_ERROR_FAILURE;
++    }
++
++    return NS_OK;
++}
++
++NS_IMETHODIMP
++nsToolkitBase::RemoveObserver(nsIToolkitObserver* aObserver)
++{
++    if (! aObserver)
++        return NS_ERROR_NULL_POINTER;
++
++    mObservers.RemoveObject(aObserver);
++
++    return NS_OK;
++
++}
++
++void nsToolkitBase::NotifyInvalidated(nsIWidget* aWidget, int x, int y, int width, int height)
++{
++	PRInt32 count = mObservers.Count();
++	for (PRInt32 i = 0; i < count; ++i)
++	{
++		(void) mObservers[i]->NotifyInvalidated(aWidget, x, y, width, height);
++	}
++
++	//if (mObserver)
++	//	mObserver->NotifyInvalidated(aWidget, x, y, width, height);
++
++   
++}
++
++
+ 
+ #pragma mark -
+ 
+Index: widget/src/mac/nsToolkitBase.h
+===================================================================
+RCS file: /cvsroot/mozilla/widget/src/mac/Attic/nsToolkitBase.h,v
+retrieving revision 1.2
+diff -u -r1.2 nsToolkitBase.h
+--- widget/src/mac/nsToolkitBase.h	19 Jan 2004 23:48:15 -0000	1.2
++++ widget/src/mac/nsToolkitBase.h	5 Jan 2008 00:27:24 -0000
+@@ -43,6 +43,7 @@
+ #include "nsIToolkit.h"
+ 
+ #include "nsCOMPtr.h"
++#include "nsCOMArray.h"
+ #include "nsIEventQueueService.h"
+ 
+ 
+@@ -57,6 +58,8 @@
+   
+   static void       PostSleepWakeNotification(const char* aNotification);
+ 
++         void       NotifyInvalidated(nsIWidget* aWidget, int x, int y, int width, int height);
++
+ protected:
+ 
+   virtual nsresult  InitEventQueue(PRThread * aThread) = 0;
+@@ -76,6 +79,8 @@
+ 
+   CFRunLoopSourceRef   mSleepWakeNotificationRLS;
+   io_object_t       mPowerNotifier;
++    //nsCOMPtr<nsIToolkitObserver> mObserver;
++    nsCOMArray<nsIToolkitObserver> mObservers;
+ };
+ 
+ extern nsToolkitBase* NS_CreateToolkitInstance();
+Index: widget/src/mac/nsWindow.cpp
+===================================================================
+RCS file: /cvsroot/mozilla/widget/src/mac/Attic/nsWindow.cpp,v
+retrieving revision 1.232.2.9
+diff -u -r1.232.2.9 nsWindow.cpp
+--- widget/src/mac/nsWindow.cpp	3 Oct 2007 01:12:12 -0000	1.232.2.9
++++ widget/src/mac/nsWindow.cpp	5 Jan 2008 00:27:25 -0000
+@@ -292,6 +292,8 @@
+ 
+ 	mDestructorCalled = PR_TRUE;
+ 
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+ 	//Destroy();
+ 
+ 	if (mWindowRegion)
+@@ -423,6 +425,8 @@
+ 	NS_IF_RELEASE(mMenuBar);
+ 	SetMenuBar(nsnull);
+ 
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+ 	ReportDestroyEvent();	// beard: this seems to cause the window to be deleted. moved all release code to destructor.
+ 
+ 	return NS_OK;
+@@ -533,6 +537,7 @@
+ NS_IMETHODIMP nsWindow::Show(PRBool bState)
+ {
+   mVisible = bState;
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+   return NS_OK;
+ }
+ 
+@@ -878,6 +883,8 @@
+ {
+ 	if ((mBounds.x != aX) || (mBounds.y != aY))
+ 	{
++		NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+ 		// Invalidate the current location (unless it's the top-level window)
+ 		if ((mParent != nsnull) && (!mIsTopWidgetWindow))
+ 			Invalidate(PR_FALSE);
+@@ -891,6 +898,8 @@
+ 
+ 		// Report the event
+ 		ReportMoveEvent();
++
++		NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+ 	}
+ 	return NS_OK;
+ }
+@@ -902,8 +911,11 @@
+ //-------------------------------------------------------------------------
+ NS_IMETHODIMP nsWindow::Resize(PRInt32 aWidth, PRInt32 aHeight, PRBool aRepaint)
+ {
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+   if ((mBounds.width != aWidth) || (mBounds.height != aHeight))
+   {
++
+     // Set the bounds
+     mBounds.width  = aWidth;
+     mBounds.height = aHeight;
+@@ -917,6 +929,8 @@
+ 
+     // Report the event
+     ReportSizeEvent();
++
++	NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+   }
+   else {
+     // Recalculate the regions. We always need to do this, our parents may have
+@@ -927,6 +941,8 @@
+       Invalidate(PR_FALSE);
+   }
+ 
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+   return NS_OK;
+ }
+ 
+@@ -1051,6 +1067,8 @@
+ 	if ( aIsSynchronous )
+ 	  Update();
+ 
++	NotifyInvalidated(aRect);
++
+ 	return NS_OK;
+ }
+ 
+@@ -1091,6 +1109,10 @@
+ 	if ( aIsSynchronous )
+ 	  Update();
+ 
++    PRInt32 x, y, width, height;
++    NS_CONST_CAST(nsIRegion*, aRegion)->GetBoundingBox(&x, &y, &width, &height);
++    NotifyInvalidated(nsRect(x, y, width, height));
++
+ 	return NS_OK;
+ }
+ 
+@@ -1469,6 +1491,8 @@
+ 
+   NS_ASSERTION(ValidateDrawingState(), "Bad drawing state");
+ 
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+   return NS_OK;
+ }
+ 
+@@ -1702,6 +1726,8 @@
+       ScrollBits(macRect,aDx,aDy);
+ 
+       EndDraw();
++	  
++	  NotifyInvalidated(scrollRect);
+     }
+   }
+ 
+Index: widget/src/mac/nsWindow.h
+===================================================================
+RCS file: /cvsroot/mozilla/widget/src/mac/Attic/nsWindow.h,v
+retrieving revision 1.106.2.4
+diff -u -r1.106.2.4 nsWindow.h
+--- widget/src/mac/nsWindow.h	2 Aug 2006 18:49:38 -0000	1.106.2.4
++++ widget/src/mac/nsWindow.h	5 Jan 2008 00:27:25 -0000
+@@ -41,6 +41,7 @@
+ #include "nsIPluginWidget.h"
+ #include "nsBaseWidget.h"
+ #include "nsDeleteObserver.h"
++#include "nsToolkit.h"
+ 
+ #include "nsIWidget.h"
+ #include "nsIKBStateControl.h"
+@@ -238,6 +239,13 @@
+   void          CombineRects ( TRectArray & inRectArray ) ;
+   void          SortRectsLeftToRight ( TRectArray & inRectArray ) ;
+ 
++  void NotifyInvalidated(const nsRect& aRect) {
++	nsToolkit* tk = NS_STATIC_CAST(nsToolkit*, mToolkit);
++	if (tk) {
++	  tk->NotifyInvalidated(this, aRect.x, aRect.y, aRect.width, aRect.height);
++    }
++  }
++
+ protected:
+ #if DEBUG
+   const char*       gInstanceClassName;
+Index: widget/src/windows/nsToolkit.cpp
+===================================================================
+RCS file: /cvsroot/mozilla/widget/src/windows/nsToolkit.cpp,v
+retrieving revision 3.48.4.8
+diff -u -r3.48.4.8 nsToolkit.cpp
+--- widget/src/windows/nsToolkit.cpp	21 Nov 2006 04:10:10 -0000	3.48.4.8
++++ widget/src/windows/nsToolkit.cpp	5 Jan 2008 00:27:25 -0000
+@@ -734,6 +734,45 @@
+   return nsnull;
+ }
+ 
++NS_IMETHODIMP
++nsToolkit::AddObserver(nsIToolkitObserver* aObserver)
++{
++    if (! aObserver)
++        return NS_ERROR_NULL_POINTER;
++
++    if (! mObservers.AppendObject(aObserver)) {
++        return NS_ERROR_FAILURE;
++    }
++
++    return NS_OK;
++}
++
++NS_IMETHODIMP
++nsToolkit::RemoveObserver(nsIToolkitObserver* aObserver)
++{
++    if (! aObserver)
++        return NS_ERROR_NULL_POINTER;
++
++    mObservers.RemoveObject(aObserver);
++
++    return NS_OK;
++
++}
++
++void nsToolkit::NotifyInvalidated(nsIWidget* aWidget, int x, int y, int width, int height)
++{
++	PRInt32 count = mObservers.Count();
++	for (PRInt32 i = 0; i < count; ++i)
++	{
++		(void) mObservers[i]->NotifyInvalidated(aWidget, x, y, width, height);
++	}
++
++	//if (mObserver)
++	//	mObserver->NotifyInvalidated(aWidget, x, y, width, height);
++
++   
++}
++
+ //-------------------------------------------------------------------------
+ //
+ // Register the window class for the internal window and create the window
+Index: widget/src/windows/nsToolkit.h
+===================================================================
+RCS file: /cvsroot/mozilla/widget/src/windows/nsToolkit.h,v
+retrieving revision 3.31.4.1
+diff -u -r3.31.4.1 nsToolkit.h
+--- widget/src/windows/nsToolkit.h	23 May 2006 10:18:41 -0000	3.31.4.1
++++ widget/src/windows/nsToolkit.h	5 Jan 2008 00:27:25 -0000
+@@ -46,6 +46,9 @@
+ #include "nsWindowAPI.h"
+ #include "nsITimer.h"
+ #include "nsCOMPtr.h"
++#include "nsCOMArray.h"
++
++#include <stdio.h>
+ 
+ struct MethodInfo;
+ class nsIEventQueue;
+@@ -84,11 +87,16 @@
+             PRBool          UserIsMovingWindow(void);
+             nsIEventQueue*  GetEventQueue(void);
+ 
++            NS_IMETHOD      AddObserver(nsIToolkitObserver* aObserver);
++            NS_IMETHOD      RemoveObserver(nsIToolkitObserver* aObserver);
++
+ private:
+                             ~nsToolkit();
+             void            CreateUIThread(void);
+ 
+ public:
++            void            NotifyInvalidated(nsIWidget* aWidget, int x, int y, int width, int height);
++
+     // Window procedure for the internal window
+     static LRESULT CALLBACK WindowProc(HWND hWnd, 
+                                         UINT Msg, 
+@@ -100,6 +108,8 @@
+     HWND        mDispatchWnd;
+     // Thread Id of the "main" Gui thread.
+     PRThread    *mGuiThread;
++    //nsCOMPtr<nsIToolkitObserver> mObserver;
++    nsCOMArray<nsIToolkitObserver> mObservers;
+ 
+ public:
+     static HINSTANCE mDllInstance;
+Index: widget/src/windows/nsWindow.cpp
+===================================================================
+RCS file: /cvsroot/mozilla/widget/src/windows/nsWindow.cpp,v
+retrieving revision 3.569.2.47
+diff -u -r3.569.2.47 nsWindow.cpp
+--- widget/src/windows/nsWindow.cpp	8 Nov 2007 08:20:00 -0000	3.569.2.47
++++ widget/src/windows/nsWindow.cpp	5 Jan 2008 00:27:27 -0000
+@@ -1832,6 +1832,8 @@
+     }
+ #endif
+ 
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+     VERIFY(::DestroyWindow(mWnd));
+ 
+     mWnd = NULL;
+@@ -1849,10 +1851,12 @@
+ 
+ NS_IMETHODIMP nsWindow::SetParent(nsIWidget *aNewParent)
+ {
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+   if (aNewParent) {
+     HWND newParent = (HWND)aNewParent->GetNativeData(NS_NATIVE_WINDOW);
+     NS_ASSERTION(newParent, "Parent widget has a null native window handle");
+     ::SetParent(mWnd, newParent);
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+ 
+     return NS_OK;
+   }
+@@ -2009,6 +2013,7 @@
+                        SWP_NOZORDER | SWP_NOACTIVATE);
+       }
+     }
++    NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+   }
+   mIsVisible = bState;
+ 
+@@ -2056,6 +2061,7 @@
+   }
+ 
+   ::SetWindowPos(mWnd, behind, 0, 0, 0, 0, flags);
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+   return NS_OK;
+ }
+ 
+@@ -2268,6 +2274,8 @@
+     return NS_OK;
+   }
+ 
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+   mBounds.x = aX;
+   mBounds.y = aY;
+ 
+@@ -2310,6 +2318,7 @@
+ 
+     NS_IF_RELEASE(par);
+   }
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+   return NS_OK;
+ }
+ 
+@@ -2328,6 +2337,7 @@
+     ResizeTranslucentWindow(aWidth, aHeight);
+ #endif
+ 
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+   // Set cached value for lightweight and printing
+   mBounds.width  = aWidth;
+   mBounds.height = aHeight;
+@@ -2358,6 +2368,8 @@
+     NS_IF_RELEASE(par);
+   }
+ 
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+   if (aRepaint)
+     Invalidate(PR_FALSE);
+ 
+@@ -2380,6 +2392,8 @@
+     ResizeTranslucentWindow(aWidth, aHeight);
+ #endif
+ 
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+   // Set cached value for lightweight and printing
+   mBounds.x      = aX;
+   mBounds.y      = aY;
+@@ -2411,6 +2425,8 @@
+     NS_IF_RELEASE(par);
+   }
+ 
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
++
+   if (aRepaint)
+     Invalidate(PR_FALSE);
+ 
+@@ -3234,6 +3250,8 @@
+         VERIFY(::UpdateWindow(mWnd));
+       }
+     }
++
++    NotifyInvalidated(nsRect(nsPoint(0,0), mBounds.Size()));
+   }
+   return NS_OK;
+ }
+@@ -3274,6 +3292,8 @@
+         VERIFY(::UpdateWindow(mWnd));
+       }
+     }
++
++    NotifyInvalidated(aRect);
+   }
+   return NS_OK;
+ }
+@@ -3303,6 +3323,10 @@
+         rv = NS_ERROR_FAILURE;
+       }
+     }
++
++    PRInt32 x, y, width, height;
++    NS_CONST_CAST(nsIRegion*, aRegion)->GetBoundingBox(&x, &y, &width, &height);
++    NotifyInvalidated(nsRect(x, y, width, height));
+   }
+   return rv;
+ }
+@@ -3444,6 +3468,7 @@
+ 
+   ::ScrollWindowEx(mWnd, aDx, aDy, (nsnull != aClipRect) ? &trect : NULL, NULL,
+                    NULL, NULL, SW_INVALIDATE | SW_SCROLLCHILDREN);
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+   ::UpdateWindow(mWnd);
+   return NS_OK;
+ }
+@@ -3453,6 +3478,7 @@
+   // Scroll the entire contents of the window + change the offset of any child windows
+   ::ScrollWindowEx(mWnd, aDx, aDy, NULL, NULL, NULL,
+                    NULL, SW_INVALIDATE | SW_SCROLLCHILDREN);
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+   ::UpdateWindow(mWnd); // Force synchronous generation of NS_PAINT
+   return NS_OK;
+ }
+@@ -3470,6 +3496,7 @@
+   // Child windows are not scrolled.
+   ::ScrollWindowEx(mWnd, aDx, aDy, &trect, NULL, NULL,
+                    NULL, SW_INVALIDATE);
++  NotifyInvalidated(nsRect(nsPoint(0, 0), mBounds.Size()));
+   ::UpdateWindow(mWnd); // Force synchronous generation of NS_PAINT
+   return NS_OK;
+ }
+@@ -8270,6 +8297,9 @@
+       // Rollup if the event is outside the popup.
+       PRBool rollup = !nsWindow::EventIsInsideWindow(inMsg, (nsWindow*)gRollupWidget);
+ 
++      // XXXjgaunt - Linden - to get events to the popup
++      rollup = PR_FALSE;
++
+       if (rollup && (inMsg == WM_MOUSEWHEEL || inMsg == uMSH_MOUSEWHEEL ||
+                      inMsg == WM_MOUSEHWHEEL))
+       {
+Index: widget/src/windows/nsWindow.h
+===================================================================
+RCS file: /cvsroot/mozilla/widget/src/windows/nsWindow.h,v
+retrieving revision 3.204.2.13
+diff -u -r3.204.2.13 nsWindow.h
+--- widget/src/windows/nsWindow.h	8 Nov 2007 08:20:00 -0000	3.204.2.13
++++ widget/src/windows/nsWindow.h	5 Jan 2008 00:27:27 -0000
+@@ -526,6 +526,13 @@
+ 
+   PRBool CanTakeFocus();
+ 
++  void NotifyInvalidated(const nsRect& aRect) {
++	nsToolkit* tk = NS_STATIC_CAST(nsToolkit*, mToolkit);
++	if (tk) {
++	  tk->NotifyInvalidated(this, aRect.x, aRect.y, aRect.width, aRect.height);
++    }
++  }
++
+ private:
+ 
+ 
+
+--- xulrunner/installer/mac/Makefile.in	2006-08-23 10:11:46.000000000 -0700
++++ xulrunner/installer/mac/Makefile.in	2008-01-29 16:10:11.000000000 -0800
+@@ -79,11 +79,13 @@
+ 
+ # Syntax "chown_root <directory>"
+ # Should be equivalent to "chown -R root:admin <directory>"
+-CHOWN_ROOT ?= $(error CHOWN_ROOT must be set to a setuid script.)
++# MBW -- XXX -- turning this off, since it breaks us.
++#CHOWN_ROOT ?= $(error CHOWN_ROOT must be set to a setuid script.)
+ 
+ # Syntax "chown_revert <directory>"
+ # Should be equivalent to "chown -R <getuid> <directory>"
+-CHOWN_REVERT ?= $(error CHOWN_REVERT must be set to a setuid script.)
++# MBW -- XXX -- turning this off, since it breaks us.
++#CHOWN_REVERT ?= $(error CHOWN_REVERT must be set to a setuid script.)
+ 
+ # Do the real work here: we take $(DIST)/XUL.framework and make it into an
+ # installer .pkg bundle. The xulrunner/installer makefile will then pack the
+@@ -94,19 +96,22 @@
+ 	$(RM) -rf $(DIST)/$(STAGEPATH)xulrunner-pkg
+ 	mkdir $(DIST)/$(STAGEPATH)xulrunner-pkg
+ 	chmod -R a+rX,u+w,go-w,-s,-t $(DIST)/$(STAGEPATH)$(MOZ_PKG_APPNAME)
++# MBW -- XXX -- turning this off, since it breaks us.
++# create the package directory at least, so rsync doesn't die.
++	mkdir -p $(_ABS_DIST)/$(STAGEPATH)xulrunner-pkg/$(PKG_BASENAME).pkg/Contents/MacOS
+ # For some unknown reason, PackageMaker requires absolute paths to everything.
+-	unset NEXT_ROOT; \
+-	$(CHOWN_ROOT) $(DIST)/$(STAGEPATH)$(MOZ_PKG_APPNAME) && \
+-	  /Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker -build -v \
+-	    -p $(_ABS_DIST)/$(STAGEPATH)xulrunner-pkg/$(PKG_BASENAME).pkg \
+-	    -f $(_ABS_DIST)/$(STAGEPATH)$(MOZ_PKG_APPNAME) \
+-	    -r $(_ABS_OBJDIR)/resource-stage \
+-	    -i $(_ABS_OBJDIR)/Info.plist \
+-	    -d $(_ABS_OBJDIR)/Description.plist > packagemaker.log; \
+-	SAVED=$$?; \
+-	if [ "$$SAVED" == "1" -a \
+-	     `grep -c 'was completed with the following non-fatal errors' < packagemaker.log` -gt 0 ]; then \
+-	  SAVED=0; \
+-	fi; \
+-	$(CHOWN_REVERT) $(DIST)/$(STAGEPATH)$(MOZ_PKG_APPNAME); \
+-	exit $$SAVED
++#	unset NEXT_ROOT; \
++#	$(CHOWN_ROOT) $(DIST)/$(STAGEPATH)$(MOZ_PKG_APPNAME) && \
++#	  /Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker -build -v \
++#	    -p $(_ABS_DIST)/$(STAGEPATH)xulrunner-pkg/$(PKG_BASENAME).pkg \
++#	    -f $(_ABS_DIST)/$(STAGEPATH)$(MOZ_PKG_APPNAME) \
++#	    -r $(_ABS_OBJDIR)/resource-stage \
++#	    -i $(_ABS_OBJDIR)/Info.plist \
++#	    -d $(_ABS_OBJDIR)/Description.plist > packagemaker.log; \
++#	SAVED=$$?; \
++#	if [ "$$SAVED" == "1" -a \
++#	     `grep -c 'was completed with the following non-fatal errors' < packagemaker.log` -gt 0 ]; then \
++#	  SAVED=0; \
++#	fi; \
++#	$(CHOWN_REVERT) $(DIST)/$(STAGEPATH)$(MOZ_PKG_APPNAME); \
++#	exit $$SAVED
+
+
+--- widget/src/mac/nsMacTSMMessagePump.cpp	2006-06-22 12:13:02.000000000 -0700
++++ widget/src/mac/nsMacTSMMessagePump.cpp	2008-03-13 17:28:13.000000000 -0700
+@@ -172,6 +172,9 @@
+ 	NS_ASSERTION(err==noErr, "nsMacTSMMessagePump::PositionToOffsetHandler: AEGetParamPtr[TSMRefcon] failed");
+ 	if (err!=noErr) 
+ 		return err;
++
++	if(NULL==eventHandler)
++		return errAEEventNotHandled;
+ 	
+ 	//
+ 	// Extract the Position parameter.
+@@ -220,6 +223,9 @@
+ 	NS_ASSERTION(err==noErr, "nsMacTSMMessagePump::OffsetToPositionHandler: AEGetParamPtr[TSMRefcon] failed.");
+ 	if (err!=noErr) 
+ 		return err;
++
++	if(NULL==eventHandler)
++		return errAEEventNotHandled;
+ 	
+ 	//
+ 	// Extract the Offset parameter
+@@ -264,6 +270,9 @@
+   NS_ASSERTION(err==noErr, "nsMacTSMMessagePump::GetAppleEventTSMData: AEGetParamPtr[TSMRefcon] failed.");
+   if (err)
+     return err;
++
++  if(NULL==*outEventHandler)
++    return errAEEventNotHandled;
+  
+   //
+   // get text
+@@ -438,6 +447,9 @@
+   NS_ASSERTION(err==noErr, "nsMacTSMMessagePump::UnicodeGetSelectedTextHandler: AEGetParamPtr[TSMRefcon] failed.");
+   if (err!=noErr) 
+     return err;
++
++  if(NULL==eventHandler)
++    return errAEEventNotHandled;
+   
+   //
+   // Extract the Offset parameter
+
+Index: modules/plugin/base/src/nsPluginsDirDarwin.cpp
+===================================================================
+RCS file: /cvsroot/mozilla/modules/plugin/base/src/nsPluginsDirDarwin.cpp,v
+retrieving revision 1.8.2.1
+diff -r1.8.2.1 nsPluginsDirDarwin.cpp
+--- modules/plugin/base/src/nsPluginsDirDarwin.cpp	2008-04-25 12:57:43.000000000 -0700
++++ modules/plugin/base/src/nsPluginsDirDarwin.cpp	2008-04-25 13:14:18.000000000 -0700
+@@ -260,7 +260,7 @@
+ static char* p2cstrdup(StringPtr pstr)
+ {
+     int len = pstr[0];
+-    char* cstr = new char[len + 1];
++    char* cstr = (char*)PR_Malloc((len + 1) * sizeof(char));
+     if (cstr != NULL) {
+         ::BlockMoveData(pstr + 1, cstr, len);
+         cstr[len] = '\0';
+@@ -373,10 +373,10 @@
+ 
+       // fill-in rest of info struct
+       int variantCount = info.fVariantCount;
+-      info.fMimeTypeArray      = new char*[variantCount];
+-      info.fExtensionArray     = new char*[variantCount];
++      info.fMimeTypeArray      = (char **)PR_Malloc(variantCount * sizeof(char *));
++      info.fExtensionArray     = (char **)PR_Malloc(variantCount * sizeof(char *));
+       if (mi.infoStrings)
+-        info.fMimeDescriptionArray = new char*[variantCount];
++        info.fMimeDescriptionArray = (char **)PR_Malloc(variantCount * sizeof(char *));
+ 
+       short mimeIndex = 2, descriptionIndex = 2;
+             for (int i = 0; i < variantCount; i++) {
+@@ -403,20 +403,21 @@
+ {
+     if (info.fPluginInfoSize <= sizeof(nsPluginInfo)) 
+         {
+-            delete[] info.fName;
+-            delete[] info.fDescription;
++
++            PR_Free(info.fName);
++            PR_Free(info.fDescription);
+             int variantCount = info.fVariantCount;
+             for (int i = 0; i < variantCount; i++) 
+                 {
+-                    delete[] info.fMimeTypeArray[i];
+-                    delete[] info.fExtensionArray[i];
+-                    delete[] info.fMimeDescriptionArray[i];
++                    PR_Free(info.fMimeTypeArray[i]);
++                    PR_Free(info.fExtensionArray[i]);
++                    PR_Free(info.fMimeDescriptionArray[i]);
+                 }
+-            delete[] info.fMimeTypeArray;
+-            delete[] info.fMimeDescriptionArray;
+-            delete[] info.fExtensionArray;
+-            delete[] info.fFileName;
+-            delete[] info.fFullPath;
++            PR_Free(info.fMimeTypeArray);
++            PR_Free(info.fMimeDescriptionArray);
++            PR_Free(info.fExtensionArray);
++            PR_Free(info.fFileName);
++            PL_strfree(info.fFullPath);
+         }
+     return NS_OK;
+ }

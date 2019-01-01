@@ -1,0 +1,371 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;11.&nbsp;Proxies and Players</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch10.html" title="Chapter&nbsp;10.&nbsp;Profiling">
+      <link rel="next" href="ch12.html" title="Chapter&nbsp;12.&nbsp;Entities and the Universe">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch11.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;11.&nbsp;Proxies and Players</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch10.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch12.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Proxies_And_Players"></a>Chapter&nbsp;11.&nbsp;Proxies and Players
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch11.html#d0e10274">11.1. Proxies</a></span></dt>
+                  <dt><span class="section"><a href="ch11.html#d0e10363">11.2. Witnesses</a></span></dt>
+                  <dt><span class="section"><a href="ch11.html#xref_Entity_Control">11.3. Entity Control</a></span></dt>
+                  <dt><span class="section"><a href="ch11.html#xref_Physics_Correction">11.4. Physics Correction</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch11.html#d0e10544">11.4.1. Avoiding Y-axis rubber-banding.</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10274"></a>11.1.&nbsp;Proxies
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The class
+                      <code class="classname">BigWorld</code>.<code class="classname">Proxy</code> on the
+                      BaseApp extends
+                      <code class="classname">BigWorld</code>.<code class="classname">Base</code> to support
+                      player-controlled entities. By deriving an entity from
+                      <code class="classname">BigWorld</code>.<code class="classname">Proxy</code>, you can
+                      implement player characters, their accounts, and any other relevant
+                      player-controlled objects on the server.
+               </p>
+               <p>An entity derived from
+                      <code class="classname">BigWorld</code>.<code class="classname">Proxy</code> is created
+                      from the database whenever a client logs in to the server. For details on
+                      how BigWorld determines which Proxy to load, see <a href="ch20.html" title="Chapter&nbsp;20.&nbsp;User Authentication and Billing System Integration"><i xmlns:xlink="http://www.w3.org/1999/xlink">User Authentication and Billing System Integration</i></a>. Proxies created
+                      in this way (see below for other ways of creating proxies) which have a
+                      property called <code class="varname">password</code>, will have the value of that
+                      property set to the login password.
+               </p>
+               <p>An instance of
+                      <code class="classname">BigWorld</code>.<code class="classname">Proxy</code> needs neither
+                      a cell entity, nor a client one. A proxy entity can be created using the
+                      method
+                      <code class="classname">BigWorld</code>.<code class="methodname">createBase</code>, just
+                      like any other entity. For more detail on this method, see <a href="ch07.html#xref_Entity_Instantiation_On_The_BaseApp" title="7.1.&nbsp;Entity Instantiation on the BaseApp">Entity Instantiation on the BaseApp</a>.
+               </p>
+               <p>Like other base entities, saving and loading proxy entities from the
+                      database is possible. Initially, these reloaded proxy entities will be
+                      created without an attached client. An existing proxy can later hand its
+                      client over to the reloaded one, in which case the reloaded proxy will be
+                      the one handling the client connection.
+               </p>
+               <p>This allows you to have, for example, an
+                      <code class="classname">Account</code> entity that people can log in to, and a
+                      <code class="classname">Character</code> entity that people can select from a menu
+                      in order to use in the game.
+               </p>
+               <p>To pass the control of a client from one proxy to another, use the
+                      method <code class="methodname">giveClientTo</code>, as in the example
+                      below:
+               </p><pre class="programlisting">clientControlledProxy.giveClientTo( nonClientControlledProxy )</pre><p>Whenever a client moves between proxies, or the cell entity of the
+                      proxy that a client is attached to is destroyed, the client receives a
+                      call on <code class="methodname">onEntitiesReset</code> to clear out its current
+                      knowledge of the world. This effectively interrupts all game
+                      communications, and forces the client to refresh. If only the cell entity
+                      has been destroyed, then the client's knowledge of its proxy is
+                      retained.
+               </p>
+               <p>If <code class="methodname">giveClientTo</code> does not succeed because of
+                      a problem with the destination proxy,
+                      <code class="methodname">onGiveClientToFailure</code> will be called on the
+                      origin proxy.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/baseapp_managing_bases_and_proxies.png"><span class="caption">
+                        <p>BaseApp managing bases and proxies</p></span></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10363"></a>11.2.&nbsp;Witnesses
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Whenever a proxy with an attached client has a corresponding cell
+                      entity, an extra object called witness is attached to the cell
+                      entity.
+               </p>
+               <p>This object manages the entity's AoI, and sends updates to the
+                      proxy, which forwards them on to the client.
+               </p>
+               <p>The updates consist of the bulk of game-related messages, such
+                      as:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Entity position updates.</p>
+                     </li>
+                     <li>
+                        <p>Entity property updates.</p>
+                     </li>
+                     <li>
+                        <p>Method calls.</p>
+                     </li>
+                     <li>
+                        <p>Space data changes.</p>
+                     </li>
+                     <li>
+                        <p>Notifications of entities entering and leaving the AoI.</p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Entity_Control"></a>11.3.&nbsp;Entity Control
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>By default, every cell entity is considered to be controlled by the
+                      server. When an entity incorporates a witness object, it is considered to
+                      be controlled by the client attached to the corresponding proxy.
+               </p>
+               <p>However, the control of an entity may be explicitly assigned and
+                      queried, using the entity attribute .<code class="varname">controlledBy</code>. This
+                      attribute may be set to <span class="literal">None</span>, to indicate server
+                      control, or to a <code class="classname">BaseEntityMailBox</code> to indicate
+                      control by the client attached to that proxy. Within this context, control
+                      implies ownership of and responsibility for the entity's position and
+                      direction. Clients (and proxies) are informed of changes to the set of
+                      entities that they are allowed to control. Proxies may read this set
+                      through their attribute wards.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Physics_Correction"></a>11.4.&nbsp;Physics Correction
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>When an entity is controlled by a client, setting the attribute
+                      <code class="classname">Entity</code>.<code class="varname">topSpeed</code> to a value
+                      greater than zero enables the physics checking. By default the
+                      <code class="varname">topSpeed</code> enables physics checking on all 3 axis,
+                      however this may not always be appropriate. For example, if the gravity of
+                      your game environment enables a Y-axis acceleration that results in a top
+                      speed exceeding the maximum allowable X/Z-axis top speed. In order to
+                      accommodate this there is a secondary attribute named
+                      <code class="classname">Entity</code>.<code class="varname">topSpeedY</code> which takes
+                      precedence when set to a value greater than zero.
+                      <code class="varname">topSpeedY</code> will only be used when both
+                      <code class="varname">topSpeed</code> and <code class="varname">topSpeedY</code> are greater
+                      than zero.
+               </p>
+               <p>Entity movement is validated in the following ways:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Speed</em></p>
+                        <p>The first check is regarding the speed, to ensure that it does
+                                   not exceed <code class="varname">topSpeed</code> and
+                                   <code class="varname">topSpeedY</code>. There is a small amount of variance
+                                   allowed in speed to account for up to 150ms of network jitter. Care is
+                                   taken so that this <em class="emphasis">latency debt</em> is not exploited
+                                   by allowing the player to travel faster than the top speed for a brief
+                                   period of time.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Geometry of the scene</em></p>
+                        <p>The second check is made against the geometry of the scene, to
+                                   ensure that the entity only leaves its current chunk through a
+                                   well-defined portal.
+                        </p>
+                        <p>In spite of being very fast, this check does have consequences
+                                   for level design. Barriers that control character mobility must be
+                                   represented at the level of chunks. For example, a chunk with a wall
+                                   across it, and a door giving access to the other side, is not
+                                   protected by this physics checking system. In order to implement this
+                                   in a manner to enable physics validation, two chunks should be used
+                                   one on each side of the wall, with the door as a portal between
+                                   them.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Custom physics validator</em></p>
+                        <p>If a custom physics validator has been developed, it will then
+                                   be called between the top speed and the geometry checks. The custom
+                                   physics validator is called with the following parameters:
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p>Pointer to the entity.</p>
+                              </li>
+                              <li>
+                                 <p>Pointer to the vehicle (<span class="literal">NULL</span> if the
+                                                entity is not on a vehicle).
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>The position to which the entity wants to move.</p>
+                              </li>
+                              <li>
+                                 <p>The time elapsed since the last physics check.</p>
+                              </li>
+                           </ul>
+                        </div>
+                        <p>The custom physics validator should return
+                                   <span class="literal">true</span> if the entity is allowed to move to the new
+                                   position, or <span class="literal">false</span> if it is not allowed.
+                        </p>
+                        <p>To install a custom physics validator, a CellApp extension
+                                   module must be written. During the initialisation of the extension
+                                   module, the global function pointer
+                                   <code class="varname">g_customPhysicsValidator</code> (declared in
+                                   <code class="filename">bigworld/src/server/cellapp/entity.hpp</code>) should be
+                                   set to point to the custom physics validator function. For more
+                                   details, see <a href="ch25.html" title="Chapter&nbsp;25.&nbsp;Extending BigWorld Server"><i xmlns:xlink="http://www.w3.org/1999/xlink">Extending BigWorld Server</i></a>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Other scenarios in which physics checking is applied include:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Control of multiple entities by the same client (such as
+                                   wards).
+                        </p>
+                     </li>
+                     <li>
+                        <p>Movement between vehicles (the ghost methods
+                                   <code class="methodname">onPassengerAlightAttempt</code> and
+                                   <code class="methodname">onPassengerBoardAttempt</code> are additionally
+                                   called).
+                        </p>
+                     </li>
+                     <li>
+                        <p>Movement to another space.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>When a server script directly sets the position or direction of an
+                      entity that is controlled by a client, the CellApp treats that as a
+                      physics correction. A new position and direction (sometimes referred to as
+                      the <em class="emphasis">pose</em>) are forced down to the client, and no
+                      future position and direction updates are accepted until the correction is
+                      acknowledged. This feature can be very useful for teleporting a player in
+                      response to some action or event on the server. Notably, the methods
+                      <code class="classname">Entity</code>.<code class="methodname">teleport</code>,
+                      <code class="classname">Entity</code>.<code class="methodname">boardVehicle</code> and
+                      <code class="classname">Entity</code>.<code class="methodname">alightVehicle</code> also
+                      adhere to this mechanism. Server-side teleports are the only way to move
+                      an entity between spaces.
+               </p>
+               <p>While in most cases movement controllers would also result in
+                      downstream-forced positions, their use on client-controlled entities is
+                      neither recommended nor supported, since they continually set the position
+                      via a system intended for one-off adjustments.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10544"></a>11.4.1.&nbsp;Avoiding Y-axis rubber-banding.
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Due to the manner in which physics validation occurs, if a top
+                           speed has been exceeded, the server will force a position update to the
+                           client with the last known valid position. This however has the
+                           unfortunate side effect of producing an entity which doesn't fall if the
+                           top speed has been exceeded in the Y-axis. Setting the
+                           <code class="varname">topSpeedY</code> to be higher than
+                           <code class="varname">topSpeed</code> will help in this situation, but eventually,
+                           the Y-velocity will be greater than <code class="varname">topSpeedY</code> due to
+                           acceleration due to gravity when falling for long periods.
+                  </p>
+                  <p>In order to produce a work around for this, it is recommended to
+                           write a custom physics validator while setting a large value for
+                           <code class="varname">topSpeedY</code>. The custom physics validator could then
+                           perform its own validation and update the entity position with a
+                           decreasing Y-position prior to returning <span class="literal">false</span>, and
+                           the updated position would then be forced to the client.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch10.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch12.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;10.&nbsp;Profiling&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;12.&nbsp;Entities and the Universe</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,460 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;34.&nbsp;Web Console</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt03.html" title="Part&nbsp;III.&nbsp;Extending WebConsole">
+      <link rel="prev" href="pt03.html" title="Part&nbsp;III.&nbsp;Extending WebConsole">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;34.&nbsp;Web Console</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="pt03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;III.&nbsp;Extending WebConsole</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_WebConsole_Overview"></a>Chapter&nbsp;34.&nbsp;Web Console
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch34.html#d0e17611">34.1. Adding a Page to a Module</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch34.html#d0e17635">34.1.1. Create a Template KID File</a></span></dt>
+                        <dt><span class="section"><a href="ch34.html#d0e17675">34.1.2. Edit <code class="filename">controllers.py</code></a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch34.html#d0e17723">34.2. Adding a Module</a></span></dt>
+                  <dt><span class="section"><a href="ch34.html#d0e17812">34.3. Add an Action Item to ClusterControl</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch34.html#xref_Adding_A_Menu_Item_For_An_Existing_Component_Type">34.3.1. Adding a Menu Item for an Existing Component Type</a></span></dt>
+                        <dt><span class="section"><a href="ch34.html#d0e17862">34.3.2. Adding a Menu Item for a New Component Type</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>Although WebConsole provides numerous features to control and monitor
+                 a server cluster, there many times when you want to extend its
+                 functionality. This part of the document describes how to do that.
+            </p>
+            <p>WebConsole is built upon an existing web development framework
+                 (TurboGears). The list below describes TurboGears' components of
+                 interest:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">TurboGears</em></p>
+                     <p>Rapid web application development framework.</p>
+                     <p>Component can be found at <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.turbogears.org/" target="_top">http://www.turbogears.org/</a>.
+                     </p>
+                     <p>Documentation can be found at <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://docs.turbogears.org/1.0" target="_top">http://docs.turbogears.org/1.0</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">MochiKit</em></p>
+                     <p>A set of JavaScript libraries to enhance existing JavaScript
+                              functionality and provide simple mechanisms of performing common
+                              JavaScript operations.
+                     </p>
+                     <p>Component can be found at <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://mochikit.com/" target="_top">http://mochikit.com/</a>.
+                     </p>
+                     <p>Documentation can be found at <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://mochikit.com/doc/html/MochiKit/index.html" target="_top">http://mochikit.com/doc/html/MochiKit/index.html</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">KID Templates</em></p>
+                     <p>Template language that provides the ability to integrate Python
+                              code into HTML to generate dynamic web pages.
+                     </p>
+                     <p>Component can be found at <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://kid-templating.org/" target="_top">http://kid-templating.org/</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">CherryPy</em></p>
+                     <p>Web server component of TurboGears.</p>
+                     <p>Component can be found at <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.cherrypy.org/" target="_top">http://www.cherrypy.org/</a>.
+                     </p>
+                     <p>Documentation can be found at <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://docs.cherrypy.org/" target="_top">http://docs.cherrypy.org/</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">SQLObject</em></p>
+                     <p>Relational database Python wrapper that abstracts database
+                              concepts (such as tables, rows and columns) into object-oriented
+                              concepts (such as classes, instances and attributes).
+                     </p>
+                     <p>Component can be found at <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.sqlobject.org/" target="_top">http://www.sqlobject.org/</a>.
+                     </p>
+                     <p>Documentation can be found at <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.sqlobject.org/SQLObject.html" target="_top">http://www.sqlobject.org/SQLObject.html</a>.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>The referenced documentation will differ based on the kind of
+                 functionality that you are trying to achieve within WebConsole. The sections
+                 below outline some common modifications that you might wish to make to
+                 WebConsole, and a brief description of what is required. The also include
+                 references to the appropriate component documentation that would be used
+                 while modifying the tool.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e17611"></a>34.1.&nbsp;Adding a Page to a Module
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This is possibly the easiest modification that you might want to
+                      make to WebConsole.
+               </p>
+               <p>There are roughly two steps to add a new page:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Create a template KID
+                                      file.</em></p>
+                        <p>This file displays the dynamic content generated in whatever
+                                   format we choose. The content is generated by the method created in
+                                   the step below.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Add a method to
+                                      <code class="filename">controllers.py</code>.</em></p>
+                        <p>The method will be called when the page is accessed, and
+                                   generates the content to be passed to the template file.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e17635"></a>34.1.1.&nbsp;Create a Template KID File
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Below is a simple stub template file that is enough to test if the
+                           code is hooked up correctly, before writing the template layout
+                           code.
+                  </p>
+                  <p>For our example, this template file will be saved as
+                           <code class="filename">web_console/log_viewer/
+                              templates/delete.kid</code>.
+                  </p><pre class="programlisting">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+  
+&lt;?python
+  layout_params[ "moduleHeader" ] = "Log Viewer"
+?&gt;
+  
+&lt;html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://purl.org/kid/ns#"
+      py:layout="'../../common/templates/layout.kid'"
+      py:extends="'../../common/templates/common.kid'"&gt;
+  
+&lt;div py:def="moduleContent()"&gt; <a name="co10568" href="ch34.html#co10568_desc"><img src="../images/callouts/1.png" alt="1" border="0"></a>
+  
+    &lt;script type="text/javascript"&gt;
+        PAGE_TITLE = 'Delete a Log';
+    &lt;/script&gt;
+  
+    This page will be able to delete logs.
+
+`&lt;p&gt;Page accessed: ${accessTime}&lt;/p&gt;
+&lt;/div&gt;
+&lt;/html&gt;</pre><p><span class="citetitle">Example KID template file <span class="symbol">&#8208;</span>
+                              <code class="filename">web_console/log_viewer/templates/delete.kid</code></span></p>
+                  <div class="calloutlist">
+                     <table border="0" summary="Callout list">
+                        <tr>
+                           <td width="5%" valign="top" align="left"><a name="co10568_desc"></a><a href="#co10568"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                           </td>
+                           <td valign="top" align="left">
+                              <p>This tag is necessary because the template inherits its layout
+                                           from <code class="filename">web_console/common/templates/layout.kid</code>,
+                                           which displays the module list in the left hand side of the page,
+                                           and then fills the main portion of the page by calling
+                                           <code class="methodname">moduleContent()</code>.
+                              </p>
+                              <p>If you remove the <span class="literal">&lt;div&gt;</span> element and
+                                           access the page, an exception should be produced, stating that
+                                           <span class="literal">"name 'moduleContent' is not defined"</span>.
+                              </p>
+                           </td>
+                        </tr>
+                     </table>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e17675"></a>34.1.2.&nbsp;Edit <code class="filename">controllers.py</code></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The method created in controllers.py joins the act of accessing a
+                           web page in the browser to processing the data and passing it to the
+                           template KID file.
+                  </p>
+                  <p>An <span class="literal">@expose</span> decorator must be specified for the
+                           method that will tie the template KID file to the new method, with the
+                           forward slashes replaced by periods.
+                  </p>
+                  <p>Add the excerpt below to the <code class="classname">LogViewer</code>
+                           class:
+                  </p><pre class="programlisting"># This will only allow users who have logged in to access the page
+@identity.require( identity.not_anonymous() )
+@expose( template = "log_viewer.templates.delete" )
+def delete( self, **kw ):
+  return dict( accessTime=time.ctime() )</pre><p>Note that the name of the added method can be accessed directly,
+                           since it has been exposed. To access the page, try to connect to
+                           <span class="literal">http://<em class="replaceable"><code>&lt;machinename&gt;</code></em>:8080/log/delete.</span></p>
+                  <p>Finally, if you wish to add the page as a link in the left-hand
+                           navigation links, under the module heading, then add the line below in
+                           the <code class="methodname">__init__</code> method of
+                           <code class="filename">controllers.py</code>:
+                  </p><pre class="programlisting">self.addPage( "Delete Logs", "delete" )</pre><p><em class="emphasis">Example <code class="filename">controllers.py</code>
+                              <span class="symbol">&#8208;</span> Addition to the
+                              <span class="literal">__init__</span> method</em></p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e17723"></a>34.2.&nbsp;Adding a Module
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Creating a basic module is a relatively straightforward procedure.
+                      Outlined below are the steps required to get a new module working within
+                      WebConsole. However, to extend its functionality, it is strongly
+                      recommended that you refer to the TurboGears documentation website, and
+                      the existing WebConsole modules' documentation.
+               </p>
+               <p>The Python Console module is the simplest one in WebConsole, and
+                      thus the best starting point for grasping how you might extend a module
+                      once the basic framework is operational.
+               </p>
+               <p>The steps below create a module called Devel:</p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Create the directory <code class="filename">web_console/devel</code> and <code class="filename">web_console/devel/templates</code>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>In each of the directories above, create an empty file
+                                   <code class="filename">__init__.py</code>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Add the module to <code class="filename">controllers.py</code>.
+                        </p>
+                        <p>To make the module accessible from WebConsole, the root
+                                   controller has to be notified of its existence. To do this, at the end
+                                   of the <code class="methodname">__init__</code> method of
+                                   <code class="filename">web_console/ root/controllers.py</code>, add the excerpt
+                                   below (you should see similar lines for the other modules above
+                                   it):
+                        </p><pre class="programlisting">import web_console.devel.controllers
+self.devel = web_console.devel.controllers.Devel(self, "Devel Tools", "devel","/static/images/console.png", lambda: not isAdmin() )</pre><p><span class="citetitle">Example <code class="filename">controllers.py</code> <span class="symbol">&#8208;</span> Addition to the
+                                      <code class="methodname">__init__</code> method</span></p>
+                     </li>
+                     <li>
+                        <p>Create the <span class="literal">controllers.py</span> for the new
+                                   module.
+                        </p>
+                        <p>Below is an extremely basic stub module that makes the index
+                                   page available, and links it to the template KID file
+                                   <code class="filename">web_console/devel/templates/index.kid</code>:
+                        </p><pre class="programlisting">from turbogears.controllers import (expose, validate)
+from turbogears import identity
+  
+from web_console.common import module
+  
+class Devel( module.Module ):
+  
+  def __init__( self, *args, **kw ):
+    module.Module.__init__( self, *args, **kw )
+  
+  @identity.require( identity.not_anonymous() )
+  @expose( template="devel.templates.index" )
+  def index( self ):
+    return dict()</pre><p><span class="citetitle">Example <code class="filename">controllers.py</code> for the
+                                      new module</span></p>
+                     </li>
+                     <li>
+                        <p>Create the template page to use when the module is
+                                   accessed.
+                        </p>
+                        <p>Place the text below in
+                                   <code class="filename">web_console/devel/templates/index.kid</code>.
+                        </p><pre class="programlisting">  &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+  &lt;html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://purl.org/kid/ns#"
+      py:layout="'../../common/templates/layout.kid'"&gt;
+  
+  &lt;div py:def="moduleContent()"&gt;
+    The Development Module
+  &lt;/div&gt;
+  
+  &lt;/html&gt;</pre><p><span class="citetitle">File
+                                      <code class="filename">web_console/devel/templates/index.kid</code></span></p>
+                     </li>
+                  </ol>
+               </div>
+               <p>After these modifications, the module Devel Tools will be displayed
+                      in WebConsole's left-hand navigation menu.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e17812"></a>34.3.&nbsp;Add an Action Item to ClusterControl
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The action menu supports two types of functionality:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Redirecting upon selection</p>
+                     </li>
+                     <li>
+                        <p>Running JavaScript upon selection</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The behaviour is defined in
+                      <code class="filename">web_console/common/util.py</code> script, in
+                      <code class="methodname">ActionMenuOptions.addRedirect()</code> and
+                      <code class="methodname">ActionMenuOptions.addScript()</code> methods.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Adding_A_Menu_Item_For_An_Existing_Component_Type"></a>34.3.1.&nbsp;Adding a Menu Item for an Existing Component Type
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>To add an action menu item to a cluster component type, edit the
+                           <code class="filename">web_console/common/caps.py</code> script, and for the
+                           particular cluster process type, add a call to either
+                           <code class="methodname">addRedirect</code> or
+                           <code class="methodname">addScript</code>.
+                  </p>
+                  <p>For example, in order to add a menu item called Clone, which only
+                           for CellApps redirects to a different page, the following should be
+                           added to the get method in caps.py:
+                  </p><pre class="programlisting">if isinstance( o, cluster.CellAppProcess ):
+  addRedirect( "Clone", "/cc/clone",
+           params = dict( ),
+           help = "Clone this process" )</pre><p><span class="citetitle">Example caps.py <span class="symbol">&#8208;</span>
+                              Addition to the <code class="methodname">get()</code> method</span></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e17862"></a>34.3.2.&nbsp;Adding a Menu Item for a New Component Type
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>To enable the detection of a new component process type, it is
+                           necessary to add a Python class in
+                           <code class="filename">bigworld/tools/server/pycommon/process.py</code> to
+                           uniquely identify that process.
+                  </p>
+                  <p>In the example below, we add a new component process type for an
+                           SMS component, so that WebConsole can display a Send SMS action.
+                  </p>
+                  <p>First, a simple stub class for the SMS component must be created.
+                           To keep all the different process definitions together, search for the
+                           class definition for ReviverProcess, then add the following text just
+                           after it:
+                  </p><pre class="programlisting">class SMSProcess( Process ):
+  
+  def __init__( self, machine, mgm ):
+    Process.__init__( self, machine, mgm )</pre><p><span class="citetitle">Example <code class="filename">process.py</code> <span class="symbol">&#8208;</span> Definition of <span class="literal">SMSProcess</span>
+                              class</span></p>
+                  <p>The new class then needs to be associated with an MGM message
+                           <span class="symbol">&#8208;</span> in <span class="literal">cluster.py</span>, in
+                           the <span class="literal">Process.getProcess</span> method, edit the
+                           <span class="literal">name2proc</span> hash and add the mapping from the component
+                           network name to the class type:
+                  </p><pre class="programlisting">  ...
+  "client": ClientProcess,
+  "message_logger": MessageLoggerProcess,
+  "sms": SMSProcess }</pre><p><span class="citetitle">Example cluster.py <span class="symbol">&#8208;</span>
+                              Addition to the <span class="literal">Process.getProcess</span>
+                              method</span></p>
+                  <p>It is now possible to add an action menu item, just as described
+                           in section <a href="ch34.html#xref_Adding_A_Menu_Item_For_An_Existing_Component_Type" title="34.3.1.&nbsp;Adding a Menu Item for an Existing Component Type">Adding a Menu Item for an Existing Component Type</a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="pt03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt03.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Part&nbsp;III.&nbsp;Extending WebConsole&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

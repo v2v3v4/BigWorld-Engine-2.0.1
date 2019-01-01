@@ -1,0 +1,150 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;24.&nbsp;navgen_settings.xml</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch23.html" title="Chapter&nbsp;23.&nbsp;.mvl">
+      <link rel="next" href="ch25.html" title="Chapter&nbsp;25.&nbsp;options.xml">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch24.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;24.&nbsp;<span class="literal">navgen_settings.xml</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch23.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch25.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_navgen_settings_xml"></a>Chapter&nbsp;24.&nbsp;<span class="literal">navgen_settings.xml</span></h2>
+                  </div>
+               </div>
+            </div>
+            <p>For details on NavGen, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>, section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html" class="olink"><i>NavGen</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html#xref_Changing_Settings" class="olink">Changing settings</a>.
+            </p>
+            <p>Located under <span class="literal">bigworld/tools/misc</span>, the grammar of
+                 <span class="literal">navgen_settings.xml</span> is listed below:
+            </p><pre class="programlisting">&lt;navgen_settings.xml&gt;
+
+   &lt;space&gt;  <em class="replaceable"><code>folder/file</code></em>  &lt;space&gt;
+
+  +&lt;girth&gt;  <em class="replaceable"><code>float</code></em>
+     ?&lt;always&gt;         &lt;/always&gt;
+     ?&lt;width&gt;   <em class="replaceable"><code>float</code></em>  &lt;/width&gt;
+     ?&lt;height&gt;  <em class="replaceable"><code>float</code></em>  &lt;/height&gt;
+     ?&lt;depth&gt;   <em class="replaceable"><code>float</code></em>  &lt;/depth&gt;
+
+   &lt;bwlockd&gt;         <em class="replaceable"><code>server:port</code></em>  &lt;/bwlockd&gt;
+   &lt;standalone&gt;     [true|false]  &lt;/standalone&gt;
+  ?&lt;floodResultPath&gt; <em class="replaceable"><code>folder</code></em>       &lt;/floodResultPath&gt;
+
+&lt;/navgen_settings.xml&gt;</pre><p><span class="citetitle">Grammar of
+                    <span class="literal">bigworld/tools/misc/navgen_settings.xml</span></span></p>
+            <p>The list below describes the tags in
+                 <span class="literal">bigworld/tools/misc/navgen_settings.xml</span>:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">always</span> (section
+                                 <span class="literal">girth</span>)</em></p>
+                     <p>Determines if this girth should always be included into waypoint.
+                              If set to false, it is up to the marker to determine whether to include
+                              a girth.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">bwlockd</span><sup>A</sup></em></p>
+                     <p>WorldEditor lock server (<span class="literal">bwlockd</span>) server and
+                              port. Since NavGen also modifies terrain data, bwlockd server is used to
+                              avoid more than one world builder working on the same piece of
+                              data.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">depth</span> (section
+                                 <span class="literal">girth</span>)</em></p>
+                     <p>Depth of the entity for which to generate navigation mesh.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">floodResultPath</span></em></p>
+                     <p>Path where the pre-filter and post-filter TGA files are generated.
+                              For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html" class="olink"><i>NavGen</i></a>
+                              <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html#xref_Generating_The_Navmesh" class="olink">Generating the navmesh</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html#xref_Processing_Time" class="olink">Processing time</a> <span class="symbol">&#8594;</span>
+                              <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html#xref_Adjacency_Map_Filtering_Blue" class="olink">Adjacency map filtering (blue)</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">girth</span></em></p>
+                     <p>Tag for section defining entity girth for which to generate
+                              navigation mesh. Default is 0.5.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">height</span> (section
+                                 <span class="literal">girth</span>)</em></p>
+                     <p>Height of the entity for which to generate navigation mesh.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">space</span></em></p>
+                     <p>Folder containing the space to load. The path is relative to the
+                              game's resources folder
+                              (<span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span>).
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">standalone</span><sup>A</sup></em></p>
+                     <p>Determines if NavGen should connect to a
+                              <span class="literal">bwlockd</span> server.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">width</span> (section
+                                 <span class="literal">girth</span>)</em></p>
+                     <p>Width of the entity for which to generate navigation mesh.</p>
+                  </li>
+               </ul>
+            </div>
+            <p><em class="emphasis"><em class="emphasis">A</em> &#8212; For details on
+                    <span class="literal">bwlockd</span>, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch12.html" class="olink"><i>Lock Server (BWLockD)</i></a>.</em></p>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch23.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch25.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;23.&nbsp;<span class="literal">.mvl</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;25.&nbsp;<span class="literal">options.xml</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,153 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;3.&nbsp;BinSection files</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;alias.xml">
+      <link rel="next" href="ch04.html" title="Chapter&nbsp;4.&nbsp;ZipSection files">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch03.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;3.&nbsp;<span class="literal">BinSection</span> files
+                  </th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_BinSection_Files"></a>Chapter&nbsp;3.&nbsp;<span class="literal">BinSection</span> files
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p>A <span class="literal">BinSection</span> can be interpreted as a binary blob of
+                 data. It can also be viewed as containing other data sections.
+            </p>
+            <p>Currently, the binary files <span class="literal">.anca</span>, and
+                 <span class="literal">.primitives</span> use this format (for details on
+                 <span class="literal">.primitive</span> files, see <a href="ch29.html" title="Chapter&nbsp;29.&nbsp;.primitives"><i xmlns:xlink="http://www.w3.org/1999/xlink"><span class="literal">.primitives</span></i></a>).
+            </p>
+            <p>Described in BNF format, the file has the following format (the
+                 asterisk character &#8212;<span class="literal"><span class="literal">*</span></span>&#8212; indicates that
+                 the previous section might appear zero or more times):
+            </p><pre class="programlisting">&lt;bin_section&gt; ::= <em class="emphasis">&lt;magic_number&gt;</em> &lt;child_section_data&gt; &lt;index_table&gt; 
+&lt;child_section_data&gt; ::= <em class="emphasis">&lt;binary_blob&gt;</em>*<a name="co233"></a><img src="../images/callouts/1.png" alt="1" border="0">
+&lt;index_table&gt; ::= &lt;data_section_entry&gt;* <em class="emphasis">&lt;index_table_length&gt;</em> 
+&lt;data_section_entry&gt; ::= <em class="emphasis">&lt;blob_length&gt;&lt;reserved_data&gt;</em>&lt;data_section_tag&gt; 
+&lt;data_section_tag&gt; ::= <em class="emphasis">&lt;tag_length&gt;&lt;tag_value&gt;</em></pre><p><span class="citetitle"><span class="literal">BinSection</span> file format in BNF
+                    grammar</span></p>
+            <div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co233"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>For each <span class="literal">&lt;binary_blob&gt;</span> there is a
+                                 <span class="literal">&lt;data_section_entry&gt;</span>.
+                        </p>
+                     </td>
+                  </tr>
+               </table>
+            </div>
+            <p>The list below describes the sections in the file:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">&lt;binary_blob&gt;</span></em></p>
+                     <p>Binary data, padded to 4-byte boundary</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">&lt;blob_length&gt;</span></em></p>
+                     <p>4-byte little endian integer, containing the length of respective
+                              &lt;binary_blob&gt;.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">&lt;index_table_length&gt;</span></em></p>
+                     <p>4-byte little endian integer, containing the length of section
+                              &lt;index_table&gt;, excluding this entry.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">&lt;magic_number&gt;</span></em></p>
+                     <p>4-byte number 0x42A14E65 (65 4E A1 42 big endian).</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">&lt;reserved_data&gt;</span></em></p>
+                     <p>16-byte reserved data, containing the following fields:</p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">preloadLen</span></em>
+                                           &#8212; uint32 containing length of data when streamed in.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">version</em> &#8212; uint32 containing a
+                                           version number.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">modified</em> &#8212; uint64 containing
+                                           timestamp of last modification.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">&lt;tag_length&gt;</span></em></p>
+                     <p>4-byte little endian integer, containing length of the section's
+                              tag.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">&lt;tag_value&gt;</span></em></p>
+                     <p>Section's tag, padded to 4-byte boundary</p>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;<span class="literal">alias.xml</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;<span class="literal">ZipSection</span> files
+                  </td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

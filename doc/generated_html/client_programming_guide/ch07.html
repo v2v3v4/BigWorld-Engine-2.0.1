@@ -1,0 +1,298 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;7.&nbsp;Entities</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Chunks">
+      <link rel="next" href="ch08.html" title="Chapter&nbsp;8.&nbsp;User Data Objects">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch07.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;7.&nbsp;Entities</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch06.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch08.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Entities"></a>Chapter&nbsp;7.&nbsp;Entities
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch07.html#d0e2527">7.1. Entity Manager</a></span></dt>
+                  <dt><span class="section"><a href="ch07.html#xref_Entities_Are_Python_Script_Objects">7.2. Entity scripts</a></span></dt>
+                  <dt><span class="section"><a href="ch07.html#d0e2566">7.3. Entity resources</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch07.html#xref_Entity_Preloads">7.3.1. Preloads</a></span></dt>
+                        <dt><span class="section"><a href="ch07.html#d0e2606">7.3.2. Prerequisites</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>Entities are a key BigWorld concept, and involve a large system in
+                 their own right. They are the link between the client and the server and are
+                 the feature most particular to BigWorld Technology, in comparison to other
+                 3D game systems.
+            </p>
+            <p>This section deals only with the management aspects of entities on the
+                 client.
+            </p>
+            <p>For details on the environment in which entity scripts are placed, and
+                 the system that supports them, see <a href="ch09.html" title="Chapter&nbsp;9.&nbsp;Scripting"><i xmlns:xlink="http://www.w3.org/1999/xlink">Scripting</i></a>. For
+                 details on the definition of an entity, which is shared between the server
+                 and the client, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch02.html" class="olink"><i>Physical Entity Structure for Scripting</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch02.html#xref_The_Definition_File" class="olink">The Entity Definition File</a>.
+            </p>
+            <p>Depending on the entity type, it can exist in different parts of
+                 BigWorld, as listed below:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">Client-only</em></p>
+                     <p>For example, a security camera prop, or an information icon.
+                                Client-only entities are created by setting WorldEditor's <em class="emphasis">Properties</em>' panel <em class="emphasis">Client-Only</em> attribute to <em class="emphasis">true</em>. (for details on this panel, see the
+                                document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a> 's section
+                                <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html" class="olink"><i>WorldEditor</i></a> <span class="symbol">&#8594;</span>
+                                <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html#xref_we_Panel_Summary" class="olink">Panel summary</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html#xref_we_Properties_Panel" class="olink">Properties panel</a>). Client-only entities should
+                                not have cell or base scripts.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Client and server</em></p>
+                     <p>The entity will exist in both parts at the same position. For
+                                example, the player Avatar, NPCs, a vending machine.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Server-only</em></p>
+                     <p>The entity will be instantiated on the server only. For example,
+                                a NPC spawn point or teleportation destination point. Server-only
+                                entities do not have any scripts on the client side.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e2527"></a>7.1.&nbsp;Entity Manager
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The Entity Manager stores two lists of entities:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Active List</em> &#8212; Contains
+                                   the entities that are currently in the world, as relayed by the server
+                                   or indicated by the chunk files.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Cached List</em> &#8212; Contains
+                                   the entities that have recently been in the world, but are now just
+                                   outside the client's 500m radius area of interest (AoI).
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Entities are cached so that if they come back into the client's AoI
+                      shortly after they have left it, the server does not have to resend all
+                      the data associated with that entity; only the fields that have
+                      changed.
+               </p>
+               <p>Since messages may be received from the server out of order, the
+                      Entity Manager is not sensitive to their order. For example, if an entity
+                      enters the player's AoI then quickly leaves it, the BigWorld client
+                      behaves correctly even if it receives the entity's 'leave AoI' message
+                      before its 'enter AoI' message.
+               </p>
+               <p>The Entity Manager can always determine the relative time that it
+                      should have received a message from the sequence number of the packet,
+                      since packets are sent at regular intervals.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Entities_Are_Python_Script_Objects"></a>7.2.&nbsp;Entity scripts
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Entity scripts on the client are Python classes that derive from the
+                      <code class="code">BigWorld.Entity</code> class. This base class exposes a number of
+                      methods and attributes which allow the script to control the behaviour of
+                      the entity (e.g. position, orientation, and the entity model are all
+                      exposed via the <code class="code">BigWorld.Entity</code> interface).
+               </p>
+               <p>In addition exposing to methods and attributes, the client engine
+                      will notify the entity scripts when certain events occur via named event
+                      handlers.
+               </p>
+               <p>See <a href="ch09.html" title="Chapter&nbsp;9.&nbsp;Scripting"><i xmlns:xlink="http://www.w3.org/1999/xlink">Scripting</i></a> and the Client Python API
+                      reference guide for details on what methods, attributes, and event
+                      handlers are available.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e2566"></a>7.3.&nbsp;Entity resources
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Generally, each entity type require some resources in order to
+                      operate, for example models, textures, shaders, sounds, or particle
+                      systems. The BigWorld client provides a couple of ways to make sure these
+                      resources are available when the entity enters the world, avoiding
+                      stalling the main thread.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Entity_Preloads"></a>7.3.1.&nbsp;Preloads
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When the client starts up, it will query each entity Python module
+                           for a function named <code class="code">preload</code>. Resource names returned by
+                           this function will be loaded on client startup and kept in memory for
+                           the entire life-time of the client (i.e. it will be instantly available
+                           for use at any time). This is useful for commonly used assets to avoid
+                           potentially loading and re-loading at a later time. The tradeoff,
+                           however, is that the client will take longer to start and will use more
+                           memory (if the resource isn't actually being used at some point).
+                  </p>
+                  <p>To use the preloads mechanism, create a global function called
+                           <code class="code">preload</code> in the relevant entity module. It must take a
+                           single parameter which is a Python list containing resource to preload.
+                           Modify this list in place (e.g. using list.append or list
+                           concatenation), inserting the string names of each resource to be
+                           preloaded by the client.
+                  </p>
+                  <p>For example, <code class="code"> </code></p><pre class="programlisting"># Door.py
+import BigWorld
+
+class Door( BigWorld.Entity ):
+    def __init__( self ):
+        ...
+
+def preload( list ):
+    list.append( "doors/models/generic_door.model" )
+    list.append( "doors/maps/door_highlight.tga" )
+    ... </pre><p>The type of resources which can be preloaded are,
+                     
+                           
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Fonts</p>
+                        </li>
+                        <li>
+                           <p>Textures</p>
+                        </li>
+                        <li>
+                           <p>Shaders</p>
+                        </li>
+                        <li>
+                           <p>Models</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>
+                     	  
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2606"></a>7.3.2.&nbsp;Prerequisites
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When an entity is about to appear in the world on the client, the
+                           engine will execute a callback on the entity script called
+                           <code class="code">prerequisites</code>. This allows entity scripts to return a list
+                           of resources that must be loaded before the entity may enter the world.
+                           These resources are loaded by the loading thread, so as to not interrupt
+                           the rendering pipeline.
+                  </p>
+                  <p>It is recommended practice for an entity to expose its required
+                           resources as pre-requisites, and load them in the method
+                           <code class="code">onEnterWorld</code>. Unlike using preloads, prerequisites do not
+                           leak a reference, so when the entity leaves the world, it will free its
+                           resources.
+                  </p>
+                  <p>The Entity Manager calls <code class="code">Entity::checkPrerequisites</code>
+                           before allowing an entity to enter the world. This method checks whether
+                           the pre-requisites for this entity entering the world are satisfied. If
+                           they are not, then it starts the process of satisfying them (if not yet
+                           started).
+                  </p>
+                  <p>Note that when the <code class="code">prerequisites</code> method is called on
+                           the entity, its script has already been initialised and its properties
+                           have been set up. The entity thus may specialise its pre-requisites list
+                           based on the specific instance of that entity. For example:
+                  </p><pre class="programlisting">def Door( BigWorld.Entity ):
+    ...
+    def prerequisites( self ):
+        return [ DoorResources[ self.modelType ].modelName ]
+    ...</pre></div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch06.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch08.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;6.&nbsp;Chunks&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;8.&nbsp;User Data Objects</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

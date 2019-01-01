@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="bw_vs80_client_defaults"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="..;../lib;../lib/python/include;../lib/third_party/openssl/inc32;../lib/python/Include;../lib/fmod/api/inc;../lib/fmod/fmoddesignerapi/api/inc;../lib/umbra/interface;../lib/third_party/openautomate/inc/;../lib/scaleform_gfxsdk/Include;../lib/scaleform_gfxsdk/Src/GRenderer;&quot;$(GFXSDK)/Include&quot;;&quot;$(GFXSDK)/Src/GRenderer&quot;"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="winmm.lib ws2_32.lib msimg32.lib user32.lib advapi32.lib ole32.lib shell32.lib dinput8.lib imagehlp.lib d3dx9.lib d3d9.lib d3dxof.lib dxguid.lib shlwapi.lib libeay32.lib ssleay32.lib psapi.lib"
+		AdditionalLibraryDirectories="..\lib;..\lib\speedtreert\lib\VC80;..\lib\fmod\api\lib;..\lib\fmod\fmoddesignerapi\api\lib;&quot;..\lib\umbra\lib\win32-x86&quot;;..\lib\third_party\openssl\out32"
+	/>
+	<Tool
+		Name="VCResourceCompilerTool"
+		Culture="3081"
+	/>
+</VisualStudioPropertySheet>

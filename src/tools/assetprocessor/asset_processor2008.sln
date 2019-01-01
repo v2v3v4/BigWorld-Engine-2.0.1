@@ -1,0 +1,82 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetProcessor", "assetprocessor2008.vcproj", "{C0EB7CF4-B63D-42BE-A34C-0DECB84A2C9B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{87B6D90B-35B0-43E6-8506-9EEF75584B9B} = {87B6D90B-35B0-43E6-8506-9EEF75584B9B}
+		{4AEF9430-3078-42D9-BB8E-045D4865F7EE} = {4AEF9430-3078-42D9-BB8E-045D4865F7EE}
+		{ACA40B35-0C48-4BB8-85FE-5376BD38211D} = {ACA40B35-0C48-4BB8-85FE-5376BD38211D}
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81} = {4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0} = {B179FA51-48CF-4F63-8D95-2AD57FE898A0}
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950} = {1ABB1158-909C-4AD4-9F81-CB38BBA5D950}
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F} = {DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}
+		{879B9D6D-C3AB-41C7-8EEC-B7B36C4AE5E7} = {879B9D6D-C3AB-41C7-8EEC-B7B36C4AE5E7}
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141} = {5DC4CC9A-3052-4076-A8D4-FE229C1AC141}
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D} = {204D85B9-F793-4F21-99FF-40AC92A08E5D}
+		{DB0DFFD4-284A-4EA7-8178-8BE7030C1B61} = {DB0DFFD4-284A-4EA7-8178-8BE7030C1B61}
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD} = {A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "moo", "..\..\lib\moo\moo2008.vcproj", "{B179FA51-48CF-4F63-8D95-2AD57FE898A0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "resmgr", "..\..\lib\resmgr\resmgr2008.vcproj", "{204D85B9-F793-4F21-99FF-40AC92A08E5D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cstdmf", "..\..\lib\cstdmf\cstdmf2008.vcproj", "{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "math", "..\..\lib\math\math3d2008.vcproj", "{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pyscript", "..\..\lib\pyscript\pyscript2008.vcproj", "{87B6D90B-35B0-43E6-8506-9EEF75584B9B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "physics2", "..\..\lib\physics2\physics22008.vcproj", "{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zip", "..\..\lib\zip\zip2008.vcproj", "{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "romp", "..\..\lib\romp\romp2008.vcproj", "{879B9D6D-C3AB-41C7-8EEC-B7B36C4AE5E7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "terrain", "..\..\lib\terrain\terrain2008.vcproj", "{4AEF9430-3078-42D9-BB8E-045D4865F7EE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DB0DFFD4-284A-4EA7-8178-8BE7030C1B61} = {DB0DFFD4-284A-4EA7-8178-8BE7030C1B61}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libpng", "..\..\lib\png\projects\visualc71\libpng2008.vcproj", "{DB0DFFD4-284A-4EA7-8178-8BE7030C1B61}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "job_system", "..\..\lib\job_system\job_system2008.vcproj", "{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nedalloc", "..\..\lib\third_party\nedalloc\nedmalloc2008.vcproj", "{ACA40B35-0C48-4BB8-85FE-5376BD38211D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		PyModule_Hybrid|Win32 = PyModule_Hybrid|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C0EB7CF4-B63D-42BE-A34C-0DECB84A2C9B}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{C0EB7CF4-B63D-42BE-A34C-0DECB84A2C9B}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{87B6D90B-35B0-43E6-8506-9EEF75584B9B}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{87B6D90B-35B0-43E6-8506-9EEF75584B9B}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{879B9D6D-C3AB-41C7-8EEC-B7B36C4AE5E7}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{879B9D6D-C3AB-41C7-8EEC-B7B36C4AE5E7}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{4AEF9430-3078-42D9-BB8E-045D4865F7EE}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{4AEF9430-3078-42D9-BB8E-045D4865F7EE}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{DB0DFFD4-284A-4EA7-8178-8BE7030C1B61}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{DB0DFFD4-284A-4EA7-8178-8BE7030C1B61}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{ACA40B35-0C48-4BB8-85FE-5376BD38211D}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{ACA40B35-0C48-4BB8-85FE-5376BD38211D}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

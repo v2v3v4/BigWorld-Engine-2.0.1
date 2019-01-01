@@ -1,0 +1,97 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Glossary of Terms</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="Glossary_Of_Terms"></a>Glossary of Terms</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Glossary">1. Glossary</a></span></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Glossary"></a>Chapter&nbsp;1.&nbsp;Glossary</h2></div></div></div><p>The list below describes some of the terms used throughout the
+  BigWorld documents:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">AOI</em></p><p>or, Area Of Interest: the physical region in which an entity is
+      interested.</p><p>Typically, this is a vertically oriented cylinder with a radius of
+      500 metres around the entity.</p><p>The length of the radius is also known as the ghost distance,
+      because it matches the distance between an entity and a nearby cell in
+      which the entity needs to be ghosted. For more details, see the document
+      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/server_overview.html#Server_Overview" class="olink">Server Overview</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/server_overview.html#xref_Server_Components" class="olink"><i>Server Components</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/server_overview.html#xref_Server_Components_CellApp" class="olink">CellApp</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/server_overview.html#xref_Real_And_Ghost_Entities" class="olink">Real and Ghost Entities</a>.</p><p>The distance should be slightly larger than the distance that an
+      avatar can see.</p></li><li><p><em class="emphasis">Area of Interest</em></p><p>See AOI.</p></li><li><p><em class="emphasis">Avatar</em></p><p>An entity associated with a character. This may be a Player
+      Character (PC) or a Non-Player Character (NPC).</p></li><li><p><em class="emphasis">Base</em></p><p>An object used to represent the part of an entity that does not
+      move.</p><p>Unlike the part of an entity on a cell, which can move between
+      different machines, a base does not move, thus giving a fixed location
+      to talk to the entity.</p></li><li><p><em class="emphasis">Bundle</em></p><p>A bundle is a collection of messages. It maps to one or more UDP
+      packets.</p></li><li><p><em class="emphasis">Call</em></p><p>A type of event: a remote method invocation. Differs from other
+      types of event in that a call is made directly on a known object.</p></li><li><p><em class="emphasis">Camera</em></p><p>A camera is a view into the world. Cameras have a position and a
+      viewing direction, stored in a matrix.</p><p>There are a number of cameras that move in different ways, but
+      exactly one must be active for each frame.</p><p>The active camera matrix is communicated to the 3D Engine (Moo)
+      before drawing the frame.</p></li><li><p><em class="emphasis">Chunk</em></p><p>The terrain, scene, and collision scene are split up into chunks
+      that are loaded when necessary.</p><p>At every frame, the client determines if any unloaded chunks may
+      soon be visible, and instructs the loading thread to load them. Chunks
+      are also disposed when no longer needed so the memory they use can be
+      reclaimed.</p></li><li><p><em class="emphasis">Chunking</em></p><p>Term used for the concept of breaking the world into connected
+      pieces.</p><p>It is usually used when talking about rendering the scene or
+      loading world data, e.g.: 'The chunking of the terrain allows it to load
+      faster.'</p></li><li><p><em class="emphasis">Collision scene</em></p><p>The collision scene contains a representation of the space that is
+      used in physics calculations, in particular for calculating collisions
+      between moving objects and the scenery, and querying properties about
+      the point of impact.</p></li><li><p><em class="emphasis">Console</em></p><p>A console is a layer of text drawn over the scene and the GUI.
+      Consoles are mainly used for debugging, but can also be used by
+      scripts.</p></li><li><p><em class="emphasis">Detail object</em></p><p>A detail object is a small mesh drawn in large numbers onto the
+      terrain around the camera position. They are separated from ordinary
+      models for efficiency. The selection and placement of these objects is
+      largely automatic, based on the texture of the underlying
+      terrain.</p></li><li><p><em class="emphasis">Entity</em></p><p>An entity is the basic addressable object in the BigWorld system.
+      The messages, sent between the BigWorld server and client, are all in
+      the context of some entity.</p><p>Entities have a type and a position, and a number of other
+      properties determined by the type. Each entity type has a Python script
+      class associated with it, and each entity instance in the world has an
+      instance of its Python class to control it.</p><p>Entities have no intrinsic representation in the world; rather
+      their controlling script explicitly adds objects to the scene under the
+      entity's authority.</p><p>The BigWorld client presents a rich scripting environment for the
+      implementation of entities, by exposing powerful classes and objects as
+      Python types and modules. For more details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/server_overview.html#Server_Overview" class="olink">Server Overview</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/server_overview.html#xref_Server_Components" class="olink"><i>Server Components</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/server_overview.html#xref_Server_Components_CellApp" class="olink">CellApp</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/server_overview.html#xref_Scripting_And_Entities" class="olink">Scripting and Entities</a>.</p></li><li><p><em class="emphasis">Event</em></p><p>A remote method invocation (see Call) or a property update.</p></li><li><p><em class="emphasis">Ghost</em></p><p>A non-authoritative representation of a real object.</p></li><li><p><em class="emphasis">GUI element</em></p><p>A range of Graphical User Interface (GUI) elements may also exist
+      in the world, without being added to the scene, but being overlaid after
+      the scene is drawn.</p><p>Scripts have access to these elements.</p></li><li><p><em class="emphasis">Light</em></p><p>A light is a scene object that illuminates models. Like models,
+      lights must be in the scene to have an effect. Scripts also have access
+      to lights.</p></li><li><p><em class="emphasis">Message</em></p><p>A message represents a single event or call.</p></li><li><p><em class="emphasis">Model</em></p><p>A model is a mesh, possibly attached to a skeleton that can be
+      drawn in the world.</p><p>Models often have animations (especially those with skeletons),
+      which affect the configuration of the mesh. In order for a model to be
+      properly updated and drawn, it must be put into the scene.</p><p>Entity scripts make use of models (often just one) to represent
+      themselves in the world.</p></li><li><p><em class="emphasis">Object</em></p><p>The most general concept of a thing in the game. For example, a
+      button or an object that represents a team are examples of objects. It
+      maps to the C++ concept of an object.</p></li><li><p><em class="emphasis">Particle system</em></p><p>A particle system displays a moving and changing set of particles.
+      These do not exist in the scene by themselves, but are attached to a
+      model instead.</p><p>Scripts also have access to particle systems, and can construct a
+      great variety of graphical effects by specifying the rules for a
+      system.</p></li><li><p><em class="emphasis">Personality script</em></p><p>The personality script is a global script that determines the
+      game-specific top-level behaviour of the client, base and cell
+      applications. It remains in scope for the entire running of the
+      application, so for example on the client, regardless of changes in the
+      active player, the personality script remains the same.</p><p>The main job for personality scripts is to handle global events,
+      for example for initialisation, the handling of input events, or
+      responding to when a server process has fully started up, or the
+      geometry is fully mapped. Additional tasks that are appropriate for the
+      personality script are tasks such as managing the active camera, and
+      handling global user interface features such as a chat console.</p></li><li><p><em class="emphasis">Player</em></p><p>The player is the special name given to the entity controlled by
+      the user. This entity is usually an avatar.</p><p>This is the only entity that the BigWorld server will let the
+      client control - attempts to control others will be denied by the
+      server.</p><p>Also, the client bandwidth (data coming from the server) allocated
+      to each entity is proportional to that entity's proximity to the
+      client's player entity. For details on bandwidth management and load
+      balancing, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/server_overview.html#Server_Overview" class="olink">Server Overview</a>.</p></li><li><p><em class="emphasis">Player script</em></p><p>Each entity type that might become a player also provides a player
+      script in Python as a class that inherits from the ordinary Python
+      entity class.</p><p>The player script has the important job of handling the user input
+      and graphical feedback specific to that player type. This involves
+      everything from entity movement (on the input side) to the display of
+      the current item (on the graphical feedback side). A number of C++
+      classes are provided as Python types to aid the player script in these
+      duties.</p></li><li><p><em class="emphasis">Portal</em></p><p>Chunks are connected to each other through portals.</p></li><li><p><em class="emphasis">Real</em></p><p>The authoritative representation of an object (at least within the
+      scope of the cells).</p></li><li><p><em class="emphasis">Scene</em></p><p>The scene is a concept encompassing the majority of objects that
+      have a three-dimensional physical manifestation in the world.</p><p>The static base of the scene can be constructed using tools such
+      as WorldEditor. Other scene objects are added dynamically based on
+      information from the server.</p><p>The scene is sometimes referred to as the scene graph.</p></li><li><p><em class="emphasis">Terrain</em></p><p>The terrain is the primary geometric object that gives overall
+      form to the surface of the world. Most other objects in the world are
+      placed on top of the terrain.</p><p>It is implemented as a large contiguous height-mapped mesh,
+      partitioned into chunks for efficient processing.</p><p>Textures are applied to the terrain and are merged using alpha
+      blending.</p></li><li><p><em class="emphasis">World</em></p><p>The world refers to the entire scene, and is made up of many
+      diverse components such as chunks, terrain, camera, and entities.</p><p>Most of these components are updated and drawn at every frame.
+      More importantly, the world defines a fixed geographic reference frame,
+      as opposed to the camera or objects, which have their own movable
+      reference frames.</p></li></ul></div></div></div></div></body></html>

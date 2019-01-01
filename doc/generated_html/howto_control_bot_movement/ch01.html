@@ -1,0 +1,92 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;1.&nbsp;What is a Movement Controller?</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Write a Bot Movement Controller">
+      <link rel="up" href="index.html" title="How To Write a Bot Movement Controller">
+      <link rel="prev" href="index.html" title="How To Write a Bot Movement Controller">
+      <link rel="next" href="ch02.html" title="Chapter&nbsp;2.&nbsp;The MovementFactory">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_control_bot_movement/ch01.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;1.&nbsp;What is a Movement Controller?</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_What_Is_A_Movement_Controller"></a>Chapter&nbsp;1.&nbsp;What is a Movement Controller?
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p>A <em class="emphasis">movement controller</em> is an object that
+                   controls the movement of a bot.
+            </p>
+            <p>More specifically, it must sub-class the
+                   <code class="classname">MovementController</code> class defined in
+                   <code class="filename">bigworld/src/server/tools/bots/movement_controller.<em class="replaceable"><code>[ch]</code></em>pp</code>,
+                   and therefore implement the virtual method
+                   <code class="methodname">nextStep()</code>, which supplies position and
+                   orientation updates for that bot.
+            </p>
+            <p>Additionally, you will need to implement a sub-class of
+                   <code class="classname">MovementFactory</code> (defined in the same source files
+                   as <code class="classname">MovementController</code>) to supply
+                   <code class="classname">MovementController</code> objects to bots, either at bot
+                   instantiation time, or on change of movement controller, via the virtual
+                   method <code class="methodname">create()</code>. For details, see <a href="ch02.html#xref_The_create_Method" title="2.2.&nbsp;The create() method">The <code class="methodname">create()</code> method</a>.
+            </p>
+            <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+               <h3 class="title">Note</h3>
+               <p>The Patrol movement controller is recommended as a reference
+                        companion to this document.
+               </p>
+               <p>It can be found in
+                        <code class="filename">src/server/tools/bots/patrol_graph.<em class="replaceable"><code>[ch]</code></em>pp</code>.
+               </p>
+               <p>This file also contains useful classes other than the movement
+                        controller and factory referenced in this document.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">How To Write a Bot Movement Controller&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;The <code class="classname">MovementFactory</code></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

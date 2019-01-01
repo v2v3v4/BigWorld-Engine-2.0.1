@@ -1,0 +1,679 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;26.&nbsp;Shared Development Environments</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch25.html" title="Chapter&nbsp;25.&nbsp;Releasing The Game">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;26.&nbsp;Shared Development Environments</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch25.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Simplified_Server_Usage"></a>Chapter&nbsp;26.&nbsp;Shared Development Environments
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch26.html#xref_Window_Linux_Cross_Platform_Development">26.1. Windows and Linux cross platform development</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch26.html#xref_Sharing_Resources_From_Windows">26.1.1. Sharing resources from Windows</a></span></dt>
+                        <dt><span class="section"><a href="ch26.html#d0e13570">26.1.2. Accessing Windows share from Linux</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch26.html#d0e13727">26.2. Using BigWorld with a Version Control System</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch26.html#d0e13732">26.2.1. Customers using the Commercial Edition</a></span></dt>
+                        <dt><span class="section"><a href="ch26.html#d0e13741">26.2.2. Customers using the Indie Edition</a></span></dt>
+                        <dt><span class="section"><a href="ch26.html#xref_Version_Control_Exclusions">26.2.3. Files to exclude from version
+                                       control</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch26.html#d0e13851">26.3. DBMgr database conflicts</a></span></dt>
+               </dl>
+            </div>
+            <p>As the workflow of creating a game requires a large number of people
+                 working on a numerous components simultaneously within a variety of
+                 environments it is nescessary to ensure that everybody can work together in
+                 as seamless a manner as possible. This chapter aims to outline the key areas
+                 in which interaction is required and the recommended methods to avoid
+                 conflicts.
+            </p>
+            <p>Currently there are three areas that have been identified that may
+                 cause potential interaction conflict for an unprepared development
+                 team:
+            </p>
+            <div class="orderedlist">
+               <ol type="1">
+                  <li>
+                     <p>Windows and Linux cross platform development.</p>
+                  </li>
+                  <li>
+                     <p>Using BigWorld with a Version Control System.</p>
+                  </li>
+                  <li>
+                     <p>DBMgr database conflicts.</p>
+                  </li>
+               </ol>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Window_Linux_Cross_Platform_Development"></a>26.1.&nbsp;Windows and Linux cross platform development
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>For anyone not familiar with both Windows and Linux, running a
+                      BigWorld server on a Linux box to test game scripts and assets can be
+                      intimidating and error prone. Since designers and artists typically do
+                      most of their work on Windows, the process of synchronising files between
+                      Windows and Linux machines can be tedious.
+               </p>
+               <p>The solution outlined below aims to simplify this task by having all
+                      assets and game scripts reside on a Windows machine, with a Linux machine
+                      (which can be shared among multiple users) hosting and running a BigWorld
+                      server for each user that requires their own development
+                      environment.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject" align="center"><img src="images/shared_resources.png" align="middle" height=""><span class="caption">
+                        <p>Sharing game resources between Windows and
+                                   Linux
+                        </p></span></div>
+               </div>
+               <p>This solution can be summarised as follows:</p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>A game developer on a Windows machine creates a network share of
+                                   the root BigWorld directory (<em class="emphasis">i.e.</em>, the directory
+                                   containing <code class="filename">bigworld</code>, <code class="filename">fantasydemo</code>, and <code class="filename">src</code> folders).
+                        </p>
+                     </li>
+                     <li>
+                        <p>On the Linux machine, the Windows share from Step 1 is mapped to
+                                   a directory and the relevant <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em></code>
+                                   directories and used when a BigWorld server is started.
+                        </p>
+                     </li>
+                  </ol>
+               </div>
+               <p>Cross-mounting development resources has been found within the
+                      BigWorld offices to be the most effective method for Windows based
+                      developers and artists to work, as all editable files reside on the
+                      machine they are working on.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>This solution intentionally keeps the server binaries on the Linux
+                           box.
+                  </p>
+                  <p>Running server executables that exist on Samba mounted filesystems
+                           can cause unexpected problems, and is not recommended.
+                  </p>
+                  <p>Running server binaries from NFS mounted filesystems works
+                           correctly and is a recommended alternative.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Sharing_Resources_From_Windows"></a>26.1.1.&nbsp;Sharing resources from Windows
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>For the purposes of this example we assume that all the game
+                           resources have been checked out into a directory called <code class="filename">C:\BigWorld</code>.
+                  </p>
+                  <p>To share the <code class="filename">C:\BigWorld</code>
+                           directory on the Windows machine, follow the steps below for your
+                           version of Windows.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13445"></a>26.1.1.1.&nbsp;Windows XP
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="orderedlist">
+                        <ol type="1">
+                           <li>
+                              <p>Browse to the <code class="filename">C:\</code>
+                                             drive in Explorer.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Select the <code class="filename">BigWorld</code>
+                                             directory and right-click it.
+                              </p>
+                           </li>
+                           <li>
+                              <p>In the context menu, select the <em class="emphasis">Sharing and Security...</em> menu item.
+                              </p>
+                           </li>
+                           <li>
+                              <p>On the <em class="emphasis">mf Properties</em> dialog
+                                             box, select the <em class="emphasis">Share This Folder</em>
+                                             option button.
+                              </p>
+                           </li>
+                           <li>
+                              <p>In the <em class="emphasis">Share Name</em> field,
+                                             type the name to share the folder by (in our example, <em class="emphasis">mf-win</em>).
+                              </p>
+                           </li>
+                           <li>
+                              <p>Click the <em class="emphasis">Permissions</em>
+                                             button.
+                              </p>
+                           </li>
+                           <li>
+                              <p>In the <em class="emphasis">Permission For mf</em>
+                                             dialog box's <em class="emphasis">Group or User Names</em>
+                                             list box, select the <em class="emphasis">Everyone</em>
+                                             item.
+                              </p>
+                           </li>
+                           <li>
+                              <p>In the <em class="emphasis">Permissions For
+                                                Everyone</em> list box's <em class="emphasis">Full
+                                                Control</em> entry, select the <em class="emphasis">Allow</em> check box.
+                              </p>
+                           </li>
+                        </ol>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13515"></a>26.1.1.2.&nbsp;Windows 7
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="orderedlist">
+                        <ol type="1">
+                           <li>
+                              <p>Browse to the <code class="filename">C:\</code>
+                                             drive in Explorer.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Select the <code class="filename">BigWorld</code>
+                                             directory and right-click it.
+                              </p>
+                           </li>
+                           <li>
+                              <p>In the context menu, select the <em class="emphasis">Properties</em> menu item.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Select the <em class="emphasis">Sharing</em>
+                                             tab.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Click the <em class="emphasis">Advanced
+                                                Sharing...</em> button.
+                              </p>
+                           </li>
+                           <li>
+                              <p>In the <em class="emphasis">Advanced Sharing</em>
+                                             dialog box, select the <em class="emphasis">Share this
+                                                folder</em> check box.
+                              </p>
+                           </li>
+                           <li>
+                              <p>If necessary, click the <em class="emphasis">Permissions</em> button to enable all users
+                                             access privileges to this share.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Click <em class="emphasis">OK</em> when
+                                             finished.
+                              </p>
+                           </li>
+                        </ol>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13570"></a>26.1.2.&nbsp;Accessing Windows share from Linux
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>To assist the process of mounting the Windows share, BigWorld
+                           provides the script <code class="filename">setup_win_dev</code>. The location of
+                           this script may differ depending on your edition.
+                  </p>
+                  <div class="variablelist">
+                     <dl>
+                        <dt><span class="term">Indie Edition</span></dt>
+                        <dd>
+                           <p>For customers using the Indie edition,
+                                          <code class="filename">setup_win_dev</code> will be installed into
+                                          <code class="filename">/opt/bigworld/current/server/bin</code> by
+                                          the server RPM package. This directory has also been placed into
+                                          your <code class="envar">$PATH</code> so you can run
+                                          <code class="filename">setup_win_dev</code> from any directory.
+                           </p>
+                        </dd>
+                        <dt><span class="term">Commercial Edition</span></dt>
+                        <dd>
+                           <p>Customers using the Commercial edition can find the
+                                          setup_win_dev script located in
+                                          <code class="filename">bigworld/tools/server/install/setup_win_dev.py</code>.
+                           </p>
+                        </dd>
+                     </dl>
+                  </div>
+                  <p>Please note, however, that it was designed for developers working
+                           at BigWorld, and hence it uses default values appropriate for BigWorld
+                           as well. Before artists and game programmers use it, a sysadmin or
+                           programmer should edit this file to change the defaults to values
+                           appropriate for your development environment.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13608"></a>26.1.2.1.&nbsp;Assumptions and Requirements
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>This <code class="filename">setup_win_dev</code> script has following
+                                assumptions:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>The server binaries can be accessed on the Windows
+                                             share.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Your username on the Windows box is the same as your
+                                             username on the Linux box.
+                              </p>
+                           </li>
+                           <li>
+                              <p>You are using CentOS 5 or later.</p>
+                           </li>
+                           <li>
+                              <p>Linux kernel with CIFS module. This should be contained
+                                             within the default CentOS kernel.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>The script will display a list of prerequisites upon startup,
+                                which are reproduced here for convenience:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>The user running the script has been entered into the
+                                             <code class="filename">/etc/sudoers</code> file on the Linux
+                                             machine.
+                              </p>
+                              <p>For details see the system manual page with the command
+                                             '<span><strong class="command">man sudoers</strong></span>'.
+                              </p>
+                           </li>
+                           <li>
+                              <p>You know the location of your home directory on the Linux
+                                             machine.
+                              </p>
+                              <p>This can generally be discovered by running the following
+                                             command:
+                              </p><pre class="programlisting">$ echo $HOME
+/home/alice</pre></li>
+                           <li>
+                              <p>You have shared the top level BigWorld directory from your
+                                             Windows machine.
+                              </p>
+                              <p>For details on how to achieve this see <a href="ch26.html#xref_Sharing_Resources_From_Windows" title="26.1.1.&nbsp;Sharing resources from Windows">Sharing resources from Windows</a>.
+                              </p>
+                           </li>
+                           <li>
+                              <p>You may also require the Samba client programs. To install
+                                             the Samba client, run the following command as the root
+                                             user:
+                              </p><pre class="programlisting"># yum install samba-client</pre></li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13662"></a>26.1.2.2.&nbsp;Mapping a Windows share onto Linux
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Once the requirements outlined above have been met, or any
+                                necessary modifications have been made to your environment, running
+                                the <code class="filename">setup_win_dev</code> script will guide you through
+                                mounting a Windows share using Samba onto the Linux machine.
+                     </p>
+                     <p>Outlined below is a simple run through of the
+                                <code class="filename">setup_win_dev</code> program discussing each
+                                step.
+                     </p>
+                     <p>When the program is first run, it attempts to establish root
+                                user privileges using the <span><strong class="command">sudo</strong></span> command. This
+                                enables the program to interact with the system devices nescessary to
+                                provide access to your Windows share. This step may not be nescessary
+                                if you have recently performed another command using sudo. Enter the
+                                password for the account you are currently logged in as.
+                     </p><pre class="programlisting">$ setup_win_dev
+NOTE: If you are immediately prompted for a password, enter your *own*
+      password not that of the root user.
+
+* Validating user has 'sudo' privileges
+Password: </pre><p>Next we see that the program is preparing a destination
+                                directory for the Windows share to be placed under. This directory
+                                defaults to <code class="filename"><code class="envar">$HOME</code>/bigworld_windows_share</code>.
+                     </p><pre class="programlisting">* Setting up destination location for Windows resources</pre><p>The next step involves entering information regarding the
+                                location of the Windows machine and the name of the shared resources.
+                                If you are uncertain about any of the details attempt to access your
+                                Windows machine from another machine in the network to establish the
+                                machine name and share name.
+                     </p><pre class="programlisting">* Querying location of remote resources
+
+Enter the hostname of your Windows machine: <em class="emphasis">mywindowsmachine</em>
+Enter the share name of the shared BigWorld directory: <em class="emphasis">BigWorld_indie</em></pre><p>You now need to input the username and password required to
+                                access the Windows machine. The username will default to the username
+                                of your unix account, however if your Windows login is different
+                                simply enter that here.
+                     </p><pre class="programlisting">We now need the username and password required to connect to the Windows share
+Username [alice]: <em class="emphasis">bob</em>
+Password: 
+Confirm password: </pre><p>The <code class="filename">setup_win_dev</code> program now outputs the
+                                resource name to be used when accessing the Windows share. This
+                                resource name can be used by other Samba tools such as smbclient if
+                                you are having troubles connecting.
+                     </p><pre class="programlisting">Using remote location: '//mywindowsmachine/BigWorld_indie'</pre><p>Finally you will be asked if you wish to have the Windows share
+                                always available on the Linux machine. This allows you to reboot or
+                                shutdown the Linux machine whenever you need to without having to
+                                remount the Windows share. If you choose 'yes' a new file that is only
+                                readable by your user will be created in
+                                <code class="filename"><code class="envar">$HOME</code>/.bw_share_credentials</code>
+                                containing your username and password.
+                     </p><pre class="programlisting">Do you want to automount your Windows share each time this Linux box boots?
+This will place a file in your home directory containing a clear-text copy
+of your password that is only readable by your user. [yes]</pre><p>The setup_win_dev program will now attempt to make the Windows
+                                shared resources available for you.
+                     </p><pre class="programlisting">Patched /etc/fstab successfully
+//mywindowsmachine/BigWorld_indie is mounted at /home/alice/bigworld_windows_share
+* Windows directory successfully mounted</pre></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e13727"></a>26.2.&nbsp;Using BigWorld with a Version Control System
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>It is strongly recommended that a version control system such as
+                      CVS, SVN or Perforce is used while developing a game using BigWorld. In
+                      doing so you allow numerous people within your development team to remain
+                      up to date with changes and enable access to all parts of the project
+                      resources regardless of the development platform of an individual.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13732"></a>26.2.1.&nbsp;Customers using the Commercial Edition
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Most recipients of an SVN distribution should place the entire
+                           release received from BigWorld into their version control system. This
+                           ensures that any changes to the BigWorld source code and resources are
+                           propagated to all the game developers at once.
+                  </p>
+                  <p>Some files should not be committed into the version control
+                           system. Please review the section <a href="ch26.html#xref_Version_Control_Exclusions" title="26.2.3.&nbsp;Files to exclude from version control">Files to exclude from version
+                              control</a> for further details.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13741"></a>26.2.2.&nbsp;Customers using the Indie Edition
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13744"></a>26.2.2.1.&nbsp;Creating a project repository
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Customers using the Indie edition should only commit their own
+                                project directories into version control.
+                     </p>
+                     <p>Indie customers should only commit their own project directories
+                                into version control.
+                     </p>
+                     <p>For example in the case of a new game called
+                                &#8220;<span class="quote">my_game</span>&#8221; it is recommended to commit the directory
+                                <code class="filename">C:\BigWorld\my_game</code> into your
+                                version control system.
+                     </p>
+                     <p>Some files should not be committed into the version control
+                                system. Please review the section <a href="ch26.html#xref_Version_Control_Exclusions" title="26.2.3.&nbsp;Files to exclude from version control">Files to exclude from version
+                                 control</a> for further
+                                details.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13763"></a>26.2.2.2.&nbsp;Checking out an existing project
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>When setting up a new client machine run the installation
+                                procedures outlined in the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_installation_guide/index.html" class="olink">Client Installation Guide</a> and then checkout your project
+                                into the new installation.
+                     </p>
+                     <p>When setting up a new server machine run the installation
+                                procedures outlined in the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/index.html" class="olink">Server Installation Guide</a>. You will then need to
+                                checkout your project into the home directory of the user running the
+                                server, or follow the instructions outlined in <a href="ch26.html#xref_Window_Linux_Cross_Platform_Development" title="26.1.&nbsp;Windows and Linux cross platform development">Windows and Linux cross platform development</a> to use
+                                resources mounted from a Windows machined. After preparing the server
+                                and the game resources for use you will also need to ensure that the
+                                .bwmachined.conf file has been updated accordingly. Details on the
+                                .bwmachined.conf file can be found in the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/index.html" class="olink">Server Installation Guide</a>.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Version_Control_Exclusions"></a>26.2.3.&nbsp;Files to exclude from version
+                                    control
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>There are numerous files that are automatically generated while
+                           running a the BigWorld Technology Suite which are only relevant to the
+                           user currently running a program. These files should be excluded from
+                           your version control system to avoid conflicts with other users. Each
+                           version control system provides its own mechanism to ignore or exclude
+                           files. For example Subversion allows you to set a directory property
+                           <span class="literal">svn:ignore</span> to a list of file match patterns for that
+                           directory.
+                  </p>
+                  <p>Below is listed a set of files and directories that should be
+                           considered for adding exclusion rules to your version control repository
+                           and configuration files.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13788"></a>26.2.3.1.&nbsp;General exclusion rules
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Application log files such as <code class="filename">python.log</code> or
+                                <code class="filename">worldeditor.log</code> should not be committed into your
+                                repository.
+                     </p><pre class="programlisting">*.log</pre><p>When you run the game client or the tools, some resources will
+                                be created on-disk as 'processed' or 'compiled' versions of source
+                                files. These files are regenerated on demand based on comparing the
+                                timestamp of the source with the timestamp of the automatically
+                                generated file. These files should not be committed into your
+                                repository.
+                     </p><pre class="programlisting">*.dds        # Compressed texture map files
+*.anca       # Compressed animation files
+*.font       # Processed font files
+font/*.dds   # Generated font bitmaps</pre><p>Python scripts used for client and server game logic will
+                                generate a compiled byte-code file when they are first run or updated.
+                                As these files will be changing frequently during development they
+                                should not be included in the repository to help reduce clutter with
+                                each changeset.
+                     </p><pre class="programlisting">*.pyc</pre></div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13809"></a>26.2.3.2.&nbsp;Tools specific exclusion rules
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The art pipeline tools automatically generate user preference
+                                files when they are run. As these will differ between artists they
+                                should be excluded from the repository.
+                     </p><pre class="programlisting">bigworld/tools/worldeditor/options.xml
+bigworld/tools/worldeditor/resources/graphics_preferences.xml
+
+bigworld/tools/particleeditor/options.xml
+
+bigworld/tools/modeleditor/options.xml</pre><p>The art tools Asset Browser also generates history files as it
+                                is being used.
+                     </p><pre class="programlisting">bigworld/tools/modeleditor/resources/ual/history.xml
+bigworld/tools/modeleditor/resources/ual/favourites.xml
+
+bigworld/tools/particleeditor/resources/ual/history.xml
+bigworld/tools/particleeditor/resources/ual/favourites.xml
+
+bigworld/tools/worldeditor/resources/ual/history.xml
+bigworld/tools/worldeditor/resources/ual/favourites.xml</pre><p>WorldEditor will create a
+                                <code class="filename">space.localsettings</code> file when creating a new
+                                space.
+                     </p><pre class="programlisting"><em class="replaceable"><code>&lt;your_game&gt;</code></em>/res/spaces/<em class="replaceable"><code>&lt;your_new_space&gt;</code></em>/space.localsettings</pre><p>WorldEditor will also create two files containing a space map.
+                                Both these files must be committed to revision control or
+                                neither.
+                     </p><pre class="programlisting"><em class="replaceable"><code>&lt;your_game&gt;</code></em>/res/spaces/<em class="replaceable"><code>&lt;your_space&gt;</code></em>/space.thumbnail.dds
+<em class="replaceable"><code>&lt;your_game&gt;</code></em>/res/spaces/<em class="replaceable"><code>&lt;your_space&gt;</code></em>/space.thumbnail.timestamps</pre><p>The BigWorld game client will also generate a preferences file
+                                in the directory it is run from.
+                     </p><pre class="programlisting"># Substitute 'fantasydemo' for your game name
+fantasydemo/game/preferences.xml</pre></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e13851"></a>26.3.&nbsp;DBMgr database conflicts
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>For customers using a MySQL database to store persistent data,
+                      shared development environments can present an issue with multiple servers
+                      contending for the same database.
+               </p>
+               <p>The database used by DBMgr is exclusive per server cluster instance
+                      so it is nessecary for multiple users running a server on the same machine
+                      to use different databases. To do this requires adding or modifying the
+                      the &lt;res&gt;/server/bw.xml configuration file entries for
+                      <span class="literal">dbMgr/host</span> and <span class="literal">dbMgr/databaseName</span>.
+                      Specifically the <span class="literal">databaseName</span> should be unique per
+                      user. For more information on these options refer to the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a> section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html#xref_DBMgr_Configuration_Options" class="olink">DBMgr Configuration Options</a>.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch25.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;25.&nbsp;Releasing The Game&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,381 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;5.&nbsp;Client Script Changes</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Upgrade BigWorld Versions">
+      <link rel="up" href="index.html" title="How To Upgrade BigWorld Versions">
+      <link rel="prev" href="ch04.html" title="Chapter&nbsp;4.&nbsp;File Format Changes">
+      <link rel="next" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Server Changes">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;5.&nbsp;Client Script Changes</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Client_Script_Changes"></a>Chapter&nbsp;5.&nbsp;Client Script Changes
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch05.html#d0e111">5.1. Input Handling</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e114">5.1.1. PyKeyEvent</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e170">5.1.2. PyMouseEvent</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e221">5.1.3. PyAxisEvent</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e272">5.1.4. handleCharEvent</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e294">5.1.5. SimpleGUIComponent.mouseButtonFocus</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e325">5.1.6. SimpleGUIComponent.handleMouseButtonEvent</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch05.html#d0e353">5.2. Interpretation of Pitch</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e358">5.2.1. Direction Cursor</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e380">5.2.2. Cursor Camera</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e385">5.2.3. TrackerNodeInfo</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>Customers should update their Python scripts based on the below
+                 changes:
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e111"></a>5.1.&nbsp;Input Handling
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e114"></a>5.1.1.&nbsp;PyKeyEvent
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Keyboard, mouse button, and joystick button event information is
+                           now encapsulated within the <code class="classname">PyKeyEvent</code> class.
+                           Python scripts will need to be updated in the following
+                           locations:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>The personality script event handler
+                                        <code class="methodname">handleKeyEvent</code> now takes a single
+                                        parameter, which is a <code class="classname">PyKeyEvent</code>
+                                        instance.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="methodname">GUI.handleKeyEvent</code> now takes a single
+                                        parameter, which should be a <code class="classname">PyKeyEvent</code>
+                                        instance.
+                           </p>
+                        </li>
+                        <li>
+                           <p>The <code class="methodname">handleKeyEvent</code> and
+                                        <code class="methodname">handleMouseButtonEvent</code> methods on
+                                        <code class="classname">SimpleGUIComponent</code> scripts need to be
+                                        adjusted in the same way so that they take a single
+                                        <code class="classname">PyKeyEvent</code> parameter.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="methodname">BaseCamera.handleKeyEvent</code> now takes a
+                                        <code class="classname">PyKeyEvent</code> .
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>See the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a> for details on the
+                           <code class="classname">PyKeyEvent</code> class.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e170"></a>5.1.2.&nbsp;PyMouseEvent
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Mouse movement events are now encapsulated within the
+                           <code class="classname">PyMouseEvent</code> class. Python scripts will need to
+                           be updated in the following locations:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>The personality script event handler
+                                        <code class="methodname">handleMouseEvent</code> now takes a single
+                                        parameter, which is a <code class="classname">PyMouseEvent</code>
+                                        instance.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="methodname">GUI.handleMouseEvent</code> now takes a
+                                        single parameter, which should be a
+                                        <code class="classname">PyMouseEvent</code> instance.
+                           </p>
+                        </li>
+                        <li>
+                           <p>The <code class="methodname">handleMouseEvent</code> methods on
+                                        <code class="classname">SimpleGUIComponent</code> scripts need to be
+                                        adjusted in the same way so that they take a
+                                        <code class="classname">PyKeyEvent</code> rather than passing deltas as
+                                        individual parameters.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="methodname">BaseCamera.handleMouseEvent</code> now takes
+                                        a <code class="classname">PyMouseEvent</code> .
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>See the Python Client API documentation for details on the
+                           <code class="classname">PyMouseEvent</code> class.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e221"></a>5.1.3.&nbsp;PyAxisEvent
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Joystick axis events are now encapsulated within the
+                           <code class="classname">PyAxisEvent</code> class. Python scripts will need to be
+                           updated in the following locations:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>The personality script event handler
+                                        <code class="methodname">handleAxisEvent</code> now takes a single
+                                        parameter, which is a <code class="classname">PyAxisEvent</code>
+                                        instance.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="methodname">GUI.handleAxisEvent</code> now takes a
+                                        single parameter, which should be a
+                                        <code class="classname">PyAxisEvent</code> instance.
+                           </p>
+                        </li>
+                        <li>
+                           <p>The <code class="methodname">handleMouseEvent</code> methods on
+                                        <code class="classname">SimpleGUIComponent</code> scripts need to be
+                                        adjusted in the same way so that they take a
+                                        <code class="classname">PyKeyEvent</code> rather than passing deltas as
+                                        individual parameters.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="methodname">BaseCamera.handleAxisEvent</code> now takes
+                                        a <code class="classname">PyAxisEvent</code>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>See the Python Client API documentation for details on the
+                           <code class="classname">PyAxisEvent</code> class.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e272"></a>5.1.4.&nbsp;handleCharEvent
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p><code class="methodname">handleCharEvent</code> has been removed as
+                           character events are now included as part of the
+                           <code class="classname">PyKeyEvent</code> class. Any character input logic needs
+                           to be moved to <code class="methodname">handleKeyEvent</code> by checking to
+                           see if the <code class="varname">character</code> member of
+                           <code class="classname">PyKeyEvent</code> is <span class="literal">None</span> or a valid
+                           Unicode string.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e294"></a>5.1.5.&nbsp;SimpleGUIComponent.mouseButtonFocus
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The <code class="varname">SimpleGUIComponent.mouseButtonFocus</code> now
+                           controls a number of events related to the mouse which was previously
+                           controlled by the <code class="varname">SimpleGUIComponent.focus</code> property.
+                           These are:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><code class="methodname">SimpleGUIComponent.handleMouseButtonEvent</code></p>
+                        </li>
+                        <li>
+                           <p><code class="methodname">SimpleGUIComponent.handleClickEvent</code></p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>In order for these events to be called on the component scripts,
+                           be sure to set the <code class="varname">mouseButtonFocus</code> attribute to
+                           <span class="literal">True</span>, either via the scripts or within the <code class="filename">.gui</code> XML files.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e325"></a>5.1.6.&nbsp;SimpleGUIComponent.handleMouseButtonEvent
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The
+                           <code class="methodname">SimpleGUIComponent.handleMouseButtonEvent</code> will
+                           now only be called on one component, which is the top most component
+                           located beneath the mouse that has <code class="varname">mouseButtonFocus</code>
+                           set to True.
+                  </p>
+                  <p>Previously, <code class="varname">mouseButtonFocus</code> would be called on
+                           the top most component as well as each other component that the mouse is
+                           under (whether or not it was hidden by another overlapping
+                           component).
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>Keep in mind that <code class="methodname">handleKeyEvent</code> will
+                                still be called for mouse buttons (i.e. it is treated as if it is any
+                                other key button press), as it did in previous versions (as long as
+                                <code class="methodname">handleMouseButtonEvent</code> returns
+                                <span class="literal">False</span>).
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e353"></a>5.2.&nbsp;Interpretation of Pitch
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Previously, the interpretation of a pitch value was inconsistent
+                      throughout the BigWorld API. This has now been made consistent. A positive
+                      pitch is now consistently interpreted as nose pointing down and a negative
+                      pitch as nose pointing up. This has affected a number of APIs.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e358"></a>5.2.1.&nbsp;Direction Cursor
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The meaning of <span class="literal">minPitch</span> and
+                           <span class="literal">maxPitch</span> have been swapped.
+                           <span class="literal">minPitch</span> is now the most that the pitch can point
+                           upwards and <span class="literal">maxPitch</span> is the most that the pitch can
+                           point downwards.
+                  </p>
+                  <p>If the direction cursor setting are read out of
+                           <code class="filename">engine_config.xml</code>, the pitch related settings in
+                           the directionCursor section may need to be updated.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e380"></a>5.2.2.&nbsp;Cursor Camera
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>If the pitch of the cursor camera is now queried, it will now be
+                           the inverse of what it used to be.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e385"></a>5.2.3.&nbsp;TrackerNodeInfo
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The <span class="literal">minPitch</span> and <span class="literal">maxPitch</span>
+                           arguments of <code class="classname">TrackerNodeInfo</code> have the opposite
+                           direction than the used to.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;4.&nbsp;File Format Changes&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;6.&nbsp;Server Changes</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

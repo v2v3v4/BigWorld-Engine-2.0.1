@@ -1,0 +1,527 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;2.&nbsp;How it Works</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Using PyGUI">
+      <link rel="up" href="index.html" title="Using PyGUI">
+      <link rel="prev" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Introduction">
+      <link rel="next" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Integration">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;2.&nbsp;How it Works</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_HowItWorks"></a>Chapter&nbsp;2.&nbsp;How it Works
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch02.html#d0e107">2.1. PyGUIBase</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e120">2.2. .gui files</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e155">2.3. Visual states</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch02.html#d0e164">2.3.1. Visual state Python class</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e185">2.3.2. Visual state XML schema</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e199">2.3.3. External Visual States</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch02.html#d0e225">2.4. Mutually Exclusive Input</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e253">2.5. Tool Tips</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch02.html#d0e261">2.5.1. Tool Tip Manager</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e285">2.5.2. Tool Tip Templates</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e313">2.5.3. Tool Tip Info</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch02.html#d0e357">2.6. Draggable Components</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e107"></a>2.1.&nbsp;PyGUIBase
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>All component scripts in PyGUI inherit from a common base class
+                      called <code class="code">PyGUIBase</code>. This class provides common functionality to
+                      all PyGUI component scripts, including activation/deactivation management,
+                      event handler routing, and tool-tips.
+               </p>
+               <p>Be sure to call all base class methods which are defined in
+                      <code class="code">PyGUIBase</code> if any are overridden in the derived class,
+                      otherwise some functionality may break (e.g. input event handling
+                      methods).
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e120"></a>2.2.&nbsp;.gui files
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>PyGUI is designed so that user interfaces can be defined in
+                      <code class="filename">.gui</code> files. To allow this, PyGUI
+                      component scripts have been setup with an appropriate factory string and
+                      can be configured by specifying named values within the
+                      <span class="literal">&lt;script&gt;</span> blocks in the .gui file.
+               </p>
+               <p>Generally speaking, new GUI windows are assembled via the
+                      interactive Python console, and then saved to a <code class="filename">.gui</code> file. When the game scripts load up the
+                      window, they load from the .gui file rather than assembling the window
+                      programmatically. Existing windows can be tweaked either by modifying the
+                      .gui file externally, or by adjusting via the Python console and resaving
+                      the <code class="filename">.gui</code> file.
+               </p>
+               <p>For example, the &lt;script&gt; block for a slider may look
+                      something like this:
+               </p><pre class="programlisting">&lt;script&gt;    "PyGUI.Slider"
+    &lt;toolTipInfo&gt;
+        &lt;templateName&gt;    tooltip1line    &lt;/templateName&gt;
+        &lt;items&gt;
+            &lt;text&gt; The quick brown fox, etc    &lt;/text&gt;
+            &lt;shortcut&gt;    &lt;/shortcut&gt;
+        &lt;/items&gt;
+        &lt;placement&gt;    above    &lt;/placement&gt;
+    &lt;/toolTipInfo&gt;
+    &lt;isHorizontal&gt;    true    &lt;/isHorizontal&gt;
+    &lt;minValue&gt;    6.000000    &lt;/minValue&gt;
+    &lt;maxValue&gt;    40.000000    &lt;/maxValue&gt;
+    &lt;stepSize&gt;    1.000000    &lt;/stepSize&gt;
+&lt;/script&gt;</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>Some component scripts are made up of multiple components (e.g.
+                           the slider has a static background part as well as a child draggable
+                           part). The scripts do assume that the child components exist and have a
+                           certain name. To make this easier, complex components provide creator
+                           methods that create the required parts.
+                  </p>
+               </div>
+               <p>See the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/index.html" class="olink">Client Programming Guide</a> chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch16.html" class="olink"><i>Graphical User Interface (GUI)</i></a> for detailed information
+                      about <code class="filename">.gui</code> files.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e155"></a>2.3.&nbsp;Visual states
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The appearance of a component on the screen is defined by the
+                      relevant attributes on SimpleGUIComponent. By itself, this is fine for
+                      simple types of interface components that do not change state (e.g. the
+                      background texture of a window). However, most scripts (e.g. buttons)
+                      change state internally based on user input (e.g. mouse hovering, mouse
+                      clicking) or game state (e.g. disabling a button) and these states need to
+                      be reflected to the user visually.
+               </p>
+               <p>To help with this, the PyGUI framework allows "visual states" to be
+                      defined on the component script and to be saved with the .gui files. The
+                      component script will use information from these visual states to update
+                      attributes on SimpleGUIComponent when the internal state has
+                      changed.
+               </p>
+               <p>For example, buttons have 'normal' and 'hover' as some of its
+                      possible states. The button will use 'normal' as the default state on
+                      creation, and the internal state changes to 'hover' when the mouse enters
+                      the region of the button. Each state has a visual state block which can be
+                      configured be configured to change attributes such as the texture, UV
+                      mapping, the colour of the component, or even change the way the component
+                      is blended onto the screen. The component script will automatically switch
+                      apply the appropriate visual state as the internal state changes. If a
+                      required visual state has not been defined for a component script,
+                      warnings will be printed to the Python console.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e164"></a>2.3.1.&nbsp;Visual state Python class
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A visual state is represented in script by a specialised Python
+                           class which derives from the base <code class="code">VisualState</code> class. For
+                           example, <code class="code">ButtonVisualState</code> corresponds to the Button
+                           component script.
+                  </p>
+                  <p>There is one <code class="code">VisualState</code> instance per visual state on
+                           a component script, and can be set by name by calling
+                           <code class="code">componentScript.setVisualState( name, stateInstance
+                              )</code>.
+                  </p>
+                  <p>The visual states will be automatically serialised to and from the
+                           .gui files.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e185"></a>2.3.2.&nbsp;Visual state XML schema
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The exact visual state properties that are available depends on
+                           the script that it is attached to, however they all use the following
+                           basic schema within the <code class="code">&lt;script&gt;</code> tag:
+                  </p><pre class="programlisting">&lt;script&gt;
+    ...
+    &lt;visualStates&gt; PyGUI.VisualStateClassName
+        &lt;statename1&gt; 
+            &lt;property1&gt;      value &lt;/property1&gt;
+            &lt;/property2&gt;    value &lt;/property2&gt;
+            ...
+        &lt;/statename1&gt;
+        &lt;statename2&gt; 
+            ...
+        &lt;/statename2&gt;
+    &lt;/visualStates&gt;
+&lt;/script&gt;</pre><p>So for example, a button may look something like:</p><pre class="programlisting">&lt;visualStates&gt;    PyGUI.ButtonVisualState
+    &lt;normal&gt;
+        &lt;textStyle&gt;    ButtonNormal    &lt;/textStyle&gt;
+        &lt;icon&gt;
+            &lt;textureName&gt;    gui/maps/gui_general.dds    &lt;/textureName&gt;
+            &lt;materialFX&gt;    BLEND    &lt;/materialFX&gt;
+            &lt;mapping&gt;    PIXEL
+                &lt;coords0&gt;    0.000000 110.000000    &lt;/coords0&gt;
+                &lt;coords1&gt;    0.000000 131.000000    &lt;/coords1&gt;
+                &lt;coords2&gt;    21.000000 131.000000    &lt;/coords2&gt;
+                &lt;coords3&gt;    21.000000 110.000000    &lt;/coords3&gt;
+            &lt;/mapping&gt;
+            &lt;colour&gt;    255.000000 255.000000 255.000000 255.000000    &lt;/colour&gt;
+        &lt;/icon&gt;
+    &lt;/normal&gt;
+    &lt;pressed&gt;
+        &lt;textStyle&gt;    ButtonPressed    &lt;/textStyle&gt;
+        &lt;icon&gt;
+            &lt;textureName&gt;    gui/maps/gui_general.dds    &lt;/textureName&gt;
+            &lt;materialFX&gt;    BLEND    &lt;/materialFX&gt;
+            &lt;mapping&gt;    PIXEL
+                &lt;coords0&gt;    22.000000 110.000000    &lt;/coords0&gt;
+                &lt;coords1&gt;    22.000000 131.000000    &lt;/coords1&gt;
+                &lt;coords2&gt;    43.000000 131.000000    &lt;/coords2&gt;
+                &lt;coords3&gt;    43.000000 110.000000    &lt;/coords3&gt;
+            &lt;/mapping&gt;
+            &lt;colour&gt;    255.000000 255.000000 255.000000 255.000000    &lt;/colour&gt;
+        &lt;/icon&gt;
+    &lt;/pressed&gt;
+    ...
+&lt;/visualStates&gt;</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e199"></a>2.3.3.&nbsp;External Visual States
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>To avoid duplication when the same visual state definitions are
+                           used across multiple instances of the same script (e.g. all buttons in
+                           the game may have the same look), visual states can be defined in
+                           external XML files and references from within the .gui file.
+                  </p>
+                  <p>To reference an external visual state, use the
+                           <code class="code">&lt;external&gt;</code> tag within the
+                           <code class="code">&lt;visualStates&gt;</code> block. The external XML file would
+                           have a single root tag, as of the root tag is the
+                           <code class="code">&lt;visualStates&gt;</code> block from above. For example,
+                  </p><pre class="programlisting">&lt;visualStates&gt;
+    &lt;external&gt;    gui/visual_states/standard_button.xml    &lt;/external&gt;
+&lt;/visualStates&gt;</pre><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Tip</h3>
+                     <p>To load an existing visual state XML into a component, use the
+                                <code class="code">loadVisualStates</code> method on the component script. For
+                                example,
+                     </p><pre class="programlisting">&gt;&gt;&gt; button = PyGUI.Button.create( "default_texture_name.tga", "Push Me" )
+&gt;&gt;&gt; button.script.loadVisualStates( "gui/visual_states/standard_button.xml" )</pre></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e225"></a>2.4.&nbsp;Mutually Exclusive Input
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Some component scripts rely on mutually exclusive keyboard input. In
+                      other words, in most cases there should only be one component that has
+                      keyboard focuse at any particular time (e.g. only one EditField should
+                      receive key events).
+               </p>
+               <p>Since the low level BigWorld GUI library allows many component
+                      scripts to receive keyboard input at the same time (via the
+                      SimpleGUIComponent.focus property), PyGUI has a high level "focus
+                      manager". This manager makes sure only one component has their focus
+                      property set to true at any one time (as long as all component scripts
+                      grab focus via the manager).
+               </p>
+               <p>The following functions are provided to maintain the mutually
+                      exclusive keyboard focus:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="code">PyGUI.setFocusedComponent</code> &#8212; Takes a GUI
+                                   component, removes focus from any previously focused component, sets
+                                   the focus flag on the incoming component to True, and then stores a
+                                   reference to this new component.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="code">PyGUI.getFocusedComponent</code> &#8212; Returns a
+                                   reference to the currently focused component (i.e. the component
+                                   previously given to <code class="code">setFocusedComponent</code>).
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="code">PyGUI.isFocusedComponent</code> &#8212; Given a component,
+                                   determines if it currently is the focused component.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e253"></a>2.5.&nbsp;Tool Tips
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>PyGUI supports triggering tool tips on any arbitrary GUI component,
+                      since the trigger functionality is implemented in <code class="code">PyGUIBase</code>.
+                      It also allows the definition of any number of tool tip templates to allow
+                      full control over the appearance of tool tips.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e261"></a>2.5.1.&nbsp;Tool Tip Manager
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Since there can be only one tool tip active at any one time, this
+                           is managed by a singleton instance of the <code class="code">ToolTipManager</code>
+                           class. This singleton should be initialised on application startup,
+                           simply by creating an instance of <code class="code">ToolTipManager</code>. The
+                           scripts will raise an exception if there is already a manager instance
+                           created.
+                  </p>
+                  <p>The <code class="code">ToolTipManager</code> constructor expects two arguments:
+                           a parent GUI (tool tips will be added as children of this GUI, and is
+                           often a simple full screen invisible SimpleGUIComponent), and a Z-order
+                           to be used by the tool tips (this is usually a small number, close to
+                           zero, so that tool tips appear on top of everything else). For
+                           example,
+                  </p><pre class="programlisting">toolTipMgr = PyGUI.ToolTipManager( self.guiRoot, 0.01 )</pre><p>Once constructed, this singleton instance can also be accessed via
+                           <code class="code">PyGUI.ToolTipManager.instance</code>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e285"></a>2.5.2.&nbsp;Tool Tip Templates
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Before tool tips can be used, one or more template GUI's need to
+                           be defined. A tool tip template has a name, and an associated .gui file,
+                           allowing much flexibility in the layout of specific tool tip types (e.g.
+                           you may have a simple one line tool tip, or you may have a complex tool
+                           tip which includes an icon image and multiple lines of text).
+                  </p>
+                  <p>To register a template, do so on startup by calling
+                           <code class="code">ToolTipManager.addToolTipTemplate</code> and provide a template
+                           name and a template .gui filename. For example,
+                  </p><pre class="programlisting">toolTipMgr.addToolTipTemplate( "simple", "gui/simple_tooltip.gui" )</pre><p>Component scripts will refer to the tool tip template by
+                           name.
+                  </p>
+                  <p>The tool tip should have a script attached to it which is an
+                           instance of, or derives from, <code class="code">PyGUI.ToolTip</code>. If deriving a
+                           new class, it can override the <code class="code">doLayout</code> method to implement
+                           dynamic layouts for the tool tip content. For an example, see
+                           <code class="code">FDGUIOneLineToolTip</code> in
+                           <code class="filename">fantasydemo/res/scripts/helpers/FDGUI/FDToolTip.py</code>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e313"></a>2.5.3.&nbsp;Tool Tip Info
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>To associate a tool tip with a particular component, a ToolTipInfo
+                           instance needs to be attached to the PyGUIBase script. A ToolTipInfo has
+                           a number of different properties:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><code class="code">templateName</code> &#8212; A string name of a
+                                        registered template
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">items</code> &#8212; A dictionary containing a set of
+                                        named items. When a tool tip is activated, it will go through each
+                                        key in this dictionary and look for a component on the template GUI
+                                        with the key name. If the component it finds is a <code class="code">Text</code>
+                                        component it will set the text to the dictionary value, otherwise it
+                                        will set the <code class="code">textureName</code> property based on the
+                                        value.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">delayType</code> &#8212; A string containing the type of
+                                        delay to use before displaying the tool tip. Specify 'delay' to show
+                                        the tool tip only after half a second, or 'immediate' to show it
+                                        immediately.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">placement</code> &#8212; A string defining the placement
+                                        type for this tool tip. This can be 'below', 'above', 'left', or
+                                        'right'.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>This tool tip information is serialised to the .gui file once it
+                           has been attached to a <code class="code">PyGUIBase</code> component. An example
+                           <code class="code">toolTipInfo</code> serialisation is,
+                  </p><pre class="programlisting">&lt;script&gt; &amp;quot;PyGUI.Button&amp;quot;
+    ...
+    &lt;toolTipInfo&gt;
+        &lt;templateName&gt; tooltip1line &lt;/templateName&gt;
+        &lt;items&gt;
+            &lt;line1&gt; Toggles the display of the inventory window. &lt;/line1&gt;
+            &lt;shortcut&gt; (I) &lt;/shortcut&gt;
+            &lt;title&gt; Inventory &lt;/title&gt;
+        &lt;/items&gt;
+    &lt;/toolTipInfo&gt;
+    ...
+&lt;/script&gt;</pre><p>This example assumes that the 'tooltip1line' template has three
+                           Text component's on it: 'line1', 'shortcut', and 'title'.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e357"></a>2.6.&nbsp;Draggable Components
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>PyGUI provides generic functionality for components that can be
+                      dragged around the screen with the mouse. In PyGUI this is used by the
+                      DraggableWindow and the Slider scripts. In FDGUI this is also used for
+                      dragging inventory items out of the inventory window and across the
+                      screen.
+               </p>
+               <p>There can only be one component being dragged at any one time, and
+                      this is transparently handled by
+                      <code class="code">PyGUI.DraggableComponent.ComponentDragManager</code>.
+               </p>
+               <p>Draggable functionality is implemented in
+                      <code class="code">PyGUI.DraggableComponent</code>. Any component script that derives
+                      from <code class="code">PyGUI.DraggableComponent</code> automatically becomes
+                      draggable, and can be configured to be either draggable only in the
+                      horizontal direction, only the vertical direction, or both. It can also be
+                      configured to restrict the component to be only draggable within the
+                      confines of the screen or it's parent Window.
+               </p>
+               <p>These options are configured by passing in the appropriate
+                      parameters to the DraggableComponent constructor:
+               </p><pre class="programlisting">DraggableComponent.__init__( self, horzDrag, vertDrag, restrictToParent )</pre><p>If
+                      the derived class implements any of the following methods, then it must
+                      call the methods on the <code class="code">DraggableComponent</code> base class:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="code">onSave( self, dataSection )</code></p>
+                     </li>
+                     <li>
+                        <p><code class="code">onLoad( self, dataSection )</code></p>
+                     </li>
+                     <li>
+                        <p><code class="code">handleMouseButtonEvent( self, comp, event )</code></p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Introduction&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;Integration</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

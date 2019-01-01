@@ -1,0 +1,824 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;26.&nbsp;Entity Extras and Controllers</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt02.html" title="Part&nbsp;II.&nbsp;Server C++ Programming Guide">
+      <link rel="prev" href="ch25.html" title="Chapter&nbsp;25.&nbsp;Extending BigWorld Server">
+      <link rel="next" href="ch27.html" title="Chapter&nbsp;27.&nbsp;Updatable Objects">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch26.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;26.&nbsp;Entity Extras and Controllers</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch25.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;II.&nbsp;Server C++ Programming Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch27.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Entity_Extras_And_Controllers"></a>Chapter&nbsp;26.&nbsp;Entity Extras and Controllers
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch26.html#d0e15368">26.1. Implementing Entity Extras</a></span></dt>
+                  <dt><span class="section"><a href="ch26.html#d0e15567">26.2. Implementing Controllers</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch26.html#d0e15891">26.2.1. Configuring Portal's Permissivity</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch26.html#d0e15969">26.3. Integrating Entity Extras and Controllers</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch26.html#d0e16075">26.3.1. Restricting the Number of Controllers Per Entity</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>BigWorld provides two mechanisms for extending Entity and server
+                 functionality. These are known as <em class="emphasis">Entity Extras</em> and
+                 <em class="emphasis">Controllers</em>.
+            </p>
+            <p>Entity extras provide a mechanism for adding additional methods to all
+                 BigWorld cell entities. They are created on the spot when accessed by an
+                 entity, and are otherwise stateless. They are lost when the entity changes
+                 cells. There is at most one instance of EntityExtra per entity, and it may
+                 be easily retrieved from an Entity reference.
+            </p>
+            <p>Controllers provide a standard method to perform CPU-intensive work on
+                 entities in C++. They are instantiated by, and attached to a cell entity,
+                 and travel with it between cells. They are useful for performing actions
+                 that are either unfeasible or inefficient to implement in Python. There may
+                 be multiple Controller instances per entity, each with its own ID, which the
+                 entity script (or another Controller) may use to cancel or access the
+                 entity.
+            </p>
+            <p>Thus, it is not possible to retrieve a Controller instance by type
+                 from an entity reference, since it would not be possible to determine the
+                 instance retrieved. Of course, a friendly EntityExtra could store a pointer
+                 to it, if this were desired.
+            </p>
+            <p>BigWorld comes packaged with a selection of proven useful entity
+                 extras and Controllers, including facilities for performing the following
+                 functions:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Movement and navigation.</p>
+                  </li>
+                  <li>
+                     <p>Vehicle management.</p>
+                  </li>
+                  <li>
+                     <p>Entity vision and visibility.</p>
+                  </li>
+                  <li>
+                     <p>Timed events.</p>
+                  </li>
+               </ul>
+            </div>
+            <p>Depending on game design, however, additional facilities may be
+                 needed. Game design may also dictate the need for different implementations
+                 of one or more of the supplied facilities. Custom entity extras and
+                 Controllers are often useful for implementing these game-specific
+                 features.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e15368"></a>26.1.&nbsp;Implementing Entity Extras
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Entity extras attach additional methods to the
+                      <code class="classname">BigWorld</code>.<code class="classname">Entity</code> Python class
+                      on the cell. All entities have access to all methods of entity extras.
+                      However, the class implementing an entity extra is not instantiated until
+                      one of those methods is used, thus saving memory.
+               </p>
+               <p>While entity extras are useful for extending entities in ways that
+                      can only be done via C++, it is worth remembering that for many things a
+                      simple Python base class will suffice.
+               </p>
+               <p>Entity extras should not contain any state for an entity, as they
+                      are not streamed from one cell to another during the cell's ghosting
+                      process.
+               </p>
+               <p>A minimal entity extra consists of the following header file
+                      (replacing any references to <span class="literal">EgExtra</span> with the
+                      appropriate name):
+               </p><pre class="programlisting">#ifndef EGEXTRA_HPP
+#define EGEXTRA_HPP
+
+<em class="emphasis">#include "cellapp/entity_extra.hpp"</em>
+
+/**
+ * Simple example entity extra... can print a message to the screen
+ */
+<em class="emphasis">
+#undef PY_METHOD_ATTRIBUTE_WITH_DOC
+#define PY_METHOD_ATTRIBUTE_WITH_DOC PY_METHOD_ATTRIBUTE_ENTITY_EXTRA_WITH_DOC
+</em>
+class <em class="emphasis">EgExtra</em> : public <em class="emphasis">EntityExtra</em>
+{
+  <em class="emphasis">Py_EntityExtraHeader</em>( EgExtra );
+
+public:
+  EgExtra( Entity&amp; e );
+  ~EgExtra();
+
+  PyObject * <em class="emphasis">pyGetAttribute</em>( const char * attr );
+  int <em class="emphasis">pySetAttribute</em>( const char * attr, PyObject * value );
+
+  static const Instance&lt;EgExtra&gt; <em class="emphasis">instance</em>;
+};
+<em class="emphasis">
+#undef PY_METHOD_ATTRIBUTE_WITH_DOC
+#define PY_METHOD_ATTRIBUTE_WITH_DOC PY_METHOD_ATTRIBUTE_BASE_WITH_DOC
+</em>
+#endif</pre><p><span class="citetitle">EgExtra header file
+                         <code class="filename">bigworld/src/examples/cellapp_extension/egextra.hpp</code>
+                         <span class="symbol">&#8208;</span> Minimal definition</span></p>
+               <p>The code above contains the declarations necessary to integrate an
+                      entity extra into any entity in the BigWorld system.
+               </p>
+               <p>After the header guards,
+                      <span class="literal">bigworld/src/server/cellapp/entity_extra.hpp</span> is
+                      included which defines the <code class="classname">EntityExtra</code>
+                      class.
+               </p>
+               <p>It also overrides the macro <span class="literal">PY_METHOD_ATTRIBUTE</span>,
+                      in order to make automatically declared Python attributes in
+                      <span class="literal">EntityExtra</span>s work<sup>[<a name="d0e15444" href="#ftn.d0e15444">36</a>]</sup>. This allows BigWorld to search through and automatically
+                      instantiate extras by using only the name of the method that has been
+                      called.
+               </p>
+               <p>In the <span class="literal">EgExtra</span> class, we derive from
+                      <span class="literal">EntityExtra</span>, and use the macro
+                      <span class="literal">Py_EntityExtraHeader</span> to declare some additional methods
+                      and properties that are used to keep track of these classes.
+               </p>
+               <p>We provide the methods <span class="literal">pyGetAttribute</span> and
+                      <span class="literal">pySetAttribute</span> so that we can act like a Python
+                      object.
+               </p>
+               <p>A static specialisation <span class="literal">EntityExtra::instance</span>
+                      member is also declared to access the entity extras. With it, we can get a
+                      reference to the <span class="literal">EgExtra</span> for any <span class="literal">Entity&amp;
+                         ent</span> using the code:
+               </p><pre class="programlisting">EgExtra&amp; eg = EgExtra instance( ent );</pre><p>If the extra does not exist, it will be instantiated and returned.
+                      If we wanted to check first whether the extra exists, we can query it with
+                      the following code:
+               </p><pre class="programlisting">bool hasEgExtra = EgExtra instance.exists( ent );</pre><p>We implement the outline of the <span class="literal">EgExtra</span> class as
+                      follows:
+               </p><pre class="programlisting">#include "egextra.hpp"
+
+DECLARE_DEBUG_COMPONENT(0);
+
+PY_TYPEOBJECT( EgExtra )
+
+PY_BEGIN_METHODS( EgExtra )
+PY_END_METHODS()
+
+PY_BEGIN_ATTRIBUTES( EgExtra )
+PY_END_ATTRIBUTES()
+
+const EgExtra::<em class="emphasis">Instance</em>&lt;EgExtra&gt; 
+  EgExtra::instance( &amp;EgExtra::s_attributes_.di_ );
+
+EgExtra::EgExtra( Entity&amp; e ) : EntityExtra( e )
+{
+}
+
+EgExtra::~EgExtra()
+{
+}
+
+PyObject * EgExtra::<em class="emphasis">pyGetAttribute</em>( const char * attr )
+{
+  PY_GETATTR_STD();
+  return this-&gt;EntityExtra::pyGetAttribute( attr );
+}
+
+int EgExtra::<em class="emphasis">pySetAttribute</em>( const char * attr, PyObject * value )
+{
+  PY_SETATTR_STD();
+  return this-&gt;EntityExtra::pySetAttribute( attr, value );
+}</pre><p><span class="citetitle">EgExtra implementation file
+                         <code class="filename">bigworld/src/examples/cellapp_extension/egextra.cpp</code>
+                         <span class="symbol">&#8208;</span> Class outline</span></p>
+               <p>These two files together constitute the framework that we will use
+                      to implement any entity extra. These files can be found in BigWorld
+                      distribution, in the directory <code class="filename">bigworld/src/examples/cellapp_extension</code>.
+               </p>
+               <p>We can now add methods to this entity extra. We do this by declaring
+                      the method in the class declaration, and exposing it to Python with the
+                      BigWorld Python macros.
+               </p>
+               <p>As a simple example, to implement a method that prints the message
+                      '<span class="literal">hello world</span>' to the server debug log, we add the
+                      following code to the class declaration:
+               </p><pre class="programlisting">// ...
+
+class EgExtra : public EntityExtra
+{
+  Py_EntityExtraHeader( EgExtra );
+
+public:
+  // ...
+
+  void <em class="emphasis">helloWorld</em>();
+  PY_AUTO_METHOD_DECLARE( RETVOID, helloWorld, END );
+};
+
+// ...</pre><p><span class="citetitle"><span class="literal">EgExtra</span> header file <span class="symbol">&#8208;</span> Declaration of method
+                         <span class="literal">helloWorld</span></span></p>
+               <p>And in the implementation file, we add a simple 'stub'
+                      implementation:
+               </p><pre class="programlisting">// ...
+
+PY_TYPE_OBJECT( EgExtra )
+
+PY_BEGIN_METHODS( EgExtra )
+  PY_METHOD( helloWorld )
+PY_END_METHODS()
+
+// ...
+
+void EgExtra::<em class="emphasis">helloWorld</em>()
+{
+  DEBUG_MSG( "egextra: hello world\n" );
+}</pre><p><span class="citetitle"><span class="literal">EgExtra</span> implementation file <span class="symbol">&#8208;</span> Definition of method
+                         <span class="literal">helloWorld</span></span></p>
+               <p>After compiling this module, then for any entity in the world you
+                      can call:
+               </p><pre class="programlisting">self.helloWorld()</pre><p>The call above outputs the text '<span class="literal">egextra: hello
+                         world</span>' to the server debug log.
+               </p>
+               <p>Entity extras have an <code class="methodname">entity</code>() function,
+                      which returns a reference to the entity they have been attached to.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e15567"></a>26.2.&nbsp;Implementing Controllers
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Controllers enable us to dynamically add stateful C++ objects to
+                      entities on the CellApp. They can be used for property updates that need
+                      to be continuous, or for extensions that need to interact with the server
+                      at a level lower than the one exposed via the scripted entity
+                      model.
+               </p>
+               <p>To implement a Controller, inherit from the CellApp class named
+                      <code class="classname">Controller</code>. The Controller declaration has to
+                      include the special macro <span class="literal">DECLARE_CONTROLLER_TYPE</span>,
+                      which includes definitions required to register the Controller in the
+                      BigWorld system.
+               </p>
+               <p>The stub declaration file contains the following code:</p><pre class="programlisting">#ifndef EGCONTROLLER_HPP
+#define EGCONTROLLER_HPP
+
+#include "cellapp/controller.hpp"
+
+class EgController : public Controller
+{
+  <em class="emphasis">DECLARE_CONTROLLER_TYPE</em>( EgController );
+
+public:
+};
+
+#endif</pre><p><span class="citetitle">Controller header file <span class="symbol">&#8208;</span>
+                         <code class="filename">bigworld/src/examples/cellapp_extension/egcontroller.hpp</code></span></p>
+               <p>A Controller may be a member of the real domain (denoted by
+                      <span class="literal">DOMAIN_REAL</span>), or the ghost domain (denoted by
+                      <span class="literal">DOMAIN_GHOST</span>).
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">A Controller member of
+                                      <span class="literal">DOMAIN_REAL</span> works with reals.</em></p>
+                        <p>An example would be a movement Controller. Positional data is
+                                   already sent via the entity (due to the necessity of placing the ghost
+                                   in the right position), but other clients are unlikely to need to know
+                                   the entity's final destination. Consequently, there is no need to send
+                                   ghost information for this entity. Therefore, the Controller needs to
+                                   operate only in the real domain.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">A Controller member of
+                                      <span class="literal">DOMAIN_GHOST</span> works with ghosts.</em></p>
+                        <p>One such controller is BigWorld's
+                                   <code class="classname">VisibilityController</code>, which simply publishes
+                                   information for other entities to query. Other entities need to query
+                                   this Controller (through an entity extra) to determine whether they
+                                   can see that entity, even when the entity is a ghost.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>BigWorld directs Controllers by calling various virtual methods on
+                      the <code class="classname">Controller</code> class. There are two types of such
+                      methods:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p><em class="emphasis">Communication methods</em></p>
+                        <p>These methods serialise data onto a stream between cells, so
+                                   that the Controller representation can be moved from one machine to
+                                   another.
+                        </p>
+                        <p>There are four of these, one each for reading/writing to the
+                                   real/ghost domains, as described below:
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis">Method:
+                                                   <span class="literal">Read</span></em></p>
+                                 <div class="itemizedlist">
+                                    <ul type="circle">
+                                       <li>
+                                          <p><em class="emphasis"><span class="literal">DOMAIN_REAL</span>:
+                                                                <span class="literal">bool readRealFromStream( BinaryIStream&amp;
+                                                                   )</span></em></p>
+                                          <p>Returns <span class="literal">TRUE</span> on success. Default
+                                                             implementation: <span class="literal">return TRUE</span>.
+                                          </p>
+                                       </li>
+                                       <li>
+                                          <p><em class="emphasis"><span class="literal">DOMAIN_GHOST</span>:
+                                                                <span class="literal">bool readGhostFromStream( BinaryIStream&amp;
+                                                                   )</span></em></p>
+                                          <p>Returns <span class="literal">TRUE</span> on success. Default
+                                                             implementation: <span class="literal">return TRUE</span>.
+                                          </p>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis">Method:
+                                                   <span class="literal">Write</span></em></p>
+                                 <div class="itemizedlist">
+                                    <ul type="circle">
+                                       <li>
+                                          <p><em class="emphasis"><span class="literal">DOMAIN_REAL</span>:
+                                                                <span class="literal">void writeRealToStream( BinaryOStream&amp;
+                                                                   )</span></em></p>
+                                          <p>Default implementation: Do nothing</p>
+                                       </li>
+                                       <li>
+                                          <p><em class="emphasis"><span class="literal">DOMAIN_GHOST</span>:
+                                                                <span class="literal">bool void writeGhostToStream( BinaryOStream&amp;
+                                                                   )</span></em></p>
+                                          <p>Default implementation: Do nothing.</p>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Start/stop methods</em></p>
+                        <p>Controllers often request to be called back from the BigWorld
+                                   code. However, a real Controller should not be executed when it is
+                                   attached to a ghost entity, and a ghost Controller should not be
+                                   executed when it is attached to a real entity.
+                        </p>
+                        <p>To allow this, BigWorld uses four Controller methods to notify a
+                                   controller when it should change its processing strategy <span class="symbol">&#8208;</span> start methods should request the callbacks,
+                                   and stop methods should cancel them, as described below:
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis">Method: Start</em></p>
+                                 <div class="itemizedlist">
+                                    <ul type="circle">
+                                       <li>
+                                          <p><em class="emphasis"><span class="literal">DOMAIN_REAL</span>:
+                                                                <span class="literal">void startReal( bool isInitialStart
+                                                                   )</span></em></p>
+                                          <p>Default implementation: Do nothing.</p>
+                                       </li>
+                                       <li>
+                                          <p><em class="emphasis"><span class="literal">DOMAIN_GHOST</span>:
+                                                                <span class="literal">void startGhost( )</span></em></p>
+                                          <p>Default implementation: Do nothing.</p>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis">Method: Stop</em></p>
+                                 <div class="itemizedlist">
+                                    <ul type="circle">
+                                       <li>
+                                          <p><em class="emphasis"><span class="literal">DOMAIN_REAL</span>:
+                                                                <span class="literal">void stopReal( bool isFinalStop
+                                                                   )</span></em></p>
+                                          <p>Default implementation: Do nothing.</p>
+                                       </li>
+                                       <li>
+                                          <p><em class="emphasis"><span class="literal">DOMAIN_GHOST</span>:
+                                                                <span class="literal">void stopGhost( )</span></em></p>
+                                          <p>Default implementation: Do nothing.</p>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                  </ol>
+               </div>
+               <p>A Controller can be a member of both domains
+                      (<span class="literal">DOMAIN_REAL</span>, and <span class="literal">DOMAIN_GHOST</span>) if
+                      it has the (uncommon) need to present aspects of itself as a ghost
+                      Controller, and aspects of itself as a real Controller.
+               </p>
+               <p>Once an initial decision has been made as to which domains a
+                      controller belongs to, a stub implementation file needs to be set up. At
+                      first, it does not have to declare the domain, as illustrated
+                      below:
+               </p><pre class="programlisting">#include "egcontroller.hpp"
+#include "cellapp/cellapp.hpp"
+
+DECLARE_DEBUG_COMPONENT(0);
+
+// controller type declaration needs to go here</pre><p><span class="citetitle">Controller stub implementation file <span class="symbol">&#8208;</span>
+                         <code class="filename">bigworld/src/examples/cellapp_extension/egcontroller.cpp</code></span></p>
+               <p>Next, a macro needs to be placed to implement the controller
+                      integration. There are two possible macros for that:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p><em class="emphasis">IMPLEMENT_CONTROLLER_TYPE( CLASS_NAME,
+                                      DOMAIN )</em></p>
+                        <p>This macro declares a standard Controller type, which will be
+                                   instantiated using an <span class="literal">EntityExtra</span>. See below for
+                                   more details.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">IMPLEMENT_CONTROLLER_TYPE_WITH_PY_FACTORY(
+                                      CLASS_NAME, DOMAIN )</em></p>
+                        <p>This macro declares that the controller will be instantiated
+                                   using an automatically generated
+                                   <span class="literal">addControllerClassName</span> method in Python. The
+                                   <span class="literal">ControllerClassName</span> used omits the trailing word
+                                   '<span class="literal">Controller</span>' if it is present
+                                   (<em class="emphasis">e.g.</em>, <span class="literal">TimerController</span> becomes
+                                   <span class="literal">addTimer</span>).
+                        </p>
+                        <p>A factory method has to be created to use this feature. Its
+                                   declaration goes into the class declaration, and its name is
+                                   <span class="literal">New</span>:
+                        </p><pre class="programlisting">public:
+  static FactoryFnRet New( int userArg );
+  PY_AUTO_CONTROLLER_FACTORY_DECLARE( EgController, ARG( int, END ) )</pre><p>This method is implemented in the <span class="literal">.cpp</span>
+                                   file:
+                        </p><pre class="programlisting">Controller::FactoryFnRet EgController::New( int userArg )
+{
+  return FactoryFnRet( new EgController(), userArg );
+}</pre></li>
+                  </ol>
+               </div>
+               <p>When implementing a controller, the <span class="literal">Controller</span>
+                      class exposes the following useful methods:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">entity()</span></em></p>
+                        <p>Returns an <span class="literal">Entity&amp;</span> object, referring to
+                                   the entity that owns this Controller.
+                        </p>
+                        <p>For more details on methods exposed by the
+                                   <span class="literal">Entity</span> class, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_cpp/cellapp/index.html" class="olink">CellApp C API</a> and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_cpp/client/index.html" class="olink">Client C API</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">cancel()</span></em></p>
+                        <p>Cancels this controller. Call this method only on real
+                                   entities.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">ghost()</span></em></p>
+                        <p>Informs the cell to update the ghosted portion of this (real
+                                   entity) controller.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">standardCallback (
+                                         <em class="replaceable"><code>methodName</code></em> )</span></em></p>
+                        <p>Calls the 'standard' Controller Python notification method on
+                                   the associated entity. Standard notification methods have the
+                                   following Python signature: <span class="literal">def methodName( self,
+                                      controllerID, userData )</span>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e15891"></a>26.2.1.&nbsp;Configuring Portal's Permissivity
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A <span class="literal">PortalConfigController</span> configures the portal
+                           that its owning entity straddles. It is added with the entity method
+                           <span class="literal">addPortalConfig</span>, and takes the following
+                           arguments:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">permissive</span></em></p>
+                           <p>Boolean value indicating whether the portal allows objects in
+                                        the collision scene to pass through it.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">triFlags</span></em></p>
+                           <p>uint32 value for the triangle flags that should be returned on
+                                        collision tests that intersect the portal when it is not
+                                        permissive.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">navigable</span></em></p>
+                           <p>Boolean value not currently used, and which should be set to
+                                        the same value as the permissive argument.
+                           </p>
+                           <p>In the future, this argument may be used to indicate whether
+                                        the navigation system should consider the portal to be passable. For
+                                        now however, the navigation system uses the same flag as the
+                                        collision scene (permissive). For details, on the navigation system,
+                                        see <a href="ch12.html#xref_Navigation_System" title="12.2.&nbsp;Navigation System">Navigation System</a>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The controller is cancelled with the Entity method
+                           <span class="literal">cancel</span>, as with other controllers. It is a ghost
+                           controller, and therefore the portal configuration is correctly
+                           replicated across cells when more than one can see it. It is not however
+                           propagated to the client, if required it must be done via script
+                           properties or messages.
+                  </p>
+                  <p>The direction of the entity to which the
+                           <span class="literal">PortalConfigController</span> is attached must be the same
+                           as the normal of the portal that is to be configured,
+                           <em class="emphasis">i.e.</em>, if the portal runs east-west between two
+                           chunks, then the entity must face either south or north, otherwise the
+                           portal will probably not be found.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>An entity should not be moved while it has a
+                                <span class="literal">PortalConfigController</span> attached, or there may be
+                                undesirable results across cells.
+                     </p>
+                     <p>If the entity needs to be moved, then cancel
+                                <span class="literal">PortalConfigController</span>, move the entity, and
+                                recreate the controller.
+                     </p>
+                  </div>
+                  <p>To the extent that portals are uni-directional and come in pairs,
+                           <span class="literal">PortalConfigController</span> configures only the portal
+                           whose normal faces approximately the same direction as the entity,
+                           <em class="emphasis">i.e.</em>, the portal in the chunk that is found just in
+                           front (10 cm) of the entity's position. Another entity with opposite
+                           direction may be created if a separate configuration is desired for the
+                           opposing portal. For most purposes however (<em class="emphasis">i.e.</em>,
+                           navigation and collision) it is only necessary to configure one portal
+                           differently to the default permissive state.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>The method <span class="literal">configureConnection</span> has been
+                                deprecated, since it does not work across cells.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e15969"></a>26.3.&nbsp;Integrating Entity Extras and Controllers
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Entity extras are commonly used to provide a more sophisticated
+                      means of instantiating Controllers. They might provide a factory that
+                      selects one of several types of Controller to instantiate, or provide a
+                      means of limiting the number of Controllers that are instantiated.
+               </p>
+               <p>To begin exploring this, we implement something similar to the
+                      automatic instantiation provided by the macro
+                      <span class="literal">IMPLEMENT_CONTROLLER_TYPE_WITH_PY_FACTORY</span>.
+               </p>
+               <p>We add an instantiation method called
+                      <span class="literal">addEgController</span> to <span class="literal">EgExtra</span>, taking
+                      an integer user argument:
+               </p><pre class="programlisting">class EgExtra : public EntityExtra
+{
+  Py_EntityExtraHeader( EgExtra );
+
+public:
+  // ...
+
+  PY_AUTO_METHOD_DECLARE( RETOWN, addEgController, ARG( int, END ) );
+  PyObject * <em class="emphasis">addEgController</em>( int userArg );
+
+  static const Instance&lt;EgExtra&gt; instance;
+};</pre><p><span class="citetitle"><span class="literal">EgExtra</span> header file
+                         <code class="filename">bigworld/src/examples/cellapp_extension/egextra.hpp</code>
+                         <span class="symbol">&#8208;</span> Declaration of instantiation method
+                         <span class="literal">addEgController</span></span></p>
+               <p>The next step is to implement the method addEgController. To do so,
+                      we need to:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Add a macro <span class="literal">PY_METHOD</span> to declare the
+                                   Python/C++ binding code.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Ensure that the method is being called on a real entity.</p>
+                     </li>
+                     <li>
+                        <p>Instantiate an <span class="literal">EgController</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Add the new Controller to the entity.</p>
+                     </li>
+                     <li>
+                        <p>Return the controller ID.</p>
+                     </li>
+                  </ol>
+               </div>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>Most Controllers do not need any more functionality than the
+                           built-in Python factory method supplies.
+                  </p>
+                  <p>Creating unnecessary <span class="literal">EntityExtra</span> instances
+                           should be avoided, since every declared <span class="literal">EntityExtra</span>
+                           type uses 4 bytes per entity (including ghost entities), even when it is
+                           not instantiated.
+                  </p>
+               </div>
+               <p>This will mean the following changes to
+                      <span class="literal">EgExtra</span>:
+               </p><pre class="programlisting">#include "egextra.hpp"
+#include "egcontroller.hpp"
+
+DECLARE_DEBUG_COMPONENT(0);
+
+PY_TYPEOBJECT( EgExtra )
+
+PY_BEGIN_METHODS( EgExtra )
+  PY_METHOD( helloWorld )
+  <em class="emphasis">PY_METHOD( addEgController )</em>
+PY_END_METHODS()
+
+// ...
+
+PyObject * EgExtra::<em class="emphasis">addEgController</em>( int userArg )
+{
+  <em class="emphasis">if (!entity_.isReal())</em>
+  {
+    PyErr_SetString( PyExc_TypeError,
+      "Entity.addEgController() may only be called on real entities" );
+    return NULL;
+  }
+
+  <em class="emphasis">ControllerPtr pController = new EgController();</em>
+  ControllerID controllerID = 
+    <em class="emphasis">entity_.addController( pController, userArg );
+  return Script::getData( controllerID );</em>
+}</pre><p><span class="citetitle"><span class="literal">EgExtra</span> implementation file
+                         <code class="filename">bigworld/src/examples/cellapp_extension/egextra.cpp</code>
+                         <span class="symbol">&#8208;</span> Definition of instantiation method
+                         <span class="literal">addEgController</span></span></p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e16075"></a>26.3.1.&nbsp;Restricting the Number of Controllers Per Entity
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>If you want to restrict the entities to have only one Controller
+                           each, then the class <span class="literal">EgExtra</span> may be changed so that
+                           it maintains a pointer to the current Controller, and the method
+                           <span class="literal">addEgController</span> should ensure that the pointer is
+                           <span class="literal">NULL</span> before allowing a new one to be added.
+                  </p>
+                  <p>The class <span class="literal">EgController</span> would then, in its
+                           method <span class="literal">startReal</span>, send its pointer to the class
+                           <span class="literal">EgExtra</span>, and communicate to it that it has been
+                           cancelled in its method <span class="literal">stopReal</span>. The pointer must
+                           not be directly set in the method <span class="literal">addEgController</span>, as
+                           it would break the symmetry of the Controller 'owning' that pointer in
+                           the <span class="literal">EntityExtra</span>.
+                  </p>
+                  <p>Setting the pointer in the mentioned methods in the Controller
+                           works correctly when the entity is offloaded to another cell.
+                  </p>
+                  <p>The line to add to method <span class="literal">startReal</span> would be
+                           similar to the line below:
+                  </p><pre class="programlisting">EgExtra::instance( *this-&gt;entity() ).setEgControllerPtr( this )</pre><p>Note that the object <span class="literal">EgExtra</span> will be
+                           instantiated if it does not already exist.
+                  </p>
+                  <p>Keeping a pointer to a related Controller can also be useful for
+                           an entity extra to maintain states across cell transitions.
+                  </p>
+                  <p>For example, to calculate the age of an entity extra, it might
+                           provide a method <span class="literal">getEgAge</span>, and the Controller might
+                           store the game time when it is created. The entity extra can then
+                           calculate its age by subtracting the current game time from the
+                           Controller's stored game time (after checking that the Controller
+                           pointer is not <span class="literal">NULL</span>).
+                  </p>
+               </div>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e15444" href="#d0e15444">36</a>] </sup>Note that this is undone at the end of the file.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch25.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt02.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch27.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;25.&nbsp;Extending BigWorld Server&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;27.&nbsp;Updatable Objects</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

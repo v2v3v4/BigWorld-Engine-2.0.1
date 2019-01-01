@@ -1,0 +1,123 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;5.&nbsp;Asynchronous and Ghost Cell Considerations</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Build Vehicles">
+      <link rel="up" href="index.html" title="How To Build Vehicles">
+      <link rel="prev" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Models and Animation">
+      <link rel="next" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Ripper Example">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_build_vehicle/ch05.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;5.&nbsp;Asynchronous and Ghost Cell Considerations</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Asynchronous_Considerations"></a>Chapter&nbsp;5.&nbsp;Asynchronous and Ghost Cell Considerations
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch05.html#d0e253">5.1. Entering the world</a></span></dt>
+                  <dt><span class="section"><a href="ch05.html#d0e266">5.2. Observing avatars interacting with vehicles</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e253"></a>5.1.&nbsp;Entering the world
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>When using the board / alight vehicle mechanism, the passenger's
+                      position is defined in terms of the vehicle. As a result, passengers will
+                      always enter the world after the vehicle. To allow the vehicle to
+                      correctly handle this, we require some form of notification of the
+                      passenger's entry into the world.
+               </p>
+               <p>The excerpt below illustrates how to achieve this:</p><pre class="programlisting"># This function is called by avatar when it enters the world.
+def passengerEnterWorld( self, pilot ):
+    pilot.model.visible = False
+    pilot.model.motors[0].entityCollision = False
+    if self.model.mount == None:
+        pilotModel = pilot.model
+        pilotModel.tracker = None
+        pilot.model = makeModel( pilot.modelNumber, None )
+        pilot.model.visible = False
+        self.model.mount = pilotModel
+        self.model.mount.RipperPilotIdle()
+        self.model.mount.visible = True
+        pilot.targetCaps = []</pre><p><span class="citetitle"><code class="filename">client/Ripper.py</code></span></p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e266"></a>5.2.&nbsp;Observing avatars interacting with vehicles
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Communication with third parties is done via the vehicle's cell. To
+                      do this, have the vehicle cell broadcast any state-changing responses to
+                      <code class="varname">self.allClients</code>, with the ID of the affected avatar as
+                      a parameter.
+               </p><pre class="programlisting">def passengerBoarded( self, sourceAvatarID ):
+    # Notify all clients about the Ripper being mounted.
+    self.allClients.mountVehicle( True, sourceAvatarID )</pre><p><span class="citetitle"><code class="filename">client/Ripper.py</code></span></p>
+               <p>Remember that third parties might not have both the vehicle and its
+                      passengers in their area of interest, and so the ID might not be
+                      immediately resolvable into an entity. To handle this situation, the
+                      avatar should notify vehicles they are riding when they themselves enter
+                      the world. The passenger will never enter the world before their vehicle,
+                      as its position is known only relative to the former.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch06.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;4.&nbsp;Models and Animation&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;6.&nbsp;Ripper Example</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

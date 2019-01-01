@@ -1,0 +1,386 @@
+/* Bigworld documentation stylesheet */
+
+body {
+	font-family: Tahoma, Verdana, sans-serif;
+	font-size: 0.8em;
+	margin: 0px;
+	padding: 0px;
+}
+
+p {
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
+
+body table {
+	font-size: inherit; 
+}
+
+.emphasis {
+	font-weight:bold;
+	font-style:normal;
+	}
+
+table td {
+	font-size:10pt;
+}
+
+.sect1 table{
+	border: #999999 solid 1px;
+	background-color:#E8F2FF;
+	border-collapse:collapse;
+}
+
+.sect1 table th{
+	border: #999999 solid 1px;
+	background-color:#000000;
+	color:#FFFFFF;
+	text-align:left;
+	padding: 5px;
+}
+
+.sect1 table td{
+	border: #999999 solid 1px;
+	padding: 5px;
+}
+
+.white table{
+	border: white solid 1px;
+	background-color:white;
+	border-collapse:collapse;
+}
+
+.white table th, .white table td{
+	background-color:#FFFFFF;
+	color: #000000;
+	text-align:left;
+	border: white solid 1px;
+	padding: 5px;
+}
+
+.striped table .odd{
+	background-color:#EFEFEF;
+}
+
+.calloutlist table{
+	border: 0;
+	background-color:#ffffff;
+}
+
+.calloutlist i{
+	font-weight:bold;
+	font-style:normal;
+}
+
+.calloutlist table td{
+	border: 0;
+}
+
+li .programlisting {
+	color:#000000;
+}
+
+#bigworld-header {
+	border: 			0;
+	margin: 			0;
+	padding: 			0;
+	background-image:	url(bigworld_header_bkgd.jpg );
+	background-repeat:	no-repeat;
+	background-color:	#104D8C;
+	border-bottom: 		1px solid #104D8C;
+	height: 73px;
+}
+
+#bigworld-header img {
+	position: relative;
+	left: 0.6cm;
+	top: 6px;
+}
+
+#content {
+	/*margin: 0.5cm 1cm;  */
+}
+
+hr {
+	border: 0;
+	width: 100%;
+	height: 1px;
+	background-color: #3A6CA7;
+}
+
+pre {
+	color: #000000;
+	border: 1px solid #999999;
+	background-color: #FBFBFB;
+	padding: 5px;
+	margin-top: 5px;
+	margin-bottom:0;
+	margin-left: 25px;
+	margin-right: 25px;
+}
+
+pre, code {
+	font-size: 1.2em;
+}
+
+li pre {
+	padding: 3px;
+	margin: 3px 0;
+}
+
+h1 { /* only use on the title page */
+	font-family: Tahoma, Verdana, sans-serif;
+	color: #3577FF;
+	margin-top: 10pt;
+	margin-bottom: 0pt;
+	background-color: #E7EFF8;
+}
+
+h2 {
+	font-family: Tahoma, Verdana, sans-serif;
+	color: #072C94;
+	padding: 4px 0px 0px 0px;
+	margin: 10px 0px;
+}
+
+div.chapter {
+	margin: 0.5cm 1cm; 
+}
+
+div.titlepage {
+	margin: 0 0.75cm;
+}
+
+div.chapter div.titlepage h2 { /* chapter title */
+    font-size: 150%;
+    font-weight: Bold;
+	padding: 4px 0px;
+    color: #072C94;
+}
+
+div.chapter div.section div.titlepage h2, div.chapter div.sect1 div.titlepage h2 { /* section title */
+    font-size: 120%;
+    font-weight: Bold;
+	background-color: #9AC5F8;
+	color: black;
+	padding: 2px 0px;
+	margin-top:40px;
+}
+
+h3 {
+	color: #072C94;
+	font-size: 110%;
+	border-bottom: #072C94 solid 1px;
+	padding: 2px 0px;
+	margin: 10px 0px;
+}
+
+h4 {
+	color: #3577FF;
+	font-size: 100%;
+	border-bottom: #3577FF solid 1px;
+	padding: 2px 0px;
+	margin: 10px 0px;
+}
+
+h5 {
+	color: #3577FF;
+	font-size: 95%;
+	border-bottom: #3577FF solid 1px;
+	padding: 2px 0px;
+	margin-left: 10px;
+	margin: 10px 0px;
+}
+
+h6 {
+	color: #3577FF;
+	font-size: 95%;
+	border-bottom: #3577FF solid 1px;
+	padding: 2px 0px;
+	margin-left: 10px;
+	margin: 10px 0px;
+}
+
+li {
+	/*color: red; */
+}
+
+div.note {
+	border: 1px solid #072C94;
+	padding: 0px 0px 4px 0px;
+	background-color: #E8F2FF;
+	margin: 10px 25px 20px 25px;
+}
+
+div.note h3 {
+    font-weight: Bold;
+	background-color: #072C94;
+	text-align:center;
+	color: white;
+	padding: 2px 6px;
+	margin: 0;
+	padding: 5px;
+	border: 0;
+}
+
+div.note p {
+	padding: 0px 6px;
+}
+
+div.note .informalfigure {
+	padding: 0px 12px;
+}
+
+div.toc {
+	background-color: #E7EFF8;
+	font-weight:bold;
+	margin: 0;
+	padding-left: 5px;
+	padding-bottom: 5px;
+}
+
+div.toc p {
+	padding-top: 10px;
+	margin-left: 0;
+}
+
+div.toc a:link, div.toc a:visited{
+	color: #072C94;
+	font-size: 90%;
+	text-decoration:none;
+}
+
+div.toc a:hover, div.toc a:active{
+	color: #FF5300;
+	font-size: 90%;
+}
+
+div.toc dl {
+	margin-left: 10pt;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+div.toc dl dd {
+	margin-left: 5pt;
+	font-weight: normal;
+}
+
+div.toc dl dd dl dd {
+	margin-left: 10pt;
+}
+
+div.toc dl dd dl dd dl{
+	margin-left: 10pt;
+}
+
+div.toc dl dd dl dd dl dd dl{
+	margin-left:0;
+}
+
+div.itemizedlist ul {
+	margin-top:3px;
+	padding-left:18pt;
+	font-size:95%;
+}
+div.itemizedlist ul ul {
+	margin-top:3px;
+    margin-left:15pt;
+	padding-left:0;
+	font-size:100%;
+}
+div.itemizedlist li{ 
+	color: #FF5300; 
+	list-style:square;
+	margin-bottom: 5px;  /* to add margin in between bullet points */
+}
+
+div.itemizedlist li p{
+	color: black;
+}
+
+.caption {
+	color:#666666;
+	font-size: 90%;
+}
+
+p span.citetitle { /* have tried to adjust margin top to reduce space after programlisting, but doesn't work */
+	color:#666666;
+	font-size: 90%;
+	margin-left: 30px;
+	font-weight: bold;
+}
+
+/* chunked html files only */
+div.navheader {
+	padding-top:10px;
+}
+
+.navheaderline {
+	color: #3577FF;
+	width: 95%;
+}
+
+div.navheader th{
+	color: #3577FF;
+}
+
+div.navfooter {
+	padding-bottom:10px;
+}
+
+div.navfooter td{
+	font-size: 90%;
+	font-style:italic;
+	color: #666666;
+}
+
+div.navheader a:link, div.navheader a:visited, div.navfooter a:link, div.navfooter a:visited{
+	color: #3577FF;
+	font-weight: bold;
+	font-style:normal;
+}
+
+div.navheader a:hover, div.navheader a:active, div.navfooter a:hover, div.navfooter a:active{
+	color: #FF5300;
+	font-weight: bold;
+	font-style:normal;
+}
+
+div.figure {
+	font-size: 90%;
+	color: #666666;
+}
+
+span.literal {
+	font-family: Courier, mono;
+}
+
+img{
+	margin-left:25px;
+}
+
+/*------ FAQ STYLES ------*/
+table.FAQTopOfPageList     { font-family:Serif; font-size:100%; margin-left:0pt; margin-top:6pt; border:0; }
+table.FAQTopOfPageList th  { text-align:right; padding:1pt; vertical-align:top; font-weight:bold; color:navy; background-color:white; }
+table.FAQTopOfPageList td  { text-align:left;  padding:1pt; border:0pt; }
+table.FAQTopOfPageList code{ font-size:90% }
+table.FAQTopOfPageList pre { font-size:90% }
+table.FAQQAndA             { font-family:Serif; font-size:11.0pt; margin-left:0pt; margin-top:9pt; border:0; width:100%}
+table.FAQQAndA thead tr    { font-weight:bold; background-color:whitesmoke; vertical-align:top;}
+table.FAQQAndA thead tr td { border-top:0.5pt solid black; border-bottom:0.5pt solid black; }
+table.FAQQAndA thead tr td p { margin-top:3pt; margin-bottom:3pt; }
+table.FAQQAndA tr          { vertical-align:top;}
+table.FAQQAndA td          { border:0pt; }
+table.FAQQAndA td p        { margin-left:0pt;   margin-top:6pt; margin-bottom:0pt; }
+table.FAQQAndA ul          { padding-left:20pt; margin-top:6pt; margin-bottom:0pt; }
+table.FAQQAndA tfoot       { font-size:80%; }
+table.FAQQAndA tfoot td    { padding-top:3pt; }
+table.FAQQAndA code        { font-size:85%; }
+table.FAQQAndA pre         { font-size:85%; }
+
+
+table.normal{
+	color: black;
+}
+

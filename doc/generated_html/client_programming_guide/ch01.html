@@ -1,0 +1,546 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;1.&nbsp;Overview</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="index.html" title="Client Programming Guide">
+      <link rel="next" href="ch02.html" title="Chapter&nbsp;2.&nbsp;User Input">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch01.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Overview</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Overview"></a>Chapter&nbsp;1.&nbsp;Overview
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch01.html#d0e34">1.1. Client in context</a></span></dt>
+                  <dt><span class="section"><a href="ch01.html#d0e63">1.2. Outline</a></span></dt>
+                  <dt><span class="section"><a href="ch01.html#xref_Resource_Search_Paths">1.3. Resource search paths</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch01.html#d0e145">1.3.1. paths.xml</a></span></dt>
+                        <dt><span class="section"><a href="ch01.html#d0e170">1.3.2. Command line switch</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch01.html#xref_Configuration_Files">1.4. Configuration files</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch01.html#xref_File_resources_xml">1.4.1. File <span class="literal">resources.xml</span></a></span></dt>
+                        <dt><span class="section"><a href="ch01.html#xref_File_engine_config_xml">1.4.2. File
+                                       <span class="literal"><em class="replaceable"><code>&lt;engine_config&gt;</code></em>.xml</span></a></span></dt>
+                        <dt><span class="section"><a href="ch01.html#xref_File_scripts_config_xml">1.4.3. File
+                                       <span class="literal"><em class="replaceable"><code>&lt;scripts_config&gt;</code></em>.xml</span></a></span></dt>
+                        <dt><span class="section"><a href="ch01.html#xref_File_preferences_xml">1.4.4. File
+                                       <span class="literal"><em class="replaceable"><code>&lt;preferences&gt;</code></em>.xml</span></a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch01.html#xref_Coordinate_system">1.5. Coordinate System</a></span></dt>
+               </dl>
+            </div>
+            <p>This document is a technical design overview for the Client Engine for
+                 3d engine Technology. It is part of a larger set of documentation describing
+                 the whole system. It only includes references to the BigWorld Server in
+                 order to provide context. Readers interested only in the workings of the
+                 BigWorld Client may ignore the server information.
+            </p>
+            <p>The intended audience is technical-typically MMOG developers and
+                 designers.
+            </p>
+            <p>For API-level information, please refer to the online
+                 documentation.
+            </p>
+            <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+               <h3 class="title">Note</h3>
+               <p>For details on BigWorld terminology, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../glossary_of_terms/index.html" class="olink">Glossary of Terms</a>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e34"></a>1.1.&nbsp;Client in context
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The BigWorld Client provides the end-user experience of the BigWorld
+                      client/server architecture. In a BigWorld client/server implementation,
+                      the client connects to the server using UDP/IP over the Internet.
+               </p>
+               <p>The BigWorld Client presents the user with a realistic and immersive
+                      3D environment. The contents of that environment are a combination of
+                      static data stored with the client, and dynamic data sent from the server.
+                      The user interacts with the world through an avatar (character) that he or
+                      she controls. The movement and actions of that avatar are relayed to the
+                      server. The avatars controlled by other connected users are part of the
+                      dynamic data sent from the server.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/client_perspective_of_bigworld_system.png"><span class="caption">
+                        <p>Client perspective of BigWorld system. Note that the
+                                   BigWorld server is not just one machine, although the client can treat
+                                   it as such.
+                        </p></span></div>
+               </div>
+               <p>Developers may choose to integrate the client with their own server
+                      technology, but if they do, they will have to address problems already
+                      tackled by the BigWorld architecture, like:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Uniform collision scene (used on client and server).</p>
+                     </li>
+                     <li>
+                        <p>Uniform client/server scripting (used on client and
+                                   server).
+                        </p>
+                     </li>
+                     <li>
+                        <p>Tools that produce server and client content.</p>
+                     </li>
+                     <li>
+                        <p>Optimised low bandwidth communication protocol.</p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e63"></a>1.2.&nbsp;Outline
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The client initialises itself, connects to the server, and then runs
+                      in its main thread a standard game loop (each iteration of which is known
+                      as a frame):
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Receive input</p>
+                     </li>
+                     <li>
+                        <p>Update world</p>
+                     </li>
+                     <li>
+                        <p>Draw world</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Each step of the frame is described below:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Input</em></p>
+                        <p>Input is received from attached input devices using DirectInput.
+                                   In a BigWorld client/server implementation, input is also received
+                                   over the network from the server using WinSock 2.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Update</em></p>
+                        <p>The world is updated to account for the time that has passed
+                                   since the last update.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Draw</em></p>
+                        <p>The world is drawn with the 3D engine Moo, which uses Direct3D
+                                   (version 9c). For details, see <a href="ch21.html" title="Chapter&nbsp;21.&nbsp;3D Engine (Moo)"><i xmlns:xlink="http://www.w3.org/1999/xlink">3D Engine (Moo)</i></a>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>A number of other objects also fall into the world's 'update then
+                      draw' system. These include a dozen related to the weather and atmospheric
+                      effects (rain, stars, fog, clouds, etc.), various script assistance
+                      systems (targeting, combat), pools of water, footprints, and
+                      shadows.
+               </p>
+               <p>There are other threads for background scene loading and other
+                      asynchronous tasks.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Resource_Search_Paths"></a>1.3.&nbsp;Resource search paths
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The BigWorld client is a generic executable that is fully
+                      configurable via the game specific resources. The location of these
+                      resources must be supplied to the client so that it can initialise
+                      correctly.
+               </p>
+               <p>Typically, at least two resource paths need to be specified - your
+                      project specific resource path and the BigWorld resource path (which
+                      supplies common resources such as standard shaders, fonts, scripts, etc).
+                      For example, if your game was located in "my_game", the two resource paths
+                      you would define are:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="code">my_game/res</code></p>
+                     </li>
+                     <li>
+                        <p><code class="code">bigworld/res</code></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>When the engine tries to access a resource, it will look in each
+                      resource tree in the order that they are given to the engine. As an
+                      example, if the client scripts request the resource named
+                      <code class="code">sets/models/foo.model</code> it tries the following
+                      locations:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="code">my_game/res/sets/models/foo.model</code></p>
+                     </li>
+                     <li>
+                        <p><code class="code">bigworld/res/sets/models/foo.model</code></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The search will stop at the first valid file found. As such, it is
+                      possible to override resources specified in <code class="code">bigworld/res</code> by
+                      placing it in the same location within <code class="code">my_game/res</code>.
+               </p>
+               <p>There are two ways search paths can be specified:</p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e145"></a>1.3.1.&nbsp;paths.xml
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p><code class="code">paths.xml</code> is an XML file which the engine will look
+                           for on startup and contains a list of resource paths. The client will
+                           first try to open <code class="code">paths.xml</code> in the current working
+                           directory. If it cannot be found in the current directory, then it will
+                           try to open <code class="code">paths.xml</code> in the same folder as the client
+                           executable. The schema of <code class="code">paths.xml</code> looks like this:
+                  </p><pre class="programlisting">&lt;root&gt;
+    &lt;Paths&gt;
+        &lt;Path&gt;../../my_game/res&lt;/Path&gt;
+        &lt;Path&gt;../../bigworld/res&lt;/Path&gt;
+    &lt;/Paths&gt;
+&lt;/root&gt;
+</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>Paths are defined relative to the location of
+                                <code class="code">paths.xml</code>.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e170"></a>1.3.2.&nbsp;Command line switch
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>By default the client will look for the <code class="code">paths.xml</code>
+                           illustrated above. However, this can be overridden via the command line
+                           using the <code class="code">--res</code> switch. Multiple paths are semi-colon
+                           separated. For example,
+                  </p><pre class="programlisting">"bwclient.exe" --res ../../../my_game/res;../../../bigworld/res</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>These paths must be defined relative to the executable location,
+                                <em class="emphasis">not </em>the current working directory.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Configuration_Files"></a>1.4.&nbsp;Configuration files
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Configuration files are defined relatively to one of the entries in
+                      the resources folders list (or
+                      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span>). For details on
+                      how BigWorld compiles this list, see <a href="ch01.html#xref_Resource_Search_Paths" title="1.3.&nbsp;Resource search paths">Resource search paths</a></p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_File_resources_xml"></a>1.4.1.&nbsp;File <span class="literal">resources.xml</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This file defines game-specific resources that are needed by the
+                           client engine to run.
+                  </p>
+                  <p>The entries in resources.xml are read from the various entries in
+                           the resources folders list (or
+                           <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span>), in the order
+                           in which they are listed. Only missing entries will have their values
+                           read in subsequent folders.
+                  </p>
+                  <p>A default file exists under folder bigworld/res, and any of its
+                           resources may be overridden by creating your own file
+                           <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/resources.xml</span>.
+                  </p>
+                  <p>The example below illustrates this mechanism:</p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/precedence_of_your_games_resources_xml.png"><span class="caption">
+                           <p>Precedence of your game's
+                                        <span class="literal">resources.xml</span> file over BigWorld's
+                                        ones
+                           </p></span></div>
+                  </div>
+                  <p>For a complete list of the resources and values used by BigWorld,
+                           refer to the <span class="literal">resources.xml</span> file provided with the
+                           distribution.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_File_engine_config_xml"></a>1.4.2.&nbsp;File
+                                    <span class="literal"><em class="replaceable"><code>&lt;engine_config&gt;</code></em>.xml</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The XML file
+                           <span class="literal"><em class="replaceable"><code>&lt;engine_config&gt;</code></em>.xml</span>
+                           lists several engine configuration options.
+                  </p>
+                  <p>The actual name and location of this file is defined by the
+                           <code class="filename">resources.xml</code>'s
+                           <span class="literal">&lt;engineConfigXML&gt;</span> tag. The location of the
+                           <code class="filename">resources.xml</code> file is always defined relative to
+                           one of the entries in the resources directories list (or
+                           <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span>), which will
+                           be searched in the order in which they are listed.
+                  </p>
+                  <p>An example follows below:</p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/locating_engineconfigxmls_file.png"><span class="caption">
+                           <p>Locating <span class="literal">&lt;engineConfigXML&gt;</span>'s
+                                        file
+                           </p></span></div>
+                  </div>
+                  <p>Under the main section of the XML file, a personality tag must be
+                           included, naming the personality script to use.
+                  </p>
+                  <p>Several other tags are used by BigWorld to customize the way the
+                           client runs. For a complete list of the supported tags and a description
+                           of their functions, refer to the <span class="literal">engine_config.xml</span>
+                           file provided with the distribution. Additional information can also be
+                           found in the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>.
+                  </p>
+                  <p>The data contained in this file is passed to the personality
+                           script as the second argument to the <span class="literal">init</span> method (for
+                           details, see <a href="ch09.html#xref_init" title="9.2.1.&nbsp;init"><span class="literal">init</span></a>), in the form of a
+                           <span class="literal">DataSection</span> object.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_File_scripts_config_xml"></a>1.4.3.&nbsp;File
+                                    <span class="literal"><em class="replaceable"><code>&lt;scripts_config&gt;</code></em>.xml</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The XML file
+                           <span class="literal"><em class="replaceable"><code>&lt;scripts_config&gt;</code></em>.xml</span>
+                           can be used to configure the game scripts. It has no fixed grammar, and
+                           its form can be freely defined by the script programmer.
+                  </p>
+                  <p>The actual name and location of this file is defined by the
+                           <span class="literal">resources.xml</span>'s <span class="literal">scriptsConfigXML</span>
+                           tag &#8212; its location is always defined relative to one of the entries in
+                           the resources folders list (or
+                           <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span>), which will
+                           be searched in the order in which they are listed.
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/locating_scriptsconfigxmls_file.png"><span class="caption">
+                           <p>Locating <span class="literal">scriptsConfigXML</span>'s
+                                        file
+                           </p></span></div>
+                  </div>
+                  <p>The data contained in this file is passed to the personality
+                           script as the first argument to the <span class="literal">init</span> method (for
+                           details, see <a href="ch09.html#xref_init" title="9.2.1.&nbsp;init"><span class="literal">init</span></a>), in the form of a
+                           <span class="literal">DataSection</span> object.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_File_preferences_xml"></a>1.4.4.&nbsp;File
+                                    <span class="literal"><em class="replaceable"><code>&lt;preferences&gt;</code></em>.xml</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The XML file
+                           <span class="literal"><em class="replaceable"><code>&lt;preferences&gt;</code></em>.xml</span> is
+                           used to save user preferences for video and graphics settings, with a
+                           pre-defined grammar.
+                  </p>
+                  <p>The file also embeds a data section (called
+                           <span class="literal">scriptsPreference</span>) that can be used by scripts to
+                           persist game preferences &#8212; there is no fixed grammar for this
+                           section.
+                  </p>
+                  <p>The actual name and location of this file is defined in file
+                           specified by <span class="literal">resources.xml</span>'s
+                           <span class="literal">engineConfigXML</span> tag, in the
+                           <span class="literal">preferences</span> tag.
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/locating_engineconfigxmls_preferences_file.png"><span class="caption">
+                           <p>Locating <span class="literal">engineConfigXML</span>'s
+                                        preferences' file
+                           </p></span></div>
+                  </div>
+                  <p>By default the preferences XML file is relative to the client
+                           executable location, but this can be changed to a number of other base
+                           paths by specifying a <code class="code">pathBase</code> subtag (e.g. it can be
+                           defined to be relative to the user's My Documents directory). The base
+                           path can be defined as an optional sub-tag of the preferences tag. The
+                           available path bases for &lt;preferences&gt;.xml are:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><code class="code">EXE_PATH</code> &#8212; The preferences XML file will be
+                                        stored relative to the location of the client executable. This is
+                                        the default location if none is supplied.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">CWD</code> &#8212; The preferences XML file will be stored
+                                        relative to the current working directory. Note that if the working
+                                        directory changes during runtime, it will save in the new working
+                                        directory.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">APP_DATA</code> &#8212; The preferences XML file will be
+                                        stored relative to the current user's AppData directory.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">MY_DOCS</code> &#8212; The preferences XML file will be stored
+                                        relative to the current user's My Documents directory.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">RES_TREE</code> &#8212; The preferences XML file will be
+                                        stored relative to the first resource path found in
+                                        <code class="code">paths.xml</code>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The data contained in the <span class="literal">scriptsPreference</span> of
+                           this file is passed to the personality script as the third argument to
+                           the <span class="literal">init</span> method (for details, see <a href="ch09.html#xref_init" title="9.2.1.&nbsp;init"><span class="literal">init</span></a>), in the form of a <span class="literal">DataSection</span>
+                           object.
+                  </p>
+                  <p>The current user preferences can be saved back into the file
+                           (including changes to the <span class="literal">DataSection</span> that represents
+                           the script preferences) by calling
+                           <span class="literal">BigWorld.savePreferences</span>. For details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a> .
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Coordinate_system"></a>1.5.&nbsp;Coordinate System
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld uses a left-handed coordinate system. The x-axis points
+                      <em class="emphasis">"left"</em>, the y-axis points <em class="emphasis">"up"</em>
+                      and the z-axis points <em class="emphasis">"forward"</em>.
+               </p>
+               <p><em class="emphasis">yaw</em> is rotation around the y-axis. Positive is
+                      to the right, negative is to the left.
+               </p>
+               <p><em class="emphasis">pitch</em> is rotation around the x-axis. Positive
+                      is nose pointing down, negative is nose pointing up.
+               </p>
+               <p><em class="emphasis">roll</em> is rotation around the z-axis. Positive is
+                      to the left, negative is to the right.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Client Programming Guide&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;User Input</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

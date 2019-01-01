@@ -1,0 +1,622 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;8.&nbsp;.chunk</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch07.html" title="Chapter&nbsp;7.&nbsp;.cdata">
+      <link rel="next" href="ch09.html" title="Chapter&nbsp;9.&nbsp;common_options.xml">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch08.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;8.&nbsp;<span class="literal">.chunk</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_chunk_o_chunk_chunk_i_chunk"></a>Chapter&nbsp;8.&nbsp;<span class="literal">.chunk</span></h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch08.html#xref_TransformSection">8.1. TransformSection</a></span></dt>
+               </dl>
+            </div>
+            <p>Named as
+                 <span class="literal"><em class="replaceable"><code>&lt;chunk&gt;</code></em>o.chunk</span> (for
+                 outside chunks) and
+                 <span class="literal"><em class="replaceable"><code>&lt;chunk&gt;</code></em>i.chunk</span> (for
+                 inside chunks), these files are defined under folder
+                 <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/spaces/<em class="replaceable"><code>&lt;space&gt;</code></em></span>.
+            </p>
+            <p>Contains list of scene objects, texture sets, collision scene,
+                 etc...
+            </p>
+            <p>The <span class="literal">.chunk</span> file format specification is illustrated
+                 below:
+            </p><pre class="programlisting">&lt;<em class="replaceable"><code>fileName</code></em>&gt; ?<em class="replaceable"><code>label</code></em>
+
+  ?&lt;terrain&gt;
+     &lt;resource&gt; [<em class="replaceable"><code>file.terrain</code></em>|<em class="replaceable"><code>file.cdata/terrain</code></em>] &lt;/resource&gt;
+   &lt;/terrain&gt;
+
+  ?<em class="emphasis">TransformSection  </em><a name="co434"></a><img src="../images/callouts/1.png" alt="1" border="0">
+
+  *&lt;model&gt; ?<em class="replaceable"><code>label</code></em>
+    +&lt;resource&gt;  <em class="replaceable"><code>file.model</code></em>  &lt;/resource&gt;
+    ?&lt;animation&gt;
+       &lt;name&gt;     <em class="replaceable"><code>string</code></em>  &lt;/name&gt; 
+       &lt;frameRateMultiplier&gt; <em class="replaceable"><code>float</code></em> &lt;/frameRateMultiplier&gt;
+     &lt;/animation&gt;
+     <em class="emphasis">TransformSection  </em><a name="co442"></a><img src="../images/callouts/2.png" alt="2" border="0">
+    *&lt;staticLighting&gt;<a name="co443"></a><img src="../images/callouts/3.png" alt="3" border="0">
+       &lt;offset&gt;     <em class="replaceable"><code>int</code></em>  &lt;/offset&gt; 
+       &lt;size&gt; <em class="replaceable"><code>int</code></em> &lt;/size&gt;
+     &lt;/staticLighting&gt;
+   &lt;/model&gt;
+
+  *&lt;entity&gt;
+    ?&lt;id&gt;          <em class="replaceable"><code>string</code></em>  &lt;/id&gt;
+     &lt;type&gt;        <em class="replaceable"><code>string</code></em>  &lt;/type&gt;
+     <em class="emphasis">TransformSection  </em><a name="co449"></a><img src="../images/callouts/4.png" alt="4" border="0">
+    ?&lt;instantiation&gt;  <em class="replaceable"><code>integer</code></em>  &lt;/instantiation&gt;
+    ?&lt;tag&gt;            str<em class="replaceable"><code>i</code></em>ng   &lt;/tag&gt;
+     &lt;properties&gt;
+       <em class="emphasis">PropertiesList</em>
+     &lt;/properties&gt;
+   &lt;/entity&gt;
+
+   *&lt;particles&gt;
+     &lt;resource&gt;   <em class="replaceable"><code>file.xml</code></em>  &lt;/resource&gt;
+     <em class="emphasis">TransformSection  </em><a name="co459"></a><img src="../images/callouts/5.png" alt="5" border="0">
+   &lt;/particles&gt;
+
+  &lt;boundingBox&gt;
+    &lt;min&gt; <em class="replaceable"><code>float</code></em>  <em class="replaceable"><code>float</code></em>  <em class="replaceable"><code>float</code></em>  &lt;/min&gt;
+    &lt;max&gt; <em class="replaceable"><code>float</code></em>  <em class="replaceable"><code>float</code></em>  <em class="replaceable"><code>float</code></em>  &lt;/max&gt;
+  &lt;/boundingBox&gt;
+
+  ?<em class="emphasis">AmbientLightSection  </em><a name="co478"></a><img src="../images/callouts/6.png" alt="6" border="0"><a name="co478_2"></a><img src="../images/callouts/7.png" alt="7" border="0">
+
+  *<em class="emphasis">DirectionalLightSection  </em><a name="co480"></a><img src="../images/callouts/8.png" alt="8" border="0">
+
+  *<em class="emphasis">FlareSection  </em><a name="co482"></a><img src="../images/callouts/9.png" alt="9" border="0">
+
+  *<em class="emphasis">OmniLightSection  </em><a name="co484"></a><img src="../images/callouts/10.png" alt="10" border="0">
+
+  *<em class="emphasis">SpotLightSection  </em><a name="co486"></a><img src="../images/callouts/11.png" alt="11" border="0">
+
+  *&lt;water&gt;
+     &lt;position&gt;      <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/position&gt;
+     &lt;orientation&gt;   <em class="replaceable"><code>float</code></em>              &lt;/orientation&gt;
+     &lt;size&gt;          <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/size&gt;
+     &lt;tessellation&gt;  <em class="replaceable"><code>float</code></em>              &lt;/tessellation&gt;
+     &lt;consistency&gt;   <em class="replaceable"><code>float</code></em>              &lt;/consistency&gt;
+   &lt;/water&gt;
+
+  ?&lt;navmesh&gt;
+     &lt;resource&gt;  <em class="replaceable"><code>file.cdata/navmesh</code></em>  &lt;/resource&gt;
+   &lt;/navmesh&gt;
+
+   &lt;waypointGenerationTime&gt;
+     &lt;hi&gt;  <em class="replaceable"><code>integer</code></em>  &lt;/hi&gt;
+     &lt;lo&gt;  <em class="replaceable"><code>integer</code></em>  &lt;/lo&gt;
+   &lt;/waypointGenerationTime&gt;
+
+&lt;/fileName&gt;</pre><p><span class="citetitle">Grammar of chunk file</span></p>
+            <div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co434"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>See <a href="ch08.html#xref_TransformSection" title="8.1.&nbsp;TransformSection">TransformSection</a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co442"><img src="../images/callouts/2.png" alt="2" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>See <a href="ch08.html#xref_TransformSection" title="8.1.&nbsp;TransformSection">TransformSection</a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co443"><img src="../images/callouts/3.png" alt="3" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>Inside chunks only.</p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co449"><img src="../images/callouts/4.png" alt="4" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>See <a href="ch08.html#xref_TransformSection" title="8.1.&nbsp;TransformSection">TransformSection</a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co459"><img src="../images/callouts/5.png" alt="5" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>See <a href="ch08.html#xref_TransformSection" title="8.1.&nbsp;TransformSection">TransformSection</a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co478"><img src="../images/callouts/6.png" alt="6" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>Inside chunks only.</p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co478_2"><img src="../images/callouts/7.png" alt="7" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>See <a href="ch38.html#xref_light_xml" title="38.5.&nbsp;<light&gt;.xml"><span class="literal"><em class="replaceable"><code>&lt;light&gt;</code></em>.xml</span></a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co480"><img src="../images/callouts/8.png" alt="8" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>See <a href="ch38.html#xref_light_xml" title="38.5.&nbsp;<light&gt;.xml"><span class="literal"><em class="replaceable"><code>&lt;light&gt;</code></em>.xml</span></a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co482"><img src="../images/callouts/9.png" alt="9" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>See <a href="ch38.html#xref_light_xml" title="38.5.&nbsp;<light&gt;.xml"><span class="literal"><em class="replaceable"><code>&lt;light&gt;</code></em>.xml</span></a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co484"><img src="../images/callouts/10.png" alt="10" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>See <a href="ch38.html#xref_light_xml" title="38.5.&nbsp;<light&gt;.xml"><span class="literal"><em class="replaceable"><code>&lt;light&gt;</code></em>.xml</span></a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co486"><img src="../images/callouts/11.png" alt="11" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>See <a href="ch38.html#xref_light_xml" title="38.5.&nbsp;<light&gt;.xml"><span class="literal"><em class="replaceable"><code>&lt;light&gt;</code></em>.xml</span></a>.
+                        </p>
+                     </td>
+                  </tr>
+               </table>
+            </div>
+            <p>The list below describes the tags in the chunk file:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">adjacentChunk</span> (sections
+                                 <span class="literal">navPolySet/navPoly</span> and
+                                 <span class="literal">waypointSet/waypoint</span>)</em></p>
+                     <p><em class="emphasis">For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html" class="olink"><i>Server Components</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Server_Components_CellApp" class="olink">CellApp</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Navigation_System" class="olink">Navigation System</a>, and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html" class="olink"><i>NavGen</i></a>
+                                 <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html#xref_Navpolys_Vertices_And_Adjacency" class="olink">Navpolys, vertices and adjacency</a>.</em></p>
+                     <p>ID of the navpoly adjacent to this vertex.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">AmbientLightSection</em></p>
+                     <p>For details, see <a href="ch38.html#xref_light_xml" title="38.5.&nbsp;<light&gt;.xml"><span class="literal"><em class="replaceable"><code>&lt;light&gt;</code></em>.xml</span></a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">animation</span> (section
+                                 <span class="literal">model</span>)</em></p>
+                     <p>Tag for model animation section, which specifies animation file
+                              and frame rate multiplier.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">boundingBox</span></em></p>
+                     <p>Tag for chunk's bounding box section, which specifies its point of
+                              origin and end.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">consistency</span> (section
+                                 <span class="literal">water</span>)</em></p>
+                     <p>Consistency of the water: <em class="emphasis"><span class="literal">0</span>=fluid,
+                                 <span class="literal">1</span>=rigid</em></p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">DirectionalLightSection</em></p>
+                     <p>For details, see <a href="ch38.html#xref_light_xml" title="38.5.&nbsp;<light&gt;.xml"><span class="literal"><em class="replaceable"><code>&lt;light&gt;</code></em>.xml</span></a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">entity</span></em></p>
+                     <p>Tag for entity section, which specifies settings for the models to
+                              be placed in the chunk, such as entity id, type, transform,
+                              entity-specific properties, etc....
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">FlareSection</em></p>
+                     <p>For details, see <a href="ch38.html#xref_light_xml" title="38.5.&nbsp;<light&gt;.xml"><span class="literal"><em class="replaceable"><code>&lt;light&gt;</code></em>.xml</span></a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">frameRateMultiplier</span>
+                                 (section <span class="literal">model/animation</span>)</em></p>
+                     <p>The rate at which the animation will be sped up/slowed
+                              down.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">girth</span> (sections
+                                 <span class="literal">navPolySet</span> and
+                                 <span class="literal">waypointSet</span>)</em></p>
+                     <p><em class="emphasis">For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html" class="olink"><i>Server Components</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Server_Components_CellApp" class="olink">CellApp</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Navigation_System" class="olink">Navigation System</a>, and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html" class="olink"><i>NavGen</i></a>
+                                 <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html#xref_Navpolys_Vertices_And_Adjacency" class="olink">Navpolys, vertices and adjacency</a>.</em></p>
+                     <p>Girth for which the navigation mesh was generated. For details on
+                              the relation between entity girth and navigation mesh generation, see
+                              the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>, chapter
+                              <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html" class="olink"><i>NavGen</i></a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html#xref_Changing_Settings" class="olink">Changing settings</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">height</span> (sections
+                                 <span class="literal">navPolySet</span> and
+                                 <span class="literal">waypointSet</span>)</em></p>
+                     <p><em class="emphasis">For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html" class="olink"><i>Server Components</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Server_Components_CellApp" class="olink">CellApp</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Navigation_System" class="olink">Navigation System</a>, and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html" class="olink"><i>NavGen</i></a>
+                                 <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html#xref_Navpolys_Vertices_And_Adjacency" class="olink">Navpolys, vertices and adjacency</a>.</em></p>
+                     <p>Vertical range of the navpoly prism.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">hi</span> (section
+                                 <span class="literal">waypointGenerationTime</span>)</em></p>
+                     <p>The high 32 bits of the waypoint generation time.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">id</span> (section
+                                 <span class="literal">entity</span>)</em></p>
+                     <p>ID of the entity in the chunk. This can be used by scripts to
+                              reference the entity.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">instantiation</span> (section
+                                 <span class="literal">entity</span>)</em></p>
+                     <p>Where the entity should be instantiated: 0=server, 1=client</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">lighting</span> (section
+                                 <span class="literal">model</span>)</em></p>
+                     <p>The size and offset of the vertex colour used for the static
+                              lighting of this model.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">lo</span> (section
+                                 <span class="literal">waypointGenerationTime</span>)</em></p>
+                     <p>The low 32 bits of the waypoint generation time.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">max</span> (section
+                                 <span class="literal">boundingBox</span>)</em></p>
+                     <p>End point of the chunk's bounding box.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">min (section boundingBox)</em></p>
+                     <p>Starting point of the chunk's bounding box.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">minHeight</span> (sections
+                                 <span class="literal">navPolySet</span> and
+                                 <span class="literal">waypointSet</span>)</em></p>
+                     <p><em class="emphasis">For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html" class="olink"><i>Server Components</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Server_Components_CellApp" class="olink">CellApp</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Navigation_System" class="olink">Navigation System</a>, and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html" class="olink"><i>NavGen</i></a>
+                                 <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html#xref_Navpolys_Vertices_And_Adjacency" class="olink">Navpolys, vertices and adjacency</a>.</em></p>
+                     <p>The minimum height of values in the set.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">model</span></em></p>
+                     <p>Tag for model section, which specifies settings for the models to
+                              be placed in the chunk, such as resource file, animation file,
+                              transform, lighting, etc....
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">name</span> (section
+                                 <span class="literal">model/animation</span>)</em></p>
+                     <p>File containing the animation for the model.</p>
+                     <p>The file will be located in the animations folder under the model
+                              file's folder, and the extension .animation will be automatically
+                              appended to it.
+                     </p>
+                     <p>For example if
+                              <span class="literal"><em class="replaceable"><code>&lt;model&gt;</code></em></span> is
+                              <span class="literal">myFolder/example.model</span>, and
+                              <span class="literal"><em class="replaceable"><code>&lt;animation&gt;</code></em></span> is
+                              <span class="literal">myAnimation</span>, then the complete path/filename for the
+                              animation file is
+                              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/myFolder/animations/myAnimation.animation</span>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">navmesh</span></em></p>
+                     <p><em class="emphasis">For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html" class="olink"><i>Server Components</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Server_Components_CellApp" class="olink">CellApp</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Navigation_System" class="olink">Navigation System</a>, and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html" class="olink"><i>NavGen</i></a>
+                                 <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html#xref_Navpolys_Vertices_And_Adjacency" class="olink">Navpolys, vertices and adjacency</a>.</em></p>
+                     <p>Tag for navigation mesh section, which specifies its resource
+                              file.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">navPoly</span> (section
+                                 <span class="literal">navPolySet</span>)</em></p>
+                     <p><em class="emphasis">For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html" class="olink"><i>Server Components</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Server_Components_CellApp" class="olink">CellApp</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Navigation_System" class="olink">Navigation System</a>, and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html" class="olink"><i>NavGen</i></a>
+                                 <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html#xref_Navpolys_Vertices_And_Adjacency" class="olink">Navpolys, vertices and adjacency</a>.</em></p>
+                     <p>Tag for navpoly section, which specifies height, minimum height,
+                              its delimiting vertices, and optionally the vertex's adjacent chunk
+                              ID.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">navPolySet</span></em></p>
+                     <p><em class="emphasis">For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html" class="olink"><i>Server Components</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Server_Components_CellApp" class="olink">CellApp</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Navigation_System" class="olink">Navigation System</a>, and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html" class="olink"><i>NavGen</i></a>
+                                 <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html#xref_Navpolys_Vertices_And_Adjacency" class="olink">Navpolys, vertices and adjacency</a>.</em></p>
+                     <p>Tag for section specifying group of navpolys.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">OmniLightSection</em></p>
+                     <p>For details, see <a href="ch38.html#xref_light_xml" title="38.5.&nbsp;<light&gt;.xml"><span class="literal"><em class="replaceable"><code>&lt;light&gt;</code></em>.xml</span></a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">orientation</span> (section
+                                 <span class="literal">water</span>)</em></p>
+                     <p>The yaw of the water.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">particles</span></em></p>
+                     <p>Tag for particle section, which specifies settings for the
+                              particles to be placed in the chunks, such as resource file and
+                              transform.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">properties</span> (section
+                                 <span class="literal">entity</span>)</em></p>
+                     <p>Tag for the entity-specific properties, containing <em class="emphasis">PropertiesList</em> section.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">PropertiesList (section
+                                 <span class="literal">entity/properties</span>)</em></p>
+                     <p>List of entity-specific properties, as specified by the entity
+                              definition file.
+                     </p>
+                     <p>These are the persistent properties defined by the entity or the
+                              entity that it inherits from.
+                     </p>
+                     <p>For details on entity definition files, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch02.html" class="olink"><i>Physical Entity Structure for Scripting</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch02.html#xref_The_Definition_File" class="olink">The Entity Definition File</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">resource</span></em></p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis">Section
+                                              <span class="literal">model</span></em></p>
+                              <p>File containing the model. For details on format of model
+                                           files, see <a href="ch21.html" title="Chapter&nbsp;21.&nbsp;.model"><i xmlns:xlink="http://www.w3.org/1999/xlink"><span class="literal">.model</span></i></a>. The path is relative
+                                           to the game's resources folder
+                                           (<span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span>).
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Section
+                                              <span class="literal">navmesh</span></em></p>
+                              <p><em class="emphasis">For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html" class="olink"><i>Server Components</i></a>
+                                              <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Server_Components_CellApp" class="olink">CellApp</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Navigation_System" class="olink">Navigation System</a>, and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html" class="olink"><i>NavGen</i></a>
+                                              <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html#xref_Navpolys_Vertices_And_Adjacency" class="olink">Navpolys, vertices and adjacency</a>.</em></p>
+                              <p>Binary file containing navigation mesh data for the chunk. The
+                                           path is relative to the chunk file's folder.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Section
+                                              <span class="literal">particles</span></em></p>
+                              <p>File containing the particle system. For details on format of
+                                           particle system files, see <a href="ch38.html#xref_particle_xml" title="38.7.&nbsp;<particle&gt;.xml"><span class="literal"><em class="replaceable"><code>&lt;particle&gt;</code></em>.xml</span></a>. The
+                                           path is relative to the game's resources folder
+                                           (&lt;res&gt;).
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Section
+                                              <span class="literal">terrain</span></em></p>
+                              <p>File containing terrain settings such as height map, overlay
+                                           data, and textures used. The path is relative to the chunk file's
+                                           folder.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">SpotLightSection</em></p>
+                     <p>For details, see <a href="ch38.html#xref_light_xml" title="38.5.&nbsp;<light&gt;.xml"><span class="literal"><em class="replaceable"><code>&lt;light&gt;</code></em>.xml</span></a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">tag</span> (section
+                                 <span class="literal">entity</span>)</em></p>
+                     <p>The tag of this instance, used to identify this particular
+                              instance of an entity.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">terrain</span></em></p>
+                     <p>Tag for terrain section, which specifies settings for the terrain
+                              to be placed in the chunk, such as resource file.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">tessellation</span> (section
+                                 <span class="literal">water</span>)</em></p>
+                     <p>The preferred distance between vertices in the water.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">TransformSection (main section and
+                                 <span class="literal">entity</span>, <span class="literal">model</span>, and
+                                 <span class="literal">particles</span> sections)</em></p>
+                     <p>For details, see <a href="ch08.html#xref_TransformSection" title="8.1.&nbsp;TransformSection">TransformSection</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">type</span> (section
+                                 <span class="literal">entity</span>)</em></p>
+                     <p>Type of the entity to be placed.</p>
+                     <p>BigWorld uses this value to determine the path/name of the entity
+                              definition file:
+                              <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;type&gt;</code></em>.def</span></p>
+                     <p>For details on entity definition files, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch02.html" class="olink"><i>Physical Entity Structure for Scripting</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch02.html#xref_The_Definition_File" class="olink">The Entity Definition File</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">vertex</span> (sections
+                                 <span class="literal">navPolySet/navPoly</span> and
+                                 <span class="literal">waypointSet/waypoint</span>)</em></p>
+                     <p><em class="emphasis">For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html" class="olink"><i>Server Components</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Server_Components_CellApp" class="olink">CellApp</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Navigation_System" class="olink">Navigation System</a>, and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html" class="olink"><i>NavGen</i></a>
+                                 <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html#xref_Navpolys_Vertices_And_Adjacency" class="olink">Navpolys, vertices and adjacency</a>.</em></p>
+                     <p>XY position of the navpoly's vertex.</p>
+                     <p>The third coordinate is used to store adjacency information for
+                              the edge formed between this vertex and the next &#8212; it is either the
+                              navpoly ID of the adjacent navpoly, or an encoding of an obstacle
+                              type.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">water</span></em></p>
+                     <p>Tag for water section, which specifies its position, orientation,
+                              size, etc...
+                     </p>
+                     <p>For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/index.html" class="olink">Client Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch06.html" class="olink"><i>Chunks</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch06.html#xref_Sway_Items" class="olink">Sway items</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">waypoint</span> (section
+                                 <span class="literal">waypointSet</span>)</em></p>
+                     <p>Tag for waypoint section, which specifies height, minimum height,
+                              its delimiting vertices, and optionally the vertex's adjacent chunk
+                              ID.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">waypointGenerationTime</span></em></p>
+                     <p>The filetime of the chunk the last time the waypoint was
+                              generated.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">waypointSet</span></em></p>
+                     <p>Tag for section specifying group of waypoint.</p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_TransformSection"></a>8.1.&nbsp;TransformSection
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The transform information contained in <em class="emphasis">TransformSection</em> depends on which of the following
+                      sections of the chunk file it appears:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Main section</p>
+                     </li>
+                     <li>
+                        <p><span class="literal">&lt;model&gt;</span></p>
+                     </li>
+                     <li>
+                        <p><span class="literal">&lt;entity&gt;</span></p>
+                     </li>
+                     <li>
+                        <p><span class="literal">&lt;particles&gt;</span></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The grammar for the TransformSection is described below:</p><pre class="programlisting">&lt;transform&gt;
+  &lt;row0&gt;    <em class="replaceable"><code>float</code></em>    &lt;/row0&gt;
+  &lt;row1&gt;    <em class="replaceable"><code>float</code></em>    &lt;/row1&gt;
+  &lt;row2&gt;    <em class="replaceable"><code>float</code></em>    &lt;/row2&gt;
+  &lt;row3&gt;    <em class="replaceable"><code>float</code></em>    &lt;/row3&gt;
+&lt;/transform&gt;</pre><p><span class="citetitle">Grammar of <em class="emphasis">TransformSection</em> in visual file</span></p>
+               <p>The list below describes the tags in <em class="emphasis">TransformSection</em>.
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">row0</span></em>,
+                                   <em class="emphasis"><span class="literal">row1</span></em>, <em class="emphasis"><span class="literal">row2</span></em>,<em class="emphasis">
+                                      <span class="literal">row3</span></em></p>
+                        <p>Transform matrices to be applied to chunk, model, entity, or
+                                   particle system.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;7.&nbsp;<span class="literal">.cdata</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;9.&nbsp;<span class="literal">common_options.xml</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

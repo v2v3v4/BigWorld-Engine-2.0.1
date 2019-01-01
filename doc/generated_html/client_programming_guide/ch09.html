@@ -1,0 +1,1385 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;9.&nbsp;Scripting</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch08.html" title="Chapter&nbsp;8.&nbsp;User Data Objects">
+      <link rel="next" href="ch10.html" title="Chapter&nbsp;10.&nbsp;Models">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch09.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;9.&nbsp;Scripting</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch08.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch10.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Scripting"></a>Chapter&nbsp;9.&nbsp;Scripting
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch09.html#xref_Functional_Components">9.1. Functional components</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch09.html#d0e2788">9.1.1. Entity skeleton</a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e2797">9.1.2. Python script object</a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e2804">9.1.3. Model management</a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#xref_Filters">9.1.4. Filters</a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#xref_Action_Queue">9.1.5. Action Queue</a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#xref_Action_Matcher">9.1.6. Action Matcher</a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e3476">9.1.7. Trackers</a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e3558">9.1.8. Timers and Traps</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch09.html#xref_Personality_Script">9.2. Personality script</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch09.html#xref_init">9.2.1. <span class="literal">init</span></a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e3802">9.2.2. <span class="literal">fini</span></a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e3822">9.2.3. <span class="literal">handleKeyEvent</span></a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e3852">9.2.4. <span class="literal">handleMouseEvent</span></a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e3872">9.2.5. <span class="literal">handleAxisEvent</span></a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e3892">9.2.6. <span class="literal">handleIMEEvent</span></a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e3907">9.2.7. <span class="literal">handleLangChangeEvent</span></a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e3917">9.2.8. <span class="literal">onChangeEnvironments</span></a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e3933">9.2.9. <span class="literal">onGeometryMapped</span></a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e3945">9.2.10. <span class="literal">onRecreateDevice</span></a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e3964">9.2.11. <span class="literal">onTimeOfDayLocalChange</span></a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e3976">9.2.12. <span class="literal">start</span></a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>The facilities provided to scripts are of extreme importance, as they
+                 determine the generality and extensibility of the client. To a script
+                 programmer this environment is the client; just as to an ordinary user, the
+                 windowing system is the computer.
+            </p>
+            <p>The scripting environment offers a great temptation to try to write
+                 the whole of a program in it. This can quickly make for slow and
+                 incomprehensible programs (especially if the same programming discipline is
+                 not applied to the scripting language as is to C++). Therefore, we recommend
+                 that a functionality should only be written in script when it does not need
+                 to be called at every frame. Furthermore, where it is global, it should be
+                 implemented in the personality script. So, for example, a global chat
+                 console would be implemented in the personality script, whilst a targeting
+                 system, which needs to check the collision scene at every frame, is best
+                 implemented in C++.
+            </p>
+            <p>Importantly, the extensive integration of Python throughout BigWorld
+                 Technology allows for both rapid development of game code, and enormous
+                 flexibility.
+            </p>
+            <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+               <h3 class="title">Note</h3>
+               <p>Garbage collection is disabled in BigWorld's Python integration,
+                      because garbage collection is an expensive operation that can occur at any
+                      time, blocking the main thread and causing frame rate spikes for
+                      example.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Functional_Components"></a>9.1.&nbsp;Functional components
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This section describes the contents and services of the (general)
+                      C++ entity, from the point of view of a script that uses these facilities.
+                      The functional components of an entity, described in the following
+                      sections are:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Entity Skeleton</p>
+                     </li>
+                     <li>
+                        <p>Python Script Object</p>
+                     </li>
+                     <li>
+                        <p>Model Management</p>
+                     </li>
+                     <li>
+                        <p>Filters</p>
+                     </li>
+                     <li>
+                        <p>Action Queue</p>
+                     </li>
+                     <li>
+                        <p>Action Matcher</p>
+                     </li>
+                     <li>
+                        <p>Trackers (IK)</p>
+                     </li>
+                     <li>
+                        <p>Timers and Traps</p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2788"></a>9.1.1.&nbsp;Entity skeleton
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The Entity class (entity.cpp) is the C++ container that brings
+                           together whatever components are in use for a particular entity. It is
+                           derived from Python object and intercepts certain accesses, and passes
+                           those it does not understand on to the user script. This allows scripts
+                           to call C++ functions on themselves (and other entities) transparently,
+                           using the 'self' reference. The same technique of integration has been
+                           used in the cell and base components of the server.
+                  </p>
+                  <p>This class handles any housekeeping or glue required by the
+                           component classes &#8212; it is the public face of an entity as far as
+                           other C++ modules are concerned.
+                  </p>
+                  <p>The data members of this class include id, type, and
+                           position.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2797"></a>9.1.2.&nbsp;Python script object
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This is the instance of the user-supplied script class. The type
+                           of the entity selects the class. It stores type-specific data defined in
+                           the XML description of the entity type, as well as any other internally
+                           used data that the script wishes to store.
+                  </p>
+                  <p>When field data is sent from the server, this class has its fields
+                           automatically updated (and it is notified of the change). When messages
+                           are received from the server (or another script on the client), the
+                           message handlers are called automatically. The entity class performs
+                           this automation &#8212; it appears to be automatic from the script's
+                           point of view.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2804"></a>9.1.3.&nbsp;Model management
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A model is BigWorld's term for a mesh, plus the animations and
+                           actions used on it.
+                  </p>
+                  <p>The model management component allows an entity to manage the
+                           models that are drawn and animated at its position. Models can be
+                           attached to each other at well-defined attachment points (hard points),
+                           or they can exist independently. A model is not automatically added to
+                           the scene when it is loaded &#8212; it must be explicitly put in
+                           it.
+                  </p>
+                  <p>An entity may use any number of independent (disconnected) models,
+                           but most will use zero or one. Those that use more require special
+                           filters to behave sensibly. For details, see <a href="ch09.html#xref_Filters" title="9.1.4.&nbsp;Filters">Filters</a>.
+                  </p>
+                  <p>The best way to understand models is t`o be acquainted to their
+                           Python interface, which is described in the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>'s entry <em class="emphasis">Main
+                              <span class="symbol">&#8594;</span> Client <span class="symbol">&#8594;</span> BigWorld <span class="symbol">&#8594;</span> Classes <span class="symbol">&#8594;</span> <span class="literal">PyModel</span></em>. For
+                           more details, see <a href="ch10.html" title="Chapter&nbsp;10.&nbsp;Models"><i xmlns:xlink="http://www.w3.org/1999/xlink">Models</i></a>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Filters"></a>9.1.4.&nbsp;Filters
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Filters take time-stamped position updates and interpolate them to
+                           produce the position for an entity at an arbitrary time.
+                  </p>
+                  <p>BigWorld provides only the Filter base class. The game developer
+                           would derive game-specific filters from this. Each entity can then
+                           select one type of filter for itself from the variations available. It
+                           can dynamically change its filter if it so desires.
+                  </p>
+                  <p>Whenever a movement update comes from the server, it is handed
+                           over to the selected filter, along with the time that the (existing)
+                           game time reconstruction logic calculated for that event.
+                  </p>
+                  <p>The filter can also be provided with gaps in time and transform,
+                           <em class="emphasis">i.e.</em>, 'at game-time x there was a forward movement
+                           of y metres and a rotation of z radians lasting t seconds'. The filter
+                           (if it is smart enough) can then incorporate this into its
+                           interpolation.
+                  </p>
+                  <p>The filter can also execute script callbacks at a given time in
+                           the stream.
+                  </p>
+                  <p>Filters are fully accessible from Python.</p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Action_Queue"></a>9.1.5.&nbsp;Action Queue
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The action queue is the structure within the BigWorld Technology
+                           framework that controls the queue of actions in effect on a model
+                           (actions are wrapped by ActionQueuer objects that are contained by the
+                           action queue).
+                  </p>
+                  <p>The ActionQueue deals with the combining of layers and also
+                           applying the appropriate blend in and blend out times.
+                  </p>
+                  <p>The ActionQueue also deals with any scripted callback functions
+                           that are linked to the playing of an action, like for example calling
+                           sound-playing callbacks at particular frames in an action.
+                  </p>
+                  <p>An action is described in XML as illustrated the example
+                           <span class="literal">.model</span> file below (model files are located in any of
+                           the various sub-folders under the resource tree
+                           <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span> , such as for
+                           example,
+                           <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/environments</span>,
+                           <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/flora</span>,
+                           <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/sets/vehicles</span>,
+                           etc...):
+                  </p><pre class="programlisting">&lt;action&gt;
+   &lt;name&gt;          <em class="replaceable"><code>ACTION_NAME</code></em>     &lt;/name&gt;
+  ?&lt;animation&gt;     <em class="replaceable"><code>ANIMATION_NAME  </code></em>&lt;/animation&gt;
+  ?&lt;blendInTime&gt;   <em class="replaceable"><code>float</code></em>           &lt;/blendInTime&gt;
+  ?&lt;blendOutTime&gt;  <em class="replaceable"><code>float</code></em>           &lt;/blendOutTime&gt;
+  ?&lt;filler&gt;        [true|false]    &lt;/filler&gt;
+  ?&lt;track&gt;         <em class="replaceable"><code>int</code></em>             &lt;/track&gt;
+  ?&lt;isMovement&gt;    [true|false]    &lt;/isMovement&gt;
+  ?&lt;isCoordinated&gt; [true|false]    &lt;/isCoordinated&gt;
+  ?&lt;isImpacting&gt;   [true|false]    &lt;/isImpacting&gt;
+  ?&lt;match&gt;
+    ?&lt;trigger&gt;
+      ?&lt;minEntitySpeed&gt; <em class="replaceable"><code>float</code></em>  &lt;/minEntitySpeed&gt;
+      ?&lt;maxEntitySpeed&gt; <em class="replaceable"><code>float  </code></em>&lt;/maxEntitySpeed&gt;
+      ?&lt;minEntityAux1&gt;  <em class="replaceable"><code>float</code></em>  &lt;/minEntityAux1&gt;
+      ?&lt;maxEntityAux1&gt;  <em class="replaceable"><code>float</code></em>  &lt;/maxEntityAux1&gt;
+      ?&lt;minModelYaw&gt;    <em class="replaceable"><code>float</code></em>  &lt;/minModelYaw&gt;
+      ?&lt;maxModelYaw&gt;    <em class="replaceable"><code>float</code></em>  &lt;/maxModelYaw&gt;Coor
+      ?&lt;capsOn&gt;  <em class="replaceable"><code>capabilities</code></em>  &lt;/capsOn&gt;
+      ?&lt;capsOff&gt; <em class="replaceable"><code>capabilities</code></em>  &lt;/capsOff&gt;
+     &lt;/trigger&gt;
+    ?&lt;cancel&gt;
+      ?&lt;minEntitySpeed&gt; <em class="replaceable"><code>float</code></em>  &lt;/minEntitySpeed&gt;
+      ?&lt;maxEntitySpeed&gt; <em class="replaceable"><code>float  </code></em>&lt;/maxEntitySpeed&gt;
+      ?&lt;minEntityAux1&gt;  <em class="replaceable"><code>float</code></em>  &lt;/minEntityAux1&gt;
+      ?&lt;maxEntityAux1&gt;  <em class="replaceable"><code>float</code></em>  &lt;/maxEntityAux1&gt;
+      ?&lt;minModelYaw&gt;    <em class="replaceable"><code>float</code></em>  &lt;/minModelYaw&gt;
+      ?&lt;maxModelYaw&gt;    <em class="replaceable"><code>float</code></em>  &lt;/maxModelYaw&gt;Coor
+      ?&lt;capsOn&gt;  <em class="replaceable"><code>capabilities</code></em>  &lt;/capsOn&gt;
+      ?&lt;capsOff&gt; <em class="replaceable"><code>capabilities</code></em>  &lt;/capsOff&gt;
+     &lt;/cancel&gt;
+    ?&lt;scalePlaybackSpeed&gt;  [true|false] &lt;/scalePlaybackSpeed&gt;
+    ?&lt;feetFollowDirection&gt; [true|false] &lt;/feetFollowDirection&gt;
+    ?&lt;oneShot&gt;             [true|false] &lt;/oneShot&gt;En
+    ?&lt;promoteMotion&gt;       [true|false] &lt;/promoteMotion&gt;
+   &lt;/match&gt;
+&lt;/action&gt;</pre><p><span class="citetitle">Example <span class="literal">.model</span> file describing
+                              action</span></p>
+                  <p>The list below describes some of the tags in the XML file:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">name</span></em></p>
+                           <p>Name of that action as used by a script.</p>
+                           <p>These are available as named 'constants' off the model object
+                                        returned by the Model Manager.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">animation</span></em></p>
+                           <p>The base animation whence the frame data is sourced.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">blendInTime</span></em></p>
+                           <p>Time in seconds the action takes to completely blend
+                                        in.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">blendOutTime</span></em></p>
+                           <p>Time in seconds the action takes to completely blend
+                                        out.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">filler</span></em></p>
+                           <p>Specifies if the action is just padding and can be interrupted
+                                        if anything else comes on the queue.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">track</span></em></p>
+                           <p>Track number in which the action should be played.</p>
+                           <p>If the action has a track, then the animation is blended on
+                                        top of whatever other animations exist &#8212;
+                                        <em class="emphasis">i.e.</em>, it bypasses the queue.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">isMovement</span></em></p>
+                           <p>Specifies that the action uses a simple movement animation
+                                        such as walk, run, side-step, etc. The translation must be linear,
+                                        and is subtracted from the action when played (so a run animation
+                                        which moves from the origin will now appear to run on the spot).
+                                        This setting requires the PromoteMotion flag to be set, and doing so
+                                        means this translation then moves the model accordingly. If the
+                                        model is owned by a client-controlled Entity, then the server-side
+                                        entity's position will be updated accordingly. This setting allows
+                                        the use of scalePlaybackSpeed. This setting cannot be used with
+                                        isCoordinated and isImpacting.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">isCoordinated</span></em></p>
+                           <p>Specifies that the action's animation starts from an offset
+                                        position. Used for actions that require coordination with a
+                                        non-player character (NPC), which needs to be positioned relative to
+                                        the player's character for the purpose of matching contact points
+                                        (e.g. shaking hands). This setting cannot be used with isMovement
+                                        and isImpacting.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">isImpacting</span></em></p>
+                           <p>Specifies that the action is a complex (non-linear) movement
+                                        animation. If the entity is client-controlled, then its position on
+                                        the server will also be updated. Examples of animations used with
+                                        isImpacting are jumping, combat and knockdowns, interacting with
+                                        entities, etc. This setting requires PromoteMotion and cannot be
+                                        used with isMovement and isCoordinated.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">match</span></em></p>
+                           <p>If this section is present, it means the Action Matcher can
+                                        automatically select the action (see below).
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">trigger</span> (section
+                                           <span class="literal">match</span>)</em></p>
+                           <p>This section defines criteria used to determine when to start
+                                        an action.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">minEntitySpeed</span>
+                                           (section <span class="literal">trigger</span>)</em></p>
+                           <p>Determines the minimum velocity of the entity for the action
+                                        to start.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">maxEntitySpeed</span>
+                                           (section <span class="literal">trigger</span>)</em></p>
+                           <p>Determines the maximum velocity of the entity for the action
+                                        to start.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">minEntityAux1</span>
+                                           (section <span class="literal">trigger</span>)</em></p>
+                           <p>Determines the minimum pitch of the entity for the action to
+                                        start.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">maxEntityAux1</span>
+                                           (section <span class="literal">trigger</span>)</em></p>
+                           <p>Determines the maximum pitch of the entity for the action to
+                                        start.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">minModelYaw</span> (section
+                                           <span class="literal">trigger</span>)</em></p>
+                           <p>Determines the minimum yaw of the model for the action to
+                                        start.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">maxEntityYaw</span> (section
+                                           <span class="literal">trigger</span>)</em></p>
+                           <p>Determines the maximum yaw of the model for the action to
+                                        start.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">capsOn</span> (section
+                                           <span class="literal">trigger</span>)</em></p>
+                           <p>Determines which special case character states need to be on
+                                        for the action to start.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">capsOff</span> (section
+                                           <span class="literal">trigger</span>)</em></p>
+                           <p>Determines which special case character states need to be off
+                                        for the action to start.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">cancel</span> (section
+                                           <span class="literal">match</span>)</em></p>
+                           <p>This section defines the criteria used to determine when to
+                                        stop an action.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">minEntitySpeed</span>
+                                           (section <span class="literal">cancel</span>)</em></p>
+                           <p>Determines the minimum velocity of the entity for the action
+                                        to stop.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">maxEntitySpeed</span>
+                                           (section <span class="literal">cancel</span>)</em></p>
+                           <p>Determines the maximum velocity of the entity for the action
+                                        to stop.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">minEntityAux1</span>
+                                           (section <span class="literal">cancel</span>)</em></p>
+                           <p>Determines the minimum pitch of the entity for the action to
+                                        stop.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">maxEntityAux1</span>
+                                           (section <span class="literal">cancel</span>)</em></p>
+                           <p>Determines the maximum pitch of the entity for the action to
+                                        stop.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">minModelYaw</span> (section
+                                           <span class="literal">cancel</span>)</em></p>
+                           <p>Determines the minimum yaw of the model for the action to
+                                        stop.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">maxEntityYaw</span> (section
+                                           <span class="literal">cancel</span>)</em></p>
+                           <p>Determines the maximum yaw of the model for the action to
+                                        stop.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">capsOn</span> (section
+                                           <span class="literal">cancel</span>)</em></p>
+                           <p>Determines which special case character states need to be on
+                                        for the action to stop.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">capsOff</span> (section
+                                           <span class="literal">cancel</span>)</em></p>
+                           <p>Determines which special case character states need to be off
+                                        for the action to stop.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">scalePlaybackSpeed</span>
+                                           (section <span class="literal">match</span>)</em></p>
+                           <p>Specifies that the animation playback speed should be scaled
+                                        as a function of the entity's speed. This setting requires
+                                        isMovement.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">feetFollowDirection</span>
+                                           (section <span class="literal">match</span>)</em></p>
+                           <p>Specifies that the model should turn to track the Entity. In
+                                        practice this means while this action is matched, the model rotates
+                                        on the spot instead of playing a turning action.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">oneShot</span> (section
+                                           <span class="literal">match</span>)</em></p>
+                           <p>Specifies that the action will only be selected for playing
+                                        once in a row by the action matcher. Note the distinction between
+                                        this and filler, where filler is not related to the action
+                                        matcher.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">promoteMotion</span>
+                                           (section <span class="literal">match</span>)</em></p>
+                           <p>Specifies that the motion of the root node within the
+                                        animation should affect the model's position (and the owner entity's
+                                        position, if the entity is client-controlled). This setting must be
+                                        enabled for isImpacting or isMovement actions to work correctly.
+                                        This setting cannot be used with filler.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The Python interface to a model's action queue allows actions to
+                           be played directly on that model, or a set of actions to be queued and
+                           played in sequence. Callback functions can be defined and played when
+                           actions are finished.
+                  </p>
+                  <p>In Python, a model can be easily created and an action played on
+                           it, as illustrated in the example below:
+                  </p><pre class="programlisting">class Jogger( BigWorld.Entity ):
+  ....
+def __init__( self ):
+  self.model = BigWorld.Model( "jogger.model" )
+
+def warmUp( self ):
+  self.model.action( "StretchLegs" )()
+...</pre><p><span class="citetitle">Model creation in Python</span></p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Debugging_Animations"></a>9.1.5.1.&nbsp;Debugging animations
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>If a model is not being animated as it is supposed to, it is
+                                useful to display the Action Queue graph in the Python console.
+                     </p>
+                     <p>This is can be done by calling
+                                <span class="literal">BigWorld.debugAQ()</span> method, which can receive two
+                                kinds of arguments:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">PyModel</span></em></p>
+                              <p>Displays the graph for the specified model, with the blend
+                                             weight of each action. Each action is represented in a different,
+                                             arbitrarily chosen, colour.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">None</em></p>
+                              <p>Switches off the graph display.</p>
+                           </li>
+                        </ul>
+                     </div>
+                     <div class="informalfigure">
+                        <div class="mediaobject"><img src="images/python_console_display_action_queue.png"><span class="caption">
+                              <p>Python console displaying Action Queue's debugging
+                                             graph
+                              </p></span></div>
+                     </div>
+                     <p>The graph in the picture above displays the execution on the
+                                TurnLeft animation (in green) and the Idle one (in red). We can
+                                determine the animations that were being played in each labelled point
+                                in the graph:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis">A</em> &#8212; 100% of the
+                                             <span class="literal">Idle</span> animation is being played.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Between A and B</em> &#8212;
+                                             <span class="literal">Idle</span> animation is being blended in with
+                                             <span class="literal">TurnLeft</span> animation.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">B</em> &#8212; 50% of the
+                                             <span class="literal">Idle</span> animation is being played, and 50% of the
+                                             <span class="literal">TurnLeft</span> animation is being played.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">C</em> &#8212; 100% of the
+                                             <span class="literal">TurnLeft</span> animation is being played.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>For more details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>.
+                     </p>
+                     <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                        <h3 class="title">Note</h3>
+                        <p>ModelEditor offers the same functionality for the model. For
+                                     details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html" class="olink"><i>ModelEditor</i></a> <span class="symbol">&#8594;</span>
+                                     <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html#xref_me_Panel_Summary" class="olink">Panel summary</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html#xref_me_Actions_Panel" class="olink">Actions panel</a>.
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Action_Matcher"></a>9.1.6.&nbsp;Action Matcher
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Given a model, an action queue, and a set of actions, all
+                           behaviour of a game object/character can be specified by event-driven
+                           calls on the Action Queuer. This ends up with a heavy overhead, as many
+                           changes in object state need to directly call the object and solve which
+                           animation should be played.
+                  </p>
+                  <p>The solution to this problem is to internalise most of the
+                           behaviour of a character in a system called the Action Matcher, which
+                           automatically updates an object's motion based on the object's state. It
+                           is a simple pattern matcher, picking an animation based on model's
+                           attributes such as speed, direction, etc.
+                  </p>
+                  <p>State parameters such as speed, rotation, or power are exposed to
+                           the Action Matcher, which then selects the action that best maps to
+                           these parameters. This frees the game from having to handle many aspects
+                           of animation, allowing it to only have to update state parameters, such
+                           as position.
+                  </p>
+                  <p>When there are no (unblended) actions in the Action Queue for a
+                           model (within the player's AoI), the Action Matcher takes over and plays
+                           an 'idle' action. It triggers these 'idle' animations to give the game
+                           world more life, since real living things are not still. It can also be
+                           used to automate menial animation tasks.
+                  </p>
+                  <p>This class looks at all the actions that have a match section (see
+                           XML example in section <a href="ch09.html#xref_Action_Queue" title="9.1.5.&nbsp;Action Queue">Action Queue</a>,
+                           whose constraints are satisfied for the Action Matcher object
+                           controlling the model.
+                  </p>
+                  <p>Scriptable constraints are tested against the capabilities bit
+                           fields <span class="literal">capsOn</span> and <span class="literal">capsOff</span>. The
+                           Action Matcher for a model has a set of capability bits, which value is
+                           controlled by script. An action will only be matched if all the capsOn
+                           bits are on and all the capsOff bits are off in the Action Matcher's
+                           set.
+                  </p>
+                  <p>It then looks at the change in pose (position and orientation
+                           &#8212; as set by the filter) and selects the first action that matches
+                           this change for the time over which the change occurred. The trigger
+                           constraints are used to test most actions. The cancel constraints are
+                           used if the action that matched last frame is encountered. This feature
+                           is intended primarily to reduce action hysteresis.
+                  </p>
+                  <p>The update function of an action-matched object takes the previous
+                           updated position of the object, chooses the best matched action from its
+                           matched action list, then plays the animation back at the correct speed
+                           to smoothly link action with speed. As a game character starts moving
+                           faster, the Action Matcher may choose a faster running cycle to play
+                           back and increase its playback speed to precisely match speed so no foot
+                           sliding is seen.
+                  </p>
+                  <p>This method allows an AI system to define behaviour with respect
+                           to a few variables such as orientation, speed, and aiming direction, and
+                           the Action Matcher will convert these updated parameters into a smoothly
+                           moving character.
+                  </p>
+                  <p>In a client/server architecture where position and orientation are
+                           updated over a network, the Action Matcher (combined with a filter) can
+                           automatically compensate for position jumps caused by network lag by
+                           having characters realistically run faster to the latest updated
+                           position.
+                  </p>
+                  <p>When an action is loaded, its data is augmented with the effect on
+                           pose that performing the action would have on the root node. This
+                           information is used for the matching described above.
+                  </p>
+                  <p>Now that an action has been selected, it is passed to the Action
+                           Queue. If the action supplied is the same as the previous action, it
+                           continues to be played in the normal fashion (<em class="emphasis">i.e.</em>,
+                           <span class="literal">frame += fps*deltaTime</span>). Otherwise, it is blended in
+                           over a few frames while the other is blended out.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e3425"></a>9.1.6.1.&nbsp;Using the Action Matcher
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Each action designed to be matched must define a &lt;match&gt;
+                                section. These are added via ModelEditor using the Actions window. The
+                                matching parameters are divided in two:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis">Trigger parameters</em> &#8212;
+                                             Define when an action can be started, and
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Cancel section</em> &#8212;
+                                             Defines when an action should be stopped.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>The minEntitySpeed and minEntitySpeed tags in each section
+                                define the velocities in which actions can and cannot be triggered or
+                                cancelled.
+                     </p>
+                     <p>The auxiliary parameters can be used to define a pitch range
+                                that is used to match action. The minModelYaw and maxModelYaw tags
+                                define a yaw range. The main matching parameters define speed and
+                                orientation ranges that the action applies to, and also a user-defined
+                                set of matching flags that are used with special case character
+                                states. These flags can be used to set whether a game character is not
+                                using the basic action set, such as being injured or being
+                                angry.
+                     </p>
+                     <p>The BigWorld engine uses the matchCaps parameter to store the
+                                bitwise flag set of an action. At any given time, the model itself
+                                will have an on/off flag set representing the state of these states,
+                                and this is tested against each action's matchCaps per frame.
+                     </p>
+                     <p>A set of user-defined action states should be defined (created
+                                as a text file or as comment section in model file). A simple example
+                                is given in the list below:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis">Capability flag: 1</em> &#8212;
+                                             State: Angry
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Capability flag: 2</em> &#8212;
+                                             State: Happy
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Capability flag: 3</em> &#8212;
+                                             State: Sad
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>A set of angry animation can now be accessed using the action
+                                matcher by just adding the angry flag to the current matchCaps.
+                     </p>
+                     <p>In Python code, a simple example of a character that should now
+                                move and behave in an angry manner is shown below:
+                     </p><pre class="programlisting">class AngryMan( BigWorld.Entity ):
+  ....
+def onEnterWorld( self, prereqs ):
+  self.am = BigWorld.ActionMatcher( self )
+
+def enterAngryMode( self ):
+  self.am.matchCaps = self.am.matchCaps + [1]
+...</pre><p><span class="citetitle">Python implementation of character in angry
+                                   mode</span></p>
+                     <p>By using the Action Matcher this way, a character's natural
+                                motion can be fleshed out without having to explicitly call any
+                                function to play animations. Specific event-based actions should still
+                                be called directly via the Action Queue structure, but the background
+                                behaviour of the character can be completely defined using the
+                                ModelEditor tool and setting matching flags appropriately in the code
+                                base.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e3476"></a>9.1.7.&nbsp;Trackers
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A tracker applies inverse kinematics to nodes in the entity's
+                           model so that they appear to point to a position defined by a given
+                           'target' entity. An entity may have any number of trackers.
+                  </p>
+                  <p>To add a tracker to an entity, use a script call like this:</p><pre class="programlisting">tracker = BigWorld.Tracker()
+tracker.dirProvider = DiffDirProvider( 
+  self.focalMatrix, target.focalMatrix )
+tracker.nodeInfo = BigWorld.TrackerNodeInfo(
+  model,
+  primaryNode, 
+  secondaryNodeList, 
+  pointingNodeName,
+  minPitch, maxPitch,
+  minYaw, maxYaw,
+  angularVelocity )
+self.model.tracker = tracker</pre><p><span class="citetitle">Adding tracker in Python</span></p>
+                  <p>The parameters for the <span class="literal">BigWorld.TrackerNodeInfo</span>
+                           method are described below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">model</span></em></p>
+                           <p>PyModel that owns the nodes that the tracker will
+                                        affect.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">primaryNode</span></em></p>
+                           <p>Primary node reference.</p>
+                           <p>Node references are built up from the entity's independent
+                                        model (the first one if there are multiple) following a path of
+                                        attachment points and ending in a node name. This allows trackers to
+                                        transparently work through attached models
+                                        (<em class="emphasis">i.e.</em>, they are treated as if they are welded
+                                        onto the model's skeleton).
+                           </p>
+                           <p>This is more important for Supermodels (for more details, see
+                                        <a href="ch10.html#xref_SuperModel" title="10.3.&nbsp;SuperModel">SuperModel</a>), where characters are built out
+                                        of multiple model parts.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">secondaryNodeList</span></em></p>
+                           <p>List of secondary nodes, containing tuples of the form (node,
+                                        weight).
+                           </p>
+                           <p>These have the same transform performed on them as on the
+                                        primary node, in proportion with the weight amount. Actually, all
+                                        the weights (including the primary node, with a weight of 1.0) are
+                                        summed, and each node gets their weight proportion of this total
+                                        applied to them.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">pointingNodeName</span></em></p>
+                           <p>Name of the node providing the frame of reference used for
+                                        tracker manipulations.
+                           </p>
+                           <p>If the node specified is not present, then the model's scene
+                                        root is used.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">minPitch</span>,
+                                           <span class="literal">maxPitch</span>, <span class="literal">minYaw</span>,
+                                           <span class="literal">maxYaw</span></em></p>
+                           <p>Limits on the turn that the tracker is permitted to apply, in
+                                        degrees.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">angularVelocity</span></em></p>
+                           <p>Speed at which a tracker will turn the PyModelNode instances
+                                        that it influences, in degrees per second.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e3558"></a>9.1.8.&nbsp;Timers and Traps
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>These are generic helper services provided to entity
+                           scripts.
+                  </p>
+                  <p>A script can set timers to have itself called-back at a certain
+                           time, as illustrated in the example below:
+                  </p><pre class="programlisting">BigWorld.callback( afterTime, fn )</pre><p>Traps use a slightly different interface:</p><pre class="programlisting">trapRef = self.addTrap( radius, function )</pre><p>A trap goes off if any entity wanders within the given radius of
+                           the entity it is created on, and can be cancelled with the self.delTrap
+                           method.
+                  </p>
+                  <p>There are two other types of trap, optimised for their specific
+                           need, as discussed in the following sections.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e3575"></a>9.1.8.1.&nbsp;Pot
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>A Pot is a 'player-only-trap', and is triggered only by the
+                                player entity. Due to this, it is a lot cheaper to use than a general
+                                trap.
+                     </p>
+                     <p>A Pot is added given a matrix provider, a radius, and a script
+                                callback for triggering.
+                     </p><pre class="programlisting">potHandle = BigWorld.addPot( trapMatrix, radius, callback )</pre></div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e3584"></a>9.1.8.2.&nbsp;Mat
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>A Mat is a 'matrix trap', and is triggered when an area is
+                                triggered by another. This makes sense only because matrix providers
+                                are dynamic. The areas are defined as:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>Source-matrix translation and a bounding area given by the
+                                             scale of the x-, y- and z-axes in that matrix.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Destination-matrix translation of destination matrix
+                                             (treated as a point).
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>A Mat is defined in Python as listed below:</p><pre class="programlisting">matHandle = BigWorld.addMat( sourceMatrix, callback, destMatrix )</pre></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Personality_Script"></a>9.2.&nbsp;Personality script
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The personality script is a Python script used to handle several
+                      callbacks from the BigWorld engine for initialisation, cleanup, input
+                      handling, and environment changes. It can also implement client
+                      functionality that does not belong to any particular entity in the game,
+                      such as the game start screen.
+               </p>
+               <p>Its name is defined in the file specified by the
+                      <span class="literal">resources.xml</span>'s <span class="literal">engineConfigXML</span> tag,
+                      in the <span class="literal">personality</span> tag &#8212; for more details, see
+                      <a href="ch01.html#xref_File_engine_config_xml" title="1.4.2.&nbsp;File <engine_config&gt;.xml">File
+                           <span class="literal"><em class="replaceable"><code>&lt;engine_config&gt;</code></em>.xml</span></a>.
+               </p>
+               <p>The personality script generally declares a class to contain all
+                      data to be shared by functions in the script, and declares a global
+                      variable using the constructor of that class. For example, a personality
+                      script may include the following code:
+               </p><pre class="programlisting">class SharedData:
+  def __init__( self ):
+    self.settings = ""
+
+# initialise the shared data object for this personality script
+sd = SharedData()
+
+# This callback is called by BigWorld when initialising
+def init( configSect ):
+  # save the configSect object for later use
+  sd.configSect = configSect</pre><p><span class="citetitle">Example of personality script</span></p>
+               <p>The sections below describe the available personality
+                      callbacks.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_init"></a>9.2.1.&nbsp;<span class="literal">init</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The callback has the following syntax:</p><pre class="programlisting">init(scriptsConfig, engineConfig, preferences, loadingScreenGUI = None)</pre><p>The script is called once, when the engine initialises, and
+                           receives the arguments below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">scriptsConfig</span></em></p>
+                           <p><span class="literal">PyDataSection</span> object containing data from
+                                        XML file defined in <span class="literal">resources.xml</span>'s
+                                        <span class="literal">scriptsConfigXML</span> tag (for details, see <a href="ch01.html#xref_File_scripts_config_xml" title="1.4.3.&nbsp;File <scripts_config&gt;.xml">File
+                                       <span class="literal"><em class="replaceable"><code>&lt;scripts_config&gt;</code></em>.xml</span></a>).
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">engineConfig</span></em></p>
+                           <p><span class="literal">PyDataSection</span> object containing data from
+                                        XML file defined in <span class="literal">resources.xml</span>'s
+                                        <span class="literal">engineConfigXML</span> tag (for details, see <a href="ch01.html#xref_File_scripts_config_xml" title="1.4.3.&nbsp;File <scripts_config&gt;.xml">File
+                                       <span class="literal"><em class="replaceable"><code>&lt;scripts_config&gt;</code></em>.xml</span></a>).
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">preferences</span></em></p>
+                           <p><span class="literal">PyDataSection</span> object containing data from
+                                        the <span class="literal">scriptsPreference</span> section of the file
+                                        specified in the <span class="literal">preferences</span> tag of the file
+                                        specified in <span class="literal">resources.xml</span>'s
+                                        <span class="literal">engineConfigXML</span> tag (for details, see <a href="ch01.html#xref_File_preferences_xml" title="1.4.4.&nbsp;File <preferences&gt;.xml">File
+                                       <span class="literal"><em class="replaceable"><code>&lt;preferences&gt;</code></em>.xml</span></a>).
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">loadingScreenGUI</span></em></p>
+                           <p>Optional argument representing the loading screen GUI, if one
+                                        was defined in <span class="literal">resources.xml</span> (for details, see
+                                        <a href="ch01.html#xref_File_preferences_xml" title="1.4.4.&nbsp;File <preferences&gt;.xml">File
+                                       <span class="literal"><em class="replaceable"><code>&lt;preferences&gt;</code></em>.xml</span></a>).
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The available read functions are listed below:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readBool</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readFloat</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readFloats</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readInt</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readInts</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readMatrix34</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readString</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readStrings</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readVector2</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readVector2s</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readVector3</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readVector3s</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readVector4</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readVector4s</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readWideString</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">readWideStrings</span></em></p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>To read data from PyDataSection, call the read function that
+                           relates to the data type, passing in the section name as the first
+                           argument, and the default value as the second argument. The plural read
+                           functions (ending in 's') read the contents of all matching subsections
+                           of the specified section, and return the results as tuple of values. You
+                           can refer to sub-sections by using the forward slash.
+                  </p>
+                  <p>For example:</p><pre class="programlisting">username = userPreferences.readString("login/username", "guest")</pre><p>You can also reference to subsections of a PyDataSection by
+                           calling the section name prefixed with an underscore.
+                  </p>
+                  <p>For example:</p><pre class="programlisting">username = userPreferences._login._username.asString</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e3802"></a>9.2.2.&nbsp;<span class="literal">fini</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The callback has the following syntax:</p><pre class="programlisting">fini()</pre><p>This is script is called when the client engine shuts down. It is
+                           used to do any cleanup required before the client exits. This is a good
+                           place to perform a logout procedure on the player to logout
+                           gracefully.
+                  </p>
+                  <p>For example:</p><pre class="programlisting"># note: you must set up a logOff method as a base method in the
+# def file of the class that the player is using.
+def fini():
+  try:
+    BigWorld.player().base.logOff()
+  except:
+    pass</pre><p><span class="citetitle">Example of <span class="literal">fini()</span>
+                              implementation</span></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e3822"></a>9.2.3.&nbsp;<span class="literal">handleKeyEvent</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The callback has the following syntax:</p><pre class="programlisting">handleKeyEvent( event )</pre><p>The event argument is a PyKeyEvent which contains information
+                           about the key event. See the Python Client API document for
+                           details.
+                  </p>
+                  <p>Generally, several systems can process keyboard input, so the
+                           arguments are passed to a <span class="literal">handleKeyEvent</span> method on
+                           each system in turn, until one returns a Boolean value of True,
+                           indicating that it has processed the key event.
+                  </p>
+                  <p>For example:</p><pre class="programlisting">def handleKeyEvent( event ):
+  global rds
+
+  # give the chat console a go first
+  if rds.chat.editing:
+    if rds.chat.handleKeyEvent( event ):
+      return True
+  # try the gui
+  if GUI.handleKeyEvent( event ):
+    return 1
+  # now do our custom keys
+  if not event.isKeyDown(): return False # we are not interested in key releases
+  if event.key == KEY_RETURN and event.modifiers == 0:
+    rds.chat.edit( True )  # bring up the chat console
+    return True
+
+  # return False because the key event has not been handled
+  return False</pre><p><span class="citetitle">Example of <span class="literal">handleKeyEvent()</span>
+                              implementation</span></p>
+                  <p>Note that the engine also calls the
+                           <span class="literal">handleKeyEvent</span> method on the entity that the player
+                           is controlling. All keys related to player control are handled
+                           there.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e3852"></a>9.2.4.&nbsp;<span class="literal">handleMouseEvent</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The callback has the following syntax:</p><pre class="programlisting">handleMouseEvent( event )</pre><p>This script is called whenever the mouse moves, and is given an
+                           instance of PyMouseEvent. It operates similarly to
+                           handleKeyEvent.
+                  </p>
+                  <p>For example:</p><pre class="programlisting">def handleMouseEvent( event ):
+
+  # try the gui
+  if GUI.handleMouseEvent( event ):
+    return True
+
+  # return False because the mouse event has not been handled
+  return False</pre><p><span class="citetitle">Example of <span class="literal">handleMouseEvent()</span>
+                              implementation</span></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e3872"></a>9.2.5.&nbsp;<span class="literal">handleAxisEvent</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The callback has the following syntax:</p><pre class="programlisting">handleAxisEvent( event )</pre><p>This script is called whenever a joystick axis event occurs, and
+                           is given an instance of PyAxisEvent.
+                  </p>
+                  <p>For example:</p><pre class="programlisting">def handleAxisEvent( event ):
+
+  # try the GUI
+  if GUI.handleAxisEvent( event ):
+    return True
+
+  # return False because the axis event has not been handled
+  return False</pre><p><span class="citetitle">Example of <span class="literal">handleAxisEvent()</span>
+                              implementation</span></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e3892"></a>9.2.6.&nbsp;<span class="literal">handleIMEEvent</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The callback has the following syntax:</p><pre class="programlisting">handleIMEEvent( event )</pre><p>This is called when an Input Method Editor (IME) related event
+                           occurs and is used to update the GUI respectively, and is given a
+                           <code class="code">PyIMEEvent</code> object as it's first parameter. See <a href="ch18.html" title="Chapter&nbsp;18.&nbsp;Input Method Editors (IME)"><i xmlns:xlink="http://www.w3.org/1999/xlink">Input Method Editors (IME)</i></a> for details on IME
+                           support.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e3907"></a>9.2.7.&nbsp;<span class="literal">handleLangChangeEvent</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The callback has the following syntax:</p><pre class="programlisting">handleLangChangeEvent()</pre><p>This event occurs whenever the current input language has been
+                           changed by the user. It is useful for tasks such as updating language
+                           indicators on GUI edit fields.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e3917"></a>9.2.8.&nbsp;<span class="literal">onChangeEnvironments</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The callback has the following syntax:</p><pre class="programlisting">onChangeEnvironments( inside )</pre><p>This script is a callback acknowledging the environment type the
+                           player is currently in.
+                  </p>
+                  <p>Currently there are only inside and outside environment types. The
+                           argument is a Boolean value indicating whether the player is inside or
+                           not. This may be useful for modifying the behaviour of the camera in
+                           third person mode.
+                  </p>
+                  <p>For example:</p><pre class="programlisting">def onChangeEnvironments( inside ):
+  global sd
+  sd.inside = inside
+  sd.updatePivotDist()</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e3933"></a>9.2.9.&nbsp;<span class="literal">onGeometryMapped</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The callback has the following syntax:</p><pre class="programlisting">onGeometryMapped(spaceID, spacePath)</pre><p>This callback method tells the player entity about changes to the
+                           geometry in a space. It is called when geometry is mapped into any of
+                           the currently existing spaces on the client. The space ID and the name
+                           of the space geometry are passed as parameters.
+                  </p>
+                  <p>The first parameter is the ID of the space the geometry is being
+                           mapped in to. The second parameter is the name describing the space's
+                           geometry.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e3945"></a>9.2.10.&nbsp;<span class="literal">onRecreateDevice</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The callback has the following syntax:</p><pre class="programlisting">onRecreateDevice ()</pre><p>This script is a callback alerting the scripts that the Direct3D
+                           device has been recreated. This often occurs when the screen resolution
+                           is changed.
+                  </p>
+                  <p>This callback was introduced primarily so that scripts can
+                           re-layout their GUI component scripts, but it is also useful for
+                           recreating any static <span class="literal">PyModelRenderer</span> textures (since
+                           these do not automatically update, unless they are dynamic).
+                  </p>
+                  <p>For example:</p><pre class="programlisting">def onRecreateDevice():
+  (width,height) = GUI.screenResolution()
+  myGuiController.doLayout( width, height )
+  myRenderers.recreateTextures()</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e3964"></a>9.2.11.&nbsp;<span class="literal">onTimeOfDayLocalChange</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The callback has the following syntax:</p><pre class="programlisting">onTimeOfDayLocalChange( gameTime, secondsPerGameHour )</pre><p>This script is a callback to allow scripts to be notified of
+                           changes in the game time.
+                  </p>
+                  <p>It is passed two floats as arguments: the first one is the game
+                           time in seconds, and the second is the number of real-time seconds per
+                           game hour.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e3976"></a>9.2.12.&nbsp;<span class="literal">start</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The callback has the following syntax:</p><pre class="programlisting">start()</pre><p>This script is called after the engine has initialised, and used
+                           to start the game. It may be used to bring up a start menu, or login
+                           screen.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch08.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch10.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;8.&nbsp;User Data Objects&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;10.&nbsp;Models</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

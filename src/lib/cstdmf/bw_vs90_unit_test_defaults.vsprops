@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="bw_vs90_unit_test_defaults"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="..\..;..\..\cppunit\include;../../../bigworld/src/client;../../../bigworld/src;../../../src/lib;../../../src/lib/python/include;../../third_party/openssl/inc32"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		OutputFile="..\..\..\..\..\tests\$(ConfigurationName)\$(ProjectName).exe"
+		AdditionalLibraryDirectories="..\..\..\..\bigworld\lib;..\..\..\lib\umbra\lib\win32-x86;..\..\..\lib\fmod\api\lib;..\..\..\lib\fmod\fmoddesignerapi\api\lib;..\..\..\lib\speedtreert\lib\VC80"
+		SubSystem="1"
+	/>
+</VisualStudioPropertySheet>

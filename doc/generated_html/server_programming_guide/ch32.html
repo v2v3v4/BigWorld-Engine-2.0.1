@@ -1,0 +1,161 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;32.&nbsp;Non-Blocking Socket I/O Using Mercury</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt02.html" title="Part&nbsp;II.&nbsp;Server C++ Programming Guide">
+      <link rel="prev" href="ch31.html" title="Chapter&nbsp;31.&nbsp;Debug Message Macros">
+      <link rel="next" href="ch33.html" title="Chapter&nbsp;33.&nbsp;MySQL Database Schema">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch32.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;32.&nbsp;Non-Blocking Socket I/O Using Mercury</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch31.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;II.&nbsp;Server C++ Programming Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch33.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Non_Blocking_Socket_IO_Using_Mercury"></a>Chapter&nbsp;32.&nbsp;Non-Blocking Socket I/O Using Mercury
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch32.html#d0e17271">32.1. Getting Callbacks From Mercury::EventDispatcher</a></span></dt>
+               </dl>
+            </div>
+            <p>TCP/IP is commonly used to communicate with third party products, like
+                 billing systems, for example. However, care must be taken to avoid blocking
+                 the main thread of the program.
+            </p>
+            <p>One option is to spawn separate threads to handle the I/O, but the
+                 recommended option is to use non-blocking I/O. Mercury uses non-blocking I/O
+                 by default, and provides callbacks on I/O events to enable the program to
+                 wait for something without blocking the main thread.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e17271"></a>32.1.&nbsp;Getting Callbacks From Mercury::EventDispatcher
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The <code class="classname">Mercury::EventDispatcher</code> class contains
+                  	the main loop of almost all the server executables:
+                  	<code class="methodname">Mercury::EventDispatcher::processContinuously()</code>.
+               </p>
+               <p>This function effectively time slices the main thread by waiting for
+                      events to happen on sockets, and then calling handlers to process those
+                      events. It is vital that all event handler does not to block or take
+                      a significant amount of processing time, otherwise the others will be
+                      starved.
+               </p>
+               <p>The following Mercury::EventDispatcher methods allow event handlers
+                  	to be registered:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><code class="methodname">registerFileDescriptor</code></em></p>
+                        <p><span class="literal">bool registerFileDescriptor( int
+                                      fd, InputNotificationHandler * handler );</span></p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><code class="methodname">deregisterFileDescriptor</code></em></p>
+                        <p><span class="literal">bool deregisterFileDescriptor( int fd
+                                      );</span></p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><code class="methodname">registerWriteFileDescriptor</code></em></p>
+                        <p><span class="literal">bool registerWriteFileDescriptor( int
+                                      fd, InputNotificationHandler * handler );</span></p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><code class="methodname">deregisterWriteFileDescriptor</code></em></p>
+                        <p><span class="literal">bool deregisterWriteFileDescriptor( int fd
+                                      );</span></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The <span class="literal">handleInputNotification</span> method of an
+                      <span class="literal">InputNotificationHandler</span> object registered via
+                      <span class="literal">registerFileDescriptor</span> will be called when the
+                      specified file descriptor (usually a socket) has data available for
+                      reading.
+               </p>
+               <p>The <code class="methodname">handleInputNotification</code> method of an
+                      <code class="methodname">InputNotificationHandler</code> object registered via
+                      <code class="methodname">registerWriteFileDescriptor</code> will be called when
+                      the specified file descriptor (usually a socket) is ready for writing.
+                      This is useful when writing a large amount of data. A non-blocking write
+                      operation will only write an amount of data equal to, or less than, its
+                      internal buffers can hold. Then the program must wait until the socket is
+                      again ready to be written to. Waiting for a socket to become writable is
+                      also useful during the TCP connection process, as the socket will not be
+                      ready for writing until the connection is fully established.
+               </p>
+               <p>All registered handlers must be de-registered using the
+                      corresponding function. They are not automatically de-registered when the
+                      file descriptor is closed.
+               </p>
+               <p>For more details, see the example file
+                      <code class="filename">bigworld/src/server/baseapp/eg_tcpecho.cpp</code>.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch31.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt02.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch33.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;31.&nbsp;Debug Message Macros&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;33.&nbsp;MySQL Database Schema</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

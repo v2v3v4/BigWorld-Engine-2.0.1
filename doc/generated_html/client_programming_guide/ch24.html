@@ -1,0 +1,2106 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;24.&nbsp;Debugging</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch23.html" title="Chapter&nbsp;23.&nbsp;Job System">
+      <link rel="next" href="ch25.html" title="Chapter&nbsp;25.&nbsp;Releasing The Game">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;24.&nbsp;Debugging</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch23.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch25.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Debugging"></a>Chapter&nbsp;24.&nbsp;Debugging
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch24.html#d0e10791">24.1. Build configuration &#8212; conditional feature inclusion</a></span></dt>
+                  <dt><span class="section"><a href="ch24.html#xref_Watchers">24.2. Watchers</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch24.html#d0e10818">24.2.1. Watcher types</a></span></dt>
+                        <dt><span class="section"><a href="ch24.html#d0e10829">24.2.2. Using watchers</a></span></dt>
+                        <dt><span class="section"><a href="ch24.html#d0e10844">24.2.3. Watcher Console</a></span></dt>
+                        <dt><span class="section"><a href="ch24.html#d0e10856">24.2.4. Remote watcher access</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch24.html#d0e10872">24.3. Memory tracking</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch24.html#d0e10877">24.3.1. ResourceCounters overview</a></span></dt>
+                        <dt><span class="section"><a href="ch24.html#d0e10899">24.3.2. Memory allocation taxonomy</a></span></dt>
+                        <dt><span class="section"><a href="ch24.html#d0e10930">24.3.3. Case studies</a></span></dt>
+                        <dt><span class="section"><a href="ch24.html#d0e11557">24.3.4. Displaying the memory tracking console</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch24.html#d0e11600">24.4. Scripts</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch24.html#d0e11607">24.4.1. Python Console</a></span></dt>
+                        <dt><span class="section"><a href="ch24.html#xref_Remote_Python_Console">24.4.2. Remote Python Console</a></span></dt>
+                        <dt><span class="section"><a href="ch24.html#d0e11876">24.4.3. Script reloading</a></span></dt>
+                        <dt><span class="section"><a href="ch24.html#d0e11891">24.4.4. Common errors</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch24.html#d0e11974">24.5. Script interactive debugging</a></span></dt>
+                  <dt><span class="section"><a href="ch24.html#xref_Client_Access_Tool_CAT">24.6. Client Access Tool (CAT)</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch24.html#d0e12089">24.6.1. Connecting to the client</a></span></dt>
+                        <dt><span class="section"><a href="ch24.html#d0e12105">24.6.2. CAT Scripts</a></span></dt>
+                        <dt><span class="section"><a href="ch24.html#d0e12187">24.6.3. Creating scripts for CAT</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch24.html#d0e12550">24.7. Timing</a></span></dt>
+               </dl>
+            </div>
+            <p>This section describes some of the debugging features of the BigWorld
+                 client.
+            </p>
+            <p>Debugging is an important part of any development process, and the
+                 client has many features that facilitate finding bugs early, in-game
+                 debugging, remote debugging, and the immediate application of changes
+                 without restarting.
+            </p>
+            <p>Many debugging features are accessed via a specially defined debug
+                 key. By default, the debug maps to the grave (tilde) key on the keyboard,
+                 however this can be re-configured by editing the engine configuration XML
+                 file.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10791"></a>24.1.&nbsp;Build configuration &#8212; conditional feature inclusion
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld provides a number of features that aid in runtime
+                      debugging, such as the debug menu and the telnet Python service.
+               </p>
+               <p>To remove these features from a final release build of the client, a
+                      number of compile guards exist. These are collectively controlled by the
+                      following define located in src/lib/ cstdmf/config.hpp.
+               </p><pre class="programlisting">#define CONSUMER_CLIENT_BUILD 0</pre><p>If <span class="literal">CONSUMER_CLIENT_BUILD</span> is 0, then the
+                      development features will be compiled.
+               </p>
+               <p>Individual features are encapsulated in their own individual compile
+                      guards, which can collectively be switched using the above define.
+                      Individual features may also be enabled, by setting the corresponding
+                      force enable define to a non-zero value.
+               </p>
+               <p>This is illustrated in the example below:</p><pre class="programlisting">#define CONSUMER_CLIENT_BUILD    0
+
+#define FORCE_ENABLE_DEBUG_KEY_HANDLER    0
+#define ENABLE_DEBUG_KEY_HANDLER  (!CONSUMER_CLIENT_BUILD \
+                                   || FORCE_ENABLE_DEBUG_KEY_HANDLER)
+</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Watchers"></a>24.2.&nbsp;Watchers
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>A watcher is an object that wraps a variable or function result in a
+                      program, and turns it into a string.
+               </p>
+               <p>Watchers can be read-write or read-only, and can be viewed in
+                      various ways. Their hierarchy is usually organised by functionality. There
+                      are also watchers that can dynamically match changing data, such as the
+                      contents of a sequence or map.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10818"></a>24.2.1.&nbsp;Watcher types
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The simplest watcher type is the DirectoryWatcher, which allows
+                           the creation of a directory of other watchers (including
+                           DirectoryWatchers). This is one way in which the hierarchy can be built
+                           up. For example, a float value for the amount of rain drawn by the rain
+                           system in the BigWorld client is specified at 'Client Settings/Rain/
+                           amount'. This uses three DirectoryWatchers: the root directory, the
+                           Client Settings directory, and the Rain directory.
+                  </p>
+                  <p>There are also templatised watchers for any data type that can be
+                           streamed onto a std::stream object. These come in two flavours, as
+                           DataWatchers of variables, and as MemberWatchers of the result (or sole
+                           argument) of member functions of a class.
+                  </p>
+                  <p>The DataWatchers and MemberWatchers can also take a 'base object'
+                           argument, which the data they point to is considered a member of. This
+                           is very useful when combined with more complicated types of watchers,
+                           such as the SequenceWatcher.
+                  </p>
+                  <p>The SequenceWatcher and MapWatcher appear to be the same as a
+                           DirectoryWatcher, but they watch any class that supports the STL
+                           sequence or mapping methods. They have just one client watcher, but they
+                           present as many children as there are elements of their wrapped
+                           container. The child watcher is called with its 'base object' set to the
+                           element of the container. To handle pointers in these containers, there
+                           is also the BaseDereferenceWatcher, which presents no extra hierarchy
+                           level, but rather dereferences its base object and calls a sole child
+                           watcher with that value. The children can be named either by a static
+                           list, or by making a request for a certain value in the child watcher
+                           (such as name).
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10829"></a>24.2.2.&nbsp;Using watchers
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>From the types above, it can be seen that a watcher hierarchy can
+                           be set up to both expose simple settings and to track complex
+                           structures.
+                  </p>
+                  <p>The simplest way to make a watcher is to use the MF_WATCH macro.
+                           This macro takes the path name for the watcher, and a variable or member
+                           function to get/set its value. It expands to code that adds the
+                           appropriate watcher.
+                  </p>
+                  <p>To change the parsing or display of a value (as a string), it is
+                           not necessary to write a new watcher. Instead, you can use member
+                           functions that get and set the value as a string. This is how the
+                           'Client Settings/Time of day' value works &#8212; there are simple accessors
+                           for timeOfDayAsString, which format the time of day as 'hours:minutes'
+                           and parse it back from the same format. Setting a watcher can also be
+                           used to trigger a command &#8212; for example, the server is also notified
+                           whenever the time of day is set (for debugging purposes only).
+                  </p>
+                  <p>To track complex structures, the appropriate watcher must be
+                           created directly, and inserted into the watcher hierarchy. Classes that
+                           participate in such an arrangement often implement a getWatcher() static
+                           method that returns a watcher object that works when the 'base object'
+                           is set to an instance of their class. The same watcher can be shared by
+                           all instances of the class, and is usually of type DirectoryWatcher of
+                           DataWatchers and MemberWatchers.
+                  </p>
+                  <p>This is done on the client with the map of entities maintained by
+                           the Entity Manager. The entities are named by their ID.
+                  </p>
+                  <p>Most of the C++ state of the client is also available through
+                           explicitly added watchers, as they were needed for some stage of the
+                           debugging already.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10844"></a>24.2.3.&nbsp;Watcher Console
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The watcher console provides access to the watcher system from
+                           within the game. It can be brought up at any time, and overlays the game
+                           screen with a listing of the current watcher directory.
+                  </p>
+                  <p>Directory-like entries can be followed down, and the value of any
+                           writable watcher can be set by selecting it, pressing
+                           <span class="literal">Enter</span>, then typing in a new value.
+                  </p>
+                  <p>There are also keys for adjusting numerical values by 1, 10, 100,
+                           or 1000.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10856"></a>24.2.4.&nbsp;Remote watcher access
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The watcher system is exported from the client using a very simple
+                           UDP-based watcher message protocol. The server uses this protocol
+                           extensively for its own debugging needs.
+                  </p>
+                  <p>This is not related to Mercury, although it can be (and currently
+                           is) linked to its input loop. When the client starts up, it broadcasts a
+                           watcher nub notification packet, advertising the port its watcher nub is
+                           listening for requests on (it sends a similar message when it shuts down
+                           cleanly).
+                  </p>
+                  <p>To access the watcher values, a number of tools may be used, but
+                           by far the most useful is a UNIX daemon called 'watcher'. This daemon
+                           listens for any broadcast watcher packets and adds or removes them from
+                           an internal list.
+                  </p>
+                  <p>The other side of the daemon presents an HTTP interface to all the
+                           watcher nubs it knows. It inserts the name of the watcher nub (contained
+                           in the registration message, <em class="emphasis">e.g.</em>, 'client of
+                           John', 'cell14', etc...) as the top level of a watcher super-hierarchy.
+                           It presents the individual watcher trees as branches of this top
+                           directory. The path in the request URL is translated into the watcher
+                           value request path. This interface can get and set values.
+                  </p>
+                  <p>So by connecting to this daemon with any web browser, all the
+                           running clients on the local network can be seen, and then investigated
+                           or manipulated, right down to changing the value of a Python variable in
+                           an entity. Python variables can be set to arbitrary Python, which is
+                           executed on the client to find its value. The client can also send its
+                           watcher nub notification to another external address if so desired, so
+                           even remote clients can be accessed in this way.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10872"></a>24.3.&nbsp;Memory tracking
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The memory tracking system can be used to determine the amount of
+                      memory allocated to a class or module. The ResourceCounters class is the
+                      primary class used to perform the tracking.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10877"></a>24.3.1.&nbsp;ResourceCounters overview
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This is a simple class that tracks the memory usage of a component
+                           based on a description string (the component allocating/deallocating the
+                           memory) and a memory pool enumeration (the memory pool to be used,
+                           <em class="emphasis">i.e.</em>, system memory, managed video memory, or
+                           default video memory).
+                  </p>
+                  <p>The two main worker methods of this class are add and subtract,
+                           which respectively track memory allocations and deallocations using the
+                           description-pool.
+                  </p>
+                  <p>The <span class="literal">ResourceCounters</span> class maintains a map of
+                           the components it is tracking. Rather than calling the methods of
+                           ResourceCounters directly, two macros are exposed. These macros are
+                           defined away to nothing when memory tracking is disabled:
+                  </p><pre class="programlisting">#define RESOURCE_COUNTER_ADD(DESCRIPTION_POOL, AMOUNT) /
+  ResourceCounters::instance().add(DESCRIPTION_POOL, (size_t)(AMOUNT));
+#define RESOURCE_COUNTER_SUB(DESCRIPTION_POOL, AMOUNT) /
+  ResourceCounters::instance().subtract(DESCRIPTION_POOL, (size_t)(AMOUNT));</pre><p>ResourceCounters also exposes <span class="literal">toString</span>-style
+                           methods that are used by the realtime resource-monitoring console to
+                           display the current memory usage statistics.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10899"></a>24.3.2.&nbsp;Memory allocation taxonomy
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>With respect to the memory tracking system, there are two basic
+                           types of memory allocation:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">DirectX memory
+                                           allocation</em></p>
+                           <p>All DirectX resources are COM objects. COM objects use
+                                        reference counting to manage their sharing among multiple objects.
+                                        The Moo library provides the wrapper class ComObjectWrap for dealing
+                                        with these objects.
+                           </p>
+                           <p>Inside BigWorld, there are two reference types used to refer
+                                        to DirectX objects: plain points (<em class="emphasis">e.g.</em>,
+                                        DX::Texture*) and ComObjectWrap pointers. For DirectX objects, the
+                                        memory tracking is performed purely through the ComObjectWrap class.
+                                        Therefore, any DirectX resource that needs its memory tracked must
+                                        be refactored to use ComObjectWrap references if it does not do so
+                                        already. For details on how the DirectX textures were instrumented,
+                                        see <a href="ch24.html#xref_DirectX_Textures" title="24.3.3.1.&nbsp;DirectX textures">DirectX textures</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Standard memory
+                                           allocation</em></p>
+                           <p>All other objects in BigWorld use standard stack or heap
+                                        memory. Unlike the memory tracking for DirectX resources, there is
+                                        no unified way of instrumenting a particular class or set of
+                                        classes. For details on the main issues encountered when
+                                        instrumenting arbitrary classes, see <a href="ch24.html#xref_Binary_Blocks" title="24.3.3.2.&nbsp;Binary blocks">Binary blocks</a>, <a href="ch24.html#xref_Terrain_Height_Maps" title="24.3.3.3.&nbsp;Terrain height maps">Terrain height maps</a>, and <a href="ch24.html#xref_Terrain_Texture_Layers" title="24.3.3.4.&nbsp;Terrain texture layers">Terrain texture layers</a>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10930"></a>24.3.3.&nbsp;Case studies
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This section documents the instrumenting of four classes/types
+                           that make up the BigWorld system:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>DirectX textures</p>
+                        </li>
+                        <li>
+                           <p>Binary blocks</p>
+                        </li>
+                        <li>
+                           <p>Terrain height maps</p>
+                        </li>
+                        <li>
+                           <p>Terrain texture layers.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Each of these classes/types presents its own set of challenges.
+                           These examples highlight the main issues that come up during
+                           instrumentation.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_DirectX_Textures"></a>24.3.3.1.&nbsp;DirectX textures
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Even with the memory-tracking functionality added to the
+                                <span class="literal">ComObjectWrap</span> class, COM objects are not
+                                memory-tracked by default, because the accounting for memory must
+                                occur after the resource has been created. Since there is no way of
+                                knowing when this happens automatically, memory tracking cannot be
+                                activated automatically for all COM objects.
+                     </p>
+                     <p>In order to activate the memory tracking for a particular
+                                DirectX resource, the programmer must make a call to
+                                <span class="literal">ComObjectWrap::addAlloc(<em class="replaceable"><code>&lt;string
+                                         description&gt;</code></em>)</span> after creating the DirectX
+                                resource to activate the memory tracking for this resource. Note that
+                                <span class="literal">ComObjectWrap</span> objects automatically handle the
+                                deallocation of memory from the memory tracking system on destruction
+                                of the last resource reference. Therefore there is no need for the
+                                programmer to explicitly make the deallocation.
+                     </p>
+                     <p>Below are excerpts of the <span class="literal">lock_map.*pp</span> files
+                                that support DirectX texture instrumenting.
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">src/tools/worldeditor/project/lock_map.hpp</span></em></p><pre class="programlisting">Class LockMap
+{
+public:
+  ...
+  ComObjectWrap&lt;DX::Texture&gt; lockTexture() { return lockTexture_; }
+  ...
+private:
+  ...
+  ComObjectWrap&lt;DX::Texture&gt; lockTexture_;
+  ...
+};</pre></li>
+                        </ul>
+                     </div>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">src/tools/worldeditor/project/lock_map.cpp</span></em></p><pre class="programlisting">LockMap::LockMap() :
+  gridWidth_(0),
+  gridHeight_(0),
+  colourLocked_(Colour::getUint32(COLOUR_LOCKED)),
+  colourLockedEdge_(Colour::getUint32(COLOUR_LOCKED_EDGE)),
+  colourLockedByOther_(Colour::getUint32(COLOUR_LOCKED_BY_OTHER)),
+  colourUnlocked_(Colour::getUint32(COLOUR_UNLOCKED))
+{
+}
+...
+
+void LockMap::setTexture(uint8 textureStage)
+{
+  Moo::rc().setTexture(textureStage, lockTexture_.pComObject());
+}
+...
+
+void LockMap::updateLockData(  uint32 width, uint32 height, uint8* lockData)
+{
+  bool recreate = !lockTexture_.pComObject(); <a name="co9669"></a><img src="../images/callouts/1.png" alt="1" border="0">
+  ...
+}
+
+void LockMap::releaseLockTexture()
+{
+  lockTexture_ = NULL; <a name="co9675"></a><img src="../images/callouts/2.png" alt="2" border="0">
+}
+...
+
+void LockMap::createLockTexture()
+{
+  ...
+  HRESULT hr = Moo::rc().device()-&gt;CreateTexture(
+    gridWidth_, gridHeight_, 1, 0, D3DFMT_A8R8G8B8,
+    D3DPOOL_MANAGED, &amp;lockTexture_, 0 );
+  lockTexture_.addAlloc("texture/lock terrain");
+  ...
+}</pre><div class="calloutlist">
+                                 <table border="0" summary="Callout list">
+                                    <tr>
+                                       <td width="5%" valign="top" align="left"><a href="#co9669"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                                       </td>
+                                       <td valign="top" align="left">
+                                          <p>Several functions require a reference to a DirectX
+                                                             texture resource, such as <span class="literal">setTexture</span>. A
+                                                             call to <span class="literal">ComObjectWrap:: pComObject()</span>
+                                                             returns such a pointer.
+                                          </p>
+                                       </td>
+                                    </tr>
+                                    <tr>
+                                       <td width="5%" valign="top" align="left"><a href="#co9675"><img src="../images/callouts/2.png" alt="2" border="0"></a> 
+                                       </td>
+                                       <td valign="top" align="left">
+                                          <p>When releasing resources, the release call is handled
+                                                             automatically. It must not be called explicitly on release &#8212;
+                                                             <span class="literal">ComObjectWrap</span> should simply be set to
+                                                             <span class="literal">NULL</span>.
+                                          </p>
+                                       </td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>It is important that when <span class="literal">ComObjectWrap</span>
+                                objects are being used to access a DirectX resource that they be used
+                                everywhere to access that resource. <span class="literal">ComObjectWrap</span>
+                                objects automatically increment and decrement the internal reference
+                                count of the COM objects they reference when passing COM objects
+                                between themselves. Passing a COM object reference from a
+                                <span class="literal">ComObjectWrap</span> object to a regular pointer
+                                circumvents the automated memory deallocation and reference
+                                decrementing functionality.
+                     </p>
+                     <p>The only situation when a DirectX resource should be exposed as
+                                a plain pointer is when passing the object to DirectX functions
+                                directly (see the above example in
+                                <span class="literal">src/tools/bigbang/project/lock_map.cpp</span>'s function
+                                <span class="literal">setTexture</span>, when
+                                <span class="literal">Moo::rc().setTexture</span> is called).
+                     </p>
+                     <p>In
+                                <span class="literal">src/tools/worldeditor/project/lock_map.cpp</span>'s
+                                function <span class="literal">createLockTexture</span>, directly after the call
+                                to <span class="literal">Moo::rc().device()-&gt;CreateTexture</span>, a call to
+                                <span class="literal">lockTexture_.addAlloc("texture/lock terrain")</span> is
+                                made. This call accounts for the allocation of memory during the
+                                <span class="literal">Moo::rc().device()-&gt;CreateTexture</span> call for the
+                                <span class="literal">lockTexture_</span> object. The" texture/lock terrain"
+                                memory resource pool will be incremented by the amount of memory used
+                                by <span class="literal">lockTexture_</span>. But how to is the amount of memory
+                                used by <span class="literal">lockTexture_</span> determined?
+                     </p>
+                     <p><span class="literal">ComObjectWrap</span> is a templated class. A
+                                different class implementation is created at compile time for each COM
+                                object that makes use of this class. In the case of
+                                <span class="literal">DX::Texture</span>, a
+                                <span class="literal">ComObjectWrap&lt;Dx::Texture&gt;</span> class is created.
+                                During the call
+                                <span class="literal">ComObjectWrap::addAlloc(<em class="replaceable"><code>&lt;string
+                                         description&gt;</code></em>)</span>, calls to the functions
+                                <span class="literal">ComObjectWrap::pool</span> and
+                                <span class="literal">ComObjectWrap::size</span> are made. Each COM object can
+                                implement its own version of these methods using template
+                                specialisation. The
+                                <span class="literal">ComObjectWrap&lt;Dx::Texture&gt;</span> versions
+                                are:
+                     </p><pre class="programlisting">template&lt;&gt; uint ComObjectWrap&lt;DX::Texture&gt;::pool() const
+{
+  // Get a surface to determine pool
+  D3DSURFACE_DESC surfaceDesc;
+  pComObject_-&gt;GetLevelDesc(0, &amp;surfaceDesc);
+  
+  return (uint)surfaceDesc.Pool;
+}
+
+template&lt;&gt; uint ComObjectWrap&lt;DX::Texture&gt;::size() const
+{
+  // Determine the mip-map texture size scaling factor
+  double mipmapScaler = 0.0;
+  for (DWORD i = 0; i &lt; pComObject_-&gt;GetLevelCount(); i++)
+  mipmapScaler += 1 / pow(4.0, (double)i);
+
+  // Get a surface to determine the width, height, and format
+  D3DSURFACE_DESC surfaceDesc;
+  pComObject_-&gt;GetLevelDesc(0, &amp;surfaceDesc);
+
+  // Get the surface size
+  uint32 surfaceSize = DX::surfaceSize(surfaceDesc);
+
+  // Track memory usage
+  return (uint)(surfaceSize * mipmapScaler);
+}</pre><p><span class="citetitle">Excerpt &#8212;
+                                   <span class="literal">src/lib/moo/com_object_wrap.ipp</span></span></p>
+                     <p>The <span class="literal">ComObjectWrap&lt;DX::Texture&gt;::pool</span>
+                                function determines what memory pool the texture resides in by
+                                examining the surface description of the surface at mipmap level 0.
+                                The <span class="literal">ComObjectWrap&lt;DX::Texture&gt;::size</span> function
+                                determines the size of the memory allocation by computing the mipmap
+                                scaling factor due to the mipmap levels, determining the memory
+                                footprint of the zero level mipmap level for the given texture format,
+                                and then multiplying the two.
+                     </p>
+                     <p>Every DirectX resource that is to be memory-tracked will need to
+                                implement its own versions of these functions.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Binary_Blocks"></a>24.3.3.2.&nbsp;Binary blocks
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Memory tracking for <span class="literal">BinaryBlock</span> involves
+                                calls to the <span class="literal">RESOURCE_COUNTER_ADD</span> and
+                                <span class="literal">RESOURCE_COUNTER_SUB</span> macros in the constructor and
+                                destructor respectively. In the constructor, if the
+                                <span class="literal">BinaryBlock</span> is the owner of the data, the memory
+                                tracking call is:
+                     </p><pre class="programlisting">RESOURCE_COUNTER_ADD( ResourceCounters::DescriptionPool(  "binary block",
+                     (uint)ResourceCounters::SYSTEM),
+                     (uint)(len_ + sizeof(*this)))</pre><p>Otherwise, if another <span class="literal">BinaryBlock</span> owns the
+                                data, the call is:
+                     </p><pre class="programlisting">RESOURCE_COUNTER_ADD( ResourceCounters::DescriptionPool(  "binary block",
+                      (uint)ResourceCounters::SYSTEM),
+                      (uint)sizeof(*this))</pre><p>Note that in the first version, the size of the binary data
+                                allocation is accounted for, as well as the size of the
+                                <span class="literal">BinaryBlock</span> object, while in the second version
+                                only the size of the <span class="literal">BinaryBlock</span> object is
+                                accounted for. Similarly in the destructor, if the
+                                <span class="literal">BinaryBlock</span> owns the data, the memory tracking call
+                                is:
+                     </p><pre class="programlisting">RESOURCE_COUNTER_SUB( ResourceCounters::DescriptionPool(  "binary block",
+                      (uint)ResourceCounters::SYSTEM),
+                      (uint)(len_ + sizeof(*this)))</pre><p>Otherwise, the call is:</p><pre class="programlisting">RESOURCE_COUNTER_SUB( ResourceCounters::DescriptionPool(  "binary block",
+                      (uint)ResourceCounters::SYSTEM),
+                      (uint)sizeof(*this))</pre><p>As it stands, the memory usage for all
+                                <span class="literal">BinaryBlock</span> objects is placed in a single resource
+                                pool called "binary block". This is still a very high level of
+                                granularity &#8212; it is likely that <span class="literal">BinaryBlock</span> objects
+                                are used by many different objects to varying degrees. It would be
+                                useful to known their distribution throughout the system. For details
+                                on how this is done, see <a href="ch24.html#xref_Terrain_Texture_Layers" title="24.3.3.4.&nbsp;Terrain texture layers">Terrain texture layers</a>.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Terrain_Height_Maps"></a>24.3.3.3.&nbsp;Terrain height maps
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Like most classes, <span class="literal">TerrainHeightMap2</span> has
+                                primitive types, pointers, and objects as member variables.
+                     </p><pre class="programlisting">TerrainHeightMap2::TerrainHeightMap2(CommonTerrainBlock2 &amp;terrainBlock2):
+...
+{
+  ...
+  RESOURCE_COUNTER_ADD( ResourceCounters::DescriptionPool(  "height map",
+                        (uint)ResourceCounters::SYSTEM),
+                        (uint)(sizeof(*this)))
+}
+TerrainHeightMap2::~TerrainHeightMap2()
+{
+  RESOURCE_COUNTER_SUB( ResourceCounters::DescriptionPool(  "height map",
+                        (uint)ResourceCounters::SYSTEM),
+                        (uint)(sizeof(*this)))
+}</pre><p><span class="citetitle">Excerpt &#8212;
+                                   <span class="literal">src/lib/moo/terrain_height_map2.cpp</span></span></p>
+                     <p>The calls to <span class="literal">RESOURCE_COUNTER_ADD</span> and
+                                <span class="literal">RESOURCE_COUNTER_SUB</span> account for the static memory
+                                used by the member variables, but do not account for the dynamically
+                                allocated memory used by our member pointers, the member pointers of
+                                our member objects, member pointers of member objects of our member
+                                objects, and so on.
+                     </p>
+                     <p>Therefore, it is necessary to examine both the member pointers
+                                and the member objects to account for their dynamic memory usage, if
+                                any. With respect to the TerrainHeightMap2 class, there are three
+                                members of interest:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><span class="literal">CommonTerrainBlock2*
+                                                terrainBlock2_</span></p>
+                           </li>
+                           <li>
+                              <p><span class="literal">TerrainQuadTreeCell quadTree_</span></p>
+                           </li>
+                           <li>
+                              <p>I<span class="literal">mage&lt;float&gt; heights_</span></p>
+                           </li>
+                        </ul>
+                     </div>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="d0e11196"></a>24.3.3.3.1.&nbsp;<span class="literal">CommonTerrainBlock2*
+                                                 terrainBlock2_</span></h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>On construction of a <span class="literal">TerrainHeightMap2</span>
+                                     object, a reference to the parent
+                                     <span class="literal">CommonTerrainBlock2</span> objects is passed in. As
+                                     such, the <span class="literal">TerrainHeightMap2</span> is not responsible
+                                     for the memory usage of this class (in fact, the opposite is true &#8212;
+                                     if memory tracking is added to
+                                     <span class="literal">CommonTerrainBlock2</span>, then it is likely that the
+                                     memory allocated by <span class="literal">TerrainHeightMap2</span> should be
+                                     allocated into the <span class="literal">CommonTerrainBlock2</span> resource
+                                     counter). Simply accounting for the
+                                     <span class="literal">terrainBlock2_</span> pointer in the constructor's call
+                                     to <span class="literal">RESOURCE_COUNTER_ADD</span> is sufficient.
+                        </p>
+                     </div>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="xref_TerrainQuadTreeCell_quadTree"></a>24.3.3.3.2.&nbsp;TerrainQuadTreeCell quadTree_
+                                 </h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>The <span class="literal">TerrainQuadTreeCell</span> class must be
+                                     inspected to check whether it or any of its members result in any
+                                     dynamic memory allocations. The inspection is recursive until all
+                                     members and their allocations are accounted for. For the
+                                     <span class="literal">TerrainQuadTreeCell</span> class we have the following
+                                     expansion:
+                        </p><pre class="programlisting">TerrainQuadTreeCell
+
+    std::string allocator_;                      // Need to account for this
+    std::vector&lt;TerrainQuadTreeCell&gt; children_;  // Need to account for this
+    BoundingBox boundingBox_;                    // Need to expand
+
+      static BoundingBox s_insideOut_;          // For simplicity we do not
+                                                // account for static members
+      Outcode oc_;                              // Is of primitive type uint32
+      Outcode combinedOc_;                      // Is of primitive type uint32
+      Vector3 min_;                             // Only contains primitives
+      Vector3 max_;                             // Only contains primitives</pre><p>For <span class="literal">TerrainQuadTreeCell</span>, the dynamic memory
+                                     used by member variables
+                                     <span class="literal">TerrainQuadTreeCell::allocator</span>_ and
+                                     <span class="literal">TerrainQuadTreeCell::children_</span> must be accounted
+                                     for.
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis">
+                                                     <span class="literal">TerrainQuadTreeCell::allocator_</span></em></p>
+                                 <p><span class="literal">allocator_</span> is a
+                                                  <span class="literal">std::string</span> that records the resource pool
+                                                  being used. Since we want <span class="literal">TerrainHeightMap2</span>'s
+                                                  <span class="literal">TerrainQuadTreeCell</span> instances to use
+                                                  <span class="literal">TerrainHeightMap2</span>'s resource pool, we need a
+                                                  way to configure <span class="literal">TerrainQuadTreeCells</span>
+                                                  resource pool. This is done by passing the resource pool string
+                                                  to the <span class="literal">TerrainQuadTreeCell</span>
+                                                  constructor.
+                                 </p><pre class="programlisting">TerrainQuadTreeCell::TerrainQuadTreeCell(const std::string&amp; allocator);</pre><p><em class="emphasis">Excerpt &#8212;
+                                                     <span class="literal">src/lib/moo/terrain_quad_tree_cell.cpp</span></em></p>
+                                 <p><span class="literal">allocator</span>_ is then set to the resource
+                                                  pool passed as parameter, so that the correct resource pool will
+                                                  be used. It is a simple matter to account for
+                                                  <span class="literal">allocator_</span>'s additional memory usage in the
+                                                  constructor's memory-tracking call to
+                                                  <span class="literal">RESOURCE_COUNTER_ADD</span>:
+                                 </p><pre class="programlisting">TerrainQuadTreeCell::TerrainQuadTreeCell(const std::string&amp; allocator);
+{
+  ...
+  RESOURCE_COUNTER_ADD( ResourceCounters::DescriptionPool(  allocator_,
+                        (uint)ResourceCounters::SYSTEM),
+                        (uint)( sizeof(*this) + 
+                        allocator_.capacity() ))
+  ...
+}</pre><p>A similar call is made in the destructor.</p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">TerrainQuadTreeCell::children_</span></em></p>
+                                 <p><span class="literal">children_</span> is a
+                                                  <span class="literal">std::vector</span> containing zero or four
+                                                  <span class="literal">TerrainQuadTreeCell</span> objects. Vectors use
+                                                  dynamic memory allocation, but since the objects are of type
+                                                  <span class="literal">TerrainQuadTreeCell</span>, that means we are
+                                                  already accounting for the memory of each allocation. The only
+                                                  catch with having a vector of
+                                                  <span class="literal">TerrainQuadTreeCell</span> objects is that the call
+                                                  to <span class="literal">children_.resize(4)</span> in
+                                                  <span class="literal">TerrainQuadTreeCell::init</span> would create four
+                                                  <span class="literal">TerrainQuadTreeCell</span> objects using the default
+                                                  constructor. These objects must use the same resource pool as
+                                                  their parent <span class="literal">TerrainQuadTreeCell</span> object. This
+                                                  is achieved by passing a prototype instance to the resize method
+                                                  with the appropriate resource pool:
+                                 </p><pre class="programlisting">void TerrainQuadTreeCell::init(...)
+{
+  ...
+  TerrainQuadTreeCell childPrototype(allocator_);
+  children_.resize(4, childPrototype);
+  ...</pre><p><span class="citetitle">Excerpt &#8212;
+                                                     <span class="literal">src/lib/moo/terrain_quad_tree_cell.cpp</span></span></p>
+                                 <p>At this point all memory has been accounted for in class
+                                                  <span class="literal">TerrainHeightMap2</span>.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="xref_Image_float_heights"></a>24.3.3.3.3.&nbsp;<span class="literal">Image&lt;float&gt; heights_</span></h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>The <span class="literal">Image&lt;float&gt;</span> class must be
+                                     inspected to see if it or any of its members result in any dynamic
+                                     memory allocations. Like the inspection performed on
+                                     <span class="literal">TerrainQuadTreeCell</span>, the inspection is recursive
+                                     until all members and there allocations are accounted for. The
+                                     member variables of the <span class="literal">Image&lt;PixelType&gt;</span>
+                                     class are:
+                        </p><pre class="programlisting">Image&lt;PixelType&gt;
+
+  std::string allocator_;           // Need to account for this
+  PixelType* pixels_;               // Need to account for this
+  PixelType** lines_;               // Need to account for this
+  uint32 width_;                    // Primitive
+  uint32 height_;                   // Primitive
+  bool owns_;                       // Primitive
+  size_t stride_;                   // Primitive</pre><p>For <span class="literal">Image&lt;float&gt;</span>, the dynamic memory
+                                     used by the member variables
+                                     <span class="literal">Image&lt;float&gt;::allocator_</span>,
+                                     <span class="literal">Image&lt;float&gt;::pixels_</span>, and
+                                     <span class="literal">Image&lt;float&gt;::lines_</span> must be accounted
+                                     for.
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">Image&lt;float&gt;::allocator_</span></em></p>
+                                 <p>Just like
+                                                  <span class="literal">TerrainQuadTreeCell::allocator_</span> (for details,
+                                                  see <a href="ch24.html#xref_TerrainQuadTreeCell_quadTree" title="24.3.3.3.2.&nbsp;TerrainQuadTreeCell quadTree_">TerrainQuadTreeCell quadTree_</a>),
+                                                  <span class="literal">Image&lt;float&gt;::allocator_</span> stores the
+                                                  resource pool for this object. Its memory is accounted for in
+                                                  the constructor's memory tracking call to
+                                                  <span class="literal">RESOURCE_COUNTER_ADD</span>:
+                                 </p><pre class="programlisting">RESOURCE_COUNTER_ADD(  ResourceCounters::DescriptionPool(  allocator_,
+                       (uint)ResourceCounters::SYSTEM),
+                       (uint)( sizeof(*this) + allocator_.capacity() ))</pre><p>A similar call is made in the destructor.</p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">Image&lt;float&gt;::pixels_</span></em></p>
+                                 <p>The dynamic memory allocations assigned to
+                                                  Image<span class="literal">&lt;float&gt;::pixels_</span> can be determined
+                                                  simply by searching through the Image class. Every direct or
+                                                  indirect memory allocation and deallocation must be accounted
+                                                  for. The following is an example of an indirect dynamic memory
+                                                  allocation to the <span class="literal">Image&lt;float&gt;::pixels_</span>
+                                                  member variable.
+                                 </p><pre class="programlisting">template&lt;typename PixelType&gt;
+bool Image&lt;PixelType&gt;::createBuffer(uint32 w, uint32 h, PixelType* &amp; buffer,
+                          bool&amp; owns, size_t&amp; stride, bool&amp; flipped)
+{
+  ...
+  // Track memory usage
+  RESOURCE_COUNTER_ADD(
+    ResourceCounters::DescriptionPool(  allocator_,
+                              (uint)ResourceCounters::SYSTEM),
+                              (uint)(sizeof(PixelType) * w * h))
+  buffer = new PixelType[w*h];
+  ...
+}
+
+template&lt;typename PixelType&gt;
+void Image&lt;PixelType&gt;::init(  uint32 w, uint32 h, PixelType *pixels,
+                      bool owns, size_t stride, bool flipped)
+{
+  ...
+  pixels_ = pixels;
+  width_  = w;
+  height_ = h;
+  owns_   = owns;
+  stride_ = (stride == 0) ? w*sizeof(PixelType) : stride;
+  createLines(width_, height_, pixels_, stride_, flipped);
+}
+
+template&lt;typename PixelType&gt;
+inline void Image&lt;PixelType&gt;::resize(uint32 w, uint32 h)
+{
+  ...
+  PixelType *newBuf = NULL;  // Creates a PixelType pointer
+  bool owns, flipped;
+  size_t stride;
+
+  // newBuf points to newly created pixel buffer
+  createBuffer(w, h, newBuf, owns, stride, flipped);
+
+  // pixels_ now points to newly created pixel buffer
+  init(w, h, newBuf, owns, stride, flipped);
+}</pre></li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">Image&lt;float&gt;::lines_</span></em></p>
+                                 <p>Use the same technique described above for
+                                                  <span class="literal">Image&lt;float&gt;::lines_</span>.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Terrain_Texture_Layers"></a>24.3.3.4.&nbsp;Terrain texture layers
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The final instrumenting case study is for class
+                                <span class="literal">TerrainTextureLayer2</span>. The techniques described in
+                                the earlier case studies can be used to account for all but three of
+                                <span class="literal">TerrainTextureLayer2</span>'s member variables:
+                     </p><pre class="programlisting">CommonTerrainBlock2* terrainBlock_;      // Same as CommonTerrainBlock2* terrainBlk2
+std::string textureName_;                // Need to account for this
+TerrainTextureLayer2::ImageType blends_; // Same as Image&lt;float&gt; heights_
+uint32 width_;                           // Primitive
+uint32 height_;                          // Primitive
+Vector4 uProjection_;                    // Primitive
+Vector4 vProjection_;                    // Primitive
+size_t lockCount_;                       // Primitive
+BaseTexturePtr pTexture_;                // Need to account for this
+State state_;                            // Primitive
+BinaryPtr compressedBlend_;              // Need to account for this</pre><p><span class="citetitle"><span class="literal">TerrainTextureLayer2</span>'s member
+                                   variables</span></p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">std::string::textureName_</span></em></p>
+                              <p><span class="literal">textureName_</span> can be accounted for in a
+                                             similar manner to TerrainQuadTreeCell::allocator_ (for details,
+                                             see <a href="ch24.html#xref_TerrainQuadTreeCell_quadTree" title="24.3.3.3.2.&nbsp;TerrainQuadTreeCell quadTree_">TerrainQuadTreeCell quadTree_</a>) and
+                                             <span class="literal">Image&lt;float&gt;::allocator_ </span>(for details,
+                                             see <a href="ch24.html#xref_Image_float_heights" title="24.3.3.3.3.&nbsp;Image<float&gt; heights_"><span class="literal">Image&lt;float&gt; heights_</span></a>), except that the
+                                             allocation occurs in several places in
+                                             <span class="literal">terrain_texture_layer2.cpp</span>. Each can be handled
+                                             similarly by subtracting from the resource pool before an
+                                             assignment and adding to the resource pool after an assignment, as
+                                             illustrated below:
+                              </p><pre class="programlisting">RESOURCE_COUNTER_SUB(  ResourceCounters::DescriptionPool(  "texture layer",
+                       (uint)ResourceCounters::SYSTEM),
+                       (uint)textureName_.capacity())
+
+textureName_ = filename;
+
+RESOURCE_COUNTER_ADD(  ResourceCounters::DescriptionPool(  "texture layer",
+                       (uint)ResourceCounters::SYSTEM),
+                       (uint)textureName_.capacity())</pre><p><span class="citetitle">Excerpt &#8212;
+                                                <span class="literal">src/lib/moo/terrain_texture_layer2.cpp</span></span></p>
+                           </li>
+                           <li>
+                              <p><span class="literal">BaseTexturePtr::pTexture_</span></p>
+                              <p><span class="literal">BaseTexturePtr</span> is a smart pointer to the
+                                             abstract class <span class="literal">BaseTexture</span>. The first case
+                                             study above already accounted for all texture usage in the system,
+                                             therefore we need a way to override the call to
+                                             <span class="literal">ComObjectWrap::addAlloc(std::string
+                                                description)</span> so that for this particular texture the
+                                             "terrain texture layer/texture" memory resource pool is
+                                             used.
+                              </p>
+                              <p>First, a search is performed to find where
+                                             <span class="literal">pTexture_</span> is being assigned:
+                              </p><pre class="programlisting">pTexture_ = TextureManager::instance()-&gt;get( textureName_ );</pre><p>The desired memory pool needs to be added to this parameter
+                                             list to override the default pool used for
+                                             <span class="literal">TextureManager</span>'s created textures. The call now
+                                             looks like this with all the default values for the parameters
+                                             filled in:
+                              </p><pre class="programlisting">pTexture_ = TextureManager::instance()-&gt;get(
+      textureName_, true, true, true, "terrain texture layer/texture" );</pre><p>The last parameter must have a default value assigned so
+                                             that the interface for the method is not broken. The allocator
+                                             pool must be passed through to the construction of the
+                                             <span class="literal">AnimatingTexture</span> and
+                                             <span class="literal">ManagedTexture</span> classes. This requires the
+                                             addition of the allocator pool description string to the
+                                             constructors of these classes (and any other classes that inherit
+                                             from <span class="literal">BaseTexture</span> that need more accurate memory
+                                             tracking). The constructor of the <span class="literal">BaseTexture</span>
+                                             class is also changed to accept this allocator string in its
+                                             constructor and store it in a member variable. This member
+                                             variable can then be used by all classes that inherit from
+                                             <span class="literal">BaseTexture</span> to account for the memory allocated
+                                             in the call to <span class="literal">CreateTexture</span>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">BinaryPtr::compressedBlend_</span></em></p>
+                              <p>As mentioned above, the <span class="literal">BinaryBlock</span> class
+                                             accounts for all its memory usage. Therefore, if we wish to
+                                             account for the <span class="literal">compressedBlend_</span> dynamic
+                                             allocation in the <span class="literal">TerrainTextureLayer2</span> memory
+                                             pool we must override the memory tracking in
+                                             <span class="literal">BinaryBlock</span>. This can be achieved similarly to
+                                             how the resource pool was overridden when creating a texture. The
+                                             desired pool must be passed through to the
+                                             <span class="literal">BinaryBlock</span> constructor. This required adding
+                                             the default valued allocator string to the end of the following
+                                             methods:
+                              </p><pre class="programlisting">inline BinaryPtr Moo::compressImage( Image&lt;PIXELTYPE&gt; const &amp;image,
+                                     std::string allocator)
+{
+   ...
+   return compressPNG(pngData, allocator);
+}
+...</pre><p><span class="citetitle"><span class="literal">src/lib/moo/png.hpp</span></span></p><pre class="programlisting">BinaryPtr Moo::compressPNG( PNGImageData const &amp;data,
+                            std::string allocator)
+{
+   ...
+   BinaryPtr result = concatenate(outputBuffers, allocator);
+   ...
+}
+...
+BinaryPtr concatenate ( std::vector&lt;BinaryPtr&gt; const &amp;buffers,
+                        std::string            const &amp;allocator)
+{
+   ...
+   BinaryPtr result = new BinaryBlock(data, totalSize, allocator() );
+   ...
+}</pre><p><span class="citetitle"><span class="literal">src/lib/moo/png.cpp</span></span></p><pre class="programlisting">BinaryBlock::BinaryBlock( const void * data, int len,
+                          const char *allocator, BinaryPtr pOwner )
+{
+   ...
+   RESOURCE_COUNTER_ADD( ResourceCounters::DescriptionPool(allocator_,
+                         (uint)ResourceCounters::SYSTEM),
+                         (uint)sizeof(*this))
+}</pre><p><span class="citetitle"><span class="literal">src/lib/resmgr/binary_block.cpp</span></span></p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e11557"></a>24.3.4.&nbsp;Displaying the memory tracking console
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The memory tracking console can be displayed in the client,
+                           WorldEditor, ModelEditor and ParticleEditor. To display the console in
+                           the client, press <span class="literal">Ctrl+DEBUG</span>+<span class="literal">F5</span>,
+                           and to display it in the tools, press
+                           <span class="literal">Shift+Ctrl</span>+<span class="literal">F5</span>.
+                  </p>
+                  <p>The user can cycle through the realtime memory usage information
+                           by pressing <span class="literal">Space</span>. There are three levels of
+                           granularity:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">All memory </em>&#8212; one pool.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">System memory, video memory, and
+                                           miscellaneous memory </em>&#8212; three pools.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">System memory, managed memory, default
+                                           memory, and miscellaneous memory</em> &#8212; four pools
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Note that video memory is a combination of managed and default
+                           memories. Also, miscellaneous memory is a catchall for any memory that
+                           does not fall into the system, managed, or default pools
+                           (<em class="emphasis">e.g.</em>, DirectX Scratch memory).
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e11600"></a>24.4.&nbsp;Scripts
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The implementation of a game using the BigWorld client can
+                      potentially involve many scripts. These scripts will interact and have
+                      real-time requirements and dependencies, since they are part of a network
+                      game &#8212; in some cases, the game cannot be simply stopped and stepped
+                      through without affecting the behaviour of the client being
+                      debugged.
+               </p>
+               <p>Scripting must therefore be approached in the same way as any other
+                      coding, and not as a poor alternative to C++ coding. Scripts must be
+                      designed properly, and consideration must be given to the appropriate use
+                      of class hierarchies and other language concepts.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e11607"></a>24.4.1.&nbsp;Python Console
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The Python console can be brought up at any time during the
+                           game.
+                  </p>
+                  <p>This is a console that looks and acts exactly like a Python
+                           interpreter, so arbitrary Python can be entered into it. All C++ modules
+                           can be accessed, so the environment is the same as that in which the
+                           scripts are executed.
+                  </p>
+                  <p>Python errors and exceptions that are not caught by the script
+                           itself (before they reach the C++ call-in point) are output to the
+                           console, and therefore are errors from commands entered into the Python
+                           console itself. The console is the first place to access when an error
+                           occurs in a game.
+                  </p>
+                  <p>The Python console supports multi-line commands the same way that
+                           the standard Python interpreter does, and it also supports macros like a
+                           UNIX shell. Macro invocations begin with a dollar sign ($), and their
+                           expansions are contained in a dictionary in the personality file ( see
+                           the fantasydemo personality script for an example). It implements the
+                           BWPersonality.expandMacros() callback function.
+                  </p>
+                  <p>The list below describes the line editing shortcuts supported by
+                           the Python console:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Backspace</span></em></p>
+                           <p>Deletes the character to the left on insertion point. Same as
+                                        <span class="literal">Ctrl</span>+<span class="literal">H</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Delete</span></em></p>
+                           <p>Deletes the character to the right of insertion point. Same as
+                                        <span class="literal">Ctrl</span>+<span class="literal">D</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">End</span></em></p>
+                           <p>Moves insertion point to the end of line. Same as
+                                        <span class="literal">Ctrl</span>+<span class="literal">E</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Home</span></em></p>
+                           <p>Moves insertion point to the beginning of line. Same as
+                                        <span class="literal">Ctrl</span>+<span class="literal">A</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span>+<span class="literal">Backspace</span></em></p>
+                           <p>Cuts to clipboard all text between insertion point and
+                                        beginning of word. Same as
+                                        <span class="literal">Ctrl</span>+<span class="literal">W</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span>+<span class="literal">Delete</span></em></p>
+                           <p>Cuts to clipboard all text between insertion point and end of
+                                        word. Same as <span class="literal">Ctrl</span>+<span class="literal">R</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span>+<span class="literal">Insert</span></em></p>
+                           <p>Pastes the content of clipboard after insertion point. Same as
+                                        <span class="literal">Ctrl</span>+<span class="literal">Y</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span>+<span class="literal">Left
+                                              arrow</span></em></p>
+                           <p>Moves insertion point to the beginning of word.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span>+<span class="literal">Right
+                                              arrow</span></em></p>
+                           <p>Moves insertion point to the end of word.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span>+<span class="literal">A</span></em></p>
+                           <p>Moves insertion point to the beginning of line. Same as
+                                        <span class="literal">Home</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span>+<span class="literal">D</span></em></p>
+                           <p>Deletes the character to the right of insertion point. Same as
+                                        <span class="literal">Delete</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span>+<span class="literal">E</span></em></p>
+                           <p>Moves insertion point to the end of line. Same as
+                                        <span class="literal">End</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span>+<span class="literal">H</span></em></p>
+                           <p>Deletes the character to the left of insertion point. Same as
+                                        <span class="literal">Backspace</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span>+<span class="literal">K</span></em></p>
+                           <p>Cuts to clipboard all text between insertion point and end of
+                                        line.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span>+<span class="literal">R</span></em></p>
+                           <p>Cuts to clipboard all text between insertion point and end of
+                                        word. Same as
+                                        <span class="literal">Ctrl</span>+<span class="literal">Delete</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span>+<span class="literal">U</span></em></p>
+                           <p>Cuts to clipboard all text between insertion point and
+                                        beginning of line.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span>+<span class="literal">W</span></em></p>
+                           <p>Cuts to clipboard all text between insertion point and
+                                        beginning of word. Same as
+                                        <span class="literal">Ctrl</span>+<span class="literal">Backspace</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ctrl</span>+<span class="literal">Y</span></em></p>
+                           <p>Pastes the content of clipboard after insertion point. Same as
+                                        <span class="literal">Ctrl</span>+<span class="literal">Insert</span>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The console also offers the functionality of auto code completion.
+                           By pressing <span class="literal">Tab</span>, it automatically completes the
+                           current word by trying to match it against the attributes defined for
+                           the referenced context. If a unique match is found, then it is added
+                           after the insertion point. If more than one match exists, then pressing
+                           <span class="literal">Tab</span> cycles through all of them.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Remote_Python_Console"></a>24.4.2.&nbsp;Remote Python Console
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The services provided by the Python console are also available
+                           remotely over the network.
+                  </p>
+                  <p>The client accepts connections using the telnet protocol on TCP
+                           port 50001. A number of telnet options are supported, such as the
+                           emulation of line editing.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e11876"></a>24.4.3.&nbsp;Script reloading
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>All scripts can be reloaded by pressing <span class="literal">Caps
+                              Lock</span>+<span class="literal">F11</span>.
+                  </p>
+                  <p>Existing entity class instances are updated so that they are
+                           instances of the new classes, without losing their dictionary. Entity
+                           script classes can provide a reload method to refetch stored function
+                           references that have changed after reloading. For example, the reload
+                           function in the player script recalculates its key bindings, which would
+                           otherwise continue to reference functions in the old version of the
+                           class.
+                  </p>
+                  <p>When the server sends an update to a script, only that script is
+                           reloaded and only its instances are updated.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e11891"></a>24.4.4.&nbsp;Common errors
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Some common scripting errors are listed below:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">Could not find class
+                                           <span class="literal"><em class="replaceable"><code>&lt;entity&gt;</code></em></span></em></p>
+                           <p>There is a Python error in the file
+                                        <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/<em class="replaceable"><code>&lt;entity&gt;</code></em>.py</span>.
+                                        Check the file <span class="literal">python.log</span> in the current working
+                                        folder.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">App::init:
+                                              BigWorldClientScript::init()</span> failed</em></p>
+                           <p>There is a mismatch between Python script and
+                                        <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</span>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">EntityType::init:
+                                              EntityDescriptionMap::parse</span> failed</em></p>
+                           <p>An undefined data type was used in file
+                                        <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</span>
+                                        file, or in
+                                        <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml</span>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>For details on entity definition and Python script files, see the
+                           document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s sections <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch02.html" class="olink"><i>Physical Entity Structure for Scripting</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch02.html#xref_The_Definition_File" class="olink">The Entity Definition File</a> and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch02.html" class="olink"><i>Physical Entity Structure for Scripting</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch02.html#xref_The_Script_Files" class="olink">The Script Files</a>, respectively.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e11974"></a>24.5.&nbsp;Script interactive debugging
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>You can run BigWorld Client as a Python extension module, instead of
+                      as an executable. This will allow you to use third party interactive
+                      debuggers (such as Wing IDE and Komodo), or Python's built-in debug module
+                      (pdb) to debug your game's scripts.
+               </p>
+               <p>To run the client as Python extension module, follow these steps
+                      below:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Create the Python extension module by build the client using the
+                                   <span class="literal">PyModule_Hybrid</span> configuration.
+                        </p>
+                        <p>This configuration requires the environment variable
+                                   <span class="literal">PYTHONHOME</span> to be set to the top-level folder of a
+                                   standard Python installation (<em class="emphasis">e.g.</em>,
+                                   <span class="literal">C:\Python25</span>).
+                        </p>
+                        <p>Because the client will link against the stock standard dynamic
+                                   Python libraries, you must disable the dependency of your startup
+                                   project (<em class="emphasis">e.g.</em>, <span class="literal">fantasydemo</span>) to
+                                   the <span class="literal">pythoncore</span> project. To do so, follow the steps
+                                   below:
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p>On the <em class="emphasis">Solution Explorer</em>
+                                                pane, right-click your startup project.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>In the context menu, select the <em class="emphasis">Project Dependencies</em> menu item
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>In the <em class="emphasis">Project Dependencies</em>
+                                                dialog box, check <em class="emphasis"><span class="literal">pythoncore</span></em> on the
+                                                <em class="emphasis">Depends On</em> list.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>Click OK.</p>
+                              </li>
+                           </ul>
+                        </div>
+                        <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                           <h3 class="title">Note</h3>
+                           <p>Instead of a <span class="literal">winMAIN</span> entry point, when
+                                        build as an extension module, the client will require a Python
+                                        module initialisation entry point.
+                           </p>
+                           <p>For a sample implementation, see
+                                        <span class="literal"><em class="replaceable"><code>&lt;mfroot&gt;</code></em>/fantasydemo/src/client/winmain.cpp</span>,
+                                        or just copy the code inside the <span class="literal">BWCLIENT_AS_PYTHON_MODULE
+                                           #if/#endif</span> block into your <span class="literal">winmain.cpp</span>
+                                        file).
+                           </p>
+                        </div>
+                     </li>
+                     <li>
+                        <p>Run the client using the following start-up script:</p><pre class="programlisting"># add client script directories 
+# to Python's script search path
+import sys
+sys.path[1:1] = [
+  r'd:\mf\fantasydemo\res\scripts\client',
+  r'd:\mf\fantasydemo\res\scripts\common']
+
+# run the client. Replace fantasydemo with
+# the name of your extension module (.pyd)
+import fantasydemo
+fantasydemo.run(' '.join(sys.argv))</pre></li>
+                  </ol>
+               </div>
+               <p>Using the script above, you can start the client from the command
+                      prompt (for example, with the command <span class="literal">python.exe
+                         fantasydemo.py</span>.) or from Visual Studio. Now, from anywhere in
+                      the scripts or from the Python console, you can invoke the standard Python
+                      debugger:
+               </p><pre class="programlisting">import pdb
+pdb.set_trace()</pre><p>For more information on how to use the pdb module, please refer to
+                      the Python Manuals.
+               </p>
+               <p>You can also use the start-up script to run the client using a third
+                      party interactive Python debugger/IDE. This should allow you to set
+                      breakpoints and inspect variables. For more information on how to use an
+                      interactive debugger, please refer to your package manuals.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>The client will be disconnected from the server if the execution
+                           of the main thread is interrupted by more than a few seconds, as it
+                           usually happens when Python scripts are debugged interactively.
+                  </p>
+               </div>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>When running the client as an extension module, it is possible to
+                           quit the Python interpreter before exiting the client (by, for example,
+                           invoking exit() from pdb prompt).
+                  </p>
+                  <p>Because the client will still try to execute Python commands
+                           during its shutdown process, this will cause the client to crash.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Client_Access_Tool_CAT"></a>24.6.&nbsp;Client Access Tool (CAT)
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>CAT provides a graphical interface to change watcher values and run
+                      Python console commands on a remote or local client. It does so via the
+                      Remote Python Console service provided by the client. For more details,
+                      see <a href="ch24.html#xref_Remote_Python_Console" title="24.4.2.&nbsp;Remote Python Console">Remote Python Console</a>.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e12089"></a>24.6.1.&nbsp;Connecting to the client
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In order to connect to the client, you have to provide the
+                           computer name and/or the IP address where it is running.
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/client_chooser_dialog.png"><span class="caption">
+                           <p>Client Chooser dialog</p></span></div>
+                  </div>
+                  <p>If you provide both the computer name and the IP address, CAT
+                           first tries to connect using the computer name, and if that fails, then
+                           it uses the IP address. Specify localhost as the computer name or
+                           127.0.0.1 in the IP address to connect to the local client.
+                  </p>
+                  <p>CAT automatically reconnects to the last client when it is
+                           started.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e12105"></a>24.6.2.&nbsp;CAT Scripts
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>CAT searches for scripts in folder
+                           <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/../tools/cat/scripts</span>,
+                           where <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span> is one
+                           of the entries in the resources folders list (for details on how
+                           BigWorld compiles this list, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch06.html" class="olink"><i>Starting the Tools</i></a>).
+                  </p>
+                  <p>For example, if one of the entries in
+                           <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span> is
+                           <span class="literal">C:/mf/fantasydemo/res</span>, then CAT will look for scripts
+                           under the folder <span class="literal">C:/mf/fantasydemo/tools/cat/scripts</span>.
+                           It will then present a tree view of the scripts, as illustrated in the
+                           picture below:
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/tree_view_of_scripts.png"><span class="caption">
+                           <p>Tree view of scripts</p></span></div>
+                  </div>
+                  <p>CAT scripts are specialised Python scripts. In the image above,
+                           the CAT script
+                           <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/../tools/cat/scripts/Render/Performance.py</span>
+                           is selected. It defines the GUI controls to the right of the tree. When
+                           you select a different CAT script from the tree, different controls will
+                           be presented to the right of the tree.
+                  </p>
+                  <p>CAT scripts allow the viewing and manipulation of client watcher
+                           values as well as the execution of commands in the client's Python
+                           console. See the examples provided in folder
+                           <span class="literal">fantasydemo/tools/cat/scripts</span> for information on how
+                           to create your own scripts.
+                  </p>
+                  <p>The list below describes the toolbar buttons and its
+                           functions:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">Reconnect</em></p>
+                           <p>Reconnects to the client, <em class="emphasis">e.g.</em>, after you
+                                        restart the client.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Disconnect</em></p>
+                           <p>Disconnects from the client.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Auto update</em></p>
+                           <p>Refreshes the data on the current tab once every 2
+                                        seconds.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Update</em></p>
+                           <p>Refreshes the data on the current tab
+                                        <em class="emphasis">e.g.</em>, if watcher values are changed from the
+                                        within client.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e12187"></a>24.6.3.&nbsp;Creating scripts for CAT
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>CAT looks for scripts in folder
+                           <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/../tools/cat/scripts</span>,
+                           thus enabling two separate sets of CAT scripts to exist:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>BigWorld system scripts</p>
+                        </li>
+                        <li>
+                           <p>Scripts defined by you that are specific for your game.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>CAT scans this directory hierarchically, and generates a folder
+                           tree akin to Windows Explorer's one, using the folder names as branches
+                           and script files as leaves.
+                  </p>
+                  <p>The picture below illustrates how a folder structure will be
+                           displayed in CAT:
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/example_folder_structure_vs_resulting_structure_in_cat.png"><span class="caption">
+                           <p>Example folder structure vs. Resulting structure in
+                                        CAT
+                           </p></span></div>
+                  </div>
+                  <p>The basic structure of the CAT script files is illustrated
+                           below:
+                  </p><pre class="programlisting">from controls import *
+envSetup = \
+"""
+&#8230;
+""" 
+
+args = \
+(
+  ...
+)
+
+commands = \
+(
+  ...
+)</pre><p><span class="citetitle">Skeleton of CAT script files</span></p>
+                  <p>CAT script files are divided in three blocks, which are described
+                           below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">envSetup</span></em></p>
+                           <p>Block where variables local to this CAT script are created and
+                                        initialised.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">args</span></em></p>
+                           <p>Represent various controls for variables, which can be edited.
+                                        They can either represent variables local to the CAT page, or
+                                        watchers that mirror values on the client.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">commands</span></em></p>
+                           <p>Executable commands that appear on the CAT page as
+                                        buttons.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The following sections discuss the blocks args and
+                           commands.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e12248"></a>24.6.3.1.&nbsp;Block args
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>There are several widget elements available in the args block of
+                                the CAT pages.
+                     </p>
+                     <p>In order to add multiple elements, they should be placed in a
+                                list with comma delimiters. Any underscores in names are ignored and
+                                replaced by spaces.
+                     </p>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="d0e12255"></a>24.6.3.1.1.&nbsp;Basic Elements
+                                 </h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>The basic elements of args control the layout of CAT
+                                     pages.
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">Divider()</span></em></p>
+                                 <p>This element causes CAT to display a horizontal divider
+                                                  between elements, allowing pages to be visually divided.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">FixedText(
+                                                        "<em class="replaceable"><code>&lt;text&gt;</code></em>"
+                                                        )</span></em></p>
+                                 <p>This element displays any static text segments such as
+                                                  headings. Multiple lines of text can be specified by using the
+                                                  newline character "<span class="literal">\n</span>".
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="d0e12282"></a>24.6.3.1.2.&nbsp;Variables
+                                 </h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>It is possible to set up variables that are local to a
+                                     specific CAT page.
+                        </p>
+                        <p>These can also have an associated Python variable tied to
+                                     them, to allow for updates from the client application.
+                        </p>
+                        <p>Below is a list of commands to create variables in CAT:</p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">StaticText ( "&lt;name&gt;"
+                                                        [, default = "&lt;value&gt;"] [, updateCommand =
+                                                        "&lt;python_update _source&gt;" ] )</span></em></p>
+                                 <p>This widget creates a non-editable field with the
+                                                  specified name and default value (if default is present).
+                                 </p>
+                                 <p>If updateCommand is specified, then
+                                                  <span class="literal"><em class="replaceable"><code>&lt;python_update_source&gt;</code></em></span>
+                                                  will be used as the Python value from the client that will be
+                                                  displayed.
+                                 </p>
+                                 <p>For example:</p><pre class="programlisting">StaticText( "Position",
+updateCommand = """
+  location = $B.findChunkFromPoint( $p.position ).split( '@' )
+  print "(%.1f,%.1f,%.1f) @ %s @ %s" %
+    ( $p.position.x, $p.position.y, $p.position.z,
+      location[0], location[1] )
+  """ )</pre><p><span class="citetitle">Creation of field</span></p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">CheckBox( "&lt;name&gt;" [,
+                                                        updateCommand = "&lt;python_update_source&gt;" [, setCommand =
+                                                        "&lt;python_set_source&gt;" ] ] )</span></em></p>
+                                 <p>This widget creates a check box called with the specified
+                                                  name.
+                                 </p>
+                                 <p>If updateCommand is specified, then until the check box is
+                                                  edited, it will use &lt;python_update_source&gt; as the Python
+                                                  code to get the value that will be displayed.
+                                 </p>
+                                 <p>If setCommand is specified, then when the field is edited,
+                                                  &lt;python_set_source&gt; will be executed.
+                                 </p>
+                                 <p>For example:</p><pre class="programlisting">CheckBox( "Use Dash",
+          updateCommand = "$p.isDashing",
+          setCommand = "$p.switchToDash(Use_Dash)" )</pre><p><span class="citetitle">Creation of check box</span></p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">Int ( "&lt;name&gt;" [,
+                                                        default = &lt;value&gt; ] [, updateCommand =
+                                                        "&lt;python_update_source&gt;" [, setCommand =
+                                                        "&lt;python_set_source&gt;" [, minMax =
+                                                        (&lt;min&gt;,&lt;max&gt;) ] ] ] )</span></em></p>
+                                 <p>This widget creates an integer field with the specified
+                                                  name and default value (if default is present).
+                                 </p>
+                                 <p>If setCommand is specified, then when the field is edited,
+                                                  &lt;python_set_source&gt; will be executed.
+                                 </p>
+                                 <p>If updateCommand is specified, then
+                                                  &lt;python_update_source&gt; will be used as the Python value
+                                                  from the client that will be displayed.
+                                 </p>
+                                 <p>If minMax is specified, then the field will have the
+                                                  specified (inclusive) value range.
+                                 </p>
+                                 <p>For example:</p><pre class="programlisting">Int( "Health",
+     default = 100,
+     updateCommand = "$p.healthPercent",
+     setCommand = "$p.healthPercent = Health; $p.set_healthPercent()",
+     minMax = ( 0, 100 ) )</pre><p><span class="citetitle">Creation of integer field</span></p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">Float ( ( "&lt;name&gt;" [,
+                                                        default = &lt;value&gt; ] [, updateCommand =
+                                                        "&lt;python_update_source&gt;" [, setCommand =
+                                                        "&lt;python_set_source&gt;" [, minMax =
+                                                        (&lt;min&gt;,&lt;max&gt;) ] ] ] )</span></em></p>
+                                 <p>This widget creates a float field with the specified name
+                                                  and default value (if default is present).
+                                 </p>
+                                 <p>If updateCommand is specified, then
+                                                  &lt;python_update_source&gt; will be used as the Python value
+                                                  from the client that will be displayed.
+                                 </p>
+                                 <p>If setCommand is specified, then when the field is edited,
+                                                  &lt;python_set_source&gt; will be executed.
+                                 </p>
+                                 <p>If minMax is specified, then the field will have the
+                                                  specified (inclusive) value range.
+                                 </p>
+                                 <p>For example:</p><pre class="programlisting">Float( "Speed Multiplier",
+       default = 1.0,
+       updateCommand = "$p.speedMultiplier",
+       setCommand = "$p.speedMultiplier = Speed_Multiplier",
+       minMax = ( 1.0, 10.0 ) )</pre><p><span class="citetitle">Creation of float field</span></p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">FloatSlider ( (
+                                                        "&lt;name&gt;" [, updateCommand = "&lt;python_update_source&gt;"
+                                                        [, setCommand = "&lt;python_set_source&gt;" [, minMax =
+                                                        (&lt;min&gt;,&lt;max&gt;) ] ] ] )</span></em></p>
+                                 <p>This widget creates a float slider with the specified name
+                                                  and default value (if default is present).
+                                 </p>
+                                 <p>If updateCommand is specified, then
+                                                  &lt;python_update_source&gt; will be used as the Python value
+                                                  from the client that will be displayed.
+                                 </p>
+                                 <p>If setCommand is specified, then when the field is edited,
+                                                  &lt;python_set_source&gt; will be executed.
+                                 </p>
+                                 <p>If minMax is specified, then the field will have the
+                                                  specified (inclusive) value range.
+                                 </p>
+                                 <p>For example:</p><pre class="programlisting">FloatSlider( "Camera_Distance",
+updateCommand = "BigWorld.camera().pivotMaxDist",
+setCommand = "BigWorld.camera().pivotMaxDist=Camera_Distance",
+minMax = (0.01, 200.0) )</pre><p><span class="citetitle">Creation of float slider</span></p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">List ( "&lt;name&gt;",
+                                                        ("&lt;option1&gt;", "&lt;option2&gt;", ...), [, default =
+                                                        "&lt;option9&gt;" [, updateCommand =
+                                                        "&lt;python_update_source&gt;" ] ] )</span></em></p>
+                                 <p>This widget creates a drop-down menu with the specified
+                                                  name, containing the entries specified in the list passed as the
+                                                  second argument.
+                                 </p>
+                                 <p>If default is specified, then the value entered must be
+                                                  present in the list passed as the second argument.
+                                 </p>
+                                 <p>In a similar fashion to the Int and Float widgets, the
+                                                  drop-down menu can be given an associated Python
+                                                  variable.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">Enum ( "&lt;name&gt;", (
+                                                        ("&lt;option_1&gt;",&lt;value1&gt;),
+                                                        ("&lt;option_2&gt;",&lt;value2&gt;), ...), [, updateCommand =
+                                                        "&lt;python_update_source&gt;" [, setCommand =
+                                                        "&lt;python_set_source&gt;" ] ] )</span></em></p>
+                                 <p>This widget creates a drop-down menu with the specified
+                                                  name, containing the entries specified in the list of 2-tuple
+                                                  passed as the second argument.
+                                 </p>
+                                 <p>Each entry will be associated with the value specified on
+                                                  the second element of its tuple.
+                                 </p>
+                                 <p>If updateCommand is specified, then
+                                                  &lt;python_update_source&gt; will be used as the Python value
+                                                  from the client that will be displayed.
+                                 </p>
+                                 <p>If setCommand is specified, then when the field is edited,
+                                                  &lt;python_set_source&gt; will be executed.
+                                 </p>
+                                 <p>For example:</p><pre class="programlisting">Enum( "Mode",
+( ("Walk",0), ("Run",1), ("Dash",2) ),
+updateCommand = "2*$p.isDashing + $p.isRunning",
+setCommand = """
+ if Mode==0: $p.switchToRun(1); $p.switchToDash(0)
+ if Mode==1: $p.switchToRun(0); $p.switchToDash(0)
+ if Mode==2: $p.switchToRun(1); $p.switchToDash(1)
+ """ )</pre><p><span class="citetitle">Creation of drop-down menu with associated
+                                                     numeric values</span></p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">Bool ( "&lt;name&gt;", [,
+                                                        updateCommand = "&lt;python_update_source&gt;" [, setCommand =
+                                                        "&lt;python_set_source&gt;" ] ] )</span></em></p>
+                                 <p>This widget creates a drop-down menu with the specified
+                                                  name, with just one entry having two possible values: true or
+                                                  false.
+                                 </p>
+                                 <p>If updateCommand is specified, then
+                                                  &lt;python_update_source&gt; will be used as the Python value
+                                                  from the client that will be displayed.
+                                 </p>
+                                 <p>If setCommand is specified, then when the field is edited,
+                                                  &lt;python_set_source&gt; will be executed.
+                                 </p>
+                                 <p>For example:</p><pre class="programlisting">Bool( "Walking", updateCommand = "1-$p. isRunning ", setCommand = "$p. switchToRun (Walking)" )</pre><p><span class="citetitle">Creation of drop-down menu with true/false
+                                                     entry</span></p>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="d0e12439"></a>24.6.3.1.3.&nbsp;Watchers
+                                 </h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>Watchers allow you to view the value of specific variables in
+                                     a live system.
+                        </p>
+                        <p>These values can be accessed from the Debug (Watchers) Console
+                                     in the FantasyDemo (accessed by pressing <span class="literal">DEBUG</span>+
+                                     <span class="literal">F7</span>). However, CAT gives you a much simpler way to
+                                     manipulate them.
+                        </p>
+                        <p>Whenever adding a CAT control, it is essential to ensure that
+                                     there is a matching <span class="literal">MF_WATCHER</span> that corresponds
+                                     to the value in question. The best way to check that is by looking
+                                     for the value in the watcher console within the game.
+                        </p>
+                        <p>The value is retrieved from and saved to the value that
+                                     matches the <em class="emphasis">value path</em>
+                                     <span class="literal">MF_WATCHER</span>.
+                        </p>
+                        <p>Below is a list of commands that allow you to manipulate
+                                     watchers:
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">WatcherCheckBox(
+                                                        "&lt;name&gt;", "&lt;value_path&gt;"
+                                                        )</span></em></p>
+                                 <p>Shows a check box with the specified name.</p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">WatcherFloat(
+                                                        "&lt;name&gt;", "&lt;value_path&gt;" [, minMax =
+                                                        (&lt;min&gt;,&lt;max&gt;)] )</span></em></p>
+                                 <p>Shows a float field with the specified name. If minMax is
+                                                  specified, then the field will have the specified (inclusive)
+                                                  value range.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">WatcherFloatEnum (
+                                                        "&lt;name&gt;", "&lt;value_path&gt;", ( ( "&lt;option1&gt;",
+                                                        &lt;value1&gt; ), ( "&lt;option2&gt;", &lt;value2&gt; ) )
+                                                        )</span></em></p>
+                                 <p>Shows a dropdown menu with the specified name, containing
+                                                  the entries specified in the list of 2-tuple passed as the third
+                                                  argument.
+                                 </p>
+                                 <p>Each entry will be associated with the value specified on
+                                                  the second element of its tuple.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">WatcherFloatSlider(
+                                                        "&lt;name&gt;", "&lt;value_path&gt;", minMax =
+                                                        (&lt;min&gt;,&lt;max&gt;) )</span></em></p>
+                                 <p>Shows a float slider with the specified name, and with the
+                                                  specified (inclusive) value range.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">WatcherInt( "&lt;name&gt;",
+                                                        "&lt;value_path&gt;" [, minMax = (&lt;min&gt;,&lt;max&gt;)]
+                                                        )</span></em></p>
+                                 <p>Shows an integer field with the specified name. If
+                                                  <span class="literal">minMax</span> is specified, then the field will have
+                                                  the specified (inclusive) value range.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">WatcherIntSlider(
+                                                        "&lt;name&gt;", "&lt;value_path&gt;", minMax =
+                                                        (&lt;min&gt;,&lt;max&gt;) )</span></em></p>
+                                 <p>Shows a slider with the specified name, and with the
+                                                  specified (inclusive) value range.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">WatcherText(
+                                                        "&lt;name&gt;", "&lt;value_path&gt;"
+                                                        )</span></em></p>
+                                 <p>Creates a field with the specified name.</p>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e12522"></a>24.6.3.2.&nbsp;Block commands
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>These are commands that appear as buttons in CAT, shown below
+                                the elements specified in the block args.
+                     </p>
+                     <p>They execute a given Python script. Each command to be added
+                                takes the following format:
+                     </p><pre class="programlisting">( "&lt;description&gt;", "&lt;script&gt;" ),</pre><p>where
+                                <span class="literal"><em class="replaceable"><code>&lt;description&gt;</code></em></span> is
+                                the button's caption, and
+                                <span class="literal"><em class="replaceable"><code>&lt;script&gt;</code></em></span> is the
+                                Python script to be executed.
+                     </p>
+                     <p>For example:</p><pre class="programlisting">from controls import *
+
+...
+
+commands = \
+(
+    ( "Hide_GUI", "BigWorld.hideGui()" ),
+    ( "Show_ GUI ", "BigWorld.showGui()" )
+)Example implementation of block commands</pre><p><span class="citetitle">Example implementation of block
+                                   <span class="literal">commands</span></span></p>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e12550"></a>24.7.&nbsp;Timing
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The BigWorld libraries provide a number of timing tools for
+                      analysing game performance. One of the most important of these is the
+                      DogWatch timer class.
+               </p>
+               <p>When a DogWatch is created, it is registered in a global list.
+                      Whenever that timer is started, it is automatically entered into a timing
+                      statistics hierarchy, based on what other timers are running when it is
+                      started. The same timer can have multiple instances in the hierarchy if it
+                      is run more than once in different contexts.
+               </p>
+               <p>The root timer is called Frame, and is always running for the entire
+                      frame time at every frame. All other timer instances are children of this
+                      timer's instance. Care is taken at the frame boundary to ensure that no
+                      time goes unaccounted for. Timers can even be running across the frame
+                      boundary. If this is the case, then they are momentarily stopped, and then
+                      restarted in the next frame's time slice.
+               </p>
+               <p>A view of the DogWatch timer hierarchy is displayed in a debug
+                      console, which shows the average of the DogWatch times over the last
+                      second. The user can navigate and drill down in the hierarchy, which is
+                      displayed using indentation on a single console page. Any of the timer
+                      instances can also be graphed, and there can be as many graphs displayed
+                      simultaneously as desired. By default, the client keeps 120 frames of
+                      DogWatch timer history.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch23.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch25.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;23.&nbsp;Job System&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;25.&nbsp;Releasing The Game</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

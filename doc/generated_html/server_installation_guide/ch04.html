@@ -1,0 +1,659 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;4.&nbsp;Installing the BigWorld Server</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Installation Guide">
+      <link rel="up" href="index.html" title="Server Installation Guide">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Installing CentOS 5">
+      <link rel="next" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Cluster Configuration">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Installing the BigWorld Server</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Installing_The_BigWorld_Server"></a>Chapter&nbsp;4.&nbsp;Installing the BigWorld Server
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch04.html#d0e436">4.1. Obtaining the Package</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#xref_Installing_BWMachined">4.2. Installing BWMachined</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#xref_Installing_BWMachined_BWMachined_RPM_Package">4.2.1. BWMachined RPM Package</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#xref_Installing_BWMachined_Run_The_Daemon_Installation_Script">4.2.2. Run the Daemon Installation Script</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch04.html#xref_Configuring_BWMachined">4.3. Configuring BWMachined</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#d0e573">4.3.1. Creating <code class="filename">~/.bwmachined.conf</code></a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e642">4.3.2. Creating <code class="filename">/etc/bwmachined.conf</code></a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch04.html#d0e777">4.4. Check That BWMachined is Running</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#xref_Configure_MySQL_Server">4.5. Configure MySQL Server</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#d0e967">4.5.1. MySQL Tweaks</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch04.html#d0e975">4.6. Installing Server Tools</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e436"></a>4.1.&nbsp;Obtaining the Package
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To obtain the BigWorld server from the SVN patch repository, use
+                      your provided username / password to access instructions on how to use the
+                      repository and upgrade releases. These can be found at <a xmlns:xlink="http://www.w3.org/1999/xlink" href="https://svn01.bigworldtech.com/docs/" target="_top">https://svn01.bigworldtech.com/docs/</a></p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Installing_BWMachined"></a>4.2.&nbsp;Installing BWMachined
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BWMachined is a daemon used in the BigWorld Server environment to
+                      start and track processes, and publish information about BigWorld
+                      servers.
+               </p>
+               <p>It must be running before any other BigWorld processes are started.
+                      It is strongly recommended to install it as a daemon, so it is always
+                      running (although this is not strictly necessary).
+               </p>
+               <p>There are two installation methods for BWMachined. The first
+                      installation method, described in the section <a href="ch04.html#xref_Installing_BWMachined_BWMachined_RPM_Package" title="4.2.1.&nbsp;BWMachined RPM Package">BWMachined RPM Package</a>, uses a
+                      BWMachined RPM Package. The second installation method, described in the
+                      section <a href="ch04.html#xref_Installing_BWMachined_Run_The_Daemon_Installation_Script" title="4.2.2.&nbsp;Run the Daemon Installation Script">Run the Daemon Installation Script</a>,
+                      uses the <code class="filename">bwmachined2.sh</code> script.
+               </p>
+               <p>For more information on how to configure BWMachined, please see the
+                      section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="ch04.html#xref_Configuring_BWMachined" class="olink">Configuring BWMachined</a>.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Installing_BWMachined_BWMachined_RPM_Package"></a>4.2.1.&nbsp;BWMachined RPM Package
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This section discusses how to install BWMachined using a
+                           BWMachined RPM package. For more information on BigWorld RPM
+                           implementation, such as how to generate the BWMachined RPM package, see
+                           the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch12.html" class="olink"><i>RPM</i></a>.
+                  </p>
+                  <p>BWMachined RPM package can be found in the <code class="filename">bigworld/tools/server/rpm/binary_rpms</code>
+                           directory.
+                  </p>
+                  <p>To install BWMachined using a RPM package directly, run the
+                           following command as root:
+                  </p><pre class="programlisting"># yum --nogpgcheck install bigworld-bwmachined-<em class="replaceable"><code>&lt;version&gt;</code></em>-<em class="replaceable"><code>&lt;release&gt;</code></em>.x86_64.rpm</pre><p>where <code class="code">&lt;version&gt;</code> and
+                           <code class="code">&lt;release&gt;</code> are replaced by the actual version and
+                           release number.
+                  </p>
+                  <p>For a large environment where BWMachined needs to be installed on
+                           many machines, we recommend that a yum repository to be set up to
+                           provide the BWMachined RPM package. This allows the BWMachined to be
+                           installed by running the yum command on a machine without the need to
+                           manually copy the BWMachined RPM package to that machine first. For more
+                           information on how to set up a yum repository, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch12.html" class="olink"><i>RPM</i></a>.
+                  </p>
+                  <p>If a yum repository has been set up and the BWMachined package is
+                           made available in the repository, then the BWMachined can be installed
+                           using the following command:
+                  </p><pre class="programlisting"># yum --nogpgcheck install bigworld-bwmachined</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Installing_BWMachined_Run_The_Daemon_Installation_Script"></a>4.2.2.&nbsp;Run the Daemon Installation Script
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>To install BWMachined, you need to run
+                           <code class="filename">bwmachined2.sh</code> as the root user in the <code class="filename">bigworld/tools/server/install</code> directory.
+                           For example, issue the commands below:
+                  </p><pre class="programlisting"># ./bwmachined2.sh install</pre><p>These commands will do the following:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Stop any existing installed BWMachined daemon, and uninstall
+                                        it if it does exist.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Create the BWMachined init script in <code class="filename">/etc/rc.d/init.d/</code>.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Create the symbolic links in <code class="filename">/etc/rc[1-5].d/</code>. It is setup to stop in
+                                        <code class="filename">rc1.d/</code> and start in <code class="filename">rc[2-5].d/</code>. These can be change
+                                        manually if desired.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Copy the BWMachined executable to the directory <code class="filename">/usr/local/sbin/</code>.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Launch the executable in daemon mode as if the init script
+                                        were called with the <code class="option">start</code> argument.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Configuring_BWMachined"></a>4.3.&nbsp;Configuring BWMachined
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BWMachined plays a crucial role in the ongoing operation of your
+                      cluster environment, so it's important to understand how it can be
+                      configured and which configuration options are relevant for your server
+                      environment.
+               </p>
+               <p>There are two configuration files which are relevant to the
+                      operation of BWMachined:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="filename">~/.bwmachined.conf</code></p>
+                        <p>This file is used to specify options relating to how an
+                                   individual user working within a BigWorld cluster should find the
+                                   server resources required to operate on any available cluster
+                                   machines.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="filename">/etc/bwmachined.conf</code></p>
+                        <p>This file is primarily used to specify settings relating to how
+                                   the machine that BWMachined is running on should operate within the
+                                   cluster environment.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e573"></a>4.3.1.&nbsp;Creating <code class="filename">~/.bwmachined.conf</code></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When starting a server and related components there are two
+                           important pieces of information required to facilitate this:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Where to find the BigWorld server executable files.</p>
+                        </li>
+                        <li>
+                           <p>Which directories contain the game resources to use with the
+                                        server.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The preferred way to specify these settings is in a file
+                           <code class="filename">~/.bwmachined.conf</code>.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>For users not familiar with Linux:</p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>The <span class="literal">~</span> (tilde) indicates the user's home
+                                               directory, for example a user called <span class="literal">johns</span>
+                                               would generally have a home directory located at
+                                               <code class="filename">/home/johns</code></p>
+                           </li>
+                           <li>
+                              <p>The period character before the filename indicates it is a
+                                               hidden file which causes it to not be displayed by many
+                                               directory listing applications including ls (unless the
+                                               <code class="code">-a</code> option is specified).
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <p>Below is an example of a <code class="filename">~/.bwmachined.conf</code>
+                           file for a user <span class="literal">johns</span>. This file needs to be manually
+                           created when the user account is created. Note the different places
+                           where a semi-colon and a colon are used.
+                  </p><pre class="programlisting"># .bwmachined.conf
+# Format: BW_ROOT;BW_RES_PATH:[BW_RES_PATH] ...
+/home/johns/mf;/home/johns/mf/fantasydemo/res:/home/johns/mf/bigworld/res</pre><p>The path before the semi-colon should point to the root directory
+                           of the installed files. You will generally have the <code class="filename">bigworld</code> directory underneath this root
+                           directory. The paths after the semi-colon (separated by colon
+                           characters) specify the resource paths that will be used to find
+                           resources used by your game.
+                  </p>
+                  <p>When starting a BigWorld server using the standard server tools,
+                           such as <span><strong class="command">control_cluster.py</strong></span> or WebConsole, BWMachined
+                           is responsible for launching the server binaries and uses the
+                           information located in <code class="filename">~/.bwmachined.conf</code> as well
+                           as the architecture of the host system to determine how to launch the
+                           server for the requesting user.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>Each user that needs to run a server within your cluster
+                                environment will need a <code class="filename">~/.bwmachined.conf</code> file
+                                created and configured for them.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e642"></a>4.3.2.&nbsp;Creating <code class="filename">/etc/bwmachined.conf</code></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The global configuration file
+                           <code class="filename">/etc/bwmachined.conf</code> is used for setting options
+                           that define how BWMachined will operate on the host it is running on.
+                           For example, if you have multiple machines in your cluster, and during
+                           development you wish to isolate certain machines into groups for
+                           developer usage, this would be applied in the global configuration file.
+                           The following list provides a quick summary of host based configuration
+                           options that may be applied in the file
+                           <code class="filename">/etc/bwmachined.conf</code>:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>User defined categories</p>
+                        </li>
+                        <li>
+                           <p>Reviver configuration</p>
+                        </li>
+                        <li>
+                           <p>BigWorld server timing method</p>
+                        </li>
+                        <li>
+                           <p>Interface configuration for multi-interface hosts</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>The configuration file is only read when BWMachined starts. It
+                                will have to be restarted if you want it to acknowledge your
+                                changes.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e671"></a>4.3.2.1.&nbsp;Reviver Configuration
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>When the Reviver process starts, it queries the local BWMachined
+                                process, and will only support the components that have an entry in a
+                                special user defined category called <span class="literal">[Components]</span>.
+                                An example configuration specifying that the Reviver should support
+                                all server components would be defined as below:
+                     </p><pre class="programlisting">[Components]
+baseApp
+baseAppMgr
+cellApp
+cellAppMgr
+dbMgr
+loginApp</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                        <h3 class="title">Note</h3>
+                        <p>BaseApp and CellApp will not be restarted by Reviver, the
+                                     <span class="literal">[Components]</span> entries are used by the WebConsole
+                                     and <span><strong class="command">control_cluster.py</strong></span> to determine which
+                                     processes should be started by BWMachined on that host. This list
+                                     however is only a hint for the server tools and the processes may
+                                     still be started on that host if required.
+                        </p>
+                     </div>
+                     <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                        <h3 class="title">Note</h3>
+                        <p>If the <span class="literal">[Components]</span> category does not
+                                     contain any entries, then Reviver will support all server
+                                     components.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e696"></a>4.3.2.2.&nbsp;Timing Method
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>By default, time services is provided by the clock_gettime
+                                system call. The default is the recommended timing method and works
+                                for all supported platforms, for further options, please refer to
+                                <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch15.html" class="olink"><i>Clock</i></a>.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e703"></a>4.3.2.3.&nbsp;Machine groups
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The membership of the machine running BWMachined can also be
+                                optionally specified in <code class="filename">/etc/bwmachined.conf</code>. For
+                                more details on what machine groups are used for, and how to specify
+                                them, refer to the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch16.html" class="olink"><i>Machine Groups and Categories</i></a>.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e713"></a>4.3.2.4.&nbsp;Internal Interface Configuration for Multi-interface
+                                         Hosts
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The BigWorld machine daemon is used for both internal machines
+                                and out-facing machines such as those that BaseApps and LoginApps are
+                                run on. The protocol that BigWorld components use for discovery of
+                                server processes, and process startup registry involves a UDP
+                                broadcast to the machine daemons.
+                     </p>
+                     <p>The machine daemon must determine the interface to receive these
+                                broadcasts from. By default, the machine daemon will determine which
+                                interface is the internal interface by sending a broadcast packet on
+                                each interface and waiting for this broadcast packet to be returned.
+                                The interface which receives the first broadcast packet is assumed to
+                                be the internal network.
+                     </p>
+                     <p>For the out-facing machines with more than one interface, this
+                                may result in the incorrect interface being chosen. In these
+                                situations, it is best to check your broadcast routing rules<sup>[<a name="d0e722" href="#ftn.d0e722">1</a>]</sup> and consider adding firewall rules to block receiving
+                                from bwmachined ports (20018 and 20019) on these other
+                                interfaces.
+                     </p>
+                     <p>For example, if <span class="literal">eth1</span> is not your internal
+                                interface:
+                     </p><pre class="programlisting"># /sbin/iptables -I INPUT 1 -p udp -i <em class="replaceable"><code>eth1</code></em> -m multiport --destination-ports 20018:20019 -j DROP</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                        <h3 class="title">Note</h3>
+                        <p>In most circumstances it is better to block all ports and then
+                                     only open the ports that are needed. See <a href="ch05.html#xref_Cluster_Configuration_Security" title="5.1.&nbsp;Security">Security</a>.
+                        </p>
+                     </div>
+                     <p>In rare cases, the <span class="literal">[InternalInterface]</span>
+                                configuration option can be set with either the dotted-decimal address
+                                or the name of the interface that is connected to the internal
+                                network.
+                     </p>
+                     <p>For example, using the name of the interface:</p><pre class="programlisting">[InternalInterface]
+<em class="replaceable"><code>eth0</code></em></pre><p>Using dotted-decimal notation:</p><pre class="programlisting">[InternalInterface]
+<em class="replaceable"><code>192.168.0.1</code></em></pre><p>If this option is not specified, auto-discovery of the internal
+                                interface will be performed. If the option is specified, but no
+                                interface is found that matches the value set in
+                                <span class="literal">[InternalInterface]</span>, then an error will be logged
+                                to syslog and the machine daemon process will terminate.
+                     </p>
+                     <p>This option may now also be specified in the
+                                <span class="literal">[bwmachined]</span> section of
+                                <code class="filename">/etc/bigworld.conf</code> as follows:
+                     </p><pre class="programlisting">[bwmachined]
+internal_interface = <em class="replaceable"><code>&lt;value&gt;</code></em></pre></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e777"></a>4.4.&nbsp;Check That BWMachined is Running
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>To check if the daemon is running, issue the command
+                                   below:
+                        </p><pre class="programlisting"># ps -C bwmachined2</pre><p>The output should be one line listing the details of the daemon
+                                   process.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Another way to verify if the daemon is running, is to run the
+                                   <span><strong class="command">control_cluster.py</strong></span><sup>[<a name="d0e793" href="#ftn.d0e793">2</a>]</sup> utility. To use <span><strong class="command">control_cluster.py</strong></span> to
+                                   check the status of BWMachined, issue the following command:
+                        </p><pre class="programlisting">$ bigworld/tools/server/control_cluster.py cinfo</pre><p>The machines correctly running BWMachined should be displayed,
+                                   as in the example below:
+                        </p><pre class="programlisting">shire       10.40.3.37      0 processes   0%, 0% of 2000MHz (4% mem)</pre><p>Make sure that the process has an address that is on the
+                                   internal network. If it does not, make sure that your broadcast route
+                                   is set correctly.
+                        </p>
+                        <p>If your machine is not listed, but has BWMachined running, then
+                                   you might need to check your firewall rules. For more details, see
+                                   section <a href="ch05.html#xref_Cluster_Configuration_Security" title="5.1.&nbsp;Security">Security</a> in this
+                                   document.
+                        </p>
+                        <p>You can also run the following command to check the relationship
+                                   between bwmachined processes in the cluster.
+                        </p><pre class="programlisting">$ bigworld/tools/server/control_cluster.py checkring</pre></li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Configure_MySQL_Server"></a>4.5.&nbsp;Configure MySQL Server
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This step is required if you wish to use BigWorld WebConsole and
+                      StatLogger, or use DBMgr with MySQL support.
+               </p>
+               <p>At this point it is assumed you have installed the MySQL server and
+                      the MySQL client development packages. See <a href="ch03.html#xref_Post_Installation_Setup" title="3.2.&nbsp;Post-installation Setup">Post-installation Setup</a> for more information.
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>The MySQL daemon is not configured to run by default in CentOS.
+                                   You can check whether or not it is running by issuing the following
+                                   command as the root user:
+                        </p><pre class="programlisting"># /sbin/service mysqld status</pre><p>If (as expected) the MySQL daemon is not running, you can
+                                   manually start it by running the following command as the root
+                                   user:
+                        </p><pre class="programlisting"># /sbin/service mysqld start</pre><p>To ensure that MySQL starts automatically each time you boot the
+                                   machine, you can use the <span><strong class="command">chkconfig</strong></span> utility. To see
+                                   what runlevels<sup>[<a name="d0e844" href="#ftn.d0e844">3</a>]</sup> MySQL is enabled for, run the following command as the
+                                   root user:
+                        </p><pre class="programlisting"># /sbin/chkconfig --list mysqld</pre><p>If MySQL is disabled for all runlevels, you can enable it to the
+                                   network-enabled runlevels by running the following command as the root
+                                   user:
+                        </p><pre class="programlisting"># /sbin/chkconfig --level 35 mysqld on</pre></li>
+                     <li>
+                        <p>The default MySQL installation is configured with one user
+                                   called <span class="literal">root</span>. This is not the same as the system
+                                   root user. Additional users may be created using the
+                                   <span><strong class="command">mysql</strong></span> command-line utility. A user is required for
+                                   DBMgr's database and for the WebConsole and StatLogger server tools.
+                                   In order to create a new user, log in to MySQL as the
+                                   <span class="literal">root</span> user:
+                        </p><pre class="programlisting">$ mysql -u root</pre><p>Then create an additional user with the required privileges. For
+                                   example:
+                        </p><pre class="programlisting">mysql&gt; GRANT SELECT, INSERT, UPDATE, DELETE, ALTER, CREATE, DROP, INDEX ON fantasydemo.* TO '<em class="replaceable"><code>bigworld</code></em>'@'localhost' IDENTIFIED BY '<em class="replaceable"><code>bigworld_passwd</code></em>'; 
+mysql&gt; GRANT SELECT, INSERT, UPDATE, DELETE, ALTER, CREATE, DROP, INDEX ON fantasydemo.* TO '<em class="replaceable"><code>bigworld</code></em>'@'%' IDENTIFIED BY '<em class="replaceable"><code>bigworld_passwd</code></em>'; 
+mysql&gt; GRANT RELOAD ON *.* TO '<em class="replaceable"><code>bigworld</code></em>'@'localhost' IDENTIFIED BY '<em class="replaceable"><code>bigworld_passwd</code></em>'; 
+mysql&gt; GRANT RELOAD ON *.* TO '<em class="replaceable"><code>bigworld</code></em>'@'%' IDENTIFIED BY '<em class="replaceable"><code>bigworld_passwd</code></em>';</pre><p>The above commands create a user called
+                                   <span class="literal">bigworld</span> with a password of
+                                   <span class="literal">bigworld_passwd</span> that has <span class="literal">SELECT</span>,
+                                   <span class="literal">INSERT</span>, <span class="literal">UPDATE</span>,
+                                   <span class="literal">DELETE</span>, <span class="literal">ALTER</span>,
+                                   <span class="literal">CREATE</span>, <span class="literal">DROP</span>,
+                                   <span class="literal">INDEX</span> and <span class="literal">RELOAD</span> privileges on
+                                   the fantasydemo database.
+                        </p>
+                        <p>You can restrict the machines from which the user can connect by
+                                   specifying a more restrictive pattern after the <span class="literal">@</span>
+                                   symbol.
+                        </p>
+                        <p>For more information on MySQL account management, please refer
+                                   to the MySQL online documentation, specifically the <em class="emphasis">MySQL
+                                      Server Administration</em> document.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Create a new game database using the <span><strong class="command">mysql</strong></span>
+                                   command-line utility. For example, for FantasyDemo:
+                        </p><pre class="programlisting">mysql&gt; CREATE DATABASE <em class="replaceable"><code>fantasydemo</code></em>;</pre><p>This must match the database connection details specified in
+                                   your game's <code class="filename">bw.xml</code> configuration file.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The DBMgr binary provided in your package does not have MySQL
+                                   support built-in. You will need to rebuild DBMgr with MySQL support
+                                   enabled. Please refer to the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch11.html#xref_Compiling_DBMgr_With_MySQL_Support" class="olink">Compiling DBMgr with MySQL Support</a> for instructions
+                                   on how to rebuild and configure your game environment for MySQL
+                                   support.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e967"></a>4.5.1.&nbsp;MySQL Tweaks
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>MySQL documentation suggests that the
+                           <code class="varname">innodb_buffer_pool_size</code> system variable can be set to
+                           80% of the physical memory size.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e975"></a>4.6.&nbsp;Installing Server Tools
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>A suite of utilities collectively referred to as <em class="emphasis">Server
+                         Tools</em> are provided to monitor and query BigWorld Server status,
+                      both live and post event. These tools include WebConsole, MessageLogger
+                      and StatLogger.
+               </p>
+               <p>A typical deployment of the server tools is to install one instance
+                      of the WebConsole, MessageLogger and StatLogger in the network. The
+                      WebConsole can be used to control multiple BigWorld servers. Each server
+                      is running under different Unix account. A WebConsole account will need to
+                      be created for each user (e.g. server operator / developer) that will
+                      control a BigWorld server in the network. Each Unix user can only run one
+                      BigWorld server at a time.
+               </p>
+               <p>To install these server tools, refer to the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_tools_installation_guide/index.html" class="olink">Server Tools Installation Guide</a>.
+               </p>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e722" href="#d0e722">1</a>] </sup>For more details, see <a href="ch05.html#xref_Cluster_Configuration_Routing" title="5.2.&nbsp;Routing">Routing</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e793" href="#d0e793">2</a>] </sup>For more details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch03.html#xref_Server_Command_Line_Utilities" class="olink">Server Command-Line Utilities</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e844" href="#d0e844">3</a>] </sup>If you are unfamiliar with the concept of
+                                 <em class="emphasis">runlevels</em> it would be useful to gain a basic
+                                 understanding of this concept if you intend to maintain a BigWorld
+                                 server cluster.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Installing CentOS 5&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Cluster Configuration</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

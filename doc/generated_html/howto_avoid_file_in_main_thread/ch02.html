@@ -1,0 +1,211 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;2.&nbsp;Entity.prerequisites()</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Avoid Files Being Loaded in the Main Thread">
+      <link rel="up" href="index.html" title="How To Avoid Files Being Loaded in the Main Thread">
+      <link rel="prev" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Entity Preloads">
+      <link rel="next" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Dynamically loading resources">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_avoid_file_in_main_thread/ch02.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;2.&nbsp;<code class="methodname">Entity.prerequisites()</code></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Entity_Prerequisites"></a>Chapter&nbsp;2.&nbsp;<code class="methodname">Entity.prerequisites()</code></h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch02.html#d0e118">2.1. Using <code class="methodname">Entity.prerequisites()</code></a></span></dt>
+               </dl>
+            </div>
+            <p>Assets may also be loaded from specific requests issued by the
+               scripted logic. For instance, when the player equips a special item for the
+               first time, that item's model and texture will have to be in memory before
+                 it can be displayed. In these cases, if that resource is not already
+                 resident, then the main thread will pause, waiting for the load request to
+                 complete.
+            </p>
+            <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+               <h3 class="title">Note</h3>
+               <p>To prevent this kind of problems from creeping into the game, the
+                      BigWorld Client issues a warning in the debug output whenever an access to
+                      disk is requested from the main thread while the 3D scene is
+                      visible<sup>[<a name="d0e65" href="#ftn.d0e65">1</a>]</sup>. Programmers are encouraged to fix these warnings as soon as
+                      they start to pop-up.
+               </p>
+            </div>
+            <p>The <code class="methodname">prerequisites()</code> method is the recommended
+                 method of pre-loading the resources that may be required by the scripts in
+                 order to avoid pauses in the gameplay. It allows gameplay programmers to
+                 specify which assets can potentially be used by an entity instance. It will
+                 guarantee that the entity will not enter the world until all required
+                 resources have been loaded from disk, and are ready to be used by the main
+                 thread .
+            </p>
+            <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+               <h3 class="title">Note</h3>
+               <p>In a truly dynamic game environment it is not possible to anticipate
+                      which resources will be requested by the scripts. In these cases,
+                      <code class="methodname">BigWorld.loadResourceListBG()</code> can be used to load
+                      further resources.
+               </p>
+            </div>
+            <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+               <h3 class="title">Note</h3>
+               <p>Although the entity entry into the world may be delayed, that
+                      usually is not noticeable, since most entities enter the player AoI at a
+                      great distance. Even when that is not the case (after teleporting to a
+                      location close to the player, for instance), that is still better than
+                      pausing the game or having avatars swing invisible swords
+               </p>
+            </div>
+            <p>The function differs from <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch07.html#xref_Entity_Preloads" class="olink">Preloads</a> by working on a per-entity instance
+                 basis, instead of globally. That allows a much more rational management of
+                 resources, since only assets with real potential of being used are stored in
+                 memory at any one time. Entity preloads on the other hand, are kept in
+                 memory for the whole life of the client application.
+            </p>
+            <p>The fact that prerequisites work on a per-entity instance basis, as
+                 opposed to per-entity type, allows programmers to customize the
+                 prerequisites list depending on the state of the entity, further adding to
+                 the efficiency of the system. When a non-player entity enters the player
+                 AoI, for instance, only those items that the entity is currently carrying
+                 would be required to load. The Entity Manager system guarantees that the
+                 entity's properties are up-to-date before the prerequisites list is
+                 requested.
+            </p>
+            <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+               <h3 class="title">Note</h3>
+               <p>For details on this function, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>'s entry <em class="emphasis">Class List
+                         <span class="symbol">&#8594;</span> Entity</em>, section <em class="emphasis">Callback Method Documentation</em>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e118"></a>2.1.&nbsp;Using <code class="methodname">Entity.prerequisites()</code></h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The <code class="methodname">Entity.prerequisites()</code> method is, in
+                      fact, very straightforward to use. After an entity is initialised,
+                      alongside its properties, but before the
+                      <code class="methodname">onEnterWorld()</code> method is called, the
+                      <code class="classname">EntityManager</code> class calls the
+                      <code class="methodname">prerequisites()</code> method on the entity. The method
+                      must return a list of all assets that must be loaded before the entity
+                      enters the world.
+               </p>
+               <p>A simple example is illustrated below:</p><pre class="programlisting">class TradeKiosk( BigWorld.Entity ):
+  MODEL = 'models\kiosk.model'
+
+  def prerequisites( self ):
+    # return list even if it is just a single file
+    return [ TradeKiosk.MODEL ]
+
+  def onEnterWorld( self, prerequisites ):
+    self.model = prerequisites[ TradeKiosk.MODEL ]</pre><p><span class="citetitle">Simple example of loading prerequisite
+                         assets</span></p>
+               <p>A more realistic scenario is when the required resources vary
+                      according to the entity state. In this case, a single entity type is used
+                      to model all types of pickable flowers. The <span class="literal">type</span>
+                      property is used to differentiate each instance. Since
+                      <span class="literal">type</span> is guaranteed to be initialised when the
+                      <span class="literal">prerequisites</span> method is called, the script can
+                      customise which resources are loaded. In this case, the type property will
+                      not change over the lifetime of this particular entity, so we only need to
+                      load resource once.
+               </p><pre class="programlisting">class PickableFlower( BigWorld.Entity ):
+  ASSETS = {
+    'lili' : ('models\lili.model', 'effects\sparkles.xml')
+    'daisy' : ('models\daisy.model', 'effects\spirits.xml')
+    'orchid' : ('models\orchid.model', 'effects\petals.xml')
+  }
+
+  PICK_SOUND = 'sounds\pick_flower.wav'
+
+  def prerequisites( self ):
+    prereq = []
+    prereq.append(PickableFlower.ASSETS[self.type][0])
+    prereq.append(PickableFlower.ASSETS[self.type][1])
+    prereq.append(PickableFlower.PICK_SOUND)
+    return prereq
+
+  def onEnterWorld( self, prerequisites ):
+    # model varies according to the type of flower.
+    # prerequisites can be accessed like a map, and returns python objects.
+    # in this case, we know that .model files become PyModels.
+    self.model = prerequisites[ PickableFlower.ASSETS[self.type][0] ]
+    
+    # it is up to us whether or not to hold onto the PyResourceRefs instance
+    # passed into onEnterWorld.  In this case, we will be using the particle
+    # system at a later date, so we'll simply hold onto the object until it
+    # is needed.
+    self.prerequisites = prerequisites
+
+  def onPickEvent( self ):
+    # picking sound effect is constant between types
+    self.model.playSound( PickableFlower.PICK_SOUND )
+
+    # particle effect varies according to the type of flower
+    particles = self.prerequisites[ PickableFlower.ASSETS[self.type][1] ]
+    self.model.root.attach( particles )
+    particles.force(1)</pre><p><span class="citetitle">Another example of load prerequisite
+                         assets</span></p>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e65" href="#d0e65">1</a>] </sup>For details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>'s
+                             entry <em class="emphasis">Modules <span class="symbol">&#8594;</span> BigWorld</em>, section <em class="emphasis">Member Functions</em>, function <em class="emphasis"><code class="methodname">BigWorld.worldDrawEnabled</code></em>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Entity Preloads&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;Dynamically loading resources</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

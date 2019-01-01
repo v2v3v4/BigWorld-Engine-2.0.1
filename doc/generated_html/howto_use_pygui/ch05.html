@@ -1,0 +1,1042 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;5.&nbsp;Component Script Reference</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Using PyGUI">
+      <link rel="up" href="index.html" title="Using PyGUI">
+      <link rel="prev" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Constructing an Interface">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;5.&nbsp;Component Script Reference</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Component_Script_Reference"></a>Chapter&nbsp;5.&nbsp;Component Script Reference
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch05.html#d0e653">5.1. Window</a></span></dt>
+                  <dt><span class="section"><a href="ch05.html#d0e669">5.2. Button</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e674">5.2.1. Component hierarchy</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e679">5.2.2. Creation</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e686">5.2.3. Properties</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e713">5.2.4. Events</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e734">5.2.5. Visual states</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch05.html#d0e856">5.3. CheckBox</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e864">5.3.1. Component hierarchy</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e869">5.3.2. Creation</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e876">5.3.3. Properties</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e884">5.3.4. Events</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e889">5.3.5. Visual states</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch05.html#d0e894">5.4. RadioButton</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e899">5.4.1. Component hierarchy</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e904">5.4.2. Creation</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e911">5.4.3. Properties</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e925">5.4.4. Events</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e930">5.4.5. Visual states</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch05.html#d0e935">5.5. Slider</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e940">5.5.1. Component hierarchy</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e945">5.5.2. Creation</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e952">5.5.3. Events</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e971">5.5.4. Visual states</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch05.html#d0e1049">5.6. EditField</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e1064">5.6.1. Component hierarchy</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e1069">5.6.2. Creation</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e1076">5.6.3. Properties</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e1125">5.6.4. Events</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch05.html#d0e1144">5.7. LanguageIndicator</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e1149">5.7.1. Component hierarchy</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e1155">5.7.2. Creation</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e1162">5.7.3. Properties</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e1183">5.7.4. Events</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e1188">5.7.5. Visual states</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch05.html#d0e1193">5.8. ScrollableText</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e1203">5.8.1. Component hierarchy</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e1209">5.8.2. Creation</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e1216">5.8.3. Properties</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e1245">5.8.4. Events</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e1250">5.8.5. Visual states</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e653"></a>5.1.&nbsp;Window
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Since a group of user interface functionality is usually
+                      encapsulated within its own window (e.g. chat window, options window,
+                      etc), typical usage of PyGUI is to have the Window class at the top level
+                      of a particular .gui file. The .gui file will then be loaded and added to
+                      the GUI hierarchy at the appropriate time in the game scripts (e.g. show
+                      the options window when a button is pressed).
+               </p>
+               <p>There is no helper create method for window, since there is no
+                      specialised hierarchy. Just create a <code class="code">WindowGUIComponent</code> and
+                      attach a Window script instance to it.
+               </p>
+               <div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Tip</h3>
+                  <p>Derive your Window script from <code class="code">DraggableWindow</code> rather
+                           than Window in order to make it draggable with the mouse.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e669"></a>5.2.&nbsp;Button
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The Button script provides standard push-button functionality. In
+                      addition, they can be configured so that they can be toggled between an
+                      active state and an inactive state.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e674"></a>5.2.1.&nbsp;Component hierarchy
+                           </h3>
+                        </div>
+                     </div>
+                  </div><pre class="programlisting">WindowGUIComponent &#8212; background texture, handles input events
+    -&gt; TextGUIComponent &#8212; optional text label, must be named "label"</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e679"></a>5.2.2.&nbsp;Creation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A create method is supplied and takes the following
+                           arguments:
+                  </p><pre class="programlisting">Button.create( backgroundTextureName, [text], [toggle] )</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e686"></a>5.2.3.&nbsp;Properties
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Buttons have a number of properties which control it's behaviour,
+                           and are serialised to the GUI XML file.
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><code class="code">buttonStyle</code> &#8212; by default this is
+                                        'pressbutton', but if it set to 'togglebutton' it will become a
+                                        toggle-type button.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">buttonDisabled</code> &#8212; determines if this button
+                                        is disabled (i.e. cannot be pressed by the user). Use the
+                                        <code class="code">setDisabledState(state)</code> method to change this
+                                        state.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">buttonActive</code> &#8212; if this is a toggle style
+                                        button, then this is True when toggled to the active state. Use the
+                                        <code class="code">setToggleState(state)</code> method to change this
+                                        state.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e713"></a>5.2.4.&nbsp;Events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Button can raise the following events:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><span class="literal">onClick()</span> &#8212; the user has clicked the
+                                        button.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">onActivate()</span> &#8212; the toggle button has
+                                        been activated.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">onDeactivate()</span> &#8212; the toggle button
+                                        has been deactivated.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e734"></a>5.2.5.&nbsp;Visual states
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Button has the following visual states:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><span class="literal">normal</span> &#8212; the button is idle, this is
+                                        the default state.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">hover</span> &#8212; the user is hovering the
+                                        mouse over the button.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">pressed</span> &#8212; the user is currently
+                                        pressing down on the button.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">disabled</span> &#8212; the button is currently
+                                        disabled and can't be used by the user.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">active</span> &#8212; the toggle button is idle,
+                                        but is currently in it's active state.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">hover_active</span> &#8212; the user is hovering
+                                        the mouse over the toggle button while it is active.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">pressed_active</span> &#8212; the user is
+                                        currently pressing down the button while it is active.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">disabled_active</span> &#8212; the toggle button
+                                        is disabled, but is active.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The button uses the <code class="classname">ButtonVisualState</code> class
+                           to determine its appearance and has the following properties:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><span class="literal">textStyle</span> &#8212; chooses a font via a
+                                        style name defined in <code class="filename">TextStyles.py</code>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">icon</span> &#8212; defines how the background
+                                        texture gets applied, and has the following sub-properties:
+                           </p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><span class="literal">textureName</span> &#8212; the name of the
+                                                     texture resource.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">materialFX</span> &#8212; the blending type
+                                                     used to display the texture (uses the same value names as
+                                                     <code class="varname">SimpleGUIComponent.materialFX</code>).
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">mapping</span> &#8212; the rectangle within
+                                                     the texture, specified by four UV coordinates.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">colour</span> &#8212; colour tint, corresponds
+                                                     to the <code class="varname">SimpleGUIComponent.colour</code>
+                                                     property.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><span class="literal">pressed</span> &#8212; the user is currently
+                                        pressing down on the button.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">disabled</span> &#8212; the button is currently
+                                        disabled and can't be used by the user.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">active</span> &#8212; the toggle button is idle,
+                                        but is currently in it's active state.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">hover_active</span> &#8212; the user is hovering
+                                        the mouse over the toggle button while it is active.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">pressed_active</span> &#8212; the user is
+                                        currently pressing down the button while it is active.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">disabled_active</span> &#8212; the toggle button
+                                        is disabled, but is active.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e856"></a>5.3.&nbsp;CheckBox
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>A check box is similar to a Button (in fact, it derives from the
+                      <code class="classname">Button</code> class), however it's hierarchy is slightly
+                      modified to cope with the different layout of a checkbox.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e864"></a>5.3.1.&nbsp;Component hierarchy
+                           </h3>
+                        </div>
+                     </div>
+                  </div><pre class="programlisting">WindowGUIComponent &#8212; invisible background, handles input events
+    -&gt; SimpleGUIComponent &#8212; check icon, must be named "box"
+    -&gt; TextGUIComponent &#8212; text label, must be named "label"</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e869"></a>5.3.2.&nbsp;Creation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A create method is supplied and takes the following
+                           arguments:
+                  </p><pre class="programlisting">CheckBox.create( boxTextureName, [text] )</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e876"></a>5.3.3.&nbsp;Properties
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The CheckBox inherits the properties of Button. The
+                           <code class="code">buttonStyle</code> property must be set to 'checkbox' to access
+                           checkbox functionality.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e884"></a>5.3.4.&nbsp;Events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>CheckBox has the same events as Button.</p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e889"></a>5.3.5.&nbsp;Visual states
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>CheckBox has the same visual states as Button.</p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e894"></a>5.4.&nbsp;RadioButton
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>A RadioButton behaves and looks similar to the CheckBox, however
+                      they can be placed in named groups so that only one radio box within the
+                      same group can be checked at any one time. The group is determined by a
+                      unique group name among its siblings.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e899"></a>5.4.1.&nbsp;Component hierarchy
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>RadioButton has the same component hierarchy as CheckBox.</p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e904"></a>5.4.2.&nbsp;Creation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A create method is supplied and takes the following
+                           arguments:
+                  </p><pre class="programlisting">RadioButton.create( boxTextureName, [text], [groupName] )</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e911"></a>5.4.3.&nbsp;Properties
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The RadioButton inherits the properties of Button. The
+                           <code class="code">buttonStyle</code> property must be set to 'radiobutton' to access
+                           checkbox functionality. In addition to the base class properties, the
+                           RadioButton uses some additional properties:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><code class="code">groupName</code> &#8212; this defines the mutual
+                                        exclusivity group. All sibiling radio buttons with the same group
+                                        name will be mutually exclusive to one another.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e925"></a>5.4.4.&nbsp;Events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>RadioButton has the same events as Button.</p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e930"></a>5.4.5.&nbsp;Visual states
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>RadioButton has the same visual states as Button.</p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e935"></a>5.5.&nbsp;Slider
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The Slider class allows the user to interpolate between a minimum
+                      value and a maximum value. Both horizontal and vertical sliders are
+                      supported. It consists of a parent component which acts as the main
+                      container, and has a child component which acts as the draggable
+                      "thumb".
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e940"></a>5.5.1.&nbsp;Component hierarchy
+                           </h3>
+                        </div>
+                     </div>
+                  </div><pre class="programlisting">WindowGUIComponent &#8212; background texture, handles input events
+    -&gt; SimpleGUIComponent &#8212; draggable thumb, must be named "thumb"</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e945"></a>5.5.2.&nbsp;Creation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A create method is supplied and takes the following
+                           arguments:
+                  </p><pre class="programlisting">Slider.create( backgroundTexture, thumbTexture, isHorizontal )</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e952"></a>5.5.3.&nbsp;Events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><span class="literal">onValueChanged( value )</span> &#8212; called
+                                        whenever the slider has moved.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">onBeginDrag( value )</code> &#8212; called when the user
+                                        has just started dragging the slider.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">onEndDrag( value )</code> &#8212; called when the user
+                                        has finished dragging the slider.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e971"></a>5.5.4.&nbsp;Visual states
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><span class="literal">normal</span> &#8212; the slider is idle, this is
+                                        the default state.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">hover</span> &#8212; the user is hovering the
+                                        mouse over the slider thumb.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">pressed</span> &#8212; the user is currently
+                                        pressing down on the slider thumb.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="literal">disabled</span> &#8212; the slider is currently
+                                        disabled and can't be used by the user.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The slider uses the <code class="code">SliderVisualState</code> class to
+                           determine its appearance and has the following properties:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><span class="literal">background</span> - defines how the background
+                                        texture gets applied, and has the following sub-properties:
+                           </p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><span class="literal">textureName</span> &#8212; the name of the
+                                                     texture resource.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">mapping</span> &#8212; the rectangle within
+                                                     the texture, specified by four UV coordinates.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">colour</span> &#8212; colour tint, corresponds
+                                                     to the <code class="varname">SimpleGUIComponent.colour</code>
+                                                     property.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><span class="literal">thumb</span> &#8212; defines how the "thumb"
+                                        appears, and has the following sub-properties:
+                           </p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><span class="literal">textureName</span> &#8212; the name of the
+                                                     texture resource.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">mapping</span> &#8212; the rectangle within
+                                                     the texture, specified by four UV coordinates.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">colour</span> &#8212; colour tint, corresponds
+                                                     to the <code class="varname">SimpleGUIComponent.colour</code>
+                                                     property.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1049"></a>5.6.&nbsp;EditField
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The EditField is a single line text input edit box. It supports
+                      advanced keyboard navigation, horizontal scrolling, Unicode text input and
+                      can make use of the PyGUI IME framework. It also supports automatically
+                      choosing a new font based on a provided list of possible fonts which best
+                      matches the current screen resolution.
+               </p>
+               <p>The EditField makes use of the PyGUI keyboard input mutual
+                      exclusivity framework.
+               </p>
+               <p>Use the <code class="code">EditField.setText </code>and
+                      <code class="code">EditField.getText</code> methods to access the current text in the
+                      edit field.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1064"></a>5.6.1.&nbsp;Component hierarchy
+                           </h3>
+                        </div>
+                     </div>
+                  </div><pre class="programlisting">WindowGUIComponent &#8212; background texture, horizontal scrolling, handles input events
+    -&gt; TextGUIComponent &#8212; the current text content, must be named "text"</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1069"></a>5.6.2.&nbsp;Creation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A create method is supplied and takes the following
+                           arguments:
+                  </p><pre class="programlisting">EditField.create( backgroundTextureName, [activeColour], [inactiveColour] )</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1076"></a>5.6.3.&nbsp;Properties
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The edit field has a number of properties which control it's
+                           behaviour, and are serialised to the GUI XML file.
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><code class="code">activeColour</code> &#8212; this defines the colour of
+                                        the text when the edit field currently has focus.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">inactiveColour</code> &#8212; this defines the colour of
+                                        the text when the edit field does not have focus.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">enabled</code> &#8212; if this is False, then the user
+                                        cannot focus the edit field and input text.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">maxLength</code> &#8212; the maximum length of the edit
+                                        field, in characters.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">enableIME</code> &#8212; if True, then IME functionality
+                                        is enabled on the edit field.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">focusViaMouse</code> &#8212; if True, then the edit
+                                        field can be brought into focuse by clicking on it with the
+                                        mouse.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">idealVisibleCharacters</code> &#8212; the number of
+                                        characters which should be ideally visible and is used to determine
+                                        the best font to use from the autoFont list.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">autoSelectionFonts</code> &#8212; a list of font names
+                                        that are chosen based on the current resolution and
+                                        idealVisibleCharacters. This is serialised as a set of
+                                        <code class="code">&lt;autoFont&gt;</code> tags.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1125"></a>5.6.4.&nbsp;Events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><span class="literal">onEnter( text )</span> &#8212; called whenever the
+                                        user presses enter with the EditField in focus.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">onEscape</code>() &#8212; called whenever the user
+                                        presses escape with the EditField in focus.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">onChangeFocus( state )</code> &#8212; called whenever
+                                        the edit field component changes input focus.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1144"></a>5.7.&nbsp;LanguageIndicator
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>A language indicator is a specialised non-interactive component. The
+                      job of the indicator is to display to the user the name of the current
+                      input locale (e.g. "EN" for English, "FR" for French, "CN" for Chinese,
+                      etc). It is often used in conjunction with an EditField.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1149"></a>5.7.1.&nbsp;Component hierarchy
+                           </h3>
+                        </div>
+                     </div>
+                  </div><pre class="programlisting">WindowGUIComponent &#8212; background texture
+    -&gt; TextGUIComponent &#8212; text showing the language indication, must be named "label"</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1155"></a>5.7.2.&nbsp;Creation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A create method is supplied and takes the following
+                           arguments:
+                  </p><pre class="programlisting">LanguageIndicator.create( autoSize=True, padding=5, square=True )</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1162"></a>5.7.3.&nbsp;Properties
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The language indicator has a number of properties which control
+                           it's behaviour, and are serialised to the GUI XML file.
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><code class="code">autoSize</code> &#8212; if this is True, then the
+                                        indicator will automatically resize itself to fit around the
+                                        indication label.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">padding</code> &#8212; only effective if autoSize is
+                                        True, this will add some padding (in pixels) around the indication
+                                        label.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">square</code> &#8212; only effective if autoSize is
+                                        True, this will maintain a square aspect ratio at all times.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1183"></a>5.7.4.&nbsp;Events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>LanguageIndicator does not raise any events.</p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1188"></a>5.7.5.&nbsp;Visual states
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>LanguageIndicator does not have any visual states.</p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1193"></a>5.8.&nbsp;ScrollableText
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The ScrollableText class implements a wod wrapped, vertically
+                      scrolling buffer of text. It supports colour formatting (using the
+                      formatting tags supported by TextGUIComponent) and automatically chooses
+                      the most appropriate font out of a list that best matches the current
+                      screen resolution.
+               </p>
+               <p>Use the <code class="code">ScrollableText.appendLine( str )</code> method to add
+                      a new line. If the given string contains line breaks, it will
+                      automatically break the line into multiple lines at those points.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1203"></a>5.8.1.&nbsp;Component hierarchy
+                           </h3>
+                        </div>
+                     </div>
+                  </div><pre class="programlisting">WindowGUIComponent &#8212; background texture, implements vertical scrolling
+    -&gt; TextGUIComponent &#8212; a multiline text component which implements the buffer, must be named "text"</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1209"></a>5.8.2.&nbsp;Creation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A create method is supplied and takes the following
+                           arguments:
+                  </p><pre class="programlisting">ScrollableText.create()</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1216"></a>5.8.3.&nbsp;Properties
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>ScrollableText has a number of properties which control it's
+                           behaviour, and are serialised to the GUI XML file.
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><code class="code">autoSelectionFonts</code> &#8212; a list of font names
+                                        that are chosen based on the current resolution and
+                                        idealCharactersPerLine. This is serialised as a set of
+                                        <code class="code">&lt;autoFont&gt;</code> tags.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">idealCharactersPerLine</code> &#8212; the number of
+                                        characters which should be ideally visible and is used to determine
+                                        the best font to use from the autoFont list.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">maxLines</code> &#8212; maximum number of lines to store
+                                        before clipping off the oldest line
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">wordWrap</code> &#8212; boolean whether or not to word
+                                        wrap the text
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1245"></a>5.8.4.&nbsp;Events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>ScrollableText does not raise any events.</p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1250"></a>5.8.5.&nbsp;Visual states
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>ScrollableText does not have any visual states.</p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;4.&nbsp;Constructing an Interface&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,328 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;4.&nbsp;Fault Tolerance</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Operations Guide">
+      <link rel="up" href="index.html" title="Server Operations Guide">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Cluster Administration Tools">
+      <link rel="next" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Backups and Disaster Recovery">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_operations_guide/ch04.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Fault Tolerance</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Fault_Tolerance"></a>Chapter&nbsp;4.&nbsp;Fault Tolerance
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch04.html#xref_CellApp_Fault_Tolerance">4.1. CellApp Fault Tolerance</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#xref_BaseApp_Fault_Tolerance">4.2. BaseApp Fault Tolerance</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#xref_Fault_Tolerance_With_Reviver">4.3. Fault Tolerance with Reviver</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#xref_Specifying_Components_To_Support">4.3.1. Specifying Components to Support</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#xref_Reviver_Layout">4.3.2. Recommended Reviver Layout</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#xref_Command_Line_Options">4.3.3. Command-Line Options</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>The Fault Tolerance system in BigWorld Technology is designed to
+                 transparently cope with the loss of a machine due to physical, electrical,
+                 or logical fault.
+            </p>
+            <p>The game systems in general should not be affected, and the game
+                 experience will continue normally for most clients, with possibly a brief
+                 interruption for clients closest to the faulty machine.
+            </p>
+            <p>The loss of any single machine (running a single process) is always
+                 handled. The loss of multiple machines in a short time frame may not always
+                 be adequately handled. In such extreme cases &#8212; for example, a complete
+                 power outage affecting all machines &#8212; the Disaster Recovery system
+                 will be invoked. For more details, see <a href="ch05.html#xref_Disaster_Recovery" title="5.1.&nbsp;Disaster Recovery">Disaster Recovery</a>.
+            </p>
+            <p>Note that, in spite of handling failures, the Fault Tolerance system
+                 should not be relied upon to cover up a software bug that causes a component
+                 to crash. All such bugs should be found and fixed in the source code. If the
+                 bug is believed to be in BigWorld Technology code (and not in a customer's
+                 extension), then contact BigWorld Support with details of the problem. For
+                 more details, see <a href="ch13.html" title="Chapter&nbsp;13.&nbsp;First Aid After a Crash"><i xmlns:xlink="http://www.w3.org/1999/xlink">First Aid After a Crash</i></a>.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_CellApp_Fault_Tolerance"></a>4.1.&nbsp;CellApp Fault Tolerance
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>CellApp fault tolerance works by backing up the cell entities to
+                      their base entities.
+               </p>
+               <p>As long as a backup period is specified for the cell entities, the
+                      fault tolerance for the CellApp processes is automatic. An operator should
+                      ensure that there is enough spare capacity in available CellApps to take
+                      up the load of a lost process.
+               </p>
+               <p>For details on how to specify the CellApp backup period, see <a href="ch02.html#xref_CellApp_Configuration_Options" title="2.12.&nbsp;CellApp Configuration Options">CellApp Configuration Options</a>.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>Cell entities without a base entity are not backed up, and
+                           therefore will not be restored if their process is lost.
+                  </p>
+               </div>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>Since cell entities back up to base entities, running CellApp and
+                           BaseApp processes on the same machine should be avoided. If the entire
+                           machine is lost, this level of fault tolerance will not work.
+                  </p>
+               </div>
+               <p>For more details on the implementation of CellApp fault tolerance on
+                      code level, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch15.html" class="olink"><i>Fault Tolerance</i></a>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_BaseApp_Fault_Tolerance"></a>4.2.&nbsp;BaseApp Fault Tolerance
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The BaseApp supports a BaseApp level fault-tolerance by backing each
+                      base entity to another BaseApp via a hashing scheme.
+               </p>
+               <p>For more details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html" class="olink"><i>Server Components</i></a><span class="symbol">&#8594;</span>
+                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Server_Components_BaseApp" class="olink">BaseApp</a><span class="symbol">&#8594;</span><a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Server_Components_BaseApp" class="olink">BaseApp</a>. For details on the
+                      implementation of BaseApp fault tolerance on code level, see the document
+                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch15.html" class="olink"><i>Fault Tolerance</i></a>.
+               </p>
+               <p>Each BaseApp is assigned a set of other BaseApps and a hash function
+                      from an entity's ID to one of these backups. Over a period of time, all
+                      entities are backed up. This is then repeated. If a BaseApp dies, then the
+                      entities are restored on to the appropriate backup.
+               </p>
+               <p>There is a possibility of base entities that were previously on the
+                      same BaseApp ending up on different BaseApps (which places limits on
+                      scripting).
+               </p>
+               <p>In addition, any attached clients will be disconnected on an
+                      unexpected BaseApp failure, requiring a re-login. However, if BaseApps are
+                      retired, attached clients will be migrated to another running
+                      BaseApp.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/distributed_baseapp_backup.png"><span class="caption">
+                        <p>Distributed BaseApp Backup &#8212; Dead BaseApp's
+                                   entities can be restored to Backup BaseApp
+                        </p></span></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Fault_Tolerance_With_Reviver"></a>4.3.&nbsp;Fault Tolerance with Reviver
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Fault tolerance for BaseAppMgr, CellAppMgr, DBMgr, and LoginApp is
+                      provided by the Reviver, by starting a new instance of the process to
+                      replace the unavailable one.
+               </p>
+               <p>Although it is possible for one Reviver to watch all processes, it
+                      is recommended to run a multiple Reviver instances on different machines
+                      as Revivers normally stop after reviving a process.
+               </p>
+               <p>For more details on Reviver, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>'s chapters <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch04.html" class="olink"><i>Design Introduction</i></a> and
+                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html" class="olink"><i>Server Components</i></a>.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Specifying_Components_To_Support"></a>4.3.1.&nbsp;Specifying Components to Support
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When the Reviver starts, it queries the local BWMachined process,
+                           and will only support the components that have an entry in a special
+                           category called <span class="literal">Components</span> in the machine's
+                           configuration file <code class="filename">/etc/bwmachined.conf</code>.
+                  </p>
+                  <p>An example <code class="filename">/etc/bwmachined.conf</code> specifying
+                           that the Reviver should support all singleton server components would
+                           contain a section as below:
+                  </p><pre class="programlisting">[Components]
+baseApp
+baseAppMgr
+cellApp
+cellAppMgr
+dbMgr
+loginApp</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>If the <span class="literal">[Components]</span> category does not contain
+                                any entries, then Reviver will support all singleton server
+                                components.
+                     </p>
+                     <p>BaseApp and CellApp will not be restarted by Reviver &#8212; the
+                                <span class="literal">[Components]</span> entries are used by WebConsole and
+                                <span class="literal">control_cluster.py</span> to determine which processes
+                                should be started by BWMachined on that host.
+                     </p>
+                  </div>
+                  <p>Be aware that the configuration file is only read when BWMachined
+                           starts. As such if you many any changes to the configuration file, you
+                           will need to restart BWMachined before the changes are recognised. To
+                           restart BWMachined run the following command as the root user:
+                  </p><pre class="programlisting"># /etc/init.t/bwmachined2 restart</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Reviver_Layout"></a>4.3.2.&nbsp;Recommended Reviver Layout
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>As a Reviver process is responsible for restarting a dead server
+                           process as a once off task before shutting down, a mis-configured
+                           Reviver layout may result in a situation where your cluster can suffer a
+                           process outage that is not handled by the available Revivers.
+                  </p>
+                  <p>As a worst case scenario consider a server cluster that hosts the
+                           BaseAppMgr and CellAppMgr processes on a machine with the hostname
+                           <span class="literal">gameworld</span> and a single Reviver process on a backup
+                           machine with the hostname <span class="literal">gamereviver</span>. If the machine
+                           <span class="literal">gamereviver</span> has been configured to revive both the
+                           BaseAppMgr and CellAppMgr processes and <span class="literal">gameworld</span>
+                           suffers a power failure, only one process will be revived on
+                           <span class="literal">gamereviver</span>.
+                  </p>
+                  <p>For this reason BigWorld recommends that you run enough Reviver
+                           instances so that each process is responsible for one singleton process.
+                           Using this approach should result in fault tolerance layout that avoids
+                           gaps in your cluster revival plan.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Command_Line_Options"></a>4.3.3.&nbsp;Command-Line Options
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The supported components can also be specified via command-line
+                           (even though we recommend that you use
+                           <span class="literal">/etc/bwmachined.conf</span> for that), as below:
+                  </p><pre class="programlisting">reviver [--add|--del {baseAppMgr|cellAppMgr|dbMgr|loginApp} ]</pre><p>If reviver is invoked with no options, then it will try to monitor
+                           all singleton processes specified in category
+                           <span class="literal">Components</span> of
+                           <span class="literal">/etc/bwmachined.conf</span>.
+                  </p>
+                  <p>The options for invoking reviver are described in the list
+                           below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">--add { baseAppMgr | cellAppMgr
+                                              | dbMgr | loginApp }</span></em></p>
+                           <p>Starts the Reviver, trying to monitor only the components
+                                        specified in this option. That means that the components list in
+                                        <span class="literal">/etc/bwmachined.conf</span> will be ignored.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">--del { baseAppMgr | cellAppMgr
+                                              | dbMgr | loginApp }</span></em></p>
+                           <p>Starts the Reviver, trying to monitor all components specified
+                                        in the list in <span class="literal">/etc/bwmachined.conf</span>, except the
+                                        ones specified in this option.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">To start Reviver trying to monitor all
+                                           processes specified in Components in
+                                           /etc/bwmachined.conf:</em></p><pre class="programlisting">reviver</pre></li>
+                     </ul>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">To start Reviver trying to monitor only
+                                           DBMgr and LoginApp:</em></p><pre class="programlisting">reviver --add dbMgr --add loginApp</pre></li>
+                     </ul>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">To start Reviver trying to monitor all
+                                           processes specified in Components in
+                                           <code class="filename">/etc/bwmachined.conf</code>, except DBMgr and
+                                           LoginApp:</em></p><pre class="programlisting">reviver -del dbMgr -del loginApp</pre></li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Cluster Administration Tools&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Backups and Disaster Recovery</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

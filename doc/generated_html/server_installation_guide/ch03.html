@@ -1,0 +1,448 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;3.&nbsp;Installing CentOS 5</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Installation Guide">
+      <link rel="up" href="index.html" title="Server Installation Guide">
+      <link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Hardware Requirements">
+      <link rel="next" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Installing the BigWorld Server">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Installing CentOS 5</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Install_OS"></a>Chapter&nbsp;3.&nbsp;Installing CentOS 5
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch03.html#d0e157">3.1. Installing</a></span></dt>
+                  <dt><span class="section"><a href="ch03.html#xref_Post_Installation_Setup">3.2. Post-installation Setup</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#d0e328">3.2.1. Install updates</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e335">3.2.2. Configure services</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e349">3.2.3. Install build tools</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e356">3.2.4. MySQL server and development libraries</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e373">3.2.5. Changing UIDs</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+               <h3 class="title">Note</h3>
+               <p>Even experienced users should skim the following sections to make
+                      sure that required packages are installed.
+               </p>
+            </div>
+            <p>You may wish to refer to the CentOS documentation for additional notes
+                 and guidelines on installing and configuring CentOS.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e157"></a>3.1.&nbsp;Installing
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Boot the computer using the installation DVD, or other media
+                                   (for example PXE boot). See the CentOS documentation for further
+                                   details.
+                        </p>
+                        <p>You may need to select the CD/DVD ROM drive as a bootable device
+                                   in the BIOS when installing from DVD.
+                        </p>
+                     </li>
+                     <li>
+                        <p>This installation guide is based on the graphical installer.
+                                   Press ENTER at the first boot screen to select <span class="literal">Install in
+                                      graphical mode</span>.
+                        </p>
+                        <p>If you are having trouble with video card drivers, then you can
+                                   reboot and try the text-only installer.
+                        </p>
+                     </li>
+                     <li>
+                        <p>If this is the first time that the CD/DVD has been used, then it
+                                   is worthwhile to use the built-in test option.
+                        </p>
+                        <p>The test will take around 15 minutes. If you do not want to
+                                   test, just select Skip.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Language and keyboard
+                                      type.</em></p>
+                        <p>The language selected will be used for the installation
+                                   procedure as well as being the default language of the installed
+                                   system.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Installation method</em></p>
+                        <p>Choose <span class="literal">Local CDROM</span> if you are using DVD to
+                                   install, or you can choose your local CentOS mirror.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Disk partitioning</em></p>
+                        <p>You can partition the disk as you see fit. The <span class="literal">Remove
+                                      all partitions on selected drives and create default layout</span>
+                                   option should work for most situations. You can modify the default
+                                   layout by checking the <span class="literal">Review and modify partitioning
+                                      layout</span> checkbox.
+                        </p>
+                        <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                           <h3 class="title">Note</h3>
+                           <p>If the machine will host the database server (running MySQL
+                                        and DBMgr), and you are using secondary databases, you will need to
+                                        use LVM partitions and you will also need to allocate some free
+                                        space for the LVM snapshot. You can add unallocated space on one of
+                                        your logical drives when reviewing the partitioning layout. See
+                                        <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch05.html#xref_Database_Snapshot_Tool" class="olink">Database Snapshot Tool</a> for more details about the
+                                        snapshotting tool.
+                           </p>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Boot loader
+                                      configuration</em></p>
+                        <p>Select the appropriate options for you machine (by default, the
+                                   bootloader will be installed to the MBR).
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Network configuration</em></p>
+                        <p>Ensure that you have at least one network device listed, and
+                                   that IPv4 is enabled for it.
+                        </p>
+                        <p>In production, for BaseApp and LoginApp machines, there should
+                                   be two network interfaces, one for external traffic, and the other for
+                                   internal server traffic. In development, these can be the same.
+                        </p>
+                        <p>The hostname can be specified manually or it can be set from
+                                   DHCP.
+                        </p>
+                        <p>If you are not using DHCP, you will need to enter the default
+                                   gateway and DNS addresses.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Time zone selection</em></p>
+                        <p>Select your time zone.</p>
+                        <p>We recommend that you leave the system clock as UTC as per the
+                                   default.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Setting the <code class="code">root</code>
+                                      password</em></p>
+                        <p>You will need access to the <code class="code">root</code> account to install
+                                   some BigWorld Server components, make sure you remember this
+                                   password.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Package selection</em></p>
+                        <p>If this is a production machine, we recommend that you have
+                                   <span class="literal">Desktop - Gnome</span> unchecked. You can leave the other
+                                   options unchecked, the specific packages that the BigWorld server
+                                   requires will be installed later on in this guide.
+                        </p>
+                        <p>In development, you may wish to use the machine as a desktop
+                                   development machine, in which case you can choose to install whichever
+                                   packages you require for development, such as the <span class="literal">Desktop -
+                                      Gnome</span> package group.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">First boot configuration</em></p>
+                        <p>The installation program will format the disk partitions,
+                                   install the base system and system packages. After this process is
+                                   complete, you will be asked to reboot the machine. On first boot, you
+                                   will be prompted for further configuration.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Authentication</em></p>
+                        <p>This tool sets up how your OS will look up user account
+                                   information.
+                        </p>
+                        <p>BigWorld components assume that the username to UID mapping is
+                                   unique across the network i.e. two users with the same name on two
+                                   different machines will have the same UID and vice versa. If you are
+                                   creating accounts with the same name on multiple machines, please
+                                   ensure that they all have the UID by manually specifying their
+                                   UID.
+                        </p>
+                        <p>Furthermore, the BigWorld server also assumes that server
+                                   components started by the same user (as identified by their UID)
+                                   belongs to the same server instance, even when those components are
+                                   running on different machines. To run multiple BigWorld Server
+                                   instances, multiple user accounts are needed.
+                        </p>
+                        <p>You can set up remote account information servers such as LDAP.
+                                   We recommend using LDAP during development to ensure that every
+                                   machine in the cluster has the same user set. Typically, each
+                                   developer user has an account where they can run their own servers
+                                   independent of other users.
+                        </p>
+                        <p>Refer to the OpenLDAP documentation for further information on
+                                   how to configure an LDAP service to authenticate users.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Firewall configuration</em></p>
+                        <p>For a development machine, the firewall should be disabled. The
+                                   default firewall blocks all UDP traffic, which prevents the BigWorld
+                                   Server from operating. You can disable the firewall by setting the
+                                   <span class="literal">Security Level</span> option to
+                                   <span class="literal">Disabled</span>.
+                        </p>
+                        <p>For a production machine, you will need to setup specialised
+                                   firewall rules for your specific security requirements. Guides for
+                                   BigWorld Server specific firewall settings are given in the <a href="ch05.html" title="Chapter&nbsp;5.&nbsp;Cluster Configuration"><i xmlns:xlink="http://www.w3.org/1999/xlink">Cluster Configuration</i></a> section of this
+                                   document.
+                        </p>
+                        <p>BigWorld Server is known to work with the default SELinux
+                                   settings (enforcing).
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">System services</em></p>
+                        <p>For production machines, in order to avoid unexpected load
+                                   spikes on your system from background services, we recommend that you
+                                   disable any non-essential services. You can configure which services
+                                   are started up at boot time.
+                        </p>
+                        <p>Services that are recommended to be disabled
+                                   include:
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p>cups</p>
+                              </li>
+                              <li>
+                                 <p>bluetooth</p>
+                              </li>
+                              <li>
+                                 <p>yum-updatesd</p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Finishing the
+                                      installation</em></p>
+                        <p>Once exiting the first boot configuration screen, you will be
+                                   presented with a login prompt. Login as the root user to continue the
+                                   installation.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Post_Installation_Setup"></a>3.2.&nbsp;Post-installation Setup
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e328"></a>3.2.1.&nbsp;Install updates
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Although not strictly required, it is a good idea to install the
+                           latest updates. You can update the packages by running the following
+                           command:
+                  </p><pre class="programlisting"># yum update</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e335"></a>3.2.2.&nbsp;Configure services
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In order to avoid unexpected load spikes on your system from
+                           background services, non-essential services should be disabled. The
+                           service configuration can be modified by running:
+                  </p><pre class="programlisting"># firstboot --reconfig</pre><p>This will bring up the same configuration menu that appears after
+                           the OS has been installed. Select the option <span class="literal">System
+                              services</span>, and uncheck those services that you don't wish to
+                           start at boot time. See above in <a href="ch03.html" title="Chapter&nbsp;3.&nbsp;Installing CentOS 5"><i xmlns:xlink="http://www.w3.org/1999/xlink">Installing CentOS 5</i></a> for a
+                           list of recommended services to disable.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e349"></a>3.2.3.&nbsp;Install build tools
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>To build the BigWorld Server, GCC and Make must be installed.
+                           These should be the default compiler and make utility on your Linux
+                           installation.
+                  </p><pre class="programlisting"># yum install gcc-c++ make</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e356"></a>3.2.4.&nbsp;MySQL server and development libraries
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This step is required if you wish to use BigWorld WebConsole and
+                           StatLogger, or use DBMgr with MySQL support.
+                  </p>
+                  <p>BigWorld Server is compatible with MySQL 5.0 and MySQL 5.1.
+                           Support for MySQL 4.x has been deprecated.
+                  </p>
+                  <p>If you have not already installed the MySQL server, you can do so
+                           by running the following command as the root user:
+                  </p><pre class="programlisting"># yum install mysql-server</pre><p>If you intend on using DBMgr with MySQL support, also ensure you
+                           have the MySQL client development package as this is required to rebuild
+                           DbMgr with MySQL support.
+                  </p>
+                  <p>Install the MySQL client development package by running the
+                           following command as the root user:
+                  </p><pre class="programlisting"># yum install mysql-devel</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e373"></a>3.2.5.&nbsp;Changing UIDs
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A requirement of BWMachined is that all machines in your cluster
+                           must have the same user account information, in particular, that the
+                           numerical user IDs for a particular username are the same on every
+                           machine.
+                  </p>
+                  <p>When setting up your cluster, one system in your cluster may end
+                           up with a different mapping of UID's to usernames to other systems in
+                           your cluster. This is especially if you are not using LDAP or other such
+                           tool to synchronise login names.
+                  </p>
+                  <p>If you are using the GNOME desktop environment on these machines,
+                           there can be problems when you change the UID for a username. This
+                           section outlines the steps to change the UID of a username and avoid
+                           these problems.
+                  </p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Make sure no one is logged in graphically.</p>
+                        </li>
+                        <li>
+                           <p>If you are in graphical mode, press <code class="code">CTRL + ALT +
+                                           F1</code> to switch to a text console.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Log in as <code class="code">root</code>.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Choose the new user ID and group ID for your user, making sure
+                                        that the new user ID is not being used by any other user, and
+                                        similarly that the group ID is not used by another group. You can
+                                        check by looking through <code class="filename">/etc/passwd</code> and
+                                        <code class="filename">/etc/group</code>. By convention, the user's primary
+                                        group ID and user ID are the same, though this need not be the
+                                        case.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Change the user ID and group ID of the user and the user's
+                                        primary group by invoking the following commands:
+                           </p><pre class="programlisting"># groupmod -g &lt;new GID&gt; &lt;username&gt;
+# usermod -u &lt;new UID&gt; -g &lt;new GID&gt; &lt;username&gt;</pre></li>
+                        <li>
+                           <p>Confirm that the new user has the new UID and GID:</p><pre class="programlisting"># id &lt;username&gt;</pre></li>
+                        <li>
+                           <p>Issue the commands below to remove any invalidated GNOME
+                                        state:
+                           </p><pre class="programlisting"># rm -rf /tmp/*&lt;username&gt;*</pre></li>
+                        <li>
+                           <p>You will now need to change the ownership of the home
+                                        directory to the new UID and GID.
+                           </p><pre class="programlisting"># chown -R &lt;username&gt;:&lt;username&gt; /home/&lt;username&gt;</pre></li>
+                        <li>
+                           <p>Press <code class="code">CTRL + ALT + F7</code> to return to the graphical
+                                        login if required.
+                           </p>
+                        </li>
+                     </ol>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;Hardware Requirements&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;Installing the BigWorld Server</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

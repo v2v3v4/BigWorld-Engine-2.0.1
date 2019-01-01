@@ -1,0 +1,212 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Using PyGUI</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Using PyGUI">
+      <link rel="next" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Introduction">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Using PyGUI</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left">&nbsp;</td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch01.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="book" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h1 class="title"><a name="HowTo_Use_PyGUI"></a>Using PyGUI
+                     </h1>
+                  </div>
+                  <div>
+                     <p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p>
+                  </div>
+                  <div>
+                     <p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p>
+                  </div>
+                  <div>
+                     <div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+                           is restricted to authorised users. This document is protected by
+                           copyright laws of Australia, other countries and international treaties.
+                           Unauthorised use, reproduction or distribution of this document, or any
+                             portion of this document, may result in the imposition of civil and
+                             criminal penalties as provided by law.
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <hr>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="chapter"><a href="ch01.html">1. Introduction</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch01.html#d0e24">1.1. Overview</a></span></dt>
+                        <dt><span class="section"><a href="ch01.html#d0e55">1.2. Features</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch02.html">2. How it Works</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch02.html#d0e107">2.1. PyGUIBase</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e120">2.2. .gui files</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e155">2.3. Visual states</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch02.html#d0e164">2.3.1. Visual state Python class</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#d0e185">2.3.2. Visual state XML schema</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#d0e199">2.3.3. External Visual States</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch02.html#d0e225">2.4. Mutually Exclusive Input</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e253">2.5. Tool Tips</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch02.html#d0e261">2.5.1. Tool Tip Manager</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#d0e285">2.5.2. Tool Tip Templates</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#d0e313">2.5.3. Tool Tip Info</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch02.html#d0e357">2.6. Draggable Components</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch03.html">3. Integration</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#d0e401">3.1. Personality script integration</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e463">3.2. Factory strings</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e488">3.3. Input Method Editor</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e513">3.4. Testing</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch04.html">4. Constructing an Interface</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#d0e543">4.1. Window script</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e567">4.2. Window component</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e581">4.3. Adding components to the window</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch04.html#d0e594">4.3.1. Attaching existing visual states</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch04.html#d0e604">4.4. Handling events</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e630">4.5. Loading and displaying the window</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e637">4.6. Tweaking existing windows</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch05.html">5. Component Script Reference</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#d0e653">5.1. Window</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#d0e669">5.2. Button</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e674">5.2.1. Component hierarchy</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e679">5.2.2. Creation</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e686">5.2.3. Properties</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e713">5.2.4. Events</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e734">5.2.5. Visual states</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch05.html#d0e856">5.3. CheckBox</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e864">5.3.1. Component hierarchy</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e869">5.3.2. Creation</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e876">5.3.3. Properties</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e884">5.3.4. Events</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e889">5.3.5. Visual states</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch05.html#d0e894">5.4. RadioButton</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e899">5.4.1. Component hierarchy</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e904">5.4.2. Creation</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e911">5.4.3. Properties</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e925">5.4.4. Events</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e930">5.4.5. Visual states</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch05.html#d0e935">5.5. Slider</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e940">5.5.1. Component hierarchy</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e945">5.5.2. Creation</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e952">5.5.3. Events</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e971">5.5.4. Visual states</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch05.html#d0e1049">5.6. EditField</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e1064">5.6.1. Component hierarchy</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1069">5.6.2. Creation</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1076">5.6.3. Properties</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1125">5.6.4. Events</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch05.html#d0e1144">5.7. LanguageIndicator</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e1149">5.7.1. Component hierarchy</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1155">5.7.2. Creation</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1162">5.7.3. Properties</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1183">5.7.4. Events</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1188">5.7.5. Visual states</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch05.html#d0e1193">5.8. ScrollableText</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e1203">5.8.1. Component hierarchy</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1209">5.8.2. Creation</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1216">5.8.3. Properties</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1245">5.8.4. Events</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1250">5.8.5. Visual states</a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left">&nbsp;</td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch01.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">&nbsp;</td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;1.&nbsp;Introduction</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

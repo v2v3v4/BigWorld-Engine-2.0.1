@@ -1,0 +1,392 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Server Operations Guide</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Operations Guide">
+      <link rel="next" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Introduction">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_operations_guide/index.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Server Operations Guide</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left">&nbsp;</td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch01.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="book" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h1 class="title"><a name="Server_Operations_Guide"></a>Server Operations Guide
+                     </h1>
+                  </div>
+                  <div>
+                     <p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p>
+                  </div>
+                  <div>
+                     <p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p>
+                  </div>
+                  <div>
+                     <div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+                           is restricted to authorised users. This document is protected by
+                           copyright laws of Australia, other countries and international treaties.
+                           Unauthorised use, reproduction or distribution of this document, or any
+                             portion of this document, may result in the imposition of civil and
+                             criminal penalties as provided by law.
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <hr>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="chapter"><a href="ch01.html">1. Introduction</a></span></dt>
+                  <dt><span class="chapter"><a href="ch02.html">2. Server Configuration with <span class="literal">bw.xml</span></a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch02.html#xref_The_Entry_parentFile">2.1. The entry <span class="literal">parentFile</span></a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_User_Dependent_Configuration">2.2. User dependent configuration</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_Command_Line_Options_Override_XML">2.3. Command-Line Options</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_General_Configuration_Options">2.4. General Configuration Options</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e1179">2.5. Billing System Configuration Options</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_Network_Configuration_Options">2.6. Network Configuration Options</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_Network_Address_Translation_Configuration_Options">2.7. Network Address Translation Configuration Options</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_Load_Balancing_Configuration_Options">2.8. Load Balancing Configuration Options</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch02.html#d0e1509">2.8.1. Entities Cardinality Configuration Options</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch02.html#xref_BaseApp_Configuration_Options">2.9. BaseApp Configuration Options</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch02.html#xref_BaseApp_Secondary_Database_Configuration_Options">2.9.1. Secondary Database Configuration Options</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#d0e2042">2.9.2. Packet Log Configuration Options</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#d0e2099">2.9.3. ID Configuration Options</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#d0e2164">2.9.4. Client Upstream Limits</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch02.html#xref_BaseAppMgr_Configuration_Options">2.10. BaseAppMgr Configuration Options</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_Bots_Configuration_Options">2.11. Bots Configuration Options</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_CellApp_Configuration_Options">2.12. CellApp Configuration Options</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch02.html#d0e3128">2.12.1. Noise Configuration Options</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#d0e3225">2.12.2. ID Configuration Options</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#d0e3290">2.12.3. CellApp Profiles Configuration Options</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch02.html#xref_CellAppMgr_Configuration_Options">2.13. CellAppMgr Configuration Options</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_DBMgr_Configuration_Options">2.14. DBMgr Configuration Options</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch02.html#d0e4134">2.14.1. Data Consolidation Options</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#d0e4170">2.14.2. XML Database Options</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch02.html#xref_LoginApp_Configuration_Options">2.15. LoginApp Configuration Options</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#xref_Reviver_Configuration_Options">2.16. Reviver Configuration Options</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch02.html#d0e4662">2.16.1. Reviver's BaseAppMgr Configuration Options</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#d0e4698">2.16.2. Reviver's CellAppMgr Configuration Options</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#d0e4734">2.16.3. Reviver's DBMgr Configuration Options</a></span></dt>
+                              <dt><span class="section"><a href="ch02.html#d0e4770">2.16.4. Reviver's LoginApp Configuration Options</a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch03.html">3. Cluster Administration Tools</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#xref_WebConsole">3.1. WebConsole</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch03.html#d0e4878">3.1.1. Modules</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#xref_WebConsole_Installation_And_Configuration">3.1.2. Installation and Configuration</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#xref_WebConsole_User_Admin">3.1.3. User Administration</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#xref_WebConsole_Modes">3.1.4. Production Mode vs Development Mode</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#xref_WebConsole_Customising">3.1.5. Customising</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch03.html#xref_MessageLogger">3.2. Message Logger</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch03.html#d0e5217">3.2.1. Configuration</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#d0e5275">3.2.2. File Format</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#xref_Command_Line_Utilities">3.2.3. Command Line Utilities</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#d0e5562">3.2.4. Automatic Log Archiving</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#xref_MessageLogger_Scalability">3.2.5. Production Scalability</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch03.html#xref_StatLogger">3.3. StatLogger</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch03.html#d0e5664">3.3.1. Requirements</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#d0e5715">3.3.2. Output</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#xref_StatLogger_Data_Collection_And_Aggregation">3.3.3. Data Collection and Aggregation</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#xref_StatLogger_Configuration">3.3.4. Configuration</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#d0e6167">3.3.5. Database</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch03.html#xref_Server_Command_Line_Utilities">3.4. Server Command-Line Utilities</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch03.html#xref_control_cluster_py">3.4.1. Control Cluster</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#d0e6634">3.4.2. MessageLogger Related Utilities</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch03.html#xref_Space_Viewer">3.5. Space Viewer</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch03.html#d0e6693">3.5.1. Selecting Spaces to View</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#d0e6711">3.5.2. Viewing Spaces</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#xref_Customising_Entity_And_Display_Colours">3.5.3. Customising Entity and Display Colours</a></span></dt>
+                              <dt><span class="section"><a href="ch03.html#xref_Running_Space_Viewer_Remotely">3.5.4. Running Space Viewer Remotely</a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch04.html">4. Fault Tolerance</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#xref_CellApp_Fault_Tolerance">4.1. CellApp Fault Tolerance</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#xref_BaseApp_Fault_Tolerance">4.2. BaseApp Fault Tolerance</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#xref_Fault_Tolerance_With_Reviver">4.3. Fault Tolerance with Reviver</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch04.html#xref_Specifying_Components_To_Support">4.3.1. Specifying Components to Support</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#xref_Reviver_Layout">4.3.2. Recommended Reviver Layout</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#xref_Command_Line_Options">4.3.3. Command-Line Options</a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch05.html">5. Backups and Disaster Recovery</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#xref_Disaster_Recovery">5.1. Disaster Recovery</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#xref_Database_Snapshot_Tool">5.2. Database Snapshot Tool</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e7097">5.2.1. Operational Behaviour</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e7130">5.2.2. Usage</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#xref_Snapshot_Tool_Requirements">5.2.3. Requirements</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#xref_Partitioning">5.2.4. Partitioning</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#xref_Snapshot_Tool_Configuration">5.2.5. Configuration</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e7540">5.2.6. Restoring From a Snapshot</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch05.html#xref_Data_Consolidation_Tool">5.3. Data Consolidation Tool</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#xref_Skipping_Data_Consolidation">5.3.1. Skipping Data Consolidation</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#xref_Ignoring_SQLite_Errors">5.3.2. Ignoring SQLite Errors</a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch06.html">6. Controlled Startup and Shutdown</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch06.html#d0e7751">6.1. Server-wide Shutdown</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e7836">6.2. Individual Application Retirement</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch06.html#d0e7841">6.2.1. BaseApp Retirement</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e7852">6.2.2. CellApp Retirement</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e7857">6.2.3. Retirement via WebConsole</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e7867">6.2.4. Retirement via <span class="literal">control_cluster.py</span></a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch07.html">7. Stress Testing with Bots</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch07.html#d0e7886">7.1. The Login Process</a></span></dt>
+                        <dt><span class="section"><a href="ch07.html#d0e8009">7.2. Python Interface</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch07.html#d0e8021">7.2.1. Python Controller (<span class="literal">bot_op.py</span>)</a></span></dt>
+                              <dt><span class="section"><a href="ch07.html#d0e8127">7.2.2. Methods and Attributes</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch07.html#xref_Controlling_Movement">7.3. Controlling Movement</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch07.html#xref_NodeProperties_Section">7.3.1. NodeProperties Section</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch07.html#d0e8646">7.4. Extending Bots</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch07.html#d0e8649">7.4.1. Creating New Movement Controllers</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch07.html#xref_Bots_Misc">7.5. Miscellaneous Bots Issues</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch07.html#xref_Bots_Misc_File_Descriptor_Limit">7.5.1. Running out of File Descriptors</a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch08.html">8. Security</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch08.html#d0e8715">8.1. Security of the Server</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#xref_Security_Server_Ports">8.2. Server Ports</a></span></dt>
+                        <dt><span class="section"><a href="ch08.html#xref_Blocking_Ports_And_Related_Security_Considerations">8.3. Blocking Ports and Related Security Considerations</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch09.html">9. BigWorld Server Across Multiple Machines</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch09.html#d0e8912">9.1. How To Start</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch09.html#d0e8917">9.1.1. WebConsole</a></span></dt>
+                              <dt><span class="section"><a href="ch09.html#d0e8926">9.1.2. Auto Configuration Via
+                                             <span class="literal">control_cluster.py</span></a></span></dt>
+                              <dt><span class="section"><a href="ch09.html#d0e8938">9.1.3. Hard-Coded Scripts</a></span></dt>
+                              <dt><span class="section"><a href="ch09.html#d0e8946">9.1.4. Manual Start</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch09.html#d0e8951">9.2. How To Stop</a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e8967">9.3. How To Monitor</a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#xref_LoginApp_And_Scalability">9.4. LoginApp and Scalability</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch10.html">10. Multiple BigWorld Servers in a Single LAN</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch10.html#d0e9057">10.1. Keeping Processes Separate</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e9067">10.2. Centralised Cluster Monitoring</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#xref_Auto_Detections_Of_LoginApps">10.3. Auto-Detection of LoginApps</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch11.html">11. MySQL Support</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch11.html#xref_Compiling_DBMgr_With_MySQL_Support">11.1. Compiling DBMgr with MySQL Support</a></span></dt>
+                        <dt><span class="section"><a href="ch11.html#d0e9133">11.2. Update <code class="filename">bw.xml</code> To Use MySQL</a></span></dt>
+                        <dt><span class="section"><a href="ch11.html#xref_Initialise_Database_With_Entity_Definitions">11.3. Synchronise Database With Entity Definitions</a></span></dt>
+                        <dt><span class="section"><a href="ch11.html#xref_Enabling_Secondary_Databases">11.4. Enabling Secondary Databases</a></span></dt>
+                        <dt><span class="section"><a href="ch11.html#xref_MySQL_Privileges">11.5. Privileges</a></span></dt>
+                        <dt><span class="section"><a href="ch11.html#d0e9332">11.6. The ClearAutoLoad tool</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch12.html">12. RPM</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch12.html#d0e9390">12.1. Directory Structures and Files</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e9426">12.2. How to Generate Binary RPM Packages</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e9521">12.3. Customising RPM Packages</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e9597">12.4. Setting up a Yum Repository</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e9710">12.5. Install, Upgrade and Uninstall using Yum Command</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch12.html#d0e9718">12.5.1. Install and Upgrade using a RPM Package Directly</a></span></dt>
+                              <dt><span class="section"><a href="ch12.html#d0e9751">12.5.2. Install and Upgrade using Yum Repository</a></span></dt>
+                              <dt><span class="section"><a href="ch12.html#d0e9765">12.5.3. Remove an Installed Package</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch12.html#d0e9772">12.6. How to Obtain Version Number of an Installed Package</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch13.html">13. First Aid After a Crash</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch13.html#d0e9811">13.1. Change your coredump output directory, if necessary</a></span></dt>
+                        <dt><span class="section"><a href="ch13.html#d0e9842">13.2. Determine the first process(es) that crashed</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch13.html#d0e9854">13.2.1. BigWorld logs</a></span></dt>
+                              <dt><span class="section"><a href="ch13.html#d0e9868">13.2.2. Chronologically listing core files</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch13.html#xref_Generate_Stack_Trace">13.3. Generate a stack trace of the process that crashed</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch13.html#d0e9927">13.3.1. Troubleshooting</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch13.html#xref_Retrieve_Crash_Logs">13.4. Retrieve relevant log information</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch13.html#d0e9960">13.4.1. Generating a log summary from a core file</a></span></dt>
+                              <dt><span class="section"><a href="ch13.html#d0e9975">13.4.2. Archiving all logs</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch13.html#d0e9989">13.5. Back up the crash information</a></span></dt>
+                        <dt><span class="section"><a href="ch13.html#d0e10030">13.6. Notify BigWorld Support of the crash</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch13.html#d0e10061">13.6.1. Uploading large files</a></span></dt>
+                              <dt><span class="section"><a href="ch13.html#d0e10083">13.6.2. Providing BigWorld access to your server cluster</a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch14.html">14. Common Log Messages</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch14.html#d0e10093">14.1. Warnings</a></span></dt>
+                        <dt><span class="section"><a href="ch14.html#d0e10198">14.2. Errors</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch15.html">15. Clock</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch15.html#d0e10259">15.1. BigWorld Timing Methods</a></span></dt>
+                        <dt><span class="section"><a href="ch15.html#xref_Clock_source">15.2. Linux Clock Source</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch16.html">16. Machine Groups and Categories</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch16.html#d0e10340">16.1. Introduction</a></span></dt>
+                        <dt><span class="section"><a href="ch16.html#xref_BWMachined_Machine_Groups">16.2. Configuration</a></span></dt>
+                        <dt><span class="section"><a href="ch16.html#d0e10381">16.3. User Defined Categories</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left">&nbsp;</td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch01.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">&nbsp;</td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;1.&nbsp;Introduction</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

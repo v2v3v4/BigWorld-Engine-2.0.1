@@ -1,0 +1,566 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;4.&nbsp;Design Introduction</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Overview">
+      <link rel="up" href="index.html" title="Server Overview">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Concepts">
+      <link rel="next" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Server Components">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_overview/ch04.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Design Introduction</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Design_Introduction"></a>Chapter&nbsp;4.&nbsp;Design Introduction
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch04.html#d0e256">4.1. Hardware Components</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e272">4.2. Software Components</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#d0e314">4.2.1. CellApp</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e330">4.2.2. CellAppMgr</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e344">4.2.3. BaseApp</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e363">4.2.4. BaseAppMgr</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#xref_Software_Components_LoginApp">4.2.5. LoginApp</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e377">4.2.6. DBMgr</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e386">4.2.7. Reviver</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e391">4.2.8. BWMachined</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch04.html#xref_Design_Introduction_Use_Cases">4.3. Use Cases</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#d0e407">4.3.1. Server Startup</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#xref_Use_Cases_Logging_In">4.3.2. Logging In</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e469">4.3.3. Data From Clients</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e476">4.3.4. Data To Clients</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e481">4.3.5. Ghosting</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e493">4.3.6. Changing Cells</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e498">4.3.7. Load Balancing</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>This section discusses the design of BigWorld Server environment, with
+                 a brief overview of its components and a series of Use Cases.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e256"></a>4.1.&nbsp;Hardware Components
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The BaseApps and the LoginApps are the only server hardware that
+                      needs to be connected to the Internet.
+               </p>
+               <p>For security purposes, it is recommended that the BaseApp and
+                      LoginApp machines have two network cards; one to connect to the Internet,
+                      and the other to connect to the rest of the server cluster.
+               </p>
+               <p>The diagram below shows the connection between the different
+                      components of server hardware.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/bigworld_server_components.png"><span class="caption">
+                        <p>BigWorld Server components</p></span></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e272"></a>4.2.&nbsp;Software Components
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The primary software components of the server are:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>CellApp</p>
+                     </li>
+                     <li>
+                        <p>CellAppMgr</p>
+                     </li>
+                     <li>
+                        <p>BaseApp</p>
+                     </li>
+                     <li>
+                        <p>BaseAppMgr</p>
+                     </li>
+                     <li>
+                        <p>LoginApp</p>
+                     </li>
+                     <li>
+                        <p>DBMgr</p>
+                     </li>
+                     <li>
+                        <p>Reviver</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>There is also a special daemon process called BWMachined, which runs
+                      on each machine.
+               </p>
+               <p>In a production environment, each CellApp runs on its own machine,
+                      as does each BaseApp. All other processes (apart from BWMachined) can be
+                      organised to run in various combinations across one or more servers,
+                      depending on system loads.
+               </p>
+               <p>In the hardware diagram above, LoginApp runs on its own machine(s),
+                      directly connected to the Internet. The DBMgr also runs on its own
+                      machine, whereas the CellAppMgr and BaseAppMgr both run on the World
+                      server.
+               </p>
+               <p>The diagram below shows the communication paths between many of the
+                      software components:
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/communication_between_bigworld_components.png"><span class="caption">
+                        <p>Communication between BigWorld
+                                   components
+                        </p></span></div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e314"></a>4.2.1.&nbsp;CellApp
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Each CellApp is responsible for all cells running on it.</p>
+                  <p>CellApps are probably the most important part of the architecture.
+                           Each cell is responsible for either part of a large space or an entire
+                           one. Within the game world, cells do not overlap, and collectively they
+                           cover all game spaces.
+                  </p>
+                  <p>Each cell is responsible for maintaining the entities located
+                           within its boundaries. The entity is the basic element of operations
+                           within the BigWorld game environment. Its distinguishing feature is its
+                           point position in a space. A cell may also keep ghosts (copies) of
+                           entities that are near, but outside its own boundary.
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/cellapps_managing_cells.png"><span class="caption">
+                           <p>CellApps managing cells</p></span></div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e330"></a>4.2.2.&nbsp;CellAppMgr
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The main responsibility of the CellAppMgr is to direct the cells
+                           and CellApps.
+                  </p>
+                  <p>It coordinates which cells run on which CellApps, and balances the
+                           load on each of them by varying the size of the cells.
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/cellappmgr_managing_cellapps.png"><span class="caption">
+                           <p>CellAppMgr managing CellApps</p></span></div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e344"></a>4.2.3.&nbsp;BaseApp
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In some respects, BaseApps can be seen as the firewalls for the
+                           server.
+                  </p>
+                  <p>For the client, their main purpose is to isolate it from
+                           transitions of its entity between CellApps.
+                  </p>
+                  <p>Each BaseApp contains many bases.</p>
+                  <p>Connected clients are served by an enhanced base known as a proxy.
+                           Each proxy is responsible for at most one client. Each client talks to
+                           one proxy. This proxy is responsible for redirecting messages from the
+                           client to the correct cell.
+                  </p>
+                  <p>In general, the BaseApp maintains bases. A base represents an
+                           object or function that does not need to have a position in the
+                           world.
+                  </p>
+                  <p>For example, an object used for group chat is a base without a
+                           corresponding cell entity.
+                  </p>
+                  <p>Any cell entity can have a corresponding base entity, giving it a
+                           fixed point of contact in the game world.
+                  </p>
+                  <p>A base is also considered to be part of an entity, so a proxy is
+                           the 'base entity' for a client, which will usually have a related 'cell
+                           entity' part, as well as a 'client entity' part instantiated on any
+                           clients that can see it.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e363"></a>4.2.4.&nbsp;BaseAppMgr
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The game world has a single BaseAppMgr running, which is
+                           responsible for managing the BaseApps.
+                  </p>
+                  <p>Its main job is to allocate new client connections to the most
+                           appropriate BaseApp, and keep track of them.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Software_Components_LoginApp"></a>4.2.5.&nbsp;LoginApp
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Clients talk to this component to initiate a session with the
+                           server. The LoginApp then adds the player as a proxy on a BaseApp, which
+                           may go on to create an entity on a CellApp.
+                  </p>
+                  <p>Multiple instances of this component can be running at
+                           once.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e377"></a>4.2.6.&nbsp;DBMgr
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>DBMgr is the interface to the database, where the persistent state
+                           of the world is stored.
+                  </p>
+                  <p>When a player logs in, the login process requests from the
+                           database the full set of properties for that player's entity. This data
+                           is used to instantiate a proxy for the player on the BaseApp.
+                  </p>
+                  <p>When the player logs out, the BaseApp sends a logoff message to
+                           the database. This message contains the player's entity's properties,
+                           which may have been modified by the base (or cell) entity.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e386"></a>4.2.7.&nbsp;Reviver
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Reviver is a watchdog process used to restart other processes that
+                           have failed, either because the machine they were running on has failed,
+                           or because the processes themselves have crashed or are
+                           unresponsive.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e391"></a>4.2.8.&nbsp;BWMachined
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>BWMachined is a daemon process that runs on each machine in the
+                           server cluster. It can be used to remotely start, stop, and locate
+                           server components. It also monitors CPU, memory, and network usage, and
+                           provides this information to network users.
+                  </p>
+                  <p>This is how server components locate each other during startup,
+                           via a broadcast message. Its operation is similar to a CORBA Name
+                           Server.
+                  </p>
+                  <p>This daemon must be running at all times on each machine in the
+                           server's cluster, and must be started as root. For installation
+                           instructions, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/index.html" class="olink">Server Installation Guide</a>.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Design_Introduction_Use_Cases"></a>4.3.&nbsp;Use Cases
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This section describes how some of the functionality of the server
+                      works. It is intended to give an introductory view of the components in
+                      the server, and how they relate to each other.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e407"></a>4.3.1.&nbsp;Server Startup
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The important things about startup are the dependencies between
+                           processes and how different processes find one another.
+                  </p>
+                  <p>As mentioned in <a href="ch05.html#xref_BWMachined" title="5.8.&nbsp;BWMachined">BWMachined</a>, BWMachined runs
+                           on each machine in the server cluster, and is responsible for monitoring
+                           the processes running on its machine.
+                  </p>
+                  <p>When a process starts up, it registers itself with the daemon
+                           running on the local machine. The registration includes an interface
+                           name.
+                  </p>
+                  <p>Many processes need to know the location of other
+                           processes.
+                  </p>
+                  <p>For example, a CellApp needs to know the location of a CellAppMgr,
+                           so that it can register with it. So when CellApp starts up, it asks for
+                           the location of a CellAppMgr by sending a broadcast message on
+                           BWMachined's port, to which all BWMachined processes listen. If a
+                           BWMachined has a CellAppMgr (associated with the correct user), it sends
+                           the CellAppMgr's contact details as a response.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>The BWMachined daemon should always be running on each machine
+                                in the server cluster.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Use_Cases_Logging_In"></a>4.3.2.&nbsp;Logging In
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When a client starts up, it communicates with LoginApp (for more
+                           details, see <a href="ch04.html#xref_Software_Components_LoginApp" title="4.2.5.&nbsp;LoginApp">LoginApp</a>).
+                  </p>
+                  <p>The login process follows the steps below:</p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Client sends a login request (for which it needs to know
+                                        LoginApp's IP address).
+                           </p>
+                        </li>
+                        <li>
+                           <p>While listening to its fixed (user-specified) port, LoginApp
+                                        receives the request.
+                           </p>
+                        </li>
+                        <li>
+                           <p>LoginApp forwards the request to DBMgr, so it can check if
+                                        login details are valid.
+                           </p>
+                        </li>
+                        <li>
+                           <p>DBMgr queries the database regarding login details.</p>
+                        </li>
+                        <li>
+                           <p>If the details are valid, DBMgr instructs BaseAppMgr to create
+                                        a new entity.
+                           </p>
+                        </li>
+                        <li>
+                           <p>BaseAppMgr forwards entity creation request to the least
+                                        loaded BaseApp.
+                           </p>
+                        </li>
+                        <li>
+                           <p>BaseApp creates new proxy, which is an object derived from
+                                        Base class.
+                           </p>
+                        </li>
+                        <li>
+                           <p>The newly created proxy now may create the cell entity on a
+                                        CellApp (this step might be delayed by the proxy until client
+                                        selects a character, for example.).When creating the cell entity,
+                                        the proxy may send a message via the CellAppMgr or directly to a
+                                        CellApp
+                           </p>
+                        </li>
+                        <li>
+                           <p>The UDP port of the proxy is returned to the client (via
+                                        BaseAppMgr, DBMgr, then LoginApp).
+                           </p>
+                        </li>
+                     </ol>
+                  </div>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/login_process.png"><span class="caption">
+                           <p>Login process</p></span></div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e469"></a>4.3.3.&nbsp;Data From Clients
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>All communication from the client to the server is sent to the
+                           address of the client's proxy that was sent to it during login.
+                  </p>
+                  <p>This communication uses Mercury (the BigWorld communication
+                           mechanism) on top of UDP. Once the proxy receives the packet, it
+                           forwards the messages (generally most, if not all) to the appropriate
+                           CellApp. This will then update the data of the appropriate entity. If
+                           the entity has any ghosts, these are also updated.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e476"></a>4.3.4.&nbsp;Data To Clients
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Periodically, at 10 Hertz (configurable), the client's cell entity
+                           constructs a packet full of messages about the entities in the client's
+                           AoI. This packet is then sent via the proxy to the client.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e481"></a>4.3.5.&nbsp;Ghosting
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Each client's entity keeps a priority queue of other entities in
+                           its AoI. One issue that arises is that not all these entities might be
+                           on the same cell. The solution to this is ghosting.
+                  </p>
+                  <p>A ghost is a copy of an entity from an adjacent cell. The ghost
+                           copy contains all data that may be wanted when other entities are going
+                           through their priority queues to construct their update packets. If
+                           there is a possibility that an entity is within the AoI of another
+                           entity in a different cell, it must have a ghost in that cell. To
+                           achieve this, if an entity is within the AoI distance (or ghost
+                           distance) of a cell boundary, BigWorld creates a ghost of the entity on
+                           that cell.
+                  </p>
+                  <p>When a real entity (<em class="emphasis">i.e.</em>, the master,
+                           non-ghost entity) is updated, it updates its ghosts as well, if
+                           any.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e493"></a>4.3.6.&nbsp;Changing Cells
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>As an entity moves around, it may actually leave the boundary of
+                           the cell it is currently on. When this occurs, the entity is moved to
+                           the relevant new cell. It then informs the base of its new address, so
+                           that the base can find it in the future (and in the case of a proxy, so
+                           that the proxy can continue to forward messages correctly).
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e498"></a>4.3.7.&nbsp;Load Balancing
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A CellApp machine, like any other machine, has a limit to the load
+                           it can handle. To avoid some CellApps getting overloaded, there is a
+                           mechanism to balance the load. In general, if a cell is overloaded, then
+                           it reduces its size, thus offloading some entities. If it is
+                           underloaded, it increases its size to assume control of more
+                           entities.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Concepts&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Server Components</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

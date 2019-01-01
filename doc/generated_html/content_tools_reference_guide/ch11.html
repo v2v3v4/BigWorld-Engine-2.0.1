@@ -1,0 +1,1562 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;11.&nbsp;3ds Max and Maya Exporters</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Content Tools Reference Guide">
+      <link rel="up" href="index.html" title="Content Tools Reference Guide">
+      <link rel="prev" href="ch10.html" title="Chapter&nbsp;10.&nbsp;NavGen">
+      <link rel="next" href="ch12.html" title="Chapter&nbsp;12.&nbsp;Lock Server (BWLockD)">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/content_tools_reference_guide/ch11.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;11.&nbsp;3ds Max and Maya Exporters</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch10.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch12.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_3ds_Max_And_Maya_Exporters"></a>Chapter&nbsp;11.&nbsp;3ds Max and Maya Exporters
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch11.html#d0e30722">11.1. 3ds Max</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch11.html#xref_3ds_Max_Visual_Exporter">11.1.1. 3ds Max visual exporter</a></span></dt>
+                        <dt><span class="section"><a href="ch11.html#xref_3ds_Max_Animation_Exporter">11.1.2. 3ds Max animation exporter</a></span></dt>
+                        <dt><span class="section"><a href="ch11.html#d0e31122">11.1.3. Data supported</a></span></dt>
+                        <dt><span class="section"><a href="ch11.html#d0e31283">11.1.4. Installing the 3ds Max exporters</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch11.html#xref_Maya">11.2. Maya</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch11.html#xref_Maya_Visual_And_Animation_Exporter">11.2.1. Maya visual and animation exporter</a></span></dt>
+                        <dt><span class="section"><a href="ch11.html#xref_Maya_Exporting">11.2.2. Exporting</a></span></dt>
+                        <dt><span class="section"><a href="ch11.html#xref_BigWorld_Shelf">11.2.3. BigWorld shelf</a></span></dt>
+                        <dt><span class="section"><a href="ch11.html#xref_Creating_Shells">11.2.4. Creating Shells</a></span></dt>
+                        <dt><span class="section"><a href="ch11.html#d0e31744">11.2.5. Installing the Maya exporters</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch11.html#xref_Exporting_Custom_Node_Hierarchy">11.3. Exporting custom node hierarchy</a></span></dt>
+                  <dt><span class="section"><a href="ch11.html#xref_Validation_Rules">11.4. Validation rules</a></span></dt>
+               </dl>
+            </div>
+            <p>BigWorld offers plug-ins that allow you to export geometry and
+                 animation data from 3ds Max and Maya to the formats used by the game
+                 engine.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e30722"></a>11.1.&nbsp;3ds Max
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld offers plug-ins for exporting visuals and animations,
+                      supporting 3ds Max versions 2008, 2009, 2010 and 2011.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_3ds_Max_Visual_Exporter"></a>11.1.1.&nbsp;3ds Max visual exporter
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The 3ds Max visual exporter is a plug-in that exports mesh data to
+                           the .visual format used by the BigWorld engine.
+                  </p>
+                  <p>It exports meshes, physiqued meshes, skinned meshes, transform
+                           nodes, morph targets, BSP trees, hard points, and portals, and can also
+                           generate tangents and binormals for normal mapping.
+                  </p>
+                  <p>In order to access the Visual Export plug-in, set the <em class="emphasis">Select File To Export</em> dialog box's <em class="emphasis">Save As Type</em> drop-down list box to <em class="emphasis">Visual Exporter (<span class="literal">*.VISUAL</span>)</em>, as
+                           illustrated below:
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/exporters_3ds_max_visual_exporter.png" height=""><span class="caption">
+                           <p>Accessing the Visual Export plug-in in 3ds
+                                        Max
+                           </p></span></div>
+                  </div>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>For unskinned meshes Visual Exporter can automatically select a
+                                32-bit index buffers if there are more than 65355 vertices in the
+                                model. However, skinned meshes are limited to 65355 vertices.
+                     </p>
+                     <p>The client engine can load both 16- and 32-bit index buffers
+                                automatically, but some low-end graphic cards do not support the
+                                latter. On those cards, objects with 32-bit index buffer will not
+                                render.
+                     </p>
+                  </div>
+                  <p>The components of the <em class="emphasis">Visual
+                              Exporter</em> and <em class="emphasis">Advanced
+                              Settings</em> dialog boxes are described below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">Visual type</em></p>
+                           <p>Type of visual being exported, and hence what kind of
+                                        information to save.
+                           </p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis">Animated, skinned</em></p>
+                                    <p>Specifies that the plug-in should export everything as is,
+                                                     <em class="emphasis">i.e.</em>, every piece should be exported as a
+                                                     separate object, and all transform nodes and morph targets
+                                                     should be exported.
+                                    </p>
+                                    <p>This option should only be used for visuals that have
+                                                     moving parts rigged with physique, skinned, or separate moving
+                                                     parts.
+                                    </p>
+                                    <p>This option does not generate BSP trees from the meshes.
+                                                     If you want to have a (static) BSP tree for an animated object,
+                                                     then you will have to create a custom one.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Static</em></p>
+                                    <p>Specifies that the plug-in should combine all meshes into
+                                                     one, discarding all transform nodes and modifiers, and
+                                                     generating a BSP tree for the combined mesh (unless there is a
+                                                     custom one in the current scene).
+                                    </p>
+                                    <p>This option should be used for shells and other static
+                                                     objects placed in the scene.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Static with nodes</em></p>
+                                    <p>Specifies that the plug-in should combine all meshes into
+                                                     one, exporting all transform nodes.
+                                    </p>
+                                    <p>This option is similar to <em class="emphasis">Static</em>, except that it will export all
+                                                     transform nodes for the scene.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Mesh particles</em></p>
+                                    <p>Specifies that the plug-in should allow these meshes to be
+                                                     sorted when rendered, so that alpha blending works correctly.
+                                                     Each individual object in the scene is exported as one particle,
+                                                     in the format used by the mesh particle renderer.
+                                    </p>
+                                    <p>There is a limit of 17 particle meshes exported for each
+                                                     mesh particle object.
+                                    </p>
+                                    <p>Visuals exported using this option can be used as a
+                                                     particle system in ParticleEditor. For details, see <a href="ch04.html#xref_pe_Renderer_Properties_Sub_Panel" title="4.10.2.2.2.&nbsp;Renderer Properties sub-panel">Renderer Properties sub-panel</a>.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Allow scale</em></p>
+                           <p>Indicates that the transform nodes should be exported with
+                                        scale.
+                           </p>
+                           <p>This is generally not necessary, and should only be used if
+                                        you want to export animations that include scale.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Normal mapped</em></p>
+                           <p>Specifies that the plug-in should create additional data to be
+                                        used for normal-mapping the model.
+                           </p>
+                           <p>This option must be checked to use a normal-mapped material on
+                                        the model.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Keep existing
+                                           materials</em></p>
+                           <p>Specifies that the plug-in should keep changes made to the
+                                        material in ModelEditor.
+                           </p>
+                           <p>This option must be checked if you are overwriting a
+                                        previously exported model, and want to keep material changes made in
+                                        ModelEditor.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Snap vertices</em></p>
+                           <p>Specifies that the plug-in should snap the vertices of all
+                                        geometry to the nearest tenth of a millimetre.
+                           </p>
+                           <p>This option has been added primarily to support the new use of
+                                        portals &#8212; because the grid and axis alignment restrictions
+                                        have been removed for portals, snapping portals to the nearest tenth
+                                        of a millimetre can pull portals off bounding box or hull
+                                        boundaries.
+                           </p>
+                           <p>This option does not affect geometry exported when the
+                                        <em class="emphasis">Visual Type</em> drop-down list box is
+                                        set to <em class="emphasis">Animated</em>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Advanced Settings
+                                           dialog</em></p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis">Bone count</em></p>
+                                    <p>Specifies the number of bones used by the Visual Splitter
+                                                     to divide up any mesh.
+                                    </p>
+                                    <p>It is set to a default of 17 because all BigWorld skinned
+                                                     shaders are designed to use a maximum of 17 bones. When a visual
+                                                     file uses more than 17 bones, the Visual Splitter divides the
+                                                     object into 17, or less, bone segments.
+                                    </p>
+                                    <p>Only change this field if you have created shaders that
+                                                     support a different number of bones.
+                                    </p>
+                                    <p>The field's maximum value is 87, which is the upper limit
+                                                     of BigWorld vertex format.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Disable visual
+                                                        checker</em></p>
+                                    <p>Specifies that the plug-in should not check the exported
+                                                     model against the visual rules.
+                                                     <sup>A</sup></p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Fix cylindrical
+                                                        mapping</em></p>
+                                    <p>Specifies that the plug-in should try to use an
+                                                     alternative method for generating texture space vectors used for
+                                                     normal mapping.
+                                    </p>
+                                    <p>This option must be checked if there are artifacts along
+                                                     seams when using normal-mapped shaders.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Opposite facing
+                                                        direction</em></p>
+                                    <p>Specifies that the model has been modelled facing in the
+                                                     incorrect direction and that it should be rotated by 180 degrees
+                                                     so that is appears correctly inside the engine.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+                  <p><em class="emphasis"><em class="emphasis">A</em> &#8212; The rules
+                              are defined in <span class="literal">bigworld/tools/res/visual_rules.xml</span>.
+                              For details, see <a href="ch11.html#xref_Validation_Rules" title="11.4.&nbsp;Validation rules">Validation rules</a>.</em></p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e30909"></a>11.1.1.1.&nbsp;Configuration file
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The plug-in automatically generates the file
+                                <span class="literal">visualexporter.cfg</span>, under 3ds Max's folder
+                                <span class="literal">plugcfg</span>.
+                     </p>
+                     <p>The list below describes the configuration options written to
+                                this file:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">allowScale</span></em></p>
+                              <p>Last value set for the <em class="emphasis">Allow
+                                                Scale</em> check box in the exporter dialog box.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">bumpMapped</span></em></p>
+                              <p>Last value set for the <em class="emphasis">Bumpmapped</em> check box in the exporter dialog
+                                             box.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">exportMode</span></em></p>
+                              <p>Last export mode used in the exporter dialog box.</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">unitScale</span></em></p>
+                              <p>Conversion factor for units between 3ds Max and
+                                             BigWorld.
+                              </p>
+                              <p>The default value is 0.1, which means that 1 unit in 3ds Max
+                                             equals 0.1 units in BigWorld.
+                              </p>
+                              <p>It is important to note that you need to change this value
+                                             in both <span class="literal">animationexporter.cfg</span> and
+                                             <span class="literal">visualexporter.cfg</span>.
+                              </p>
+                              <p><em class="emphasis">This configuration option can be set only in the
+                                                configuration files.</em></p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_3ds_Max_Animation_Exporter"></a>11.1.2.&nbsp;3ds Max animation exporter
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The 3ds Max Animation Exporter is a plug-in that exports
+                           animations to the .animation format used by the BigWorld engine.
+                  </p>
+                  <p>It supports exporting of node and morph animations (using the
+                           morpher modifier).
+                  </p>
+                  <p>To access the <em class="emphasis">Animation Export</em>
+                           plug-in, in the <em class="emphasis">Select File To Export</em>
+                           dialog box set the <em class="emphasis">Save As Type</em>
+                           drop-down list box to <em class="emphasis">Animation Exporter
+                              (<span class="literal">*.ANIMATION</span>)</em>, as illustrated
+                           below:
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/exporters_3ds_max_animation_exporter.png" height=""><span class="caption">
+                           <p>Accessing the Animation Export plug-in in 3ds
+                                        Max
+                           </p></span></div>
+                  </div>
+                  <p>The list below describes the components of the Visual Exporter
+                           dialog box:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">Allow scale</em></p>
+                           <p>Indicates that the animation should be exported with scale
+                                        keys in it.
+                           </p>
+                           <p>If you wish to use scaling animations, you have to export the
+                                        visual you want to animate with this option enabled as well. For
+                                        more details, see <a href="ch11.html#xref_3ds_Max_Visual_Exporter" title="11.1.1.&nbsp;3ds Max visual exporter">3ds Max visual exporter</a>.
+                           </p>
+                           <p>This option only applies to node animation.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Export morph animation</em></p>
+                           <p>Indicates that morph animations should be exported.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Export node animation</em></p>
+                           <p>Indicates that node animations should be exported.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Use reference
+                                           hierarchy</em></p>
+                           <p>Indicates that the animation should be exported with a node
+                                        hierarchy different from the one in the current 3ds Max file.
+                           </p>
+                           <p>Once this option is selected, the <em class="emphasis">Select
+                                           Reference Hierarchy File</em> dialog box is displayed, where
+                                        you can select the visual file with the desired node
+                                        hierarchy.
+                           </p>
+                           <p>For details, see <a href="ch11.html#xref_Exporting_Custom_Node_Hierarchy" title="11.3.&nbsp;Exporting custom node hierarchy">Exporting custom node hierarchy</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Export cue track</em></p>
+                           <p>Not supported for this version.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Opposite facing
+                                           direction</em></p>
+                           <p>Specifies that the model has been modelled facing in the
+                                        incorrect direction and that it should be rotated by 180 degrees so
+                                        that is appears correctly inside the engine.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e31055"></a>11.1.2.1.&nbsp;Configuration file
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The plug-in automatically generates the file
+                                <span class="literal">animationexporter.cfg</span>, under 3ds Max's folder
+                                plugcfg.
+                     </p>
+                     <p>The list below describes the configuration options written to
+                                this file:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">allowScale</span></em></p>
+                              <p>Last value set for the <em class="emphasis">Allow
+                                                Scale</em> check box in the exporter dialog box.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">exportMorphAnimation</span></em></p>
+                              <p>Last value set for the <em class="emphasis">Export Morph
+                                                Animation</em> check box in the exporter dialog box.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">exportNodeAnimation</span></em></p>
+                              <p>Last value set for the <em class="emphasis">Export Node
+                                                Animation</em> check box in the exporter dialog box.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">referenceNodesFile</span></em></p>
+                              <p>Last reference nodes file used for exporting
+                                             animation.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">unitScale</span></em></p>
+                              <p>Conversion factor for units between 3ds Max and
+                                             BigWorld.
+                              </p>
+                              <p>The default value is 0.1, which means that 1 unit in 3ds Max
+                                             equals 0.1 units in BigWorld.
+                              </p>
+                              <p>It is important to note that you need to change this value
+                                             in both <span class="literal">animationexporter.cfg</span> and
+                                             <span class="literal">visualexporter.cfg</span>.
+                              </p>
+                              <p>This configuration option can be set only in the
+                                             configuration files.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e31122"></a>11.1.3.&nbsp;Data supported
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The list below gives an overview of the data supported by the
+                           plug-in:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">BSP tree</em></p>
+                           <p>If the selected option in <em class="emphasis">Visual
+                                           Exporter</em> dialog box's <em class="emphasis">Visual
+                                           Type</em> group box is either <em class="emphasis">Static</em> or <em class="emphasis">Static With
+                                           Nodes</em>, then BSP trees are generated from the exported
+                                        object.
+                           </p>
+                           <p>It is also possible to define a custom BSP tree, by postfixing
+                                        an object name with '<span class="literal">_bsp</span>'. If a custom BSP tree
+                                        exists, then a new one will not be generated from the exported
+                                        object.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Hard point</em></p>
+                           <p>All nodes having the name prefixed by '<span class="literal">HP_</span>'
+                                        will be exported as a hard point (hard points are attachment points
+                                        for joining two models).
+                           </p>
+                           <p>Except for the transform node, no object will be exported for
+                                        a hard point.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Material</em></p>
+                           <p>If a standard 3ds Max material is applied to an object, then
+                                        the identifier, the diffuse map, and the self-illumination factors
+                                        of the material will be exported.
+                           </p>
+                           <p>If a DirectX 9 shader material is applied to a model, then the
+                                        properties and the shader name referenced by the material will be
+                                        exported.
+                           </p>
+                           <p>When exporting an existing visual, the plug-in tries to keep
+                                        its material settings.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Mesh</em></p>
+                           <p>Meshes in the current set will be exported according to the
+                                        selected option in the <em class="emphasis">Visual
+                                           Exporter</em> dialog box's <em class="emphasis">Visual
+                                           Type</em> group box.
+                           </p>
+                           <p>If <em class="emphasis">Visual Type</em> is set to
+                                        <em class="emphasis">Animated</em>, then the plug-in will
+                                        also export any morpher, skin, and physique modifiers applied to the
+                                        object.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Node</em></p>
+                           <p>If the selected option in <em class="emphasis">Visual
+                                           Exporter</em> dialog box's <em class="emphasis">Visual
+                                           Type</em> group box is either <em class="emphasis">Animated</em> or <em class="emphasis">Static With
+                                           Nodes</em>, then all transform nodes in the current set will
+                                        be exported.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Portal</em></p>
+                           <p>Portals are generally a single Quad with the surface normal
+                                        pointing toward the main body of the shell that it is part
+                                        of.
+                           </p>
+                           <p>The type of portal to export is defined by editing the user
+                                        properties of the object in 3ds Max. To define it, follow the steps
+                                        below:
+                           </p>
+                           <div class="orderedlist">
+                              <ol type="1">
+                                 <li>
+                                    <p>Right-click the object.</p>
+                                 </li>
+                                 <li>
+                                    <p>In the context menu, click <em class="emphasis">Properties</em>.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>In the <em class="emphasis">Object Properties</em>
+                                                     dialog box, click the <em class="emphasis">User
+                                                        Defined</em> tab.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>In the multi-line field <em class="emphasis">User-Defined
+                                                        Properties</em>, enter the value according to the type of
+                                                     portal, as described in the list below:
+                                    </p>
+                                    <div class="itemizedlist">
+                                       <ul type="circle">
+                                          <li>
+                                             <p><em class="emphasis">Portal type:
+                                                                     Standard</em></p>
+                                             <p>Used to link two shells together in
+                                                                  WorldEditor.
+                                             </p>
+                                             <div class="itemizedlist">
+                                                <ul type="square">
+                                                   <li>
+                                                      <p><em class="emphasis">User-defined
+                                                                                  properties:</em></p><pre class="programlisting">portal=true</pre></li>
+                                                </ul>
+                                             </div>
+                                          </li>
+                                          <li>
+                                             <p><em class="emphasis">Portal type:
+                                                                     Exit</em></p>
+                                             <p>Used to link the outside world to a shell.</p>
+                                             <div class="itemizedlist">
+                                                <ul type="square">
+                                                   <li>
+                                                      <p><em class="emphasis">User-defined
+                                                                                  properties:</em></p><pre class="programlisting">portal=true
+exit=true</pre></li>
+                                                </ul>
+                                             </div>
+                                          </li>
+                                          <li>
+                                             <p><em class="emphasis">Portal type:
+                                                                     Heaven</em></p>
+                                             <p>Lets you see the outside world from an inside
+                                                                  chunk.
+                                             </p>
+                                             <div class="itemizedlist">
+                                                <ul type="square">
+                                                   <li>
+                                                      <p><em class="emphasis">User-defined
+                                                                                  properties:</em></p><pre class="programlisting">portal=true
+exit=true
+heaven=true</pre></li>
+                                                </ul>
+                                             </div>
+                                          </li>
+                                       </ul>
+                                    </div>
+                                 </li>
+                              </ol>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e31283"></a>11.1.4.&nbsp;Installing the 3ds Max exporters
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The proprietary 3ds Max exporters are provided for 3ds Max
+                           versions 2008, 2009, 2010 and 2011, and can be found in the folder
+                           <span class="literal">bigworld\tools\exporter</span></p>
+                  <p>To install the 3ds Max exporter, follow the steps below:</p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Open 3ds Max.</p>
+                        </li>
+                        <li>
+                           <p>Open the <em class="emphasis">Configure System
+                                           Paths</em> dialog box:
+                           </p>
+                           <p>On 3ds Max 2008, 2009, 2010 and 2011, select the <em class="emphasis">Customize <span class="symbol">&#8594;</span>
+                                           Configure System Paths</em> menu item.
+                           </p>
+                           <div class="informalfigure">
+                              <div class="mediaobject"><img src="images/exporters_3ds_max_installing_invoking_configure_user_paths_dialog_box.png" height=""><span class="caption">
+                                    <p>Invoking the Configure User Paths dialog
+                                                     box
+                                    </p></span></div>
+                           </div>
+                        </li>
+                        <li>
+                           <p>On the <em class="emphasis">Configure System Paths</em>
+                                        dialog box:
+                           </p>
+                           <div class="itemizedlist">
+                              <ul type="disc">
+                                 <li>
+                                    <p>Click the <em class="emphasis">3rd Party
+                                                        Plug-Ins</em> tab.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Click the <em class="emphasis">Add</em> button
+                                                     &#8212; the <em class="emphasis">Choose Directory For New
+                                                        Entry</em> dialog box will open.
+                                    </p>
+                                    <div class="informalfigure">
+                                       <div class="mediaobject"><img src="images/exporters_3ds_max_installing_invoking_choose_directory_for_new_entry_dialog_box.png" height=""><span class="caption">
+                                             <p>Invoking the Choose Directory For New Entry
+                                                                  dialog box
+                                             </p></span></div>
+                                    </div>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p>On the <em class="emphasis">Choose Directory For New
+                                           Entry</em> dialog box:
+                           </p>
+                           <div class="orderedlist">
+                              <ol type="a">
+                                 <li>
+                                    <p>On the <em class="emphasis">Folder</em> drop-down
+                                                     list, select the folder containing the BigWorld exporter plug-in
+                                                     for your 3ds Max version, e.g.
+                                                     <span class="literal">bigworld\tools\exporter\3dsmax2011</span>.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>On the file list, select
+                                                     <span class="literal">visualexporter.dle</span>.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>On the <em class="emphasis">Label</em> field, type
+                                                     '<span class="literal">BigWorld exporters</span>'.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Click the <em class="emphasis">Use Path</em> button
+                                                     &#8212; the <em class="emphasis">Configure System
+                                                        Paths</em> dialog box will be reactivated, listing
+                                                     BigWorld's exporter plug-in.
+                                    </p>
+                                    <div class="informalfigure">
+                                       <div class="mediaobject"><img src="images/exporters_3ds_max_installing_setting_choose_directory_for_new_entry_dialog_box.png" height=""><span class="caption">
+                                             <p>Setting the Choose Directory For New Entry
+                                                                  dialog box
+                                             </p></span></div>
+                                    </div>
+                                 </li>
+                              </ol>
+                           </div>
+                        </li>
+                     </ol>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Maya"></a>11.2.&nbsp;Maya
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The BigWorld plug-in allows you to export Maya visual and animations
+                      created with versions 2008, 2009, 2010 and 2011.
+               </p>
+               <p>Its features and installation steps are described in the
+                      sub-sections below.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Maya_Visual_And_Animation_Exporter"></a>11.2.1.&nbsp;Maya visual and animation exporter
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The Maya Visual and Animation Exporter is a plug-in that exports
+                           mesh and animation data respectively to the .visual and .animation
+                           formats used by the BigWorld engine.
+                  </p>
+                  <p>The visual exporter portion exports meshes, skinned meshes,
+                           transform nodes, BSP trees, hard points, portals and morph targets, and
+                           can also generate tangents and binormals for normal mapping. The
+                           animation exporter portion exports node animations and morph
+                           animations.
+                  </p>
+                  <p>This version supports:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Static Models</p>
+                        </li>
+                        <li>
+                           <p>Static Models with Nodes</p>
+                        </li>
+                        <li>
+                           <p>Normal Models</p>
+                        </li>
+                        <li>
+                           <p>Animations</p>
+                        </li>
+                        <li>
+                           <p>Mesh Particles</p>
+                        </li>
+                        <li>
+                           <p>Custom BSPs</p>
+                        </li>
+                        <li>
+                           <p>Custom Hulls</p>
+                        </li>
+                        <li>
+                           <p>Bump Mapping</p>
+                        </li>
+                        <li>
+                           <p>Morph Targets and Animation</p>
+                        </li>
+                        <li>
+                           <p>Custom node hierarchies.</p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Maya_Exporting"></a>11.2.2.&nbsp;Exporting
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In order to access the <em class="emphasis">Visual and Animation
+                              Exporter</em> plug-in, set the <em class="emphasis">Export</em> dialog box's <em class="emphasis">Files
+                              Of Type</em> drop-down list box to <em class="emphasis">BigWorld
+                              Asset (<span class="literal">*.*</span>)</em>, as illustrated below:
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/exporters_maya_visual_and_animation_exporter.png" height=""><span class="caption">
+                           <p>Invoking the Visual and Animation Exporter
+                                        plug-in
+                           </p></span></div>
+                  </div>
+                  <p>The list below describes the components of the <em class="emphasis">Export All Options</em> dialog box:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">Export</em></p>
+                           <p>Sets the type of file being exported.</p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis">Visual</em></p>
+                                    <p>Specifies that the objects should be saved into a
+                                                     <span class="literal">.visual</span> file.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Animation</em></p>
+                                    <p>Specifies that the objects should be saved into a
+                                                     <span class="literal">.animation</span> file.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Visual type</em></p>
+                           <p>Sets the type of visual being exported, and hence what
+                                        information to save.
+                           </p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis">Animated, skinned</em></p>
+                                    <p>Specifies that the plug-in should export everything as is,
+                                                     <em class="emphasis">i.e.</em>, every piece should be exported as a
+                                                     separate object, and all transform nodes and morph targets
+                                                     should be exported.
+                                    </p>
+                                    <p>This option should only be used for visuals that have
+                                                     moving parts, either skinned or separate moving parts.
+                                    </p>
+                                    <p>This option does not generate BSP trees from the meshes.
+                                                     If you want a (static) BSP tree for an animated object, then you
+                                                     will have to create a custom one.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Static</em></p>
+                                    <p>Specifies that the plug-in should combine all meshes into
+                                                     one, discarding all transform nodes and modifiers, and
+                                                     generating a BSP tree for the combined mesh (unless there is a
+                                                     custom one in the current scene).
+                                    </p>
+                                    <p>This option should be used for shells and other static
+                                                     objects placed in the scene.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Static with nodes</em></p>
+                                    <p>Specifies that the plug-in should combine all meshes into
+                                                     one, exporting all transform nodes.
+                                    </p>
+                                    <p>This option is similar to the option Static, except in
+                                                     that it will export all transform nodes for the scene
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Mesh particles</em></p>
+                                    <p>Specifies that the plug-in should allow these meshes to be
+                                                     sorted when rendered, so that alpha blending works correctly.
+                                                     Each individual object in the scene is exported as one particle,
+                                                     in the format used by the mesh particle renderer.
+                                    </p>
+                                    <p>There is a limit of 17 particle meshes exported for each
+                                                     mesh particle object.
+                                    </p>
+                                    <p>Visuals exported using this option can be used as a
+                                                     particle system in ParticleEditor. For details, see <a href="ch04.html#xref_pe_Renderer_Properties_Sub_Panel" title="4.10.2.2.2.&nbsp;Renderer Properties sub-panel">Renderer Properties sub-panel</a>.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Allow scale</em></p>
+                           <p>Indicates that the object should be exported with scale keys
+                                        in it.
+                           </p>
+                           <p>If you wish to use scaling animations, then you have to export
+                                        both the visual and the animation with this option enabled.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Normal mapped</em></p>
+                           <p>Specifies that the plug-in should create additional data to be
+                                        used for normal-mapping the model.
+                           </p>
+                           <p>This option must be checked to use a normal-mapped material on
+                                        the model.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Keep existing
+                                           materials</em></p>
+                           <p>Specifies that the plug-in should keep changes to material
+                                        made in ModelEditor.
+                           </p>
+                           <p>This option must be checked if you are overwriting a
+                                        previously exported model, and want to keep material changes made in
+                                        ModelEditor.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Use reference node</em></p>
+                           <p>Indicates that the animation should be exported with a node
+                                        hierarchy different from the one in the current Maya file.
+                           </p>
+                           <p>Once this option is checked, the <em class="emphasis">Select
+                                           Reference Hierarchy File</em> dialog box is displayed, where
+                                        you can select the visual file with the desired node hierarchy. For
+                                        more details, see <a href="ch11.html#xref_Exporting_Custom_Node_Hierarchy" title="11.3.&nbsp;Exporting custom node hierarchy">Exporting custom node hierarchy</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Snap vertices</em></p>
+                           <p>Specifies that the plug-in should snap the vertices of all
+                                        geometry to the nearest tenth of a millimetre.
+                           </p>
+                           <p>This option has been added primarily to support the new use of
+                                        portals &#8212; because the grid and axis alignment restrictions
+                                        have been removed for portals, snapping portals to the nearest tenth
+                                        of a millimetre can pull portals off bounding box or hull
+                                        boundaries.
+                           </p>
+                           <p>This option does not affect geometry exported when the
+                                        <em class="emphasis">Visual Type</em> drop-down list box is
+                                        set to <em class="emphasis">Animated</em>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Strip reference prefix</em></p>
+                           <p>Specifies that the plug-in should strip the model name prefix
+                                        from the names of the animation nodes when using referenced models
+                                        inside Maya.
+                           </p>
+                           <p>When animating a model in Maya that uses a reference to a
+                                        rigged model, the name of the model will be prefixed to the name of
+                                        each animated node. As a result the node names of the original model
+                                        will not match those of the animation, so the animation will not
+                                        affect the model. By selecting this option, the model name will be
+                                        stripped from the names of the animation nodes so that the node
+                                        names in the visual file match those in the animation file.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Advanced Settings
+                                           dialog</em></p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis">Bone count</em></p>
+                                    <p>Specifies the number of bones used by the Visual Splitter
+                                                     to divide any mesh up.
+                                    </p>
+                                    <p>It is set to a default of 17 because that is the maximum
+                                                     that all BigWorld skinned shaders are designed to use. When a
+                                                     visual file uses more than 17 bones, the Visual splitter divides
+                                                     the object into 17 or less bone segments.
+                                    </p>
+                                    <p>Only change this field if you have created shaders that
+                                                     support a different number of bones.
+                                    </p>
+                                    <p>The field's maximum value is 87, which is the upper limit
+                                                     of BigWorld vertex format.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Use decimetres</em></p>
+                                    <p>Specifies that Maya units are interpreted as decimetres (1
+                                                     unit = 10 decimetres) rather than metres.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Disable visual
+                                                        checker</em></p>
+                                    <p>Specifies that the plug-in should not check the exported
+                                                     model against the visual rules.
+                                                     <sup>A</sup></p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Fix cylindrical
+                                                        mapping</em></p>
+                                    <p>Specifies that the plug-in should try to use an
+                                                     alternative method for generating texture space vectors used for
+                                                     normal mapping.
+                                    </p>
+                                    <p>This option must be checked if there are artifacts along
+                                                     seams when using normal-mapped shaders.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Opposite facing
+                                                        direction</em></p>
+                                    <p>Specifies that the model has been modelled facing in the
+                                                     incorrect direction and that it should be rotated by 180 degrees
+                                                     so that is appears correctly inside the engine.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">Scene root added</em></p>
+                                    <p>Specifies that the model already has a dummy scene root
+                                                     added by the artist. If not selected, a scene root will be added
+                                                     automatically so that the correct node gets examined as the
+                                                     itinerant when testing for the &#8220;Is Movement&#8221; action inside the
+                                                     BigWorld engine. This option provides support for customers with
+                                                     manually added dummy scene roots, therefore not requiring assets
+                                                     to be altered.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+                  <p><em class="emphasis"><em class="emphasis">A </em>&#8212; The rules
+                              are defined in file
+                              <span class="literal">bigworld/tools/res/visual_rules.xml</span>. For details, see
+                              <a href="ch11.html#xref_Validation_Rules" title="11.4.&nbsp;Validation rules">Validation rules</a>.</em></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_BigWorld_Shelf"></a>11.2.3.&nbsp;BigWorld shelf
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The BigWorld Shelf contains useful shortcuts for working with
+                           shells.
+                  </p>
+                  <p>These icons are described in the list below:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><span class="inlinemediaobject"><img src="images/exporters_maya_bigworld_shelf_button_add_portal.png"></span> &#8212; Adds the Portal attribute to the
+                                        object's face currently selected.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="inlinemediaobject"><img src="images/exporters_maya_bigworld_shelf_button_add_exit.png"></span> &#8212; Adds the Exit attribute to the
+                                        object's face currently selected.
+                           </p>
+                        </li>
+                        <li>
+                           <p><span class="inlinemediaobject"><img src="images/exporters_maya_bigworld_shelf_button_add_heaven.png"></span> &#8212; Adds the Heaven attribute to the
+                                        object's face currently selected.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Creating_Shells"></a>11.2.4.&nbsp;Creating Shells
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The requirements for creating in 3ds Max the game assets to be
+                           used in BigWorld Technology are covered in the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//content_creation.chm" class="olink">Content Creation Manual</a> (accessible via WorldEditor's,
+                           ModelEditor's, and ParticleEditor's <em class="emphasis">Help <span class="symbol">&#8594;</span> Content Creation</em> menu item, or
+                           directly by opening the
+                           <span class="literal">bigworld/doc/content_creation.chm</span> file).
+                  </p>
+                  <p>But there is a major difference between 3ds Max and Maya in the
+                           creation of portals. To create a portal in Maya, follow the steps
+                           below:
+                  </p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Create a face on your shell model covering the area of the
+                                        portal.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Ensure the normals for the portal are facing outwards from the
+                                        shell.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Extract the face from the rest of the shell model.</p>
+                        </li>
+                        <li>
+                           <p>Apply the portal attribute (and <em class="emphasis">heaven</em>
+                                        and <em class="emphasis">exit</em> attributes, if applicable).
+                           </p>
+                        </li>
+                        <li>
+                           <p>If the portal is not being recognised, then try the steps
+                                        below:
+                           </p>
+                           <div class="orderedlist">
+                              <ol type="a">
+                                 <li>
+                                    <p>Recreate your portal, based on a face extracted from the
+                                                     shell model.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Centre the pivot point of the portal plane.</p>
+                                 </li>
+                                 <li>
+                                    <p>Ensure that the transforms for the shell and portal are
+                                                     all zeroed.
+                                    </p>
+                                 </li>
+                              </ol>
+                           </div>
+                        </li>
+                     </ol>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e31744"></a>11.2.5.&nbsp;Installing the Maya exporters
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In order to use the plug-in, you need to update your environment
+                           variables and Maya's plug-in settings. To do that, follow the steps
+                           below:
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                              The steps below are the same for all supported versions of Maya, only folder names for the latest version of Maya
+                     are shown 
+                           
+                  </div>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Add the BigWorld exporter folder as an additional plugin path
+                                        to Maya:
+                           </p>
+                           <div class="orderedlist">
+                              <ol type="a">
+                                 <li>
+                                    <p>Open Maya.env, e.g. <span class="literal">My
+                                                          Documents/maya/2011/Maya.env</span>.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Add the BigWorld exporter path to the
+                                                       <span class="literal">MAYA_PLUG_IN_PATH</span> variable, e.g.
+                                                       <span class="literal">MAYA_PLUG_IN_PATH =
+                                                          C:/mf/bigworld/tools/exporter/maya2011</span>.
+                                    </p>
+                                 </li>
+                              </ol>
+                           </div>
+                           <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                              <h3 class="title">Note</h3>
+                              <p>Each installed version of Maya can point to its
+                                               appropriate version of the BigWorld exporters.
+                              </p>
+                           </div>
+                        </li>
+                        <li>
+                           <p>Copy the BigWorld's export script to the Maya folder:</p>
+                           <div class="orderedlist">
+                              <ol type="a">
+                                 <li>
+                                    <p>Open Windows Explorer.</p>
+                                 </li>
+                                 <li>
+                                    <p>Navigate to the folder
+                                                     <span class="literal">bigworld/tools/exporter/maya2011</span>.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Select the <span class="literal">visualfileexporterscript.mel</span>
+                                                     file.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Copy the file to the <span class="literal">My
+                                                        Documents/maya/2011/scripts</span> folder.
+                                    </p>
+                                 </li>
+                              </ol>
+                           </div>
+                        </li>
+                        <li>
+                           <p>Copy BigWorld's shelf and its icons to Maya folder:</p>
+                           <div class="orderedlist">
+                              <ol type="a">
+                                 <li>
+                                    <p>Open Windows Explorer.</p>
+                                 </li>
+                                 <li>
+                                    <p>Navigate to the folder
+                                                     <span class="literal">bigworld/tools/exporter/maya2011</span>.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Select the <span class="literal">shelf_bigworld.mel</span>
+                                                     file.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Copy the file to the <span class="literal">My
+                                                        Documents/maya/2011/prefs/shelves</span> folder.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Navigate to the folder
+                                                     <span class="literal">bigworld/tools/exporter/maya2011</span>.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Select the bitmap files
+                                                     <span class="literal">exit_portal.bmp</span>,
+                                                     <span class="literal">heavenly_portal.bmp</span>, and
+                                                     <span class="literal">standard_portal.bmp</span>.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Copy the selected files to the the <span class="literal">My
+                                                        Documents/maya/2011/prefs/icons</span> folder
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Open Maya &#8212; you should see the BigWorld's tab in the
+                                                     shelf area (if that option is selected in Maya), and the icons
+                                                     displayed below (for details, see <a href="ch11.html#xref_BigWorld_Shelf" title="11.2.3.&nbsp;BigWorld shelf">BigWorld shelf</a>).
+                                    </p>
+                                    <div class="informalfigure">
+                                       <div class="mediaobject"><img src="images/exporters_maya_bigworld_shelf.png" height=""><span class="caption">
+                                             <p>BigWorld shelf</p></span></div>
+                                    </div>
+                                 </li>
+                              </ol>
+                           </div>
+                        </li>
+                        <li>
+                           <p>Update Maya's plug-in settings:</p>
+                           <div class="orderedlist">
+                              <ol type="a">
+                                 <li>
+                                    <p>Open Maya.</p>
+                                 </li>
+                                 <li>
+                                    <p>Select the <em class="emphasis">Window <span class="symbol">&#8594;</span> Setting/Preferences <span class="symbol">&#8594;</span> Plug-in Manager</em> menu
+                                                     item &#8212; the <em class="emphasis">Plug-in
+                                                        Manager</em> dialog box will be displayed.
+                                    </p>
+                                    <div class="informalfigure">
+                                       <div class="mediaobject"><img src="images/exporters_maya_installing_plug_in_manager_dialog_box.png" height=""><span class="caption">
+                                             <p>Plug-in Manager dialog box</p></span></div>
+                                    </div>
+                                 </li>
+                                 <li>
+                                    <p>Select the <em class="emphasis">Loaded</em> (to
+                                                     load the plug-in for the current session) and <em class="emphasis">Auto Load</em> (to load it automatically on
+                                                     startup of future sessions) check boxes.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Click the <span class="inlinemediaobject"><img src="images/exporters_maya_installing_plug_in_manager_dialog_box_button_information.png"></span> button &#8212; the <em class="emphasis">Plug-in Information</em> dialog box will be
+                                                     displayed.
+                                    </p>
+                                    <p>The
+                                                     <span class="literal">bigworld/tools/exporter/maya2011/visual.mll</span>
+                                                     file should be listed.
+                                    </p>
+                                    <div class="informalfigure">
+                                       <div class="mediaobject"><img src="images/exporters_maya_installing_plug_in_information_dialog_box.png" height=""><span class="caption">
+                                             <p>Plug-in Information dialog
+                                                                  box
+                                             </p></span></div>
+                                    </div>
+                                 </li>
+                                 <li>
+                                    <p>Click the <em class="emphasis">Close</em> button to
+                                                     return to the <em class="emphasis">Plug-in Manager</em>
+                                                     dialog box.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Click the <em class="emphasis">Close</em> button to
+                                                     return to Maya.
+                                    </p>
+                                 </li>
+                              </ol>
+                           </div>
+                        </li>
+                     </ol>
+                  </div>
+                  <p>After carrying out these steps, you are ready to export your
+                           objects and animations to the <span class="literal">.visual</span> and
+                           <span class="literal">.animation</span> formats used by BigWorld.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Exporting_Custom_Node_Hierarchy"></a>11.3.&nbsp;Exporting custom node hierarchy
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Sometimes it is useful to create an animation where the node
+                      hierarchy in the scene is different from the one that the model was
+                      exported with. This usually occurs when there are two elements in the
+                      scene, and you want to link them, then move them together.
+               </p>
+               <p>The example below illustrates such a scenario:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>When a character steps onto a little boat, you want both the
+                                   character and the whole boat to dip down where the character's foot
+                                   steps on.
+                        </p>
+                     </li>
+                     <li>
+                        <p>To accomplish this, the character is linked to a rotating box
+                                   used as a handle to rotate the whole boat, since this is easy to
+                                   animate in 3ds Max.
+                        </p>
+                     </li>
+                     <li>
+                        <p>But if this animation were exported with the node hierarchy in
+                                   the current 3ds Max file, then the rotation would be lost, since that
+                                   node is not normally in the hierarchy of the visual.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>By exporting the model using the node hierarchy specified in a
+                      visual file, the resulting animation will look the same in the game engine
+                      as it does in 3ds Max or Maya.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/exporters_exporting_custom_node_hierarchy_3ds_max.png" height=""><span class="caption">
+                        <p>3ds Max</p></span></div>
+               </div>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/exporters_exporting_custom_node_hierarchy_maya.png" height=""><span class="caption">
+                        <p>Maya</p></span></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Validation_Rules"></a>11.4.&nbsp;Validation rules
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Before exporting the visual, the <em class="emphasis">Visual
+                         Exporter</em> plug-in validates it according to a set of rules
+                      defined in the <span class="literal">bigworld/tools/res/visual_rules.xml</span>
+                      file.
+               </p>
+               <p>The format of the <span class="literal">visual_rules.xml</span> file is as
+                      follows:
+               </p><pre class="programlisting">&lt;visual_rules.xml&gt;
+
+  *&lt;rule&gt;
+     &lt;identifier&gt;              id                                &lt;/identifier&gt;
+    ?&lt;parent&gt;                  parent_id                         &lt;/parent&gt;
+    ?&lt;exportAs&gt;               [normal|static|static with nodes]  &lt;/exportAs&gt;
+    ?&lt;path&gt;                    folder                            &lt;/path&gt;
+    ?&lt;filespec&gt;                file_matching_criteria            &lt;/filespec&gt;
+    ?&lt;minSize&gt;                 .f .f .f                          &lt;/minSize&gt;
+    ?&lt;maxSize&gt;                 .f .f .f                          &lt;/maxSize&gt;
+    ?&lt;maxNodesPerRenderSet&gt;    integer                           &lt;/maxNodesPerRenderSet&gt;
+    ?&lt;maxTriangles&gt;            integer                           &lt;/maxTriangles&gt;
+    ?&lt;minTriangles&gt;            integer                           &lt;/minTriangles&gt;
+    ?&lt;portals&gt;                 true|false                        &lt;/portals&gt;
+    ?&lt;portalSnap&gt;              .f .f .f                          &lt;/portalSnap&gt;
+    ?&lt;portalDistance&gt;          .f                                &lt;/portalDistance&gt;
+    ?&lt;portalOffset&gt;            .f                                &lt;/portalOffset&gt;
+    *&lt;hardPoint&gt;               hard_point_name                   &lt;/hardPoint&gt;
+    ?&lt;checkUnknownHardPoints&gt; [true|false]                       &lt;/checkUnknownHardPoints&gt;
+   &lt;/rule&gt;
+
+&lt;/visual_rules.xml &gt;</pre><p><span class="citetitle"><span class="literal">bigworld/tools/res/visual_rules.xml</span>
+                         file format</span></p>
+               <p>The plug-in determines which rule to use based on the visual's
+                      target path and file name &#8212; it will search through all matching
+                      rules (ordering the rules based on the length of the value for the path
+                      tag &#8212; from the longest to the shortest), and use the first matching
+                      one (with either no filespec tag, or with one that matches the filename
+                      using standard wildcard matching).
+               </p>
+               <p>The list below describes the tags in the
+                      <span class="literal">visual_rules.xml</span> file:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">checkUnknownHardPoints</span></em></p>
+                        <p>Specified if hard points not specified in the set of
+                                   <span class="literal">hardPoint</span> tags should be flagged as error.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">exportAs</span></em></p>
+                        <p>Specifies how to save the visual.</p>
+                        <p>Can have the following values: <span class="literal">normal</span>,
+                                   <span class="literal">static</span>, or <span class="literal">static with
+                                      nodes</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">fileSpec</span></em></p>
+                        <p>Matching criteria (using wildcards) specifying the visuals for
+                                   which this rule applies to.
+                        </p>
+                        <p>This option is not inherited via the parent tag.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">hardPoint</span></em></p>
+                        <p>Name of the hard point that the visual must have.</p>
+                        <p>The set of hard points to check against is the one formed by all
+                                   hard points mentioned in all parents.
+                        </p>
+                        <p>This tag may be defined multiple times for the same rule.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">identifier</span></em></p>
+                        <p>Name of the rule.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">maxNodesPerRenderSet</span><sup>A</sup></em></p>
+                        <p>Maximum nodes allowed per renderset, <em class="emphasis">i.e.</em>,
+                                   how many bones each geometric element is allowed to use for
+                                   skinning.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">maxSize</span><sup>A</sup></em></p>
+                        <p>Maximum size of the visual in metres.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">maxTriangles</span><sup>A</sup></em></p>
+                        <p>Maximum number of triangles in the visual.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">minSize</span><sup>A</sup></em></p>
+                        <p>Minimum size of the visual in metres.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">minTriangles</span><sup>A</sup></em></p>
+                        <p>Minimum number of triangles in the visual.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">parent</span></em></p>
+                        <p>Name of the rule from which to inherit options.</p>
+                        <p>For each option, the plug-in will search up the hierarchy until
+                                   it finds a match for it.
+                        </p>
+                        <p>The path and fileSpec options are not inherited.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">path</span></em></p>
+                        <p>Resource folder which visuals this rule applies to.</p>
+                        <p>This option is not inherited via parent tag.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">portalDistance</span><sup>A</sup></em></p>
+                        <p>Number of which the distance between the origin and the portal
+                                   must be a multiple of.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">portalOffset</span><sup>A</sup></em></p>
+                        <p>Number of which the centre of the portal must be a multiple of
+                                   on the portal plane.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">portals</span></em></p>
+                        <p>Determines if the visual may have portals.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">portalSnap</span><sup>A</sup></em></p>
+                        <p>Number of which the bounding box of the portal must be a
+                                   multiple of.
+                        </p>
+                        <p>A value must be specified for each dimension.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p><em class="emphasis"><em class="emphasis">A </em>&#8212; A value of
+                         zero indicates that the option should not be checked.</em></p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch10.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch12.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;10.&nbsp;NavGen&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;12.&nbsp;Lock Server (BWLockD)</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

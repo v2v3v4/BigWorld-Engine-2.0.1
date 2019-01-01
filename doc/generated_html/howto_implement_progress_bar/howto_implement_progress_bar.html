@@ -1,0 +1,204 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>How To Implement a Progress Bar</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_Progress_Bar"></a>How To Implement a Progress Bar</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Introduction">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#xref_Script_And_Gui_Files">2. The Script and GUI Files</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e33">2.1. Script for generating the GUI file</a></span></dt><dt><span class="section"><a href="#d0e74">2.2. Generating the GUI file</a></span></dt><dt><span class="section"><a href="#d0e132">2.3. The generated GUI file</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Implementing_Progress_Bars">3. Implementing Progress Bars</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e167">3.1. Using the progress bar</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e172">3.1.1. Displaying the progress bar</a></span></dt><dt><span class="section"><a href="#d0e193">3.1.2. Updating the progress bar</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e205">3.2. Creating a progress bar for the game startup</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e210">3.2.1. To enable the GUI-based application progress bar</a></span></dt><dt><span class="section"><a href="#d0e236">3.2.2. What must my GUI script support?</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e248">3.3. Creating a player teleport progress bar</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Troubleshooting">4. Troubleshooting</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e273">4.1. My game's personality script takes a while to initialise</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Introduction"></a>Chapter&nbsp;1.&nbsp;Introduction</h2></div></div></div><p>Progress bars are always useful in games and other applications, in
+  order to indicate to the user how long they will need to wait until a long
+  task has finished.</p><p>These tasks may be initialising the game, or loading the world around
+  a player when they either log in the game or teleport to another part of the
+  world.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Script_And_Gui_Files"></a>Chapter&nbsp;2.&nbsp;The Script and GUI Files</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e33">2.1. Script for generating the GUI file</a></span></dt><dt><span class="section"><a href="#d0e74">2.2. Generating the GUI file</a></span></dt><dt><span class="section"><a href="#d0e132">2.3. The generated GUI file</a></span></dt></dl></div><p>Creating a progress bar using BigWorld technology is a straightforward
+  task. In this document, we will implement a progress bar using a GUI script
+  in Python, which will in turn generate a GUI file in XML format.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e33"></a>2.1.&nbsp;Script for generating the GUI file</h2></div></div></div><p>For this example, we will be using the FantasyDemo scripts.</p><p>Open the
+    <code class="filename">fantasydemo/res/scripts/client/PyGUI.py</code>, and include
+    the following lines:</p><pre class="programlisting">"""
+This class is a simple Progress Bar.
+   """
+   class ProgressBar( PyGUIBase ):
+    
+      factoryString="PyGUI.ProgressBar"
+    
+      def __init__( self, component ):        
+         PyGUIBase.__init__( self, component )        
+                    
+      def setProgress( self, value ):
+         pass</pre><p><span class="citetitle">Progress bar script
+    <code class="filename">PyGUI.py</code></span></p><p>The example given in this document uses
+    <code class="classname">PyGUIBase</code>, which is the base class for GUI
+    components, and is described in file
+    <code class="filename">fantasydemo/res/scripts/client/helpers/PyGUI.py</code>. The
+    use of this class to implement the progress bar is optional.</p><p>The class attribute <code class="varname">factoryString</code> tells the GUI
+    library which class to instantiate when we load our GUI from the XML file.
+    The XML will contain a <span class="literal">&lt;script&gt;</span> entry with the
+    value "<span class="literal">PyGUI.ProgressBar</span>"</p><p>The method <code class="methodname">setProgress()</code> is called by the
+    user to set the current progress level. Our script will respond by moving
+    the bar to the appropriate place.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74"></a>2.2.&nbsp;Generating the GUI file</h2></div></div></div><p>It is easier to create a GUI at runtime if you use the in-game
+    Python console. So, first launch the FantasyDemo executable, then press
+    <span class="literal"><em class="replaceable"><code>DEBUG</code></em>+P</span> to open the Python
+    console. The code below defines the GUI for our progress bar:</p><pre class="programlisting">import GUI
+progress = GUI.Window( "maps/gui/gui_bar_back.dds" )
+progress.bar = GUI.Simple( "maps/gui/gui_bar.dds" )
+progress.bar.clipper = GUI.ClipShader()
+progress.height = progress.bar.height = 0.1
+progress.materialFX = progress.bar.materialFX = "BLEND"
+progress.bar.colour = (128,128,255,255)
+GUI.addRoot( progress )</pre><p><span class="citetitle">Script for generating GUI file (Defining visual
+    elements)</span></p><p>The file above defines a bitmapped border component for the bar, and
+    a bitmapped bar component hooked up to a Clip GUI Shader.</p><p>Given that the specified border component is the image below:</p><div class="informalfigure"><div class="mediaobject"><img src="images/border_component.png"><span class="caption"><p>Border component</p></span></div></div><p>And given that the bar component is the image below:</p><div class="informalfigure"><div class="mediaobject"><img src="images/bar_component.png"><span class="caption"><p>Bar component</p></span></div></div><p>Note that we have created the progress bar as a Window. This enables
+    us to reposition the whole progress bar simply by moving the root
+    component.</p><p>For example, to move the entire progress bar to the top middle of
+    the screen, we would write:</p><pre class="programlisting">progress.position = (0,0.8,1)</pre><p><span class="citetitle">Script for generating GUI file &#8212; Positioning bar on
+    top middle screen</span></p><p>The final attribute we need to set on the progress bar component is
+    its script. We do this simply by instantiating the appropriate Python
+    class, as illustrated below:</p><pre class="programlisting">from Helpers import PyGUI
+progress.script = PyGUI.ProgressBar(None)</pre><p><span class="citetitle">Script for generating GUI file &#8212; Defining bar's
+    script</span></p><p>To generate the progress bar GUI file, hook up the script to the GUI
+    component and save it to disk, as illustrated below:</p><pre class="programlisting">progress.save( "guis/progress_bar.gui" )</pre><p><span class="citetitle">Script for generating GUI file (Generating the bar's GUI
+    file)</span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e132"></a>2.3.&nbsp;The generated GUI file</h2></div></div></div><p>The generated file <code class="filename">guis/progress_bar.gui</code> will
+    look something like this:</p><pre class="programlisting">&lt;progress_bar.gui&gt;
+
+    &lt;WindowGUIComponent&gt;   301410224
+        &lt;position&gt;         0.000000 0.000000 1.000000 &lt;/position&gt;
+
+        &lt;widthInClip&gt;      true                       &lt;/widthInClip&gt;
+        &lt;width&gt;            0.500000                   &lt;/width&gt;
+        &lt;heightInClip&gt;     true                       &lt;/heightInClip&gt;
+        &lt;height&gt;           0.100000                   &lt;/height&gt;
+        &lt;colour&gt;           255.0 255.0 255.0 255.0    &lt;/colour&gt;
+        &lt;angle&gt;            0                          &lt;/angle&gt;
+        &lt;flip&gt;             0                          &lt;/flip&gt;
+        &lt;visible&gt;          true                       &lt;/visible&gt;
+        &lt;horizontalAnchor&gt; 1                          &lt;/horizontalAnchor&gt;
+        &lt;verticalAnchor&gt;   1                          &lt;/verticalAnchor&gt;
+        &lt;textureName&gt;      maps/gui/gui_bar_back.dds  &lt;/textureName&gt;
+        &lt;materialFX&gt;       1                          &lt;/materialFX&gt;
+        &lt;tiled&gt;            false                      &lt;/tiled&gt;
+        &lt;tileWidth&gt;        16                         &lt;/tileWidth&gt;
+        &lt;tileHeight&gt;       16                         &lt;/tileHeight&gt;
+        &lt;script&gt;           "PyGUI.ProgressBar"        &lt;/script&gt;
+        &lt;children&gt;
+            &lt;bar&gt;          301291568                  &lt;/bar&gt;
+        &lt;/children&gt;
+        &lt;scroll&gt;           0.000000 0.000000          &lt;/scroll&gt;
+        &lt;minScroll&gt;        0.000000 0.000000          &lt;/minScroll&gt;
+        &lt;maxScroll&gt;        0.000000 0.000000          &lt;/maxScroll&gt;
+    &lt;/WindowGUIComponent&gt;
+    
+    &lt;SimpleGUIComponent&gt;   301291568
+
+        &lt;position&gt;         0.000000 0.000000 1.000000 &lt;/position&gt;
+        &lt;widthInClip&gt;      true                       &lt;/widthInClip&gt;
+        &lt;width&gt;            0.500000                   &lt;/width&gt;
+        &lt;heightInClip&gt;     true                       &lt;/heightInClip&gt;
+        &lt;height&gt;           0.100000                   &lt;/height&gt;
+        &lt;colour&gt;           128.0 128.0 255.0 255.0    &lt;/colour&gt;
+        &lt;angle&gt;            0                          &lt;/angle&gt;
+        &lt;flip&gt;             0                          &lt;/flip&gt;
+        &lt;visible&gt;          true                       &lt;/visible&gt;
+        &lt;horizontalAnchor&gt; 1                          &lt;/horizontalAnchor&gt;
+        &lt;verticalAnchor&gt;   1                          &lt;/verticalAnchor&gt;
+        &lt;textureName&gt;      maps/gui/gui_bar.dds       &lt;/textureName&gt;
+        &lt;materialFX&gt;       1                          &lt;/materialFX&gt;
+        &lt;tiled&gt;            false                      &lt;/tiled&gt;
+        &lt;tileWidth&gt;        16                         &lt;/tileWidth&gt;
+        &lt;tileHeight&gt;       16                         &lt;/tileHeight&gt;
+        &lt;shaders&gt;
+            &lt;clipper&gt;      301215592                  &lt;/clipper&gt;
+        &lt;/shaders&gt;
+    &lt;/SimpleGUIComponent&gt;
+
+    &lt;ClipGUIShader&gt;        301215592
+
+        &lt;mode&gt;             0                          &lt;/mode&gt;
+        &lt;value&gt;            1.000000                   &lt;/value&gt;
+        &lt;speed&gt;            0.000000                   &lt;/speed&gt;
+        &lt;delay&gt;            0.000000                   &lt;/delay&gt;
+        &lt;slant&gt;            0.000000                   &lt;/slant&gt;
+    &lt;/ClipGUIShader&gt;
+
+&lt;/progress_bar.gui&gt;</pre><p><span class="citetitle">GUI file
+    <code class="filename">progress_bar.gui</code></span></p><p>Now that we know the names of the components, we can implement the
+    GUI script. The script controls the progress bar via its method
+    <span class="literal">setProgress</span>:</p><pre class="programlisting">def setProgress( self, value ):
+    clipper = self.frame.bar.clipper
+    if value &gt; clipper.value:
+        self.frame.bar.clipper.value = value</pre><p><span class="citetitle">Progress bar script file <span class="literal">PyGUI.py</span>
+    (Controlling the progress)</span></p><p>This method simply maps the incoming progress value (between 0.0 and
+    1.0) to the clip value on the GUI Clip shader. The Clip shader will
+    smoothly clip the component to the new value over a set amount of
+    time.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Implementing_Progress_Bars"></a>Chapter&nbsp;3.&nbsp;Implementing Progress Bars</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e167">3.1. Using the progress bar</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e172">3.1.1. Displaying the progress bar</a></span></dt><dt><span class="section"><a href="#d0e193">3.1.2. Updating the progress bar</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e205">3.2. Creating a progress bar for the game startup</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e210">3.2.1. To enable the GUI-based application progress bar</a></span></dt><dt><span class="section"><a href="#d0e236">3.2.2. What must my GUI script support?</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e248">3.3. Creating a player teleport progress bar</a></span></dt></dl></div><p>Once the bar's GUI file has been generated, you can incorporate it to
+  your game, both at the loading screen or during the transition due to a
+  teleport.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e167"></a>3.1.&nbsp;Using the progress bar</h2></div></div></div><p>Once the GUI file has been created, it is a simple task to display
+    it in your game, and update its value.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e172"></a>3.1.1.&nbsp;Displaying the progress bar</h3></div></div></div><p>The first step to have your game display the bar is to associate
+      it with its GUI file, as illustrated below:</p><pre class="programlisting">import GUI
+progressBar = GUI.load( "guis/progress_bar.gui" )</pre><p>And display it via method
+      <code class="methodname">GUI.addRoot()</code>:</p><pre class="programlisting">GUI.addRoot( progressBar)</pre><p>If you derived your script from the class
+      <span class="literal">PyGUIBase</span>, then you can also display the bar via the
+      script's active method, as illustrated below:</p><pre class="programlisting">progressBar.script.active(1)</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e193"></a>3.1.2.&nbsp;Updating the progress bar</h3></div></div></div><p>In order to update the progress bar, all you have to do is call
+      the script method <code class="methodname">setProgress</code>:</p><pre class="programlisting">progressBar.script.setProgress( 0.18 )</pre><p>The script will perform the relevant actions on the underlying GUI
+      component.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e205"></a>3.2.&nbsp;Creating a progress bar for the game startup</h2></div></div></div><p>Built into the client engine is a progress bar for tracking
+    start-up. This can be used directly in your game, or just sued as example
+    code.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e210"></a>3.2.1.&nbsp;To enable the GUI-based application progress bar</h3></div></div></div><p>Place the following entry in file
+      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/resources.xml
+      </span>(where
+      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span> is the first
+      folder specified in environment variable
+      <span class="literal">BW_RES_PATH</span>):</p><pre class="programlisting">&lt;system&gt;
+&lt;loadingScreenGUI&gt; folder/loading_screen.gui &lt;/loadingScreenGUI&gt;
+&lt;/system&gt;</pre><p><span class="citetitle"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/resources.xml</span>&#8212;Defining
+      file for the loading screen</span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e236"></a>3.2.2.&nbsp;What must my GUI script support?</h3></div></div></div><p>The application will invoke your GUI script as it initialises. The
+      loading screen/progress bar file must have the following
+      interface:</p><pre class="programlisting">def setProgress( self, value ):
+    #change the progress bar here
+    pass
+def addMessage( self, str ):
+    #display a loading message on-screen
+    pass</pre><p><span class="citetitle">Loading screen/progress bar file
+      <code class="filename">folder/loading_screen.gui</code></span></p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e248"></a>3.3.&nbsp;Creating a player teleport progress bar</h2></div></div></div><p>There is a method called <code class="methodname">spaceLoadStatus()</code>,
+    which returns the percentage of the world that has been loaded. This
+    feature can be used to update a progress bar when the player is
+    teleporting to another part of world.</p><p>The method's signature is illustrated below:</p><pre class="programlisting">BigWorld.spaceLoadStatus( distance )</pre><p>To link your progress bar up to the chunk loading, you will have to
+    poll this method, as illustrated below:</p><pre class="programlisting">def progressCheck( self, endTime ):
+    finished = (endTime &lt; BigWorld.time())
+    if not finished:
+        status = <em class="emphasis">BigWorld.spaceLoadStatus( self.distance ) </em>
+        finished = (status &gt; 0.95)
+    if finished:
+        self.setProgress(1.0) 
+        self.component.fader.value = 0.0
+        if self.callbackFn:
+            BigWorld.callback( self.component.fader.speed, self.callbackFn )
+        else:
+            self.setProgress( status ) 
+            BigWorld.callback( self.checkRate, Functor( self.progressCheck, endTime ) )</pre><p><span class="citetitle">Updating the progress bar with chunk loading
+    status</span></p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Troubleshooting"></a>Chapter&nbsp;4.&nbsp;Troubleshooting</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e273">4.1. My game's personality script takes a while to initialise</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e273"></a>4.1.&nbsp;My game's personality script takes a while to initialise</h2></div></div></div><p>The application will call method <span class="literal">setProgress</span>
+    until it reaches 100%. Once this value is reached, the personality script
+    <span class="literal">init</span> method is called.</p><p>If you want to seamlessly incorporate the loading of the application
+    with the loading of the personality script, then make your loading bar GUI
+    script rescale the incoming values.</p><p>For example in
+    <span class="literal">fantasydemo/res/scripts/client/Helpers/ProgressBar.py</span>,
+    here are the code snippets that perform this task:</p><pre class="programlisting">def setMinMax( self, min, max ):
+    self.min = min
+    self.max = max
+
+def setProgress( self, value ):
+    #remap value into the correct range
+    range = self.max - self.min
+    value = self.min + value*range
+    self.component.bar.clipper.value = value
+
+def onLoad( self, section ):
+    self.phase1Ratio = section.readFloat( "phase1Ratio", self.phase1Ratio )
+
+def startPhase( self, num ):
+    if num == 1:
+        self.setMinMax( 0.0, self.phase1Ratio )
+    else:
+        self.setMinMax( self.phase1Ratio, 1.0 )</pre><p><span class="citetitle">Incorporating the loading of application with loading of
+    personality script</span></p><p>FantasyDemo's loading bar loads a value from the
+    <span class="literal">.gui</span> file called <span class="literal">phase1ratio</span>. This
+    is set to 0.66, meaning that the application's initialisation goes up to
+    66% of the progress bar. Therefore 33% of the time will be used by the
+    personality script to load chunks.</p></div></div></div></div></body></html>

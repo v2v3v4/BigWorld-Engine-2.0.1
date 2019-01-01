@@ -1,0 +1,611 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;10.&nbsp;Models</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch09.html" title="Chapter&nbsp;9.&nbsp;Scripting">
+      <link rel="next" href="ch11.html" title="Chapter&nbsp;11.&nbsp;Animation System">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch10.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;10.&nbsp;Models</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch09.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch11.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Models"></a>Chapter&nbsp;10.&nbsp;Models
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch10.html#d0e4015">10.1. Performance</a></span></dt>
+                  <dt><span class="section"><a href="ch10.html#xref_Hard_Points">10.2. Hard Points</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch10.html#d0e4079">10.2.1. Naming scheme</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e4157">10.2.2. How it works</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e4164">10.2.3. Syntax</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e4181">10.2.4. Data</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch10.html#xref_SuperModel">10.3. SuperModel</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch10.html#d0e4256">10.3.1. Design</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e4272">10.3.2. SuperModel classes</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>For the purposes of the BigWorld client, a model is a self-contained
+               unit of geometry that can draw itself into a 3D scene at the location of a
+               world-space transform matrix. Moreover, all models may have animations that
+                 alter their appearance over time &#8212; some models explicitly support animations
+                 of their nodes (which are skinned), whereas the others are animated by
+                 displaying alternate geometries.
+            </p>
+            <p>Moo, the BigWorld 3D engine, currently exports three kinds of objects
+                 that may be used as models:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Meshes with skeletons.</p>
+                  </li>
+                  <li>
+                     <p>Meshes without skeletons.</p>
+                  </li>
+                  <li>
+                     <p>Billboards (a special form of simple geometry).</p>
+                  </li>
+               </ul>
+            </div>
+            <p>However, the model concept in the BigWorld client encapsulates
+                 anything that fits into the definition above, and the implementation is
+                 easily extended to incorporate new kinds of objects.
+            </p>
+            <p>Moo names its meshes <em class="emphasis">visuals</em> (visuals actually
+                 include a good deal more than a simple polygon mesh. They can have groups of
+                 meshes, bones, envelopes, materials, and a hierarchical skeleton too) and
+                 <span class="literal">.visual</span> files can be readily created from a 3ds Max model
+                 using a BigWorld exporter. Node-based animations can also be created with
+                 the exporter. A .model file can then be created with the tool ModelEditor,
+                 so that the visual and its animations are tied together. Model files that
+                 are billboards or static meshes (and their animations) can also be created
+                 with ModelEditor.
+            </p>
+            <p>A model file can also specify a simpler parent file to be used when
+                 drawn in the distance. Chains of parent model files thus formed are known as
+                 level-of-detail (LOD) chains.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4015"></a>10.1.&nbsp;Performance
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>In order to improve rendering performance, a model can be flagged in
+                      ModelEditor to be batch rendered, which results in the creation of the
+                      <span class="literal">batched</span> tag in the generated model file (for details,
+                      see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s
+                      section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html" class="olink"><i>ModelEditor</i></a> <span class="symbol">&#8594;</span>
+                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html#xref_me_Panel_Summary" class="olink">Panel summary</a> <span class="symbol">&#8594;</span>
+                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html#xref_me_Object_Properties_Panel" class="olink">Object Properties panel</a>).
+               </p>
+               <p>The batch rendering works by caching per-instance data (essentially
+                      lighting conditions and transforms) at traverse time, and once the scene
+                      has been traversed, rendering all instances at the same time, only
+                      updating the data necessary for each render. This saves the engine from
+                      setting vertices, indices, and textures multiple times for batched models.
+                      It does use a bit more memory, but gives a considerable performance
+                      boost.
+               </p>
+               <p>It is advisable to use the batch flag on models with many instances
+                      of it in the scene. In FantasyDemo, the batch flag is used on trees,
+                      guards, striffs, chickens, and the guard's guns. Please note that the flag
+                      does not affect models that use tints.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Hard_Points"></a>10.2.&nbsp;Hard Points
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Hard points, or attachment points, can be conceived as logical
+                      patches of Velcro that allow us to stick a gun in a hand, sling a backpack
+                      over a shoulder, or place a security camera on a turret. The artists must
+                      embed hard points in their .visual files using dummy nodes.
+               </p>
+               <p>Hard points use well-defined names, preceded by 'HP_' prefix, so
+                      that entities can scan for hard point nodes. The significant information
+                      is:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Name.</p>
+                     </li>
+                     <li>
+                        <p>Position.</p>
+                     </li>
+                     <li>
+                        <p>Orientation.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>This information allows the developer to attach any object to any
+                      other, within the constraints of game logic.
+               </p>
+               <p>Examples of hard points include:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><span class="literal">HP_LeftHand</span></p>
+                     </li>
+                     <li>
+                        <p><span class="literal">HP_RightHand</span></p>
+                     </li>
+                     <li>
+                        <p><span class="literal">HP_Shoulder</span></p>
+                     </li>
+                     <li>
+                        <p><span class="literal">HP_Belt1</span></p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4079"></a>10.2.1.&nbsp;Naming scheme
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In order to avoid the need for an intermediate step, there needs
+                           to be an explicit pairing between character hard points and item hard
+                           points. Every item needs a hard point for every specific way that it can
+                           be held.
+                  </p>
+                  <p>As an example, listed below are the hard points for a human
+                           character and a gun.
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">In
+                                           <span class="literal">human.model</span>:</em></p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><span class="literal">HP_Left_Hand</span></p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">HP_Right_Hand</span></p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">HP_Belt_1</span></p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">HP_Belt_2</span></p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">HP_Belt_3</span></p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">HP_Belt_4</span></p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">HP_Shoulder</span></p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">HP_Blade_Lower</span></p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">HP_Blade_Upper</span></p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">In
+                                           <span class="literal">gun.model</span>:</em></p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><span class="literal">HP_Left_Hand</span></p>
+                                 </li>
+                                 <li>
+                                    <p>H<span class="literal">P_Right_Hand</span></p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">HP_Belt_2</span></p>
+                                 </li>
+                                 <li>
+                                    <p><span class="literal">HP_Shoulder</span></p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4157"></a>10.2.2.&nbsp;How it works
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The (client-side) Entity class provides a list of hard points, but
+                           only if asked by the specializing class. For example, when a model is
+                           loaded, it will find all nodes prefixed with (for instance) 'HP_'. These
+                           are then stored in a hardPoint list that is owned by the model.
+                  </p>
+                  <p>When an item is equipped, the entity/game arbiter will be asked to
+                           match up the item with the correct hard point. For example, if the 'next
+                           weapon' button is pressed, the next weapon in the inventory can be
+                           attached to the right hand hard point.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4164"></a>10.2.3.&nbsp;Syntax
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The syntax for using hard points from Python is elegant and
+                           powerful. To attach model gun to model avatar on hard point hand, use
+                           the following syntax:
+                  </p><pre class="programlisting">avatar.hand = gun</pre><p>A model is checked when it is attached to ensure that it is not
+                           attached elsewhere. To retrieve the model attached to avatar's hand,
+                           simply use:
+                  </p><pre class="programlisting">model = avatar.hand</pre><p>If no model is attached, then None is returned.</p>
+                  <p>The model is attached by reference, not by copy, so anything that
+                           can be done to the original model reference can be done to the reference
+                           retrieved from a hard point.
+                  </p>
+                  <p>For example, gun.Shoot() and avatar.hand.Shoot() have the same
+                           effect.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4181"></a>10.2.4.&nbsp;Data
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A model definition is an XML file specifying:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>A base model definition reference (optional).</p>
+                        </li>
+                        <li>
+                           <p>The visual defining the mesh.</p>
+                        </li>
+                        <li>
+                           <p>The animations the mesh can use.</p>
+                        </li>
+                        <li>
+                           <p>The actions that the model can perform (for more details, see
+                                        <a href="ch09.html#xref_Action_Queue" title="9.1.5.&nbsp;Action Queue">Action Queue</a>).
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The ModelEditor tool is used to create a .model file that links an
+                           object's geometry to its animations and defines the sets of
+                           animations/actions that are possible to play on this object.
+                  </p>
+                  <p>As with all resource files in the BigWorld framework, .model files
+                           are in XML format. They are hierarchical and inherit data from their
+                           parent(s), in this way basic animations that apply to a large set of
+                           characters can be isolated from more character-specific animations
+                           without having to be duplicated.
+                  </p>
+                  <p>The example below defines a very simple model:</p><pre class="programlisting">&lt;jogger.model&gt;
+
+  &lt;nodefullVisual&gt;  jogger  &lt;/nodefullVisual&gt;
+  &lt;parent&gt;          biped   &lt;/parent&gt;
+
+  &lt;animation&gt;
+    &lt;name&gt;      jog         &lt;/name&gt;
+    &lt;frameRate&gt; 30.0        &lt;/frameRate&gt;
+    &lt;nodes&gt;     jogAnim     &lt;/nodes&gt;
+    &lt;alpha&gt;
+      &lt;Torso&gt;   0.0  &lt;/Torso&gt;
+      &lt;Pelvis&gt;  1.0  &lt;/Pelvis&gt;
+    &lt;/alpha&gt;
+  &lt;/animation&gt;
+
+  &lt;action&gt;
+    &lt;name&gt;          BIPED_JOG  &lt;/name&gt;
+    &lt;animation&gt;     jog        &lt;/animation&gt;
+    &lt;blendInTime&gt;   0.300000   &lt;/blendInTime&gt;
+    &lt;blendOutTime&gt;  0.300000   &lt;/blendOutTime&gt;
+    &lt;filler&gt;        false      &lt;/filler&gt;
+    &lt;blended&gt;       false      &lt;/blended&gt;
+    &lt;isMovement&gt;    true       &lt;/isMovement&gt;
+    &lt;isCoordinated&gt; false      &lt;/isCoordinated&gt;
+    &lt;isImpacting&gt;   true       &lt;/isImpacting&gt;
+    &lt;match&gt;
+      &lt;trigger&gt;
+        &lt;minEntitySpeed&gt; 1.0  &lt;/minEntitySpeed&gt;
+        &lt;maxEntitySpeed&gt; 3.0  &lt;/maxEntitySpeed&gt;
+        &lt;capsOn&gt;         16   &lt;/capsOn&gt;
+      &lt;/trigger&gt;
+    &lt;/match&gt;
+  &lt;/action&gt;
+&lt;jogger.model&gt;</pre><p><span class="citetitle">Example of <span class="literal">.model</span>
+                              file</span></p>
+                  <p>This file describes a character (<span class="literal">jogger</span>) which
+                           has a geometry defined by the visual file jogger and has a standard set
+                           of biped actions via the <span class="literal">&lt;parent&gt;</span> tag, which
+                           may include walk, run, and jump animations, but also specifies a jog
+                           animation.
+                  </p>
+                  <p>The animation section includes:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Name of the animation.</p>
+                        </li>
+                        <li>
+                           <p>Frame rate at which the animation should normally be played
+                                        at.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Tag <span class="literal">&lt;nodes&gt;</span>, which refers to the name
+                                        of the animation file that contains the raw keyframe data.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The <span class="literal">&lt;action&gt;</span> section describes the action
+                           name that is used to play this action from the Python code.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_SuperModel"></a>10.3.&nbsp;SuperModel
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>A SuperModel is a collection of models that need to function as one.
+                      The SuperModel class is a utility class that forms a flexible basis for
+                      modules that want to use models. It is used for the static models
+                      specified in chunks, and the dynamic models that entities can
+                      manipulate.
+               </p>
+               <p>The SuperModel provides an efficient representation (both in memory
+                      and in CPU) of a conceptual model. The supermodel is made up of selectable
+                      parts, and these parts have an inheritance tree for specifying animations,
+                      actions, material overrides, and most importantly, lower level of detail
+                      (LOD) parts that may be substituted at appropriate distances.
+               </p>
+               <p>The supermodel brings all these parts and their adornments together
+                      into one conceptual model that automatically takes care of the complexity
+                      that arises from the multi-part and LODing features.
+               </p>
+               <p>An example of the most basic SuperModel is a single mesh, which has
+                      been exported from 3ds Max using the BigWorld exporter; into the format
+                      understood by the 3D engine Moo.
+               </p>
+               <p>SuperModels do not live in the scene graph or in chunks, and provide
+                      no interfaces to the scripting system. These matters are left up to
+                      higher-level classes, which are encouraged to use SuperModel for all their
+                      model needs.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4256"></a>10.3.1.&nbsp;Design
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>There are model files, with the .model extension, but there are no
+                           explicit SuperModel files.
+                  </p>
+                  <p>There is the SuperModel class, which holds together and controls
+                           the animation and rendering of a number of models. A SuperModel is
+                           created based on information in chunk and model files (these are
+                           instance-like classes &#8212; there is nothing analogous to
+                           PyModelInfo.).
+                  </p>
+                  <p>Using LOD ratios, the SuperModel class can manage the transition
+                           between, say, an avatar being rendered at a high LOD using three
+                           separate models, to it being rendered at a low LOD using just
+                           one.
+                  </p>
+                  <p>Animations are accumulated on the same inheritance hierarchy, and
+                           the animation most appropriate to the current LOD level is used. All the
+                           animations for all the LOD levels are interpreted and selected from a
+                           flat namespace. Attempting to play an animation that does not exist (or
+                           does not exist at the current LOD level) selects an infinite length
+                           animation of the model's initial pose. Care must be taken to ensure that
+                           multi-model SuperModels do not waste time animating unnecessarily
+                           (<em class="emphasis">e.g.</em>, when all the small parts have an animation
+                           overriding the whole part's animation, it would be a waste of time to
+                           apply the whole part's animation).
+                  </p>
+                  <p>The mesh files themselves specify how a part is connected to
+                           others for multi-part supermodels.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4272"></a>10.3.2.&nbsp;SuperModel classes
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The SuperModel class implements the basic functionality of the
+                           BigWorld model definition, using the objects provided by Moo. It
+                           combines a number of the .model files created by ModelEditor (but
+                           usually just one) into one conceptual model, managing any animations and
+                           level-of-detail chains. The SuperModel class is detailed in <a href="ch10.html#xref_SuperModel" title="10.3.&nbsp;SuperModel">SuperModel</a>.
+                  </p>
+                  <p>Two classes currently use SuperModels in the BigWorld client, for
+                           two different needs:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>ChunkModel</p>
+                        </li>
+                        <li>
+                           <p>PyModel</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Both are described in the following subsections.</p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e4290"></a>10.3.2.1.&nbsp;ChunkModel
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>A ChunkModel is a model that inhabits the static scene base
+                                (<em class="emphasis">e.g.</em>, rocks, trees). Together with the terrain,
+                                it populates the client world and forms the majority of interesting
+                                scenery.
+                     </p>
+                     <p>All ChunkModels are added to the collision scene for their
+                                chunk, unless flagged otherwise. They may optionally play one
+                                animation, at a specified speed multiplier &#8212; otherwise they are
+                                static.
+                     </p>
+                     <p>They depend heavily upon the services of their SuperModel,
+                                supplying only the interface required to live in a chunk, and the
+                                simple instructions to play back their single animation.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e4302"></a>10.3.2.2.&nbsp;PyModel
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>This class implements the model as it appears to the scripting
+                                environment.
+                     </p>
+                     <p>It allows scripts to perform the following operations:</p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>Fetch bound actions sourced from the model's
+                                             definition.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Reference hard points (for details, see <a href="ch10.html#xref_Hard_Points" title="10.2.&nbsp;Hard Points">Hard Points</a>).
+                              </p>
+                           </li>
+                           <li>
+                              <p>Specify position, rotation, and scaling.</p>
+                           </li>
+                           <li>
+                              <p>Add motors to move itself around in the scene (such as an
+                                             Action Matcher).
+                              </p>
+                           </li>
+                           <li>
+                              <p>Add trackers for inverse kinematics.</p>
+                           </li>
+                           <li>
+                              <p>Add particle systems tied to any node.</p>
+                           </li>
+                           <li>
+                              <p>Control the generation of footsteps and dust
+                                             particles.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Control visibility and shadows.</p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch09.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch11.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;9.&nbsp;Scripting&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;11.&nbsp;Animation System</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

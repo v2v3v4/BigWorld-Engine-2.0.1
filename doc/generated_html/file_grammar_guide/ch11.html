@@ -1,0 +1,187 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;11.&nbsp;EffectMaterial section</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch10.html" title="Chapter&nbsp;10.&nbsp;dxenum.xml">
+      <link rel="next" href="ch12.html" title="Chapter&nbsp;12.&nbsp;exporter.xml">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch11.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;11.&nbsp;EffectMaterial section</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch10.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch12.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_EffectMaterial"></a>Chapter&nbsp;11.&nbsp;EffectMaterial section
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p>Used by the EffectMaterial class, this section contains material
+                 information, and is part of the following file formats:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal"><em class="replaceable"><code>&lt;material&gt;</code></em>.mfm</span></em>
+                              &#8212; See <a href="ch20.html" title="Chapter&nbsp;20.&nbsp;.mfm"><i xmlns:xlink="http://www.w3.org/1999/xlink"><span class="literal">.mfm</span></i></a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal"><em class="replaceable"><code>&lt;item&gt;</code></em>.model</span></em>
+                              &#8212; See <a href="ch21.html" title="Chapter&nbsp;21.&nbsp;.model"><i xmlns:xlink="http://www.w3.org/1999/xlink"><span class="literal">.model</span></i></a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal"><em class="replaceable"><code>&lt;item&gt;</code></em>.visual</span></em>
+                              &#8212; See <a href="ch36.html" title="Chapter&nbsp;36.&nbsp;.visual"><i xmlns:xlink="http://www.w3.org/1999/xlink"><span class="literal">.visual</span></i></a>.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>The format of the <em class="emphasis">EffectMaterial</em>
+                 section is illustrated below:
+            </p><pre class="programlisting">?&lt;identifier&gt;     <em class="replaceable"><code>string</code></em>   &lt;/identifier&gt;
++&lt;fx&gt;             <em class="replaceable"><code>file</code></em>     &lt;/fx&gt; 
+?&lt;channel&gt;        <em class="replaceable"><code>string</code></em>   &lt;/channel&gt;
+?&lt;mfm&gt;            <em class="replaceable"><code>file</code></em>     &lt;/mfm&gt;
+ &lt;materialKind&gt;   <em class="replaceable"><code>integer</code></em>  &lt;/materialKind&gt;
+ &lt;collisionFlags&gt; <em class="replaceable"><code>integer</code></em>  &lt;/collisionFlags&gt;
+
++&lt;property&gt;  <em class="replaceable"><code>string_property_name</code></em>
+
+  [ &lt;Texture&gt;  <em class="replaceable"><code>file</code></em>                     &lt;/Texture&gt;
+  | &lt;Vector4&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/Vector4&gt;
+  | &lt;Float&gt;    <em class="replaceable"><code>float</code></em>                    &lt;/float&gt;
+  | &lt;Bool&gt;    [true|false]              &lt;/bool&gt;
+  | &lt;Int&gt;      <em class="replaceable"><code>int</code></em>                      
+      ?&lt;UIMin&gt; <em class="replaceable"><code>int</code></em>  &lt;/UIMin&gt;
+      ?&lt;UIMax&gt; <em class="replaceable"><code>int</code></em>  &lt;/UIMax&gt;
+    &lt;/Int&gt;
+  ]
+
+&lt;/property&gt;</pre><p><span class="citetitle">Grammar of the <em class="emphasis">EffectMaterial</em> section</span></p>
+            <p>The list below describes the tags in the <em class="emphasis">EffectMaterial</em> section:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Bool</span> (section
+                                 <span class="literal">property</span>)</em></p>
+                     <p>Generic material property requiring a bool value.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">collisionFlags</span><sup>A</sup></em></p>
+                     <p>Specifies if the material will collide with models, or be affected
+                              by light and other effects.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Float</span> (section
+                                 <span class="literal">property</span>)</em></p>
+                     <p>Generic material property requiring a <span class="literal">float</span>
+                              value (<em class="emphasis">e.g.</em>,
+                              <span class="literal">diffuseLightExtraModulation</span>,
+                              <span class="literal">selfIllumination</span>,
+                              <span class="literal">parallaxAspectRatio</span>,
+                              <span class="literal">parallaxScale</span>, <span class="literal">glowRatio</span>,
+                              etc...)
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">fx</span></em></p>
+                     <p>Effect resource.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">identifier</span></em></p>
+                     <p>Material name.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Int</span> (section
+                                 <span class="literal">property</span>)</em></p>
+                     <p>Generic material property requiring an int value
+                              (<em class="emphasis">e.g.</em>, <span class="literal">alphaReference</span>,
+                              <span class="literal">lightDir</span>, etc...)
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">materialKind</span><sup>A</sup></em></p>
+                     <p>Material kind, used for sound and particle system This value is
+                              used to retrieve material information from file
+                              <span class="literal">bigworld/res/system/data/material_kinds.xml</span>. For
+                              details, see <a href="ch19.html" title="Chapter&nbsp;19.&nbsp;material_kinds.xml"><i xmlns:xlink="http://www.w3.org/1999/xlink"><span class="literal">material_kinds.xml</span></i></a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">property</span><sup>A</sup></em></p>
+                     <p>Tag for miscellaneous material properties.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Texture</span> (section
+                                 <span class="literal">property</span>)</em></p>
+                     <p>Texture file to be assigned to the corresponding property
+                              (<em class="emphasis">e.g.</em>, <span class="literal">diffuseMap</span>,
+                              <span class="literal">heightMap</span>, <span class="literal">specularMap</span>,
+                              <span class="literal">normalMap</span>, <span class="literal">glowMap</span>, etc...)
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Vector4</span> (section
+                                 <span class="literal">property</span>)</em></p>
+                     <p>Generic material property requiring 4 float values
+                              (<em class="emphasis">e.g.</em>, <span class="literal">specularColour</span>,
+                              <span class="literal">vTransform</span>, <span class="literal">uTransform</span>,
+                              <span class="literal">materialSpecular</span>, etc...)
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p><em class="emphasis"><em class="emphasis">A</em> &#8212; For details, see the
+                    document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html" class="olink"><i>ModelEditor</i></a>
+                    <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html#xref_me_Panel_Summary" class="olink">Panel summary</a> <span class="symbol">&#8594;</span>
+                    <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html#xref_me_Material_Settings_Panel" class="olink">Materials Settings panel</a>.</em></p>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch10.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch12.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;10.&nbsp;<span class="literal">dxenum.xml</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;12.&nbsp;<span class="literal">exporter.xml</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

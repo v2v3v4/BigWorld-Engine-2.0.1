@@ -1,0 +1,531 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;20.&nbsp;User Authentication and Billing System Integration</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch19.html" title="Chapter&nbsp;19.&nbsp;Implementing Common Systems">
+      <link rel="next" href="ch21.html" title="Chapter&nbsp;21.&nbsp;Security">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch20.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;20.&nbsp;User Authentication and Billing System Integration</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch19.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch21.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_User_Authentication_And_Proxy_Selection"></a>Chapter&nbsp;20.&nbsp;User Authentication and Billing System Integration
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch20.html#d0e13551">20.1. Authentication by DBMgr</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch20.html#xref_bigworldLogOnMapping_Table">20.1.1. Default Authentication via MySQL</a></span></dt>
+                        <dt><span class="section"><a href="ch20.html#d0e13674">20.1.2. Default Authentication via XML</a></span></dt>
+                        <dt><span class="section"><a href="ch20.html#d0e13754">20.1.3. Custom Authentication and Billing System Integration</a></span></dt>
+                        <dt><span class="section"><a href="ch20.html#xref_Accepting_All_Users">20.1.4. Accepting All Users</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch20.html#xref_Bypassing_bigworldLogOnMapping_And_Using_Account_Entity">20.2. Authentication via a Base entity</a></span></dt>
+               </dl>
+            </div>
+            <p>In the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch04.html" class="olink"><i>Design Introduction</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch04.html#xref_Design_Introduction_Use_Cases" class="olink">Use Cases</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch04.html#xref_Use_Cases_Logging_In" class="olink">Logging In</a>, an overview of the login process is
+                 given. This chapter details the part of that process concerned with
+                 authenticate the login details and loading the initial entity.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e13551"></a>20.1.&nbsp;Authentication by DBMgr
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>By default, authentication of the player's username and password is
+                      done by the DBMgr. It also handles the mapping of that username to the
+                      initial entity the player will use. There are a number of different ways
+                      this can be done. This section discusses these different
+                      approaches.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_bigworldLogOnMapping_Table"></a>20.1.1.&nbsp;Default Authentication via MySQL
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When using the MySQL database, DBMgr uses the
+                           <span class="literal">bigworldLogOnMapping</span> table (for details, see <a href="ch33.html#xref_Entity_Tables" title="33.1.&nbsp;Entity Tables">Entity Tables</a>) to check login's validity and which
+                           entity to load for the user. It contains the following columns:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">logOnName</span></em></p>
+                           <p>Username used to log in to BigWorld. This corresponds to the
+                                        <span class="literal"><em class="parameter"><code>username</code></em></span> argument passed
+                                        to the
+                                        <code class="classname">BigWorld</code>.<code class="methodname">connect()</code>
+                                        call on the client.
+                           </p>
+                           <p>This is the primary key.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">password</span></em></p>
+                           <p>User's password. This corresponds to the
+                                        <code class="code"><em class="parameter"><code>password</code></em></code> argument passed to the
+                                        <code class="classname">BigWorld</code>.<code class="methodname">connect()</code>
+                                        call on the client.
+                           </p>
+                           <p>If <code class="filename">bw.xml</code> file's
+                                        <span class="literal">billingSystem/isPasswordHashed</span> setting is true,
+                                        the password will be hashed. The following SQL is used to perform
+                                        the hashing: 
+                           </p><pre class="programlisting">MD5( CONCAT( <em class="replaceable"><code>password</code></em>, logOnName ) )</pre></li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">entityType</span></em></p>
+                           <p>Type ID of the entity to create. To map the type ID to its
+                                        name, <span class="literal">bigworldEntityTypes</span> table (for details, see
+                                        <a href="ch33.html#xref_Entity_Tables" title="33.1.&nbsp;Entity Tables">Entity Tables</a>.) is used. This can be queried
+                                        with the following MySQL query.
+                           </p><pre class="programlisting">SELECT typeID FROM bigworldEntityTypes WHERE name='MyEntityType';</pre></li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">entityID</span></em></p>
+                           <p>The database id of the associated entity.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>To determine whether a login is valid and which entity to load,
+                           DBMgr executes the following steps:
+                  </p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Find a row in the <span class="literal">bigworldLogOnMapping</span>
+                                        table where the <span class="literal">logOnName</span> column matches the
+                                        username.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Check that the user's password matches the password of the
+                                        found row.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Load the entity identified by <span class="literal">typeID</span> and
+                                        <span class="literal">recordName</span>.
+                           </p>
+                        </li>
+                     </ol>
+                  </div>
+                  <p>For this step to succeed, the entity must already exist in the
+                           database. For information on how to create an entity and write it to the
+                           database, see <a href="ch08.html#xref_Reading_And_Writing_Entities" title="8.2.&nbsp;Reading and Writing Entities">Reading and Writing Entities</a>.
+                  </p>
+                  <p>This table is usually populated using MySQL tools. An example
+                           script, <code class="filename">bigworld/tools/server/misc/add_account.py</code>,
+                           implements a command line utility that can be used to create
+                           accounts.
+                  </p>
+                  <p>For information on how BigWorld can automatically populate this
+                           table, see <a href="ch20.html#xref_Accepting_All_Users" title="20.1.4.&nbsp;Accepting All Users">Accepting All Users</a>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13674"></a>20.1.2.&nbsp;Default Authentication via XML
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>It is highly recommended to use the MySQL database back-end for
+                                production environments. You should consider moving away from the XML
+                                database before implementing user authentication. 
+                     </p>
+                  </div>
+                  <p>The XML database implements the equivalent of the
+                           <span class="literal">bigworldLogOnMapping</span> table in the section
+                           <span class="literal">_BigWorldInfo/LogOnMapping</span>. Each row is specified
+                           using a separate sub-section, as illustrated below:
+                  </p><pre class="programlisting">&lt;root&gt;
+  &lt;_BigWorldInfo&gt;
+    &lt;LogOnMapping&gt;
+      &lt;item&gt;
+        &lt;logOnName&gt;  John      &lt;/logOnName&gt;
+        &lt;password&gt;   acde1234  &lt;/password&gt;
+        &lt;type&gt;       Account   &lt;/type&gt;
+        &lt;entityID&gt;   7231  &lt;/entityID&gt;
+      &lt;/item&gt;
+      &lt;item&gt;
+        &lt;logOnName&gt;  Peter     &lt;/logOnName&gt;
+        &lt;password&gt;   zyxw9876  &lt;/password&gt;
+        &lt;type&gt;       Avatar    &lt;/type&gt;
+        &lt;entityID&gt;   7232  &lt;/entityID&gt;
+      &lt;/item&gt;
+    &lt;/LogOnMapping&gt;
+  &lt;/_BigWorldInfo&gt;
+...
+&lt;/root&gt;</pre><p><span class="citetitle"><span class="literal">bigworldLogOnMapping</span> table in
+                              XML</span></p>
+                  <p>In the example above, two rows are specified. The tags correspond
+                           to the table columns as described below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">logOnName</span></em>
+                                        <span class="symbol">&#8208;</span> Corresponds to column:
+                                        <span class="literal">logOnName</span></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">password</span></em>
+                                        <span class="symbol">&#8208;</span> Corresponds to column:
+                                        <span class="literal">password</span></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">type</span></em>
+                                        <span class="symbol">&#8208;</span> Corresponds to column:
+                                        <span class="literal">typeID</span></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">entityID</span></em>
+                                        <span class="symbol">&#8208;</span> Corresponds to column:
+                                        <span class="literal">entityID</span></p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>When specifying the type of the entity, the type name is used
+                           instead of the type ID used by the MySQL database.
+                  </p>
+                  <p>Please note that
+                           <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/db.xml</code>
+                           is only read and written to during startup and shutdown, respectively.
+                           Therefore, it is not possible to update the
+                           <span class="literal">_BigWorldInfo/LogOnMapping</span> section and have the
+                           changes take effect while DBMgr is running.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13754"></a>20.1.3.&nbsp;Custom Authentication and Billing System Integration
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>It is often the case that user accounts are stored in an external
+                           system. This section describes how to bypass the
+                           <span class="literal">bigworldLogOnMapping</span> table and use your own
+                           system.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13762"></a>20.1.3.1.&nbsp;Billing System Integration using Python
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The easiest way to achieve this is via Python. When the DBMgr
+                                checks whether to use Python by attempting to call
+                                <code class="code">BWPersonality.connectToBillingSystem()</code>. If this exists
+                                and returns a Python object, this object is used to perform user
+                                authentication. The object should implement a
+                                <code class="methodname">getEntityKeyForAccount</code> and optionally
+                                <code class="methodname">setEntityKeyForAccount</code>.
+                     </p><pre class="programlisting">class BillingSystem( object ):
+    def getEntityKeyForAccount( username, password, clientAddr, response ):
+        ...
+
+    def setEntityKeyForAccount( username, password, entityType, entityID ):
+        ...
+
+def connectToBillingSystem():
+    return BillingSystem()</pre><p><span class="citetitle">Example excerpt from
+                                   res/scripts/db/BWPersonality.py</span></p>
+                     <p>The <code class="methodname">getEntityKeyForAccount</code> method
+                                accepts username, password, client address and response object as
+                                arguments. The username and password should be used for authentication
+                                and an appropriate response should be returned by calling one of the
+                                methods of the handler object.
+                     </p>
+                     <p>The response argument has the following methods:</p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">loadEntity( entityType,
+                                                   entityDatabaseID )</span><em class="emphasis"><span class="symbol">
+                                                      &#8208;</span> This should be called on successful authentication. It
+                                                   accepts two arguments, the type and database id of the entity to
+                                                   be loaded from the database and used by this
+                                                   user.</em></em></p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">loadEntityByName( entityType,
+                                                   entityName, shouldCreateUnknown )</span><em class="emphasis"><span class="symbol"> &#8208;</span> This is like loadEntity but takes the
+                                                   name (identifier string) of the entity instead of the database id.
+                                                   It also takes a boolean argument indicating whether to create a
+                                                   new entity if one with this name does not
+                                                   exist.</em></em></p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">createNewEntity( entityType,
+                                                   shouldRemember )</span><em class="emphasis"><span class="symbol">
+                                                      &#8208;</span> This should be called when logging in should proceed
+                                                   but a new entity should be created instead of loading one from the
+                                                   database. It accepts two argument, the type of the entity to
+                                                   create and a boolean indicating whether this new entity should be
+                                                   saved in the database and in the billing
+                                                   system.</em></em></p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">failureInvalidPassword()</span><em class="emphasis"><span class="symbol"> &#8208;</span> This should be called when
+                                                   authentication fails because of an invalid
+                                                   password.</em></em></p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">failureNoSuchUser()</span><em class="emphasis"><span class="symbol"> &#8208;</span> This should be called when
+                                                   authentication fails because no such user
+                                                   exists.</em></em></p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>You may not want to differentiate between receiving an invalid
+                                password or non-existent user. If so, you should just consistently
+                                return either <code class="methodname">failureNoSuchUser</code> or
+                                <code class="methodname">failureInvalidPassword</code> on failure.
+                     </p>
+                     <p>The <code class="methodname">setEntityKeyForAccount</code> is only
+                                required if <code class="methodname">createNewEntity</code> is ever called
+                                with <em class="parameter"><code>shouldRemember</code></em> as
+                                <span class="literal">True</span>. If so, this is called with the username and
+                                password of the account and the entity type and entity id of the
+                                entity to associate with that account.
+                     </p>
+                     <p>FantasyDemo has a simple example where account information is
+                                stored in an sqlite database. This is located in
+                                <code class="filename">fantasydemo/res/scripts/db/FantasyDemo.py</code> and
+                                <code class="filename">fantasydemo/res/scripts/db/sqlite_billing.py</code>.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13864"></a>20.1.3.2.&nbsp;Billing System Integration using C++
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Billing system integration can also be done via C++. A skeleton
+                                billing system case is implemented in
+                                <code class="filename">bigworld/src/server/dbmgr/custom_billing_system.cpp</code>.
+                                Integration should be done by filling out this class. To make use of
+                                this class, <code class="code">USE_CUSTOM_BILLING_SYSTEM</code> needs to be set to
+                                <code class="code">1</code> in
+                                <code class="filename">bigworld/src/server/dbmgr/Makefile</code>.
+                     </p>
+                     <p>The support for Python billing system integration is implemented
+                                in
+                                <code class="filename">bigworld/src/server/dbmgr/py_billing_system.cpp</code>.
+                                This can be used as an example.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Accepting_All_Users"></a>20.1.4.&nbsp;Accepting All Users
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>During development, it is often convenient to grant all users
+                           access to the server, without having to set up a
+                           <span class="literal">bigworldLogOnMapping</span> table.
+                  </p>
+                  <p>This can be achieved by setting <code class="filename">bw.xml</code> file's
+                           <span class="literal">billingSystem/shouldAcceptUnknownUsers</span><sup>[<a name="d0e13901" href="#ftn.d0e13901">32</a>]</sup> configuration option to <span class="literal">true</span>. With this
+                           configuration, a default entity is created for the user if there is no
+                           row matching the username in
+                           <span class="literal">bigworldLogOnMapping</span>.
+                  </p>
+                  <p>The type of the entity created is controlled by the
+                           <span class="literal">bw.xml</span> file's
+                           <span class="literal">billingSystem/entityTypeForUnknownUsers</span> option.
+                           Additionally, if
+                           <span class="literal">billingSystem/shouldRememberUnknownUsers</span> is set to
+                           <span class="literal">true</span>, then the entity created for the unknown user is
+                           saved in the database, and an entry is added in
+                           <span class="literal">bigworldLogOnMapping</span>. This effectively adds a new
+                           user into the system, and subsequent logins by the same user will be
+                           processed via the normal login process.
+                  </p>
+                  <p>If a custom billing system is being used, it is up to its
+                           implementation whether these options are respected.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Bypassing_bigworldLogOnMapping_And_Using_Account_Entity"></a>20.2.&nbsp;Authentication via a Base entity
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>An alternative method for performing user authentication, and entity
+                      selection is to delegate to an account entity and perform the logic in its
+                      base entity script. An account entity is just another BigWorld entity that
+                      is implemented using Python script. The DBMgr can be configured to bypass
+                      its usual login processing and pass control over to the account
+                      entity.
+               </p>
+               <p>To use this method, the following configuration options must be
+                      set:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">billingSystem/entityTypeForUnknownUsers</span><sup>A</sup>
+                                      <span class="symbol">&#8208;</span> Required value: Your account entity
+                                      type</em></p>
+                        <p><em class="emphasis">Reason for required value:
+                                      </em></p>
+                        <p>Type of the entity that will handle the login process.</p>
+                        <p>For details on how to implement entities, see <a href="ch02.html" title="Chapter&nbsp;2.&nbsp;Physical Entity Structure for Scripting"><i xmlns:xlink="http://www.w3.org/1999/xlink">Physical Entity Structure for Scripting</i></a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">billingSystem/authenticateViaBaseEntity</span><sup>A</sup>
+                                      <span class="symbol">&#8208;</span> Required value:
+                                      <span class="literal">true</span></em></p>
+                        <p><em class="emphasis">Reason for required
+                                      value:</em></p>
+                        <p>This bypasses the DBMgr authentication and always creates a
+                                   Proxy entity of the type indicated above. If this entity already
+                                   exists in the database with its identifier equal to the current
+                                   username, that data will be loaded otherwise a new entity will be
+                                   created. New entities are not immediately added to the database. It is
+                                   up to the base entity script to write only the appropriate entities
+                                   with a call to <code class="code">Base.writeToDB()</code>.
+                        </p>
+                        <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                           <h3 class="title">Note</h3>
+                           <p>The name of an entity is a property tagged with the
+                                        <code class="property">&lt;Identifier&gt;</code> tag. For details, see <a href="ch08.html#xref_The_Identifier_Tag" title="8.1.3.&nbsp;The Identifier Tag">The Identifier Tag</a>.
+                           </p>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+               <p><em class="emphasis"><em class="emphasis">A </em><span class="symbol">&#8208;</span> For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html#xref_DBMgr_Configuration_Options" class="olink">DBMgr Configuration Options</a>.</em></p>
+               <p>After a successful login:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">On the client </em><span class="symbol">&#8208;</span> The account's <span class="literal">__init__</span>
+                                   method is called.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">On the BaseApp</em> <span class="symbol">&#8208;</span> The account's
+                                   <span class="literal">onEntitiesEnabled</span> method is called.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>There are a couple of approaches to retrieving the user's
+                      password:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>On the BaseApp, if the account entity has a property called
+                                   password, it is automatically set to the user's login password. And,
+                                   of course, the account's name property will try to match the
+                                   username.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Since the login password sent by the client using
+                                   BigWorld.connect method is usually sent in clear text, it may be
+                                   preferable to use an empty password for normal login processing. Then,
+                                   after the account entity has been created, the client can send an
+                                   encrypted password to the Proxy.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>It is up to the account entity's implementation to verify the user's
+                      password. This is usually done by communicating with a third-party billing
+                      system. For details on how to communicate with a non-BigWorld process, see
+                      <a href="ch32.html" title="Chapter&nbsp;32.&nbsp;Non-Blocking Socket I/O Using Mercury"><i xmlns:xlink="http://www.w3.org/1999/xlink">Non-Blocking Socket I/O Using Mercury</i></a>. If the user's
+                      password is invalid, then the Proxy entity can destroy itself to
+                      disconnect the client.
+               </p>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e13901" href="#d0e13901">32</a>] </sup>For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html#xref_DBMgr_Configuration_Options" class="olink">DBMgr Configuration Options</a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch19.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch21.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;19.&nbsp;Implementing Common Systems&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;21.&nbsp;Security</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

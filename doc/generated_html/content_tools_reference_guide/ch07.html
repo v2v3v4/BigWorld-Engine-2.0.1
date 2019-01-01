@@ -1,0 +1,1010 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;7.&nbsp;Asset Browser</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Content Tools Reference Guide">
+      <link rel="up" href="index.html" title="Content Tools Reference Guide">
+      <link rel="prev" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Starting the Tools">
+      <link rel="next" href="ch08.html" title="Chapter&nbsp;8.&nbsp;Meta Data">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/content_tools_reference_guide/ch07.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;7.&nbsp;Asset Browser</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch06.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch08.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Asset_Browser"></a>Chapter&nbsp;7.&nbsp;Asset Browser
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch07.html#xref_ab_Status_Bar_Information">7.1. Status bar information</a></span></dt>
+                  <dt><span class="section"><a href="ch07.html#d0e27925">7.2. Context menus</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch07.html#xref_ab_Virtual_Folder">7.2.1. Virtual folder</a></span></dt>
+                        <dt><span class="section"><a href="ch07.html#d0e28018">7.2.2. Sub-folder</a></span></dt>
+                        <dt><span class="section"><a href="ch07.html#d0e28065">7.2.3. Asset list</a></span></dt>
+                        <dt><span class="section"><a href="ch07.html#d0e28091">7.2.4. Asset</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch07.html#xref_ab_Drag_And_Drop">7.3. Drag-and-drop</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch07.html#d0e28207">7.3.1. Virtual folder</a></span></dt>
+                        <dt><span class="section"><a href="ch07.html#d0e28254">7.3.2. Sub-folder</a></span></dt>
+                        <dt><span class="section"><a href="ch07.html#xref_ab_Asset_File">7.3.3. Asset file</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch07.html#xref_ab_Customisation">7.4. Customisation</a></span></dt>
+                  <dt><span class="section"><a href="ch07.html#d0e28366">7.5. Finding assets</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch07.html#d0e28380">7.5.1. Determining the search path</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>The Asset Browser is a panel included in the BigWorld tools
+                 WorldEditor, ModelEditor, and ParticleEditor, that manages game assets in a
+                 uniform and effective way.
+            </p>
+            <p>It can be customised via its configuration file
+                 <span class="literal">ual_config.xml</span> (for details, see <a href="ch07.html#xref_ab_Customisation" title="7.4.&nbsp;Customisation">Customisation</a>) to attend to your particular
+                 needs.
+            </p>
+            <p>The Asset Browser displays the various categories of assets available
+                 for each tool (<em class="emphasis">e.g.</em>, models, shells, textures, etc...)
+                 in a tree structure, with the asset type being the topmost level, and the
+                 subsequent levels being composed of the folders containing assets of that
+                 type. It also allows you to search assets by their name &#8212;
+                 metacharacters can be used.
+            </p>
+            <p>Similarly to web browsers, the tools also allow you to store your
+                 most-used assets (in the <em class="emphasis">Favourites</em> virtual
+                 folder), apart from automatically storing the most recently used assets (in
+                 the <em class="emphasis">History</em> virtual folder).
+            </p>
+            <div class="informalfigure">
+               <div class="mediaobject"><img src="images/ab_main_window.png" height=""><span class="caption">
+                     <p>Asset Browser</p></span></div>
+            </div>
+            <p>The list below describes the fields on this panel:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">Asset bar</em></p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><span class="inlinemediaobject"><img src="images/ab_asset_bar_button_search.jpg"></span></p>
+                              <p>Specifies the search string (with DOS-style wildcards) to
+                                           dynamically apply to the <em class="emphasis">Asset
+                                              List</em>.
+                              </p>
+                              <p>The up/down arrow next to the magnifying glass
+                                           expands/collapses the <em class="emphasis">Filter Bar</em>. A
+                                           black arrow indicates that at least one filter criteria is checked
+                                           in the Filter Bar, and a grey one indicates that none is
+                                           checked.
+                              </p>
+                           </li>
+                           <li>
+                              <p><span class="inlinemediaobject"><img src="images/ab_asset_bar_button_clear.png"></span><sup> A</sup></p>
+                              <p>Clears the search string.</p>
+                           </li>
+                           <li>
+                              <p><span class="inlinemediaobject"><img src="images/ab_asset_bar_button_refresh.png"></span><sup> A</sup></p>
+                              <p>Refreshes the <em class="emphasis">Asset
+                                              List</em>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><span class="inlinemediaobject"><img src="images/ab_asset_bar_button_swap_tiling.png"></span><sup> A</sup></p>
+                              <p>Swaps between horizontal and vertical tiling of the <em class="emphasis">Asset Tree</em> and the <em class="emphasis">Asset List</em>.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Filter bar</em></p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis">Asset locations</em></p>
+                              <p>Restricts the location of assets to be displayed in the
+                                           <em class="emphasis">Asset List</em>.
+                              </p>
+                              <p>If no location is selected, then all folders in the resources
+                                           folders list (or
+                                           <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span>) will be
+                                           searched.<sup>C</sup></p>
+                              <p>If at least one location is selected, then only those ones
+                                           that are selected and are listed in the resources folders list will
+                                           be searched. The list of locations is tool-specific, and can be
+                                           configured.<sup>B</sup></p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Asset types</em></p>
+                              <p>Restricts the type of assets to be displayed in the <em class="emphasis">Asset List</em>.
+                              </p>
+                              <p>The list of types is tool-specific, and can be
+                                           configured.<sup>B</sup></p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Asset tree</em></p>
+                     <p>Set of virtual folders, in a tree-style view, giving access to the
+                              assets.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Virtual folders</em></p>
+                     <p>Unless changed by the user, the list of virtual folders will
+                              always start with the nodes <em class="emphasis">Favourites</em>,
+                              <em class="emphasis">History</em>, and <em class="emphasis">All</em>. The remaining nodes are tool-specific, and
+                              can be configured either in the <span class="literal">ual.config.xml</span>
+                              configuration file<sup>B</sup>, or via
+                              drag-and-drop<sup>D</sup>.
+                     </p>
+                     <p>Virtual folders also have context menus. For details, see <a href="ch07.html#xref_ab_Virtual_Folder" title="7.2.1.&nbsp;Virtual folder">Virtual folder</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Asset list</em></p>
+                     <p>List of assets resulting from the following combination:</p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis">Search string</em> (specified in
+                                           the <em class="emphasis">Asset Bar</em>).
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Selected filters</em> (specified
+                                           in the <em class="emphasis">Filter Bar</em>).
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Current virtual folder</em>
+                                           (specified in the <em class="emphasis">Asset
+                                              Tree</em>).
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>Drag-and-drop from the list is supported, and is tool-specific.
+                              For details, see:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p>WorldEditor's implementation in <a href="ch02.html#xref_we_Drag_And_Drop" title="2.10.8.1.&nbsp;Drag-and-drop">Drag-and-drop</a></p>
+                           </li>
+                           <li>
+                              <p>ModelEditor's implementation in <a href="ch03.html#xref_me_Drag_And_Drop" title="3.8.1.1.&nbsp;Drag-and-drop">Drag-and-drop</a></p>
+                           </li>
+                           <li>
+                              <p>ParticleEditor's implementation in <a href="ch04.html#xref_pe_Drag_And_Drop" title="4.10.1.1.&nbsp;Drag-and-drop">Drag-and-drop</a></p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Status bar</em></p>
+                     <p>Displays information about the current item in the <em class="emphasis">Asset Tree</em> (virtual folder, or virtual folder's
+                              sub-folder), or in the <em class="emphasis">Asset List
+                                 </em>(asset file).
+                     </p>
+                     <p>For details, see <a href="ch07.html#xref_ab_Status_Bar_Information" title="7.1.&nbsp;Status bar information">Status bar information</a>.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p><em class="emphasis"><em class="emphasis">A</em> &#8212; The appearance
+                    and inclusion of these buttons is tool-specific, and can be configured. For
+                    details, see <a href="ch07.html#xref_ab_Customisation" title="7.4.&nbsp;Customisation">Customisation</a>.</em></p>
+            <p><em class="emphasis"><em class="emphasis">B</em> &#8212; For details,
+                    see <a href="ch07.html#xref_ab_Customisation" title="7.4.&nbsp;Customisation">Customisation</a>.</em></p>
+            <p><em class="emphasis"><em class="emphasis">C</em> &#8212; For details on
+                    how BigWorld compiles this list, see <a href="ch06.html" title="Chapter&nbsp;6.&nbsp;Starting the Tools"><i xmlns:xlink="http://www.w3.org/1999/xlink">Starting the Tools</i></a>.</em></p>
+            <p><em class="emphasis"><em class="emphasis">D</em> &#8212; For details,
+                    see <a href="ch07.html#xref_ab_Drag_And_Drop" title="7.3.&nbsp;Drag-and-drop">Drag-and-drop</a>.</em></p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_ab_Status_Bar_Information"></a>7.1.&nbsp;Status bar information
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The status bar displays information about the item selected in the
+                      Asset Tree or in the Asset List, as described in the list below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Virtual folder &#8212;
+                                      <span class="literal"><em class="replaceable"><code>&lt;result_folders&gt;</code></em></span>
+                                      (<span class="literal"><em class="replaceable"><code>&lt;number_of_found_files&gt;</code></em></span>
+                                      items)</em></p>
+                        <p><span class="literal"><em class="replaceable"><code>&lt;result_folders&gt;</code></em></span>
+                                   is the list of folders in the search path for which at least one asset
+                                   was actually found.
+                        </p>
+                        <div class="example"><a name="d0e27763"></a><p class="title"><b>Example&nbsp;7.1.&nbsp;Example</b></p>
+                           <div class="example-contents">
+                              <p>Assuming the following:</p>
+                              <div class="itemizedlist">
+                                 <ul type="circle">
+                                    <li>
+                                       <p><em class="emphasis">Search path contains the folders
+                                                           below:</em></p>
+                                       <div class="itemizedlist">
+                                          <ul type="square">
+                                             <li>
+                                                <p><span class="literal">C:\mf\gamebkp\res\avatars</span></p>
+                                             </li>
+                                             <li>
+                                                <p><span class="literal">C:\mf\gamebkp\res\npc</span></p>
+                                             </li>
+                                             <li>
+                                                <p><span class="literal">C:\mf\gamedev\res\avatars</span></p>
+                                             </li>
+                                             <li>
+                                                <p><span class="literal">C:\mf\gamedev\res\npc</span></p>
+                                             </li>
+                                          </ul>
+                                       </div>
+                                    </li>
+                                    <li>
+                                       <p><em class="emphasis">Only the following folders contain
+                                                           at least one file with the extension configured for the selected
+                                                           virtual folder:</em></p>
+                                       <div class="itemizedlist">
+                                          <ul type="square">
+                                             <li>
+                                                <p><span class="literal">gamebkp/res/avatars</span> (2 files with
+                                                                     the relevant extension)
+                                                </p>
+                                             </li>
+                                             <li>
+                                                <p><span class="literal">gamecli/res/avatars</span> (2 files with
+                                                                     relevant extension)
+                                                </p>
+                                             </li>
+                                             <li>
+                                                <p><span class="literal">gamedev/res/npc</span> (1 files with the
+                                                                     relevant extension)
+                                                </p>
+                                             </li>
+                                             <li>
+                                                <p><span class="literal">gametest/res/avatars</span> (1 files with
+                                                                     the relevant extension)
+                                                </p>
+                                             </li>
+                                          </ul>
+                                       </div>
+                                    </li>
+                                    <li>
+                                       <p><em class="emphasis"><span class="literal"><em class="replaceable"><code>&lt;result_folders&gt;</code></em></span>
+                                                           would then contain the following folders:</em></p>
+                                       <div class="itemizedlist">
+                                          <ul type="square">
+                                             <li>
+                                                <p><span class="literal">gamebkp/res/avatars</span></p>
+                                             </li>
+                                             <li>
+                                                <p><span class="literal">gamedev/res/npc</span></p>
+                                             </li>
+                                          </ul>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <p>The status bar would then display the following:</p>
+                              <div class="itemizedlist">
+                                 <ul type="circle">
+                                    <li>
+                                       <p><span class="literal">C:\mf\gamebkp\res\avatars;C:\mf\gamedev\res\npc</span>
+                                                        (3 items)
+                                       </p>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <p>The diagram below illustrates how this is established.</p>
+                              <p><span class="inlinemediaobject"><img src="images/ab_status_bar_virtual_folder_diagram.png"></span></p>
+                           </div>
+                        </div><br class="example-break"></li>
+                     <li>
+                        <p><em class="emphasis">Sub-folder &#8212;
+                                      <span class="literal"><em class="replaceable"><code>&lt;source_folders&gt;</code></em></span>
+                                      (<span class="literal"><em class="replaceable"><code>&lt;number_of_found_files&gt;</code></em></span>
+                                      items)</em></p>
+                        <p><span class="literal">&lt;source_folders&gt;</span> is the list of paths
+                                   containing the folder which assets are displayed in the <em class="emphasis">Asset List</em>.
+                        </p>
+                        <p>Note that all folders in the list will be displayed, regardless
+                                   of them containing assets or not.
+                        </p>
+                        <div class="example"><a name="d0e27866"></a><p class="title"><b>Example&nbsp;7.2.&nbsp;Example</b></p>
+                           <div class="example-contents">
+                              <p>Assuming the following:</p>
+                              <div class="itemizedlist">
+                                 <ul type="circle">
+                                    <li>
+                                       <p>The search path contains the folders below:</p>
+                                       <div class="itemizedlist">
+                                          <ul type="square">
+                                             <li>
+                                                <p><span class="literal">C:\mf\gamedev\res\npc</span></p>
+                                             </li>
+                                             <li>
+                                                <p><span class="literal">C:\mf\gametst\res\npc</span></p>
+                                             </li>
+                                             <li>
+                                                <p><span class="literal">C:\mf\gamebkp\res\npc</span></p>
+                                             </li>
+                                          </ul>
+                                       </div>
+                                    </li>
+                                    <li>
+                                       <p>The file system contains the folders below:</p>
+                                       <div class="itemizedlist">
+                                          <ul type="square">
+                                             <li>
+                                                <p><span class="literal">C:\mf\gamedev\res\npc</span></p>
+                                             </li>
+                                             <li>
+                                                <p><span class="literal">C:\mf\gamebkp\res\npc</span></p>
+                                             </li>
+                                          </ul>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <p>The status bar would then display the following:</p>
+                              <div class="itemizedlist">
+                                 <ul type="circle">
+                                    <li>
+                                       <p><span class="literal">C:\mf\gamedev\res\npc</span>;<span class="literal">C:\mf\gamebkp\res\npc</span>
+                                                        (<span class="literal"><em class="replaceable"><code>&lt;n&gt;</code></em></span>
+                                                        items)
+                                       </p>
+                                    </li>
+                                 </ul>
+                              </div>
+                           </div>
+                        </div><br class="example-break"></li>
+                     <li>
+                        <p><em class="emphasis">Asset file &#8212;
+                                      <span class="literal"><em class="replaceable"><code>&lt;absolute_path&gt;</code></em></span><span class="literal"><em class="replaceable"><code>&lt;filename&gt;</code></em></span></em></p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e27925"></a>7.2.&nbsp;Context menus
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Context menus are accessed by right-clicking a screen
+                      element.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_ab_Virtual_Folder"></a>7.2.1.&nbsp;Virtual folder
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The list below describes the menu items available in the virtual
+                           folder's context menu:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">List view styles</em></p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis">List</em>, <em class="emphasis">Small icons</em>, <em class="emphasis">Big
+                                                        icons</em></p>
+                                    <p>Swaps the display style in the <em class="emphasis">Asset
+                                                        List</em>.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Change this panel's
+                                           title</em></p>
+                           <p>Opens the <em class="emphasis">Change Asset Browser Panel
+                                           Title</em> dialog box, where you can specify new full window
+                                        and short titles for the <em class="emphasis">Asset
+                                           Browser</em> panel.
+                           </p>
+                           <p>The <em class="emphasis">Full Window Title</em> is used
+                                        as the panel's title, and the <em class="emphasis">Short
+                                           Title</em> as the tab's title.
+                           </p>
+                           <div class="informalfigure">
+                              <div class="mediaobject"><img src="images/ab_dlg_box_change_asset_browser_title.png" height=""><span class="caption">
+                                    <p>Change Asset Browser Title dialog
+                                                     box
+                                    </p></span></div>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Reload default folders</em></p>
+                           <p>Reloads all virtual folders specified in the configuration
+                                        file , in their original order.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Remove
+                                           '<span class="literal"><em class="replaceable"><code>&lt;name&gt;</code></em></span>'</em></p>
+                           <p>Removes the current virtual folder.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Clear
+                                           contents<sup>A</sup></em></p>
+                           <p>Clears the items in the list of the selected virtual
+                                        folder.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p><em class="emphasis"><em class="emphasis">A</em> &#8212; Only
+                              available for <em class="emphasis">Favourites</em> and <em class="emphasis">History</em> virtual folders.</em></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e28018"></a>7.2.2.&nbsp;Sub-folder
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The list below describes the menu items available in the
+                           sub-folder's context menu:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">List view styles</em></p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis">List</em>, <em class="emphasis">Small icons</em>, <em class="emphasis">Big
+                                                        icons</em></p>
+                                    <p>Swaps the display style in the <em class="emphasis">Asset
+                                                        List</em>.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Open folder in
+                                           Explorer<sup>A</sup></em></p>
+                           <p>Opens a new Windows Explorer window, displaying the contents
+                                        of the selected sub-folder.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Copy path to
+                                           clipboard<sup>A</sup></em></p>
+                           <p>Copies the sub-folder's absolute path to the clipboard.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p><em class="emphasis"><em class="emphasis">A </em>&#8212; If the
+                              sub-folder is available in more than one folder in the search path, then
+                              one menu item will be created for each of them.</em></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e28065"></a>7.2.3.&nbsp;Asset list
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The list below describes the menu items available in the asset
+                           list's context menu:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">List view styles</em></p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis">List</em>, <em class="emphasis">Small icons</em>, <em class="emphasis">Big
+                                                        icons</em></p>
+                                    <p>Swaps the display style in <em class="emphasis">Asset
+                                                        List</em>.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e28091"></a>7.2.4.&nbsp;Asset
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The list below describes the menu items available in the asset's
+                           context menu:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">List view styles</em></p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis">List</em>, <em class="emphasis">Small icons</em>, <em class="emphasis">Big
+                                                        icons</em></p>
+                                    <p>Swaps the display style in <em class="emphasis">Asset
+                                                        List.</em></p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Add to favourites</em></p>
+                           <p>Adds the selected model to the special virtual folder
+                                        <em class="emphasis">Favourites</em>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Open folder in
+                                           Explorer<sup>A</sup></em></p>
+                           <p>Opens a new Windows Explorer window, displaying the contents
+                                        of the selected sub-folder.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Copy path to
+                                           clipboard<sup>A</sup></em></p>
+                           <p>Copies the sub-folder's absolute path to the clipboard.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Edit in
+                                           ModelEditor<sup>C</sup></em></p>
+                           <p>Opens the selected item in ModelEditor.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Edit in
+                                           ParticleEditor<sup>C</sup></em></p>
+                           <p>Opens the selected item in ParticleEditor.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Open
+                                           model<sup>B</sup></em></p>
+                           <p>Opens the selected model in the viewport.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Add
+                                           model<sup>B</sup></em></p>
+                           <p>Performs the same functions as ModelEditor's <em class="emphasis">File <span class="symbol">&#8594;</span> Add
+                                           Model</em> menu item. For details, see <a href="ch03.html#xref_me_Menu_Items" title="3.1.&nbsp;Menu items">Menu items</a>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p><em class="emphasis"><em class="emphasis">A</em> &#8212; If the
+                              sub-folder is available in more than one folder in the search path, then
+                              one menu item will be created for each of them.</em></p>
+                  <p><em class="emphasis"><em class="emphasis">B</em> &#8212; Available
+                              only in ModelEditor.</em></p>
+                  <p><em class="emphasis"><em class="emphasis">C</em> &#8212; Available
+                              only in WorldEditor</em></p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_ab_Drag_And_Drop"></a>7.3.&nbsp;Drag-and-drop
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Items in the <em class="emphasis">Asset Tree</em> and
+                      <em class="emphasis">Asset List</em> provide drag-and-drop
+                      features, as described in the following sections.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e28207"></a>7.3.1.&nbsp;Virtual folder
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The effect of virtual folder's drop action depends on where it
+                           occurs:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">On Asset Tree</em></p>
+                           <p>Virtual folder's position in the tree is changed to where it
+                                        was dropped.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">On Asset Tree of another Asset Browser
+                                           panel</em></p>
+                           <p>Virtual folder is copied to the other <em class="emphasis">Asset Browser</em> panel's <em class="emphasis">Asset Tree</em>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Anywhere else</em></p>
+                           <p>An <em class="emphasis">Asset Browser</em> panel is
+                                        created, containing the <em class="emphasis">Asset Bar</em>,
+                                        <em class="emphasis">Filter Bar</em>, <em class="emphasis">Asset Tree</em> (having only the dragged virtual
+                                        folder), and <em class="emphasis">Asset List</em>. Note that
+                                        the new panel allows drag-and-drop like any other panel (for
+                                        details, see <a href="ch07.html#xref_ab_Drag_And_Drop" title="7.3.&nbsp;Drag-and-drop">Drag-and-drop</a>).
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e28254"></a>7.3.2.&nbsp;Sub-folder
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The effect of sub-folder's drop action depends on where it
+                           occurs:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">On Asset Tree</em></p>
+                           <p>A new virtual folder is created, with contents of the dragged
+                                        sub-folder.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">On Asset Tree of another Asset Browser
+                                           panel</em></p>
+                           <p>Sub-folder is copied to the other <em class="emphasis">Asset
+                                           Browser</em> panel's <em class="emphasis">Asset
+                                           Tree</em>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Anywhere else</em></p>
+                           <p>An <em class="emphasis">Asset Browser</em> panel is
+                                        created, containing the <em class="emphasis">Asset Bar,</em>
+                                        <em class="emphasis">Filter Bar</em>, <em class="emphasis">Asset Tree</em> (having only the dragged
+                                        sub-folder), and <em class="emphasis">Asset List</em>. Note
+                                        that the new panel allows drag-and-drop like any other panel (for
+                                        details, see <a href="ch07.html#xref_ab_Drag_And_Drop" title="7.3.&nbsp;Drag-and-drop">Drag-and-drop</a>).
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_ab_Asset_File"></a>7.3.3.&nbsp;Asset file
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The effect of asset file's drop action depends on where it
+                           occurs:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">On Asset Tree's Favourites virtual
+                                           folder</em></p>
+                           <p>File is copied to the virtual folder.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">On application's
+                                           viewport</em></p>
+                           <p>Tool-specific behaviour.</p>
+                           <p>For details, see:</p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p>WorldEditor's implementation in <a href="ch02.html#xref_we_Drag_And_Drop" title="2.10.8.1.&nbsp;Drag-and-drop">Drag-and-drop</a></p>
+                                 </li>
+                                 <li>
+                                    <p>ModelEditor's implementation in <a href="ch03.html#xref_me_Drag_And_Drop" title="3.8.1.1.&nbsp;Drag-and-drop">Drag-and-drop</a></p>
+                                 </li>
+                                 <li>
+                                    <p>ParticleEditor's implementation in <a href="ch04.html#xref_pe_Drag_And_Drop" title="4.10.1.1.&nbsp;Drag-and-drop">Drag-and-drop</a></p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Anywhere else</em></p>
+                           <p>Disabled.</p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_ab_Customisation"></a>7.4.&nbsp;Customisation
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Various elements of the Asset Browser can be customised, with each
+                      tool having its own configuration.
+               </p>
+               <p>The configuration is saved on the tool's <span class="literal">resources/ual
+                         folder</span>, in the <span class="literal">ual_config.xml</span> file. For
+                      details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch35.html" class="olink"><i><span class="literal">ual_config.xml</span></i></a>.
+               </p>
+               <p>The illustration below shows which elements can be configured, and
+                      how.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/ab_customisation.png" height=""><span class="caption">
+                        <p>Example of Asset Browser customisation</p></span></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e28366"></a>7.5.&nbsp;Finding assets
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The files displayed in the <em class="emphasis">Asset
+                         List</em> are determined by the list of search paths, the locations
+                      selected in <em class="emphasis">Asset Locations</em>, and the
+                      types selected in <em class="emphasis">Asset Types</em>.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e28380"></a>7.5.1.&nbsp;Determining the search path
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Each node in the <em class="emphasis">Asset Tree</em> (with
+                           the exception of <em class="emphasis">Favourites</em>, <em class="emphasis">History</em>, and <em class="emphasis">All</em>) has a list of sub-folders to include in the
+                           search (specified in the configuration file (for details, see <a href="ch07.html#xref_ab_Customisation" title="7.4.&nbsp;Customisation">Customisation</a>).
+                  </p>
+                  <p>Each of these folders is then prefixed by all folders in the
+                           search path, which is specified according to the rule below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">If no check box is selected in Asset
+                                           Locations:</em></p>
+                           <p>The search path will contain all folders in the resources
+                                        folders list (or
+                                        <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span>) &#8212;
+                                        for details on how BigWorld compiles this list, see <a href="ch06.html" title="Chapter&nbsp;6.&nbsp;Starting the Tools"><i xmlns:xlink="http://www.w3.org/1999/xlink">Starting the Tools</i></a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">If at least one location is
+                                           selected</em></p>
+                           <p>The search path will contain only the resource folders that
+                                        are selected <em class="emphasis">and</em> are listed in
+                                        the resources folders list.
+                           </p>
+                           <div class="example"><a name="d0e28423"></a><p class="title"><b>Example&nbsp;7.3.&nbsp;Example</b></p>
+                              <div class="example-contents">
+                                 <p><em class="emphasis">Assuming the
+                                                   following:</em></p>
+                                 <div class="itemizedlist">
+                                    <ul type="circle">
+                                       <li>
+                                          <p>The <span class="literal">characters</span> virtual folder is
+                                                             configured to search the following folders:
+                                          </p>
+                                          <div class="itemizedlist">
+                                             <ul type="square">
+                                                <li>
+                                                   <p><span class="literal">avatars</span></p>
+                                                </li>
+                                                <li>
+                                                   <p><span class="literal">npc</span></p>
+                                                </li>
+                                             </ul>
+                                          </div>
+                                       </li>
+                                       <li>
+                                          <p>The configuration file specifies the following <em class="emphasis">Asset Locations</em>:
+                                          </p>
+                                          <div class="itemizedlist">
+                                             <ul type="square">
+                                                <li>
+                                                   <p><em class="emphasis">Base assets</em> &#8212;
+                                                                          <span class="literal">*base/res*</span></p>
+                                                </li>
+                                                <li>
+                                                   <p><em class="emphasis">Level 1</em> (novice
+                                                                          missions) &#8212; *level1/res*
+                                                   </p>
+                                                </li>
+                                                <li>
+                                                   <p><em class="emphasis">Level 2</em> (expert
+                                                                          missions) &#8212; <span class="literal">*level2/res/*</span></p>
+                                                </li>
+                                                <li>
+                                                   <p><em class="emphasis">Level 3</em> (final
+                                                                          chapter) &#8212; <span class="literal">*level3/res/*</span></p>
+                                                </li>
+                                             </ul>
+                                          </div>
+                                       </li>
+                                       <li>
+                                          <p><em class="emphasis">Asset Locations</em> has the
+                                                             following check boxes selected:
+                                          </p>
+                                          <div class="itemizedlist">
+                                             <ul type="square">
+                                                <li>
+                                                   <p><em class="emphasis">Base Assets</em></p>
+                                                </li>
+                                                <li>
+                                                   <p><em class="emphasis">Level 1</em></p>
+                                                </li>
+                                                <li>
+                                                   <p><em class="emphasis">Level 2</em></p>
+                                                </li>
+                                             </ul>
+                                          </div>
+                                       </li>
+                                       <li>
+                                          <p><em class="emphasis">Resources folders</em> list
+                                                             is set to:
+                                          </p>
+                                          <div class="itemizedlist">
+                                             <ul type="square">
+                                                <li>
+                                                   <p><span class="literal">C:\mf\level1\res;C:\mf\level2\res;C:\mf\level3\res</span></p>
+                                                </li>
+                                             </ul>
+                                          </div>
+                                       </li>
+                                    </ul>
+                                 </div>
+                                 <p><em class="emphasis">To determine
+                                                   <span class="literal"><em class="replaceable"><code>&lt;search_path&gt;</code></em></span>:</em></p>
+                                 <div class="itemizedlist">
+                                    <ul type="circle">
+                                       <li>
+                                          <p>Make a list of all folders that are present in the
+                                                             resources folders list and are selected in <em class="emphasis">Asset Locations</em>:
+                                          </p>
+                                          <div class="itemizedlist">
+                                             <ul type="square">
+                                                <li>
+                                                   <p>In our example:
+                                                                          <span class="literal">C:\mf\level1\res;C:\mf\level2\res</span></p>
+                                                   <p><span class="literal"><span class="inlinemediaobject"><img src="images/ab_finding_assets_diagram.png"></span></span></p>
+                                                </li>
+                                             </ul>
+                                          </div>
+                                       </li>
+                                       <li>
+                                          <p>Use the list to prefix all search folders specified for
+                                                             selected virtual folder. The folder in the resulting
+                                                             <span class="literal"><em class="replaceable"><code>&lt;search_path&gt;</code></em></span>
+                                                             will be:
+                                          </p>
+                                          <div class="itemizedlist">
+                                             <ul type="square">
+                                                <li>
+                                                   <p><code class="filename">C:\mf\level1\res\avatars</code></p>
+                                                </li>
+                                                <li>
+                                                   <p><code class="filename">C:\mf\level1\res\npc</code></p>
+                                                </li>
+                                                <li>
+                                                   <p><code class="filename">C:\mf\level2\res\avatars</code></p>
+                                                </li>
+                                                <li>
+                                                   <p><code class="filename">C:\mf\level2\res\npc</code></p>
+                                                </li>
+                                             </ul>
+                                          </div>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </div>
+                           </div><br class="example-break"></li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch06.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch08.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;6.&nbsp;Starting the Tools&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;8.&nbsp;Meta Data</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

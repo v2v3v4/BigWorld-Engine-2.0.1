@@ -1,0 +1,615 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;13.&nbsp;First Aid After a Crash</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Operations Guide">
+      <link rel="up" href="index.html" title="Server Operations Guide">
+      <link rel="prev" href="ch12.html" title="Chapter&nbsp;12.&nbsp;RPM">
+      <link rel="next" href="ch14.html" title="Chapter&nbsp;14.&nbsp;Common Log Messages">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_operations_guide/ch13.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;13.&nbsp;First Aid After a Crash</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch12.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch14.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_First_Aid_After_Crash"></a>Chapter&nbsp;13.&nbsp;First Aid After a Crash
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch13.html#d0e9811">13.1. Change your coredump output directory, if necessary</a></span></dt>
+                  <dt><span class="section"><a href="ch13.html#d0e9842">13.2. Determine the first process(es) that crashed</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch13.html#d0e9854">13.2.1. BigWorld logs</a></span></dt>
+                        <dt><span class="section"><a href="ch13.html#d0e9868">13.2.2. Chronologically listing core files</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch13.html#xref_Generate_Stack_Trace">13.3. Generate a stack trace of the process that crashed</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch13.html#d0e9927">13.3.1. Troubleshooting</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch13.html#xref_Retrieve_Crash_Logs">13.4. Retrieve relevant log information</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch13.html#d0e9960">13.4.1. Generating a log summary from a core file</a></span></dt>
+                        <dt><span class="section"><a href="ch13.html#d0e9975">13.4.2. Archiving all logs</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch13.html#d0e9989">13.5. Back up the crash information</a></span></dt>
+                  <dt><span class="section"><a href="ch13.html#d0e10030">13.6. Notify BigWorld Support of the crash</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch13.html#d0e10061">13.6.1. Uploading large files</a></span></dt>
+                        <dt><span class="section"><a href="ch13.html#d0e10083">13.6.2. Providing BigWorld access to your server cluster</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>If a BigWorld server component fails there are some steps that you
+                 should follow to assist BigWorld in identifying and resolve the problem as
+                 quickly as possible. These steps are outlined briefly below.
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Change your coredump output directory, if necessary.</p>
+                  </li>
+                  <li>
+                     <p>Determine the first process(es) that crashed.</p>
+                  </li>
+                  <li>
+                     <p>Generate a stack trace of the process that crashed.</p>
+                  </li>
+                  <li>
+                     <p>Retrieve relevant log information.</p>
+                  </li>
+                  <li>
+                     <p>Back up the crash information.</p>
+                  </li>
+                  <li>
+                     <p>Notify BigWorld Support of the crash.</p>
+                  </li>
+               </ul>
+            </div>
+            <p>A crash may be either an intentional event such as an
+                 <span class="literal">assert</span>, or unintentional event such as segmentation
+                 fault. Whenever a crash occurs a core file should be written to the
+                 <code class="filename">bigworld/bin/Hybrid64</code> directory (or
+                 equivalent directory in your system). These files provide a complete dump of
+                 the memory in use by the process at the time the failure occurred and allows
+                 deep investigation as to the state of the program which is often necessary
+                 to determine the cause of a problem.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e9811"></a>13.1.&nbsp;Change your coredump output directory, if necessary
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>By default, processes that crash will output a coredump into their
+                      current working directory, which is generally the directory where the
+                      binaries reside. This directory may need to be changed if the user running
+                      the server does not have sufficient permissions to write to that
+                      directory. This may be the case if you have installed using RPM
+                      packages.
+               </p>
+               <p>The output path can be temporarily changed by writing the new output
+                      path and the core file pattern to
+                      <code class="filename">/proc/sys/kernel/core_pattern</code>. Note that this will
+                      change the coredump output path for all processes (not just BigWorld
+                      processes) dumping core on that machine.
+               </p>
+               <p>For example, a command similar to the following can be used
+                      (executed as the root user):
+               </p><pre class="programlisting">$ echo "/your/path/here/core.%e.%h.%p" &gt; /proc/sys/kernel/core_pattern</pre><p>Note that the change is only temporary and will not persist across
+                      machine restarts.
+               </p>
+               <p>If a more permanent setting is required, there is the
+                      <code class="varname">CORE_PATH</code> shell variable defined in the BWMachined init
+                      script that can be set to a suitable output directory. For example, it can
+                      be set like this:
+               </p><pre class="programlisting">CORE_PATH=/your/path/here</pre><p>The init script is located at<code class="filename">
+                         /etc/init.d/bwmachined2</code>. Note that after modifying
+                      <code class="varname">CORE_PATH</code>, the BWMachined service will need to be
+                      restarted for the changes to take effect.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e9842"></a>13.2.&nbsp;Determine the first process(es) that crashed
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>When diagnosing a crash it is important to find the first process
+                      that crashed if there have been multiple process failures. In most
+                      scenarios multiple crashes occur due to a single failure that then
+                      propagates through the cluster, so it is important to identify where the
+                      failure started. There are two methods which can be used to achieve
+                      this.
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>BigWorld logs.</p>
+                     </li>
+                     <li>
+                        <p>Chronologically listing core files.</p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9854"></a>13.2.1.&nbsp;BigWorld logs
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Whenever a crash occurs the logs should always be investigated as
+                           a first step to check for any known problems or obvious errors that may
+                           have occurred. When an issue has been identified, searching around the
+                           time period for <span class="literal">CRITICAL</span> and <span class="literal">ERROR</span>
+                           messages can help quickly identify the set of processes that failed.
+                           Searching through the logs can be performed either via WebConsole and
+                           LogViewer, or via the command line utility
+                           <code class="filename">mlcat.py</code>. Using the command line utility provides
+                           more flexibility for saving logs to a file which can then be collected
+                           and sent as part of a BigWorld support ticket.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9868"></a>13.2.2.&nbsp;Chronologically listing core files
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>If a process failure occurs due to a non-assertion failure case
+                           you may find no obvious <span class="literal">CRITICAL</span> or
+                           <span class="literal">ERROR</span> messages appear in the server logs. In this
+                           circumstance you will need to search all of the server binary
+                           directories within your cluster to find the core files relating to a
+                           crash. This sort of operation will generally require a custom script
+                           that is suited for your environment as a cluster with hundreds of
+                           machines can be time consuming to examine.
+                  </p>
+                  <p>The easiest way to perform this kind of search is to simply
+                           <span><strong class="command">ssh</strong></span> to all the server machines in the cluster and
+                           perform a directory listing. Below is the output of a simple
+                           chronologically sorted directory listing showing a sequence of core
+                           files.
+                  </p><pre class="programlisting">$ cd bigworld/bin/Hybrid64
+$ ls -lt
+...
+-rw------- 1 game Company 124305408 Jan  7 10:17 core.cellapp.pc242.3030
+-rw-r--r-- 1 game Company       275 Jan  7 10:16 assert.cellapp.pc242.3030.log
+-rw------- 1 game Company  67174400 Jan  7 10:16 core.baseapp.pc242.3024
+-rw------- 1 game Company  21635072 Jan  7 10:16 core.cellappmgr.pc242.3018
+-rw-r--r-- 1 game Company       167 Jan  7 10:15 assert.baseapp.pc242.3024.log
+-rw-r--r-- 1 game Company       166 Jan  7 10:15 assert.cellappmgr.pc242.3018.log
+-rw------- 1 game Company 125972480 Jan  6 09:48 core.cellapp.pc242.600
+-rw-r--r-- 1 game Company       275 Jan  6 09:48 assert.cellapp.pc242.600.log
+-rw------- 1 game Company  21753856 Jan  6 09:47 core.cellappmgr.pc242.596
+-rw-r--r-- 1 game Company       165 Jan  6 09:47 assert.cellappmgr.pc242.596.log
+-rw------- 1 game Company  62255104 Jan  5 15:49 core.baseapp.pc242.601
+-rw-r--r-- 1 game Company       275 Jan  5 15:49 assert.baseapp.pc242.601.log</pre><p>From the above example you can see there are 3 separate core files
+                           that have been generated on Jan 7th. As we are interested in the
+                           earliest crash we look at the two assertions from 10:15 which are for
+                           CellAppMgr and BaseApp. We then use these assertion files to find the
+                           corresponding core files using the PIDs 3018 and 3024. Thus the core
+                           files we are interested in investigating are:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>core.baseapp.pc242.3024</p>
+                        </li>
+                        <li>
+                           <p>core.cellappmgr.pc242.3018</p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Generate_Stack_Trace"></a>13.3.&nbsp;Generate a stack trace of the process that crashed
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>As you can see from the directory listing in the previous section,
+                      core files can be extremely large. One of the most effective ways of
+                      notifying BigWorld of a crash is to generate a simple text stack trace of
+                      the crash. This can be performed by using the GNU Debugger program
+                      <span><strong class="command">gdb</strong></span>. For example using the BaseApp core file from the
+                      previous section we generate a stack trace as follows:
+               </p>
+               <p>Load the BaseApp binary and core file into GDB.</p><pre class="programlisting">$ gdb baseapp core.baseapp.pc242.3024
+GNU gdb (GDB) 7.0
+Copyright (C) 2009 Free Software Foundation, Inc.
+...
+Core was generated by `/home/game/game_dir/bigworld/bin/Hybrid64/baseapp -machined --res /home/gam'.
+Program terminated with signal 11, Segmentation fault.
+#0  DebugMsgHelper::criticalMessageHelper (this=&lt;value optimized out&gt;, isDevAssertion=&lt;value optimized out&gt;, format=&lt;value optimized out&gt;, argPtr=&lt;value optimized out&gt;) at debug.cpp:321
+321             *(int*)NULL = 0;
+(gdb)</pre><p>Use the <span class="literal">bt</span> (backtrace) command to generate a
+                      stack trace.
+               </p><pre class="programlisting">(gdb) bt
+#0  DebugMsgHelper::criticalMessageHelper (this=&lt;value optimized out&gt;, isDevAssertion=&lt;value optimized out&gt;, format=&lt;value optimized out&gt;, argPtr=&lt;value optimized out&gt;) at debug.cpp:321
+#1  0x000000000087882d in DebugMsgHelper::criticalMessage (this=0x2aaab4000020, format=0x2aaab4000078 "\020\326_\265\252*") at debug.cpp:128
+#2  0x00000000007ce56c in Mercury::Channel::checkOverflowErrors (this=0x1b2e3120) at channel.cpp:460
+#3  0x00000000007d16f1 in Mercury::Channel::addResendTimer (this=0x1b2e3120, seq=&lt;value optimized out&gt;, p=0x2aaab55fc240, roBeg=0x0, roEnd=&lt;value optimized out&gt;) at channel.cpp:898
+#4  0x00000000007f8808 in Mercury::NetworkInterface::send (this=0x7fff6b280320, address=..., bundle=..., pChannel=0x1b2e3120) at network_interface.cpp:1095
+#5  0x00000000007d060b in Mercury::Channel::send (this=0x1b2e3120, pBundle=0x1b2e2f50) at channel.cpp:769
+#6  0x00000000005373c0 in Mercury::ChannelOwner::send (this=0x7fff6b27b950, arg=&lt;value optimized out&gt;) at channel_owner.hpp:33
+#7  BaseApp::handleTimeout (this=0x7fff6b27b950, arg=&lt;value optimized out&gt;) at baseapp.cpp:4693
+#8  0x00000000007da7cd in TimeQueueT&lt;unsigned long&gt;::Node::triggerTimer (this=0x1b2a7400, now=254536585659057) at time_queue.ipp:402
+#9  TimeQueueT&lt;unsigned long&gt;::process (this=0x1b2a7400, now=254536585659057) at time_queue.ipp:184
+#10 0x00000000007d9b16 in Mercury::EventDispatcher::processTimers (this=0x7fff6b27c1c0) at event_dispatcher.cpp:408
+#11 0x00000000007d9c38 in Mercury::EventDispatcher::processOnce (this=0x7fff6b27c1c0, shouldIdle=true) at event_dispatcher.cpp:580
+#12 0x00000000007d9c54 in Mercury::EventDispatcher::processContinuously (this=0x2aaab4000020) at event_dispatcher.cpp:564
+#13 0x00000000007d9c69 in Mercury::EventDispatcher::processUntilBreak (this=0x2aaab4000020) at event_dispatcher.cpp:598
+#14 0x000000000054ddbe in BaseApp::run (this=0x7fff6b27b950, argc=&lt;value optimized out&gt;, argv=&lt;value optimized out&gt;) at baseapp.cpp:1125
+#15 0x000000000051a0eb in doMain (dispatcher=&lt;value optimized out&gt;, interface=&lt;value optimized out&gt;, argc=4, argv=0x7fff6b280b58) at main.cpp:47
+#16 0x000000000051aa65 in bwMain (argc=4, argv=0x7fff6b280b58) at main.cpp:70
+#17 0x000000000051b048 in main (argc=4, argv=0x7fff6b280b58) at main.cpp:60</pre><p>Quit <span><strong class="command">gdb</strong></span>.
+               </p><pre class="programlisting">(gdb) quit</pre><p>The stack trace can then be copy and pasted into a separate text
+                      file and stored along with the other report information for the
+                      crash.
+               </p>
+               <p>It is also possible to perform this step in one quick operation by
+                      issuing a command similar to the following:
+               </p><pre class="programlisting">$ gdb -ex 'bt' -ex 'q' baseapp core.baseapp.pc242.3024 &gt; core.baseapp.pc242.3024.backtrace</pre><div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9927"></a>13.3.1.&nbsp;Troubleshooting
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>It is useful to identify when a bad / invalid stack trace has been
+                           generated. These can be caused by a number of issues such:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Process binary has been modified since the core file was
+                                        generated.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Core file or binary is corrupt.</p>
+                        </li>
+                        <li>
+                           <p>Architecture of the core file and process binary do not
+                                        match.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Below is an example of an invalid stack trace that has been
+                           generated by GDB.
+                  </p><pre class="programlisting">$ gdb baseapp core.baseapp
+...
+warning: exec file is newer than core file.
+[New Thread 7384]
+[New Thread 7368]
+Program terminated with signal 11, Segmentation fault.
+#0  0x00000000008753d1 in MemberWatcher&lt;double, StatWithRatesOfChange&lt;unsigned int&gt;, double&gt;::getAsString (this=0x7fff13a189bf, base=0x1, path=&lt;value optimized out&gt;, result=..., desc=..., mode=@0x2e99d)
+    at watcher.hpp:1846
+1846                            RETURN_TYPE value = (useObject.*getMethod_)();
+(gdb)</pre><p>You can see here that the initial loading of the file is warning
+                           us that the BaseApp executable is newer than the core file that is being
+                           examined. This can indicate that the binary has been recompiled and no
+                           longer corresponds to the core file. If we continue to examine the core
+                           file we see the following output:
+                  </p><pre class="programlisting">(gdb) bt
+#0  0x00000000008753d1 in MemberWatcher&lt;double, StatWithRatesOfChange&lt;unsigned int&gt;, double&gt;::getAsString (this=0x7fff13a189bf, base=0x1, path=&lt;value optimized out&gt;, result=..., desc=..., mode=@0x2e99d)
+    at watcher.hpp:1846
+#1  0x616d732030373039 in ?? ()
+#2  0x71655374754f6c6c in ?? ()
+#3  0x383039313d5f7441 in ?? ()
+#4  0x65646c6f202c3737 in ?? ()
+#5  0x656b63616e557473 in ?? ()
+#6  0x38313d5f71655364 in ?? ()
+#7  0x6e69772032383736 in ?? ()
+#8  0x5f657a6953776f64 in ?? ()
+#9  0x6d202c363930343d in ?? ()
+#10 0x6c667265764f7861 in ?? ()
+#11 0x74656b636150776f in ?? ()
+#12 0x000a323931383d73 in ?? ()
+#13 0x0000000000c11440 in ?? ()
+#14 0x000000000fa4dc00 in ?? ()
+#15 0x000000000fa84050 in ?? ()
+#16 0x000000000fa840ce in ?? ()
+#17 0x000000000fa840d0 in ?? ()</pre><p>What we are seeing here is GDB being unable to match the
+                           information in the core file with the executable and then presenting us
+                           with '<span class="literal">?? ()</span>' to indicate something is wrong. If you
+                           see this kind of output while generating a stack trace please identify
+                           the reason for this occurring and generate a new correct stack trace
+                           before sending it to BigWorld Support.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Retrieve_Crash_Logs"></a>13.4.&nbsp;Retrieve relevant log information
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Most server clusters tend not to keep all server logs for a long
+                      period of time due to the data storage requirement. If server logs are
+                      being deleted on a semi-frequent basis it is important to make a backup of
+                      the relevant log files so they can be referred to during crash analysis by
+                      either your own team or BigWorld support.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9960"></a>13.4.1.&nbsp;Generating a log summary from a core file
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In order to produce a quick log summary of a crash based on a core
+                           file you can use the MessageLogger tool mlcat.py. For example using the
+                           BaseApp core file from previous sections we can quickly generate a log
+                           summary using the following command:
+                  </p><pre class="programlisting">$ mlcat.py --around core.baseapp.pc242.3024 --context=50 &gt; core.baseapp.pc242.3024.log</pre><p>This command has queried the server logs based on the timestamp of
+                           the core file and saved 50 lines of context from before and after this
+                           time into the log file
+                           <code class="filename">core.baseapp.pc242.3024.log</code>.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>As core files can be extremely large and take a long time to
+                                write to disk, the time stamp of a core file may be significantly
+                                later than the server logs (sometimes in the order of minutes
+                                later).
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9975"></a>13.4.2.&nbsp;Archiving all logs
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>It is also recommended to archive the complete set of logs
+                           surrounding a crash. This can be easily performed by using the mltar.py
+                           MessageLogger utility program as follows:
+                  </p><pre class="programlisting">$ mltar.py -zcf 20100107_logs.tar.gz                                                                                                                                     &lt;server/message_logger&gt;
+Please select the segments to archive (e.g. 0,1,5-10):
+
+  #  Time                      Duration          Entries     Size
+  0  2010-01-06-09:47:07             7h            83490    4.5MB
+  1  2010-01-07-10:15:31             4h            97268    5.5MB
+
+Enter segments to archive [all]: </pre><p>In this scenario we have already identified that the crash has
+                           occurred at around Jan 7th at 10:16am so it would be useful to archive
+                           both log segments.
+                  </p>
+                  <p>We now have an archive of the relevant server logs in the file
+                           <code class="filename">20100107_logs.tar.gz</code> which can be used by your
+                           internal team or by BigWorld support as required.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e9989"></a>13.5.&nbsp;Back up the crash information
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Having successfully identified all the files that are relevant to a
+                      crash, backing up the files is the next step to ensure that all data
+                      remains available should it be needed during the investigation process. It
+                      is recommended to copy all files relating to a crash into a new directory
+                      on a non cluster machine that is well named to help identify the data at a
+                      later point. For example using the core file and crash information from
+                      previous sections a new directory might be created such as
+                      <code class="filename">/home/game_admin/crashes/20100107_baseapp</code>.
+               </p>
+               <p>You can now copy all the relevant files mentioned in the previous
+                      sections using scp or other network file transfer mechanisms suited to
+                      your environment. Below is a complete list of files recommended to
+                      keep.
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Core files (e.g.,
+                                   <code class="filename">core.baseapp.pc242.3024</code>)
+                        </p>
+                     </li>
+                     <li>
+                        <p>Binaries (e.g., <code class="filename">baseapp</code>)
+                        </p>
+                     </li>
+                     <li>
+                        <p>Stack trace summaries (e.g.,
+                                   <code class="filename">core.baseapp.pc242.3024.backtrace</code>)
+                        </p>
+                     </li>
+                     <li>
+                        <p>Log file summaries (e.g.,
+                                   <code class="filename">core.baseapp.pc242.3024.log</code>)
+                        </p>
+                     </li>
+                     <li>
+                        <p>Complete log files (e.g.,
+                                   <code class="filename">20100107_logs.tar.gz</code>)
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10030"></a>13.6.&nbsp;Notify BigWorld Support of the crash
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>You should now have a collected set of information regarding the
+                      crash which can be sent to BigWorld Support if you find you need
+                      assistance with the analysis and diagnosis of the crash.
+               </p>
+               <p>When reporting a process crash to BigWorld Support please include as
+                      much information as possible. After you have reviewed the core files and
+                      log output summary, if you believe the crash is related to any specific
+                      section of Python game script or other custom game resources, providing
+                      these files with the initial bug report can greatly speed up the time it
+                      will take BigWorld Support to identify an issue and assist in finding a
+                      solution.
+               </p>
+               <p>When creating a support ticket please include the following
+                      information:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Exact BigWorld server version used (e.g., 1.9.4.3)</p>
+                     </li>
+                     <li>
+                        <p>All relevant stack traces (see <a href="ch13.html#xref_Generate_Stack_Trace" title="13.3.&nbsp;Generate a stack trace of the process that crashed">Generate a stack trace of the process that crashed</a>)
+                        </p>
+                     </li>
+                     <li>
+                        <p>All relevant logs (see <a href="ch13.html#xref_Retrieve_Crash_Logs" title="13.4.&nbsp;Retrieve relevant log information">Retrieve relevant log information</a>)
+                        </p>
+                     </li>
+                     <li>
+                        <p>Is the crash reproducible?</p>
+                     </li>
+                     <li>
+                        <p>How frequently does the crash occur?</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>By providing all the above information in the original support
+                      ticket it can be possible to save a number of days by allowing the support
+                      team to start work on the issue as quickly as possible.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10061"></a>13.6.1.&nbsp;Uploading large files
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>If you need to upload large core files and logs to assist with the
+                           support process BigWorld provides an FTP location for you to upload this
+                           data to.
+                  </p>
+                  <div class="variablelist">
+                     <dl>
+                        <dt><span class="term"><a xmlns:xlink="http://www.w3.org/1999/xlink" href="ftp://ftp.bigworldtech.com" target="_top">ftp://ftp.bigworldtech.com</a></span></dt>
+                        <dd>
+                           <p>Username: bwguest</p>
+                           <p>Password: <span class="literal">3f7eepE3</span></p>
+                        </dd>
+                     </dl>
+                  </div>
+                  <p>When using this FTP location please note that as it is in use by
+                           numerous customers, naming your files as specifically as possible
+                           greatly assists BigWorld support. The FTP is only writable by customers
+                           so feel free to use file names with customer and game information, for
+                           example
+                           <code class="filename">customer_cellapp_report_20100128.zip</code>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10083"></a>13.6.2.&nbsp;Providing BigWorld access to your server cluster
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In certain scenarios it can be necessary for BigWorld support to
+                           require access to your server cluster in order to fully assist with an
+                           issue. While this is not a common occurrence it can save time if your
+                           staff is aware of this possibility and has a plan in place should it be
+                           required.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch12.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch14.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;12.&nbsp;RPM&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;14.&nbsp;Common Log Messages</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

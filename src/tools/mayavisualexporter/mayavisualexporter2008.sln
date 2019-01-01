@@ -1,0 +1,172 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mayavisualexporter", "mayavisualexporter2008.vcproj", "{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81} = {4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0} = {B179FA51-48CF-4F63-8D95-2AD57FE898A0}
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950} = {1ABB1158-909C-4AD4-9F81-CB38BBA5D950}
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F} = {DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141} = {5DC4CC9A-3052-4076-A8D4-FE229C1AC141}
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D} = {204D85B9-F793-4F21-99FF-40AC92A08E5D}
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD} = {A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "resmgr", "..\..\lib\resmgr\resmgr2008.vcproj", "{204D85B9-F793-4F21-99FF-40AC92A08E5D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cstdmf", "..\..\lib\cstdmf\cstdmf2008.vcproj", "{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "math", "..\..\lib\math\math3d2008.vcproj", "{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "moo", "..\..\lib\moo\moo2008.vcproj", "{B179FA51-48CF-4F63-8D95-2AD57FE898A0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "physics2", "..\..\lib\physics2\physics22008.vcproj", "{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zip", "..\..\lib\zip\zip2008.vcproj", "{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "job_system", "..\..\lib\job_system\job_system2008.vcproj", "{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Maya 2008 Debug|Win32 = Maya 2008 Debug|Win32
+		Maya 2008 Release|Win32 = Maya 2008 Release|Win32
+		Maya 2009 Debug|Win32 = Maya 2009 Debug|Win32
+		Maya 2009 Release|Win32 = Maya 2009 Release|Win32
+		Maya 2010 Debug|Win32 = Maya 2010 Debug|Win32
+		Maya 2010 Release|Win32 = Maya 2010 Release|Win32
+		Maya 2011 Debug|Win32 = Maya 2011 Debug|Win32
+		Maya 2011 Release|Win32 = Maya 2011 Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2008 Debug|Win32.ActiveCfg = Maya 2008 Debug|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2008 Debug|Win32.Build.0 = Maya 2008 Debug|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2008 Release|Win32.ActiveCfg = Maya 2008 Release|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2008 Release|Win32.Build.0 = Maya 2008 Release|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2009 Debug|Win32.ActiveCfg = Maya 2009 Debug|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2009 Debug|Win32.Build.0 = Maya 2009 Debug|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2009 Release|Win32.ActiveCfg = Maya 2009 Release|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2009 Release|Win32.Build.0 = Maya 2009 Release|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2010 Debug|Win32.ActiveCfg = Maya 2010 Debug|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2010 Debug|Win32.Build.0 = Maya 2010 Debug|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2010 Release|Win32.ActiveCfg = Maya 2010 Release|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2010 Release|Win32.Build.0 = Maya 2010 Release|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2011 Debug|Win32.ActiveCfg = Maya 2011 Debug|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2011 Debug|Win32.Build.0 = Maya 2011 Debug|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2011 Release|Win32.ActiveCfg = Maya 2011 Release|Win32
+		{D9713E2F-F9D2-4B0A-A2B0-67C6DFC41F5C}.Maya 2011 Release|Win32.Build.0 = Maya 2011 Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2008 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2008 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2008 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2008 Release|Win32.Build.0 = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2009 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2009 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2009 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2009 Release|Win32.Build.0 = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2010 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2010 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2010 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2010 Release|Win32.Build.0 = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2011 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2011 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2011 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Maya 2011 Release|Win32.Build.0 = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2008 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2008 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2008 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2008 Release|Win32.Build.0 = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2009 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2009 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2009 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2009 Release|Win32.Build.0 = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2010 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2010 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2010 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2010 Release|Win32.Build.0 = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2011 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2011 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2011 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Maya 2011 Release|Win32.Build.0 = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2008 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2008 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2008 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2008 Release|Win32.Build.0 = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2009 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2009 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2009 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2009 Release|Win32.Build.0 = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2010 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2010 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2010 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2010 Release|Win32.Build.0 = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2011 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2011 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2011 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Maya 2011 Release|Win32.Build.0 = Exporter_Release|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2008 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2008 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2008 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2008 Release|Win32.Build.0 = Exporter_Release|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2009 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2009 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2009 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2009 Release|Win32.Build.0 = Exporter_Release|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2010 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2010 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2010 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2010 Release|Win32.Build.0 = Exporter_Release|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2011 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2011 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2011 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{B179FA51-48CF-4F63-8D95-2AD57FE898A0}.Maya 2011 Release|Win32.Build.0 = Exporter_Release|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2008 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2008 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2008 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2008 Release|Win32.Build.0 = Exporter_Release|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2009 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2009 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2009 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2009 Release|Win32.Build.0 = Exporter_Release|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2010 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2010 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2010 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2010 Release|Win32.Build.0 = Exporter_Release|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2011 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2011 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2011 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{A21801EE-C2C0-4AE9-A9D1-72257F08D5BD}.Maya 2011 Release|Win32.Build.0 = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2008 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2008 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2008 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2008 Release|Win32.Build.0 = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2009 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2009 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2009 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2009 Release|Win32.Build.0 = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2010 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2010 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2010 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2010 Release|Win32.Build.0 = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2011 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2011 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2011 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Maya 2011 Release|Win32.Build.0 = Exporter_Release|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2008 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2008 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2008 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2008 Release|Win32.Build.0 = Exporter_Release|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2009 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2009 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2009 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2009 Release|Win32.Build.0 = Exporter_Release|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2010 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2010 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2010 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2010 Release|Win32.Build.0 = Exporter_Release|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2011 Debug|Win32.ActiveCfg = Exporter_Debug|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2011 Debug|Win32.Build.0 = Exporter_Debug|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2011 Release|Win32.ActiveCfg = Exporter_Release|Win32
+		{DA60D05D-C431-4CC4-903C-DB3E65D9AE0F}.Maya 2011 Release|Win32.Build.0 = Exporter_Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

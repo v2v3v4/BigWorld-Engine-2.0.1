@@ -1,0 +1,324 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;18.&nbsp;Transactions and Handling Fault Tolerance and Disaster Recovery</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch17.html" title="Chapter&nbsp;17.&nbsp;Controlled Startup and Shutdown">
+      <link rel="next" href="ch19.html" title="Chapter&nbsp;19.&nbsp;Implementing Common Systems">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch18.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;18.&nbsp;Transactions and Handling Fault Tolerance and Disaster Recovery</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch17.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch19.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="d0e12645"></a>Chapter&nbsp;18.&nbsp;Transactions and Handling Fault Tolerance and Disaster Recovery
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch18.html#d0e12650">18.1. Transaction logic</a></span></dt>
+                  <dt><span class="section"><a href="ch18.html#d0e12736">18.2. Fault Tolerance Behaviour</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch18.html#d0e12739">18.2.1. CellApp Fault Tolerance</a></span></dt>
+                        <dt><span class="section"><a href="ch18.html#d0e12762">18.2.2. BaseApp
+                                       Fault Tolerance</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch18.html#d0e12789">18.3. Disaster Recovery Behaviour</a></span></dt>
+               </dl>
+            </div>
+            <p>We illustrate the previous chapters' guidelines with respect to handling
+                 fault tolerance and disaster recovery mechanisms in BigWorld by providing an
+                 example involving the use of transactions and how to make them work with fault
+                 tolerance and disaster recovery mechanisms.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e12650"></a>18.1.&nbsp;Transaction logic
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>We give here an example of a trading transaction for transferring an
+                      item between two player entities.
+               </p>
+               <div class="figure"><a name="d0e12655"></a><p class="title"><b>Figure&nbsp;18.1.&nbsp;Transaction sequence diagram</b></p>
+                  <div class="figure-contents">
+                     <div class="mediaobject"><img src="images/transaction_flow.png" alt="Transaction sequence diagram"></div>
+                  </div>
+               </div><br class="figure-break"><p>The transaction logic between the two player entities Alice and Bob is
+                      as follows:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Alice and Bob are within each other's Area of Interest (AoI).
+                                   Alice's client informs her base entity that she would like to give Bob a
+                                   Sword item.
+                        </p>
+                        <p>Alice's base entity is passed the player name of Bob as part of
+                                   the request from the client, along with the representation of the Sword
+                                   item within Alice's inventory.
+                        </p>
+                        <p>Alice's base entity adds an entry into her transaction list. This
+                                   entry contains a unique transaction ID that identifies this transaction,
+                                   Bob's player name, the state of the transaction (set to a symbolic
+                                   constant called <span class="literal">BEGIN</span>), and the item in Alice's
+                                   inventory.
+                        </p>
+                        <p>Alice's base entity removes the Sword from Alice's
+                                   inventory.
+                        </p>
+                        <p>Alice requests a write to the database.</p>
+                     </li>
+                     <li>
+                        <p>When the write to the database calls back, it indicates whether
+                                   the write was successful or not.
+                        </p>
+                        <p>If it was not successful, then there is a problem with the
+                                   database, and the transaction is aborted (a message is sent back to the
+                                   client informing Alice of this situation), and the Sword is added back
+                                   to Alice's inventory.
+                        </p>
+                        <p>Otherwise, if the write to the database was successful, the
+                                   transaction action starts with Alice's base entity requesting an entity
+                                   base mailbox lookup based on the player name, via the
+                                   <code class="classname">BigWorld</code>.<code class="methodname">lookUpBaseByName</code>()
+                                   method, and registers a callback to a functor containing the transaction
+                                   ID.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Alice's base entity gets notification with the base mailbox of
+                                   Bob.
+                        </p>
+                        <p>If Bob's base entity can't be found, the transaction is aborted by
+                                   removing the transaction entry from the transaction list, adding the
+                                   Sword back to Alice's inventory, informing Alice's client and calling
+                                   another <code class="methodname">writeToDB</code>().
+                        </p>
+                        <p>Otherwise, Alice's base entity calls a method on Bob's base
+                                   mailbox and requesting that it add the Sword item to his inventory. We
+                                   pass the item, transaction ID, Alice's player name and a mailbox back to
+                                   Alice's base entity.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Bob's base entity adds the Sword item to its inventory (but marks
+                                   it as unusable by Bob's client for the moment).
+                        </p>
+                        <p>Bob's base entity adds an entry into its transaction list, with
+                                   Alice's player name, the state of the transaction set to the symbolic
+                                   constant <span class="literal">REMOVE</span>, and the same transaction ID that was
+                                   passed in from Alice.
+                        </p>
+                        <p>Bob's base entity then starts a write to the database, registering
+                                   a callback to a functor object that holds Alice's base entity mailbox
+                                   and the transaction ID.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Bob's base entity is called back with the result of the database
+                                   write.
+                        </p>
+                        <p>If it was unsuccessful, Bob should remove the sword from his
+                                   inventory as well as the transaction entry in the transaction list (the
+                                   transaction ID is stored in the functor callback).
+                        </p>
+                        <p>If the write was successful, the item should be marked as usable
+                                   for Bob's client.
+                        </p>
+                        <p>Whether or not the database write was successful, Bob's base
+                                   entity informs Alice of the success of the database write through her
+                                   base mailbox that is supplied through the functor callback. Bob passes
+                                   in the success flag, a mailbox to Bob's base entity and the transaction
+                                   ID.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Alice's base entity receives the result of the transaction from
+                                   Bob's side.
+                        </p>
+                        <p>Alice removes the transaction entry from her transaction
+                                   list.
+                        </p>
+                        <p>If Bob indicated that the transaction was unsuccessful, Alice
+                                   re-adds the item back to her inventory informs the client of the trading
+                                   failure.
+                        </p>
+                        <p>Alice writes to the database, and registers a callback to a
+                                   functor that holds Bob's base mailbox and the transaction ID.
+                        </p>
+                        <p>Alice notifies Bob that the transaction on her side is complete,
+                                   by passing in the transaction ID.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Bob receives this notification, and removes the transaction entry
+                                   with the given transaction ID.
+                        </p>
+                     </li>
+                  </ol>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e12736"></a>18.2.&nbsp;Fault Tolerance Behaviour
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e12739"></a>18.2.1.&nbsp;CellApp Fault Tolerance
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>If the CellApp that Alice's and/or Bob's cell entity resides on
+                           exits, all cell entities that have base entities will be restored to
+                           another CellApp. With this example scenario and transaction as described,
+                           there is not much of concern with regards to behaviour of restored cell
+                           entities as the transaction only involves BaseApps.
+                  </p>
+                  <p>However, suppose the inventory system implementation was such that
+                           the player cell entities required knowledge of items, for example, what
+                           item a player was holding in its hands, which would need to be a
+                           <span class="literal">OTHER_CLIENTS</span> or <span class="literal">ALL_CLIENTS</span> cell
+                           entity property so that other players could view the item that a player
+                           was holding. If the cell entity was restored from an older version of its
+                           cell entity data when it was last backed up to the base entity, there
+                           could be inconsistencies in the cell entity state with respect to the base
+                           entity state.
+                  </p>
+                  <p>For example, if Alice was restored to another CellApp, her cell
+                           entity could check with her base entity whether she still owned the item
+                           that she was holding, and if not, her cell entity should remove that
+                           item.
+                  </p>
+                  <p>Cell entities that are restored do not have their
+                           <code class="methodname">__init__</code>() method called, instead, after they are
+                           restored with the cell backup data from their base entity, they have their
+                           <code class="methodname">onRestore</code>() method called, and checks such as
+                           these can be done in this method to make sure the state is consistent with
+                           the base entity state.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e12762"></a>18.2.2.&nbsp;BaseApp
+                                    Fault Tolerance
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>If the BaseApp that Alice's and/or Bob's base entity resides on
+                           exits, those base entities will be restored to other BaseApps if they
+                           exist (if there is only one BaseApp, they cannot be restored).
+                  </p>
+                  <p>As with cell entities, restored base entities do not have
+                           <code class="methodname">__init__</code>() called on them, instead, they have
+                           <code class="methodname">onRestore</code>() called on them when they are each
+                           restored from their most recent base entity backup data. This is a good
+                           place to do checks on uncompleted transactions.
+                  </p>
+                  <p>For example, if the BaseApp that contained Alice exited, and Alice
+                           was restored onto another BaseApp (and perhaps Bob was too, and it could
+                           be a different BaseApp to where he was), then we need to replay any
+                           transactions that may have been underway.
+                  </p>
+                  <p>For each transaction entry in Alice's transaction list, the entity
+                           needs to replay each transaction depending on the state that it's
+                           in.
+                  </p>
+                  <p>For example, if it is in the <span class="literal">BEGIN</span> state, we
+                           resume the transaction from step 3 by looking up Bob's base entity, and
+                           continuing on.
+                  </p>
+                  <p>If we are Bob, we may have transactions in the
+                           <span class="literal">REMOVE</span> state, and so we resume the transaction from
+                           step 6, and we tell Alice (or whoever the transactions' player name refers
+                           to) that they should complete the transaction on their end.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e12789"></a>18.3.&nbsp;Disaster Recovery Behaviour
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>When we are starting the server and restoring from the database, the
+                      base entities will be restored, and each of these will have
+                      <code class="methodname">__init__</code>() called on them. The variable
+                      <code class="classname">BigWorld</code>.<code class="varname">hasStarted</code> will be
+                      <span class="literal">False</span> for restored base entities, so we can do similar
+                      checks to what we have in the BaseApp fault tolerance section.
+               </p>
+               <p>It is also the responsibility of the base entities to recreate the
+                      cell entities, usually via <code class="methodname">createCellEntity</code>(). The
+                      space ID is archived with the entity when it is written to the database, and
+                      this is present in the base entity's <code class="varname">cellData</code>
+                      dictionary.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch17.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch19.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;17.&nbsp;Controlled Startup and Shutdown&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;19.&nbsp;Implementing Common Systems</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

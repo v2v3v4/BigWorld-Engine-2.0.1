@@ -1,0 +1,502 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Using PyGUI</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_Use_PyGUI"></a>Using PyGUI</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Introduction">1. Introduction</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e24">1.1. Overview</a></span></dt><dt><span class="section"><a href="#d0e55">1.2. Features</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_HowItWorks">2. How it Works</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e107">2.1. PyGUIBase</a></span></dt><dt><span class="section"><a href="#d0e120">2.2. .gui files</a></span></dt><dt><span class="section"><a href="#d0e155">2.3. Visual states</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e164">2.3.1. Visual state Python class</a></span></dt><dt><span class="section"><a href="#d0e185">2.3.2. Visual state XML schema</a></span></dt><dt><span class="section"><a href="#d0e199">2.3.3. External Visual States</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e225">2.4. Mutually Exclusive Input</a></span></dt><dt><span class="section"><a href="#d0e253">2.5. Tool Tips</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e261">2.5.1. Tool Tip Manager</a></span></dt><dt><span class="section"><a href="#d0e285">2.5.2. Tool Tip Templates</a></span></dt><dt><span class="section"><a href="#d0e313">2.5.3. Tool Tip Info</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e357">2.6. Draggable Components</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Integration">3. Integration</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e401">3.1. Personality script integration</a></span></dt><dt><span class="section"><a href="#d0e463">3.2. Factory strings</a></span></dt><dt><span class="section"><a href="#d0e488">3.3. Input Method Editor</a></span></dt><dt><span class="section"><a href="#d0e513">3.4. Testing</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Constructing_An_Interface">4. Constructing an Interface</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e543">4.1. Window script</a></span></dt><dt><span class="section"><a href="#d0e567">4.2. Window component</a></span></dt><dt><span class="section"><a href="#d0e581">4.3. Adding components to the window</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e594">4.3.1. Attaching existing visual states</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e604">4.4. Handling events</a></span></dt><dt><span class="section"><a href="#d0e630">4.5. Loading and displaying the window</a></span></dt><dt><span class="section"><a href="#d0e637">4.6. Tweaking existing windows</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Component_Script_Reference">5. Component Script Reference</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e653">5.1. Window</a></span></dt><dt><span class="section"><a href="#d0e669">5.2. Button</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e674">5.2.1. Component hierarchy</a></span></dt><dt><span class="section"><a href="#d0e679">5.2.2. Creation</a></span></dt><dt><span class="section"><a href="#d0e686">5.2.3. Properties</a></span></dt><dt><span class="section"><a href="#d0e713">5.2.4. Events</a></span></dt><dt><span class="section"><a href="#d0e734">5.2.5. Visual states</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e856">5.3. CheckBox</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e864">5.3.1. Component hierarchy</a></span></dt><dt><span class="section"><a href="#d0e869">5.3.2. Creation</a></span></dt><dt><span class="section"><a href="#d0e876">5.3.3. Properties</a></span></dt><dt><span class="section"><a href="#d0e884">5.3.4. Events</a></span></dt><dt><span class="section"><a href="#d0e889">5.3.5. Visual states</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e894">5.4. RadioButton</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e899">5.4.1. Component hierarchy</a></span></dt><dt><span class="section"><a href="#d0e904">5.4.2. Creation</a></span></dt><dt><span class="section"><a href="#d0e911">5.4.3. Properties</a></span></dt><dt><span class="section"><a href="#d0e925">5.4.4. Events</a></span></dt><dt><span class="section"><a href="#d0e930">5.4.5. Visual states</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e935">5.5. Slider</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e940">5.5.1. Component hierarchy</a></span></dt><dt><span class="section"><a href="#d0e945">5.5.2. Creation</a></span></dt><dt><span class="section"><a href="#d0e952">5.5.3. Events</a></span></dt><dt><span class="section"><a href="#d0e971">5.5.4. Visual states</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1049">5.6. EditField</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1064">5.6.1. Component hierarchy</a></span></dt><dt><span class="section"><a href="#d0e1069">5.6.2. Creation</a></span></dt><dt><span class="section"><a href="#d0e1076">5.6.3. Properties</a></span></dt><dt><span class="section"><a href="#d0e1125">5.6.4. Events</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1144">5.7. LanguageIndicator</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1149">5.7.1. Component hierarchy</a></span></dt><dt><span class="section"><a href="#d0e1155">5.7.2. Creation</a></span></dt><dt><span class="section"><a href="#d0e1162">5.7.3. Properties</a></span></dt><dt><span class="section"><a href="#d0e1183">5.7.4. Events</a></span></dt><dt><span class="section"><a href="#d0e1188">5.7.5. Visual states</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1193">5.8. ScrollableText</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1203">5.8.1. Component hierarchy</a></span></dt><dt><span class="section"><a href="#d0e1209">5.8.2. Creation</a></span></dt><dt><span class="section"><a href="#d0e1216">5.8.3. Properties</a></span></dt><dt><span class="section"><a href="#d0e1245">5.8.4. Events</a></span></dt><dt><span class="section"><a href="#d0e1250">5.8.5. Visual states</a></span></dt></dl></dd></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Introduction"></a>Chapter&nbsp;1.&nbsp;Introduction</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e24">1.1. Overview</a></span></dt><dt><span class="section"><a href="#d0e55">1.2. Features</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e24"></a>1.1.&nbsp;Overview</h2></div></div></div><p>PyGUI is an example high-level GUI framework that is built upon the
+    lower level BigWorld GUI library. It is designed to complement the
+    BigWorld GUI library (by providing a set of classes that can be attached
+    to GUI components), rather than completely wrapping it. As such, it is
+    highly recommended to have an understanding of how the
+    <code class="classname">BigWorld.GUI</code> library works before starting to use
+    PyGUI. See the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#Client_Programming_Guide" class="olink">Client Programming Guide</a> chapter
+    <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Graphical_User_Interface_GUI" class="olink"><i>Graphical User Interface (GUI)</i></a> for details.</p><p>The scripts for PyGUI can be found at <code class="filename">fantasydemo/res/scripts/client/Helpers/PyGUI</code>.
+    Each individual script is not too long, so it is a good idea to read
+    through the scripts as they are mentioned in this document to get a better
+    handle on how they work. The PyGUI library is used by the FDGUI module in
+    <code class="filename">fantasydemo/res/scripts/client/FDGUI</code>, which
+    can be used as an example game-specific high-level GUI
+    implementation.</p><p>While the library could be used as-is to build a game UI, it has
+    been built specifically for the needs of the FantasyDemo and may need
+    tweaking to suit other projects. There are two ways it could be
+    utilised:</p><div class="itemizedlist"><ul type="disc"><li><p>Copy the PyGUI module from the FantasyDemo project and tweak it
+        to suit any particular requirements.</p></li><li><p>Use it as a point of reference for implementing a custom GUI
+        framework from the ground up.</p></li></ul></div><p>This document will describe the PyGUI module as if it were to be
+    used as-is.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55"></a>1.2.&nbsp;Features</h2></div></div></div><p>The PyGUI library includes:</p><div class="itemizedlist"><ul type="disc"><li><p>Container windows (that can be dragged across the screen with
+        the mouse).</p></li><li><p>High-level event handling mechanisms (e.g. clicking on a button
+        contained within the window).</p></li><li><p>A generic "visual state" definition system for defining what
+        components look like in different states.</p></li><li><p>An input focusing system for mutually exclusive components (e.g.
+        multiple edit fields on the screen at the same time).</p></li><li><p>Tool-tips can be associated with any PyGUI component.</p></li><li><p>A number of high-level GUI component scripts:</p><div class="itemizedlist"><ul type="circle"><li><p>Button</p></li><li><p>Check-box</p></li><li><p>Radio-button</p></li><li><p>Edit field (including integration with IME)</p></li><li><p>Language indicator (usually used in conjunction with an edit
+            field)</p></li><li><p>Draggable slider</p></li><li><p>Word wrapped, scrollable text buffer</p></li><li><p>Web browser (using the Mozilla integration)</p></li></ul></div></li></ul></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_HowItWorks"></a>Chapter&nbsp;2.&nbsp;How it Works</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e107">2.1. PyGUIBase</a></span></dt><dt><span class="section"><a href="#d0e120">2.2. .gui files</a></span></dt><dt><span class="section"><a href="#d0e155">2.3. Visual states</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e164">2.3.1. Visual state Python class</a></span></dt><dt><span class="section"><a href="#d0e185">2.3.2. Visual state XML schema</a></span></dt><dt><span class="section"><a href="#d0e199">2.3.3. External Visual States</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e225">2.4. Mutually Exclusive Input</a></span></dt><dt><span class="section"><a href="#d0e253">2.5. Tool Tips</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e261">2.5.1. Tool Tip Manager</a></span></dt><dt><span class="section"><a href="#d0e285">2.5.2. Tool Tip Templates</a></span></dt><dt><span class="section"><a href="#d0e313">2.5.3. Tool Tip Info</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e357">2.6. Draggable Components</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e107"></a>2.1.&nbsp;PyGUIBase</h2></div></div></div><p>All component scripts in PyGUI inherit from a common base class
+    called <code class="code">PyGUIBase</code>. This class provides common functionality to
+    all PyGUI component scripts, including activation/deactivation management,
+    event handler routing, and tool-tips.</p><p>Be sure to call all base class methods which are defined in
+    <code class="code">PyGUIBase</code> if any are overridden in the derived class,
+    otherwise some functionality may break (e.g. input event handling
+    methods).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e120"></a>2.2.&nbsp;.gui files</h2></div></div></div><p>PyGUI is designed so that user interfaces can be defined in
+    <code class="filename">.gui</code> files. To allow this, PyGUI
+    component scripts have been setup with an appropriate factory string and
+    can be configured by specifying named values within the
+    <span class="literal">&lt;script&gt;</span> blocks in the .gui file.</p><p>Generally speaking, new GUI windows are assembled via the
+    interactive Python console, and then saved to a <code class="filename">.gui</code> file. When the game scripts load up the
+    window, they load from the .gui file rather than assembling the window
+    programmatically. Existing windows can be tweaked either by modifying the
+    .gui file externally, or by adjusting via the Python console and resaving
+    the <code class="filename">.gui</code> file.</p><p>For example, the &lt;script&gt; block for a slider may look
+    something like this:</p><pre class="programlisting">&lt;script&gt;    "PyGUI.Slider"
+    &lt;toolTipInfo&gt;
+        &lt;templateName&gt;    tooltip1line    &lt;/templateName&gt;
+        &lt;items&gt;
+            &lt;text&gt; The quick brown fox, etc    &lt;/text&gt;
+            &lt;shortcut&gt;    &lt;/shortcut&gt;
+        &lt;/items&gt;
+        &lt;placement&gt;    above    &lt;/placement&gt;
+    &lt;/toolTipInfo&gt;
+    &lt;isHorizontal&gt;    true    &lt;/isHorizontal&gt;
+    &lt;minValue&gt;    6.000000    &lt;/minValue&gt;
+    &lt;maxValue&gt;    40.000000    &lt;/maxValue&gt;
+    &lt;stepSize&gt;    1.000000    &lt;/stepSize&gt;
+&lt;/script&gt;</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Some component scripts are made up of multiple components (e.g.
+      the slider has a static background part as well as a child draggable
+      part). The scripts do assume that the child components exist and have a
+      certain name. To make this easier, complex components provide creator
+      methods that create the required parts.</p></div><p>See the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#Client_Programming_Guide" class="olink">Client Programming Guide</a> chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Graphical_User_Interface_GUI" class="olink"><i>Graphical User Interface (GUI)</i></a> for detailed information
+    about <code class="filename">.gui</code> files.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e155"></a>2.3.&nbsp;Visual states</h2></div></div></div><p>The appearance of a component on the screen is defined by the
+    relevant attributes on SimpleGUIComponent. By itself, this is fine for
+    simple types of interface components that do not change state (e.g. the
+    background texture of a window). However, most scripts (e.g. buttons)
+    change state internally based on user input (e.g. mouse hovering, mouse
+    clicking) or game state (e.g. disabling a button) and these states need to
+    be reflected to the user visually.</p><p>To help with this, the PyGUI framework allows "visual states" to be
+    defined on the component script and to be saved with the .gui files. The
+    component script will use information from these visual states to update
+    attributes on SimpleGUIComponent when the internal state has
+    changed.</p><p>For example, buttons have 'normal' and 'hover' as some of its
+    possible states. The button will use 'normal' as the default state on
+    creation, and the internal state changes to 'hover' when the mouse enters
+    the region of the button. Each state has a visual state block which can be
+    configured be configured to change attributes such as the texture, UV
+    mapping, the colour of the component, or even change the way the component
+    is blended onto the screen. The component script will automatically switch
+    apply the appropriate visual state as the internal state changes. If a
+    required visual state has not been defined for a component script,
+    warnings will be printed to the Python console.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e164"></a>2.3.1.&nbsp;Visual state Python class</h3></div></div></div><p>A visual state is represented in script by a specialised Python
+      class which derives from the base <code class="code">VisualState</code> class. For
+      example, <code class="code">ButtonVisualState</code> corresponds to the Button
+      component script.</p><p>There is one <code class="code">VisualState</code> instance per visual state on
+      a component script, and can be set by name by calling
+      <code class="code">componentScript.setVisualState( name, stateInstance
+      )</code>.</p><p>The visual states will be automatically serialised to and from the
+      .gui files.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e185"></a>2.3.2.&nbsp;Visual state XML schema</h3></div></div></div><p>The exact visual state properties that are available depends on
+      the script that it is attached to, however they all use the following
+      basic schema within the <code class="code">&lt;script&gt;</code> tag:</p><pre class="programlisting">&lt;script&gt;
+    ...
+    &lt;visualStates&gt; PyGUI.VisualStateClassName
+        &lt;statename1&gt; 
+            &lt;property1&gt;      value &lt;/property1&gt;
+            &lt;/property2&gt;    value &lt;/property2&gt;
+            ...
+        &lt;/statename1&gt;
+        &lt;statename2&gt; 
+            ...
+        &lt;/statename2&gt;
+    &lt;/visualStates&gt;
+&lt;/script&gt;</pre><p>So for example, a button may look something like:</p><pre class="programlisting">&lt;visualStates&gt;    PyGUI.ButtonVisualState
+    &lt;normal&gt;
+        &lt;textStyle&gt;    ButtonNormal    &lt;/textStyle&gt;
+        &lt;icon&gt;
+            &lt;textureName&gt;    gui/maps/gui_general.dds    &lt;/textureName&gt;
+            &lt;materialFX&gt;    BLEND    &lt;/materialFX&gt;
+            &lt;mapping&gt;    PIXEL
+                &lt;coords0&gt;    0.000000 110.000000    &lt;/coords0&gt;
+                &lt;coords1&gt;    0.000000 131.000000    &lt;/coords1&gt;
+                &lt;coords2&gt;    21.000000 131.000000    &lt;/coords2&gt;
+                &lt;coords3&gt;    21.000000 110.000000    &lt;/coords3&gt;
+            &lt;/mapping&gt;
+            &lt;colour&gt;    255.000000 255.000000 255.000000 255.000000    &lt;/colour&gt;
+        &lt;/icon&gt;
+    &lt;/normal&gt;
+    &lt;pressed&gt;
+        &lt;textStyle&gt;    ButtonPressed    &lt;/textStyle&gt;
+        &lt;icon&gt;
+            &lt;textureName&gt;    gui/maps/gui_general.dds    &lt;/textureName&gt;
+            &lt;materialFX&gt;    BLEND    &lt;/materialFX&gt;
+            &lt;mapping&gt;    PIXEL
+                &lt;coords0&gt;    22.000000 110.000000    &lt;/coords0&gt;
+                &lt;coords1&gt;    22.000000 131.000000    &lt;/coords1&gt;
+                &lt;coords2&gt;    43.000000 131.000000    &lt;/coords2&gt;
+                &lt;coords3&gt;    43.000000 110.000000    &lt;/coords3&gt;
+            &lt;/mapping&gt;
+            &lt;colour&gt;    255.000000 255.000000 255.000000 255.000000    &lt;/colour&gt;
+        &lt;/icon&gt;
+    &lt;/pressed&gt;
+    ...
+&lt;/visualStates&gt;</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e199"></a>2.3.3.&nbsp;External Visual States</h3></div></div></div><p>To avoid duplication when the same visual state definitions are
+      used across multiple instances of the same script (e.g. all buttons in
+      the game may have the same look), visual states can be defined in
+      external XML files and references from within the .gui file.</p><p>To reference an external visual state, use the
+      <code class="code">&lt;external&gt;</code> tag within the
+      <code class="code">&lt;visualStates&gt;</code> block. The external XML file would
+      have a single root tag, as of the root tag is the
+      <code class="code">&lt;visualStates&gt;</code> block from above. For example,</p><pre class="programlisting">&lt;visualStates&gt;
+    &lt;external&gt;    gui/visual_states/standard_button.xml    &lt;/external&gt;
+&lt;/visualStates&gt;</pre><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>To load an existing visual state XML into a component, use the
+        <code class="code">loadVisualStates</code> method on the component script. For
+        example,</p><pre class="programlisting">&gt;&gt;&gt; button = PyGUI.Button.create( "default_texture_name.tga", "Push Me" )
+&gt;&gt;&gt; button.script.loadVisualStates( "gui/visual_states/standard_button.xml" )</pre></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e225"></a>2.4.&nbsp;Mutually Exclusive Input</h2></div></div></div><p>Some component scripts rely on mutually exclusive keyboard input. In
+    other words, in most cases there should only be one component that has
+    keyboard focuse at any particular time (e.g. only one EditField should
+    receive key events).</p><p>Since the low level BigWorld GUI library allows many component
+    scripts to receive keyboard input at the same time (via the
+    SimpleGUIComponent.focus property), PyGUI has a high level "focus
+    manager". This manager makes sure only one component has their focus
+    property set to true at any one time (as long as all component scripts
+    grab focus via the manager).</p><p>The following functions are provided to maintain the mutually
+    exclusive keyboard focus:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="code">PyGUI.setFocusedComponent</code> &#8212; Takes a GUI
+        component, removes focus from any previously focused component, sets
+        the focus flag on the incoming component to True, and then stores a
+        reference to this new component.</p></li><li><p><code class="code">PyGUI.getFocusedComponent</code> &#8212; Returns a
+        reference to the currently focused component (i.e. the component
+        previously given to <code class="code">setFocusedComponent</code>).</p></li><li><p><code class="code">PyGUI.isFocusedComponent</code> &#8212; Given a component,
+        determines if it currently is the focused component.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e253"></a>2.5.&nbsp;Tool Tips</h2></div></div></div><p>PyGUI supports triggering tool tips on any arbitrary GUI component,
+    since the trigger functionality is implemented in <code class="code">PyGUIBase</code>.
+    It also allows the definition of any number of tool tip templates to allow
+    full control over the appearance of tool tips.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e261"></a>2.5.1.&nbsp;Tool Tip Manager</h3></div></div></div><p>Since there can be only one tool tip active at any one time, this
+      is managed by a singleton instance of the <code class="code">ToolTipManager</code>
+      class. This singleton should be initialised on application startup,
+      simply by creating an instance of <code class="code">ToolTipManager</code>. The
+      scripts will raise an exception if there is already a manager instance
+      created.</p><p>The <code class="code">ToolTipManager</code> constructor expects two arguments:
+      a parent GUI (tool tips will be added as children of this GUI, and is
+      often a simple full screen invisible SimpleGUIComponent), and a Z-order
+      to be used by the tool tips (this is usually a small number, close to
+      zero, so that tool tips appear on top of everything else). For
+      example,</p><pre class="programlisting">toolTipMgr = PyGUI.ToolTipManager( self.guiRoot, 0.01 )</pre><p>Once constructed, this singleton instance can also be accessed via
+      <code class="code">PyGUI.ToolTipManager.instance</code>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e285"></a>2.5.2.&nbsp;Tool Tip Templates</h3></div></div></div><p>Before tool tips can be used, one or more template GUI's need to
+      be defined. A tool tip template has a name, and an associated .gui file,
+      allowing much flexibility in the layout of specific tool tip types (e.g.
+      you may have a simple one line tool tip, or you may have a complex tool
+      tip which includes an icon image and multiple lines of text).</p><p>To register a template, do so on startup by calling
+      <code class="code">ToolTipManager.addToolTipTemplate</code> and provide a template
+      name and a template .gui filename. For example,</p><pre class="programlisting">toolTipMgr.addToolTipTemplate( "simple", "gui/simple_tooltip.gui" )</pre><p>Component scripts will refer to the tool tip template by
+      name.</p><p>The tool tip should have a script attached to it which is an
+      instance of, or derives from, <code class="code">PyGUI.ToolTip</code>. If deriving a
+      new class, it can override the <code class="code">doLayout</code> method to implement
+      dynamic layouts for the tool tip content. For an example, see
+      <code class="code">FDGUIOneLineToolTip</code> in
+      <code class="filename">fantasydemo/res/scripts/helpers/FDGUI/FDToolTip.py</code>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e313"></a>2.5.3.&nbsp;Tool Tip Info</h3></div></div></div><p>To associate a tool tip with a particular component, a ToolTipInfo
+      instance needs to be attached to the PyGUIBase script. A ToolTipInfo has
+      a number of different properties:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="code">templateName</code> &#8212; A string name of a
+          registered template</p></li><li><p><code class="code">items</code> &#8212; A dictionary containing a set of
+          named items. When a tool tip is activated, it will go through each
+          key in this dictionary and look for a component on the template GUI
+          with the key name. If the component it finds is a <code class="code">Text</code>
+          component it will set the text to the dictionary value, otherwise it
+          will set the <code class="code">textureName</code> property based on the
+          value.</p></li><li><p><code class="code">delayType</code> &#8212; A string containing the type of
+          delay to use before displaying the tool tip. Specify 'delay' to show
+          the tool tip only after half a second, or 'immediate' to show it
+          immediately.</p></li><li><p><code class="code">placement</code> &#8212; A string defining the placement
+          type for this tool tip. This can be 'below', 'above', 'left', or
+          'right'.</p></li></ul></div><p>This tool tip information is serialised to the .gui file once it
+      has been attached to a <code class="code">PyGUIBase</code> component. An example
+      <code class="code">toolTipInfo</code> serialisation is,</p><pre class="programlisting">&lt;script&gt; &amp;quot;PyGUI.Button&amp;quot;
+    ...
+    &lt;toolTipInfo&gt;
+        &lt;templateName&gt; tooltip1line &lt;/templateName&gt;
+        &lt;items&gt;
+            &lt;line1&gt; Toggles the display of the inventory window. &lt;/line1&gt;
+            &lt;shortcut&gt; (I) &lt;/shortcut&gt;
+            &lt;title&gt; Inventory &lt;/title&gt;
+        &lt;/items&gt;
+    &lt;/toolTipInfo&gt;
+    ...
+&lt;/script&gt;</pre><p>This example assumes that the 'tooltip1line' template has three
+      Text component's on it: 'line1', 'shortcut', and 'title'.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e357"></a>2.6.&nbsp;Draggable Components</h2></div></div></div><p>PyGUI provides generic functionality for components that can be
+    dragged around the screen with the mouse. In PyGUI this is used by the
+    DraggableWindow and the Slider scripts. In FDGUI this is also used for
+    dragging inventory items out of the inventory window and across the
+    screen.</p><p>There can only be one component being dragged at any one time, and
+    this is transparently handled by
+    <code class="code">PyGUI.DraggableComponent.ComponentDragManager</code>.</p><p>Draggable functionality is implemented in
+    <code class="code">PyGUI.DraggableComponent</code>. Any component script that derives
+    from <code class="code">PyGUI.DraggableComponent</code> automatically becomes
+    draggable, and can be configured to be either draggable only in the
+    horizontal direction, only the vertical direction, or both. It can also be
+    configured to restrict the component to be only draggable within the
+    confines of the screen or it's parent Window.</p><p>These options are configured by passing in the appropriate
+    parameters to the DraggableComponent constructor:</p><pre class="programlisting">DraggableComponent.__init__( self, horzDrag, vertDrag, restrictToParent )</pre><p>If
+    the derived class implements any of the following methods, then it must
+    call the methods on the <code class="code">DraggableComponent</code> base class:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="code">onSave( self, dataSection )</code></p></li><li><p><code class="code">onLoad( self, dataSection )</code></p></li><li><p><code class="code">handleMouseButtonEvent( self, comp, event )</code></p></li></ul></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Integration"></a>Chapter&nbsp;3.&nbsp;Integration</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e401">3.1. Personality script integration</a></span></dt><dt><span class="section"><a href="#d0e463">3.2. Factory strings</a></span></dt><dt><span class="section"><a href="#d0e488">3.3. Input Method Editor</a></span></dt><dt><span class="section"><a href="#d0e513">3.4. Testing</a></span></dt></dl></div><p>There are a number of script hooks that need to be in place in order
+  for PyGUI to function correctly.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e401"></a>3.1.&nbsp;Personality script integration</h2></div></div></div><p>To allow the PyGUI framework to handle some logic at a global level,
+    the personality script needs to call some PyGUI event
+    handlers.</p><div class="itemizedlist"><ul type="disc"><li><p>In <code class="code">BWPersonality.handleKeyEvent</code>, call
+          <code class="code">PyGUI.handleKeyEvent</code>: </p><pre class="programlisting">def handleKeyEvent( event):
+    ...
+    handled = PyGUI.handleKeyEvent( event )
+    if not handled:
+        handled = GUI.handleKeyEvent( event )
+    ...</pre></li><li><p>In <code class="methodname">BWPersonality.handleMouseEvent()</code>,
+          call <code class="methodname">PyGUI.handleMouseEvent()</code>:</p><pre class="programlisting">def handleMouseEvent( event ):
+    ...
+    handled = PyGUI.handleMouseEvent( event )
+    if not handled:
+        handled = GUI.handleMouseEvent( event )
+    ...</pre></li><li><p>In <code class="code">BWPersonality.handleIMEEvent</code>, call
+          <code class="code">PyGUI.handleIMEEvent</code> to allow edit fields to cope with
+          IME state changes (see below for more details on IME).</p><pre class="programlisting">def handleIMEEvent( event ):
+    return PyGUI.handleIMEEvent( event )</pre></li><li><p>In <code class="code">BWPersonality.handleLangChangeEvent</code>, call
+          <code class="code">PyGUI.handleInputLangChangeEvent</code> to update components
+          such as the language indicator.</p><pre class="programlisting">def handleInputLangChangeEvent():
+    return PyGUI.handleInputLangChangeEvent()</pre></li><li><p>In <code class="methodname">BWPersonality.onRecreateDevice()</code>,
+          call <code class="methodname">PyGUI.onRecreateDevice</code> to allow the
+          GUI to cope with the screen size changing.</p><pre class="programlisting">def onRecreateDevice():
+    ...
+    PyGUI.onRecreateDevice()
+    ...   </pre></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e463"></a>3.2.&nbsp;Factory strings</h2></div></div></div><p>To allow the GUI system to successfully load .gui files and attach
+    class instances to the components, the PyGUI module needs to be loaded
+    into the main Python namespace. This can be done by putting the following
+    lines at the top of the client personality script:</p><pre class="programlisting">from Helpers import PyGUI
+__import__('__main__').PyGUI = PyGUI</pre><p>This is neccessary because PyGUI factory strings are of the form
+    <code class="code">PyGUI.ClassName</code> (e.g. <code class="code">PyGUI.Button</code>) and the GUI
+    system needs to be able to find the <code class="code">PyGUI</code> module at the top
+    level.</p><p>In order to be able to load your own classes derived from
+    <code class="code">PyGUI.Window</code>, you will need to also add your game specific
+    GUI module in a smiliar fashion. For example, if you place all your game
+    specific GUI scripts into a module called GameGUI, then you would put this
+    near the top of the personality script:</p><pre class="programlisting">import GameGUI
+__import__('__main__').GameGUI = GameGUI</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e488"></a>3.3.&nbsp;Input Method Editor</h2></div></div></div><p>PyGUI includes an IME presentation layer implementation, which is
+    contained within the <code class="classname">PyGUI.IME</code> module. This module
+    implements the IME display as a set of component singletons, which will
+    display themselves at a specified location (e.g. at the cursor carat of
+    the EditField) based on the current IME state. The EditField script uses
+    this module.</p><p>To allow IME to work, <code class="methodname">PyGUI.IME.init()</code>
+    should be called on startup. This will initialise the singleton
+    components, which are initially hidden until the user starts using an IME
+    enabled EditField.</p><p>Call <code class="methodname">PyGUI.IME.fini()</code> on shutdown to clean
+    up these components.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>See the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#Client_Programming_Guide" class="olink">Client Programming Guide</a> chapter
+      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_IME" class="olink"><i>Input Method Editors (IME)</i></a> for
+      detailed information about IME integration.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e513"></a>3.4.&nbsp;Testing</h2></div></div></div><p>To test if the integration is working, use the PyGUI test window
+    script:</p><pre class="programlisting">&gt;&gt;&gt; import Helpers.PyGUI.Test
+&gt;&gt;&gt; Helpers.PyGUI.Test.testWindow()</pre><p>This will clear the existing GUI and display a draggable window with
+    a number of basic components. If all is well, then you will be able to
+    interact with these components.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>The test window script assumes the following resources
+      exist:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">gui/tests/window.gui</code></p></li><li><p><code class="filename">gui/visual_states/button_test.xml</code></p></li><li><p><code class="filename">gui/visual_states/checkbox_test.xml</code></p></li></ul></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Constructing_An_Interface"></a>Chapter&nbsp;4.&nbsp;Constructing an Interface</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e543">4.1. Window script</a></span></dt><dt><span class="section"><a href="#d0e567">4.2. Window component</a></span></dt><dt><span class="section"><a href="#d0e581">4.3. Adding components to the window</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e594">4.3.1. Attaching existing visual states</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e604">4.4. Handling events</a></span></dt><dt><span class="section"><a href="#d0e630">4.5. Loading and displaying the window</a></span></dt><dt><span class="section"><a href="#d0e637">4.6. Tweaking existing windows</a></span></dt></dl></div><p>This section outlines the typical process of creating a new user
+  interface with PyGUI. An individual user interface will usually be a window
+  that encapsulates some part of the game, for example the chat window or the
+  graphics settings window.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e543"></a>4.1.&nbsp;Window script</h2></div></div></div><p>The first step in creating a new window is to derive a new class
+    which will be used to handle events generated by the components on the
+    window. A minimal window that has no logic would look like this:</p><pre class="programlisting">from Helpers.PyGUI import Window
+
+class MyFirstWindow( Window ):
+    factoryString = "GameGUI.MyFirstWindow"
+
+    def __init__( self, component ):
+        Window.__init__( self, component )</pre><p>The class should include a factory string class property, which is
+    used by the engine to know how to re-attach the class when deserialising
+    from a .gui file. Note the <code class="code">GameGUI</code> module name here is just
+    for illustrative purposes - this is a module created by you and is
+    specific to your game (for example FantasyDemo has a module called
+    <code class="code">FDGUI</code>).</p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>To make a Window draggable (rather than static), derive from
+      <code class="code">DraggableWindow</code> rather than <code class="code">Window</code>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e567"></a>4.2.&nbsp;Window component</h2></div></div></div><p>Once there is a script to attach to the window component, it can be
+    created at the interactive Python console in the client.</p><pre class="programlisting">&gt;&gt;&gt; import GUI
+&gt;&gt;&gt; wnd = GUI.Window( "gui/maps/window_background.tga" )
+&gt;&gt;&gt; wnd.mouseButtonFocus = True
+&gt;&gt;&gt; wnd.moveFocus = True
+&gt;&gt;&gt; wnd.crossFocus = True
+&gt;&gt;&gt; wnd.script = GameGUI.MyFirstWindow()</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>It is especially important to set the focus flags when creating a
+      draggable window.</p></div><p>Once the appopriate properties have been set on the
+    WindowGUIComponent as required, save it to a .gui file.</p><pre class="programlisting">&gt;&gt;&gt; wnd.save( "gui/myfirstwindow.gui" )</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e581"></a>4.3.&nbsp;Adding components to the window</h2></div></div></div><p>Adding components to the window such as buttons and edit boxes is
+    simply a case of adding child GUI components and attaching the appropriate
+    script. Some scripts require a specific structure of multiple components
+    with the correct naming scheme to allow them to work (e.g. a slider
+    consists of a background component and a "thumb" slider component), so to
+    ease creation most component scripts provide helper "create" functions
+    which assemble the required components in the correct way.</p><p>For example, the Button class has a static create method which
+    creates a parent component that acts as the background image and input
+    event handler, and a child text component for its label. As such, a Button
+    can be created with a single call:</p><pre class="programlisting">&gt;&gt;&gt; button = PyGUI.Button.create( "gui/maps/button-background.tga", "Button Text!" )
+&gt;&gt;&gt; wnd.addChild( button, "someButtonName" )
+&gt;&gt;&gt; button.position.x = 0.2
+&gt;&gt;&gt; button.position.y = -0.1
+&gt;&gt;&gt; ...
+&gt;&gt;&gt; wnd.save( "gui/myfirstwindow.gui" )</pre><p>See <a href="#xref_Component_Script_Reference" title="Chapter&nbsp;5.&nbsp;Component Script Reference"><i xmlns:xlink="http://www.w3.org/1999/xlink">Component Script Reference</i></a> for each
+    script to see how they can be created.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e594"></a>4.3.1.&nbsp;Attaching existing visual states</h3></div></div></div><p>To attach a pre-existing external visual state XML definition to a
+      component, use the <code class="code">loadVisualStates</code> method on the component
+      script. For example,</p><pre class="programlisting">&gt;&gt;&gt; button.script.loadVisualStates( "gui/visual_states/ingame_menu_button.xml" )</pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e604"></a>4.4.&nbsp;Handling events</h2></div></div></div><p>Events generated by component scripts (e.g. button click, slider
+    movement) are handled by the window script. A Python decorator called
+    <code class="code">PyGUIEvent</code> is provided to make this as simple as
+    possible.</p><p>The <code class="code">PyGUIEvent</code> decorator takes two arguments, the name
+    of the child component that generates the event and the name of the event
+    to handle. For example, the <code class="code">onClick</code> event for the button
+    created in the previous section can be handled:</p><pre class="programlisting">class MyFirstWindow( Window ):
+    ...
+    @PyGUI.PyGUIEvent( "someButtonName", "onClick" ):
+    def theButtonGotClicked( self ):
+        print "HELLO!"</pre><p><code class="code">PyGUIEvent</code> supports partial method parameter
+    completion, which can be put to effective use by stacking multiple
+    decorators onto the same method. A simple example of this would be if you
+    had multiple buttons on the window that perform similar operations:</p><pre class="programlisting">class MyFirstWindow( Window ):
+    ...
+    @PyGUI.PyGUIEvent( "helloButton1", "onClick", 1 ):
+    @PyGUI.PyGUIEvent( "helloButton2", "onClick", 2 ):
+    @PyGUI.PyGUIEvent( "helloButton3", "onClick", 3 ):
+    def onHelloButtonClick( self, numTimes ):
+        for x in range(numTimes):
+            print "HELLO!"</pre><p>Any number of arguments and key word arguments can be pre-filled in
+    this way.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e630"></a>4.5.&nbsp;Loading and displaying the window</h2></div></div></div><p>To display the window at run-time, load the window from disk and
+    then activate it. Keep in mind that since it can take some time to load
+    the .gui file and related resources (such as textures), it is better to
+    load it once on startup and keep initially hidden until required. For
+    example:</p><pre class="programlisting">...
+# on GameGUI initialisation
+self.myFirstWindow = GUI.load( "gui/myfirstwindow.gui" )
+
+...
+# somewhere else in a key event handler
+if event.key == Keys.ESCAPE:
+    self.myFirstWindow.script.active( True )</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e637"></a>4.6.&nbsp;Tweaking existing windows</h2></div></div></div><p>There are two ways you can modify existing user interfaces.</p><div class="itemizedlist"><ul type="disc"><li><p>Load the .gui file in the client, modify it on the Python
+          console, then resave it. This is often the easiest method when
+          making more extensive modifications.</p></li><li><p>Edit the .gui file in a text editor. This is good for small
+          tweaks, such as moving the position of a component slightly.</p></li></ul></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Component_Script_Reference"></a>Chapter&nbsp;5.&nbsp;Component Script Reference</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e653">5.1. Window</a></span></dt><dt><span class="section"><a href="#d0e669">5.2. Button</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e674">5.2.1. Component hierarchy</a></span></dt><dt><span class="section"><a href="#d0e679">5.2.2. Creation</a></span></dt><dt><span class="section"><a href="#d0e686">5.2.3. Properties</a></span></dt><dt><span class="section"><a href="#d0e713">5.2.4. Events</a></span></dt><dt><span class="section"><a href="#d0e734">5.2.5. Visual states</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e856">5.3. CheckBox</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e864">5.3.1. Component hierarchy</a></span></dt><dt><span class="section"><a href="#d0e869">5.3.2. Creation</a></span></dt><dt><span class="section"><a href="#d0e876">5.3.3. Properties</a></span></dt><dt><span class="section"><a href="#d0e884">5.3.4. Events</a></span></dt><dt><span class="section"><a href="#d0e889">5.3.5. Visual states</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e894">5.4. RadioButton</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e899">5.4.1. Component hierarchy</a></span></dt><dt><span class="section"><a href="#d0e904">5.4.2. Creation</a></span></dt><dt><span class="section"><a href="#d0e911">5.4.3. Properties</a></span></dt><dt><span class="section"><a href="#d0e925">5.4.4. Events</a></span></dt><dt><span class="section"><a href="#d0e930">5.4.5. Visual states</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e935">5.5. Slider</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e940">5.5.1. Component hierarchy</a></span></dt><dt><span class="section"><a href="#d0e945">5.5.2. Creation</a></span></dt><dt><span class="section"><a href="#d0e952">5.5.3. Events</a></span></dt><dt><span class="section"><a href="#d0e971">5.5.4. Visual states</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1049">5.6. EditField</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1064">5.6.1. Component hierarchy</a></span></dt><dt><span class="section"><a href="#d0e1069">5.6.2. Creation</a></span></dt><dt><span class="section"><a href="#d0e1076">5.6.3. Properties</a></span></dt><dt><span class="section"><a href="#d0e1125">5.6.4. Events</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1144">5.7. LanguageIndicator</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1149">5.7.1. Component hierarchy</a></span></dt><dt><span class="section"><a href="#d0e1155">5.7.2. Creation</a></span></dt><dt><span class="section"><a href="#d0e1162">5.7.3. Properties</a></span></dt><dt><span class="section"><a href="#d0e1183">5.7.4. Events</a></span></dt><dt><span class="section"><a href="#d0e1188">5.7.5. Visual states</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1193">5.8. ScrollableText</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1203">5.8.1. Component hierarchy</a></span></dt><dt><span class="section"><a href="#d0e1209">5.8.2. Creation</a></span></dt><dt><span class="section"><a href="#d0e1216">5.8.3. Properties</a></span></dt><dt><span class="section"><a href="#d0e1245">5.8.4. Events</a></span></dt><dt><span class="section"><a href="#d0e1250">5.8.5. Visual states</a></span></dt></dl></dd></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e653"></a>5.1.&nbsp;Window</h2></div></div></div><p>Since a group of user interface functionality is usually
+    encapsulated within its own window (e.g. chat window, options window,
+    etc), typical usage of PyGUI is to have the Window class at the top level
+    of a particular .gui file. The .gui file will then be loaded and added to
+    the GUI hierarchy at the appropriate time in the game scripts (e.g. show
+    the options window when a button is pressed).</p><p>There is no helper create method for window, since there is no
+    specialised hierarchy. Just create a <code class="code">WindowGUIComponent</code> and
+    attach a Window script instance to it.</p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>Derive your Window script from <code class="code">DraggableWindow</code> rather
+      than Window in order to make it draggable with the mouse.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e669"></a>5.2.&nbsp;Button</h2></div></div></div><p>The Button script provides standard push-button functionality. In
+    addition, they can be configured so that they can be toggled between an
+    active state and an inactive state.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e674"></a>5.2.1.&nbsp;Component hierarchy</h3></div></div></div><pre class="programlisting">WindowGUIComponent &#8212; background texture, handles input events
+    -&gt; TextGUIComponent &#8212; optional text label, must be named "label"</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e679"></a>5.2.2.&nbsp;Creation</h3></div></div></div><p>A create method is supplied and takes the following
+      arguments:</p><pre class="programlisting">Button.create( backgroundTextureName, [text], [toggle] )</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e686"></a>5.2.3.&nbsp;Properties</h3></div></div></div><p>Buttons have a number of properties which control it's behaviour,
+      and are serialised to the GUI XML file.</p><div class="itemizedlist"><ul type="disc"><li><p><code class="code">buttonStyle</code> &#8212; by default this is
+          'pressbutton', but if it set to 'togglebutton' it will become a
+          toggle-type button.</p></li><li><p><code class="code">buttonDisabled</code> &#8212; determines if this button
+          is disabled (i.e. cannot be pressed by the user). Use the
+          <code class="code">setDisabledState(state)</code> method to change this
+          state.</p></li><li><p><code class="code">buttonActive</code> &#8212; if this is a toggle style
+          button, then this is True when toggled to the active state. Use the
+          <code class="code">setToggleState(state)</code> method to change this
+          state.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e713"></a>5.2.4.&nbsp;Events</h3></div></div></div><p>Button can raise the following events:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="literal">onClick()</span> &#8212; the user has clicked the
+          button.</p></li><li><p><span class="literal">onActivate()</span> &#8212; the toggle button has
+          been activated.</p></li><li><p><span class="literal">onDeactivate()</span> &#8212; the toggle button
+          has been deactivated.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e734"></a>5.2.5.&nbsp;Visual states</h3></div></div></div><p>Button has the following visual states:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="literal">normal</span> &#8212; the button is idle, this is
+          the default state.</p></li><li><p><span class="literal">hover</span> &#8212; the user is hovering the
+          mouse over the button.</p></li><li><p><span class="literal">pressed</span> &#8212; the user is currently
+          pressing down on the button.</p></li><li><p><span class="literal">disabled</span> &#8212; the button is currently
+          disabled and can't be used by the user.</p></li><li><p><span class="literal">active</span> &#8212; the toggle button is idle,
+          but is currently in it's active state.</p></li><li><p><span class="literal">hover_active</span> &#8212; the user is hovering
+          the mouse over the toggle button while it is active.</p></li><li><p><span class="literal">pressed_active</span> &#8212; the user is
+          currently pressing down the button while it is active.</p></li><li><p><span class="literal">disabled_active</span> &#8212; the toggle button
+          is disabled, but is active.</p></li></ul></div><p>The button uses the <code class="classname">ButtonVisualState</code> class
+      to determine its appearance and has the following properties:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="literal">textStyle</span> &#8212; chooses a font via a
+          style name defined in <code class="filename">TextStyles.py</code>.</p></li><li><p><span class="literal">icon</span> &#8212; defines how the background
+          texture gets applied, and has the following sub-properties:</p><div class="itemizedlist"><ul type="circle"><li><p><span class="literal">textureName</span> &#8212; the name of the
+              texture resource.</p></li><li><p><span class="literal">materialFX</span> &#8212; the blending type
+              used to display the texture (uses the same value names as
+              <code class="varname">SimpleGUIComponent.materialFX</code>).</p></li><li><p><span class="literal">mapping</span> &#8212; the rectangle within
+              the texture, specified by four UV coordinates.</p></li><li><p><span class="literal">colour</span> &#8212; colour tint, corresponds
+              to the <code class="varname">SimpleGUIComponent.colour</code>
+              property.</p></li></ul></div></li><li><p><span class="literal">pressed</span> &#8212; the user is currently
+          pressing down on the button.</p></li><li><p><span class="literal">disabled</span> &#8212; the button is currently
+          disabled and can't be used by the user.</p></li><li><p><span class="literal">active</span> &#8212; the toggle button is idle,
+          but is currently in it's active state.</p></li><li><p><span class="literal">hover_active</span> &#8212; the user is hovering
+          the mouse over the toggle button while it is active.</p></li><li><p><span class="literal">pressed_active</span> &#8212; the user is
+          currently pressing down the button while it is active.</p></li><li><p><span class="literal">disabled_active</span> &#8212; the toggle button
+          is disabled, but is active.</p></li></ul></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e856"></a>5.3.&nbsp;CheckBox</h2></div></div></div><p>A check box is similar to a Button (in fact, it derives from the
+    <code class="classname">Button</code> class), however it's hierarchy is slightly
+    modified to cope with the different layout of a checkbox.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e864"></a>5.3.1.&nbsp;Component hierarchy</h3></div></div></div><pre class="programlisting">WindowGUIComponent &#8212; invisible background, handles input events
+    -&gt; SimpleGUIComponent &#8212; check icon, must be named "box"
+    -&gt; TextGUIComponent &#8212; text label, must be named "label"</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e869"></a>5.3.2.&nbsp;Creation</h3></div></div></div><p>A create method is supplied and takes the following
+      arguments:</p><pre class="programlisting">CheckBox.create( boxTextureName, [text] )</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e876"></a>5.3.3.&nbsp;Properties</h3></div></div></div><p>The CheckBox inherits the properties of Button. The
+      <code class="code">buttonStyle</code> property must be set to 'checkbox' to access
+      checkbox functionality.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e884"></a>5.3.4.&nbsp;Events</h3></div></div></div><p>CheckBox has the same events as Button.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e889"></a>5.3.5.&nbsp;Visual states</h3></div></div></div><p>CheckBox has the same visual states as Button.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e894"></a>5.4.&nbsp;RadioButton</h2></div></div></div><p>A RadioButton behaves and looks similar to the CheckBox, however
+    they can be placed in named groups so that only one radio box within the
+    same group can be checked at any one time. The group is determined by a
+    unique group name among its siblings.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e899"></a>5.4.1.&nbsp;Component hierarchy</h3></div></div></div><p>RadioButton has the same component hierarchy as CheckBox.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e904"></a>5.4.2.&nbsp;Creation</h3></div></div></div><p>A create method is supplied and takes the following
+      arguments:</p><pre class="programlisting">RadioButton.create( boxTextureName, [text], [groupName] )</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e911"></a>5.4.3.&nbsp;Properties</h3></div></div></div><p>The RadioButton inherits the properties of Button. The
+      <code class="code">buttonStyle</code> property must be set to 'radiobutton' to access
+      checkbox functionality. In addition to the base class properties, the
+      RadioButton uses some additional properties:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="code">groupName</code> &#8212; this defines the mutual
+          exclusivity group. All sibiling radio buttons with the same group
+          name will be mutually exclusive to one another.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e925"></a>5.4.4.&nbsp;Events</h3></div></div></div><p>RadioButton has the same events as Button.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e930"></a>5.4.5.&nbsp;Visual states</h3></div></div></div><p>RadioButton has the same visual states as Button.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e935"></a>5.5.&nbsp;Slider</h2></div></div></div><p>The Slider class allows the user to interpolate between a minimum
+    value and a maximum value. Both horizontal and vertical sliders are
+    supported. It consists of a parent component which acts as the main
+    container, and has a child component which acts as the draggable
+    "thumb".</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e940"></a>5.5.1.&nbsp;Component hierarchy</h3></div></div></div><pre class="programlisting">WindowGUIComponent &#8212; background texture, handles input events
+    -&gt; SimpleGUIComponent &#8212; draggable thumb, must be named "thumb"</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e945"></a>5.5.2.&nbsp;Creation</h3></div></div></div><p>A create method is supplied and takes the following
+      arguments:</p><pre class="programlisting">Slider.create( backgroundTexture, thumbTexture, isHorizontal )</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e952"></a>5.5.3.&nbsp;Events</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="literal">onValueChanged( value )</span> &#8212; called
+          whenever the slider has moved.</p></li><li><p><code class="code">onBeginDrag( value )</code> &#8212; called when the user
+          has just started dragging the slider.</p></li><li><p><code class="code">onEndDrag( value )</code> &#8212; called when the user
+          has finished dragging the slider.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e971"></a>5.5.4.&nbsp;Visual states</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="literal">normal</span> &#8212; the slider is idle, this is
+          the default state.</p></li><li><p><span class="literal">hover</span> &#8212; the user is hovering the
+          mouse over the slider thumb.</p></li><li><p><span class="literal">pressed</span> &#8212; the user is currently
+          pressing down on the slider thumb.</p></li><li><p><span class="literal">disabled</span> &#8212; the slider is currently
+          disabled and can't be used by the user.</p></li></ul></div><p>The slider uses the <code class="code">SliderVisualState</code> class to
+      determine its appearance and has the following properties:</p><div class="itemizedlist"><ul type="disc"><li><p><span class="literal">background</span> - defines how the background
+          texture gets applied, and has the following sub-properties:</p><div class="itemizedlist"><ul type="circle"><li><p><span class="literal">textureName</span> &#8212; the name of the
+              texture resource.</p></li><li><p><span class="literal">mapping</span> &#8212; the rectangle within
+              the texture, specified by four UV coordinates.</p></li><li><p><span class="literal">colour</span> &#8212; colour tint, corresponds
+              to the <code class="varname">SimpleGUIComponent.colour</code>
+              property.</p></li></ul></div></li><li><p><span class="literal">thumb</span> &#8212; defines how the "thumb"
+          appears, and has the following sub-properties:</p><div class="itemizedlist"><ul type="circle"><li><p><span class="literal">textureName</span> &#8212; the name of the
+              texture resource.</p></li><li><p><span class="literal">mapping</span> &#8212; the rectangle within
+              the texture, specified by four UV coordinates.</p></li><li><p><span class="literal">colour</span> &#8212; colour tint, corresponds
+              to the <code class="varname">SimpleGUIComponent.colour</code>
+              property.</p></li></ul></div></li></ul></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1049"></a>5.6.&nbsp;EditField</h2></div></div></div><p>The EditField is a single line text input edit box. It supports
+    advanced keyboard navigation, horizontal scrolling, Unicode text input and
+    can make use of the PyGUI IME framework. It also supports automatically
+    choosing a new font based on a provided list of possible fonts which best
+    matches the current screen resolution.</p><p>The EditField makes use of the PyGUI keyboard input mutual
+    exclusivity framework.</p><p>Use the <code class="code">EditField.setText </code>and
+    <code class="code">EditField.getText</code> methods to access the current text in the
+    edit field.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1064"></a>5.6.1.&nbsp;Component hierarchy</h3></div></div></div><pre class="programlisting">WindowGUIComponent &#8212; background texture, horizontal scrolling, handles input events
+    -&gt; TextGUIComponent &#8212; the current text content, must be named "text"</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1069"></a>5.6.2.&nbsp;Creation</h3></div></div></div><p>A create method is supplied and takes the following
+      arguments:</p><pre class="programlisting">EditField.create( backgroundTextureName, [activeColour], [inactiveColour] )</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1076"></a>5.6.3.&nbsp;Properties</h3></div></div></div><p>The edit field has a number of properties which control it's
+      behaviour, and are serialised to the GUI XML file.</p><div class="itemizedlist"><ul type="disc"><li><p><code class="code">activeColour</code> &#8212; this defines the colour of
+          the text when the edit field currently has focus.</p></li><li><p><code class="code">inactiveColour</code> &#8212; this defines the colour of
+          the text when the edit field does not have focus.</p></li><li><p><code class="code">enabled</code> &#8212; if this is False, then the user
+          cannot focus the edit field and input text.</p></li><li><p><code class="code">maxLength</code> &#8212; the maximum length of the edit
+          field, in characters.</p></li><li><p><code class="code">enableIME</code> &#8212; if True, then IME functionality
+          is enabled on the edit field.</p></li><li><p><code class="code">focusViaMouse</code> &#8212; if True, then the edit
+          field can be brought into focuse by clicking on it with the
+          mouse.</p></li><li><p><code class="code">idealVisibleCharacters</code> &#8212; the number of
+          characters which should be ideally visible and is used to determine
+          the best font to use from the autoFont list.</p></li><li><p><code class="code">autoSelectionFonts</code> &#8212; a list of font names
+          that are chosen based on the current resolution and
+          idealVisibleCharacters. This is serialised as a set of
+          <code class="code">&lt;autoFont&gt;</code> tags.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1125"></a>5.6.4.&nbsp;Events</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><span class="literal">onEnter( text )</span> &#8212; called whenever the
+          user presses enter with the EditField in focus.</p></li><li><p><code class="code">onEscape</code>() &#8212; called whenever the user
+          presses escape with the EditField in focus.</p></li><li><p><code class="code">onChangeFocus( state )</code> &#8212; called whenever
+          the edit field component changes input focus.</p></li></ul></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1144"></a>5.7.&nbsp;LanguageIndicator</h2></div></div></div><p>A language indicator is a specialised non-interactive component. The
+    job of the indicator is to display to the user the name of the current
+    input locale (e.g. "EN" for English, "FR" for French, "CN" for Chinese,
+    etc). It is often used in conjunction with an EditField.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1149"></a>5.7.1.&nbsp;Component hierarchy</h3></div></div></div><pre class="programlisting">WindowGUIComponent &#8212; background texture
+    -&gt; TextGUIComponent &#8212; text showing the language indication, must be named "label"</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1155"></a>5.7.2.&nbsp;Creation</h3></div></div></div><p>A create method is supplied and takes the following
+      arguments:</p><pre class="programlisting">LanguageIndicator.create( autoSize=True, padding=5, square=True )</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1162"></a>5.7.3.&nbsp;Properties</h3></div></div></div><p>The language indicator has a number of properties which control
+      it's behaviour, and are serialised to the GUI XML file.</p><div class="itemizedlist"><ul type="disc"><li><p><code class="code">autoSize</code> &#8212; if this is True, then the
+          indicator will automatically resize itself to fit around the
+          indication label.</p></li><li><p><code class="code">padding</code> &#8212; only effective if autoSize is
+          True, this will add some padding (in pixels) around the indication
+          label.</p></li><li><p><code class="code">square</code> &#8212; only effective if autoSize is
+          True, this will maintain a square aspect ratio at all times.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1183"></a>5.7.4.&nbsp;Events</h3></div></div></div><p>LanguageIndicator does not raise any events.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1188"></a>5.7.5.&nbsp;Visual states</h3></div></div></div><p>LanguageIndicator does not have any visual states.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1193"></a>5.8.&nbsp;ScrollableText</h2></div></div></div><p>The ScrollableText class implements a wod wrapped, vertically
+    scrolling buffer of text. It supports colour formatting (using the
+    formatting tags supported by TextGUIComponent) and automatically chooses
+    the most appropriate font out of a list that best matches the current
+    screen resolution.</p><p>Use the <code class="code">ScrollableText.appendLine( str )</code> method to add
+    a new line. If the given string contains line breaks, it will
+    automatically break the line into multiple lines at those points.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1203"></a>5.8.1.&nbsp;Component hierarchy</h3></div></div></div><pre class="programlisting">WindowGUIComponent &#8212; background texture, implements vertical scrolling
+    -&gt; TextGUIComponent &#8212; a multiline text component which implements the buffer, must be named "text"</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1209"></a>5.8.2.&nbsp;Creation</h3></div></div></div><p>A create method is supplied and takes the following
+      arguments:</p><pre class="programlisting">ScrollableText.create()</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1216"></a>5.8.3.&nbsp;Properties</h3></div></div></div><p>ScrollableText has a number of properties which control it's
+      behaviour, and are serialised to the GUI XML file.</p><div class="itemizedlist"><ul type="disc"><li><p><code class="code">autoSelectionFonts</code> &#8212; a list of font names
+          that are chosen based on the current resolution and
+          idealCharactersPerLine. This is serialised as a set of
+          <code class="code">&lt;autoFont&gt;</code> tags.</p></li><li><p><code class="code">idealCharactersPerLine</code> &#8212; the number of
+          characters which should be ideally visible and is used to determine
+          the best font to use from the autoFont list.</p></li><li><p><code class="code">maxLines</code> &#8212; maximum number of lines to store
+          before clipping off the oldest line</p></li><li><p><code class="code">wordWrap</code> &#8212; boolean whether or not to word
+          wrap the text</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1245"></a>5.8.4.&nbsp;Events</h3></div></div></div><p>ScrollableText does not raise any events.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1250"></a>5.8.5.&nbsp;Visual states</h3></div></div></div><p>ScrollableText does not have any visual states.</p></div></div></div></div></div></body></html>

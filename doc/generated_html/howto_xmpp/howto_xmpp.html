@@ -1,0 +1,179 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>How To Use XMPP With BigWorld</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_XMPP"></a>How To Use XMPP With BigWorld</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_XMPP_Overview">1. Overview</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e87">1.1. Free / Open Gateways</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_XMPP_Installation">2. Installation</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e95">2.1. Installing the XMPP server</a></span></dt><dt><span class="section"><a href="#d0e110">2.2. Configuring the FantasyDemo example</a></span></dt><dt><span class="section"><a href="#d0e122">2.3. Configuring EjabberD</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_XMPP_Servicing_Domains">2.3.1. Servicing Domains</a></span></dt><dt><span class="section"><a href="#d0e157">2.3.2. Allowing multiple account creations from a single IP</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e164">2.4. Start the ejabberd server</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_XMPP_Usage">3. Usage</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e174">3.1. Connecting to ejabberd using a client</a></span></dt><dt><span class="section"><a href="#xref_XMPP_Starting_A_FantasyDemo_Server">3.2. Starting a Fantasy Demo Server</a></span></dt><dt><span class="section"><a href="#d0e203">3.3. Connecting using the FantasyDemo client</a></span></dt><dt><span class="section"><a href="#d0e259">3.4. Communicating to the game client from your IM client</a></span></dt><dt><span class="section"><a href="#d0e272">3.5. Communicating to the game server from your IM client</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_XMPP_Implementation">4. Implementation</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e315">4.1. XMPP Module</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e324">4.1.1. xmpp.Connection</a></span></dt><dt><span class="section"><a href="#d0e332">4.1.2. xmpp.Client</a></span></dt><dt><span class="section"><a href="#d0e351">4.1.3. xmpp.Parser</a></span></dt><dt><span class="section"><a href="#d0e359">4.1.4. xmpp.Stanzas</a></span></dt><dt><span class="section"><a href="#d0e367">4.1.5. xmpp.Service</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e374">4.2. XMPP Roster</a></span></dt><dt><span class="section"><a href="#d0e392">4.3. Avatar Implementation</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e405">4.3.1. Base Implementation</a></span></dt><dt><span class="section"><a href="#d0e438">4.3.2. XMPPClient Interface</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e446">4.4. XMPP Event Notifier</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_XMPP_Overview"></a>Chapter&nbsp;1.&nbsp;Overview</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e87">1.1. Free / Open Gateways</a></span></dt></dl></div><p>XMPP is an open XML based message protocol with origins in Instant
+  Messaging (IM) and friend presence notification. It is presented within the
+  scope of the BigWorld FantasyDemo example code to illustrate a working
+  implementation of the
+  <code class="classname">BigWorld</code>.<code class="methodname">registerFileDescriptor()</code>
+  method as well as providing a real world example of one approach that can be
+  used for implementing a messaging system into your game using an external
+  service.</p><p>The intended audience for this document includes technical MMOG
+  developers, designers and system administrators.</p><p>XMPP was chosen as the protocol to use for illustrating in game
+  messaging services for a number of reasons:</p><div class="itemizedlist"><ul type="disc"><li><p>Open Standard</p><p>XMPP provides a completely open protocol standard that can be
+      re-implemented by anybody without any licensing costs. This also means
+      that there are many free implementations of the XMPP protocol
+      available.</p></li><li><p>Decentralised architecture</p><p>The decentralised nature of the XMPP protocol lends itself to
+      server solutions that can scale as required and integrate with other
+      services.</p></li><li><p>Integration with other services</p><p>Protocol extensions have been defined that describe how other
+      services can interact with an XMPP server through various mechanisms.
+      This allows users on an existing service such as AOL or ICQ to
+      communicate with users on an XMPP server as though they are all within
+      the same network.</p></li></ul></div><p>XMPP has been used in numerous projects including, but not limited
+  to:</p><div class="itemizedlist"><ul type="disc"><li><p>Quake Live</p><p>Source: <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.process-one.net/en/blogs/article/idsoftware_quakelive_service_uses_xmpp/" target="_top">Process
+      One Blog</a></p></li><li><p>Google Wave</p><p>Source: <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.waveprotocol.org/" target="_top">Google Wave
+      Federation Protocol</a></p></li><li><p>Jabber IM</p><p>Source: <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.jabber.org" target="_top">Jabber.org</a></p></li><li><p>Gtalk</p><p>Source: <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://code.google.com/apis/talk/talk_developers_home.html" target="_top">GTalk
+      Developer Documentation</a></p></li></ul></div><p>There are numerous XMPP server implementations available including
+  both free and commercial solutions. For the purposes of this document we use
+  EjabberD (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.process-one.net/en/ejabberd/" target="_top">http://www.process-one.net/en/ejabberd/</a>).</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e87"></a>1.1.&nbsp;Free / Open Gateways</h2></div></div></div><p>Currently the only known open and free to use XMPP gateway is the
+    GTalk gateway operated by Google. Refer to the federation documentation of
+    your XMPP server for more details on integration.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_XMPP_Installation"></a>Chapter&nbsp;2.&nbsp;Installation</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e95">2.1. Installing the XMPP server</a></span></dt><dt><span class="section"><a href="#d0e110">2.2. Configuring the FantasyDemo example</a></span></dt><dt><span class="section"><a href="#d0e122">2.3. Configuring EjabberD</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_XMPP_Servicing_Domains">2.3.1. Servicing Domains</a></span></dt><dt><span class="section"><a href="#d0e157">2.3.2. Allowing multiple account creations from a single IP</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e164">2.4. Start the ejabberd server</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95"></a>2.1.&nbsp;Installing the XMPP server</h2></div></div></div><p>For the purposes of this example we use the ejabberd XMPP server.
+    This is available on all BigWorld supported distributions using package
+    management, however if necessary the official website can be found
+    at:</p><p><a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.process-one.net/en/ejabberd" target="_top">http://www.process-one.net/en/ejabberd</a></p><p>To install ejabberd under CentOS or Red Hat Enterprise simply
+    perform the following step as the root user:</p><pre class="programlisting"># yum install ejabberd</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Red Hat Enterprise and CentOS users will need to enable the Extra
+      Packages for Enterprise Linux (EPEL) package repository to gain access
+      to this.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e110"></a>2.2.&nbsp;Configuring the FantasyDemo example</h2></div></div></div><p>The IM chat integration example needs to know how to connect to the
+    newly installed Jabber server. The script code reads its configuration
+    from <code class="filename">fantasydemo/res/server/config/xmpp.xml</code>. In this
+    file you will need to specify the details of the XMPP server (i.e.
+    hostname and port) as well as a resource name. The resource name is a
+    unique identifier that specifies to the server where a user is logging in
+    from when a connection is made. The default resource name is
+    "FantasyDemo", however this can be altered to your needs as
+    required.</p><p>In this file also ensure that the example has been enabled with the
+    corresponding XML tag.</p><pre class="programlisting">&lt;root&gt;
+
+    &lt;enabled&gt; true &lt;/enabled&gt;
+
+    &lt;!-- XMPP Chat example --&gt;
+    &lt;xmppServer&gt;
+        &lt;host&gt; ejabber_server.domain.com &lt;/host&gt;
+        &lt;port&gt; 5222 &lt;/port&gt;
+        &lt;resourceName&gt; FantasyDemo &lt;/resourceName&gt;
+    &lt;/xmppServer&gt;
+&lt;/root&gt;</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e122"></a>2.3.&nbsp;Configuring EjabberD</h2></div></div></div><p>Most package installations of ejabberd will place the configuration
+    file into <code class="filename">/etc/ejabberd/ejabberd.cfg</code>. When discussing
+    the ejabberd config file, this is the file that should be
+    referenced.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>When modifying or adding entries to the configuration file, the
+      entries are terminated with a full stop '.'.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_XMPP_Servicing_Domains"></a>2.3.1.&nbsp;Servicing Domains</h3></div></div></div><p>The ejabberd server services a domain of logins. For example your
+      environment may contain both <span class="literal">www.rpg-game.com</span> as well
+      as <span class="literal">www.rts-game.com</span>. Each gaming environment could
+      contain a unique user called 'tony', so we need to tell the ejabberd
+      server that it has to service both these domains.</p><p>By default most installations will have a working configuration
+      for <span class="literal">localhost</span>, however we will extend this to also
+      support a new servicing domain so other users in the office can login to
+      the server and interact with the game clients. In order to do this we
+      simply use the fully qualified host and domain name of the machine the
+      ejabberd server has been installed on. For example, while testing during
+      the writing of this installation document the ejabberd server was
+      installed onto a host called <span class="literal">bw13</span>, so the fully
+      domain being serviced would be <span class="literal">bw13.bigworldtech.com</span>.
+      In the ejabberd config file edit the hostname line to look similar to
+      the following, replacing the bw13 domain with your own hostname and
+      domain name.</p><pre class="programlisting">{hosts, ["localhost", "bw13.bigworldtech.com"]}.</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e157"></a>2.3.2.&nbsp;Allowing multiple account creations from a single IP</h3></div></div></div><p>By default the ejabberd server will limit the number of account
+      registrations that are allowed to occur from the same IP address in
+      order to stop the server being abused. As the ejabberd server will be
+      running in an isolated environment where account creations can happen
+      frequently from the same IP address (i.e. the same BaseApp registering
+      multiple new accounts at once), we will disable this limitation. To do
+      so, add the following entry to the ejabberd configuration file:</p><pre class="programlisting">{registration_timeout, infinity}.</pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e164"></a>2.4.&nbsp;Start the ejabberd server</h2></div></div></div><p>Now that the server has been configured start the server. On most
+    distributions this can be achieved using the following command run as the
+    root user:</p><pre class="programlisting"># /etc/init.d/ejabberd start</pre></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_XMPP_Usage"></a>Chapter&nbsp;3.&nbsp;Usage</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e174">3.1. Connecting to ejabberd using a client</a></span></dt><dt><span class="section"><a href="#xref_XMPP_Starting_A_FantasyDemo_Server">3.2. Starting a Fantasy Demo Server</a></span></dt><dt><span class="section"><a href="#d0e203">3.3. Connecting using the FantasyDemo client</a></span></dt><dt><span class="section"><a href="#d0e259">3.4. Communicating to the game client from your IM client</a></span></dt><dt><span class="section"><a href="#d0e272">3.5. Communicating to the game server from your IM client</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e174"></a>3.1.&nbsp;Connecting to ejabberd using a client</h2></div></div></div><p>Once the ejabberd server is running, it is now possible to connect
+    to it using a standard instant messaging client such as Gajim, Pidgin, or
+    any other of the myriad of clients that support XMPP. Please be aware
+	that we have had reports of the Trillian Astra Pro IM client not being
+	able to create accounts with the ejabberd setup described in this
+	document.</p><p>Connecting using a normal IM client will allow you to confirm that
+    you have correctly configured the ejabber server before attempting to
+    connect with a BigWorld server and client.</p><p>Your client will be able to create a new account when attempting to
+    connect. If you are prompted for a "Resource name", the name of the IM
+    client you are using will suffice.</p><p>If you have trouble connecting at this stage it is most likely
+    either a mis-configuration of the ejabber server or an incorrectly entered
+    set of details when trying to connect with the client. To check the server
+    configuration you can check the ejabber server logs which will should be
+    located for most distributions under
+    <code class="filename">/var/log/ejabberd</code>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_XMPP_Starting_A_FantasyDemo_Server"></a>3.2.&nbsp;Starting a Fantasy Demo Server</h2></div></div></div><p>Provided the ejabber installation was performed correctly and the
+    server details were correctly provided, simply starting a server normally
+    should be enough to enable the example. All the initialisation of the
+    example is performed through the BaseApp personality script
+    <code class="filename">FantasyDemo.py</code>.</p><p>To confirm that the Chat example has been enabled, search the
+    BaseApp <span class="literal">SCRIPT</span> output for the following line:</p><pre class="programlisting">XMPP Chat example enabled</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e203"></a>3.3.&nbsp;Connecting using the FantasyDemo client</h2></div></div></div><p>On a Windows machine simply start the Fantasy Demo client as normal
+    and connect to the server that was started in <a href="#xref_XMPP_Starting_A_FantasyDemo_Server" title="3.2.&nbsp;Starting a Fantasy Demo Server">Starting a Fantasy Demo Server</a>. Once connected and
+    in the game world there are 4 operations that can be performed:</p><div class="itemizedlist"><ul type="disc"><li><p>Add a friend to the players friends list</p></li><li><p>Message a friend</p></li><li><p>List all friends in the friends list</p></li><li><p>Delete a friend from the friends list</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>For all the commands that require a <span class="literal">&lt;friend
+      name&gt;</span>, in order for the Fantasy Demo script to differentiate
+      between the in game friend lists and the XMPP friends list, the friend
+      name MUST be a JID (which looks like an email address) e.g.
+      <span class="literal">friend@domain.com</span>. The domain name will be whatever
+      was specified when you configured your ejabber server in <a href="#xref_XMPP_Servicing_Domains" title="2.3.1.&nbsp;Servicing Domains">Servicing Domains</a>.</p></div><div class="itemizedlist"><ul type="disc"><li><p>To add a friend</p><p><span class="literal">/addFriend &lt;friend name&gt;</span></p></li><li><p>To message a friend</p><p><span class="literal">/msgFriend &lt;friend name&gt; : Message to your
+        friend</span></p></li><li><p>To list all your friends</p><p><span class="literal">/listFriends</span></p></li><li><p>To delete a friend from your friends list</p><p><span class="literal">/delFriend &lt;friend name&gt;</span></p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e259"></a>3.4.&nbsp;Communicating to the game client from your IM client</h2></div></div></div><p>Now you should have a connected game client and a connected
+    IM client , you should be able to communicate between the two. If
+    you haven't already, add your game client avatar name to your IM clients
+    friend list e.g. <span class="literal">avatar_name@domain.com</span>, and ensure
+    that you have added the IM client friend to your avatar's friends list
+    using <span class="literal">/addFriend im_name@domain.com</span>.</p><p>You should now be able to send messages between the two.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e272"></a>3.5.&nbsp;Communicating to the game server from your IM client</h2></div></div></div><p>FantasyDemo also has an <span class="literal">XMPPEventNotifier</span> entity
+    which you can communicate with via your IM client. This entity broadcasts
+    a text message whenever a Player logs on or off and can respond to watcher
+    queries. XMPPEventNotifier's JID is
+    <span class="literal">server_of_&lt;username&gt;@&lt;jabber server&gt;</span>, where
+    &lt;username&gt; is the name of the user running the server.</p><div class="itemizedlist"><ul type="disc"><li><p>To query a watcher, send the message</p><p><span class="literal">getWatcher &lt;watcher path&gt;</span></p></li></ul></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_XMPP_Implementation"></a>Chapter&nbsp;4.&nbsp;Implementation</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e315">4.1. XMPP Module</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e324">4.1.1. xmpp.Connection</a></span></dt><dt><span class="section"><a href="#d0e332">4.1.2. xmpp.Client</a></span></dt><dt><span class="section"><a href="#d0e351">4.1.3. xmpp.Parser</a></span></dt><dt><span class="section"><a href="#d0e359">4.1.4. xmpp.Stanzas</a></span></dt><dt><span class="section"><a href="#d0e367">4.1.5. xmpp.Service</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e374">4.2. XMPP Roster</a></span></dt><dt><span class="section"><a href="#d0e392">4.3. Avatar Implementation</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e405">4.3.1. Base Implementation</a></span></dt><dt><span class="section"><a href="#d0e438">4.3.2. XMPPClient Interface</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e446">4.4. XMPP Event Notifier</a></span></dt></dl></div><p>This chapter outlines the important components of BigWorld's XMPP
+  example that is included with FantasyDemo. It is not intended as a complete
+  discussion of the implementation, more of a guide to assist you in working
+  through the parts of the code most relevant to your needs.</p><p>Python source code relevant to the FantasyDemo example can be found
+  under the <code class="filename">fantasydemo/res/scripts/</code> directory. Specific
+  files are outlined below in more detail as each component is
+  discussed.</p><p>The BigWorld XMPP example can be broken down into four components that
+  are worth discussing individually.</p><div class="itemizedlist"><ul type="disc"><li><p>XMPP Module</p></li><li><p>XMPP Roster</p></li><li><p>Avatar Implementation</p></li><li><p>XMPP Event Notifier</p></li></ul></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e315"></a>4.1.&nbsp;XMPP Module</h2></div></div></div><p>Location:
+    <code class="filename">fantasydemo/res/scripts/base/xmpp/</code></p><p>At the time of implementing the XMPP example there were no Python
+    XMPP modules available with a suitable license for redistributing with
+    BigWorld. As a result BigWorld implemented an small module for
+    communicating with an XMPP server which can be found in the afore
+    mentioned directory.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e324"></a>4.1.1.&nbsp;xmpp.Connection</h3></div></div></div><p>This module class implements the basic communication with an XMPP
+      server. It is responsible for talking XMPP over the wire and
+      communicating the results via the
+      <code class="classname">xmpp.Connection.ConnectionHandler</code>
+      interface.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e332"></a>4.1.2.&nbsp;xmpp.Client</h3></div></div></div><p>Any object that wishes to communicate with an XMPP server can
+      inherit from <code class="classname">xmpp.Client</code> and implement concrete
+      versions of the <code class="methodname">onXmpp*</code> methods to receive
+      notifications from the server in response to roster events.</p><p>This implementation also passes through a connection handler (see
+      <code class="classname">xmpp.Connection.ConnectionHandler</code>) in
+      <code class="methodname">xmppConnect</code> rather than implementing the
+      methods itself to allow each user of the XMPP client to implement its
+      own connection based functionality.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e351"></a>4.1.3.&nbsp;xmpp.Parser</h3></div></div></div><p>This class offers basic XML parsing to separate data received from
+      the XMPP server into useable pieces. This class is only used by the
+      <code class="classname">xmpp.Connection</code> class as part of its
+      communication with the XMPP server.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e359"></a>4.1.4.&nbsp;xmpp.Stanzas</h3></div></div></div><p>This file provides a set of template XML blocks that are used by
+      the <code class="classname">xmpp.Connection</code> object for communicating with
+      the XMPP server.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e367"></a>4.1.5.&nbsp;xmpp.Service</h3></div></div></div><p><code class="classname">xmpp.Service</code> implements a simple
+      initialisation routine to test that an XMPP server that has been
+      specified in the configuration file exists and is ready to
+      communicate.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e374"></a>4.2.&nbsp;XMPP Roster</h2></div></div></div><p>Location:
+    <code class="filename">fantasydemo/res/scripts/common/XMPPRoster.py</code></p><p>The <code class="classname">XMPPRoster</code> class offers a generic storage
+    location for friends that exist in a users XMPP roster<sup>[<a name="d0e386" href="#ftn.d0e386">1</a>]</sup>.</p><p>The XMPPRoster specifically handles the possibility that multiple
+    transports are in use (eg: XMPP / MSN / ICQ) and allows querying for
+    friends across all transports.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e392"></a>4.3.&nbsp;Avatar Implementation</h2></div></div></div><p>Location:
+    <code class="filename">fantasydemo/res/scripts/base/Avatar.py</code>,
+    <code class="filename">fantasydemo/res/scripts/client/Avatar.py</code>,
+    <code class="filename">fantasydemo/res/scripts/entity_defs/interfaces/XMPPClient.def</code></p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e405"></a>4.3.1.&nbsp;Base Implementation</h3></div></div></div><p>The Base Avatar class simply inherits from
+      <code class="classname">xmpp.Client</code> and implements
+      <code class="classname">xmpp.Connection.ConnectionHandler</code> interface which
+      is then provided to <code class="methodname">xmppConnect</code>.</p><p>The only point of note with the usage of
+      <code class="classname">xmpp.Client</code> is that because of the
+      <code class="classname">xmpp.Connection</code> socket, it is not possible to
+      backup
+      <code class="classname">xmpp.Client</code><code class="varname">.xmppConnection</code>.
+      Thus if an entity that implements <code class="classname">xmpp.Client</code> is
+      restored, it needs to re-establish the XMPP client connection in the
+      <code class="methodname">onRestore</code> method.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e438"></a>4.3.2.&nbsp;XMPPClient Interface</h3></div></div></div><p>This interface is provided as a simple way to pass through Client
+      calls to the <code class="classname">xmpp.Client</code> methods that the Avatar
+      base entity has available due to its inheritance.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e446"></a>4.4.&nbsp;XMPP Event Notifier</h2></div></div></div><p>Location:
+    <code class="filename">fantasydemo/res/scripts/base/XMPPEventNotifier.py</code></p><p>The XMPP Event Notifier is very similar to the Avatar example, in
+    that it uses an <code class="classname">xmpp.Client</code> to communicate with the
+    XMPP server, however it does not have the same need to inherit from the
+    <code class="classname">xmpp.Client</code> as it is not a Proxy and will not need
+    the XMPPClient interface.</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e386" href="#d0e386">1</a>] </sup>The XMPP specification refers to a friends list as a roster to
+        generalise the concept of a collection of users.</p></div></div></div></div></div></body></html>

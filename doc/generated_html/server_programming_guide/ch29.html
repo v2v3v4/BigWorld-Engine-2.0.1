@@ -1,0 +1,372 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;29.&nbsp;Mercury Packet Structure</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt02.html" title="Part&nbsp;II.&nbsp;Server C++ Programming Guide">
+      <link rel="prev" href="ch28.html" title="Chapter&nbsp;28.&nbsp;Encrypting Client-Server Traffic">
+      <link rel="next" href="ch30.html" title="Chapter&nbsp;30.&nbsp;The Watcher Interface">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch29.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;29.&nbsp;Mercury Packet Structure</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch28.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;II.&nbsp;Server C++ Programming Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch30.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Mercury_Packet_Structure"></a>Chapter&nbsp;29.&nbsp;Mercury Packet Structure
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch29.html#d0e16490">29.1. Header</a></span></dt>
+                  <dt><span class="section"><a href="ch29.html#d0e16503">29.2. Messages</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch29.html#d0e16547">29.2.1. Fixed-Length Messages</a></span></dt>
+                        <dt><span class="section"><a href="ch29.html#d0e16566">29.2.2. Variable-Length Messages</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch29.html#d0e16585">29.3. Footers</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch29.html#d0e16595">29.3.1. Fragment Numbers</a></span></dt>
+                        <dt><span class="section"><a href="ch29.html#d0e16610">29.3.2. Sequence Number</a></span></dt>
+                        <dt><span class="section"><a href="ch29.html#d0e16618">29.3.3. ACKs</a></span></dt>
+                        <dt><span class="section"><a href="ch29.html#d0e16631">29.3.4. Indexed Channel ID</a></span></dt>
+                        <dt><span class="section"><a href="ch29.html#d0e16639">29.3.5. First Request Offset and <span class="literal">replyID</span></a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>The API for network communications that Mercury exposes is based on a
+                 message/bundle paradigm, which masks the true nature of the actual UDP
+                 packets being sent and received.
+            </p>
+            <p>From the programmer's point of view, messages are created and streamed
+                 onto Bundles (see <span class="literal">src/lib/network/bundle.hpp)</span>. At some
+                 point a Bundle will be sent, at which point Mercury will convert the
+                 messages on the Bundle into one or more contiguous sequences of bytes, and
+                 send them as a regular UDP packets. This section details the format of those
+                 packets.
+            </p>
+            <p>Broadly speaking, the structure of a Mercury packet is composed of the
+                 following:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>A single-byte header.</p>
+                  </li>
+                  <li>
+                     <p>Zero or more messages.</p>
+                  </li>
+                  <li>
+                     <p>The footers specified by the flags in the header.</p>
+                  </li>
+               </ul>
+            </div>
+            <div class="informalfigure">
+               <div class="mediaobject"><img src="images/mercury_packet_structure_broad_structure.png"><span class="caption">
+                     <p>Broad structure</p></span></div>
+            </div>
+            <div class="informalfigure">
+               <div class="mediaobject"><img src="images/mercury_packet_structure_message_structure.png"><span class="caption">
+                     <p>Message structure</p></span></div>
+            </div>
+            <div class="informalfigure">
+               <div class="mediaobject"><img src="images/mercury_packet_structure_specific_message_types.png"><span class="caption">
+                     <p>Specific message types</p></span></div>
+            </div>
+            <div class="informalfigure">
+               <div class="mediaobject"><img src="images/mercury_packet_structure_footers.png"><span class="caption">
+                     <p>Footers</p></span></div>
+            </div>
+            <div class="informalfigure">
+               <div class="mediaobject"><img src="images/mercury_packet_structure_how_first_request.png"><span class="caption">
+                     <p>How first request offset/reply <span class="symbol">&#8208;</span> IDs work
+                     </p></span></div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e16490"></a>29.1.&nbsp;Header
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The first byte of a Mercury packet is always a header, which
+                      essentially details which footers should be expected on the packet.
+               </p>
+               <p>It is a bitwise combination of the <span class="literal">FLAG*</span>
+                      constants defined inside Bundle in
+                      <span class="literal">src/lib/network/packet.hpp</span>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e16503"></a>29.2.&nbsp;Messages
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The first byte of a message is always its ID.</p>
+               <p>Looking up that message ID in whichever Mercury interface is
+                      currently in effect will reveal what type of message it is and how the
+                      subsequent bytes on the packet should be interpreted. For example,
+                      LoginApp processes all packets on its external interface according to
+                      <span class="literal">LoginInterface</span>, defined in
+                      <span class="literal">bigworld/src/common/login_interface.hpp</span>.
+               </p>
+               <p>The ID of a message is the index of its
+                      <span class="literal">MERCURY_*_MESSAGE</span> declaration in the
+                      <span class="literal">BEGIN_MERCURY_INTERFACE()</span> /
+                      <span class="literal">END_MERCURY_INTERFACE()</span> block for that Mercury
+                      interface. For example, in
+                      <span class="literal">bigworld/src/common/login_interface.hpp</span>, a login
+                      message has ID 0, because it is the first message type declared in the
+                      <span class="literal">MERCURY_INTERFACE</span> block.
+               </p>
+               <p>There are three basic types of Mercury messages:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Fixed-length messages</p>
+                     </li>
+                     <li>
+                        <p>Variable-length messages</p>
+                     </li>
+                     <li>
+                        <p>Multiple-length messages</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>These types are described in the sub-sections below.</p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e16547"></a>29.2.1.&nbsp;Fixed-Length Messages
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A fixed-length message has its precise length determined at
+                           compile time. Specifically, it is the second argument to the
+                           <span class="literal">MERCURY_FIXED_MESSAGE</span> macro that declares it.
+                  </p>
+                  <p>Therefore, the header of a fixed-length message is simply its
+                           message ID. The message payload immediately follows the header, and must
+                           have the exact length given in the interface definition.
+                  </p>
+                  <p>Although all fixed-length messages are treated equally during
+                           low-level Mercury processing, there are different macros that can
+                           declare them, which result in different handling in the callbacks that
+                           receive the unpacked messages.
+                  </p>
+                  <p>The most common example of this is the
+                           <span class="literal">MERCURY_STRUCT_MESSAGE</span> declaration. A message type
+                           declared in this way is simply a fixed-length message whose length is
+                           equal to the sum of the sizes of the fields of the struct.
+                  </p>
+                  <p>The advantage of using a struct message instead of a vanilla
+                           fixed-length one is that the object passed to the callback registered
+                           for this message type will be an object whose fields match those of the
+                           struct. The callback can therefore access them by name, and with the
+                           correct types, instead of having to extract bytes at particular offsets
+                           and lengths inside the binary data blob, and then cast them to the
+                           desired types.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e16566"></a>29.2.2.&nbsp;Variable-Length Messages
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The header for a variable-length message is the message ID,
+                           followed by a short field that specifies the exact size of the message
+                           payload.
+                  </p>
+                  <p>The length of the field specifying the payload size is the second
+                           argument to the <span class="literal">MERCURY_VARIABLE_MESSAGE</span> macro that
+                           declares the message type.
+                  </p>
+                  <p>For example, from
+                           <span class="literal">bigworld/src/common/login_interface.hpp</span>:
+                  </p><pre class="programlisting">MERCURY_VARIABLE_MESSAGE( login, 2, &amp;gLoginHandler )</pre><p>The length field in a login message header will therefore be 2
+                           bytes long.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e16585"></a>29.3.&nbsp;Footers
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The footers that are present on Mercury packet are specified by the
+                      field header, which is the first byte of the packet, and must appear in a
+                      specific order.
+               </p>
+               <p>They are listed in the following sub-sections in reverse order,
+                      <em class="emphasis">i.e.</em>, from the end of the packet towards the
+                      messages.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e16595"></a>29.3.1.&nbsp;Fragment Numbers
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>If a packet has the header <span class="literal">FLAG_IS_FRAGMENT</span>,
+                           then it is part of a chain of packets where messages span the packet
+                           boundaries.
+                  </p>
+                  <p>Typically, this will occur when trying to send messages larger
+                           than the maximum allowable UDP packet size (<em class="emphasis">e.g.</em>,
+                           large writes to the database).
+                  </p>
+                  <p>The sequence numbers for the first and last packet in the sequence
+                           of fragments are written to the footer of every packet in the sequence.
+                           Therefore, the footer consists of two 4-byte integers specifying the
+                           relevant sequence numbers.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e16610"></a>29.3.2.&nbsp;Sequence Number
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Given by <span class="literal">FLAG_HAS_SEQUENCE_NUMBER</span>, this is a
+                           single 4-byte sequence number that is streamed onto reliable packets so
+                           that they can be acknowledged.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e16618"></a>29.3.3.&nbsp;ACKs
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Given by <span class="literal">FLAG_HAS_ACKS</span>, these are
+                           acknowledgement messages corresponding to sequence numbers from previous
+                           outgoing packets.
+                  </p>
+                  <p>This is a sequence of 4-byte sequence numbers, followed by a
+                           single byte indicating the number of <span class="literal">ACK</span>s on the
+                           packet.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e16631"></a>29.3.4.&nbsp;Indexed Channel ID
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Given by <span class="literal">FLAG_INDEXED_CHANNEL</span>, this is the
+                           channel ID of a packet on an indexed channel, as opposed to a normal
+                           channel that is identified by the source address of the packet.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e16639"></a>29.3.5.&nbsp;First Request Offset and <span class="literal">replyID</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When a request is sent to a server component (for example, the
+                           <span class="literal">LoginInterface</span> '<span class="literal">probe</span>' message,
+                           which the server replies to with information about itself) the requester
+                           will attach a <span class="literal">replyID</span> to the message. The server will
+                           attach the same ID to the reply so that the requester can correlate the
+                           reply to its original request.
+                  </p>
+                  <p>If a message is a request, then an extra field will be added to
+                           the packet between the header and the message payload. This extra field
+                           is not accounted for by any variable-length fields. The field will
+                           contain the 4-byte <span class="literal">replyID</span>, followed by the 2-byte
+                           offset (from the start of the packet) of the next
+                           <span class="literal">replyID</span> in the same packet. The reason that the
+                           address of the next replyID needs to be specified is so that the
+                           <span class="literal">replyID</span>s can be distinguished from regular message
+                           payloads and parsed correctly.
+                  </p>
+                  <p>If any of the messages on a packet have
+                           <span class="literal">replyID</span>s, the header will have
+                           <span class="literal">FLAG_HAS_REQUESTS</span> set, and the footer will contain
+                           the 2-byte offset of the first <span class="literal">replyID</span> on the packet.
+                           The last request on a packet will have a next-request-offset of
+                           0.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch28.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt02.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch30.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;28.&nbsp;Encrypting Client-Server Traffic&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;30.&nbsp;The Watcher Interface</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

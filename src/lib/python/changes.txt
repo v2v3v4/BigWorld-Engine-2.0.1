@@ -1,0 +1,142 @@
+This file describes the changes made to Python by MicroForte. The source was
+originally downloaded from http://www.python.org/download as Python-2.4.tgz.
+
+11th September 2003
+builtin.dir can now handle any sequence for __members__ and __methods__, not
+just PyList.
+
+29th September 2003
+typeobject.c looks in tp_dict for __module__ and __name__ for all type
+objects, not just ones with the heap flag set.
+
+3rd October 2003
+Added low-level memory allocator redirection (low_level_malloc + friends)
+
+15th December 2003
+Added an interface to provide a different filename namespace.
+This consists of the extern-able calls PyOS_fopen, PyOS_statType,
+PyOS_listdir and PyOS_dlopen.  They are declared in pythonrun.h with
+other PyOS stuff. They allow another filesystem to be inserted
+underneath Python.
+
+16th January 2004
+ALTSEP is defined to be equal to SEP if not otherwise defined
+(simplifies some code)
+
+11th May 2004
+In the generic getattr, now checking if tp_mro is set instead of always
+assuming it is if tp_dict is set. Builtin types like descriptors seem
+to not have this set.
+
+18th September 2006
+Integrated changes into Python 2.5. Some of our modifications were not
+integrated:
+- math, struct, time, _weakref, cString, cPickle are no longer compiled into
+libpython2.5.a. Modules will now be shipped as .so files.
+- ALTSEP is no longer always defined. Changed our code to handle this case.
+- Low-level memory redirection has been removed.
+- os.tempnam() and os.tmpnam() no longer returns an error when BigWorld's
+file system is used. Instead, they are no longer built into the os module.
+- PyObject_GenericGetAttr() no longer checks if tp->tp_mro is set.
+- Compiler define PYTHONPATH is no longer set to "" on Windows.
+
+
+23rd September 2008
+Changed the following function prototypes to support the appropriate const 
+semantics:
+PyObject_CallFunction
+PyObject_CallMethod
+_PyObject_CallFunction_SizeT
+_PyObject_CallMethod_SizeT
+PySys_GetObject
+PySys_SetObject
+PySys_GetFile
+PySys_SetPath
+
+I also added a dodgy addendum to pyconfig.h generated from a diff between
+a 32 bit and 64 bit output of the configuration script to make the ultimate 
+state effectively the same as if the appropriate header had been used. If
+python is reconfigured, this needs to be manually generated and added to the 
+end.
+
+
+
+To buld the dynamically loadable modules (.so):
+
+ NOTE: BigWorld has performed a large number of modifications to the
+       Python Makefile. This makefile should be used where possible and
+       not regenerated unless absolutely necessary. However if you have
+       a need to rebuild the Makefile for any reason, you will need to
+       make a backup of the BigWorld modifications, run the configure
+       script, and then merge the BigWorld modifications back into the
+       newly generated Makefile.
+
+       When using the configure script, you will need to specify the
+       following option, along with any other options your build may
+       require:
+
+       $ ./configure --enable-unicode=ucs4
+
+
+Assumptions and Requirements)
+ To successfully build the .so files you will need a working build environment
+ which should normally already be enabled for building the libraries / server
+ components.
+
+ In addition you may need to install a number of packages onto your
+ distribution corresponding to modules that are provided by Python. On CentOS
+ the following packages should be installed in order to build most of the
+ required modules
+
+ $ yum install bzip2-devel
+ $ yum install libdbi-devel
+ $ yum install ncurses-devel
+ $ yum install sqlite-devel
+
+
+Step 1) Building the Python interpreter
+
+ In order to build the interpreter, some rules must be modified in the
+ Makefile. 
+
+ 1.1) Open src/lib/python/Makefile
+ 1.2) Uncomment the line:
+
+   BW_STANDARD_PYTHON = 1
+
+  1.3) It is recommended that you do make clean if you have already done a
+server build.
+
+   $ cd src/lib/python
+   $ make clean
+
+ 1.4) Build the interpreter. In src/lib/python type:
+
+   $ make
+
+
+Step 2)  Build the python modules. In src/lib/python type:
+
+   $ make sharedmods
+
+  The modules will be built into a location such as
+  src/lib/python/build/lib.linux-x86_64-2.6.
+
+  The contents of this directory can then be copied (if required) into
+  bigworld/res/scripts/common/lib-dynload<architecture>
+
+
+Step 3) Cleanup modifications.
+
+  You will now want to revert the changes you have made to the Python
+  Makefile so that when you perform a regular build the options
+  specific to this procedure aren't used.
+
+  Eg:
+  $ svn revert src/lib/python/Makefile
+
+  It is also good practice to clean out all of the build files that have
+  been generated as part of this process.
+
+  $ cd src/lib/python
+  $ make clean

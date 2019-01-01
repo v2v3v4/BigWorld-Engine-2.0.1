@@ -1,0 +1,749 @@
+<flora.xml>
+	<!-- flora.xml describes the ecotypes that automatically get placed onto
+	the ground based on the ground texture when the space is saved in WorldEditor.
+	There is a variable sized vertex buffer which will determine how many
+	objects can be shown at once depending on its size.  All flora object
+	textures are copied onto a larger texture for efficiency so they must
+	have a texture size of 256x128 or 512x256.  There is a limit of vertices
+	per object based upon the maximum number of possible objects in a chunk.
+	Ecotypes are based on a index rather than looked up by name so it doesn't
+	matter what they are called.  It is possible to have multiple textures
+	representing a ecotype and multiple visuals displaying for a given
+	ecotype. -->
+
+	<vb_size> 5000000 </vb_size>
+	<!-- Size of the vertex buffer. Only 
+	used if <vb_size_options> is not defined -->
+	
+	<texture_width>	512 </texture_width>
+	<!-- Maximum width/length of flora visuals. -->
+	
+	<texture_height> 256 </texture_height>
+	<!-- Maximum height of flora visuals. -->
+	
+	<AlphaTestRef>			128			</AlphaTestRef>
+	<ShadowAlphaTestRef>		128			</ShadowAlphaTestRef>
+	<AlphaTestDistance>		25			</AlphaTestDistance>
+	<AlphaBlendDistance>		0			</AlphaBlendDistance>
+	<AlphaTestFadePercent>		75			</AlphaTestFadePercent>
+	<AlphaBlendFadePercent>		50			</AlphaBlendFadePercent>
+
+	<!-- Lightmap for classic terrain -->
+	<light_map>
+		<material> system/materials/light_map.mfm </material>
+		<!-- Path to effect material.  Must be valid.-->
+
+		<width>			512	</width>
+		<!-- Width in pixels of the light map. -->
+
+		<height>		512	</height>	
+		<!-- Height in pixels of the light map. -->
+
+		<timeToleranceSecs>	60	</timeToleranceSecs>
+		<!-- Game time between updates of light map. -->
+
+		<textureFeedName>	floraLightMap	</textureFeedName>
+		<!-- Optional name of texture feed for light map. -->
+
+		<effectTextureName>	FloraLightMap	</effectTextureName>
+		<!-- Required, exposes the light map to the effect engine -->
+
+		<effectTransformName>	FloraLightMapTransform </effectTransformName>
+		<!-- Required, exposes the worldToLightMap transform to the effect engine -->
+	</light_map>
+
+	<!-- Lightmap for new terrain -->	
+	<light_map2>
+		<material> system/materials/light_map2.mfm </material>
+		<!-- Path to effect material.  Must be valid.-->
+
+		<width>			512	</width>
+		<!-- Width in pixels of the light map. -->
+
+		<height>		512	</height>	
+		<!-- Height in pixels of the light map. -->
+
+		<timeToleranceSecs>	60	</timeToleranceSecs>
+		<!-- Game time between updates of light map. -->
+
+		<textureFeedName>	floraLightMap	</textureFeedName>
+		<!-- Optional name of texture feed for light map. -->
+
+		<effectTextureName>	FloraLightMap	</effectTextureName>
+		<!-- Required, exposes the light map to the effect engine -->
+
+		<effectTransformName>	FloraLightMapTransform </effectTransformName>
+		<!-- Required, exposes the worldToLightMap transform to the effect engine -->
+	</light_map2>
+
+	<ecotypes>
+		<!-- Ecotypes, or ecosystems, are represented by the underlying
+		texture (the texture with the highest percentage blend wins).
+		If many different textures are used to represent the same ecotype
+		you can list all the textures individually - for example, below
+		you can see two different stone textures used to represent the
+		same stone ecotype.
+		Each ecotype can have a sound tag and detail object associated
+		with it. -->
+
+		<empty>	
+			<texture>	maps/landscape/bridge_stones.dds </texture>
+			<texture>	maps/landscape/lev_sand.dds	</texture>
+			<texture>	maps/landscape/a_desertsand01.dds </texture>
+			<texture>	maps/landscape/ls2_dust.dds </texture>
+			<texture>	maps/landscape/ls2_dust2.dds </texture>
+			<texture>	maps/landscape/lev_path01.dds </texture>
+			<texture>	maps/landscape/lev_path02.dds </texture>
+			<texture>	maps/landscape/lev_path03.dds </texture>
+			<texture>	maps/landscape/lev_path05.dds </texture>
+			<texture>	maps/landscape/lev_path06.dds </texture>
+			<texture>	maps/landscape/lev_path07.dds </texture>
+			<texture>	maps/landscape/lev_path08.dds </texture>
+			<texture>	maps/landscape/ls_dddd_riverbed.dds </texture>
+			<texture>	sets/t_ice/maps/terrain/ice_snow_pure.dds </texture>
+			<texture>	maps/landscape/lev_rocks.dds </texture>
+			<texture>	maps/landscape/lev_dirt01.dds </texture>
+			<texture>	maps/landscape/ls2_flagstone.dds </texture>
+			<texture>	maps/landscape/ls2_rock.dds	</texture>
+			<texture>	maps/landscape/ls2_rock2.dds </texture>
+			<texture>	maps/landscape/rock06.dds.dds </texture>
+			<texture>	maps/landscape/a_cracked_mud.dds </texture>
+			<texture>	maps/landscape/minspec_path.dds	</texture>
+			<sound_tag>	wood </sound_tag>
+		</empty>
+
+		<grass>
+			<texture>	maps/landscape/grasslands.dds	</texture>
+			<!-- The grass ecotype is identified by any part of the terrain
+			that uses these textures.  -->
+			
+			<sound_tag>	grass </sound_tag>
+			<!-- Sound is not supported in BigWorld, however this tag can be
+			used to identify what movement sound should be played by a 3rd
+			party audio engine. -->
+			
+			<generator> chooseMax
+				<noise>
+					<frequency>	0.1 </frequency>
+					<generator> visual
+						<visual> flora/dry_grass/grasslands_tall_4tris.visual
+							<scaleVariation>	0.8		</scaleVariation>
+						</visual>
+						<visual>  flora/dry_grass/grass_1_tris.visual
+							<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/dry_grass/grass_3_tris.visual
+							<scaleVariation>	0.9		</scaleVariation>
+						</visual>					
+					</generator>				
+				</noise>
+				<noise>
+					<frequency>	0.8 </frequency>	
+					<generator> visual
+						<visual> flora/dry_grass/grass_3_tris.visual
+							<scaleVariation>	0.9		</scaleVariation>
+						</visual>					
+						<visual>  flora/dry_grass/grass_1_tris.visual
+							<scaleVariation>	1.0		</scaleVariation>
+						</visual>
+					</generator>
+				</noise>				
+				<noise>
+					<frequency>	0.70 </frequency>	
+					<generator> visual
+						<visual> flora/dry_grass/grass_3_tris.visual
+							<scaleVariation>	0.7		</scaleVariation>
+						</visual>
+						<visual> flora/dry_grass/grass_1_tris.visual
+							<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+					</generator>
+				</noise>				
+			</generator>
+			<!-- This specifies the detail objects that will be randomly
+			positioned and oriented over this ecotype.  The ecotypes.py
+			script in BigBang (bigworld/tools/worldeditor/resources/scripts)
+			can be used to specify the rules of placement, eg, how steep
+			before object not placed, etc...
+			available generator types are empty, visual, and chooseMax.
+			the chooseMax type uses value generators to choose between
+			it's sub-generators.  available value generators are noise,
+			random and fixed. -->
+		</grass>
+		
+		
+		<gravel>			
+			<sound_tag>	gravel </sound_tag>
+			<avisual>	
+				<flex>	0.0	</flex>
+				<!-- the flex value determines how much the flora object
+				is effected by the in game wind. -->
+			</avisual>
+			<avisual>	
+				<flex>	0.0	</flex>
+			</avisual>
+			<avisual>	
+				<flex>	0.0	</flex>
+			</avisual>
+		</gravel>
+		
+		<pine_forest>
+			<texture>	maps/landscape/litter02.dds	</texture>
+			<texture>	maps/landscape/litter03.dds	</texture>
+			<texture>	maps/landscape/lev_litter03.dds	</texture>
+			<density>	0.8					</density>			
+			<sound_tag>	gravel </sound_tag>
+			<visual>	sets/temperate/flora/pine_cone_6tri.visual
+				<flex>	0.0	</flex>
+			</visual>
+		</pine_forest>
+
+		<forest>
+			<texture>	maps/landscape/ls2_litter.dds	</texture>
+			<texture>	maps/landscape/litter03.dds	</texture>
+			<texture>	maps/landscape/lev_litter02.dds	</texture>
+			<texture>	maps/landscape/pineneedles.dds	</texture>
+			<texture>	maps/landscape/gra_roots_02.dds	</texture>
+			<generator> chooseMax
+				<fixed>
+					<value> 0.1 </value>
+					<!-- The lower this value the greater the amount of flora -->
+				</fixed>
+				<noise>
+					<frequency>	0.8 </frequency>
+					<generator> visual
+						<visual> 	flora/fern/fern01.visual 
+						<scaleVariation>	0.8		</scaleVariation>
+						</visual>  	
+						<visual> 	flora/fern/fern02.visual
+						<scaleVariation>	0.7		</scaleVariation>
+						</visual>
+					</generator>					
+				</noise>
+			</generator>							
+			<sound_tag>	gravel </sound_tag>			
+		</forest>
+
+		<bullrush>
+			<texture>	maps/landscape/a_cracked_mud01.dds	</texture>
+			<texture>	maps/landscape/ls_cccc.dds	</texture>
+			<texture>	maps/landscape/bullrush_litter03.dds	</texture>
+			<generator> chooseMax
+				<fixed>
+					<value> 0.3 </value>
+				</fixed>
+				<noise>
+					<frequency>	0.8 </frequency>
+					<generator> visual
+						<density>	0.9					</density>
+						<visual>	flora/reeds.visual 
+						<scaleVariation>	0.3		</scaleVariation>
+						</visual>
+					</generator>					
+				</noise>
+			</generator>					
+			<sound_tag> gravel </sound_tag>			
+		</bullrush>
+
+		<woods>			
+			<texture>	maps/landscape/null.dds	</texture>		
+			<density>	1.0				</density>	
+			<visual> flora/fern/fern01.visual 
+			<scaleVariation>	0.3		</scaleVariation>
+			</visual>
+			<visual> flora/fern/fern02.visual
+			<scaleVariation>	0.3		</scaleVariation>
+			</visual>				
+			<sound_tag>	woods </sound_tag>
+		</woods>
+
+		<water_edge>
+			<sound_tag>	water </sound_tag>
+			<visual>	flora/reeds.visual </visual>						
+		</water_edge>
+
+		<water>
+			<sound_tag> water </sound_tag>
+		</water>
+		
+		<town>
+			<sound_tag> stone </sound_tag>
+			<avisual>	</avisual>
+		</town>
+
+
+
+		<stone>
+			<sound_tag> stone </sound_tag>
+			<avisual>	</avisual>
+		</stone>
+
+
+		<longgrass>
+			<texture>	maps/landscape/null.dds	</texture>
+						
+			<sound_tag>	grass </sound_tag>
+			<!-- Sound is not supported in BigWorld, however this tag can be
+			used to identify what movement sound should be played by a 3rd
+			party audio engine. -->
+			
+			<generator> chooseMax
+				<fixed>
+					<value> 0.5 </value>
+				</fixed>
+				<noise>
+					<frequency>	0.15 </frequency>
+					<generator> visual
+						<avisual> flora/longgrass/longgrass01.visual </avisual>
+						<avisual> flora/longgrass/longgrass02.visual </avisual>
+					</generator>					
+				</noise>
+				<noise>
+					<frequency>	0.8 </frequency>	
+					<generator> visual
+						<avisual> flora/longgrass/longgrass03.visual </avisual>			
+						<avisual> flora/longgrass/longgrassa01.visual </avisual>				
+						<avisual> flora/longgrass/longgrassa02.visual </avisual>					
+						<avisual> flora/longgrass/longgrassa03.visual </avisual>
+						<avisual> flora/longgrass/longgrass01.visual </avisual>
+						<avisual> flora/longgrass/longgrass02.visual </avisual>
+					</generator>
+				</noise>				
+				<noise>
+					<frequency>	0.70 </frequency>	
+					<generator> visual
+						<avisual> flora/longgrass/longgrass03.visual </avisual>			
+						<avisual> flora/longgrass/longgrassa01.visual </avisual>
+						<avisual> flora/longgrass/longgrassa02.visual </avisual>
+						<avisual> flora/longgrass/longgrassa03.visual </avisual>
+						<avisual> flora/longgrass/longgrass01.visual </avisual>
+						<avisual> flora/longgrass/longgrass02.visual </avisual>
+						<avisual> flora/longgrass/longgrass03.visual </avisual>
+						<avisual> flora/longgrass/longgrassa01.visual </avisual>
+					</generator>
+				</noise>				
+			</generator>
+			<!-- This specifies the detail objects that will be randomly
+			positioned and oriented over this ecotype.  The ecotypes.py
+			script in BigBang (bigworld/tools/worldeditor/resources/scripts)
+			can be used to specify the rules of placement, eg, how steep
+			before object not placed, etc...
+			available generator types are empty, visual, and chooseMax.
+			the chooseMax type uses value generators to choose between
+			it's sub-generators.  available value generators are noise,
+			random and fixed. -->
+		</longgrass>		
+		
+		<reeds>
+			<texture>	maps/landscape/lev_leaflitter.dds	</texture>	
+			<sound_tag>	grass </sound_tag>	
+			<generator> chooseMax
+				<fixed>
+					<value> 0.3 </value>
+				</fixed>
+				<noise>
+					<frequency>	0.15 </frequency>
+					<generator> visual
+						<density>	0.1				</density>	
+						<visual> flora/reeds/reed01.visual 
+						<scaleVariation>	0.2		</scaleVariation>
+						</visual>
+						<visual> flora/reeds/reed02.visual 
+						<scaleVariation>	0.2		</scaleVariation>
+						</visual>
+					</generator>					
+				</noise>
+				<noise>
+					<frequency>	0.8 </frequency>	
+					<generator> visual
+						<density>	0.1				</density>	
+						<visual> flora/reeds/reed01.visual 
+						<scaleVariation>	0.2		</scaleVariation>
+						</visual>
+						<visual> flora/reeds/reed02.visual 
+						<scaleVariation>	0.4		</scaleVariation>
+						</visual>
+						<visual> flora/reeds/reed03.visual 
+						<scaleVariation>	0.2		</scaleVariation>
+						</visual>
+						<visual> flora/reeds/reed04.visual 
+						<scaleVariation>	0.2		</scaleVariation>
+						</visual>
+						<visual> flora/reeds/reed05.visual 
+						<scaleVariation>	0.3		</scaleVariation>
+						</visual>
+						<visual> flora/reeds/reed06.visual 
+						<scaleVariation>	0.2		</scaleVariation>
+						</visual>
+					</generator>
+				</noise>				
+				<noise>
+					<frequency>	0.70 </frequency>	
+					<generator> visual
+						<visual> flora/reeds/reed04.visual
+						<scaleVariation>	0.2		</scaleVariation>
+						</visual>
+						<visual> flora/reeds/reed02.visual 
+						<scaleVariation>	0.4		</scaleVariation>
+						</visual>
+						<visual> flora/reeds/reed02.visual
+						<scaleVariation>	0.2		</scaleVariation>
+						</visual>
+						<visual> flora/reeds/reed04.visual
+						<scaleVariation>	0.2		</scaleVariation>
+ 						</visual>
+					
+					</generator>
+				</noise>				
+			</generator>
+		</reeds>
+		<fern2>
+			<texture>	maps/landscape/lev_graroots02.dds	</texture>
+			<texture>	maps/landscape/clover.dds	</texture>			
+			<texture>	maps/landscape/lev_clover.dds	</texture>
+			<sound_tag>	grass </sound_tag>
+			<visual> flora/red flowers/flowers02.visual	</visual>
+			<visual> flora/red flowers/flowers03.visual	</visual>
+			<visual> flora/red flowers/leaves01.visual	</visual>	
+				
+			<generator> chooseMax
+				<fixed>
+					<value> 0.3 </value>
+				</fixed>
+				<noise>
+					<frequency>	0.15 </frequency>
+					<generator> visual
+						<density>	1.0				</density>	
+						<visual> flora/red flowers/leaves01.visual	
+						<scaleVariation>	0.2		</scaleVariation>
+						</visual>
+						<visual> flora/red flowers/flowers01.visual		
+						<scaleVariation>	0.4		</scaleVariation>
+						</visual>
+					</generator>					
+				</noise>
+				<noise>
+					<frequency>	0.8 </frequency>	
+					<generator> visual
+						<density>	0.8				</density>	
+						<visual> flora/red flowers/leaves01.visual	
+						<scaleVariation>	0.2		</scaleVariation>
+						</visual>
+						<visual> flora/red flowers/leaves01.visual		
+						<scaleVariation>	0.4		</scaleVariation>
+						</visual>
+						<visual> flora/red flowers/flowers03.visual		
+						<scaleVariation>	0.2		</scaleVariation>
+						</visual>
+						<visual> flora/red flowers/flowers02.visual	
+						<scaleVariation>	0.4		</scaleVariation>
+						</visual>
+						<visual> flora/red flowers/leaves01.visual 
+						<scaleVariation>	0.3		</scaleVariation>
+						</visual>
+						<visual> flora/red flowers/leaves01.visual	
+						<scaleVariation>	0.2		</scaleVariation>
+						</visual>
+					</generator>
+				</noise>				
+				<noise>
+					<frequency>	0.70 </frequency>	
+					<generator> visual
+						<density>	0.9				</density>	
+						<visual> flora/red flowers/leaves01.visual
+						<scaleVariation>	0.4		</scaleVariation>
+						</visual>
+						<visual> flora/red flowers/leaves01.visual
+						<scaleVariation>	0.4		</scaleVariation>
+						</visual>
+						<visual> flora/red flowers/leaves01.visual
+						<scaleVariation>	0.2		</scaleVariation>
+						</visual>
+						<visual> flora/red flowers/flowers02.visual
+						<scaleVariation>	0.2		</scaleVariation>
+ 						</visual>
+					
+					</generator>
+				</noise>				
+			</generator>
+		</fern2>
+		<wheat>			
+			<texture>	maps/landscape/lev_hay.dds	</texture>
+			<density>	1.0				</density>	
+			<visual> flora/wheat/wheat_4_tris.visual
+			<flex>	0.3	</flex>	
+			<scaleVariation>	0.7		</scaleVariation>
+			</visual>		
+			<visual> flora/wheat/wheat_2_tris.visual
+			<flex>	0.2	</flex>	
+			<scaleVariation>	0.6		</scaleVariation>
+			</visual>			
+			<sound_tag>	woods </sound_tag>
+		</wheat>
+		<drygrass_wildwheat>
+			<texture>	maps/landscape/grass_patchy.dds	</texture>
+			<sound_tag>	grass </sound_tag>
+			<generator> chooseMax
+				<noise>
+					<frequency>	0.15 </frequency>
+					<generator> visual
+						<density>	1.0				</density>	
+						<visual> flora/drygrass_wildwheat/wildwheat_2_tris.visual
+						<scaleVariation>	0.7		</scaleVariation>
+						</visual>
+						<visual> flora/drygrass_wildwheat/drygrass_1_tris.visual
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+					</generator>					
+				</noise>
+				<noise>
+					<frequency>	0.8 </frequency>	
+					<generator> visual
+						<density>	1.0				</density>	
+						<visual> flora/drygrass_wildwheat/wildwheat_2_tris.visual	
+						<scaleVariation>	0.8		</scaleVariation>
+						</visual>
+						<visual> flora/drygrass_wildwheat/drygrass_1_tris.visual
+						<scaleVariation>	0.7		</scaleVariation>
+						</visual>
+						<visual> flora/drygrass_wildwheat/drygrass_1_tris.visual		
+						<scaleVariation>	0.6		</scaleVariation>
+						</visual>
+					</generator>
+				</noise>				
+			</generator>
+		</drygrass_wildwheat>
+		<wildflowers>
+			<texture>	maps/landscape/lev_grassflowers.dds	</texture>
+			<sound_tag>	grass </sound_tag>
+			<generator> chooseMax
+				<noise>
+					<frequency>	0.15 </frequency>
+					<generator> visual
+						<density>	1.0				</density>	
+						<visual> flora/wildflowers/flower_s_b01_1_tris.visual	
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/wildflowers/flower_s_r01_1_tris.visual	
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/wildflowers/flower_s_r02_1_tris.visual	
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/wildflowers/flower_s_y03_1_tris.visual	
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/wildflowers/flower_s_y04_1_tris.visual	
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/wildflowers/flower_s_w01_1_tris.visual	
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/wildflowers/flower_s_w02_1_tris.visual	
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/wildflowers/grass_1_tris.visual			
+						<scaleVariation>	0.7		</scaleVariation>
+						</visual>
+					</generator>					
+				</noise>
+				<noise>
+					<frequency>	0.7 </frequency>
+					<generator> visual
+						<visual> flora/wildflowers/flower_s_y01_1_tris.visual	
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/wildflowers/flower_s_y02_1_tris.visual	
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/wildflowers/flower_s_y04_1_tris.visual	
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+					</generator>					
+				</noise>
+				<noise>
+					<frequency>	0.9 </frequency>	
+					<generator> visual
+						<density>	1.0				</density>	
+						<visual> flora/wildflowers/weed_2_tris.visual	
+						<scaleVariation>	0.8		</scaleVariation>
+						</visual>
+						<visual> flora/wildflowers/grass_1_tris.visual			
+						<scaleVariation>	0.7		</scaleVariation>
+						</visual>
+						<visual> flora/wildflowers/grass_1_tris.visual			
+						<scaleVariation>	0.6		</scaleVariation>
+						</visual>
+						<visual> flora/wildflowers/grass_1_tris.visual			
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/wildflowers/grass_1_tris.visual		
+						<scaleVariation>	0.7		</scaleVariation>
+						</visual>
+					</generator>
+				</noise>				
+			</generator>
+		</wildflowers>
+		<cactus>
+			<texture>	maps/landscape/null.dds	</texture>
+			<sound_tag>	grass </sound_tag>
+			<generator> chooseMax
+				<noise>
+					<frequency>	0.1 </frequency>
+					<generator> visual
+						<density>	0.08				</density>	
+						<visual> flora/cactus/cactus01_16_tris.visual	
+						<flex>	0.0	</flex>	
+						<scaleVariation>	0.7		</scaleVariation>
+						</visual>
+						<visual> flora/cactus/cactus01_16_tris.visual	
+						<flex>	0.0	</flex>	
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+					</generator>					
+				</noise>
+			</generator>
+		</cactus>
+		<cactus_ball>
+			<texture>	maps/landscape/rock_sand04.dds	</texture>
+			<sound_tag>	grass </sound_tag>
+			<generator> chooseMax
+				<noise>
+					<frequency>	0.8 </frequency>
+					<generator> visual
+						<density>	0.3				</density>	
+						<visual> flora/cactus_ball/cactus_ball_8_tris.visual	
+						<flex>	0.0	</flex>	
+						<scaleVariation>	0.7		</scaleVariation>
+						</visual>
+						<visual> flora/cactus_ball/cactus_ball_8_tris.visual
+						<flex>	0.0	</flex>	
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+					</generator>					
+				</noise>
+			</generator>
+		</cactus_ball>
+		<corn>			
+			<texture>	maps/landscape/lev_dirt02.dds	</texture>
+			<density>	1.0				</density>	
+			<visual> flora/corn/corn_4_tris.visual
+			<flex>	0.3	</flex>	
+			<scaleVariation>	0.7		</scaleVariation>
+			</visual>		
+			<sound_tag>	woods </sound_tag>
+		</corn>
+		<steppe_purple>
+			<texture>	maps/landscape/lev_grass_01.dds	</texture>
+			<sound_tag>	grass </sound_tag>
+			<generator> chooseMax
+				<noise>
+					<frequency>	0.65 </frequency>
+					<generator> visual
+						<density>	1.0				</density>	
+						<visual> flora/steppe_purpleflowers/purpleflower01.visual
+						<scaleVariation>	0.7		</scaleVariation>
+						</visual>
+						<visual> flora/steppe_purpleflowers/purpleflower02.visual
+						<scaleVariation>	0.8		</scaleVariation>
+						</visual>
+						<visual> flora/steppe_purpleflowers/purpleflower03.visual
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+					</generator>					
+				</noise>
+				<noise>
+					<frequency>	0.7 </frequency>
+					<generator> visual
+						<visual> flora/steppe_purpleflowers/widegrass.visual
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+					</generator>					
+				</noise>
+				<noise>
+					<frequency>	0.9 </frequency>	
+					<generator> visual
+						<density>	1.0				</density>	
+						<visual> flora/steppe_purpleflowers/purpleflower01.visual
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/steppe_purpleflowers/purpleflower02.visual
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/steppe_purpleflowers/purpleflower03.visual
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/steppe_purpleflowers/tallgrass2.visual
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+						<visual> flora/steppe_purpleflowers/widegrass.visual
+						<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+					</generator>
+				</noise>				
+			</generator>
+		</steppe_purple>
+        <snowgrass>
+			<texture>	maps/landscape/minspec_snow.dds	</texture>
+			<!-- The grass ecotype is identified by any part of the terrain
+			that uses these textures.  -->
+			
+			<sound_tag>	grass </sound_tag>
+			<!-- Sound is not supported in BigWorld, however this tag can be
+			used to identify what movement sound should be played by a 3rd
+			party audio engine. -->
+			
+			<generator> chooseMax
+				<noise>
+					<frequency>	0.7 </frequency>
+					<generator> visual
+						<visual> sets/minspec/flora/snowgrass/snowgrass.visual
+							<scaleVariation>	0.2	</scaleVariation>
+						</visual>
+                        <visual> sets/minspec/flora/snowgrass/snowgrass_clump.visual
+							<scaleVariation>	0.8	</scaleVariation>
+						</visual>
+                        <visual> sets/minspec/flora/snowgrass/snowgrass_clump.visual
+							<scaleVariation>	0.2	</scaleVariation>
+						</visual>
+                        <visual> sets/minspec/flora/snowgrass/snowgrass_clump.visual
+							<scaleVariation>	0.2	</scaleVariation>
+						</visual>
+					</generator>				
+				</noise>
+				<!--<noise>
+					<frequency>	0.8 </frequency>	
+					<generator> visual
+						<visual> flora/dry_grass/grass_3_tris.visual
+							<scaleVariation>	0.9		</scaleVariation>
+						</visual>					
+						<visual>  flora/dry_grass/grass_1_tris.visual
+							<scaleVariation>	1.0		</scaleVariation>
+						</visual>
+					</generator>
+				</noise>				
+				<noise>
+					<frequency>	0.70 </frequency>	
+					<generator> visual
+						<visual> flora/dry_grass/grass_3_tris.visual
+							<scaleVariation>	0.7		</scaleVariation>
+						</visual>
+						<visual> flora/dry_grass/grass_1_tris.visual
+							<scaleVariation>	0.9		</scaleVariation>
+						</visual>
+					</generator>
+				</noise>	-->			
+			</generator>
+			<!-- This specifies the detail objects that will be randomly
+			positioned and oriented over this ecotype.  The ecotypes.py
+			script in BigBang (bigworld/tools/worldeditor/resources/scripts)
+			can be used to specify the rules of placement, eg, how steep
+			before object not placed, etc...
+			available generator types are empty, visual, and chooseMax.
+			the chooseMax type uses value generators to choose between
+			it's sub-generators.  available value generators are noise,
+			random and fixed. -->
+		</snowgrass>
+	</ecotypes>
+</flora.xml>
+

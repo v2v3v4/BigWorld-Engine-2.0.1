@@ -1,0 +1,124 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;1.&nbsp;Overview</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="BigWorld Web Integration Reference">
+      <link rel="up" href="index.html" title="BigWorld Web Integration Reference">
+      <link rel="prev" href="index.html" title="BigWorld Web Integration Reference">
+      <link rel="next" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Remote Methods with Return Values">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/web_integration/ch01.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Overview</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Web_Integration_Reference"></a>Chapter&nbsp;1.&nbsp;Overview
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch01.html#d0e40">1.1. Security</a></span></dt>
+               </dl>
+            </div>
+            <p>This document describes extensions to the popular scripting languages
+               PHP and Python that allow for BigWorld functionality to be integrated into a
+               web server. This document assumes familiarity with either PHP or Python, and
+                 elaborates on a Linux-based Apache PHP/Python web server setup (related to
+                 the <em class="emphasis">LAMP architecture</em>). It also assumes familiarity
+                 with concepts presented in the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>.
+            </p>
+            <p>For an example on how to implement a web interface to a running
+                 BigWorld game cluster and a web auctioning system, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_web_integration/index.html" class="olink">How To Implement Web Integration</a>.
+            </p>
+            <p>Using these extension modules, a web interface can be constructed that
+                 accesses script-level BigWorld functionality. This can then be delivered to
+                 devices that are web-aware, such as mobile phones, PC browsers, PDAs, and so
+                 on.
+            </p>
+            <p>It should also be noted that while this interface was designed around
+                 the needs of a web scripting interface, it is not web specific in that it
+                 may be imported by any Python 2.6 (or PHP) instance and used whenever you
+                 require an external scripting interface to the base entities on your server.
+                 Examples include custom administrative tools and statistic gathering
+                 scripts.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e40"></a>1.1.&nbsp;Security
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Web security should be a part of all web applications. Therefore,
+                      when implementing a BigWorld-aware web application, care must be taken to
+                      ensure that users are not able to access privileged information or have
+                      unlimited privileged access to the game script interface.
+               </p>
+               <p>From a low-level security point of view, Apache supports HTTPS
+                      transport that is transparent to modules used for PHP and mod_python
+                      scripting &#8212; for details on how to enable this feature, see the Apache
+                      documentation .
+               </p>
+               <p>From a scripting point of view, much of what is relevant to other
+                      web applications with regards to security applies equally to
+                      BigWorld-aware web applications. Because the web integration module must
+                      be run inside the cluster, care must be taken when designing interfaces to
+                      the game. For example, the standard for web applications is to not expose
+                      the database backend to users by giving them access to executing raw shell
+                      commands or SQL statements. In the same way, do not give users
+                      inappropriate privileged access to the BigWorld backend by giving them the
+                      ability to run arbitrary script commands. The web integration module does
+                      not have the same concepts of Areas of Interest or client controlled
+                      entities, so extra care must be taken when accessing game state using this
+                      interface.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">BigWorld Web Integration Reference&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;Remote Methods with Return Values</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,41 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>How To Add Vertex Colours Or A Second UV Channel</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_Add_Vertex_Colour_Or_Second_UV"></a>How To Add Vertex Colours Or A Second UV Channel</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Introduction">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#xref_Exporting">2. Exporting vertex data</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e28">2.1. Setup</a></span></dt><dt><span class="section"><a href="#d0e33">2.2. Authoring the content</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_CreatingTheShader">3. Using the vertex data in a shader</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e41">3.1. Using Vertex Colour</a></span></dt><dt><span class="section"><a href="#d0e61">3.2. Using A Second UV Channel</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Introduction"></a>Chapter&nbsp;1.&nbsp;Introduction</h2></div></div></div><p>BigWorld has a standard set of vertex formats used in the 3D engine
+    to store the required information for rendering. This data storage covers
+    the majority of usage cases, but some times more information is needed.
+    This document describes a way of utlilising the new vertex colour and uv
+    coordinate data stream to export vertex colours or extra texture
+    coordinate information from 3dsmax or Maya and then load and use this data
+    in a custom shader.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Exporting"></a>Chapter&nbsp;2.&nbsp;Exporting vertex data</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e28">2.1. Setup</a></span></dt><dt><span class="section"><a href="#d0e33">2.2. Authoring the content</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e28"></a>2.1.&nbsp;Setup</h2></div></div></div><p>To set up BigWorld to use the extra vertex streams, make sure your
+      chosen exporter (max/maya) is installed properly and your export
+      pipeline is functioning (exporting a model from Max / Maya and loading
+      it in Model Editor).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e33"></a>2.2.&nbsp;Authoring the content</h2></div></div></div><p>The actual authoring of the extra vertex data is different
+      depending on which authoring tool being used. Just ensure that only one
+      extra vertex colour/uv set is created for each model. The extra vertex
+      data will automatically be detected and appended to the model when it is
+      exported.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_CreatingTheShader"></a>Chapter&nbsp;3.&nbsp;Using the vertex data in a shader</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e41">3.1. Using Vertex Colour</a></span></dt><dt><span class="section"><a href="#d0e61">3.2. Using A Second UV Channel</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e41"></a>3.1.&nbsp;Using Vertex Colour</h2></div></div></div><p>Once you have a model exported with the extra vertex colour data,
+      you will need to make a few shader modifications to use it. The most
+      important part is the modification of the vertex shader input structures
+      to include the new parameter. The vertex colour is bound as an extra
+      stream of vertex data. This stream is linked to the
+      <span class="literal">COLOR0</span> input semantic. So to use the vertex colour in
+      you vertex shader, the input should include something like:</p><pre class="programlisting">float4 colour:	COLOR;</pre><p>The <code class="classname">VertexXYZNDUV</code> structure is used in the
+      example shader. Once you have access to this data inside the vertex
+      shader, you can do whatever use it however you want. The example shader
+      uses the vertex colour to tint the result of the regular lightonly
+      shader.</p><p>You can refer to the
+      <code class="filename">lightonly_vertexcolour.fx</code> file for an example of
+      using the new vertex colour stream.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e61"></a>3.2.&nbsp;Using A Second UV Channel</h2></div></div></div><p>Using a second UV channel is very similar to way the vertex colour
+      is used (described above). The new vertex UV coordinate is bound as an
+      extra stream of vertex data and is linked to the
+      <span class="literal">TEXCOORD1</span> input semantic. So in order to access this
+      data, the vertex input structure should include:</p><pre class="programlisting">float4 uv2:	TEXCOORD1;</pre><p>The example shader uses the extra texture coordinates to sample a
+      second texture and combine it with another texture (sampled with the
+      original coordinates) and combined via the alpha channel of the second
+      texture.</p><p>You can refer to the <code class="filename">lightonly_dual.fx</code> file
+      for an example of using the new secondary vertex uv stream.</p></div></div></div></div></body></html>

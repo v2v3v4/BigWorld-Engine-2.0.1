@@ -1,0 +1,482 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Appendix&nbsp;A.&nbsp;Example</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Build a Server-Controlled Moving Platform">
+      <link rel="up" href="index.html" title="How To Build a Server-Controlled Moving Platform">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Example Code">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_build_moving_platform/apa.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Appendix&nbsp;A.&nbsp;Example</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="appendix" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="d0e246"></a>Appendix&nbsp;A.&nbsp;Example
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="apa.html#d0e249">A.1. <span class="literal">MovingPlatform.py on client </span></a></span></dt>
+                  <dt><span class="section"><a href="apa.html#d0e260">A.2. <span class="literal">MovingPlatform.py</span> on cell</a></span></dt>
+                  <dt><span class="section"><a href="apa.html#d0e275">A.3. <span class="literal">MovingPlatform.py</span> editor script</a></span></dt>
+                  <dt><span class="section"><a href="apa.html#d0e290">A.4. <span class="literal">PlatformNode.py</span> editor script</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e249"></a>A.1.&nbsp;<span class="literal">MovingPlatform.py on client </span></h2>
+                     </div>
+                  </div>
+               </div><pre class="programlisting">import BigWorld
+
+# This implements the MovingPlatform on the Client.
+class MovingPlatform( BigWorld.Entity ):
+
+    PLATFORM_MODEL = 'sets/items/platform.model'
+
+    def __init__( self ):
+        BigWorld.Entity.__init__( self )
+
+
+    def prerequisites( self ):
+        return [ MovingPlatform.PLATFORM_MODEL ]
+
+
+    # This is called by BigWorld when the Entity enters AoI, through creation or movement.
+    def onEnterWorld( self, prereqs ):
+        self.model = BigWorld.PyModelObstacle( MovingPlatform.PLATFORM_MODEL, self.matrix, True )
+
+        # Set appropriate filter for server controlled Entity
+        self.filter = BigWorld.AvatarFilter()
+        self.model.vehicleID = self.id
+
+        BigWorld.addShadowEntity( self )
+
+
+    # This is called by BigWorld when the Entity leaves AoI, through creation or movement.
+    def onLeaveWorld( self ):
+        BigWorld.delShadowEntity( self )
+        self.model = None
+
+
+# MovingPlatform.py</pre><p><span class="citetitle"><span class="literal">MovingPlatform.py</span> on
+                           client</span></p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e260"></a>A.2.&nbsp;<span class="literal">MovingPlatform.py</span> on cell
+                        </h2>
+                     </div>
+                  </div>
+               </div><pre class="programlisting">import BigWorld
+import Math
+import random
+
+# This implements the moving platform on the cell. 
+# The platform follows a path of PlatformNodes that is set in 
+# the editor, starting at the node named in startPatrolNode
+# property.
+class MovingPlatform( BigWorld.Entity ):
+
+     WAIT_AT_NODE_TIMER = 1
+
+     def __init__( self ):
+          BigWorld.Entity.__init__( self )
+
+
+     def onTimer( self, ctrlID, timerID ):
+          if timerID == MovingPlatform.WAIT_AT_NODE_TIMER:
+               try:
+                    self.moveNext()
+          except BigWorld.UnresolvedUDORefException:
+                    self.addTimer( random.uniform( 5, 6 ), 0,
+                                   MovingPlatform.WAIT_AT_NODE_TIMER )
+
+
+     def moveNext( self ):
+          if len( self.startNode.links ) == 0:
+               return
+
+          self.startNode = random.choice( self.startNode.links )
+
+          self.accelerateToPoint( self.startNode.position,
+                                  self.startNode.approachSpeed,
+                                  self.startNode.approachAcceleration,
+                                  0, # FACING_NONE
+                                  self.startNode.waitTime &gt; 0 )
+
+
+     def onMove( self, ctrlID, waitTime ):
+          try:
+               if self.startNode.waitTime &gt; 0:
+                    self.addTimer( self.startNode.waitTime, 0,
+                                   MovingPlatform.WAIT_AT_NODE_TIMER )
+               else:
+                    self.moveNext()
+
+          except BigWorld.UnresolvedUDORefException:
+               self.addTimer( random.uniform( 5, 6 ), 0,
+                              MovingPlatform.WAIT_AT_NODE_TIMER )
+
+
+     def onPassengerAlightAttempt( self, alightEntity ):
+          print "entity", alightEntity.id, "departing"
+          return True
+
+
+     def onPassengerBoardAttempt( self, boardEntity ):
+          print "entity", boardEntity.id, "boarding"
+          return True
+
+
+     # Called from cell/FantasyDemo.py when onAllSpaceGeometryLoaded() event is
+     # received by the cellapp personality script.
+     def onAllSpaceGeometryLoaded( self, spaceID, isBootstrap, mapping ):
+          self.addTimer( 0, 0, MovingPlatform.WAIT_AT_NODE_TIMER )
+
+
+# MovingPlatform.py</pre><p><span class="citetitle"><span class="literal">MovingPlatform.py</span> on
+                           cell</span></p>
+               <p><span class="citetitle"></span></p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e275"></a>A.3.&nbsp;<span class="literal">MovingPlatform.py</span> editor script
+                        </h2>
+                     </div>
+                  </div>
+               </div><pre class="programlisting">class MovingPlatform:
+    def modelName( self, props ):
+        return 'sets/items/platform.model'
+
+    # platform nodes linking conditions
+    def canLink( self, propName, thisInfo, otherInfo ):
+        if otherInfo['type'] == 'PlatformNode':
+            return True
+        else:
+            return False
+
+# MovingPlatform.py
+</pre><p><span class="citetitle"><span class="literal">MovingPlatform.py</span> editor
+                           script</span></p>
+               <p><span class="citetitle"></span></p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e290"></a>A.4.&nbsp;<span class="literal">PlatformNode.py</span> editor script
+                        </h2>
+                     </div>
+                  </div>
+               </div><pre class="programlisting"># Importing WorldEditor to use linking functions
+import WorldEditor
+import re
+
+
+# name of the patrol path link property
+LINK_PROP_NAME = "links"
+
+
+class PlatformNode:
+
+    linkPropertyRE = re.compile( "^links$|^links\[\d+\]$" )
+
+    # return the patrol node model
+    def modelName( self, props ):
+        try:
+            if props['waitTime'] &gt; 0:            
+                return "resources/models/floating_platform_stop.model"
+            else:
+                return "resources/models/floating_platform_node.model"
+        except:
+            return "helpers/props/standin.model"
+
+
+    # patrol nodes always show the "+" gizmo
+    def showAddGizmo( self, propName, thisInfo ):
+        return True
+
+
+    # patrol nodes linking conditions
+    def canLink( self, propName, thisInfo, otherInfo ):
+        if PlatformNode.linkPropertyRE.match( propName ):
+            if otherInfo["type"] != thisInfo["type"]:
+                return False    # PlatformNode to PlatformNode only
+            elif ( thisInfo["guid"], thisInfo["chunk"] ) in otherInfo["properties"]["links"]:
+                return False    # no backlinks
+            elif ( otherInfo["guid"], otherInfo["chunk"] ) in thisInfo["properties"]["links"]:
+                return False    # single links only
+        else:
+            return False
+
+
+    # helper method to remove empty links
+    def cleanupEmptyLinks( self, links ):
+        emptyLink = ("","")
+        while links.__contains__( emptyLink ):
+            links.remove( emptyLink )
+
+
+    # when a node is deleted, other nodes must be relinked
+    def onDeleteObject( self, nodeInfo ):
+        links = nodeInfo["properties"][ LINK_PROP_NAME ]
+        backLinks = nodeInfo["backLinks"]
+        self.cleanupEmptyLinks( links )
+        self.cleanupEmptyLinks( backLinks )
+
+        relinkNode = None
+        linksBegin = 0
+        backLinksBegin = 0
+        if len( links ) &gt; 0:
+            # relink everything to the first outgoing node
+            relinkNode = links[0]
+            linksBegin = 1
+        elif len( backLinks ) &gt; 0:            
+            # relink everything to the first incoming node
+            relinkNode = backLinks[0]
+            backLinksBegin = 1
+        else:
+            return    # nothing to do!
+
+        # Relinking outgoing links
+        for link in links[linksBegin:]:
+            WorldEditor.udoCreateLink( relinkNode[0], relinkNode[1], link[0], link[1], LINK_PROP_NAME )
+
+        # Relinking incoming links (BackLinks)
+        for backlink in backLinks[backLinksBegin:]:
+            WorldEditor.udoCreateLink( backlink[0], backlink[1], relinkNode[0], relinkNode[1], LINK_PROP_NAME )
+
+        WorldEditor.addUndoBarrier( "Relink after deleting PatrolNode" )
+
+
+    # called to get extra context menu commands from the script
+    def onStartLinkMenu( self, startInfo, endInfo ):
+        # we should localise these strings
+        return ("Split link",
+                "",
+                "Swap Link Direction",
+                "Swap Link Directions (Run Of Links)" )
+
+
+    # called when one of the extra context menu commands is clicked
+    def onEndLinkMenu( self, command, startInfo, endInfo ):
+        if command == 0:
+            self.splitLink( startInfo, endInfo )
+        elif command == 1:
+            self.swapLink( startInfo, endInfo )
+        elif command == 2:
+            self.swapLinksRun( startInfo, endInfo )
+        else:
+            WorldEditor.addCommentaryMsg( "PatrolNode: received unknown command " + str(command) + ".", 0 )
+
+
+    # split a link, creating a new node in the middle
+    def splitLink( self, startInfo, endInfo ):
+        startProps = startInfo["properties"]
+        endProps = endInfo["properties"]
+
+        # find out whether the nodes are linked in one or both directions
+        startToEndLink = False
+        endToStartLink = False
+        if ( endInfo["guid"], endInfo["chunk"] ) in startProps[LINK_PROP_NAME]:
+            startToEndLink = True
+        if ( startInfo["guid"], startInfo["chunk"] ) in endProps[LINK_PROP_NAME]:
+            endToStartLink = True
+
+        # create new node
+        midPoint = ( (startInfo["position"][0] + endInfo["position"][0])/2.0,
+                     (startInfo["position"][1] + endInfo["position"][1])/2.0,
+                     (startInfo["position"][2] + endInfo["position"][2])/2.0 )
+        newInfo = WorldEditor.udoCreateAtPosition( startInfo["guid"], startInfo["chunk"], midPoint, False )
+        newProps = newInfo["properties"]
+
+        # delete old links
+        WorldEditor.udoDeleteLinks( startInfo["guid"], startInfo["chunk"], endInfo["guid"], endInfo["chunk"] )
+
+        # relink
+        if startToEndLink:
+            WorldEditor.udoCreateLink( startInfo["guid"], startInfo["chunk"], newInfo["guid"], newInfo["chunk"], LINK_PROP_NAME )
+            WorldEditor.udoCreateLink( newInfo["guid"], newInfo["chunk"], endInfo["guid"], endInfo["chunk"], LINK_PROP_NAME )
+
+        if endToStartLink:
+            WorldEditor.udoCreateLink( endInfo["guid"], endInfo["chunk"], newInfo["guid"], newInfo["chunk"], LINK_PROP_NAME )
+            WorldEditor.udoCreateLink( newInfo["guid"], newInfo["chunk"], startInfo["guid"], startInfo["chunk"], LINK_PROP_NAME )
+            
+        WorldEditor.addUndoBarrier( "Split link" )
+
+
+    # swap the direction of the link
+    def swapLink( self, startInfo, endInfo ):
+        startProps = startInfo["properties"]
+        
+        # find out whether the nodes are linked in one or both directions
+        startToEndLink = False
+        if startProps[LINK_PROP_NAME].__contains__( ( endInfo["guid"], endInfo["chunk"] ) ):
+            startToEndLink = True
+            
+        WorldEditor.udoDeleteLinks( startInfo["guid"], startInfo["chunk"], endInfo["guid"], endInfo["chunk"] )
+        
+        if startToEndLink:
+            WorldEditor.udoCreateLink( endInfo["guid"], endInfo["chunk"], startInfo["guid"], startInfo["chunk"], LINK_PROP_NAME )
+        else:
+            WorldEditor.udoCreateLink( startInfo["guid"], startInfo["chunk"], endInfo["guid"], endInfo["chunk"], LINK_PROP_NAME )
+
+        WorldEditor.addUndoBarrier( "Swap link direction" )
+
+
+    # swap the direction of the link
+    def swapLinksRun( self, startInfo, endInfo ):
+        newDir = "START_END"
+        if ( endInfo["guid"], endInfo["chunk"] ) in startInfo["properties"][LINK_PROP_NAME]:
+            newDir = "END_START"
+
+        self.changeDir( startInfo, endInfo, newDir )
+
+        WorldEditor.addUndoBarrier( "Swap direction of links (run of links)" )
+
+
+    # internal method to change the direction of all traversable links
+    def changeDir( self, startInfo, endInfo, newDir ):
+        # follow links and store them in resultLinks
+        resultLinks = []
+        for dir in [ "forward", "backward" ]:
+            # this loop has two iterations: one for following links from start
+            # to end, and one for following links from end to start.
+            lastInfo = startInfo
+            curInfo = endInfo
+            skipFirstOne = False
+            if dir == "backward":
+                lastInfo = endInfo
+                curInfo = startInfo
+                skipFirstOne = True # skips the first link, processed in "forward"
+
+            while curInfo != None:
+                # Loop for following links.
+                if skipFirstOne:
+                    skipFirstOne = False # skip this one
+                else:
+                    # add the link to the result, or break if we hit a link that
+                    # is in the results already to avoid infinite loops.
+                    startEnd = ( ( lastInfo["guid"], lastInfo["chunk"] ), ( curInfo["guid"], curInfo["chunk"] ) )
+                    endStart = ( ( curInfo["guid"], curInfo["chunk"] ), ( lastInfo["guid"], lastInfo["chunk"] ) )
+                    if resultLinks.__contains__( startEnd ) or resultLinks.__contains__( endStart ):
+                        break
+
+                    if dir == "forward":
+                        resultLinks.append( startEnd );
+                    else:
+                        resultLinks.append( endStart );
+
+                # find the next node
+                links = curInfo["properties"][LINK_PROP_NAME]
+                self.cleanupEmptyLinks( links )
+                numLinks = len(links)
+                if links.__contains__( ( lastInfo["guid"], lastInfo["chunk"] ) ):
+                    numLinks -= 1
+
+                backLinks = curInfo["backLinks"]
+                self.cleanupEmptyLinks( backLinks )
+                numBackLinks = len(backLinks)
+                if backLinks.__contains__( ( lastInfo["guid"], lastInfo["chunk"] ) ):
+                    numBackLinks -= 1
+
+                if numLinks == 1:
+                    # there's a outgoing link, so use it.
+                    nextNode = links[0];
+                    if nextNode == ( lastInfo["guid"], lastInfo["chunk"] ):
+                        # The first link is to the lastInfo, so there must be
+                        # two links, and our next node must be in the second.
+                        nextNode = links[1];
+
+                    lastInfo = curInfo
+                    curInfo = WorldEditor.udoGet( nextNode[0], nextNode[1] );
+
+                elif numBackLinks == 1:
+                    # no outgoing links, but there's a backlink, so use it.
+                    nextNode = backLinks[0];
+                    if nextNode == ( lastInfo["guid"], lastInfo["chunk"] ):
+                        # The first link is to the lastInfo, so there must be
+                        # two links, and our next node must be in the second.
+                        nextNode = backLinks[1];
+
+                    lastInfo = curInfo
+                    curInfo = WorldEditor.udoGet( nextNode[0], nextNode[1] );
+
+                else:
+                    # no suitable links so break.
+                    break
+
+        # do the actual operation on the found links
+        for link in resultLinks:
+            id1 = link[0][0]
+            chunk1 = link[0][1]
+            id2 = link[1][0]
+            chunk2 = link[1][1]
+
+            WorldEditor.udoDeleteLinks( id1, chunk1, id2, chunk2 )
+
+            if newDir == "START_END" or newDir == "BOTH":
+                WorldEditor.udoCreateLink( id1, chunk1, id2, chunk2, LINK_PROP_NAME )
+
+            if newDir == "END_START" or newDir == "BOTH":
+                WorldEditor.udoCreateLink( id2, chunk2, id1, chunk1, LINK_PROP_NAME )
+
+
+</pre><p><span class="citetitle"><span class="literal">PlatformNode.py</span> editor
+                           script</span></p>
+               <p><span class="citetitle"></span></p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Example Code&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

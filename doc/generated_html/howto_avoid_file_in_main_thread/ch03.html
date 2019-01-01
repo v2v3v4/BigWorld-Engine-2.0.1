@@ -1,0 +1,207 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;3.&nbsp;Dynamically loading resources</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Avoid Files Being Loaded in the Main Thread">
+      <link rel="up" href="index.html" title="How To Avoid Files Being Loaded in the Main Thread">
+      <link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Entity.prerequisites()">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Dynamically loading resources</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Dynamically_Loading_Resources"></a>Chapter&nbsp;3.&nbsp;Dynamically loading resources
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch03.html#d0e224">3.1. Using <code class="varname">Entity.prerequisites</code> and
+                               <code class="methodname">BigWorld.loadResourceListBG()</code></a></span></dt>
+               </dl>
+            </div>
+            <p>There are times when you will need to dynamically load resources for
+               an entity, instead of just when they enter the world. This might be due to a
+               property change causing the entity's model to change, or perhaps the entity
+                 switches an item it is holding to one not yet seen before. In these cases,
+                 you will need to load and display a new model or other resource, and you
+                 will need load them in the background thread.
+            </p>
+            <p>The <code class="methodname">BigWorld.loadResourceListBG()</code> method
+                 works just like a dynamic version of
+                 <code class="varname">Entity.prerequisites</code>, it returns an object which
+                 existence ties the lifetime of the requested resources to itself. The actual
+                 resource loaded can be retrieved from the
+                 <code class="classname">PyResourceRefs</code> instance that is passed into the
+                 callback function. The types of Python resources that can be retrieved
+                 are:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Models ( type : PyModel )</p>
+                  </li>
+                  <li>
+                     <p>Particle Systems ( type : PyMetaParticleSystem)</p>
+                  </li>
+                  <li>
+                     <p>Textures ( type : PyTextureProvider )</p>
+                  </li>
+                  <li>
+                     <p>XML files ( type : PyDataSection )</p>
+                  </li>
+                  <li>
+                     <p>FX files ( type : PyMaterial )</p>
+                  </li>
+               </ul>
+            </div>
+            <p>The <code class="methodname">BigWorld.fetchModel()</code> method can be used
+                 to asynchronously load just a <code class="classname">PyModel</code>. For details on
+                 this method, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>.
+            </p>
+            <p>The <code class="methodname">Pixie.loadBG</code> method can be used to
+                 asynchronously load a <code class="classname">PyMetaParticleSystem</code>. For
+                 details on this method, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>.
+            </p>
+            <p>Additionally <code class="methodname">BigWorld.loadResourceListBG()</code>
+                 can be used to hold onto C++ only resources, when you know that these are
+                 causing a problem. Here are the following types that can be loaded, and held
+                 onto, but not retrieved in Python:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Visuals</p>
+                  </li>
+                  <li>
+                     <p>Lens Effects</p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e224"></a>3.1.&nbsp;Using <code class="varname">Entity.prerequisites</code> and
+                               <code class="methodname">BigWorld.loadResourceListBG()</code></h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The <code class="methodname">BigWorld.loadResourceListBG()</code> method is
+                      useful for more complicated entities. For example, say you have an entity
+                      that can change its look at anytime to any of a large number of
+                      combinations. In this case, you can setup your initial look using
+                      prerequisites, but there is no way of knowing at which resources will be
+                      required in the future.
+               </p>
+               <p>In order to implement this case, load the model asynchronously when
+                      needed, as in the following example:
+               </p><pre class="programlisting">class PickableFlower( BigWorld.Entity ):
+  ASSETS = {
+    'lili' : ('models\lili.model', 'effects\sparkles.xml')
+    'daisy' : ('models\daisy.model', 'effects\spirits.xml')
+    'orchid' : ('models\orchid.model', 'effects\petals.xml')
+  }
+
+  PICK_SOUND = 'sounds\pick_flower.wav'
+
+  def __init__(self):
+    pass
+
+
+  # This event handler is called after the entity is initialised,
+  # and its initial properties have been set.  We should return
+  # a list of resources that must be loaded into memory before
+  # onEnterWorld is called.
+  def prerequisite(self):
+    prereqs = []
+    prereqs += PickableFlower.PICK_SOUND
+    prereqs += PickableFlower.ASSETS[self.type]
+    return prereqs
+
+
+  # This event handler is called when the entity is first visible to
+  # the client, and when the prerequisite resources have been loaded.
+  # The prerequisites parameter is a PyResourceRefs instance, and
+  # can be used both to access the loaded resources, and to manage
+  # their lifetime.
+  def onEnterWorld(self, prerequisites):
+    self.set_type(-1, prerequisites)
+
+
+  # This event handler is called whenever the entity type property
+  # is changed.  This can occur at anytime.  If we are calling this
+  # directly from onEnterWorld, the resources are already loaded and
+  # we can use them directly.  Otherwise we must queue up an
+  # asynchronous load of the required resources.
+  def set_type( self, old_type, prerequisites = None ):
+    if self.type != old_type:
+        if prerequisites == None:
+            resourceList = PickableFlower.ASSETS[self.type]
+            BigWorld.loadResourceListBG( resourceList, self.onLoad )
+        else:
+            self.onLoad( prerequisites )
+
+
+  # This user-defined callback function is called either when the
+  # loadResourceListBg method has finished, or is called by ourselves
+  # from enterWorld.
+  def onLoad( self, resourceRefs ):
+    self.model = resourceRefs[ PickableFlower.ASSETS[self.type][0] ]
+    self.particles = resourceRefs[ PickableFlower.ASSETS[self.type][1] ]
+    self.model.root.attach( self.particles )
+
+
+  def onPickEvent(self):
+    # picking sound effect is constant between types
+    self.model.playSound(PickableFlower.PICK_SOUND)
+    self.particles.force(1)</pre><p><span class="citetitle">Asynchronously loading the model</span></p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;<code class="methodname">Entity.prerequisites()</code>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

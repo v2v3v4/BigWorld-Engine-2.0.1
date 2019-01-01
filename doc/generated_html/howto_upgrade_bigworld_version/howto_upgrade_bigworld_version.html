@@ -1,0 +1,146 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>How To Upgrade BigWorld Versions</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_Upgrade_BigWorld_Version"></a>How To Upgrade BigWorld Versions</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_HowTo_Upgrade_BigWorld_Versions">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#xref_Merging">2. Merging BigWorld Into Your Repository</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e38">2.1. Python Bytecode</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Upgrading_Using_Asset_Processor">3. Upgrading using Asset Processor</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e57">3.1. Upgrading using the Asset Processor</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_File_Format_Changes">4. File Format Changes</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e74">4.1. XML Format</a></span></dt><dt><span class="section"><a href="#d0e84">4.2. Font Format</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Client_Script_Changes">5. Client Script Changes</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e111">5.1. Input Handling</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e114">5.1.1. PyKeyEvent</a></span></dt><dt><span class="section"><a href="#d0e170">5.1.2. PyMouseEvent</a></span></dt><dt><span class="section"><a href="#d0e221">5.1.3. PyAxisEvent</a></span></dt><dt><span class="section"><a href="#d0e272">5.1.4. handleCharEvent</a></span></dt><dt><span class="section"><a href="#d0e294">5.1.5. SimpleGUIComponent.mouseButtonFocus</a></span></dt><dt><span class="section"><a href="#d0e325">5.1.6. SimpleGUIComponent.handleMouseButtonEvent</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e353">5.2. Interpretation of Pitch</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e358">5.2.1. Direction Cursor</a></span></dt><dt><span class="section"><a href="#d0e380">5.2.2. Cursor Camera</a></span></dt><dt><span class="section"><a href="#d0e385">5.2.3. TrackerNodeInfo</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#xref_Server_Changes">6. Server Changes</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e402">6.1. Server Hardware Support</a></span></dt><dt><span class="section"><a href="#d0e409">6.2. DBMgr source code</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_HowTo_Upgrade_BigWorld_Versions"></a>Chapter&nbsp;1.&nbsp;Introduction</h2></div></div></div><p>This document details the steps required to upgrade to the current
+  BigWorld Technology version. Customers upgrading from earlier versions
+  should first upgrade their assets to the previous BigWorld Technology
+  version and only then use this document to upgrade to the latest
+  version.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>For details on BigWorld Technology file formats see the document
+    <a xmlns:xlink="http://www.w3.org/1999/xlink" href="file_grammar_guide.html#File_Grammar_Guide" class="olink">File Grammar Guide</a>.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Merging"></a>Chapter&nbsp;2.&nbsp;Merging BigWorld Into Your Repository</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e38">2.1. Python Bytecode</a></span></dt></dl></div><p>After you have downloaded the latest BigWorld version, it will be
+  nescessary at some point to migrate the official BigWorld release into your
+  own repository. This chapter aims to outline some issues you may encounter
+  in that process and how you can avoid or alleviate them.</p><p>The best approach to use for merging two branches together is to use a
+  fresh checkout of both branches so that no changes are lost due to confusion
+  about their origin. Ideally any modifications that are specific to your
+  project will be located in project specific libraries or directories that
+  are not modified by BigWorld. This will help to speed up the merge process
+  and help to make the type of changes that you need to deal with much
+  simpler.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e38"></a>2.1.&nbsp;Python Bytecode</h2></div></div></div><p>If you have either committed the Python generated bytecode <code class="filename">.pyc</code> files, or have a copy of them in the
+    directory you are merging into, please ensure that you remove these files
+    prior to merging. As the version of Python has been updated, this will
+    help to remove any conflicts that may arise from mis-matching files. To
+    remove all bytecode files at once you can perform the following
+    commands:</p><p>For Windows users:</p><pre class="programlisting">del /s *.pyc</pre><p>For Linux users:</p><pre class="programlisting">find . -name '*.pyc' | xargs rm -f</pre></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Upgrading_Using_Asset_Processor"></a>Chapter&nbsp;3.&nbsp;Upgrading using Asset Processor</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e57">3.1. Upgrading using the Asset Processor</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57"></a>3.1.&nbsp;Upgrading using the Asset Processor</h2></div></div></div><p>The Asset Processor Python script will automatically upgrade your
+    resource tree to the latest BigWorld Technology format. Instructions on
+    using this script can be found in the text file
+    <code class="filename">bigworld/tools/misc/asset_processor/asset_processor.txt</code>.</p><p>For more details about setting up the Asset Processor to deal with
+    font related changes in the latest version, please see the chapter <a href="#xref_File_Format_Changes" title="Chapter&nbsp;4.&nbsp;File Format Changes"><i xmlns:xlink="http://www.w3.org/1999/xlink">File Format Changes</i></a>.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_File_Format_Changes"></a>Chapter&nbsp;4.&nbsp;File Format Changes</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e74">4.1. XML Format</a></span></dt><dt><span class="section"><a href="#d0e84">4.2. Font Format</a></span></dt></dl></div><p>This chapter describes changes made to BigWorld Technology's file
+  formats between this version and the previous version.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74"></a>4.1.&nbsp;XML Format</h2></div></div></div><p>The
+    <code class="classname">DataSection</code><code class="methodname">.asWideString</code>
+    API now expects a UTF-8 string and not a Base64 string. This change is
+    automatically done by Asset Processor to all of the GUI files. Customers
+    which are using wide strings in other XML files and which are using this
+    API to parse these XML files should convert their string from Base64 to
+    UTF-8. XML values using the "!" prefix and an ASCII string will also be
+    converted.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e84"></a>4.2.&nbsp;Font Format</h2></div></div></div><p>The font system has been changed to utilise a glyph-caching system,
+    rather than baking entire font sets out to a texture map. This has been
+    added as part of internationalisation support. In particular, the Font
+    files no longer need a <span class="literal">&lt;generated&gt;</span> section, and
+    they no longer store their <code class="filename">.dds</code>
+    files on disk.</p><p>A new rule has been added to the Asset Processor; running this will
+    change your font files to the new format, thereby enabling the glyph cache
+    for all fonts.</p><p>If you have any fonts that you do not want changed, for example if
+    you are using artist-modified font textures, then add the names of the
+    font files you wish to exclude from the process to
+    <code class="filename">bigworld/tools/misc/asset_processor/FontGlyphCacheUpdate.py</code></p><p>Once the AssetProcessor has been run, you will be able to see in the
+    output log which fonts were modified. You can then delete their associated
+    <code class="filename">.dds</code> files from your source control
+    repository.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Client_Script_Changes"></a>Chapter&nbsp;5.&nbsp;Client Script Changes</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e111">5.1. Input Handling</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e114">5.1.1. PyKeyEvent</a></span></dt><dt><span class="section"><a href="#d0e170">5.1.2. PyMouseEvent</a></span></dt><dt><span class="section"><a href="#d0e221">5.1.3. PyAxisEvent</a></span></dt><dt><span class="section"><a href="#d0e272">5.1.4. handleCharEvent</a></span></dt><dt><span class="section"><a href="#d0e294">5.1.5. SimpleGUIComponent.mouseButtonFocus</a></span></dt><dt><span class="section"><a href="#d0e325">5.1.6. SimpleGUIComponent.handleMouseButtonEvent</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e353">5.2. Interpretation of Pitch</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e358">5.2.1. Direction Cursor</a></span></dt><dt><span class="section"><a href="#d0e380">5.2.2. Cursor Camera</a></span></dt><dt><span class="section"><a href="#d0e385">5.2.3. TrackerNodeInfo</a></span></dt></dl></dd></dl></div><p>Customers should update their Python scripts based on the below
+  changes:</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e111"></a>5.1.&nbsp;Input Handling</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e114"></a>5.1.1.&nbsp;PyKeyEvent</h3></div></div></div><p>Keyboard, mouse button, and joystick button event information is
+      now encapsulated within the <code class="classname">PyKeyEvent</code> class.
+      Python scripts will need to be updated in the following
+      locations:</p><div class="itemizedlist"><ul type="disc"><li><p>The personality script event handler
+          <code class="methodname">handleKeyEvent</code> now takes a single
+          parameter, which is a <code class="classname">PyKeyEvent</code>
+          instance.</p></li><li><p><code class="methodname">GUI.handleKeyEvent</code> now takes a single
+          parameter, which should be a <code class="classname">PyKeyEvent</code>
+          instance.</p></li><li><p>The <code class="methodname">handleKeyEvent</code> and
+          <code class="methodname">handleMouseButtonEvent</code> methods on
+          <code class="classname">SimpleGUIComponent</code> scripts need to be
+          adjusted in the same way so that they take a single
+          <code class="classname">PyKeyEvent</code> parameter.</p></li><li><p><code class="methodname">BaseCamera.handleKeyEvent</code> now takes a
+          <code class="classname">PyKeyEvent</code> .</p></li></ul></div><p>See the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="index.html#Client_Python_API" class="olink">Client Python API</a> for details on the
+      <code class="classname">PyKeyEvent</code> class.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e170"></a>5.1.2.&nbsp;PyMouseEvent</h3></div></div></div><p>Mouse movement events are now encapsulated within the
+      <code class="classname">PyMouseEvent</code> class. Python scripts will need to
+      be updated in the following locations:</p><div class="itemizedlist"><ul type="disc"><li><p>The personality script event handler
+          <code class="methodname">handleMouseEvent</code> now takes a single
+          parameter, which is a <code class="classname">PyMouseEvent</code>
+          instance.</p></li><li><p><code class="methodname">GUI.handleMouseEvent</code> now takes a
+          single parameter, which should be a
+          <code class="classname">PyMouseEvent</code> instance.</p></li><li><p>The <code class="methodname">handleMouseEvent</code> methods on
+          <code class="classname">SimpleGUIComponent</code> scripts need to be
+          adjusted in the same way so that they take a
+          <code class="classname">PyKeyEvent</code> rather than passing deltas as
+          individual parameters.</p></li><li><p><code class="methodname">BaseCamera.handleMouseEvent</code> now takes
+          a <code class="classname">PyMouseEvent</code> .</p></li></ul></div><p>See the Python Client API documentation for details on the
+      <code class="classname">PyMouseEvent</code> class.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e221"></a>5.1.3.&nbsp;PyAxisEvent</h3></div></div></div><p>Joystick axis events are now encapsulated within the
+      <code class="classname">PyAxisEvent</code> class. Python scripts will need to be
+      updated in the following locations:</p><div class="itemizedlist"><ul type="disc"><li><p>The personality script event handler
+          <code class="methodname">handleAxisEvent</code> now takes a single
+          parameter, which is a <code class="classname">PyAxisEvent</code>
+          instance.</p></li><li><p><code class="methodname">GUI.handleAxisEvent</code> now takes a
+          single parameter, which should be a
+          <code class="classname">PyAxisEvent</code> instance.</p></li><li><p>The <code class="methodname">handleMouseEvent</code> methods on
+          <code class="classname">SimpleGUIComponent</code> scripts need to be
+          adjusted in the same way so that they take a
+          <code class="classname">PyKeyEvent</code> rather than passing deltas as
+          individual parameters.</p></li><li><p><code class="methodname">BaseCamera.handleAxisEvent</code> now takes
+          a <code class="classname">PyAxisEvent</code>.</p></li></ul></div><p>See the Python Client API documentation for details on the
+      <code class="classname">PyAxisEvent</code> class.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e272"></a>5.1.4.&nbsp;handleCharEvent</h3></div></div></div><p><code class="methodname">handleCharEvent</code> has been removed as
+      character events are now included as part of the
+      <code class="classname">PyKeyEvent</code> class. Any character input logic needs
+      to be moved to <code class="methodname">handleKeyEvent</code> by checking to
+      see if the <code class="varname">character</code> member of
+      <code class="classname">PyKeyEvent</code> is <span class="literal">None</span> or a valid
+      Unicode string.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e294"></a>5.1.5.&nbsp;SimpleGUIComponent.mouseButtonFocus</h3></div></div></div><p>The <code class="varname">SimpleGUIComponent.mouseButtonFocus</code> now
+      controls a number of events related to the mouse which was previously
+      controlled by the <code class="varname">SimpleGUIComponent.focus</code> property.
+      These are:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="methodname">SimpleGUIComponent.handleMouseButtonEvent</code></p></li><li><p><code class="methodname">SimpleGUIComponent.handleClickEvent</code></p></li></ul></div><p>In order for these events to be called on the component scripts,
+      be sure to set the <code class="varname">mouseButtonFocus</code> attribute to
+      <span class="literal">True</span>, either via the scripts or within the <code class="filename">.gui</code> XML files.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e325"></a>5.1.6.&nbsp;SimpleGUIComponent.handleMouseButtonEvent</h3></div></div></div><p>The
+      <code class="methodname">SimpleGUIComponent.handleMouseButtonEvent</code> will
+      now only be called on one component, which is the top most component
+      located beneath the mouse that has <code class="varname">mouseButtonFocus</code>
+      set to True.</p><p>Previously, <code class="varname">mouseButtonFocus</code> would be called on
+      the top most component as well as each other component that the mouse is
+      under (whether or not it was hidden by another overlapping
+      component).</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Keep in mind that <code class="methodname">handleKeyEvent</code> will
+        still be called for mouse buttons (i.e. it is treated as if it is any
+        other key button press), as it did in previous versions (as long as
+        <code class="methodname">handleMouseButtonEvent</code> returns
+        <span class="literal">False</span>).</p></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e353"></a>5.2.&nbsp;Interpretation of Pitch</h2></div></div></div><p>Previously, the interpretation of a pitch value was inconsistent
+    throughout the BigWorld API. This has now been made consistent. A positive
+    pitch is now consistently interpreted as nose pointing down and a negative
+    pitch as nose pointing up. This has affected a number of APIs.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e358"></a>5.2.1.&nbsp;Direction Cursor</h3></div></div></div><p>The meaning of <span class="literal">minPitch</span> and
+      <span class="literal">maxPitch</span> have been swapped.
+      <span class="literal">minPitch</span> is now the most that the pitch can point
+      upwards and <span class="literal">maxPitch</span> is the most that the pitch can
+      point downwards.</p><p>If the direction cursor setting are read out of
+      <code class="filename">engine_config.xml</code>, the pitch related settings in
+      the directionCursor section may need to be updated.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e380"></a>5.2.2.&nbsp;Cursor Camera</h3></div></div></div><p>If the pitch of the cursor camera is now queried, it will now be
+      the inverse of what it used to be.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e385"></a>5.2.3.&nbsp;TrackerNodeInfo</h3></div></div></div><p>The <span class="literal">minPitch</span> and <span class="literal">maxPitch</span>
+      arguments of <code class="classname">TrackerNodeInfo</code> have the opposite
+      direction than the used to.</p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Server_Changes"></a>Chapter&nbsp;6.&nbsp;Server Changes</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e402">6.1. Server Hardware Support</a></span></dt><dt><span class="section"><a href="#d0e409">6.2. DBMgr source code</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e402"></a>6.1.&nbsp;Server Hardware Support</h2></div></div></div><p>32 bit Linux distributions are no longer supported. Only 64 bit
+    environments are now supported. This change was made as most hardware that
+    has been sold recently has been 64 bit, and the increased memory
+    availability on 64 bit servers is more suited to the requirements of the
+    BigWorld server.</p><p>While there should be no game script related changes needed as a
+    result of this change, any code you have implemented on a 32 bit system
+    will need to be reviewed to ensure it works safely under a 64 bit
+    environment.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e409"></a>6.2.&nbsp;DBMgr source code</h2></div></div></div><p>The DBMgr source code has undergone a cleanup and refactor which has
+    involved separating the bulk of the code into three libraries. The core
+    DBMgr code is still located in <code class="filename">bigworld/src/server/dbmgr</code>, however the XML
+    and MySQL implementations along with the generic DBMgr interface have been
+    moved into <code class="filename">bigworld/src/lib</code>.
+    Specifically the layout of the DBMgr code is as follows:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">bigworld/src/lib/dbmgr_lib</code></p><p>This directory contains the interface required for DBMgr to
+        communicate with specific database implementations, and
+        vice-versa.</p></li><li><p><code class="filename">bigworld/src/lib/dbmgr_mysql</code></p><p>This directory contains the MySQL implementation for DBMgr,
+        SyncDB and ConsolidateDBs.</p></li><li><p><code class="filename">bigworld/src/lib/dbmgr_xml</code></p><p>This directory contains the XML implementation for DBMgr.</p></li></ul></div><p>The most significant change that occurred along with the source code
+    moving location has been the cleanup and separation of the MySQL
+    implementation. Most classes are now contained in their own file, and
+    DBMgr tasks along with property data type mappings have been separated in
+    their own subdirectories.</p></div></div></div></div></body></html>

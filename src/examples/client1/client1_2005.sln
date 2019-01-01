@@ -1,0 +1,146 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client1", "client1_2005.vcproj", "{1F1425F6-2892-4622-A108-1F849689AA26}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81} = {4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}
+		{3F77FD54-39A8-459D-8DD7-0CB9551AA269} = {3F77FD54-39A8-459D-8DD7-0CB9551AA269}
+		{12ED0DA4-E297-4762-90A6-3AEE281E54B3} = {12ED0DA4-E297-4762-90A6-3AEE281E54B3}
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D} = {204D85B9-F793-4F21-99FF-40AC92A08E5D}
+		{452C08A8-4B8E-4275-9207-81840EA8148E} = {452C08A8-4B8E-4275-9207-81840EA8148E}
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141} = {5DC4CC9A-3052-4076-A8D4-FE229C1AC141}
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950} = {1ABB1158-909C-4AD4-9F81-CB38BBA5D950}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cstdmf", "..\..\lib\cstdmf\cstdmf2005.vcproj", "{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "network", "..\..\lib\network\network2005.vcproj", "{452C08A8-4B8E-4275-9207-81840EA8148E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D} = {204D85B9-F793-4F21-99FF-40AC92A08E5D}
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81} = {4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "math", "..\..\lib\math\math3d2005.vcproj", "{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "resmgr", "..\..\lib\resmgr\resmgr2005.vcproj", "{204D85B9-F793-4F21-99FF-40AC92A08E5D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950} = {1ABB1158-909C-4AD4-9F81-CB38BBA5D950}
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81} = {4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zip", "..\..\lib\zip\zip2005.vcproj", "{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "connection", "..\..\lib\connection\connection2005.vcproj", "{12ED0DA4-E297-4762-90A6-3AEE281E54B3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nedalloc", "..\..\lib\third_party\nedalloc\nedmalloc2005.vcproj", "{3F77FD54-39A8-459D-8DD7-0CB9551AA269}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Consumer_Release|Win32 = Consumer_Release|Win32
+		Debug|Win32 = Debug|Win32
+		Evaluation|Win32 = Evaluation|Win32
+		Hybrid|Win32 = Hybrid|Win32
+		PyModule_Hybrid|Win32 = PyModule_Hybrid|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1F1425F6-2892-4622-A108-1F849689AA26}.Consumer_Release|Win32.ActiveCfg = Release|Win32
+		{1F1425F6-2892-4622-A108-1F849689AA26}.Consumer_Release|Win32.Build.0 = Release|Win32
+		{1F1425F6-2892-4622-A108-1F849689AA26}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1F1425F6-2892-4622-A108-1F849689AA26}.Debug|Win32.Build.0 = Debug|Win32
+		{1F1425F6-2892-4622-A108-1F849689AA26}.Evaluation|Win32.ActiveCfg = Hybrid|Win32
+		{1F1425F6-2892-4622-A108-1F849689AA26}.Evaluation|Win32.Build.0 = Hybrid|Win32
+		{1F1425F6-2892-4622-A108-1F849689AA26}.Hybrid|Win32.ActiveCfg = Hybrid|Win32
+		{1F1425F6-2892-4622-A108-1F849689AA26}.Hybrid|Win32.Build.0 = Hybrid|Win32
+		{1F1425F6-2892-4622-A108-1F849689AA26}.PyModule_Hybrid|Win32.ActiveCfg = Hybrid|Win32
+		{1F1425F6-2892-4622-A108-1F849689AA26}.PyModule_Hybrid|Win32.Build.0 = Hybrid|Win32
+		{1F1425F6-2892-4622-A108-1F849689AA26}.Release|Win32.ActiveCfg = Release|Win32
+		{1F1425F6-2892-4622-A108-1F849689AA26}.Release|Win32.Build.0 = Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Consumer_Release|Win32.ActiveCfg = Consumer_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Consumer_Release|Win32.Build.0 = Consumer_Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Debug|Win32.Build.0 = Debug|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Evaluation|Win32.ActiveCfg = Evaluation|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Evaluation|Win32.Build.0 = Evaluation|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Hybrid|Win32.ActiveCfg = Hybrid|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Hybrid|Win32.Build.0 = Hybrid|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Release|Win32.ActiveCfg = Release|Win32
+		{4642B64B-ABF7-4FAB-903E-EB1E7CBF8A81}.Release|Win32.Build.0 = Release|Win32
+		{452C08A8-4B8E-4275-9207-81840EA8148E}.Consumer_Release|Win32.ActiveCfg = Consumer_Release|Win32
+		{452C08A8-4B8E-4275-9207-81840EA8148E}.Consumer_Release|Win32.Build.0 = Consumer_Release|Win32
+		{452C08A8-4B8E-4275-9207-81840EA8148E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{452C08A8-4B8E-4275-9207-81840EA8148E}.Debug|Win32.Build.0 = Debug|Win32
+		{452C08A8-4B8E-4275-9207-81840EA8148E}.Evaluation|Win32.ActiveCfg = Evaluation|Win32
+		{452C08A8-4B8E-4275-9207-81840EA8148E}.Evaluation|Win32.Build.0 = Evaluation|Win32
+		{452C08A8-4B8E-4275-9207-81840EA8148E}.Hybrid|Win32.ActiveCfg = Hybrid|Win32
+		{452C08A8-4B8E-4275-9207-81840EA8148E}.Hybrid|Win32.Build.0 = Hybrid|Win32
+		{452C08A8-4B8E-4275-9207-81840EA8148E}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{452C08A8-4B8E-4275-9207-81840EA8148E}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{452C08A8-4B8E-4275-9207-81840EA8148E}.Release|Win32.ActiveCfg = Release|Win32
+		{452C08A8-4B8E-4275-9207-81840EA8148E}.Release|Win32.Build.0 = Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Consumer_Release|Win32.ActiveCfg = Consumer_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Consumer_Release|Win32.Build.0 = Consumer_Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Debug|Win32.Build.0 = Debug|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Evaluation|Win32.ActiveCfg = Evaluation|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Evaluation|Win32.Build.0 = Evaluation|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Hybrid|Win32.ActiveCfg = Hybrid|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Hybrid|Win32.Build.0 = Hybrid|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Release|Win32.ActiveCfg = Release|Win32
+		{5DC4CC9A-3052-4076-A8D4-FE229C1AC141}.Release|Win32.Build.0 = Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Consumer_Release|Win32.ActiveCfg = Consumer_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Consumer_Release|Win32.Build.0 = Consumer_Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Debug|Win32.Build.0 = Debug|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Evaluation|Win32.ActiveCfg = Evaluation|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Evaluation|Win32.Build.0 = Evaluation|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Hybrid|Win32.ActiveCfg = Hybrid|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Hybrid|Win32.Build.0 = Hybrid|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Release|Win32.ActiveCfg = Release|Win32
+		{204D85B9-F793-4F21-99FF-40AC92A08E5D}.Release|Win32.Build.0 = Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Consumer_Release|Win32.ActiveCfg = Consumer_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Consumer_Release|Win32.Build.0 = Consumer_Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Debug|Win32.Build.0 = Debug|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Evaluation|Win32.ActiveCfg = Evaluation|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Evaluation|Win32.Build.0 = Evaluation|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Hybrid|Win32.ActiveCfg = Hybrid|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Hybrid|Win32.Build.0 = Hybrid|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Release|Win32.ActiveCfg = Release|Win32
+		{1ABB1158-909C-4AD4-9F81-CB38BBA5D950}.Release|Win32.Build.0 = Release|Win32
+		{12ED0DA4-E297-4762-90A6-3AEE281E54B3}.Consumer_Release|Win32.ActiveCfg = Consumer_Release|Win32
+		{12ED0DA4-E297-4762-90A6-3AEE281E54B3}.Consumer_Release|Win32.Build.0 = Consumer_Release|Win32
+		{12ED0DA4-E297-4762-90A6-3AEE281E54B3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{12ED0DA4-E297-4762-90A6-3AEE281E54B3}.Debug|Win32.Build.0 = Debug|Win32
+		{12ED0DA4-E297-4762-90A6-3AEE281E54B3}.Evaluation|Win32.ActiveCfg = Evaluation|Win32
+		{12ED0DA4-E297-4762-90A6-3AEE281E54B3}.Evaluation|Win32.Build.0 = Evaluation|Win32
+		{12ED0DA4-E297-4762-90A6-3AEE281E54B3}.Hybrid|Win32.ActiveCfg = Hybrid|Win32
+		{12ED0DA4-E297-4762-90A6-3AEE281E54B3}.Hybrid|Win32.Build.0 = Hybrid|Win32
+		{12ED0DA4-E297-4762-90A6-3AEE281E54B3}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{12ED0DA4-E297-4762-90A6-3AEE281E54B3}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{12ED0DA4-E297-4762-90A6-3AEE281E54B3}.Release|Win32.ActiveCfg = Release|Win32
+		{12ED0DA4-E297-4762-90A6-3AEE281E54B3}.Release|Win32.Build.0 = Release|Win32
+		{3F77FD54-39A8-459D-8DD7-0CB9551AA269}.Consumer_Release|Win32.ActiveCfg = Consumer_Release|Win32
+		{3F77FD54-39A8-459D-8DD7-0CB9551AA269}.Consumer_Release|Win32.Build.0 = Consumer_Release|Win32
+		{3F77FD54-39A8-459D-8DD7-0CB9551AA269}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3F77FD54-39A8-459D-8DD7-0CB9551AA269}.Debug|Win32.Build.0 = Debug|Win32
+		{3F77FD54-39A8-459D-8DD7-0CB9551AA269}.Evaluation|Win32.ActiveCfg = Evaluation|Win32
+		{3F77FD54-39A8-459D-8DD7-0CB9551AA269}.Evaluation|Win32.Build.0 = Evaluation|Win32
+		{3F77FD54-39A8-459D-8DD7-0CB9551AA269}.Hybrid|Win32.ActiveCfg = Hybrid|Win32
+		{3F77FD54-39A8-459D-8DD7-0CB9551AA269}.Hybrid|Win32.Build.0 = Hybrid|Win32
+		{3F77FD54-39A8-459D-8DD7-0CB9551AA269}.PyModule_Hybrid|Win32.ActiveCfg = PyModule_Hybrid|Win32
+		{3F77FD54-39A8-459D-8DD7-0CB9551AA269}.PyModule_Hybrid|Win32.Build.0 = PyModule_Hybrid|Win32
+		{3F77FD54-39A8-459D-8DD7-0CB9551AA269}.Release|Win32.ActiveCfg = Release|Win32
+		{3F77FD54-39A8-459D-8DD7-0CB9551AA269}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

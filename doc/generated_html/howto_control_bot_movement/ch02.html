@@ -1,0 +1,152 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;2.&nbsp;The MovementFactory</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Write a Bot Movement Controller">
+      <link rel="up" href="index.html" title="How To Write a Bot Movement Controller">
+      <link rel="prev" href="ch01.html" title="Chapter&nbsp;1.&nbsp;What is a Movement Controller?">
+      <link rel="next" href="ch03.html" title="Chapter&nbsp;3.&nbsp;The MovementController">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_control_bot_movement/ch02.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;2.&nbsp;The <code class="classname">MovementFactory</code></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="d0e71"></a>Chapter&nbsp;2.&nbsp;The <code class="classname">MovementFactory</code></h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch02.html#d0e87">2.1. Constructor and global registration</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#xref_The_create_Method">2.2. The <code class="methodname">create()</code> method</a></span></dt>
+               </dl>
+            </div>
+            <p>We will deal with the implementation of the
+                   <code class="classname">MovementFactory</code> first because you cannot test your
+                   <code class="classname">MovementController</code> without a working one, and it
+                   also illustrates the parameters that will be available to your
+                   <code class="classname">MovementController</code> when it is instantiated.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e87"></a>2.1.&nbsp;Constructor and global registration
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The <code class="classname">MovementFactory</code> need not be declared in
+                        your <code class="classname">MovementController</code>'s header file, as it will
+                        never be instantiated directly. Instead, you will declare a single
+                        static instance of the <code class="classname">MovementFactory</code> following
+                        its definition, whose constructor globally registers it as the factory
+                        for that controller type.
+               </p>
+               <p>For example, in
+                        <code class="filename">src/server/tools/bots/patrol_graph.cpp</code>:
+               </p><pre class="programlisting">/* Source abbreviated for illustrative purposes */
+namespace
+{
+    class PatrolFactory : public MovementFactory
+    {
+    public:
+        PatrolFactory() : MovementFactory( "Patrol" ) 
+        {
+            /* any required init, usually unnecessary */
+        }
+
+        MovementController *create( const std::string &amp; data, float &amp; speed, Vector3 &amp; position ) 
+        { 
+            /* parse data string and create concrete subclass of MovementController */
+        }
+    };
+
+    PatrolFactory s_patrolFactory;
+}</pre><p>The constructor for <span class="literal">PatrolFactory</span> calls the
+                        constructor of <span class="literal">MovementFactory</span> to globally register
+                        the object as the factory for generating
+                        <span class="literal">MovementController</span> objects of type
+                        <span class="literal">Patrol</span>.
+               </p>
+               <p>After the class definition, we declare a single instance of the
+                        factory class, which will associate itself with the name
+                        <span class="literal">Patrol</span> from that point on. It is useful to declare
+                        the <span class="literal">MovementFactory</span> class in an anonymous namespace
+                        (or declare it static) to avoid polluting the top-level namespace with
+                        the name of the declared instance.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_The_create_Method"></a>2.2.&nbsp;The <code class="methodname">create()</code> method
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The first parameter passed to this method (<span class="literal">const
+                           std::string &amp; data</span>) is the parameter passed to the
+                        <span class="literal">setDefaultControllerData</span> and
+                        <span class="literal">updateMovement</span> watchers when controlling bots. The
+                        <code class="methodname">create()</code> method needs to parse this string, and
+                        then use the parsed data to create an instance of the movement
+                        controller.
+               </p>
+               <p>Additionally, the method receives the speed and position of the
+                        bot, which is usually passed to the constructor of the movement
+                        controller.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>For more details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch07.html" class="olink"><i>Stress Testing with Bots</i></a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;What is a Movement Controller?&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;The MovementController</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

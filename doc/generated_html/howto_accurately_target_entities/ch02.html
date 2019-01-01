@@ -1,0 +1,162 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;2.&nbsp;Creating the targeting boxes</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Perform Accurate Targeting Of Entities">
+      <link rel="up" href="index.html" title="How To Perform Accurate Targeting Of Entities">
+      <link rel="prev" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Introduction">
+      <link rel="next" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Using the SkeletonCollider">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_accurately_target_entities/ch02.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;2.&nbsp;Creating the targeting boxes</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_CreatingTargetingBoxes"></a>Chapter&nbsp;2.&nbsp;Creating the targeting boxes
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch02.html#d0e34">2.1. Setup</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e44">2.2. Creating the boxes</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e87">2.3. Tweaking the boxes</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e34"></a>2.1.&nbsp;Setup
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To set up the accurate targeting, the easiest option is to use the
+                        <span class="literal">BigWorld</span> python console. The first thing we need to
+                        do is the create an instance of the model we want to create targeting
+                        boxes for. You can create an offline instance of an entity at the
+                        players position like this: (in this example we are creating an offline
+                        instance of the creature entity) 
+               </p><pre class="programlisting">player = BigWorld.player
+entityDict = {'creatureType':1,'creatureName':'MyTarget'}
+entityId = BigWorld.createEntity(type, player.spaceID, 0, player.position, (0,0,0), entityDict)
+creature = BigWorld.entities[entityId]</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e44"></a>2.2.&nbsp;Creating the boxes
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>After creating our model we need to create
+                        <span class="literal">BoxAttachment</span> objects that the
+                        <span class="literal">SkeletonCollider</span> can use for the collisions. We give
+                        the attachments the same name as the node they are to be attached to so
+                        they are easier to manage. We also give the box attachments a rough
+                        starting size.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>To get the names of the nodes you can enable the watcher
+                             <span class="literal">"render/Draw Node Labels"</span>, this will display the
+                             node names on the screen.
+                  </p>
+               </div><pre class="programlisting">headBox = BigWorld.BoxAttachment()
+headBox.name = 'biped Head'
+headBox.minBounds = (-0.1, -0.1, -0.1)
+headBox.maxBounds = (0.1, 0.1, 0.1)
+pelvisBox.name = 'biped Pelvis'
+pelvisBox.minBounds = (-0.2, -0.2, -0.2)
+pelvisBox.maxBounds = (0.2, 0.2, 0.2)</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>For simplicity this example only uses two
+                             <span class="literal">BoxAttachment</span> objects. In a real world game you
+                             would probably want to use more than two boxes, and you are free to
+                             use as many or as few bounding boxes that you like
+                  </p>
+               </div>
+               <p>The boxes are then attached to the entity's nodes so that we can
+                        use them for targeting.
+               </p><pre class="programlisting">creature.model.node(headBox.name).attach(headBox)
+creature.model.node(pelvisBox.name).attach(pelvisBox)</pre><p>We can now display the boxes by enabling the watcher
+                        <span class="literal">"Client Settings/displayImpactBoxes"</span>, this can be
+                        done by entering the following in the python console
+               </p><pre class="programlisting">BigWorld.setWatcher('Client Settings/displayImpactBoxes',True)</pre><div class="informalfigure">
+                  <div class="mediaobject"><img src="images/initial_boxes.png"><span class="caption">
+                        <p>Displaying the impact boxes</p></span></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e87"></a>2.3.&nbsp;Tweaking the boxes
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>There are two boxes attached to the body, we would like them to
+                        match the parts of the body they are meant to cover. To do this we need
+                        to tweak the boxes. There are some visual queues to which values are not
+                        correct, the bounding box <span class="literal">x-axis</span> is
+                        <span class="literal">red</span>, the <span class="literal">y-axis</span> is
+                        <span class="literal">green</span> and the <span class="literal">z-axis</span> is
+                        <span class="literal">blue</span>. We can change the min and max bounds of the
+                        boxes to something that fits the objects better:
+               </p><pre class="programlisting">headBox.minBounds=(0,-0.1,-0.05)
+headBox.maxBounds=(0.2,0.1,0.3)
+pelvisBox.minBounds=(-0.3,-0.2,-0.2)
+pelvisBox.maxBounds=(0.4,0.2,0.2)</pre><div class="informalfigure">
+                  <div class="mediaobject"><img src="images/fixed_boxes.png"><span class="caption">
+                        <p>The fixed impact boxes</p></span></div>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Introduction&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;Using the <span class="literal">SkeletonCollider</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

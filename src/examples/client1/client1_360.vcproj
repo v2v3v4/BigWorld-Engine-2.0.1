@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="client1_360"
+	ProjectGUID="{860F2CD0-747F-4A39-AEA1-87914F2E6EA9}"
+	Keyword="Xbox360Proj"
+	>
+	<Platforms>
+		<Platform
+			Name="Xbox 360"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="BigWorld"
+			>
+			<File
+				RelativePath="..\common\client_interface.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\common\common_client_interface.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\common\login_interface.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\common\servconn.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\common\servconn.hpp"
+				>
+			</File>
+		</Filter>
+		<File
+			RelativePath="main.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\pch.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\pch.hpp"
+			>
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

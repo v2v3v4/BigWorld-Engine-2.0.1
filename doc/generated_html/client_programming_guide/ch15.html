@@ -1,0 +1,473 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;15.&nbsp;Water</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch14.html" title="Chapter&nbsp;14.&nbsp;Detail Objects">
+      <link rel="next" href="ch16.html" title="Chapter&nbsp;16.&nbsp;Graphical User Interface (GUI)">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch15.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;15.&nbsp;Water</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch14.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch16.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Water"></a>Chapter&nbsp;15.&nbsp;Water
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch15.html#d0e5096">15.1. Code overview</a></span></dt>
+                  <dt><span class="section"><a href="ch15.html#d0e5216">15.2. Scene generation</a></span></dt>
+                  <dt><span class="section"><a href="ch15.html#xref_Render_Settings">15.3. Render settings</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch15.html#xref_Setting_The_Quality">15.3.1. Setting the quality</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch15.html#xref_Simulation">15.4. Simulation</a></span></dt>
+                  <dt><span class="section"><a href="ch15.html#d0e5419">15.5. Rain</a></span></dt>
+                  <dt><span class="section"><a href="ch15.html#d0e5424">15.6. Water depth</a></span></dt>
+                  <dt><span class="section"><a href="ch15.html#d0e5437">15.7. Watchers</a></span></dt>
+               </dl>
+            </div>
+            <p>Bodies of water can be placed in the world via WorldEditor, using the
+                 provided helper file
+                 <code class="filename">bigworld/res/helpers/misc/water.xml</code> &#8212; for details, see
+                 the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//content_creation.chm" class="olink">Content Creation Manual</a>'s lesson <em class="emphasis">Add Water to the World</em>.
+            </p>
+            <p>As all water objects are VLO's, every instance will create two new
+                 files in the chunk folder (named with a unique ID for each instance):
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><code class="filename">.vlo</code>
+                                 file</em></p>
+                     <p>Contains the XML chunk item section for the water object.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><code class="filename">.odata</code>
+                                 file</em></p>
+                     <p>Contains binary information related to the VLO (in this case, the
+                              water's per-vertex transparency/edging data).
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e5096"></a>15.1.&nbsp;Code overview
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The water implementation is contained in the
+                      <code class="filename">bigworld/src/lib/romp</code> library, more specifically in
+                      the following files:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><code class="filename">chunk_water.cpp</code>,
+                                      <code class="filename">chunk_water.hpp</code></em></p>
+                        <p>Water's link to the BigWorld chunking system.</p>
+                        <p>See also:
+                                   <code class="filename">bigworld/src/lib/chunk/chunk_vlo.cpp</code>, and
+                                   <code class="filename">bigworld/src/lib/chunk/chunk_vlo.hpp</code>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><code class="filename">editor_chunk_water.cpp</code>,
+                                      <code class="filename">editor_chunk_water.hpp</code></em></p>
+                        <p>Editor-related features, like saving, moving, and
+                                   editing.
+                        </p>
+                        <p>See also:
+                                   <code class="filename">bigworld/src/lib/chunk/editor_chunk_vlo.cpp</code> and
+                                   <code class="filename">bigworld/src/lib/chunk/editor_chunk_vlo.hpp</code>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><code class="filename">water.cpp</code>,
+                                      <code class="filename">water.hpp</code>,
+                                      <code class="filename">water.ipp</code></em></p>
+                        <p>The main files. Contains the surface drawing/setup.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><code class="filename">water_scene_renderer.cpp</code>,
+                                      <code class="filename">water_scene_renderer.hpp</code></em></p>
+                        <p>Implementation of the water scene (reflection/refraction)
+                                   generation.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><code class="filename">water_simulation.cpp</code>,
+                                      <code class="filename">water_simulation.hpp</code></em></p>
+                        <p>Implementation of the simulation of water surface.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The water features also uses the shaders below (located in
+                      res/shaders/water):
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><code class="filename">water.fx</code></em></p>
+                        <p>Main surface shader for the water.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><code class="filename">simulation.fx</code></em></p>
+                        <p>Shader for simulation of GPU water interaction.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Each <span class="literal">ChunkWater</span> in the world creates its own
+                      <span class="literal">Water</span> object. A <span class="literal">ChunkWater</span> is
+                      created by the first reference <span class="literal">ChunkVLO</span> encountered.
+                      The water is a very large object (VLO), which means that it can
+                      span/belong to more than one chunk. This is implemented by placing a VLO
+                      reference object (<span class="literal">ChunkVLO</span>) into every chunk that the
+                      water overlaps. Each reference is treated like the actual large object,
+                      passing and retrieving data from/to it.
+               </p>
+               <p>Each water object adds itself to the draw list at each frame, with
+                      <span class="literal">Waters::addToDrawList</span>. The engine then draws the list
+                      of water surfaces with a call to
+                      <span class="literal">Waters::drawWaters</span>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e5216"></a>15.2.&nbsp;Scene generation
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>A reflection scene are rendered based on the current water quality
+                      level (for details, see <a href="ch15.html#xref_Setting_The_Quality" title="15.3.1.&nbsp;Setting the quality">Setting the quality</a>). The
+                      reflection scene is a render target that is updated in the main game loop,
+                      during the call to
+                      <span class="literal">TextureRenderer::updateDynamics</span>.
+               </p>
+               <p>Multiple water surfaces can share a reflection render target
+                      (<span class="literal">WaterScene</span> class) if they are both in the same
+                      position on the y-axis. The water scene generation assumes a flat plane
+                      for the water to reflect/clip around the defined y-axis position.
+               </p>
+               <p>The refraction scene uses the Distortion channel texture which
+                      contains a copy of the main render target.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Render_Settings"></a>15.3.&nbsp;Render settings
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The terrain will always be drawn, but everything else is linked to
+                      the current quality setting defined by the following variables:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">WaterSceneRenderer::s_drawDynamics_</span></em></p>
+                        <p>Determines if dynamic objects are drawn into the water
+                                   scene.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">WaterSceneRenderer::s_drawPlayer_</span></em></p>
+                        <p>Determines if the player model is drawn into the water
+                                   scene.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">WaterSceneRenderer::s_drawTrees_</span></em></p>
+                        <p>Determines if trees are drawn into the water scene.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">WaterSceneRenderer::s_maxReflectionDistance_</span></em></p>
+                        <p>Maximum distance that a dynamic object can be away from the
+                                   water. Default value is 25.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">WaterSceneRenderer::s_maxReflections_</span></em></p>
+                        <p>Maximum number of dynamic objects to draw. Default value is
+                                   10.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">WaterSceneRenderer::s_useClipPlane_</span></em></p>
+                        <p>Toggles the use of the hardware clipping planes</p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Setting_The_Quality"></a>15.3.1.&nbsp;Setting the quality
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The Water::init method is used to initialise the graphics settings
+                           options menu link and the FX files, and is only called once. It will
+                           make available the following menu items:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">Water Quality <span class="symbol">&#8594;</span> High</em> &#8212; Invoked method:
+                                        <span class="literal">Waters::setQualityOption</span></p>
+                           <p>All world items are drawn in the water scenes. Highest detail
+                                        shader is also used.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Water Quality <span class="symbol">&#8594;</span> Mid</em> &#8212; Invoked method:
+                                        <span class="literal">Waters::setQualityOption</span></p>
+                           <p>Except for dynamic objects, all world items are drawn in the
+                                        water scenes.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Water Quality <span class="symbol">&#8594;</span> Low</em> &#8212; Invoked method:
+                                        <span class="literal">Waters::setQualityOption</span></p>
+                           <p>Player, trees and sky are drawn in the Reflection. Reflection
+                                        texture size is reduced.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Water Quality <span class="symbol">&#8594;</span> Lowest</em> &#8212; Invoked method:
+                                        <span class="literal">Waters::setQualityOption</span></p>
+                           <p>Dynamic objects, player drawing, terrain and trees are
+                                        disabled. Only the sky will be drawn into the reflection.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Water Simulation Quality <span class="symbol">&#8594;</span> High</em> &#8212; Invoked method:
+                                        <span class="literal">Waters::setSimulationOption</span></p>
+                           <p>Perturbations can propagate between
+                                        cells<sup>A</sup>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Water Simulation Quality <span class="symbol">&#8594;</span> Low</em> &#8212; Invoked method:
+                                        <span class="literal">Waters::setSimulationOption</span></p>
+                           <p>Simulation is restricted to the individual
+                                        cells<sup>A</sup>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Water Simulation Quality <span class="symbol">&#8594;</span> Off</em> &#8212; Invoked method:
+                                        <span class="literal">Waters::setSimulationOption</span></p>
+                           <p>Simulation is disabled</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p><em class="emphasis"><em class="emphasis">A</em> &#8212; Cells are
+                              sub-divisions of the water surface (for details, see <a href="ch15.html#xref_Simulation" title="15.4.&nbsp;Simulation">Simulation</a>).</em></p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Simulation"></a>15.4.&nbsp;Simulation
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The water surface is divided up into cells with size defined by the
+                      water surface (defaulting to be 100.0 units). Each cell defines an area of
+                      water simulation that can be active.
+               </p>
+               <p>There is a common pool of simulation textures (of size
+                      <span class="literal">MAX_SIM_TEXTURE_BLOCKS</span>) maintained by the
+                      SimulationManager class.
+               </p>
+               <p>A cell is activated when a movement enters its defined area, and is
+                      deactivated after a period of inactivity (defined by
+                      <span class="literal">SimulationManager::maxIdleTime_</span>, with a default value
+                      of 5.0 seconds).
+               </p>
+               <p>When the high detail simulation options are selected, water
+                      movements will propagate to (and activate) neighbouring cells.
+               </p>
+               <p>The maximum number of active movements is defined by
+                      <span class="literal">MAX_SIM_MOVEMENTS</span>. Water movements are passed into the
+                      simulation manager through the Sway system &#8212; for details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_cpp/client/index.html" class="olink">Client C API</a>'s entry <em class="emphasis">Class List
+                         <span class="symbol">&#8594;</span> <span class="literal">ChunkWater</span>,
+                         Public Member Fuction <span class="literal">sway</span></em>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e5419"></a>15.5.&nbsp;Rain
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Water is automatically affected by rain &#8212; there is another
+                      simulation texture block reserved in the SimulationManager, and that is
+                      used for the rain.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e5424"></a>15.6.&nbsp;Water depth
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The water depth is determined by the lowest terrain point underneath
+                      the water. The bounding box generated from this value could also be used
+                      to define a water volume for gameplay purposes. This can be found by
+                      searching for the <span class="literal">bbDeep_ references</span> in
+                      <code class="filename">bigworld/src/lib/romp/water.cpp</code>.
+               </p>
+               <p>This depth information is also used to colour the water's refraction
+                      based on the actual per-pixel depth of the water surface. This uses an MRT
+                      (multiple render target) depth texture generated in the main scene render.
+                      A foaming edge effect is also added using this information.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e5437"></a>15.7.&nbsp;Watchers
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To configure the behaviour of the water system, the watchers below
+                      are used (all watchers are prefixed by <em class="emphasis"><span class="literal">Client Settings/Water/</span></em>):
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">character
+                                         impact</span></em></p>
+                        <p>Strength at which a movement will hit the water surface
+                                   simulation.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">draw</span></em></p>
+                        <p>Defines whether water surfaces are drawn.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">Draw
+                                         Dynamics</span></em></p>
+                        <p>Linked to
+                                   <span class="literal">WaterSceneRenderer::s_drawDynamics_</span>.<sup>A</sup></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">Draw
+                                         Player</span></em></p>
+                        <p>Linked to
+                                   <span class="literal">WaterSceneRenderer::s_drawPlayer_</span>.<sup>A</sup></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">Draw
+                                         Trees</span></em></p>
+                        <p>Linked to
+                                   <span class="literal">WaterSceneRenderer::s_drawTrees_</span>.<sup>A</sup></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">Max Reflection
+                                         Distance</span></em></p>
+                        <p>Linked to
+                                   <span class="literal">WaterSceneRenderer::s_maxReflectionDistance_</span>.<sup>A</sup></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">Max
+                                         Reflections</span></em></p>
+                        <p>Linked to
+                                   <span class="literal">WaterSceneRenderer::s_maxReflections_</span>.<sup>A</sup></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">Scene/Use Clip
+                                         Plane</span></em></p>
+                        <p>Linked to
+                                   <span class="literal">WaterSceneRenderer::s_useClipPlane_</span>.<sup>A</sup></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">water speed
+                                         square</span></em></p>
+                        <p>Speed in which a wave will travel in the water
+                                   simulation.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">wireframe</span></em></p>
+                        <p>Toggles wireframe mode for water surface.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p><em class="emphasis"><em class="emphasis">A</em> &#8212; For details, see
+                         <a href="ch15.html#xref_Render_Settings" title="15.3.&nbsp;Render settings">Render settings</a>.</em></p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch14.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch16.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;14.&nbsp;Detail Objects&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;16.&nbsp;Graphical User Interface (GUI)</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

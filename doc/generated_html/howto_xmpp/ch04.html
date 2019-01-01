@@ -1,0 +1,310 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;4.&nbsp;Implementation</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Use XMPP With BigWorld">
+      <link rel="up" href="index.html" title="How To Use XMPP With BigWorld">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Usage">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Implementation</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_XMPP_Implementation"></a>Chapter&nbsp;4.&nbsp;Implementation
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch04.html#d0e315">4.1. XMPP Module</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#d0e324">4.1.1. xmpp.Connection</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e332">4.1.2. xmpp.Client</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e351">4.1.3. xmpp.Parser</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e359">4.1.4. xmpp.Stanzas</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e367">4.1.5. xmpp.Service</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch04.html#d0e374">4.2. XMPP Roster</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e392">4.3. Avatar Implementation</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#d0e405">4.3.1. Base Implementation</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e438">4.3.2. XMPPClient Interface</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch04.html#d0e446">4.4. XMPP Event Notifier</a></span></dt>
+               </dl>
+            </div>
+            <p>This chapter outlines the important components of BigWorld's XMPP
+                 example that is included with FantasyDemo. It is not intended as a complete
+                 discussion of the implementation, more of a guide to assist you in working
+                 through the parts of the code most relevant to your needs.
+            </p>
+            <p>Python source code relevant to the FantasyDemo example can be found
+                 under the <code class="filename">fantasydemo/res/scripts/</code> directory. Specific
+                 files are outlined below in more detail as each component is
+                 discussed.
+            </p>
+            <p>The BigWorld XMPP example can be broken down into four components that
+                 are worth discussing individually.
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>XMPP Module</p>
+                  </li>
+                  <li>
+                     <p>XMPP Roster</p>
+                  </li>
+                  <li>
+                     <p>Avatar Implementation</p>
+                  </li>
+                  <li>
+                     <p>XMPP Event Notifier</p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e315"></a>4.1.&nbsp;XMPP Module
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Location:
+                      <code class="filename">fantasydemo/res/scripts/base/xmpp/</code></p>
+               <p>At the time of implementing the XMPP example there were no Python
+                      XMPP modules available with a suitable license for redistributing with
+                      BigWorld. As a result BigWorld implemented an small module for
+                      communicating with an XMPP server which can be found in the afore
+                      mentioned directory.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e324"></a>4.1.1.&nbsp;xmpp.Connection
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This module class implements the basic communication with an XMPP
+                           server. It is responsible for talking XMPP over the wire and
+                           communicating the results via the
+                           <code class="classname">xmpp.Connection.ConnectionHandler</code>
+                           interface.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e332"></a>4.1.2.&nbsp;xmpp.Client
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Any object that wishes to communicate with an XMPP server can
+                           inherit from <code class="classname">xmpp.Client</code> and implement concrete
+                           versions of the <code class="methodname">onXmpp*</code> methods to receive
+                           notifications from the server in response to roster events.
+                  </p>
+                  <p>This implementation also passes through a connection handler (see
+                           <code class="classname">xmpp.Connection.ConnectionHandler</code>) in
+                           <code class="methodname">xmppConnect</code> rather than implementing the
+                           methods itself to allow each user of the XMPP client to implement its
+                           own connection based functionality.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e351"></a>4.1.3.&nbsp;xmpp.Parser
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This class offers basic XML parsing to separate data received from
+                           the XMPP server into useable pieces. This class is only used by the
+                           <code class="classname">xmpp.Connection</code> class as part of its
+                           communication with the XMPP server.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e359"></a>4.1.4.&nbsp;xmpp.Stanzas
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This file provides a set of template XML blocks that are used by
+                           the <code class="classname">xmpp.Connection</code> object for communicating with
+                           the XMPP server.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e367"></a>4.1.5.&nbsp;xmpp.Service
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p><code class="classname">xmpp.Service</code> implements a simple
+                           initialisation routine to test that an XMPP server that has been
+                           specified in the configuration file exists and is ready to
+                           communicate.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e374"></a>4.2.&nbsp;XMPP Roster
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Location:
+                      <code class="filename">fantasydemo/res/scripts/common/XMPPRoster.py</code></p>
+               <p>The <code class="classname">XMPPRoster</code> class offers a generic storage
+                      location for friends that exist in a users XMPP roster<sup>[<a name="d0e386" href="#ftn.d0e386">1</a>]</sup>.
+               </p>
+               <p>The XMPPRoster specifically handles the possibility that multiple
+                      transports are in use (eg: XMPP / MSN / ICQ) and allows querying for
+                      friends across all transports.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e392"></a>4.3.&nbsp;Avatar Implementation
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Location:
+                      <code class="filename">fantasydemo/res/scripts/base/Avatar.py</code>,
+                      <code class="filename">fantasydemo/res/scripts/client/Avatar.py</code>,
+                      <code class="filename">fantasydemo/res/scripts/entity_defs/interfaces/XMPPClient.def</code></p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e405"></a>4.3.1.&nbsp;Base Implementation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The Base Avatar class simply inherits from
+                           <code class="classname">xmpp.Client</code> and implements
+                           <code class="classname">xmpp.Connection.ConnectionHandler</code> interface which
+                           is then provided to <code class="methodname">xmppConnect</code>.
+                  </p>
+                  <p>The only point of note with the usage of
+                           <code class="classname">xmpp.Client</code> is that because of the
+                           <code class="classname">xmpp.Connection</code> socket, it is not possible to
+                           backup
+                           <code class="classname">xmpp.Client</code><code class="varname">.xmppConnection</code>.
+                           Thus if an entity that implements <code class="classname">xmpp.Client</code> is
+                           restored, it needs to re-establish the XMPP client connection in the
+                           <code class="methodname">onRestore</code> method.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e438"></a>4.3.2.&nbsp;XMPPClient Interface
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This interface is provided as a simple way to pass through Client
+                           calls to the <code class="classname">xmpp.Client</code> methods that the Avatar
+                           base entity has available due to its inheritance.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e446"></a>4.4.&nbsp;XMPP Event Notifier
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Location:
+                      <code class="filename">fantasydemo/res/scripts/base/XMPPEventNotifier.py</code></p>
+               <p>The XMPP Event Notifier is very similar to the Avatar example, in
+                      that it uses an <code class="classname">xmpp.Client</code> to communicate with the
+                      XMPP server, however it does not have the same need to inherit from the
+                      <code class="classname">xmpp.Client</code> as it is not a Proxy and will not need
+                      the XMPPClient interface.
+               </p>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e386" href="#d0e386">1</a>] </sup>The XMPP specification refers to a friends list as a roster to
+                             generalise the concept of a collection of users.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Usage&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

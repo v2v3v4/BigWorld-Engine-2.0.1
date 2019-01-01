@@ -1,0 +1,156 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>BigWorld Technology Server Whitepaper</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="BigWorld Technology Server Whitepaper">
+      <link rel="next" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Introduction">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/bigworld_whitepaper/index.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">BigWorld Technology Server Whitepaper</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left">&nbsp;</td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch01.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="book" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h1 class="title"><a name="BigWorld_Whitepaper"></a>BigWorld Technology Server Whitepaper
+                     </h1>
+                  </div>
+                  <div>
+                     <p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p>
+                  </div>
+                  <div>
+                     <p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p>
+                  </div>
+                  <div>
+                     <div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+                           is restricted to authorised users. This document is protected by
+                           copyright laws of Australia, other countries and international treaties.
+                             Unauthorised use, reproduction or distribution of this document, or any
+                             portion of this document, may result in the imposition of civil and
+                             criminal penalties as provided by law.
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <hr>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="chapter"><a href="ch01.html">1. Introduction</a></span></dt>
+                  <dt><span class="chapter"><a href="ch02.html">2. Architecture Overview</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="sect1"><a href="ch02.html#d0e31">2.1. Structural Overview</a></span></dt>
+                        <dt><span class="sect1"><a href="ch02.html#d0e55">2.2. Key Features</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="sect2"><a href="ch02.html#d0e58">2.2.1. Load-Balancing</a></span></dt>
+                              <dt><span class="sect2"><a href="ch02.html#d0e87">2.2.2. Scalability</a></span></dt>
+                              <dt><span class="sect2"><a href="ch02.html#d0e116">2.2.3. Fault Tolerance</a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch03.html">3. Case Studies</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="sect1"><a href="ch03.html#d0e149">3.1. Customer I</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="sect2"><a href="ch03.html#d0e163">3.1.1. Selected Solution:</a></span></dt>
+                              <dt><span class="sect2"><a href="ch03.html#d0e284">3.1.2. Summary</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="sect1"><a href="ch03.html#d0e289">3.2. Customer II</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="sect2"><a href="ch03.html#d0e307">3.2.1. Selected Solution</a></span></dt>
+                              <dt><span class="sect2"><a href="ch03.html#d0e430">3.2.2. Summary</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="sect1"><a href="ch03.html#d0e438">3.3. Customer III</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="sect2"><a href="ch03.html#d0e453">3.3.1. Selected Solution:</a></span></dt>
+                              <dt><span class="sect2"><a href="ch03.html#d0e574">3.3.2. Summary</a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch04.html">4. Demonstration and Analysis</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="sect1"><a href="ch04.html#d0e582">4.1. Introduction</a></span></dt>
+                        <dt><span class="sect1"><a href="ch04.html#d0e593">4.2. BigWorld Tools</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="sect2"><a href="ch04.html#d0e598">4.2.1. Stat Logger</a></span></dt>
+                              <dt><span class="sect2"><a href="ch04.html#xref_Tools_SpaceViewer">4.2.2. Space Viewer</a></span></dt>
+                              <dt><span class="sect2"><a href="ch04.html#xref_Tools_Bots">4.2.3. Bots</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="sect1"><a href="ch04.html#d0e658">4.3. Test Environment</a></span></dt>
+                        <dt><span class="sect1"><a href="ch04.html#d0e663">4.4. Hardware Configuration</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="sect2"><a href="ch04.html#xref_IBM_Cluster_1">4.4.1. IBM Test Cluster 1</a></span></dt>
+                              <dt><span class="sect2"><a href="ch04.html#d0e675">4.4.2. IBM Test Cluster 2</a></span></dt>
+                              <dt><span class="sect2"><a href="ch04.html#d0e682">4.4.3. BigWorld Local Test Cluster</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="sect1"><a href="ch04.html#d0e687">4.5. Game Configuration</a></span></dt>
+                        <dt><span class="sect1"><a href="ch04.html#xref_Feature_Demonstration">4.6. Feature Demonstrations</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="sect2"><a href="ch04.html#d0e705">4.6.1. Server Scalability</a></span></dt>
+                              <dt><span class="sect2"><a href="ch04.html#d0e748">4.6.2. Load Balancing</a></span></dt>
+                              <dt><span class="sect2"><a href="ch04.html#d0e808">4.6.3. Scalability Demonstration</a></span></dt>
+                              <dt><span class="sect2"><a href="ch04.html#d0e837">4.6.4. Fault Tolerance</a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch05.html">5. Summary</a></span></dt>
+               </dl>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left">&nbsp;</td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch01.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">&nbsp;</td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;1.&nbsp;Introduction</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

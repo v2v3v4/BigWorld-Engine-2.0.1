@@ -1,0 +1,1238 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;19.&nbsp;Implementing Common Systems</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch18.html" title="Chapter&nbsp;18.&nbsp;Transactions and Handling Fault Tolerance and Disaster Recovery">
+      <link rel="next" href="ch20.html" title="Chapter&nbsp;20.&nbsp;User Authentication and Billing System Integration">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch19.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;19.&nbsp;Implementing Common Systems</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch18.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch20.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Implementing_Common_Systems"></a>Chapter&nbsp;19.&nbsp;Implementing Common Systems
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch19.html#d0e12819">19.1. General Scalability</a></span></dt>
+                  <dt><span class="section"><a href="ch19.html#d0e12838">19.2. Internal inter-component communication</a></span></dt>
+                  <dt><span class="section"><a href="ch19.html#d0e12847">19.3. Player AoI Updates</a></span></dt>
+                  <dt><span class="section"><a href="ch19.html#d0e12893">19.4. BigWorld Database Scalability</a></span></dt>
+                  <dt><span class="section"><a href="ch19.html#d0e12935">19.5. Player Look-up</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch19.html#d0e12938">19.5.1. Requirements</a></span></dt>
+                        <dt><span class="section"><a href="ch19.html#d0e12950">19.5.2. Design</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch19.html#d0e13027">19.6. Friends lists</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch19.html#d0e13030">19.6.1. Requirements</a></span></dt>
+                        <dt><span class="section"><a href="ch19.html#d0e13045">19.6.2. Design</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch19.html#d0e13242">19.7. Chat</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch19.html#d0e13255">19.7.1. P2P</a></span></dt>
+                        <dt><span class="section"><a href="ch19.html#d0e13287">19.7.2. AoI-based broadcast chat</a></span></dt>
+                        <dt><span class="section"><a href="ch19.html#d0e13308">19.7.3. Non-AoI-based broadcast chat</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch19.html#d0e13337">19.8. Mail</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch19.html#d0e13340">19.8.1. Requirements</a></span></dt>
+                        <dt><span class="section"><a href="ch19.html#d0e13345">19.8.2. Design</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch19.html#d0e13356">19.9. Inventory System</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch19.html#d0e13359">19.9.1. Requirements</a></span></dt>
+                        <dt><span class="section"><a href="ch19.html#d0e13371">19.9.2. Design</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch19.html#d0e13399">19.10. AoI-based Trading</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch19.html#d0e13402">19.10.1. Requirements</a></span></dt>
+                        <dt><span class="section"><a href="ch19.html#d0e13411">19.10.2. Design</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>This chapter discusses some general issues that programmers
+                 implementing game systems should keep in mind, and also provides some
+                 example design and implementation of common systems used in MMOGs.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e12819"></a>19.1.&nbsp;General Scalability
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>In general, server processing load, internal network bandwidth and
+                      external network bandwidth scales linearly to the number of players if
+                      player and entity density remain constant. There is a small extra cost as
+                      density increases.
+               </p>
+               <p>Capacity can be added by:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Adding more BaseApps for more external connection points and
+                                   connection processing capacity
+                        </p>
+                     </li>
+                     <li>
+                        <p>Adding more CellApps for more spatial processing capacity</p>
+                     </li>
+                     <li>
+                        <p>Adding a combination of both more BaseApps and more CellApps to
+                                   increase game script processing capacity
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>CellAppMgr, BaseAppMgr and DBMgr are single instances and are
+                      theoretically scaling bottlenecks. CellAppMgr and BaseAppMgr are only
+                      concerned with managing CellApps and BaseApps and have very low load. They
+                      can scale to handling thousands of BaseApps and CellApps. Although
+                      BigWorld's design does not make heavy use of the database, the main
+                      concern for scaling is DBMgr. This is addressed below in BigWorld Database
+                      Scalability.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e12838"></a>19.2.&nbsp;Internal inter-component communication
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The number of BaseApps and CellApps required to sufficiently service
+                      an entity population should generally scale linearly with the number of
+                      entities. Most communication between entities is with those that are
+                      nearby. This is handled by keeping those entities together on CellApps as
+                      much as possible. Other communication involves point-to-point
+                      communication using remote method calls. The main issue here is to try to
+                      minimise situations where entities need to be looked up globally.
+               </p>
+               <p>The DBMgr functionality for writing out entity state is distributed
+                      across the secondary databases for each BaseApp and consolidated when the
+                      entity is retired. See BigWorld Database Scalability below.
+               </p>
+               <p>The general strategy to combating bottlenecks in game script is to
+                      avoid global game systems where possible, such as having singleton
+                      entities that control some operation of the game, for example, trading. In
+                      general, these bottlenecks can be avoided by restructuring game script and
+                      using distributed object methods to implement such global sub-systems,
+                      rather than entrusting the request handling to a single entity. An example
+                      of this is presented below (see AoI-based trading below).
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e12847"></a>19.3.&nbsp;Player AoI Updates
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Updates to some of the entities in a player's AoI are propagated to
+                      the player's client every game tick (by default,
+                      <span class="literal">gameUpdateHertz</span> is 10Hz). The amount of update data
+                      sent to the player's client is constrained to a downstream bit rate (by
+                      default, <span class="literal">bitsPerSecondToClient</span> is 20kbps).
+               </p>
+               <p>These updates consist of property changes and method calls. Every
+                      cell entity keeps a history of these changes, and for each entity in a
+                      player's AoI, the player is updated incrementally about that entity
+                      periodically. The position and direction data of an entity is specially
+                      treated so that only the most recent value of these properties (so called
+                      volatile properties) is sent to the client, instead of the full history of
+                      the property.
+               </p>
+               <p>Internally, entities in an AoI are in a priority queue. The priority
+                      of an entity in a player's AoI determines how long it will be before the
+                      next update about that entity occurs to the player. Generally speaking,
+                      entities closer to the player are updated more frequently than those that
+                      are towards the edge of a player's AoI. Properties can have
+                      <em class="emphasis">Level of Detail</em> (LoD) rules applied so that these
+                      properties will only be updated if the entity is close enough to the
+                      player. See the chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="ch04.html#xref_LOD_Level_Of_Detail_On_Properties" class="olink">LOD (Level of Detail) on Properties</a>.
+               </p>
+               <p>In general, many game operations are localised to the specific area
+                      that a player inhabits. Load balance partitioning is done across each
+                      space depending on the load being generated per cell. As entity densities
+                      increase, the partitioning scheme changes in response to equalise the load
+                      amongst the cells servicing a space. The amount of data per entity that is
+                      sent to the client is also reduced as the density of entities increases.
+                      This reduces a lot of the extra cost due to density and also makes good
+                      use of the client's bandwidth.
+               </p>
+               <p>However, very high entity densities can cause problems by causing
+                      each periodic update to a player client to be overrun with excessive
+                      amounts of entity event data. Recall that the amount of downstream
+                      bandwidth is a configurable constant. Due to the prioritising of change
+                      events of entities in a player's AoI, this can cause updates of entities
+                      further away to be starved if there are many more entities that are closer
+                      to the player.
+               </p>
+               <p>Increasing the downstream bandwidth can improve on this situation,
+                      but eventually, it is usually the client that becomes the limiting factor.
+                      There is a per-entity cost of processing on game clients, for
+                      example:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>processing notifications for each entity's position and
+                                   direction
+                        </p>
+                     </li>
+                     <li>
+                        <p>processing notifications for each entity's property
+                                   changes
+                        </p>
+                     </li>
+                     <li>
+                        <p>processing notifications for each entity's method calls</p>
+                     </li>
+                     <li>
+                        <p>applying physics rules to each entity</p>
+                     </li>
+                     <li>
+                        <p>rendering of each entity</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>There is also a limit to the amount of information that a player can
+                      comprehend. With large numbers of entities nearby, less information tends
+                      to be needed for distant entities.
+               </p>
+               <p>Extreme entity densities that can negatively affect the end-user
+                      experience can be avoided with good game design.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e12893"></a>19.4.&nbsp;BigWorld Database Scalability
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>A brief discussion of the operation of DBMgr and implications for
+                      scalability follow.
+               </p>
+               <p>When entities are checked out of the database, they are assigned to
+                      the least-loaded BaseApp. Once entities are loaded onto a BaseApp they do
+                      not generally migrate away from that BaseApp unless that BaseApp process
+                      terminates, in which case they are restored on other BaseApps in the
+                      system. See the chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="ch15.html" class="olink"><i>Fault Tolerance</i></a>.
+               </p>
+               <p>For each entity that resides on it, the BaseApp is responsible for
+                      collecting all the explicit script writes (from calls to
+                      <code class="methodname">BigWorld.writeToDB()</code>) for that entity over its
+                      checked-out lifetime, as well as the periodic backups for that entity.
+                      These writes are performed on a secondary database stored on the BaseApp
+                      machine. There can be arbitrarily many BaseApps in a cluster, and entities
+                      are statically load-balanced across them when they are instantiated. That
+                      is, they are assigned to the least-loaded BaseApp.
+               </p>
+               <p>When the entity is destroyed, it is checked back into the primary
+                      database, this results in the sum of the database writes in the BaseApp
+                      secondary database for that entity being consolidated back into the
+                      primary database on the DBMgr.
+               </p>
+               <p>This consolidation can be a bottleneck, and there are future
+                      features planned to reduce this so as to not overload the DBMgr. In
+                      general, writing back to the primary database is not a time-critical
+                      operation, so that checking entities back into the database is a
+                      fire-and-forget operation. No data loss is possible as the data is
+                      persisted on the secondary database, and not removed until the
+                      consolidation for that entity is done.
+               </p>
+               <p>On server shutdown, all checked-out entities have their database
+                      writes consolidated back into the primary database. If an unexpected
+                      failure occurs (e.g. power failure), this consolidation can take place on
+                      the next server startup.
+               </p>
+               <p>The following operations on the DBMgr can still be a
+                      bottleneck:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>checking login credentials</p>
+                     </li>
+                     <li>
+                        <p>handling lookup requests for entities by name or database
+                                   ID
+                        </p>
+                     </li>
+                     <li>
+                        <p>loading entities from the persistent storage</p>
+                     </li>
+                     <li>
+                        <p>writing entity state when entities are checked back into
+                                   persistent storage
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>In practice, looking up which BaseApp an entity is checked out to
+                      (by name or database ID) is a read operation and comparatively inexpensive
+                      due to the underlying MySQL query cache. However, schemes such as the
+                      <code class="classname">PlayerRegistry</code> entity (see Player Lookup below) can
+                      be implemented which can offload the task of handling lookup requests from
+                      the DBMgr to game script running on arbitrarily many BaseApps.
+               </p>
+               <p>However, the global DBMgr process will still place an implicit limit
+                      on how quickly entities can be loaded from, and saved to, persistent
+                      storage. Future improvements being considered include sharding the
+                      database to spread this load over many external databases.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e12935"></a>19.5.&nbsp;Player Look-up
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e12938"></a>19.5.1.&nbsp;Requirements
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Each player must be able to query the status of another player by
+                           name:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>whether or not they are logged in</p>
+                        </li>
+                        <li>
+                           <p>if they are logged in, get their player mailbox</p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e12950"></a>19.5.2.&nbsp;Design
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Using <code class="methodname">BigWorld.lookUpBaseByName()</code> causes
+                           a query to DBMgr (which causes a read on the primary database), while
+                           sufficient for many scenarios (and empirically works in many released
+                           BigWorld-based games), introduces a potential bottleneck. The discussion
+                           below outlines a design for a distributed mapping of player names to
+                           player mailboxes which effectively offloads this load to BaseApp game
+                           script, which can be scaled up by adding more BaseApps.
+                  </p>
+                  <p>The idea is to have multiple <code class="classname">PlayerRegistry</code>
+                           Base entities that contain a distributed mapping of player names to
+                           player mailboxes. These <code class="classname">PlayerRegistry</code> entities
+                           have no geospatial representation, they exist only as a system service,
+                           and so generate no load with respect to AoI updates.
+                  </p>
+                  <p>Each BaseApp has a corresponding
+                           <code class="classname">PlayerRegistry</code> entity - this spreads the
+                           <code class="classname">PlayerRegistry</code> entities out and protects against
+                           BaseApp failures. Having more than one
+                           <code class="classname">PlayerRegistry</code> entity per BaseApp does not add
+                           any additional redundancy benefit.
+                  </p>
+                  <p><code class="classname">PlayerRegistry</code> entity instances register
+                           themselves globally. Globally registered bases have their mailboxes
+                           registered under a string key in a global bases mapping that is
+                           synchronised across every BaseApp. Player names are hashed against the
+                           known number of player registries, and a particular
+                           <code class="classname">PlayerRegistry</code> instance is located via the Global
+                           Bases mechanism (see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="ch12.html#xref_Global_Bases" class="olink">Global Bases</a>).
+                  </p>
+                  <p>When player entities are created, they add themselves to the
+                           distributed registry by hashing their own name to the appropriate
+                           <code class="classname">PlayerRegistry</code> entity, and registering their base
+                           mailbox with that <code class="classname">PlayerRegistry</code> entity. On
+                           logout, they contact that same <code class="classname">PlayerRegistry</code> to
+                           notify it of the logout, and this results in the removal of the mapping
+                           between that player name and that player mailbox. A scheme for
+                           rebalancing the player registry entries can be implemented which
+                           re-balances the entries across the <code class="classname">PlayerRegistry</code>
+                           entities when a new <code class="classname">PlayerRegistry</code> is added or
+                           removed, such that the hash scheme remains consistent.
+                  </p>
+                  <p>Queries for a particular player name are done by first hashing the
+                           player name to be looked up to the appropriate
+                           <code class="classname">PlayerRegistry</code>, and then querying one of the
+                           multiple <code class="classname">PlayerRegistry</code> entities via a remote
+                           method, and a callback remote method with a mailbox. Requests for player
+                           lookup are asynchronous, and caller entities implement a callback method
+                           that is called back when the lookup is complete.
+                  </p>
+                  <p>Each <code class="classname">PlayerRegistry</code> needs a persistent
+                           mailbox list for fault tolerance purposes, so that the registry is
+                           restored to another BaseApp along with the
+                           <code class="classname">PlayerRegistry</code> entity if the BaseApp it formerly
+                           resides on fails. In this case, it is likely that it will be restored to
+                           another BaseApp which already has its own
+                           <code class="classname">PlayerRegistry</code>, so re-balancing should be done
+                           and then the restored <code class="classname">PlayerRegistry</code> should be
+                           destroyed.
+                  </p>
+                  <p>This system can be scaled up by increasing the number of BaseApps
+                           to handle queries. Tiered request schemes could also be used to avoid
+                           large numbers of globally registered base entities becoming a
+                           bottleneck.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e13027"></a>19.6.&nbsp;Friends lists
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13030"></a>19.6.1.&nbsp;Requirements
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Each player maintains a list of other players that they can use
+                           for the following purposes:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>to contact a friend</p>
+                        </li>
+                        <li>
+                           <p>send private messages to friends</p>
+                        </li>
+                        <li>
+                           <p>presence updates</p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13045"></a>19.6.2.&nbsp;Design
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Assume that friendship relation is symmetric, so that if A is on
+                           the friend list of B, then B is on the friend list of A. A friends list
+                           can be implemented as an <span class="type">ARRAY</span> of <span class="type">FIXED_DICT</span>
+                           consisting of a <span class="type">STRING</span> name property, and the
+                           <span class="type">MAILBOX</span> of the player (or <code class="code">None</code> if offline),
+                           and a <code class="code">UINT8</code> Boolean flag <code class="property">hasResponded</code>
+                           indicating that this player has responded to our request to add that
+                           player as a friend.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13071"></a>19.6.2.1.&nbsp;Adding new friends
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Let the player adding the friend be called Player A, and the
+                                friend being added to Player A's list be called Player B.
+                     </p>
+                     <div class="orderedlist">
+                        <ol type="1">
+                           <li>
+                              <p>Player A checks that Player B is not already in A's friends
+                                             list. Player A uses Player B's name to look up B's status and
+                                             mailbox (if online) via the Player Look-up mechanism.
+                              </p>
+                           </li>
+                           <li>
+                              <p>If B is not online, then we fail the operation. A scheme
+                                             could be implemented that accommodated this situation, but for the
+                                             sake of simplicity, it will not be discussed here.
+                              </p>
+                              <p>If Player B is online, then Player A adds Player B to its
+                                             friend list, setting the <code class="property">hasResponded</code> flag to
+                                             <code class="code">False</code>, and writes itself to the database using
+                                             <code class="methodname">Base.writeToDB()</code>, registering a callback
+                                             when the database write completes.
+                              </p>
+                           </li>
+                           <li>
+                              <p>If the write fails, then we rollback the friends list by
+                                             removing Player B's <span class="type">FIXED_DICT</span> element, and abort
+                                             this process, and inform Player A's client of system error.
+                              </p>
+                              <p>Otherwise, the write is completed successfully, and so
+                                             Player A informs Player B via remote method call to add Player A
+                                             to Player B's list, passing along Player A's name and
+                                             mailbox.
+                              </p>
+                              <p>Periodically, Player A resends any such outstanding requests
+                                             (indicated by <code class="property">hasResponded</code> being
+                                             <code class="code">False</code> in the friends list), every, say, 3 seconds.
+                                             The mailbox for each of these resends should be looked up each
+                                             time, in case Player B has been restored to another BaseApp or if
+                                             Player B has logged off and/or back on again. If Player B is not
+                                             online during a retry, then the operation fails and Player A's
+                                             client is informed that Player B is not online.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Typically, Player B won't already have Player A as a friend,
+                                             and so Player B adds to its local friends list by creating a
+                                             <span class="type">FIXED_DICT</span> element for Player A containing Player A's
+                                             name and mailbox, and sets the <code class="property">hasResponded</code>
+                                             flag to <code class="code">True</code>. A write to the database is requested
+                                             with a callback.
+                              </p>
+                              <p>Player B may already have an entry for Player A in its
+                                             friends list. This can happen if Player A and Player B both
+                                             simultaneously attempt to add each other as friends (in which case
+                                             <code class="property">hasResponded</code> will be <code class="code">False</code>). It
+                                             can also happen if Player B is restored to another BaseApp or is
+                                             destroyed and re-created during the wait for the database write,
+                                             or the database write takes so long that Player A has resent the
+                                             request, and in these cases, <code class="property">hasResponded</code>
+                                             will be <code class="code">True</code>.
+                              </p>
+                              <p>If the <code class="property">hasResponded</code> flag is
+                                             <code class="code">True</code>, then it signals to Player A that the operation
+                                             succeeded straight away. If the <code class="property">hasResponded</code>
+                                             flag is <code class="code">False</code>, then it should be set to
+                                             <code class="code">True</code>, and the database written to and called back
+                                             from before signalling success to Player A.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Typically, the write succeeds, and so Player B calls back on
+                                             Player A to indicate that the request was successful.
+                              </p>
+                              <p>In the exceptional case, the write can fail. Player B
+                                             removes Player A's <span class="type">FIXED_DICT</span> entry in its friends
+                                             list, and calls back on Player A to indicate that the operation
+                                             failed.
+                              </p>
+                              <p>In this scenario, Player A should try to remove Player B's
+                                             <span class="type">FIXED_DICT</span> element, and this should be made
+                                             persistent by writing Player A to the database. However, there's a
+                                             chance that Player A fails this second database write while its
+                                             earlier database write succeeded, making Player A's friends list
+                                             inconsistent in the database. There are some ways of handling this
+                                             situation:
+                              </p>
+                              <div class="itemizedlist">
+                                 <ul type="disc">
+                                    <li>
+                                       <p>Do not remove Player B's <span class="type">FIXED_DICT</span> entry
+                                                          in Player A's list, and instead have Player A retry the
+                                                          request to Player B periodically until Player B responds with
+                                                          success.
+                                       </p>
+                                    </li>
+                                    <li>
+                                       <p>Do remove Player B's <span class="type">FIXED_DICT</span> entry in
+                                                          Player A's write to database periodically.
+                                       </p>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <p>Both of these approaches assume that the database write
+                                             failures are a temporary phenomenon. It could be caused by, the
+                                             BaseApp secondary databases not having enough disk space, which is
+                                             cleared up when the system administrator makes more space. A retry
+                                             count could be kept that would remove the <span class="type">FIXED_DICT</span>
+                                             entry from the friends list after the retry count exceeded some
+                                             threshold, and Player A's client should be informed of
+                                             failure.
+                              </p>
+                           </li>
+                           <li>
+                              <p>On a successful callback from Player B, Player A sets the
+                                             <code class="property">hasResponded</code> flag to <code class="code">True</code>. A
+                                             database write is not necessary at this point, as the periodic
+                                             backup and archival systems can be relied on to save this out
+                                             eventually. In the event that the system is restarted or Player A
+                                             is restored to another BaseApp, the periodic retry of
+                                             <span class="type">FIXED_DICT</span> entries with
+                                             <code class="property">hasResponded</code> set to <code class="code">False</code> will
+                                             get a second successful callback, and will eventually be written
+                                             out.
+                              </p>
+                           </li>
+                        </ol>
+                     </div>
+                     <p>Adding to friends lists is not expected to be a frequent
+                                operation on average over the entire player population, and players
+                                are typically spread out across the available BaseApps.
+                     </p>
+                     <p>Removing a player from a friends list can be done in a similar
+                                fashion.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13206"></a>19.6.2.2.&nbsp;Private messages to friends
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>See the section on Chat below. Once you have a player mailbox, a
+                                chat message can be sent to them using a simple remote method
+                                call.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13211"></a>19.6.2.3.&nbsp;Presence information
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Presence notifications can be implemented simply by calling a
+                                method on each player in that player's friends list indicating that
+                                they have logged in or logged out (which signals that the mailbox is
+                                invalidated, and should be set to <code class="code">None</code> in the
+                                corresponding <span class="type">FIXED_DICT</span> in the
+                                <span class="type">ARRAY</span>).
+                     </p>
+                     <p>Player status notifications (e.g. away from keyboard) can be
+                                done in a similar way. Player base entities inform their clients of
+                                any change in the status of any friends, so they can update a user
+                                interface to the friends list.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13227"></a>19.6.2.4.&nbsp;Cache of friend player mailboxes
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The friends list can be used as a cache of player mailboxes
+                                while those friends are logged in, and do not need to use the general
+                                Player Look-up mechanism in order to communicate with their friend
+                                player entities. Friend mailboxes are set to <code class="code">None</code> when
+                                the friends log out.
+                     </p>
+                     <p>Caches are not required to be persistent, and so do not add any
+                                additional processing cost to the database.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13237"></a>19.6.2.5.&nbsp;Fault tolerance handling
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>When a player is restored, some of the friends may have come
+                                online or offline (or come offline, and then online) in the time since
+                                the player and the friends list was last backed up. At restore or
+                                initialisation time, player entities should perform look-ups on all
+                                the players in its friends list. It should also notify all online
+                                friends of its new mailbox when restoring.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e13242"></a>19.7.&nbsp;Chat
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>P2P chat</p>
+                     </li>
+                     <li>
+                        <p>AoI-based chat</p>
+                     </li>
+                     <li>
+                        <p>Channel-based chat (includes guid chat, world chat)</p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13255"></a>19.7.1.&nbsp;P2P
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13258"></a>19.7.1.1.&nbsp;Requirements
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Players need to be able to send messages to other players.
+                                Players are identified by name.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13263"></a>19.7.1.2.&nbsp;Design
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>See the section on Player Look-up above. Chatting from one
+                                player to another player involves the following: 
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>the mailbox of the destination player needs to be
+                                               acquired. This can be done in one of the following ways:
+                              </p>
+                              <div class="itemizedlist">
+                                 <ul type="circle">
+                                    <li>
+                                       <p>supplied by the player cell entity as the destination
+                                                            entity is in the player's AoI
+                                       </p>
+                                    </li>
+                                    <li>
+                                       <p>a local look-up in your friends list mailbox
+                                                            cache
+                                       </p>
+                                    </li>
+                                    <li>
+                                       <p>a look-up of their mailbox using the Player Look-up
+                                                            mechanism described above
+                                       </p>
+                                    </li>
+                                 </ul>
+                              </div>
+                           </li>
+                           <li>
+                              <p>calling chat remote method on that mailbox with the chat
+                                               message contents.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>To save the remote method cost of look-ups, player mailboxes can
+                                be cached on the player entities as a non-persistent entity property.
+                                For example, private messages to non-friend players tend to result in
+                                conversations, and so having a local cache of player name mapped to
+                                player mailboxes will save on a look-up each time a further chat
+                                message is sent.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13287"></a>19.7.2.&nbsp;AoI-based broadcast chat
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13290"></a>19.7.2.1.&nbsp;Requirements
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Players need to be able to broadcast messages to players in
+                                their immediate spatial vicinity.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13295"></a>19.7.2.2.&nbsp;Design
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>AoI-based chat can be implemented as a broadcast remote method
+                                call to all player entities that have the speaking player in their
+                                AoI. This does not require looping through all entities in script, and
+                                is implemented efficiently on the CellApp. The chat method call is
+                                broadcast to client entities using the same mechanism as any other
+                                broadcast method call, or when an <code class="code">ALL_CLIENTS</code> or
+                                <code class="code">OTHER_CLIENTS</code> property changes.
+                     </p>
+                     <p>Volatile distance constraints can be specified for that chat
+                                method call so that only players within a certain radius of the
+                                originating player receive the method call message.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13308"></a>19.7.3.&nbsp;Non-AoI-based broadcast chat
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13311"></a>19.7.3.1.&nbsp;Requirements
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Non-AoI-based chat channels are chat channels of entities that
+                                are not necessarily in the same spatial location. This could be used
+                                for guild-scope chat and world-scope chat.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e13316"></a>19.7.3.2.&nbsp;Design
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>A non-AoI-based channel can be implemented as a
+                                <code class="classname">ChatChannel</code> entity that contains a list of
+                                player mailboxes of the players that are connected to that chat
+                                channel.
+                     </p>
+                     <p>When a player wants to connect to a channel, a channel look-up
+                                is performed for the particular <code class="classname">ChatChannel</code>
+                                entity. This could be done via a similar scheme to the Player Look-up
+                                scheme described above. Once a mailbox to the channel is found, the
+                                player registers its base mailbox with the
+                                <code class="classname">ChatChannel</code> entity, which adds it to the list
+                                of connected player mailboxes.
+                     </p>
+                     <p>A connected player broadcasts to that channel via a remote
+                                method call with the contents of that channel. The
+                                <code class="classname">ChatChannel</code> entity is responsible for
+                                broadcasting that message to each of its connected player base
+                                mailboxes.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e13337"></a>19.8.&nbsp;Mail
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13340"></a>19.8.1.&nbsp;Requirements
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Each player must have the ability to send mail to other players.
+                           This mail includes some text and optionally in-game items.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13345"></a>19.8.2.&nbsp;Design
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The scalability of SMTP/IMAP mail servers can be leveraged here.
+                           Note that these game mail servers are completely internal to the game -
+                           no public access would be allowed (though this would be up to the game
+                           design).
+                  </p>
+                  <p>Each player has an associated email address. BaseApps can query
+                           IMAP servers asynchronously using a TCP socket registered with BigWorld,
+                           without blocking game script. Python has good support for communication
+                           with IMAP over a socket (see the chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="ch32.html" class="olink"><i>Non-Blocking Socket I/O Using Mercury</i></a>)
+                  </p>
+                  <p>Items can be gifted using special attachments or special email
+                           headers, depending on the item system used. Item data would never be
+                           directly sent via email, instead, gifted items over email would be held
+                           in escrow, as with AoI-based player item trading. See Inventory and Item
+                           trading below.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e13356"></a>19.9.&nbsp;Inventory System
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13359"></a>19.9.1.&nbsp;Requirements
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Assume a game inventory system with the following features:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Items are instances of a finite set of item archetypes</p>
+                        </li>
+                        <li>
+                           <p>Each item instance has associated with it customisations that
+                                        differentiate it between other instances of the same item archetype.
+                                        These customisations may be visual customisations, different
+                                        attributes (e.g. durability, bonus to strength, etc.)
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13371"></a>19.9.2.&nbsp;Design
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Store a fixed amount of inventory item slots per-player on the
+                           player entity to limit the amount of inventory data that is associated
+                           with player inventory.
+                  </p>
+                  <p>Some popular MMOs have the concept of banks where players must be
+                           in a specific area to access items stored at the bank. This could be a
+                           separate entity that is loaded on request when a player is accessing
+                           their bank, and then destroyed once they leave the bank. The capacity of
+                           the on-player inventory and the bank inventory could be tuned to
+                           optimise database load.
+                  </p>
+                  <p>With the on-player inventory, this can be stored as a BigWorld
+                           ARRAY of item descriptors. Item descriptors themselves would be
+                           persisted as a BigWorld <span class="type">FIXED_DICT</span>, but could be
+                           class-customised when loaded from the database so that items are
+                           represented in script as an arbitrary object type.
+                  </p>
+                  <p>Player inventory changes are expected to be frequent. Per-element
+                           changes in a BigWorld <span class="type">ARRAY</span> are propagated to the client
+                           with a description of the change path to that element and the new
+                           element value (i.e. the entire array is not sent from the server to the
+                           client each time an element is changed).
+                  </p>
+                  <p>If each time the inventory is changed, the entity wrote its state
+                           out to the secondary database, then a bottleneck can occur, as this
+                           operation is expected to be frequent.
+                  </p>
+                  <p>In this case, we rely on the fault tolerance mechanism for
+                           ensuring against data loss. This works by periodically saving out the
+                           state of the entity to another process. That other process is
+                           responsible for restoring the entity in the event of a process failure.
+                           For example, cell entity data is backed up to the corresponding base
+                           entity's BaseApp, and base entities are backed up to other BaseApps.
+                           This is the first level of fault tolerance, and the frequency of backups
+                           can be configured.
+                  </p>
+                  <p>There is also a second level of fault tolerance, which is the
+                           periodic archiving of the base and cell entity state to the secondary
+                           databases. The frequency of this can similarly tuned to achieve optimum
+                           BaseApp load.
+                  </p>
+                  <p>However, for important changes to the item inventory, for example,
+                           a quest item, game script can request a write to the secondary database
+                           and have that confirmed via an <code class="methodname">onWriteToDB()</code>
+                           callback. For trading transactions between two players, see
+                           below.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e13399"></a>19.10.&nbsp;AoI-based Trading
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13402"></a>19.10.1.&nbsp;Requirements
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Player entities in the same spatial vicinity must be able to
+                           negotiate trade of items that they own.
+                  </p>
+                  <p>Each player makes an offer to each other, placing their offered
+                           items in escrow. Once both players accept the opposing player's offer,
+                           the trade succeeds and the items are traded. If one player cancels the
+                           trade, all offered items are returned to their respective
+                           players.
+                  </p>
+                  <p>Item trading transactions must not result in duplicate items or
+                           item loss.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13411"></a>19.10.2.&nbsp;Design
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>BigWorld can readily supply the base mailboxes of any player
+                           entity in a player's AoI. Otherwise, if trading with a specific person
+                           not in the player AoI, a player look-up is required.
+                  </p>
+                  <p><code class="classname">Escrow</code> entities are created for the
+                           lifetime of a transaction, and hold mailboxes to the two entities
+                           bartering. <code class="classname">Escrow</code> entities persist to the
+                           database. Trading consists of two stages, the negotiation stage and the
+                           transfer stage. <code class="classname">Escrow</code> entities are created on
+                           the least loaded BaseApp.
+                  </p>
+                  <p>The negotiation stage is a series of offer operations made from a
+                           player entity to an <code class="classname">Escrow</code> entity, each of which
+                           is then forwarded to the opposing player entity.
+                  </p>
+                  <p>If the server stops in the middle of a transaction, the
+                           <code class="classname">Escrow</code> entity has enough persistent information
+                           to cancel itself on restore and return items back to their owning player
+                           entities.
+                  </p>
+                  <p>Player entities on the server offer items to the other player (in
+                           response to GUI interactions from their player client) in the form of
+                           remote method requests to the <code class="classname">Escrow</code> entity. In
+                           doing so, they transfer these items from their inventory to a special
+                           holding area on the player entity on the server. This holding area is
+                           not accessible for any other purpose by the player's client, other than
+                           to remove the item from the current offer, which moves that item back
+                           into their inventory.
+                  </p>
+                  <p>Each transfer to/from their player inventory to the trade holding
+                           area results in:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>notification of a change in items being offered to the
+                                        <code class="classname">Escrow</code> entity via remote method call
+                           </p>
+                        </li>
+                        <li>
+                           <p>a database write on the <code class="classname">Escrow</code>
+                                        entity
+                           </p>
+                        </li>
+                        <li>
+                           <p>an acknowledgement remote method call from the
+                                        <code class="classname">Escrow</code> entity back to the originating player
+                                        entity
+                           </p>
+                        </li>
+                        <li>
+                           <p>removal of the items from the holding area, and a database
+                                        write on the player entity
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>If, for some reason (temporary or otherwise), the database write
+                           fails, the entire trade is cancelled, and the items are returned to the
+                           players via remote method calls, which are acknowledged via a remote
+                           method call by the players back to the <code class="classname">Escrow</code>
+                           entity. When the <code class="classname">Escrow</code> entity receives
+                           acknowledgements from the two players that the trade has been cancelled,
+                           it deletes itself from the database.
+                  </p>
+                  <p>Each player can signal to the <code class="classname">Escrow</code> entity
+                           that it is willing to accept the trade as it stands. Once the
+                           <code class="classname">Escrow </code>entity receives positive notification for
+                           both parties, it transfers ownership of the items to the corresponding
+                           opposing players by signalling to the player the item data that they
+                           have traded.
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>The <code class="classname">Escrow</code> entity transfers ownership
+                                        to each player their corresponding traded items
+                           </p>
+                        </li>
+                        <li>
+                           <p>On receipt of the items, each player initiates a write to the
+                                        database. When this is confirmed to be OK, the player entity
+                                        acknowledges that they have the items by calling back on the
+                                        <code class="classname">Escrow</code> entity.
+                           </p>
+                        </li>
+                        <li>
+                           <p>The <code class="classname">Escrow</code> entity waits for both
+                                        acknowledgements to return, and then destroys itself and deletes
+                                        itself from the database.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Total database writes: 2 for each offer made, and at least 2
+                           offers are made. 3 writes for the transfer stage.
+                  </p>
+                  <p>This illustrates that trading can potentially be an expensive
+                           operation in terms of writes to disk. However, all the writes are
+                           distributed amongst the entities involved, and most would be written to
+                           the secondary database. Only one of the database writes, when the
+                           <code class="classname">Escrow</code> entity is destroyed, results in the
+                           primary database being utilised, in order to remove that
+                           <code class="classname">Escrow</code> entity from persistent storage.
+                  </p>
+                  <p>Note that each participating entity in a trading transaction is
+                           not required to be on the same process. This scales well because there
+                           can be an arbitrary number of BaseApps, and players and Escrow entities
+                           would be uniformly distributed amongst the BaseApps. Recall that while
+                           CellApps have player distributions that map to where they are spatially,
+                           base entities on BaseApps do not have this spatial relation.
+                  </p>
+                  <p>There is a cost to the primary database associated with the
+                           creation and destruction of each <code class="classname">Escrow</code> entity.
+                           This design can be improved by consolidating the escrow operations to
+                           target a pre-existing <code class="classname">EscrowManager</code> entity rather
+                           than creating and destroying <code class="classname">Escrow</code> entities. A
+                           similar scheme could be implemented to the
+                           <code class="classname">PlayerRegistry</code> entities by having an
+                           <code class="classname">EscrowManager</code> entity per BaseApp. Trading
+                           entities would nominate and agree on a random
+                           <code class="classname">EscrowManager</code> to use for their trading
+                           transaction.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch18.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch20.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;18.&nbsp;Transactions and Handling Fault Tolerance and Disaster Recovery&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;20.&nbsp;User Authentication and Billing System Integration</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

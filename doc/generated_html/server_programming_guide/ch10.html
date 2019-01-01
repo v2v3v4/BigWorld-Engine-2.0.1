@@ -1,0 +1,1447 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;10.&nbsp;Profiling</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch09.html" title="Chapter&nbsp;9.&nbsp;Character Sets and Encodings">
+      <link rel="next" href="ch11.html" title="Chapter&nbsp;11.&nbsp;Proxies and Players">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch10.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;10.&nbsp;Profiling</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch09.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch11.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Server_Profiling"></a>Chapter&nbsp;10.&nbsp;Profiling
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch10.html#xref_Profiling_Entities">10.1. Profiling Entities</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch10.html#d0e9319">10.1.1. Persistent Properties</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e9326">10.1.2. Property Data Types</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e9331">10.1.3. Property Data Propagation</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch10.html#xref_Profiling_Python_Script">10.2. Python Game Script</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch10.html#xref_Understanding_PyProfile_Output">10.2.1. Understanding the output</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e9433">10.2.2. Increasing Memory Usage / Entity Count</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch10.html#xref_Profiling_Server_Processes">10.3. Profiling Server Processes (C++ Code)</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch10.html#d0e9479">10.3.1. Common Code Block Profiles</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e9518">10.3.2. BaseApp Code Block Profiles</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e9571">10.3.3. CellApp Code Block Profiles</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch10.html#xref_Profiling_Client_Communication">10.4. Client Communication</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch10.html#d0e9736">10.4.1. Private Client Events</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e9769">10.4.2. Public Client Events</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e9806">10.4.3. Total Public Client Events</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch10.html#xref_Profiling_Server_Communication">10.5. Server Communication</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch10.html#xref_BaseApp_Interface_Summary">10.5.1. BaseApp Interface Summary</a></span></dt>
+                        <dt><span class="section"><a href="ch10.html#d0e10151">10.5.2. CellApp Interface Summary</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>Profiling the server can take on a number of forms depending on the
+                 stage of development you are in and what kind of issues you are attempting
+                 to isolate. The following list is a brief outline of the different areas you
+                 may wish to profile.
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">Entities</em></p>
+                     <p>Entities are the main game object which are used by all components
+                              of the BigWorld engine. Inefficient or bloated entities can cause
+                              excessive load and network communication on your server processes which
+                              will reduce the overall performance of your server cluster. This in turn
+                              can affect the total number of active users your server can
+                              support.
+                     </p>
+                     <p>For more information see <a href="ch10.html#xref_Profiling_Entities" title="10.1.&nbsp;Profiling Entities">Profiling Entities</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Python script</em></p>
+                     <p>Python script represents the majority of custom game code and as
+                              such is one of the most variable sources of load that is placed on the
+                              BigWorld server processes. Profiling Python script should be performed
+                              on a semi-regular basis and preferably while performing load tests in
+                              order to ensure that there are no major bottlenecks in your
+                              script.
+                     </p>
+                     <p>For more information see <a href="ch10.html#xref_Profiling_Python_Script" title="10.2.&nbsp;Python Game Script">Python Game Script</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Server Processes</em></p>
+                     <p>As the BigWorld server processes are the core of a server cluster
+                              that run custom script and game code, it can be useful to identify which
+                              areas of the server processes are under load. This can help to pinpoint
+                              issues in either game script, navigation issues, network communication,
+                              entity management or any of the other numerous tasks that are handled by
+                              the server processes.
+                     </p>
+                     <p>For more information see <a href="ch10.html#xref_Profiling_Server_Processes" title="10.3.&nbsp;Profiling Server Processes (C++ Code)">Profiling Server Processes (C++ Code)</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Client Communication</em></p>
+                     <p>Understanding the network traffic being sent to client connections
+                              can help lower bandwidth usage, thus reducing network costs as well as
+                              increasing the overall performance of your server cluster.
+                     </p>
+                     <p>For more information see <a href="ch10.html#xref_Profiling_Client_Communication" title="10.4.&nbsp;Client Communication">Client Communication</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Server Process
+                                 Communication</em></p>
+                     <p>In order to diagnose network related latency issues on individual
+                              server processes, it can be useful to identify which network messages
+                              are causing the most load on each process.
+                     </p>
+                     <p>For more information see <a href="ch10.html#xref_Profiling_Server_Communication" title="10.5.&nbsp;Server Communication">Server Communication</a>.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>We recommend you run profiles regularly while you are developing or
+                 making changes to configuration, etc. as you can see what effect a change
+                 can make. You should keep the profiles that you generate to use as a
+                 historical reference for your games performance over the development life.
+                 For example, if you make a script change, and suddenly cell load is quite
+                 high, you can use the profiles to see when this load spike started and
+                 narrow down the cause of the issue to script usage as well as the particular
+                 methods causing the script load spike.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Profiling_Entities"></a>10.1.&nbsp;Profiling Entities
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>As Entities are the main game object being used by all components of
+                      the BigWorld engine it is important to make sure that your game entities
+                      are implemented as efficiently as possible. This includes:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Minimising persistent properties.</p>
+                     </li>
+                     <li>
+                        <p>Ensuring properties have the smallest applicable data type
+                                   (while considering long term scaling).
+                        </p>
+                     </li>
+                     <li>
+                        <p>Ensuring properties have the most appropriate data propagation
+                                   flags assigned.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Ensuring properties have AoI where appropriate.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The best mechanism currently in place for profiling entity sizes is
+                      the usage of the WebConsole filtered watchers view to collect information
+                      about the impact of each entity type's properties, coupled with a peer
+                      review system to ensure that multiple people have an understanding of the
+                      impact of property types.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9319"></a>10.1.1.&nbsp;Persistent Properties
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Persistent properties cause load from both network transmission
+                           costs between CellApp, BaseApp and DBMgr, as well as placing load onto
+                           DBMgr when not using Secondary Databases. By minimising the number of
+                           persistent properties as well as decreasing the size of properties that
+                           are being persisted you will effect a long term performance gain in your
+                           cluster.
+                  </p>
+                  <p>Determining the persistent properties can be performed by using
+                           the WebConsole filtered watcher page using a Processes of 'cellapp' and
+                           a Path of 'entityTypes/*/properties/*/persistent'. Once you have
+                           narrowed down the persistent properties you can perform a review of them
+                           to determine any optimisations that can be made.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9326"></a>10.1.2.&nbsp;Property Data Types
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Choosing the smallest possible data type that can be used for a
+                           property will assist in lowering network load within your cluster. This
+                           includes all properties regardless of whether they are persisted.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9331"></a>10.1.3.&nbsp;Property Data Propagation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Often the easiest solution when developing a game is to set all
+                           properties to <span class="literal">CELL_PUBLIC</span> or
+                           <span class="literal">ALL_CLIENTS</span> as it provides the greatest visibility of
+                           the property. This quite often works perfectly when developing in the
+                           office on a single machine server that isn't heavily loaded, however
+                           this can lead to large problems when performing load tests and scaling a
+                           game up to production.
+                  </p>
+                  <p>Ideally the best approach when deciding on the propagation flags
+                           to use with properties is to use the object oriented design philosophy
+                           of calling methods on an object, in this case an Entity, to request that
+                           it perform work for you, rather than accessing its private information
+                           yourself.
+                  </p>
+                  <p>A common example is the health or HP of an entity. This value may
+                           be constantly changing due to damage or regenerating health over time
+                           and is often only directly relevant for the entity the property is
+                           associated with. While other entities may be interested in this
+                           property, they are only transiently interested, such as when they are
+                           all in combat together, or if the entities have formed a group of
+                           players. In this circumstance it may make sense to have the propagation
+                           flag as <span class="literal">CELL_PRIVATE</span> which can be requested as
+                           required by a method call. This reduces the amount of network traffic
+                           generated from broadcasting the health property every time it is updated
+                           but still allows access to the property when required.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Profiling_Python_Script"></a>10.2.&nbsp;Python Game Script
+                        </h2>
+                     </div>
+                  </div>
+               </div><pre class="programlisting">control_cluster.py pyprofile</pre><p>Profiling Python script generally occurs as a result of identifying
+                      particular bottlenecks in script that are causing issues with server
+                      processes, such as long tick times resulting in process termination
+                      through a SIGQUIT signal.
+               </p>
+               <p>Profiling server side script is performed with the
+                      <code class="filename">control_cluster.py</code> script using the <em class="parameter"><code>pyprofile</code></em><sup>[<a name="d0e9363" href="#ftn.d0e9363">22</a>]</sup> command. This command only applies to server components that
+                      run Python script, i.e., CellApp, BaseApp and DBMgr.
+               </p>
+               <p>This command will dump a table of the top cumulative and internal
+                      times for script calls over a period of time. The user can optionally
+                      display tables of callers and callees as well. See
+                      <span><strong class="command">control_cluster.py</strong></span> <code class="option">--help</code> for exact
+                      usage and options.
+               </p>
+               <p>This tool is invaluable in determining which script calls are
+                      causing the most server-side CPU load for your game, for example:
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Understanding_PyProfile_Output"></a>10.2.1.&nbsp;Understanding the output
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>PyProfile will output its results for each process that has been
+                           queried in two orderings, internal time and cumulative time. The output
+                           format of these two result sets are identical. The profile aims to help
+                           in identifying the most time-expensive Python script methods implemented
+                           by your game.
+                  </p><pre class="programlisting">      6681 function calls in 0.106 CPU seconds
+
+Ordered by: internal time
+List reduced from 30 to 10 due to restriction &lt;10&gt;
+
+ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   643    0.019    0.000    0.020    0.000 Guard.py:446(moveToPosition)
+   102    0.016    0.000    0.016    0.000 Creature.py:476(moveTowardsPoint)
+   643    0.011    0.000    0.050    0.000 Guard.py:349(think)
+   354    0.010    0.000    0.036    0.000 Creature.py:332(think)
+   239    0.007    0.000    0.008    0.000 Guard.py:584(nextPatrolNode)
+   627    0.006    0.000    0.054    0.000 Guard.py:735(onMove)
+   202    0.006    0.000    0.006    0.000 Flock.py:166(onTimer)
+   404    0.005    0.000    0.019    0.000 Guard.py:653(doCamp)
+   101    0.004    0.000    0.004    0.000 DustDevil.py:26(onTimer)
+   239    0.004    0.000    0.019    0.000 Guard.py:639(doPatrol)
+</pre><p>The <code class="classname">hotshot</code> Python module which produces
+                           these reports uses two different names when referring to the same
+                           information. The internal time report corresponds to the total time
+                           column outlined in the table below along with the other column
+                           descriptions.
+                  </p>
+                  <div class="altrow">
+                     <table border="1">
+                        <colgroup>
+                           <col width="33%">
+                           <col width="67%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Column Name</th>
+                              <th align="left">Description</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td align="left">ncalls</td>
+                              <td align="left">The total number of calls seen for this
+                                               function.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">tottime</td>
+                              <td align="left">The amount of time (in seconds) that is
+                                               spent executing the code only inside of the current method.
+                                               Methods called from this method are not included.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">cumtime</td>
+                              <td align="left">The amount of time (in seconds) this method
+                                               took to execute, including the execution time of any other
+                                               methods called from this method.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">percall</td>
+                              <td align="left">The percall columns refer to the columns
+                                               immediately to the left of them and indicate the average time
+                                               per call for the profile time they refer to.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">filename:lineno(function)</td>
+                              <td align="left">The filename and line number containing
+                                               function the profile refers to.
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9433"></a>10.2.2.&nbsp;Increasing Memory Usage / Entity Count
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Automatic garbage collection has been disabled in BigWorld to
+                           avoid the Python engine from utilising large amounts of CPU time at
+                           unexpected intervals. In order to allow Python objects to be deleted,
+                           the server processes will only delete objects when their reference count
+                           reaches zero. This approach has the side effect of not deleting objects
+                           that have circular references or are referenced by objects having
+                           circular references.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e9438"></a>10.2.2.1.&nbsp;Identifying the problem
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The symptoms of circular references in Python script will
+                                generally manifest as a constant rising of the total number of
+                                entities in your server, either on the base or cell, and / or as a
+                                constantly increasing memory footprint of your server
+                                processes.
+                     </p>
+                     <p>If you suspect this may be occurring within your game script the
+                                following code will run the Python garbage collector and report the
+                                Python objects that are ready for deletion.
+                     </p>
+                     <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                        <h3 class="title">Note</h3>
+                        <p>The following operation can take a large amount of time (in
+                                     the order of many seconds), so it is possible to cause a BaseApp or
+                                     CellApp process to be terminated due to not processing network
+                                     requests for more than three seconds.
+                        </p>
+                        <p>Ideally this command should only be run within a development
+                                     environment and as a last resort within a production cluster.
+                        </p>
+                     </div><pre class="programlisting">import gc
+gc.set_debug( gc.DEBUG_SAVEALL )
+gc.collect()
+print gc.garbage</pre><p>The list of objects stored in gc.garbage are ready for deletion.
+                                If you see a large number objects all of the same object types, you
+                                may need to explore your code further to remove any circular
+                                references when the parent object is deleted.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Profiling_Server_Processes"></a>10.3.&nbsp;Profiling Server Processes (C++ Code)
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>When experiencing load spikes in your server that are not easily
+                      attributable to a specific cause it can be useful to profile the C++
+                      server code to help narrow down the areas where the most time is being
+                      spent. This is supported on both the BaseApp and the CellApp using the
+                      <code class="filename">control_cluster.py</code> command <em class="parameter"><code>cprofile</code></em>.
+               </p>
+               <p>This <em class="parameter"><code>cprofile</code></em> command collects
+                      and reports the internal C++ profiles of a server process over a period of
+                      time. The profiles are broken down into key time sensitive code blocks
+                      such as sending updates to clients, entity navigation, etc.
+               </p>
+               <p>Below is the <em class="parameter"><code>cprofile</code></em> output
+                      from a CellApp running the FantasyDemo resources that is idling:
+               </p><pre class="programlisting">Profile                Count   Cumulative Times          Internal Times         
+Idle                    2758 |  8.963s   3249us  88.0% |  8.963s   3249us  88.0%
+scriptCall              8825 |  0.804s     91us   7.9% |  0.744s     84us   7.3%
+callUpdates              102 |  0.383s   3758us   3.8% |  0.109s   1067us   1.1%
+shuffleEntity          15648 |  0.069s      4us   0.7% |  0.069s      4us   0.7%
+backup                   102 |  0.065s    637us   0.6% |  0.052s    510us   0.5%
+boundaryCheck            448 |  0.035s     78us   0.3% |  0.035s     78us   0.3%
+findPath                 466 |  0.030s     65us   0.3% |  0.030s     65us   0.3%
+RunningTime                0 |  0.000s      0us   0.0% |  0.025s      0us   0.2%
+callTimers               102 |  0.637s   6241us   6.3% |  0.020s    193us   0.2%
+visionUpdate            9999 |  0.018s      1us   0.2% |  0.018s      1us   0.2%
+tickStats                102 |  0.017s    163us   0.2% |  0.017s    163us   0.2%
+canNavigateTo           2018 |  0.046s     22us   0.5% |  0.016s      8us   0.2%
+calcBoundary             102 |  0.016s    159us   0.2% |  0.014s    140us   0.1%
+onTimer                 3614 |  0.618s    170us   6.1% |  0.010s      2us   0.1%
+watchersTCP              250 |  0.007s     26us   0.1% |  0.007s     26us   0.1%
+transientLoad            509 |  0.004s      8us   0.0% |  0.004s      8us   0.0%
+gameTick                 102 |  1.158s  11356us  11.4% |  0.004s     41us   0.0%
+findEntity              1327 |  0.003s      2us   0.0% |  0.003s      2us   0.0%
+onMove                   796 |  0.198s    248us   1.9% |  0.002s      2us   0.0%
+chunksMainThread         509 |  0.006s     10us   0.1% |  0.001s      2us   0.0%
+
+Total running time: 10.181s (0.000s spare)
+</pre><p>The following sections outline some of the code blocks that are
+                      profiled along with a short description of their meaning. The sections
+                      have been broken down into code that is common between server processes,
+                      and server process specific code.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9479"></a>10.3.1.&nbsp;Common Code Block Profiles
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="altrow">
+                     <table border="1">
+                        <colgroup>
+                           <col width="33%">
+                           <col width="67%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Profile Type</th>
+                              <th align="left">Description</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td align="left">Idle</td>
+                              <td align="left">Time spent idling while polling for network
+                                               / file descriptor activity.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">RunningTime</td>
+                              <td align="left">Time spent collating profile
+                                               statistics.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">tickStats</td>
+                              <td align="left">Time spent updating moving average for
+                                               statistics.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">watchersTCP</td>
+                              <td align="left">Time spent processing TCP watcher
+                                               requests.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">watchersUDP</td>
+                              <td align="left">Time spent processing UDP watcher
+                                               requests.
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9518"></a>10.3.2.&nbsp;BaseApp Code Block Profiles
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="altrow">
+                     <table border="1">
+                        <colgroup>
+                           <col width="33%">
+                           <col width="67%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Profile Type</th>
+                              <th align="left">Description</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td align="left">archive</td>
+                              <td align="left">Time spent archiving entities to the
+                                               database as part of the second level fault tolerance. See <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a> chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch05.html" class="olink"><i>Backups and Disaster Recovery</i></a>.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">backup</td>
+                              <td align="left">Time spent performing entity backups to
+                                               other BaseApps as part of the first level fault tolerance
+                                               mechanism. See <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>
+                                               chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch04.html" class="olink"><i>Fault Tolerance</i></a>.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">encryptRecv</td>
+                              <td align="left">Time spent decrypting incoming network
+                                               traffic from the EncryptionFilter
+                                               (<code class="filename">bigworld/src/lib/network/encryption_filter.cpp</code>).
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">encryptSend</td>
+                              <td align="left">Time spent encrypting outgoing network
+                                               traffic from the EncryptionFilter
+                                               (<code class="filename">bigworld/src/lib/network/encryption_filter.cpp</code>).
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">tickGameTime</td>
+                              <td align="left">Time spent processing game ticks.</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9571"></a>10.3.3.&nbsp;CellApp Code Block Profiles
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="altrow">
+                     <table border="1">
+                        <colgroup>
+                           <col width="33%">
+                           <col width="67%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Profile Type</th>
+                              <th align="left">Description</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td align="left">backup</td>
+                              <td align="left">Time spent backing up cell entities to their
+                                               Base.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">boundaryCheck</td>
+                              <td align="left">Time spent calculating all entities that
+                                               need to be offloaded, ghosted or removed.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">calcBoundary</td>
+                              <td align="left">Time spent calculating the number of
+                                               entities that can be offloaded and notifying CellAppMgr.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">callTimers</td>
+                              <td align="left">Time spent processing timers.</td>
+                           </tr>
+                           <tr>
+                              <td align="left">callUpdates</td>
+                              <td align="left">Time spent calling updatable objects such as
+                                               controllers and witnesses. Calls to
+                                               <code class="classname">Controller</code><code class="methodname">.update()</code>
+                                               are included in this time.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">canNavigateTo</td>
+                              <td align="left">Time spent calculating whether an Entity can
+                                               move to a destination position from its current
+                                               location.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">chunksMainThread</td>
+                              <td align="left">Time spent performing chunk loading /
+                                               unloading calculations in the main thread.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">findEntity</td>
+                              <td align="left">Time spent locating a specific entity within
+                                               the known population on the CellApp.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">gameTick</td>
+                              <td align="left">Time processing the game tick.</td>
+                           </tr>
+                           <tr>
+                              <td align="left">onMove</td>
+                              <td align="left">Time spent in the
+                                               <code class="methodname">onMove()</code> script callback from a
+                                               movement controller.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">onTimer</td>
+                              <td align="left">Time spent in the
+                                               <code class="methodname">onTimer()</code> script callback from the
+                                               timer controller.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">scriptCall</td>
+                              <td align="left">Time spent in any Python script call that
+                                               has been invoked from C++.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">shuffleEntity</td>
+                              <td align="left">Time spent updating the range lists on
+                                               entity movement.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">transientLoad</td>
+                              <td align="left">Time spent performing entity management
+                                               tasks such as creation, deletion and initialisation.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">visionUpdate</td>
+                              <td align="left">Time spent updating the vision of
+                                               entities.
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Profiling_Client_Communication"></a>10.4.&nbsp;Client Communication
+                        </h2>
+                     </div>
+                  </div>
+               </div><pre class="programlisting">control_cluster.py eventprofile</pre><p>Recall that the server sends down both non-volatile data and
+                      volatile data down to the client. Volatile data is in the form of position
+                      and pose updates, while non-volatile data consists of the property updates
+                      on an entity and client-side method calls for that entity, sent down to
+                      any player that can witness that entity. The profiling of non-volatile
+                      data can give valuable insight into which methods and property updates are
+                      particularly high throughput, enabling effective optimisation of the
+                      network impact of entity scripts.
+               </p>
+               <p>There is a distinction made between own-client communication and
+                      other-client communication. Own-client communication consists of method
+                      calls and property updates that only an entity's own client will receive.
+                      These include updates for properties marked as
+                      <span class="literal">OWN_CLIENT</span> as well as method calls that are made using
+                      the <span class="literal">ownClient</span> mailbox, and are private to the player's
+                      own entity and not broadcast to other players. Note that this type of
+                      client communication only applies to player entities.
+               </p>
+               <p>In contrast, there is also other-client communication for an entity,
+                      which consists of the public method calls and property updates that
+                      players having that entity in their AoI are able to witness. This includes
+                      updates for properties marked as <span class="literal">OTHER_CLIENTS</span> or
+                      <span class="literal">ALL_CLIENTS</span>, as well as method calls made on an
+                      entity''s <span class="literal">otherClients</span> or as well as the
+                      <span class="literal">allClients</span> mailbox. These events are potentially
+                      propagated to any player that has that entity in their AoI.
+               </p>
+               <p>Other-client events are not propagated to witnessing clients
+                      immediately. For instance, the distance a player is from the entity an
+                      event pertains to will affect how soon that event is propagated after the
+                      event has actually occurred on the server side. In addition, the LoD level
+                      set on properties and methods will affect whether a particular event will
+                      be sent down to a witnessing player.
+               </p>
+               <p>Client communication is broken down into three types for the
+                      purposes of profiling:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Property changes and method calls to an entity's own client
+                                   (<span class="literal">privateClientEvents</span>). This tracks whenever any
+                                   own-client communication occurs.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Property changes and method calls that can be made available to
+                                   players that witness it (<span class="literal">publicClientEvents</span>). This
+                                   tracks whenever any public property is updated or any client method is
+                                   called that can be sent down to any witnessing players.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Property changes and method calls that are actually sent down to
+                                   players (<span class="literal">totalPublicClientEvents</span>). This tracks the
+                                   total number of public properties that were actually sent down to
+                                   witnessing players, subject to LoD levels.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The <em class="parameter"><code>eventprofile</code></em> command
+                      samples a running server over a period of time, collecting counts and
+                      sizes of all non-volatile communication down to the client. A sample
+                      output of <em class="parameter"><code>eventprofile</code></em> is provided
+                      below, followed by a brief description of the sections. This section is
+                      brief as the event profile command is scheduled to be updated to use the
+                      new property statistics available under the <span class="literal">entityTypes</span>
+                      watcher tree.
+               </p><pre class="programlisting">Waiting 120.0 secs for sample data ...
+**** cellapp01 ****
+
+Event Type: privateClientEvents
+
+Name                                    #       Size    AvgSize  Bandwidth
+
+Avatar.cellBounds                     120       2880     24.000     24.000
+Avatar.myArray                          2         41     20.500      0.342
+Avatar.modeTarget                       2         16      8.000      0.133
+Avatar.myDict                           1         11     11.000      0.092
+Avatar.mode                             2         10      5.000      0.083
+
+
+Event Type: publicClientEvents
+
+Name                                    #       Size    AvgSize  Bandwidth
+
+Creature.moving                      4741      23705      5.000    197.542
+Creature.performAction                956       4780      5.000     39.833
+Guard.moving                          647       3235      5.000     26.958
+Creature.creatureState                150        750      5.000      6.250
+Guard.didGesture                       69        345      5.000      2.875
+Avatar.modeTarget                       2         16      8.000      0.133
+Merchant.modeTarget                     2         16      8.000      0.133
+Avatar.mode                             2         10      5.000      0.083
+Beast.initiateRage                      2          8      4.000      0.067
+
+
+Event Type: totalPublicClientEvents
+
+Name                                    #       Size    AvgSize  Bandwidth
+
+Creature.moving                      1559       7795      5.000     64.958
+Creature.performAction                396       1980      5.000     16.500
+Creature.creatureState                 52        260      5.000      2.167
+Merchant.modeTarget                     2         16      8.000      0.133
+Beast.initiateRage                      2          8      4.000      0.067
+</pre><div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9736"></a>10.4.1.&nbsp;Private Client Events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>These include:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Changes on properties marked as <span class="literal">OWN_CLIENT</span>
+                                        or <span class="literal">ALL_CLIENT</span>S.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Client-side method calls on a player's own entity that are
+                                        propagated to that player's own client via
+                                        <code class="classname">Entity</code><code class="varname">.ownClient</code>,
+                                        <code class="classname">Entity</code><code class="varname">.client</code> or
+                                        <code class="classname">Entity</code><code class="varname">.allClients</code>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9769"></a>10.4.2.&nbsp;Public Client Events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>These include:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Changes on properties marked as
+                                        <span class="literal">OTHER_CLIENTS</span> or
+                                        <span class="literal">ALL_CLIENTS</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Client-side methods calls that are made on the mailboxes
+                                        <code class="classname">Entity</code><code class="varname">.otherClients</code>,
+                                        <code class="classname">Entity</code><code class="varname">.allClients</code>, or
+                                        using the special
+                                        <code class="classname">Entity</code>.<code class="methodname">clientMethod</code>(
+                                        <em class="parameter"><code>entityID</code></em> ) method.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9806"></a>10.4.3.&nbsp;Total Public Client Events
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>These include:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Changes on properties marked as
+                                        <span class="literal">OTHER_CLIENTS</span> or <span class="literal">ALL_CLIENTS</span>
+                                        that were actually sent down to witnessing players.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Client-side method calls that are made on the mailboxes
+                                        <code class="classname">Entity</code><code class="varname">.otherClients</code>,
+                                        <code class="classname">Entity</code><code class="varname">.allClients</code>, or
+                                        using the special
+                                        <code class="classname">Entity</code>.<code class="methodname">clientMethod</code>(
+                                        <em class="parameter"><code>entityID</code></em> ) method, that were actually sent
+                                        down to witnessing players.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Profiling_Server_Communication"></a>10.5.&nbsp;Server Communication
+                        </h2>
+                     </div>
+                  </div>
+               </div><pre class="programlisting">control_cluster.py mercuryprofile</pre><p>Server communication primarily occurs via Mercury<sup>[<a name="d0e9850" href="#ftn.d0e9850">23</a>]</sup> interfaces. These can be seen on server processes under the
+                      Watcher tree path <span class="literal">nub/interfacesByName</span>.
+               </p>
+               <p>The output of <em class="parameter"><code>mercuryprofile</code></em>
+                      provides a condensed table of results that can be optionally sorted as
+                      required by using options when running the profile. A sample of the output
+                      from a single instance of CellApp is provided below.
+               </p><pre class="programlisting">cellapp01 - Internal Nub
+
+ id                   name     br    mr max br   aml abps amps
+  0       DBInterfaceBirth      8     1      8   8.0  0.0  0.0
+  1                addCell     92     4     23  23.0  0.0  0.0
+  2                startup      8     1      8   8.0  0.0  0.0
+  3            setGameTime      4     1      4   4.0  0.0  0.0
+ 14         cellAppMgrInfo 380184 95046      4   4.0 40.0 10.0
+ 18         updateGeometry 646272 38016     17  17.0 68.0  4.0
+ 19    spaceGeometryLoaded     78     4     22  19.5  0.0  0.0
+ 21           createEntity    270     4     70  67.5  0.0  0.0
+ 22 createEntityNearEntity  63181   466    295 135.6  0.0  0.0
+ 35       writeToDBRequest   1536   384      4   4.0  0.1  0.0
+ 50        runScriptMethod  49110  4821    190  10.2 -5.0 -0.5
+255                  Reply  10892   165   9600  66.0 -0.0 -0.0
+</pre><p>By default this output is sorted by ID. As mentioned the sorting can
+                      be altered by providing command line options with running the profile.
+                      Refer to the online help with <code class="code">control_cluster.py help
+                         mercuryprofile</code> for more details. The table below provides a
+                      description of each column type.
+               </p>
+               <div class="altrow">
+                  <table border="1">
+                     <colgroup>
+                        <col width="33%">
+                        <col width="67%">
+                     </colgroup>
+                     <thead>
+                        <tr>
+                           <th>Column Name</th>
+                           <th align="left">Description</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td align="left">id</td>
+                           <td align="left">The Mercury message ID for this message. This
+                                          corresponds to the watcher value
+                                          <span class="literal">nub/interfaceByName/<em class="replaceable"><code>messageName</code></em>/id</span>.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td align="left">name</td>
+                           <td align="left">The name for this Mercury message. This
+                                          corresponds to the watcher value
+                                          <span class="literal">nub/interfaceByID/<em class="replaceable"><code>ID</code></em>/name</span>.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td align="left">br</td>
+                           <td align="left">The total number of bytes received for
+                                          messages of this message type.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td align="left">mr</td>
+                           <td align="left">A count of the number of messages received for
+                                          this message type.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td align="left">max br</td>
+                           <td align="left">The maximum numbers of bytes received for a
+                                          single instance of this message type from all messages of this
+                                          type that have been seen.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td align="left">aml</td>
+                           <td align="left">The average message length (in bytes) for this
+                                          message type.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td align="left">abps</td>
+                           <td align="left">The average bytes per second that this message
+                                          type is handling.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td align="left">amps</td>
+                           <td align="left">The average number of messages per second of
+                                          this message type.
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <p>Each server process type provides a different interface based on the
+                      functionality that process is providing. The two major causes of network
+                      traffic from Mercury messages are the BaseApp and CellApp. The following
+                      sections outline the most commonly encountered interface messages and
+                      their associated functionality. With this information it is possible to
+                      narrow down the scope of any potential issues.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_BaseApp_Interface_Summary"></a>10.5.1.&nbsp;BaseApp Interface Summary
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="altrow">
+                     <table border="1">
+                        <colgroup>
+                           <col width="33%">
+                           <col width="67%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Interface Name</th>
+                              <th align="left">Description</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td align="left">addGlobalBase</td>
+                              <td align="left">Messages received from the BaseAppMgr
+                                               informing a BaseApp of a new global base.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">backupBaseEntity</td>
+                              <td align="left">Messages containing backup information for
+                                               bases on other BaseApps. This is part of the first level fault
+                                               tolerance mechanism. See <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a> chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch04.html" class="olink"><i>Fault Tolerance</i></a>.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">backupCellEntity</td>
+                              <td align="left">Messages from cell entities containing
+                                               backup information. This is part of the first level fault
+                                               tolerance mechanism.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">callBaseMethod</td>
+                              <td align="left">Messages from other processes requesting a
+                                               Python method is run on a base entity.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">callCellMethod</td>
+                              <td align="left">Messages from a CellViaBaseMailBox. These
+                                               messages are forwarded on to the requested base's cell
+                                               entity.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">callClientMethod</td>
+                              <td align="left">Messages from a ClientViaBaseMailBox. These
+                                               messages are forwarded to the Proxy's connect client
+                                               entity.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">cellEntityLost</td>
+                              <td align="left">Messages from a cell entity notifying its
+                                               base that it has been destroyed.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">createBaseFromDB</td>
+                              <td align="left">Messages asking for a base entity to be
+                                               created using a known DBID as a result of calling
+                                               <code class="classname">BigWorld</code><code class="methodname">.createRemoteBaseFromDB<em class="replaceable"><code>*</code></em>()</code>.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">createBaseWithCellData</td>
+                              <td align="left">Messages requesting a base entity is
+                                               created.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">createCellPlayer</td>
+                              <td align="left">Messages forwarded from a CellApp to a
+                                               Client connection via a Proxy notifying the client that its
+                                               Witness has been created.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">currentCell</td>
+                              <td align="left">Messages from CellApps to BaseApps notifying
+                                               a base of an offload in its cell entity. This occurs as a normal
+                                               part of offloading entities as part of load balancing.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">detailedPosition</td>
+                              <td align="left">Messages containing position updates from
+                                               the cell to the client.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">entityMessage</td>
+                              <td align="left">Messages that are received on a nub to call
+                                               a specific interface method. For internal nubs this corresponds
+                                               to all methods defined in an entity's
+                                               <span class="literal">&lt;baseMethod&gt;</span> section. For external nubs
+                                               this corresponds only to methods that are an
+                                               <span class="literal">&lt;Exposed&gt;</span>
+                                               <span class="literal">&lt;baseMethod&gt;</span>.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">forwardedBaseMessage</td>
+                              <td align="left">Messages intended for a base that has been
+                                               recently offloaded to another BaseApp.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">logOnAttempt</td>
+                              <td align="left">Messages from the DBMgr for logon
+                                               attempts.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">modWard</td>
+                              <td align="left">Messages from the cell notifying the proxy
+                                               and the client of a change of client control as a result of
+                                               calling
+                                               <code class="classname">BigWorld</code><code class="methodname">.controlledBy()</code>.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">sendToClient</td>
+                              <td align="left">Messages from the cell notifying the proxy
+                                               that it has sent all the required updates for the entity for the
+                                               current tick and they should now be forwarded to the
+                                               client.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">setBackupBaseApps</td>
+                              <td align="left">Messages from the BaseAppMgr notifying the
+                                               current BaseApp of the other BaseApps that it is responsible for
+                                               performing backups of.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">setClient</td>
+                              <td align="left">Message to notify the BaseApp that the next
+                                               message received refers to a specific Entity. This will
+                                               generally correspond with the number of callBaseMethod,
+                                               callCellMethod and callClientMethod messages.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">setCreateBaseInfo</td>
+                              <td align="left">Messages from the BaseAppMgr informing the
+                                               BaseApp of the best BaseApp to use for calls to
+                                               <code class="classname">BigWorld</code><code class="methodname">.createBaseAnywhere()</code>
+                                               and
+                                               <code class="classname">BigWorld</code><code class="methodname">.createBaseRemotely()</code>.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">setSharedData</td>
+                              <td align="left">Messages notifying the BaseApp of any
+                                               changes to shared data which can include
+                                               <code class="classname">BigWorld</code><code class="varname">.baseAppData</code>
+                                               and
+                                               <code class="classname">BigWorld</code><code class="varname">.globalData</code>.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">teleportOther</td>
+                              <td align="left">Messages requesting that an entity (A) is
+                                               teleported to the same space as an entity (B) that is owned by
+                                               this BaseApp.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">writeToDB</td>
+                              <td align="left">Messages from the cell notifying the base
+                                               entity to write itself to the database.
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <p>The following table outlines some of the BaseApp interfaces that
+                           are used primarily to forward messages directly to the client without
+                           performing any processing. These message occur as a result of CellApp
+                           witnesses sending updates to their associated client.
+                  </p>
+                  <div class="altrow">
+                     <table border="1">
+                        <colgroup>
+                           <col width="33%">
+                           <col width="67%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Interface Name</th>
+                              <th align="left">Description</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td align="left">enterAoI</td>
+                              <td align="left">Proxy message forwarded to client.</td>
+                           </tr>
+                           <tr>
+                              <td align="left">enterAoIOnVehicle</td>
+                              <td align="left">Proxy message forwarded to client.</td>
+                           </tr>
+                           <tr>
+                              <td align="left">forcedPosition</td>
+                              <td align="left">Proxy message forwarded to client.</td>
+                           </tr>
+                           <tr>
+                              <td align="left">leaveAoI</td>
+                              <td align="left">Proxy message forwarded to client.</td>
+                           </tr>
+                           <tr>
+                              <td align="left">updateEntity</td>
+                              <td align="left">Proxy message forwarded to client.</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10151"></a>10.5.2.&nbsp;CellApp Interface Summary
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="altrow">
+                     <table border="1">
+                        <colgroup>
+                           <col width="33%">
+                           <col width="67%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Interface Name</th>
+                              <th align="left">Description</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td align="left">addCell</td>
+                              <td align="left">Messages from a CellAppMgr to add a Cell
+                                               into a Space.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">avatarUpdateExplicit</td>
+                              <td align="left">Position updates from a Client connection to
+                                               their entity.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">avatarUpdateImplicit</td>
+                              <td align="left">Position updates from a Client connection to
+                                               their entity.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">callBaseMethod</td>
+                              <td align="left">Method calls occurring on a BaseViaCell
+                                               mailbox.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">callClientMethod</td>
+                              <td align="left">Method calls occurring on a ClientViaCell
+                                               mailbox.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">callWatcher</td>
+                              <td align="left">A forwarding watcher request from the
+                                               corresponding manager process (i.e., CellAppMgr / BaseAppMgr).
+                                               For more information see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="index.html" class="olink">Server Programming Guide</a> section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="ch30.html#xref_Forwarding_Watchers" class="olink">Forwarding Watchers</a>.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">createEntity</td>
+                              <td align="left">Requests to create a new entity within a
+                                               Space.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">createEntityNearEntity</td>
+                              <td align="left">Requests to create a new entity near to
+                                               another Entity.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">createGhost</td>
+                              <td align="left">Messages from other CellApps requesting a
+                                               ghost entity is created for a new real entity in a nearby
+                                               Cell.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">forwardedBaseEntityPacket</td>
+                              <td align="left">Messages that are forwarded from a ghost
+                                               entity to the real so that it may be provided to the base
+                                               entity. This is used to avoid race conditions when offloading
+                                               entities between CellApps.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">ghostAvatarUpdate</td>
+                              <td align="left">Messages from nearby Cells updating ghost
+                                               entities on the current CellApp of position changes.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">ghostHistoryEvent</td>
+                              <td align="left">Messages sent from real entities that are
+                                               being ghosted on the current CellApp providing history event
+                                               updates.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">ghostedDataUpdate</td>
+                              <td align="left">Messages from real entities updating ghosted
+                                               properties.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">notifyOfCellRemoval</td>
+                              <td align="left">Messages sent from the CellAppMgr to notify
+                                               of a neighbouring cells removal.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">onload</td>
+                              <td align="left">Messages sent from a nearby cell that is
+                                               handing responsibility for a real entity over to the current
+                                               CellApp.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">runExposedMethod</td>
+                              <td align="left">Messages from Clients to run an
+                                               <span class="literal">&lt;Exposed&gt;</span> method on an entity.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">runScriptMethod</td>
+                              <td align="left">Messages from other server components to run
+                                               a method on an entity.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">spaceData</td>
+                              <td align="left">Messages from other CellApps notifying us of
+                                               Space Data changes. For more information see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="index.html" class="olink">Server Programming Guide</a> section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="ch12.html#xref_Space_Data" class="olink">Space Data</a>.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">writeToDBRequest</td>
+                              <td align="left">Messages to entities to stream their
+                                               information back to their base to be written to the
+                                               database.
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e9363" href="#d0e9363">22</a>] </sup>For information on <em class="parameter"><code>pyprofile</code></em> usage see the
+                             <code class="filename">control_cluster.py</code> help.
+                  </p><pre class="programlisting">$ control_cluster.py help pyprofile</pre></div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e9850" href="#d0e9850">23</a>] </sup>For more information on Mercury see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a> section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch06.html#xref_Inter_Process_Communication_Mercury" class="olink">Inter-Process Communication (Mercury)</a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch09.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch11.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;9.&nbsp;Character Sets and Encodings&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;11.&nbsp;Proxies and Players</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

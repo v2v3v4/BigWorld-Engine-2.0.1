@@ -1,0 +1,92 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;16.&nbsp;Disaster Recovery</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch15.html" title="Chapter&nbsp;15.&nbsp;Fault Tolerance">
+      <link rel="next" href="ch17.html" title="Chapter&nbsp;17.&nbsp;Controlled Startup and Shutdown">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch16.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;16.&nbsp;Disaster Recovery</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch15.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch17.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Disaster_Recovery"></a>Chapter&nbsp;16.&nbsp;Disaster Recovery
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p>BigWorld's fault tolerance ensures that the server continues to
+               operate if a single process is lost. The server also provides a second level
+               of fault tolerance known as disaster recovery. The server's state can be
+               written periodically to the database. In the event of entire server failure,
+                 the server can be restarted using this information.
+            </p>
+            <p>The rate of this archiving is specified in the file
+                 <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/server/bw.xml</code> by
+                 the configuration options <code class="property">&lt;baseApp/archivePeriod&gt;</code>
+                 and <code class="property">&lt;cellAppMgr/archivePeriod&gt;</code>. For more details
+                 on these options, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a>'s sections <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html#xref_BaseApp_Configuration_Options" class="olink">BaseApp Configuration Options</a> and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html#xref_CellAppMgr_Configuration_Options" class="olink">CellAppMgr Configuration Options</a>.
+            </p>
+            <p>The CellAppMgr process is responsible for writing to the database the
+                 spaces, their data, and the game time.
+            </p>
+            <p>Entities with a valid database entry are also periodically archived
+                 (indicated by a non-zero <code class="varname">databaseID</code> on the base entity).
+                 To write an entity to the database, thus enabling its archiving, call the
+                 method <code class="methodname">writeToDB</code>() on the base or cell
+                 entity.
+            </p>
+            <p>Each time an entity is archived, its callback
+                 <code class="methodname">onWriteToDB</code>() is invoked.
+            </p>
+            <p>Starting a server with this archived information is the same as
+                 starting the server after a controlled shutdown. For more details, see <a href="ch17.html" title="Chapter&nbsp;17.&nbsp;Controlled Startup and Shutdown"><i xmlns:xlink="http://www.w3.org/1999/xlink">Controlled Startup and Shutdown</i></a>.
+            </p>
+            <p>For more details regarding Disaster Recovery, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch05.html#xref_Disaster_Recovery" class="olink">Disaster Recovery</a>.
+            </p>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch15.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch17.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;15.&nbsp;Fault Tolerance&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;17.&nbsp;Controlled Startup and Shutdown</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

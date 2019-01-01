@@ -1,0 +1,152 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;15.&nbsp;Clock</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Operations Guide">
+      <link rel="up" href="index.html" title="Server Operations Guide">
+      <link rel="prev" href="ch14.html" title="Chapter&nbsp;14.&nbsp;Common Log Messages">
+      <link rel="next" href="ch16.html" title="Chapter&nbsp;16.&nbsp;Machine Groups and Categories">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_operations_guide/ch15.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;15.&nbsp;Clock</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch14.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch16.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Clock"></a>Chapter&nbsp;15.&nbsp;Clock
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch15.html#d0e10259">15.1. BigWorld Timing Methods</a></span></dt>
+                  <dt><span class="section"><a href="ch15.html#xref_Clock_source">15.2. Linux Clock Source</a></span></dt>
+               </dl>
+            </div>
+            <p>The BigWorld server relies heavily on having an accurate clock for
+               timers and load calculation. Unstable clocks (clocks that may move backward)
+               can cause undesired behaviour and even crashes. Therefore properly
+                 configuring how BigWorld reads the time is essential for a stable, efficient
+                 server.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10259"></a>15.1.&nbsp;BigWorld Timing Methods
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld provides three timing methods to select between. This can
+                      be configured by editing the file
+                      <code class="filename">/etc/bwmachined.conf</code>. For example, to use the
+                      <span class="literal">gettime</span> timing method, include a section like this:
+                      
+               </p><pre class="programlisting">[TimingMethod]
+gettime
+</pre><div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">rdtsc</span></em> reads
+                                   the time stamp counter register on the CPU.
+                        </p>
+                        <p>It is known to become unstable in multi-core machines where a
+                                   process moves between cores or if frequency scaling is used. In many
+                                   single core systems it is completely stable and could be used without
+                                   any issues.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">gettime</span></em> uses
+                                   the kernel's clock driver to access the current time.
+                        </p>
+                        <p>This method is far slower than <span class="literal">rdtsc</span> but has
+                                   the ability to draw on multiple time sources to ensure a good
+                                   compromise between speed, accuracy and stability is reachable. For
+                                   additional system level configuration see <a href="ch15.html#xref_Clock_source" title="15.2.&nbsp;Linux Clock Source">Linux Clock Source</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">gettimeofday</span></em>
+                                   is a deprecated timing method.
+                        </p>
+                        <p>This method of timing is similar to <span class="literal">gettime</span>
+                                   but has a lower theoretical maximum resolution and may be disrupted by
+                                   NTP.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Clock_source"></a>15.2.&nbsp;Linux Clock Source
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Linux should automatically select an appropriate clock driver for
+                      its internal timekeeping, however at times the system administrator may
+                      need to select a different driver. If <span class="literal">gettime</span> is used
+                      as the timing method this will have a direct impact on how BigWorld
+                      behaves.
+               </p>
+               <p>A user may check which clocksource they are using with the following
+                      command run as root: 
+               </p><pre class="programlisting"># cat /sys/devices/system/clocksource/clocksource0/current_clocksource</pre><p>
+                      You may check which options available with: 
+               </p><pre class="programlisting"># cat /sys/devices/system/clocksource/clocksource0/available_clocksource</pre><p>Both the <span class="literal">tsc</span> and <span class="literal">jiffies</span>
+                      options are known to be unstable. There have also been reports that
+                      <span class="literal">acpi_pm</span> is unstable with some motherboard chipsets. We
+                      suggest that the <span class="literal">hpet</span> option is used if it is
+                      available, or <span class="literal">acpi_pm</span> if it is not.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch14.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch16.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;14.&nbsp;Common Log Messages&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;16.&nbsp;Machine Groups and Categories</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

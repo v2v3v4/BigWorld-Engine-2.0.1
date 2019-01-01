@@ -1,0 +1,160 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;8.&nbsp;User Data Objects</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch07.html" title="Chapter&nbsp;7.&nbsp;Entities">
+      <link rel="next" href="ch09.html" title="Chapter&nbsp;9.&nbsp;Scripting">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch08.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;8.&nbsp;User Data Objects</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_UDOs"></a>Chapter&nbsp;8.&nbsp;User Data Objects
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch08.html#xref_UDOs_Are_Python_Script_Objects">8.1. .1. User Data Objects are Python script objects</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#xref_UDOs_client_access">8.2. .2. Accessing from the Client</a></span></dt>
+               </dl>
+            </div>
+            <p>User data objects are a way of embedding user defined data in Chunk
+               files. Each user data object type is implemented as a collection of Python
+                 scripts, and an XML-based definition file that ties the scripts together.
+                 These scripts are located in the resource tree under the folder
+                 <code class="filename">scripts</code>.
+            </p>
+            <p>User data objects differ from entities in that they are immutable
+                 (i.e. their properties don't change), and that they are not propagated to
+                 other cells or clients. This makes them a lot lighter than entities.
+            </p>
+            <p>A key feature of user data objects is their linkability. Entities are
+                 able to link to user data objects, and user data objects are able to link to
+                 other user data objects. This is achieved by including a
+                 <span class="literal">UDO_REF</span> property in the definition file for the user data
+                 object or entity that wishes to link to another user data object.
+            </p>
+            <p>For more information about linking, please refer to <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_UDO_Linking" class="olink">User Data Object Linking With <span class="literal">UDO_REF</span>
+                      Properties</a>.
+            </p>
+            <p>For details on the definition of a user data object, which is shared
+                 between the server and the client, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch03.html" class="olink"><i>Physical User Data Object Structure for Scripting</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch03.html#xref_The_UDO_Definition_File" class="olink">The User Data Object Definition File</a>.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_UDOs_Are_Python_Script_Objects"></a>8.1.&nbsp;.1. User Data Objects are Python script objects
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Each user data object is a Python script object
+                      (<span class="literal">PyObject</span>). Depending on the user data object type, it
+                      can exist in different parts of BigWorld, as listed below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Client only</em></p>
+                        <p>Client only user data objects are created by using the
+                                   <span class="literal">CLIENT</span> domain in the <span class="literal">Domain</span> tag
+                                   inside its definition file. Client-only user data objects should not
+                                   have cell or base scripts
+                        </p>
+                        <p>For an example of a client-only user data object, please refer
+                                   to the <span class="literal">CameraNode</span> user data object, implemented in
+                                   the
+                                   <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/CameraNode.py</code>
+                                   and the
+                                   <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/user_data_object_defs/CameraNode.def</code>
+                                   files.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Server only</em></p>
+                        <p>Server only user data objects are instantiated on the server
+                                   only, and will be instantiated in the cell if its
+                                   <span class="literal">Domain</span> tag is <span class="literal">CELL</span>, or in the
+                                   base if the <span class="literal">Domain</span> tag is set to
+                                   <span class="literal">BASE</span>.
+                        </p>
+                        <p>For an example of a server user data object, please refer to the
+                                   <span class="literal">PatrolNode</span> user data object, implemented in the
+                                   <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/PatrolNode.py</code>
+                                   and the
+                                   <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/user_data_object_defs/PatrolNode.def</code>
+                                   files.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_UDOs_client_access"></a>8.2.&nbsp;.2. Accessing from the Client
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The client can access all client-only user data objects using the
+                      command:
+               </p><pre class="programlisting">&gt;&gt;&gt; BigWorld.userDataObjects
+&lt;WeakValueDictionary at 3075900908&gt;</pre><p>This will return a Python dictionary, using the user data object&#8217;s
+                      unique identifier as the key, and its <span class="literal">PyObject</span>
+                      representation as its value. The attributes and script methods of the user
+                      data object can be accessed using the standard dot syntax:
+               </p><pre class="programlisting">&gt;&gt;&gt; patrolNode.patrolLinks
+[UserDataObject at 2358353012, UserDataObject at 2358383771]</pre></div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;7.&nbsp;Entities&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;9.&nbsp;Scripting</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

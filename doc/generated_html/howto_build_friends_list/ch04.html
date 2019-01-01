@@ -1,0 +1,259 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;4.&nbsp;Variations</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Build a Friends List">
+      <link rel="up" href="index.html" title="How To Build a Friends List">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Example Code">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_build_friends_list/ch04.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Variations</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Variations"></a>Chapter&nbsp;4.&nbsp;Variations
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch04.html#d0e1097">4.1. Asking for permission to be someone&#8217;s friend</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1237">4.2. Enforcing mutual friendship</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e1260">4.3. Matching request and response</a></span></dt>
+               </dl>
+            </div>
+            <p>The example here is a starting point for building your own
+                   <em class="emphasis">friends list</em>. We have pointed out areas that need
+                   further work before it would be suitable for use in a production system.
+                   Certainly you will also have specific requirements for your game. This
+                   section discusses some obvious variations and their implications.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1097"></a>4.1.&nbsp;Asking for permission to be someone&#8217;s friend
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This could be a requirement if <em class="emphasis">friends</em> have
+                        special access (<em class="emphasis">e.g.</em>, the
+                        <span class="literal">getInfo</span> command in this document's example).
+               </p>
+               <p>Ideally, the <em class="emphasis">friend</em> can subsequently rescind
+                        his friendship after granting it. This means <em class="emphasis">admirers
+                           list</em> should become editable by the user. Hence, it should
+                        probably store more than just the <span class="literal">DBID</span> for
+                        performance reasons.
+               </p>
+               <p>It may also be a good idea then to limit the size of the
+                        <em class="emphasis">admirers list</em>, since there would be usability
+                        problems when this list is large.
+               </p>
+               <p>Each <em class="emphasis">"Can I be your friend?"</em> request should
+                        also be stored somewhere. Places they could be stored:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">On the client of the player being asked
+                                        (the askee).</em></p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p>This is the bare minimum, since the
+                                                  <em class="emphasis">askee</em> must have visual indication of being
+                                                  asked.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>When the <em class="emphasis">askee</em> logs off, requests are
+                                                  forgotten.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>The <em class="emphasis">asker</em> cannot keep track of
+                                                  outstanding requests.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>A possible situation exists where acceptance is rejected
+                                                  because the <em class="emphasis">asker</em>&#8217;s <em class="emphasis">friends
+                                                     list</em> has become full since the request was
+                                                  made.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">On the client of the askee and on the
+                                        base of the player who is asking (the asker).</em></p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p>The <em class="emphasis">asker</em> can keep track of
+                                                  outstanding requests, therefore will not exceed
+                                                  <em class="emphasis">friends list</em> limit.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>The <em class="emphasis">asker</em> can withdraw the
+                                                  request.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>The <em class="emphasis">askee</em> can notify the
+                                                  <em class="emphasis">asker</em> when he logs off (by using info in
+                                                  the request from the <em class="emphasis">asker</em>) and the
+                                                  <em class="emphasis">asker</em> can remove outstanding
+                                                  requests.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>It is possible, but it does not make much sense for the
+                                                  <em class="emphasis">asker</em> to persist requests because
+                                                  <em class="emphasis">askee</em> will forget requests when he logs
+                                                  off.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">On the client and base of the
+                                        </em><em class="emphasis">askee</em><em class="emphasis">, and on the base of the </em><em class="emphasis">asker</em><em class="emphasis">.</em></p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p>Same as above except...</p>
+                              </li>
+                              <li>
+                                 <p>Both <em class="emphasis">askee</em> and
+                                                  <em class="emphasis">asker</em> can persist requests, and requests
+                                                  can be accepted independent of each other&#8217;s online
+                                                  status.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>Possible data integrity problems because we have
+                                                  persistent data in two entities that needs to be kept in
+                                                  sync.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1237"></a>4.2.&nbsp;Enforcing mutual friendship
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Where mutual friendship is enforced, it will be possible to
+                        eliminate the separate <em class="emphasis">friends list</em> and
+                        <em class="emphasis">admirers list</em>.
+               </p>
+               <p>So when player A adds player B into his <em class="emphasis">friends
+                           list</em>, he is automatically added to B&#8217;s <em class="emphasis">friends
+                           list</em>.
+               </p>
+               <p>It is highly recommended that players be forced to ask permission
+                        before forming friendships (see above). This is to prevent total
+                        strangers from using up the limited number of friends each player is
+                        allowed to have.
+               </p>
+               <p>Note that enforcing mutual friendship would not allow a game world
+                        to have "leader" characters with many more admirers than friends.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1260"></a>4.3.&nbsp;Matching request and response
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>In this document's example, the base would often call
+                        <span class="literal">self.client.showMessage(&lt;type&gt;,&lt;source&gt;,&lt;message&gt;)</span>
+                        as response to a request from the client.
+               </p>
+               <p>Often this is not sufficient for real GUIs. For example, a button
+                        may be disabled while the operation is in progress and re-enabled when
+                        the operation completes. So the client must know that the
+                        <span class="literal">showMessage</span> corresponds to an outstanding request,
+                        and not some unsolicited message (<em class="emphasis">e.g.</em>, message
+                        from a friend).
+               </p>
+               <p>One solution would be to make a separate callback method for each
+                        operation (<em class="emphasis">e.g.</em>, <span class="literal">onAddedFriend</span>,
+                        <span class="literal">onDeletedFriend</span>, etc). But this could make the
+                        <span class="literal">.def</span> file quite cluttered.
+               </p>
+               <p>Another solution would be to pass <em class="emphasis">sequence
+                           numbers</em> and have them passed back in the result
+                        (<em class="emphasis">e.g.</em>, <span class="literal">showMessage(&lt;sequence
+                           number&gt;,&lt;type&gt;,&lt;source&gt;,&lt;message&gt;)</span>). This
+                        would have the advantage of supporting multiple outstanding requests of
+                        the same type (<em class="emphasis">e.g.</em>, multiple
+                        <span class="literal">addFriends</span>), but is obviously more expensive (extra
+                        integer in message and dictionary in the client to map
+                        <em class="emphasis">sequence number</em> to request) and therefore should be
+                        limited to infrequent calls.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Example Code&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

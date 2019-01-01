@@ -1,0 +1,403 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;2.&nbsp;Architecture Overview</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="BigWorld Technology Server Whitepaper">
+      <link rel="up" href="index.html" title="BigWorld Technology Server Whitepaper">
+      <link rel="prev" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Introduction">
+      <link rel="next" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Case Studies">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/bigworld_whitepaper/ch02.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;2.&nbsp;Architecture Overview</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Architecture"></a>Chapter&nbsp;2.&nbsp;Architecture Overview
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="sect1"><a href="ch02.html#d0e31">2.1. Structural Overview</a></span></dt>
+                  <dt><span class="sect1"><a href="ch02.html#d0e55">2.2. Key Features</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="sect2"><a href="ch02.html#d0e58">2.2.1. Load-Balancing</a></span></dt>
+                        <dt><span class="sect2"><a href="ch02.html#d0e87">2.2.2. Scalability</a></span></dt>
+                        <dt><span class="sect2"><a href="ch02.html#d0e116">2.2.3. Fault Tolerance</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <div class="sect1" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e31"></a>2.1.&nbsp;Structural Overview
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The BigWorld Server is made up of a set of processes which are used
+                  to manage one game shard. These processes are typically run on a cluster of
+                  networked machines. The BigWorld Server provides a
+                  scalable, reliable game server for an arbitrary number of concurrently
+                  connected users. The size of the shard and therefore the number of 
+                      concurrent users (CCUs)
+                      can scale based on customers requirements. Some customers prefer to
+                      install multiple BigWorld instances, each dedicated to a different shard,
+                      while others deploy one shard for their entire game.
+               </p>
+               <p>Each instance of the BigWorld Server has multiple processes. The
+                      bulk of the cluster machines are dedicated to running CellApps. CellApps
+                      run the majority of the actual game code and load is dynamically balanced
+                      across them in real-time. Clients do not connect directly to the CellApp
+                      machines, rather, each client connects to a BaseApp which acts as a proxy
+                      between the client and whichever cell machine its player entity happens to
+                      be on at the time. BaseApps run on machines with public IP addresses and
+                      essentially act as the firewall for the server cluster. Most of the
+                      machines that are not dedicated to running CellApps are dedicated to
+                      running BaseApps.
+               </p>
+               <p>The CellAppMgr and BaseAppMgr are singleton processes that manage
+                      the load balancing for CellApps and BaseApps respectively, as well as
+                      providing other administrative functions.
+               </p>
+               <p>The LoginApps validate client logins and are the only processes
+                      other than BaseApps which need to run on machines with public IP
+                      addresses. The login transaction and all subsequent communication from
+                      client to server is encrypted.
+               </p>
+               <p>The Database Manager (DBMgr) stores persistent data in a MySQL
+                      database, and receives periodic back-ups of the server game state. This
+                      state is kept consistent and can be restored in the event of hardware or
+                      system failure.
+               </p>
+               <p>To understand the relationship between CellApps, BaseApps and the
+                  	client, it is important to understand one aspect of how games using BigWorld
+                  	Technology are architected: game entities are implemented
+                      as distributed classes. Each entity can have any combination of Cell,
+                      Base, and client parts, which run on the CellApps, BaseApps and clients
+                      respectively.
+               </p>
+               <p>A high level diagram of the BigWorld Server components and how they
+                      relate to each other is given in the diagram below:
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/bigworld_server_components.png" height=""><span class="caption">
+                        <p>High-level diagram of the BigWorld
+                                   Server
+                        </p></span></div>
+               </div>
+            </div>
+            <div class="sect1" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e55"></a>2.2.&nbsp;Key Features
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e58"></a>2.2.1.&nbsp;Load-Balancing
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The BigWorld Server dynamically allocates its resources to achieve
+                           a dual objective:
+                  </p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Use as few machines as are needed to keep average load
+                                        below a configured threshold, and;
+                           </p>
+                        </li>
+                        <li>
+                           <p>Distribute load across active machines as evenly as
+                                        possible.
+                           </p>
+                        </li>
+                     </ol>
+                  </div>
+                  <p>This results in an economical, efficient use of resources and a
+                           server state that is well-prepared for sudden spikes in load.
+                  </p>
+                  <p>The primary mechanism by which we implement this
+                           dynamic load-balancing scheme is the dynamic allocation and resizing of
+                           Cells. Each CellApp controls a number of cells, each of which is
+                           responsible for a specific part of a space. The area of each game space
+                           is divided between one or more cells as is necessary to keep the load on
+                           the controlling CellApps below a configured threshold. The areas controlled
+                           by cells do not overlap, and the cells collectively
+                           span all areas of all spaces in the game world.
+                           See <a href="ch04.html#xref_Figure_SpaceViewer_3_Cells">SpaceViewer Screenshot</a> 
+                           below for an example of how a number
+                           of cells share the load for a single space.
+                  </p>
+                  <p>As the load on a particular cell increases, its total area is
+                           dynamically reduced by the CellAppMgr, and entities are offloaded onto
+                           adjacent cells to balance the load between available CellApps. As the
+                           average system load increases past the configured threshold for a
+                           particular space, the CellAppMgr will add a new cell and assign it to a
+                           CellApp that doesn't already have a cell in that space. As the average
+                           system load decreases, the CellAppMgr will start to retire Cells,
+                           releasing their associated CellApps from the space, in order to maintain
+                           the average load at the configured threshold.
+                  </p>
+                  <p>This aspect of the server&#8217;s design is based on the heuristic that,
+                           generally, entities are interested in other entities that are spatially
+                           nearby. Since each cell controls entities in a continuous region of a
+                           space, in most cases the interactions between these entities can be
+                           resolved locally without having to communicate with another CellApp.
+                           This minimises network traffic and its associated (and significant) CPU
+                           usage, delivering maximum efficiency and server capacity.
+                  </p>
+                  <p>While the load balancing algorithm for Cells is dynamic, the
+                           algorithm for BaseApps is currently static (although there is work
+                           underway to modify this behaviour), in that the base part of an entity is
+                           (usually) created on the least loaded BaseApp and is never offloaded.
+                           A reasonable turnover (i.e. rate of creation and
+                           destruction) in a system keeps the load balanced evenly over
+                           the available BaseApps.
+                  </p>
+                  <p>The design for BaseApp load balancing is based on the assumption
+                           that the majority of game code is executed on the CellApp, 
+                           so that the largest proportion of game code execution can be
+                           dynamically rather than statically load balanced. The Base part of a
+                           player entity spends most of its time forwarding packets between the
+                           client and its cell entity, and since the downstream bit-rate is held
+                           constant, BaseApp load tends not to fluctuate in the way that CellApp
+                           load can. To date, this static balancing scheme is more than sufficient
+                           to distribute load evenly.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>Ask a BigWorld business manager for a live demonstration of the
+                                server load balancing capabilities. This demonstration shows dynamic
+                                allocation and resizing of cells as a result of changing game
+                                conditions.
+                     </p>
+                  </div>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e87"></a>2.2.2.&nbsp;Scalability
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>An important feature of the BigWorld Server is that load scales
+                           roughly linearly with respect to number of entities. More specifically,
+                           for all other variables such as AI, frequency of activity, etc. held
+                           constant, increasing the number of entities (clients and NPCs) should
+                           produce a linear proportional increase in overall server
+                           load.
+                  </p>
+                  <p>This is important because it means that a BigWorld Server has no
+                           "glass ceiling" for performance, where the amount of extra hardware
+                           required to progressively increase the entity capacity of the server
+                           would become prohibitive. Simply put, with a BigWorld Server, if you
+                           want to double the number of entities, you double the
+                           amount of hardware in the cluster -- The server will expand as much as the
+                           customer base requires for a predictable cost.
+                  </p>
+                  <p>The BigWorld Server achieves these linear scaling characteristics
+                           by two main methods:
+                           controlling the amount of downstream bandwidth available to each client;
+                           and limiting the vision of each entity to a predetermnined range.
+                           Since a large proportion of total server CPU consumption is taken up by
+                           the formation and sending of packets, setting a maximum downstream
+                           bit-rate per client results in load that is linear to the number of
+                           clients once each client reaches this bandwidth limit.
+                  </p>
+                  <p>Without these scaling mechanism in place, the server load would be 
+                           quadratic in the number of clients: as the number of clients
+                           increases, the number of other entities each client can see will
+                           increase at roughly the same rate, giving an
+                           <em class="emphasis">O(n<sup>2</sup>)</em> complexity for
+                           downstream traffic and server load.
+                  </p>
+                  <p>To make sure that clients are not disadvantaged by bandwidth limits,
+                           we prioritise updates for nearby entities when constructing
+                           downstream packets. Entities closest to the client avatar
+                           are given a greater share of the bandwidth and will be updated more
+                           frequently; entities further away are given less share of the bandwidth,
+                           and are updated less frequently. The client has filters to smooth the
+                           movement for entities between updates, so movement will appear smooth
+                           even for distant entities that have sparse updates. As
+                           the client approaches an entity that is far away, the update rate is
+                           increased smoothly so that interactions become more and more
+                           responsive.
+                  </p>
+                  <p>Strictly speaking, server load should increase at a slightly
+                           super-linear rate once downstream bandwidth is fully utilised. Although
+                           the amount being sent per client remains constant, the algorithm that
+                           prioritises the entities and determines which ones are updated is
+                           logarithmic in the number of entities surrounding the client avatar. The
+                           coefficient of this logarithmic part of the complexity is expected to be
+                           very small relative to the linear part related to forming and sending
+                           packets.
+                  </p>
+                  <p>This implies that having excessive entity density in a small area
+                           can have an impact on performance on the server. However, entity density
+                           is a problem not just for the server, but for the client as well. Having
+                           too high an entity density in one area will decrease the client
+                           performance from the additional rendering that is needed. A good game
+                           design should ensure that entity densities are kept at levels that are
+                           appropriate for ensuring good end-user experience.  Our experience has been
+                           that having two thousand entities in a small area (a few hundred metres square)
+                           is handled well by the server, and if appropriate rendering is used on the client
+                           performance can be acceptable there also.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>The scalability capabilities of the server are demonstrated in
+                                the chapter <a href="ch04.html#xref_Feature_Demonstration" title="4.6.&nbsp;Feature Demonstrations">Feature Demonstrations</a> in <a href="ch04.html" title="Chapter&nbsp;4.&nbsp;Demonstration and Analysis"><i xmlns:xlink="http://www.w3.org/1999/xlink">Demonstration and Analysis</i></a></p>
+                  </div>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e116"></a>2.2.3.&nbsp;Fault Tolerance
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The BigWorld Server implements a variety of countermeasures
+                           against component or widespread machine failure. This is to ensure both 
+                           data integrity and high availability of the server. This prevents the 
+                           loss of game event history such as item trades, quests completed etc. 
+                           and allows for an uninterrupted gaming experience.
+                  </p>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e121"></a>2.2.3.1.&nbsp;High Availability - First Level Fault Tolerance
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The aim of first level fault tolerance is to handle isolated
+                                server component or machine failures. When components or machines are
+                                found to be no longer reachable for whatever reason, the system
+                                recovers transparently to the user so that gameplay continues with as
+                                little disruption as possible.
+                     </p>
+                     <p>CellApps implement fault tolerance by having each cell entity
+                                back-up its state to its Base entity at regular intervals. If the
+                                CellApp goes down for any reason, Base entities will detect that their
+                                cell parts are no longer contactable and re-create their cell entity
+                                on another available CellApp.
+                     </p>
+                     <p>For BaseApps, fault tolerance is currently implemented 
+                                by having the BaseApps back up amongst themselves. Each base entity is
+                                backed up to another BaseApp and is sent periodic backup updates. If a
+                                BaseApp goes down, the other BaseApps will restore the backed up base
+                                entities that were on that BaseApp.
+                     </p>
+                     <p>A sentinel process called "Reviver" provides fault tolerance
+                                for the remaining server components (LoginApp, CellAppMgr, BaseAppMgr,
+                                and DBMgr). If any of these processes fail, the Reviver will detect
+                                it and immediately start a new instance of that process to ensure
+                                continuity of gameplay.
+                     </p>
+                     <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                        <h3 class="title">Note</h3>
+                        <p>Ask BigWorld business manager for a live demonstration of the
+                                     server's high availability. This demonstration shows game continuity
+                                     while killing a CellApp.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e135"></a>2.2.3.2.&nbsp;Preserving Game Data Integrity and Consistency - Second
+                                         Level Fault Tolerance
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The second level of fault tolerance deals with massive
+                                system-wide failures (e.g. power outages, disruption to network
+                                hardware etc) and is implemented by the DBMgr and the BaseApps. The
+                                aim of second level fault tolerance is to ensure data integrity rather
+                                than continued gameplay. By the time this stage of fault tolerance has
+                                been engaged it is safe to assume the server is no longer in a state
+                                where it can properly function.
+                     </p>
+                     <p>The BigWorld Server continually conducts a rolling distributed
+                                backup of the game state to a distributed database. For critical state
+                                changes (such as item trades) the database write can be manually
+                                invoked to ensure the gamestate is preserved irrespective of where the
+                                rolling writeback is up to. Once the cause of the system-wide
+                                disruption has been identified and fixed, the game can be restarted
+                                from the game state stored in the database.
+                     </p>
+                     <p>The second level fault tolerance mechanism is
+                                implemented using a distributed database system in the form of
+                                a secondary database for each BaseApp. This ensures scalability, and
+                                removes the DBMgr as a potential bottleneck. In addition, there is
+                                support for snapshotting the server state during online
+                                operation.
+                     </p>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Introduction&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;Case Studies</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

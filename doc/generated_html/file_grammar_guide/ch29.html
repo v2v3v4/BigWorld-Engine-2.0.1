@@ -1,0 +1,340 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;29.&nbsp;.primitives</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch28.html" title="Chapter&nbsp;28.&nbsp;.ppchain">
+      <link rel="next" href="ch30.html" title="Chapter&nbsp;30.&nbsp;shadows.xml">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch29.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;29.&nbsp;<span class="literal">.primitives</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch28.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch30.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_primitives"></a>Chapter&nbsp;29.&nbsp;<span class="literal">.primitives</span></h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch29.html#d0e16704">29.1. Vertex data section</a></span></dt>
+                  <dt><span class="section"><a href="ch29.html#d0e16760">29.2. Index data section</a></span></dt>
+                  <dt><span class="section"><a href="ch29.html#d0e16902">29.3. BSP data section</a></span></dt>
+               </dl>
+            </div>
+            <p>Defined in various sub-folders under the resource tree
+                 <span class="literal">&lt;res&gt;</span> (for example,
+                 <span class="literal">&lt;res&gt;/environments</span>,
+                 <span class="literal">&lt;res&gt;/flora</span>,
+                 <span class="literal">&lt;res&gt;/sets/vehicles</span>, etc...), the
+                 <span class="literal">.primitives</span> files use <em class="emphasis">BinSection</em> (for details on grammar of BinSection
+                 files, see <a href="ch03.html" title="Chapter&nbsp;3.&nbsp;BinSection files"><i xmlns:xlink="http://www.w3.org/1999/xlink"><span class="literal">BinSection</span> files</i></a>) to have discrete bits of
+                 binary data saved in one file using the BigWorld file system.
+            </p>
+            <p>The primitive file can contain vertex data, index data, and BSP
+                 data.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e16704"></a>29.1.&nbsp;Vertex data section
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The section with vertex data contains a small header, followed by
+                      the raw vertex data.
+               </p>
+               <p>Described in BNF format, the file has the following format (the
+                      asterisk character &#8212;<span class="literal">*</span>&#8212; indicates that the previous
+                      section might appear zero or more times.):
+               </p><pre class="programlisting">&lt;vertex_format&gt;
+&lt;number_of_vertices&gt; 
+&lt;raw_vertex_data&gt;</pre><p><span class="citetitle"><span class="literal">.primitives</span> file format in
+                         <span class="literal">BNF</span> grammar &#8212; Vertex data section</span></p>
+               <p>The list below describes the sections in the file:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;number_of_vertices&gt;</span></em></p>
+                        <p>Number of vertices.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;raw_vertex_data&gt;</span></em></p>
+                        <p>Actual vertex data, with size equal to <span class="literal">sizeof vertex *
+                                      &lt;number_of_vertices&gt;</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;vertex_format&gt;</span></em></p>
+                        <p>64-byte field, containing the name of the vertex format
+                                   (<em class="emphasis">e.g.</em>, <span class="literal">xyznuv</span>,
+                                   <span class="literal">xyznuvtb</span>, etc...).
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e16760"></a>29.2.&nbsp;Index data section
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The section with index data contains a small header and the raw
+                      index data, followed by the primitive groups. The primitive groups define
+                      the batches with different materials in the triangle list (these are the
+                      same primitive groups referenced from the <span class="literal">.visual</span> file
+                      &#8212; for details on grammar of <span class="literal">.visual</span> files, see <a href="ch36.html" title="Chapter&nbsp;36.&nbsp;.visual"><i xmlns:xlink="http://www.w3.org/1999/xlink"><span class="literal">.visual</span></i></a>).
+               </p>
+               <p>Described in <span class="literal">BNF</span> format, the file has the
+                      following format (the asterisk character &#8212;<span class="literal">*</span>&#8212; indicates
+                      that the previous section might appear zero or more times):
+               </p><pre class="programlisting">&lt;index_format&gt;
+&lt;number_of_indices&gt; 
+&lt;number_of_primitive_groups&gt; 
+&lt;raw_index_data&gt;
+&lt;raw_primitive_data&gt; ::= &lt;primitive_group_data&gt;*  <a name="co7512"></a><img src="../images/callouts/1.png" alt="1" border="0">
+&lt;primitive_group_data&gt; ::= &lt;start_idx&gt;&lt;num_of_primtvs&gt;&lt;start_vrtx&gt;&lt;num_of_vrtcs&gt;</pre><p><span class="citetitle"><span class="literal">.primitives</span> file format in
+                         <span class="literal">BNF</span> grammar &#8212; Index data section</span></p>
+               <div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a href="#co7512"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p><span class="literal">&lt;raw_primitive_data&gt;</span> contains
+                                      <span class="literal">&lt;number_of_primitive_groups&gt;</span> sections
+                                      <span class="literal">&lt;primitive_group_data&gt;</span>.
+                           </p>
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+               <p>The list below describes the sections in the file:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;index_format&gt;</span></em></p>
+                        <p>64-byte field, containing the type of index list.</p>
+                        <p>Possible values are list (which mean a 16-bit index list), and
+                                   <span class="literal">list32</span> (which means a 32-bit index list).
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;num_of_primtvs&gt;</span></em></p>
+                        <p>Number of triangles rendered in this group.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;num_of_vrtcs&gt;</span></em></p>
+                        <p>Number of vertices used by the triangles in this group.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;number_of_indices&gt;</span></em></p>
+                        <p>Integer number containing the number of indices.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;number_of_primitive_groups&gt;</span></em></p>
+                        <p>Integer number containing the number of primitive groups.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;raw_index_data&gt;</span></em></p>
+                        <p>Actual index data, with size equal to
+                                   2*<span class="literal">&lt;number_of_vertices&gt;</span> (if
+                                   <span class="literal">&lt;index_format&gt;</span> is list), or
+                                   4*<span class="literal">&lt;number_of_vertices&gt;</span> (if
+                                   <span class="literal">&lt;index_format&gt;</span> is
+                                   <span class="literal">list32</span>).
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;raw_primitive_data&gt;</span></em></p>
+                        <p>Actual primitive groups data, with size equal to
+                                   16*<span class="literal">&lt;number_of_primitive_groups&gt;</span>.
+                        </p>
+                        <p>This section contains
+                                   <span class="literal">&lt;number_of_primitive_groups&gt;</span> sections
+                                   <span class="literal">&lt;primitive_group_data&gt;</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;start_idx&gt;</span></em></p>
+                        <p>First index used by this group of triangles.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;start_vrtx&gt;</span></em></p>
+                        <p>First vertex used by the triangles in this group.</p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e16902"></a>29.3.&nbsp;BSP data section
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The section with BSP data contains a small header, followed by the
+                      raw BSP data.
+               </p>
+               <p>Described in <span class="literal">BNF</span> format, the file has the
+                      following format (the asterisk character &#8212;<span class="literal">*</span>&#8212; indicates
+                      that the previous section might appear zero or more times):
+               </p><pre class="programlisting">&lt;bsp_file&gt; ::= &lt;header&gt; &lt;triangle&gt;* &lt;node&gt;* &lt;user_data&gt;*
+&lt;header&gt; ::= &lt;magic_number&gt; &lt;num_triangles&gt; &lt;max_triangles&gt; &lt;num_nodes&gt;
+&lt;triangle&gt; ::= &lt;Vector3&gt; &lt;Vector3&gt; &lt;Vector3&gt;
+&lt;node&gt; ::= &lt;node_flags&gt; &lt;plane_eq&gt; &lt;num_indices&gt; &lt;triangle_index&gt;*
+&lt;node_flags&gt; ::= &lt;reserved&gt; &lt;is_partitioned&gt; &lt;has_front&gt; &lt;has_back&gt;
+&lt;plane_eq&gt; ::= &lt;normal&gt;&lt;d&gt;
+&lt;normal&gt; ::= &lt;Vector3&gt;
+&lt;user_data&gt; ::= &lt;user_data_key&gt; &lt;user_data_blob&gt;
+&lt;user_data_blob&gt; ::= &lt;blob_size&gt; &lt;byte&gt;*</pre><p><span class="citetitle"><span class="literal">.primitives</span> file format in
+                         <span class="literal">BNF</span> grammar &#8212; BSP data section</span></p>
+               <p>The list below describes the sections in the file:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;blob_size&gt;</span></em></p>
+                        <p>4-byte unsigned integer containing the number of bytes in the
+                                   subsequent blob of binary data.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;d&gt;</span></em></p>
+                        <p>Float value equal to the dot product of
+                                   <span class="literal">&lt;plane_eq&gt;</span> and
+                                   <span class="literal">&lt;normal&gt;</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;has_back&gt;</span></em></p>
+                        <p>1-bit flag indicating if node has a back child.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;has_front&gt;</span></em></p>
+                        <p>1-bit flag indicating if node has a front child.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;is_partitioned&gt;</span></em></p>
+                        <p>1-bit flag indicating if all triangles lie on the node's
+                                   plane
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;magic_number&gt;</span></em></p>
+                        <p>4-byte number <span class="literal">0x00505342</span> containing version
+                                   number in the last byte
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;max_triangles&gt;</span></em></p>
+                        <p>4-byte unsigned integer containing maximum size of all
+                                   <span class="literal">&lt;triangle_index&gt;</span> lists.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;normal&gt;</span></em></p>
+                        <p>Normal to plane's front.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;num_indices&gt;</span></em></p>
+                        <p>2-byte unsigned integer containing the number of
+                                   <span class="literal">&lt;triangle_index&gt;</span> sections in current
+                                   <span class="literal">&lt;node&gt;</span> section.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;num_nodes&gt;</span></em></p>
+                        <p>4-byte unsigned integer containing the number of nodes in
+                                   <span class="literal">&lt;node&gt;</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;num_triangles&gt;</span></em></p>
+                        <p>4-byte unsigned integer containing the number of triangles in
+                                   <span class="literal">&lt;triangle&gt;</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;reserved&gt;</span></em></p>
+                        <p>5-bit reserved number <span class="literal">10100</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;triangle_index&gt;</span></em></p>
+                        <p>2-byte unsigned integer containing the index to the
+                                   <span class="literal">&lt;triangle&gt;</span> section.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;triangle&gt;</span></em></p>
+                        <p>XYZ position of the triangle's vertices.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;user_data_key&gt;</span></em></p>
+                        <p>4-byte unsigned integer containing user-defined key associated
+                                   with data.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">&lt;Vector3&gt;</span></em></p>
+                        <p>Vector composed of 3 <span class="literal">float</span> values.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch28.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch30.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;28.&nbsp;<code class="filename">.ppchain</code>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;30.&nbsp;<span class="literal">shadows.xml</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

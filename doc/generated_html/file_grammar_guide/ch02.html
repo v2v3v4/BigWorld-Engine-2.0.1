@@ -1,0 +1,237 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;2.&nbsp;alias.xml</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Overview">
+      <link rel="next" href="ch03.html" title="Chapter&nbsp;3.&nbsp;BinSection files">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch02.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;2.&nbsp;<span class="literal">alias.xml</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_alias_xml"></a>Chapter&nbsp;2.&nbsp;<span class="literal">alias.xml</span></h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch02.html#xref_TypeDefinition_Section">2.1. <span class="literal">TypeDefinition</span> section</a></span></dt>
+               </dl>
+            </div>
+            <p>For more details on alias.xml, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html" class="olink"><i>Properties</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_Property_Types" class="olink">Property Types</a> <span class="symbol">&#8594;</span>
+                 <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_Alias_Of_Data_Types" class="olink">Alias of Data Types</a>.
+            </p>
+            <p>Used to create alias for data types and located under
+                 <span class="literal">fantasydemo/res/scripts/entity_defs</span>, the grammar of
+                 <span class="literal">alias.xml</span> is described below:
+            </p><pre class="programlisting">&lt;root&gt;
+  *&lt;<em class="replaceable"><code>alias_name</code></em>&gt; <em class="emphasis">TypeDefinition</em> 
+     ?&lt;Default&gt;  <em class="replaceable"><code>dflt_val</code></em>  &lt;/Default&gt;
+   &lt;/<em class="replaceable"><code>alias_name</code></em>&gt;
+&lt;/root&gt;</pre><p><span class="citetitle">Grammar of
+                    <code class="filename">fantasydemo/res/scripts/entity_defs/alias.xml</code></span></p>
+            <p>The list below describes the tags in
+                 <span class="literal">alias.xml</span>:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal"><em class="replaceable"><code>alias_name</code></em></span></em></p>
+                     <p>Alias for the type. This can be any string that is a valid XML
+                              tag.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal"><em class="replaceable"><code>dflt_val</code></em></span></em></p>
+                     <p>The default value must match the type specified in <em class="emphasis"><span class="literal">TypeDefinition</span></em>.
+                     </p>
+                     <p>For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html" class="olink"><i>Properties</i></a>
+                              <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_Default_Values" class="olink">Default Values</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">TypeDefinition</span></em></p>
+                     <p>For details, see <a href="ch02.html#xref_TypeDefinition_Section" title="2.1.&nbsp;TypeDefinition section"><span class="literal">TypeDefinition</span> section</a>.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_TypeDefinition_Section"></a>2.1.&nbsp;<span class="literal">TypeDefinition</span> section
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The grammar for the <em class="emphasis"><span class="literal">TypeDefinition</span></em> section is
+                      described below:
+               </p><pre class="programlisting">{ &lt;primitive_type&gt;<a name="co110"></a><img src="../images/callouts/1.png" alt="1" border="0">
+
+| {ARRAY | TUPLE}<a name="co112"></a><img src="../images/callouts/2.png" alt="2" border="0"> &lt;of&gt; <em class="emphasis">TypeDefinition</em> &lt;/of&gt;
+
+| FIXED_DICT<a name="co114"></a><img src="../images/callouts/3.png" alt="3" border="0">
+    &lt;Properties&gt; 
+      +&lt;<em class="replaceable"><code>field_name</code></em>&gt;
+          &lt;Type&gt;  <em class="emphasis">TypeDefinition</em>  &lt;/Type&gt;
+       &lt;/<em class="replaceable"><code>field_name</code></em>&gt;
+    &lt;/Properties&gt; 
+   ?&lt;AllowNone&gt;     true|false  &lt;/AllowNone&gt;
+   ?&lt;implementedBy&gt; <em class="replaceable"><code>custom_type</code></em><a name="co121"></a><img src="../images/callouts/4.png" alt="4" border="0"> &lt;/implementedBy&gt;
+
+| USER_TYPE &lt;implementedBy&gt; <em class="replaceable"><code>custom_type</code></em><a name="co123"></a><img src="../images/callouts/5.png" alt="5" border="0"> &lt;/implementedBy&gt;
+
+}</pre><p><span class="citetitle">Grammar of
+                         <span class="literal">fantasydemo/res/scripts/entity_defs/alias.xml</span></span></p>
+               <div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a href="#co110"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>See the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s
+                                      section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html" class="olink"><i>Properties</i></a> <span class="symbol">&#8594;</span>
+                                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_Primitive_Types" class="olink">Primitive Types</a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a href="#co112"><img src="../images/callouts/2.png" alt="2" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>See the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s
+                                      section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html" class="olink"><i>Properties</i></a> <span class="symbol">&#8594;</span>
+                                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_Composite_Types" class="olink">Composite Types</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_ARRAY_And_TUPLE_Types" class="olink">ARRAY and TUPLE Types</a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a href="#co114"><img src="../images/callouts/3.png" alt="3" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>See the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s
+                                      section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html" class="olink"><i>Properties</i></a> <span class="symbol">&#8594;</span>
+                                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_Composite_Types" class="olink">Composite Types</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_FIXED_DICT_Data_Type" class="olink">FIXED_DICT Data Type</a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a href="#co121"><img src="../images/callouts/4.png" alt="4" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>See the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s
+                                      section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html" class="olink"><i>Properties</i></a> <span class="symbol">&#8594;</span>
+                                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_Custom_User_Types" class="olink">Custom User Types</a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a href="#co123"><img src="../images/callouts/5.png" alt="5" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>See the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s
+                                      section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html" class="olink"><i>Properties</i></a> <span class="symbol">&#8594;</span>
+                                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_Custom_User_Types" class="olink">Custom User Types</a>.
+                           </p>
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+               <p>The list below describes the tags in
+                      <span class="literal">alias.xml</span>:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">ARRAY</span></em></p>
+                        <p>Alias for a composite <span class="literal">ARRAY</span> data type.
+                        </p>
+                        <p>For details on <span class="literal">ARRAY</span>s, see the document
+                                   <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html" class="olink"><i>Properties</i></a>
+                                   <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_Composite_Types" class="olink">Composite Types</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_ARRAY_And_TUPLE_Types" class="olink">ARRAY and TUPLE Types</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">FIXED_DICT</span></em></p>
+                        <p>Alias for a composite <span class="literal">FIXED_DICT</span> data
+                                   type.
+                        </p>
+                        <p>For details on <span class="literal">FIXED_DICT</span> data types, see the
+                                   document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s section
+                                   <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html" class="olink"><i>Properties</i></a> <span class="symbol">&#8594;</span>
+                                   <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_Composite_Types" class="olink">Composite Types</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_FIXED_DICT_Data_Type" class="olink">FIXED_DICT Data Type</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal"><em class="replaceable"><code>primitive_type</code></em></span></em></p>
+                        <p>Alias for a primitive data type.</p>
+                        <p>For a detailed list of primitive data types available to entity
+                                   properties, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html" class="olink"><i>Properties</i></a>
+                                   <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_Primitive_Types" class="olink">Primitive Types</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">TUPLE</span></em></p>
+                        <p>Same as <span class="literal">ARRAY</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">USER_TYPE</span></em></p>
+                        <p>Alias for a custom user type.</p>
+                        <p>For details on custom user types, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html" class="olink"><i>Properties</i></a>
+                                   <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch04.html#xref_Custom_User_Types" class="olink">Custom User Types</a>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Overview&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;<span class="literal">BinSection</span> files
+                  </td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

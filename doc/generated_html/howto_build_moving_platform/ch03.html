@@ -1,0 +1,283 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;3.&nbsp;Example Code</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Build a Server-Controlled Moving Platform">
+      <link rel="up" href="index.html" title="How To Build a Server-Controlled Moving Platform">
+      <link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Features">
+      <link rel="next" href="apa.html" title="Appendix&nbsp;A.&nbsp;Example">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_build_moving_platform/ch03.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Example Code</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="apa.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="d0e43"></a>Chapter&nbsp;3.&nbsp;Example Code
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch03.html#d0e61">3.1. <span class="literal">MovingPlatform</span> entity</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#d0e86">3.1.1. The path</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e129">3.1.2. Movement control</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e140">3.1.3. Put <span class="literal">MovingPlatform</span> in client collision
+                                         scene</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e172">3.1.4. Board and Alight from vehicles</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e210">3.1.5. Server physics validation</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>The example code is part of the FantasyDemo example game.</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>The example platform vehicle in FantasyDemo is the
+                                <span class="literal">MovingPlatform</span>. Its behaviour is to follow a path
+                                of User Data Objects of the type <span class="literal">PlatformNode</span>. The
+                                platform will wait at specific nodes and can randomly choose a
+                                direction when the path forks.
+                     </p>
+                  </li>
+                  <li>
+                     <p>The PlatformNode editor script demonstrates changing in editor
+                                appearance based on property data as well as making path building easy
+                                and intuitive.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e61"></a>3.1.&nbsp;<span class="literal">MovingPlatform</span> entity
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p><span class="literal">MovingPlatform</span> is a Non-Player Character (NPC)
+                        entity that moves around the game scene along a specified path. The path
+                        is a connected graph of user data objects of type
+                        <span class="literal">PlatformNode</span> built in WorldEditor.
+                        <span class="literal">MovingPlatform</span> moves from one node to the next by
+                        applying and acceleration &#8212; this is achieved using the
+                        <span class="literal">Entity.accelerateToPoint</span> movement controller call on
+                        <span class="literal">MovingPlatform</span>'s cell entity. The next node to which
+                        the <span class="literal">MovingPlatform</span> will traverse is randomly selected
+                        from those connected in the direction the platform it travelling. The
+                        editor script for the Patrol nodes ensures that no backwards or dual
+                        direction links exist so the platform will never double back on its
+                        self.
+               </p>
+               <p></p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e86"></a>3.1.1.&nbsp;The path
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The <span class="literal">MovingPlatform</span> takes its path from a set
+                             of connected <span class="literal">PlatformNode</span> user data objects, which
+                             were implemented for building paths. For details see the document
+                             <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html" class="olink"><i>WorldEditor</i></a> <span class="symbol">&#8594;</span>
+                             <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html#xref_we_Useful_Notes" class="olink">Useful notes</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html#xref_we_Patrol_Path_Editing" class="olink">Patrol path editing with User Data Objects</a>.
+                  </p>
+                  <p>The path appears as a connected graph of nodes, with paths
+                             linking them together in a definite direction. From the path, the
+                             <span class="literal">MovingPlatform</span> can find traversable nodes to
+                             continue its movement. Each node also contains information such as how
+                             long the platform should wait at the node and how fast it should
+                             travel as it approaches the node. This node's data is also used to
+                             modify its appearance in <span class="literal">WorldEditor</span>. Below you
+                             will observe that one node is lager than the others. This is used to
+                             highlight nodes at which the <span class="literal">MovingPlatform</span> will
+                             stop.
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/patrol_path_displayed_in_worldeditor.png"><span class="caption">
+                           <p>Path of user data objects displayed in
+                                          WorldEditor
+                           </p></span></div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e129"></a>3.1.2.&nbsp;Movement control
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The example <span class="literal">MovingPlatform</span> that follows a
+                             world builder defined path though the air. To move the platform the
+                             function <span class="literal">Entity.accelerateToPoint()</span> is used. This
+                             movement controller provides simple movement with smooth acceleration
+                             but makes no effort to avoid obstacles. It is entirely the world
+                             builder&#8217;s responsibility to ensure the platform does not fly through
+                             any walls.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e140"></a>3.1.3.&nbsp;Put <span class="literal">MovingPlatform</span> in client collision
+                                      scene
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Normally, we load models for various entities on the client
+                             using <span class="literal">BigWorld.Model</span> method. These loaded models,
+                             however are not added to the collision scene,
+                             <em class="emphasis">i.e.</em>, instead of colliding with the entity/model,
+                             your player avatar (or NPC) will pass through the colliding
+                             entity.
+                  </p>
+                  <p>In the case of our <span class="literal">MovingPlatform</span>, the player
+                             avatar will fall through the vehicle, instead of standing on top of
+                             it. We need to use <span class="literal">BigWorld.PyModelObstacle</span> to load
+                             the moving platform's model, in order to put the model in the
+                             collision scene on the client.
+                  </p>
+                  <p>For example, in <span class="literal">client/MovingPlatform.py</span>
+                             file's <span class="literal">enterWorld</span> method:
+                  </p><pre class="programlisting"> self.model = BigWorld.PyModelObstacle( MovingPlatform.PLATFORM_MODEL, self.matrix, True )</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e172"></a>3.1.4.&nbsp;Board and Alight from vehicles
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>Any entity will become a vehicle when another entity boards it
+                                  &#8212; there are no restrictions on which entity can become a
+                                  vehicle.
+                     </p>
+                  </div>
+                  <p>Player-controlled avatar entity and server-controlled NPC
+                             entities use different mechanisms to board and alight from vehicles. A
+                             server-controlled NPC would need to explicitly use
+                             <span class="literal">Entity.boardVehicle</span> and
+                             <span class="literal">Entity.alightVehicle</span>, to board or alight from a
+                             vehicle.
+                  </p>
+                  <p>Player-controlled avatar entities do not require explicit API
+                             calls to board or alight from a vehicle because the gravity
+                             calculations in the physics controller automatically detect if the
+                             player is standing on a vehicle. When player avatar moves away from
+                             the platform such that it is no longer underneath our player's feet,
+                             the entity physics controller will automatically alight them from the
+                             vehicle.
+                  </p>
+                  <p>There are two requirements for this automatic boarding and
+                             alight mechanism to operate and they are as follows:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>The player avatar must have its gravity attribute set in its
+                                          physics object, as illustrated below:
+                           </p><pre class="programlisting">BigWorld.player().physics.fall=1  </pre></li>
+                        <li>
+                           <p>The would-be vehicle entity must have its model
+                                          <span class="literal">vehicleID</span> attribute set to itself &#8212; in
+                                          our <span class="literal">client/MovingPlatform.py</span>'s file
+                                          <span class="literal">enterWorld</span> method:
+                           </p><pre class="programlisting">self.model.vehicleID = self.id</pre></li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e210"></a>3.1.5.&nbsp;Server physics validation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>Server physics validation only works on client-controlled
+                                  entities with <span class="literal">topSpeed</span> attribute greater than
+                                  zero.
+                     </p>
+                  </div>
+                  <p>The server can perform limited physics validations on
+                             player-controlled avatar entities, apart from validate speed of player
+                             avatar, the server can also permit or disallow avatar getting on/off a
+                             vehicle. For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch11.html" class="olink"><i>Proxies and Players</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch11.html#xref_Physics_Correction" class="olink">Physics Correction</a>.
+                  </p>
+                  <p>The <span class="literal">onPassengerBoardAttempt</span> and
+                             <span class="literal">onPassengerAlightAttempt</span> optional callback on
+                             vehicle entity are invoked when a player avatar boards or alights the
+                             vehicle. Returning <em class="emphasis">True</em> permits avatar's vehicle
+                             transition movement, otherwise the movement is disallowed, and avatar
+                             will be forced back to its earlier position in relation to the
+                             vehicle.
+                  </p>
+                  <p>The current <span class="literal">MovingPlatform</span> implementation
+                             does not have any additional logic in the two callbacks, apart from a
+                             simple print statement.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="apa.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;Features&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Appendix&nbsp;A.&nbsp;Example</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

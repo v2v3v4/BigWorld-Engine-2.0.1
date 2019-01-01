@@ -1,0 +1,186 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;2.&nbsp;Umbra</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Third-Party Integrations">
+      <link rel="up" href="index.html" title="Third-Party Integrations">
+      <link rel="prev" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Introduction">
+      <link rel="next" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Scaleform">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;2.&nbsp;Umbra</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Umbra_Integration"></a>Chapter&nbsp;2.&nbsp;Umbra
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch02.html#d0e344">2.1. Building BigWorld Client with Umbra enabled</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e371">2.2. Modes of operation</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e402">2.3. Chunk items</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e409">2.4. Umbra proxies</a></span></dt>
+               </dl>
+            </div>
+            <p>Umbra is a third party visibility library produced by Umbra Software
+                 Ltd (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.umbra.fi" target="_top">www.umbra.fi</a>). Umbra is not
+                 provided as part of the BigWorld Technology license and needs to be licensed
+                 separately if required.
+            </p>
+            <p>Umbra uses graphics hardware to determine what parts of the scene are
+                 visible. Any opaque object that writes to the depth buffer can be used as an
+                 occluder and any chunk item with a bounding box can potentially be
+                 occluded.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e344"></a>2.1.&nbsp;Building BigWorld Client with Umbra enabled
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To enable Umbra, the preprocessor definition
+                      <span class="literal">UMBRA_ENABLE</span> needs to be set to <span class="literal">1</span> in
+                      <span class="literal">umbra_config.hpp</span> in the chunk library
+                      (<span class="literal">src/lib/chunk/umbra_config.hpp</span>).
+               </p>
+               <p>You will also need to add the Umbra include and library paths to
+                      your projects.
+               </p>
+               <p>To link against the Umbra debug library, change the <code class="code"> #pragma
+                         comment(lib, "umbra.lib") </code> in the file
+                      (<span class="literal">src/lib/chunk/chunk_umbra.cpp</span>).
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e371"></a>2.2.&nbsp;Modes of operation
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Umbra can run in two different modes: Hardware and Software.</p>
+               <p>The engine will choose to use hardware mode when hardware occlusion
+                      queries are supported.
+               </p>
+               <p>In hardware mode, Umbra uses the z-buffer for occluding objects,
+                      this means that any opaque object that is rendered in the scene can
+                      occlude objects that are further away.
+               </p>
+               <p>In hardware mode only 2 umbra cells are created, one for inside
+                      objects and one for outside objects, both cells exist in world space and
+                      are connected by umbra portals.
+               </p>
+               <p>The BigWorld Client will chose to use Umbra in software mode when
+                      hardware occlusion queries are not supported.
+               </p>
+               <p>In software mode only objects specified as occluders can occlude
+                      other objects. By default only terrain occludes geometry, additional
+                      static models can be set manually as occluders in ModelEditor (for
+                      details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html" class="olink"><i>ModelEditor</i></a>
+                      <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html#xref_me_Panel_Summary" class="olink">Panel summary</a> <span class="symbol">&#8594;</span>
+                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html#xref_me_Object_Properties_Panel" class="olink">Object Properties panel</a>). All chunk items with a
+                      physical size can be occluded by Umbra. Please refer to the Umbra
+                      reference documentation for descriptions of Umbra-related objects.
+               </p>
+               <p>In software mode chunks correspond fairly well to Umbra cells. Each
+                      indoor chunk has a corresponding Umbra cell, which is connected to other
+                      Umbra cells by Umbra portals. All outdoor chunks share one common Umbra
+                      cell, which is owned by the chunk space. All cells exist in world
+                      space.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e402"></a>2.3.&nbsp;Chunk items
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>When using Umbra to render the scene, every ChunkItem needs to have
+                      a corresponding Umbra object. The chunk item is set as the Umbra object's
+                      user data, so that when an Umbra object is deemed visible, its chunk item
+                      can be retrieved and rendered.
+               </p>
+               <p>When implementing a specialised chunk item, you will need to add a
+                      Umbra object for it. The chunk item contains a UmbraObjectProxy and a
+                      UmbraModelProxy, which can store the Umbra object and Umbra model for the
+                      specialised chunk item. The object-to-cell matrix is the world transform
+                      of the object.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e409"></a>2.4.&nbsp;Umbra proxies
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To ease handling of Umbra objects, BigWorld Technology provides
+                      proxy objects for Umbra objects (class
+                      <span class="literal">UmbraObjectProxy</span>) and Umbra models (class
+                      <span class="literal">UmbraModelProxy</span>). These objects are a thin wrapper
+                      around the corresponding Umbra objects, allowing BigWorld Technology to
+                      use standard smart pointers to reference them.
+               </p>
+               <p>The proxies are also stored in a managed list, to ensure that all
+                      Umbra objects are destructed before Umbra is shut down. For details on
+                      these classes, see the C++ API documentation.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Introduction&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;Scaleform</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

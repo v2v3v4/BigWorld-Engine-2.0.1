@@ -1,0 +1,123 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;6.&nbsp;Development Environment Configuration</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Installation Guide">
+      <link rel="up" href="index.html" title="Server Installation Guide">
+      <link rel="prev" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Cluster Configuration">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Development Environment Configuration</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_development_environment_configuration"></a>Chapter&nbsp;6.&nbsp;Development Environment Configuration
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch06.html#d0e1204">6.1. Setting up shared resources</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#d0e1213">6.2. Configure bwmachined</a></span></dt>
+               </dl>
+            </div>
+            <p>The server side development environment requires a little bit of
+                 configuration to enable fluid development. This chapter aims to instruct the
+                 reader on how to successfully configure the server environment.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1204"></a>6.1.&nbsp;Setting up shared resources
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Developing a game using BigWorld inevitably means managing code and
+                      assets developed by a number of people on both Windows and Linux machines.
+                      With this in mind BigWorld has a set of recommendations for working in
+                      this kind of environment. Please refer to the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a> section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch23.html" class="olink"><i>Shared Development Environments</i></a> for more information.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1213"></a>6.2.&nbsp;Configure bwmachined
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Each user wishing to run a server must have a valid BWMachined
+                      configuration script which points to the server binaries and game
+                      resources to be used when starting the server. A script called
+                      <span><strong class="command">bw_configure</strong></span> is provided to assist in this process.
+                      When installing the server using RPM packages, this script should be
+                      automatically placed in your environment path and available for
+                      use.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>If this is your first time installing and running a BigWorld
+                           server and are uncertain of what to input here, please refer to the
+                           <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../bigworld_tutorial/index.html" class="olink">Tutorial</a> chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../bigworld_tutorial/ch03.html" class="olink"><i>A basic client-server game (<span class="literal">CLIENT_SERVER</span>)</i></a>, which runs through this
+                           process step by step.
+                  </p>
+               </div>
+               <p>To create or update your bwmachined configuration file
+                      (<code class="filename"><code class="envar">$HOME</code>/.bwmachined.conf</code>) simply run
+                      the script as follows:
+               </p><pre class="programlisting">$ bw_configure
+Game resource path [~/my_game/res]: ~/mf/my_game/res
+Writing to /home/alice/.bwmachined.conf succeeded
+
+Installation root : /opt/bigworld/current/server
+BigWorld resources: /opt/bigworld/current/server/res
+Game resources    : /home/alice/mf/my_game/res</pre></div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Cluster Configuration&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

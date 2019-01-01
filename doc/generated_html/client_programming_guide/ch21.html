@@ -1,0 +1,3245 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;21.&nbsp;3D Engine (Moo)</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch20.html" title="Chapter&nbsp;20.&nbsp;Sounds">
+      <link rel="next" href="ch22.html" title="Chapter&nbsp;22.&nbsp;Post Processing">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch21.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;21.&nbsp;3D Engine (Moo)</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch20.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch22.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_3D_Engine"></a>Chapter&nbsp;21.&nbsp;3D Engine (Moo)
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch21.html#xref_Features">21.1. Features</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch21.html#d0e7014">21.1.1. D3DXEffects vertex and pixel shader support</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e7021">21.1.2. Cubic environment maps</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e7026">21.1.3. Render targets</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#xref_Lighting">21.1.4. Lighting</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e7136">21.1.5. Normal mapping/bump mapping</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e7141">21.1.6. Terrain</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e7146">21.1.7. Animation</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e7151">21.1.8. Vertex morphing</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch21.html#d0e7158">21.2. Supported video cards</a></span></dt>
+                  <dt><span class="section"><a href="ch21.html#d0e7191">21.3. Hardware requirements for special effects</a></span></dt>
+                  <dt><span class="section"><a href="ch21.html#d0e7324">21.4. Visual</a></span></dt>
+                  <dt><span class="section"><a href="ch21.html#xref_EffectMaterial">21.5. EffectMaterial</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch21.html#xref_EffectMaterial_Format">21.5.1. Format</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#xref_Automatic_Variables_Globals">21.5.2. Automatic variables/Globals</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#xref_Artist_Editable_Tweakable_Variables">21.5.3. Artist-editable/tweakable variables</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e8227">21.5.4. Multiple-layered effects per material</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e8237">21.5.5. Recording material states</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e8261">21.5.6. Using BigWorld <span class="literal">.fx</span> files with 3ds Max</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch21.html#d0e8326">21.6. Visual channels</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch21.html#d0e8359">21.6.1. Sorted channel</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e8371">21.6.2. Internal sorted channel</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e8380">21.6.3. Shimmer channel</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e8387">21.6.4. Sorted shimmer channel</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e8397">21.6.5. Distortion channel</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch21.html#xref_Textures">21.7. Textures</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch21.html#xref_Texture_Details_Levels_Compression">21.7.1. Texture detail levels/compression</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e8587">21.7.2. Animated textures</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e8650">21.7.3. Applying a code-generated texture to a character</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch21.html#d0e8829">21.8. Vertex declaration</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch21.html#d0e8849">21.8.1. File format</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch21.html#xref_Graphics_Settings">21.9. Graphics settings</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch21.html#xref_Customising_Options">21.9.1. Customising options</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e9820">21.9.2. Using settings</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch21.html#xref_High_Resolution_Screenshots">21.10. Taking Screenshots</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch21.html#d0e10078">21.10.1. High Resolution Screenshots</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch21.html#xref_Dynamic_Entity_Shadows">21.11. Dynamic Entity Shadows</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch21.html#d0e10227">21.11.1. Splodges</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e10255">21.11.2. Shadow maps</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>Moo is a 3D engine using DirectX 9 that provides resource-, object-
+                 and device- based services up to, but not including the scene
+                 database.
+            </p>
+            <p>Resource-based services include the generation and management of
+                 vertex buffers, index buffers, vertex shaders, pixel shaders, and effects.
+                 Textures are compressed and stored automatically. All resources that are not
+                 managed by Direct3D are managed by Moo, allowing for large amounts of data
+                 moving in and out of use.
+            </p>
+            <p>Object-based services include a full animation system, skinned bipeds,
+                 compound skeletal geometrics, and specialised terrain rendering. Moo exposes
+                 the concept of a visual, an important mid-level geometric construct that
+                 sits beneath the scene database and greatly simplifies the scene database
+                 code.
+            </p>
+            <p>Device-based services include level-of-detail control over rendering
+                 states, encapsulated in materials and shaders. The 3D window is encapsulated
+                 as a RenderContext, and provides frames-of-reference in which to render
+                 geometrics and store lighting states.
+            </p>
+            <p>Finally, Moo provides the essential alpha-blended sorted triangle
+                 pipeline, a service that unfortunately is still not provided by Direct3D or
+                 directly in (most) hardware.
+            </p>
+            <p>It is important to note that where possible, Moo uses underlying
+                 Direct3DX structures such as D3DXMatrix, D3DXVector, and D3DXQuaternion. The
+                 DirectX team continually improves the implementation of these mathematical
+                 classes, and their functionality often takes advantage of processor specific
+                 instructions, such as MMX, SIMD and 3DNow!. It is prudent to leverage the
+                 efforts of these engineers.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Features"></a>21.1.&nbsp;Features
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Some of the advanced features of Moo are listed below:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>D3DXEffects vertex and pixel shader support</p>
+                     </li>
+                     <li>
+                        <p>Cubic environment maps</p>
+                     </li>
+                     <li>
+                        <p>Render targets</p>
+                     </li>
+                     <li>
+                        <p>Lighting</p>
+                     </li>
+                     <li>
+                        <p>Normal mapping/bump mapping</p>
+                     </li>
+                     <li>
+                        <p>Terrain</p>
+                     </li>
+                     <li>
+                        <p>Animation</p>
+                     </li>
+                     <li>
+                        <p>Vertex morphing</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The following sections describe these features.</p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7014"></a>21.1.1.&nbsp;D3DXEffects vertex and pixel shader support
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Effect files are used extensively in Moo. Most of the rendering
+                           pipeline is based around the class EffectMaterial, which implements a
+                           way of managing the global values used by the effects, and also the
+                           per-instance data for the effects, such as textures, self-illumination
+                           values, and specular reflection constants.
+                  </p>
+                  <p>The effect files also make it easier to manage pixel and vertex
+                           shaders, as they are created together in one file. Using the D3DXEffect
+                           format removes much of the complexities of adding new shader effects to
+                           the engine and allows rapid prototyping of new visual effects.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7021"></a>21.1.2.&nbsp;Cubic environment maps
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Cubic environment maps can be used for some reflections and for
+                           normalisation cube maps (used for normal mapping).
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7026"></a>21.1.3.&nbsp;Render targets
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Render targets are used to create billboard textures. They can
+                           also be used in conjunction with the GUI components to display 3D
+                           objects in the 2D GUI (for example, for item selection previews).
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Lighting"></a>21.1.4.&nbsp;Lighting
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The lighting component of Moo supports three different kinds of
+                           lights:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Directional lights.</p>
+                        </li>
+                        <li>
+                           <p>Point lights.</p>
+                        </li>
+                        <li>
+                           <p>Spot lights.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Any object can be lit by two directional lights, four point lights
+                           and two spot lights. These lights are picked according to an attenuation
+                           metric, so that generally the closest lights will be chosen. It is also
+                           important to note that the fewer lights used, the faster the execution
+                           of the lighting vertex shader will be.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Light_Maps"></a>21.1.4.1.&nbsp;Light maps
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The class <span class="literal">bigworld/src/lib/romp/light_map.cpp</span>
+                                is generalised to support both the flora and sky light maps. Light
+                                maps are configurable in XML files.
+                     </p>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="xref_Flora_Light_Map"></a>21.1.4.1.1.&nbsp;Flora light map
+                                 </h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>The flora light map details are specified in
+                                     <span class="literal">flora.xml</span> (for details on this file's grammar,
+                                     see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section
+                                     <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch38.html#xref_flora_xml" class="olink"><span class="literal"><em class="replaceable"><code>&lt;flora&gt;</code></em>.xml</span></a>)
+                                     and its location is specified in the file
+                                     <span class="literal">resources.xml</span> (for details on this file, see
+                                     <a href="ch01.html#xref_File_resources_xml" title="1.4.1.&nbsp;File resources.xml">File <span class="literal">resources.xml</span></a>).
+                        </p>
+                        <p>The <span class="literal">material</span> tag for flora light map should
+                                     be <span class="literal">system/materials/light_map.mfm</span> (for details on
+                                     this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <span class="literal"><a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch20.html" class="olink"><i><span class="literal">.mfm</span></i></a></span>).
+                        </p>
+                        <p>The default width/height for the flora light map is 64x64.
+                                     This is small, but still enough resolution for the projection onto
+                                     the flora, because its visible area is 100x100 metres.
+                        </p>
+                        <div class="informalfigure">
+                           <div class="mediaobject"><img src="images/definition_of_flora_light_map.png"><span class="caption">
+                                 <p>Definition of flora light map</p></span></div>
+                        </div>
+                     </div>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="xref_Sky_Light_Map"></a>21.1.4.1.2.&nbsp;Sky light map
+                                 </h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>The sky light map details are specified in the space's
+                                     <span class="literal">sky.xml</span> file, and its location is specified in
+                                     the space's <span class="literal">space.settings</span> file (for details on
+                                     this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch31.html" class="olink"><i><span class="literal">space.settings</span></i></a>.).
+                        </p>
+                        <p>The material tag for sky light map should be
+                                     <span class="literal">system/materials/sky_light_map.mfm</span> (for details
+                                     on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch20.html" class="olink"><i><span class="literal">.mfm</span></i></a>).
+                        </p>
+                        <p>The default width/height for the sky light map is 512x512.
+                                     This is quite large because the light map is projected across the
+                                     whole visible world (usually around 1x1 km).
+                        </p>
+                        <div class="informalfigure">
+                           <div class="mediaobject"><img src="images/definition_of_sky_light_map.png"><span class="caption">
+                                 <p>Definition of sky light map</p></span></div>
+                        </div>
+                        <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                           <h3 class="title">Note</h3>
+                           <p>The sky light map can be disabled via the
+                                          <span class="literal">SKY_LIGHT_MAP</span> graphic setting (for details, see
+                                          <a href="ch21.html#xref_Customising_Options" title="21.9.1.&nbsp;Customising options">Customising options</a>).
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7136"></a>21.1.5.&nbsp;Normal mapping/bump mapping
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Normal mapping is used to add surface detail to objects by using
+                           per-texel normals baked into a texture. Moo currently supports normal
+                           maps for specular and diffuse lighting on dynamically lit objects, and
+                           specular lighting on statically lit objects. The current version of the
+                           Exporter supports tangent space normal mapping only.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7141"></a>21.1.6.&nbsp;Terrain
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Moo takes advantage of the multi-texture, vertex, and pixel
+                           shading capabilities of the supported graphics cards. Since it uses a
+                           blended 4-layered texturing system for the terrain, Moo utilises the
+                           hardware's four texture stages optimally so that that most of the
+                           terrain can be rendered in just one pass. The terrain also supports
+                           self-shadowing from a directional light source.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7146"></a>21.1.7.&nbsp;Animation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Moo supports node-based and vertex-based (morph) animation. Moo
+                           can also blend animations together to provide smooth transitions between
+                           them.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e7151"></a>21.1.8.&nbsp;Vertex morphing
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Moo's vertex morphing is suitable for small changes in surfaces,
+                           such as facial animation. Morph targets are exported from the content
+                           creation package, and controlled through the normal animation
+                           system.
+                  </p>
+                  <p>Please note that as morph targets are applied in software,
+                           extensive use will affect rendering performance.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e7158"></a>21.2.&nbsp;Supported video cards
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The currently supported graphics cards are as follows:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">NVIDIA</em></p>
+                        <p>GeForce4 series, GeForce FX series, GeForce 6x00 series, GeForce
+                                   7x00 series cards and above.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">ATI</em></p>
+                        <p>Radeon 9000 series, and Radeon x000 series of cards.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Any graphics chip that supports at least Hardware Transform and
+                      Lighting and two texture stages should work, some with a limited subset of
+                      features enabled. These include (but are not limited to):
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">NVIDIA</em></p>
+                        <p>GeForce3 series and GeForce GO 4 series cards.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">ATI</em></p>
+                        <p>Radeon 7000 series, Radeon 8000 series, Mobility 8000 and
+                                   Mobility 9000 series.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e7191"></a>21.3.&nbsp;Hardware requirements for special effects
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The table below lists the special effects available in Moo, and
+                      their hardware requirements:
+               </p>
+               <div class="altrow">
+                  <table border="0">
+                     <colgroup>
+                        <col width="120">
+                        <col width="61">
+                        <col width="56">
+                        <col width="62">
+                     </colgroup>
+                     <thead>
+                        <tr>
+                           <th>Special effect</th>
+                           <th>Vertex shader version</th>
+                           <th>Pixel shader version</th>
+                           <th>Texture stages required</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td>Bloom</td>
+                           <td>1.1</td>
+                           <td>1.1</td>
+                           <td>4</td>
+                        </tr>
+                        <tr>
+                           <td>Cloud shadows</td>
+                           <td>1.1</td>
+                           <td>-</td>
+                           <td>3</td>
+                        </tr>
+                        <tr>
+                           <td>Flora</td>
+                           <td>1.1</td>
+                           <td>-</td>
+                           <td>1</td>
+                        </tr>
+                        <tr>
+                           <td>Heat Shimmer</td>
+                           <td>1.1</td>
+                           <td>-</td>
+                           <td>1</td>
+                        </tr>
+                        <tr>
+                           <td>Normal mapping</td>
+                           <td>1.1</td>
+                           <td>1.1</td>
+                           <td>4</td>
+                        </tr>
+                        <tr>
+                           <td>PyModel Shimmer</td>
+                           <td>1.1</td>
+                           <td>-</td>
+                           <td>1</td>
+                        </tr>
+                        <tr>
+                           <td>PyModel stipple</td>
+                           <td>1.1</td>
+                           <td>1.1</td>
+                           <td>4</td>
+                        </tr>
+                        <tr>
+                           <td>Entity shadows</td>
+                           <td>2.0</td>
+                           <td>2.0</td>
+                           <td>1</td>
+                        </tr>
+                        <tr>
+                           <td>Simulated sub-surface scattering</td>
+                           <td>3.0</td>
+                           <td>3.0</td>
+                           <td>4</td>
+                        </tr>
+                        <tr>
+                           <td>Sky Gradient dome</td>
+                           <td>1.1</td>
+                           <td>-</td>
+                           <td>3</td>
+                        </tr>
+                        <tr>
+                           <td>Terrain shadows</td>
+                           <td>1.1</td>
+                           <td>1.1</td>
+                           <td>4</td>
+                        </tr>
+                        <tr>
+                           <td>Terrain Specular</td>
+                           <td>1.1</td>
+                           <td>1.1</td>
+                           <td>4</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <p><span class="citetitle">Hardware requirements for special
+                         effects</span></p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e7324"></a>21.4.&nbsp;Visual
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The <span class="literal">Visual</span> class implements the basic renderable
+                      objects drawn by the 3D engine. A visual contains a node hierarchy,
+                      vertices, indices, and materials used for rendering objects, and it also
+                      contains a BSP tree used for collision detection.
+               </p>
+               <p>The node hierarchy gives the renderable object a frame of reference
+                      when rendering objects. Visual uses the <span class="literal">EffectMaterial</span>,
+                      <span class="literal">Primitives</span>, and <span class="literal">Vertices</span> classes to
+                      render its geometry.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_EffectMaterial"></a>21.5.&nbsp;EffectMaterial
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The material system in the BigWorld 3D engine uses
+                      <span class="literal">D3DXEffects</span> files extensively.
+               </p>
+               <p>The material system is implemented through the class
+                      <span class="literal">EffectMaterial</span>, which contains one or more D3DX
+                      effects, their overridden values, and information about the collision
+                      properties and surface type of the material.
+               </p>
+               <p>The idea behind the material system is to give as much control as
+                      possible to the artists, to allow them to experiment with new rendering
+                      techniques without involving programmers.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_EffectMaterial_Format"></a>21.5.1.&nbsp;Format
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The format of the <span class="literal">EffectMaterial</span> on disk is
+                           very simple, having only a handful of sections, and with most of the
+                           work done through the .fx file.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Automatic_Variables_Globals"></a>21.5.2.&nbsp;Automatic variables/Globals
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Automatic variables are used for any variable that is controlled
+                           by the engine, such as transforms, lights, camera positions, etc...
+                           Automatic variables are exposed to Effect files using variable
+                           semantics.
+                  </p>
+                  <p>In an Effect file, the automatic variables are defined like
+                           below:
+                  </p><pre class="programlisting">&lt;<em class="replaceable"><code>type</code></em>&gt; &lt;<em class="replaceable"><code>variableName</code></em>&gt; : &lt;<em class="replaceable"><code>semantic</code></em>&gt;;</pre><p>where:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;<em class="replaceable"><code>type</code></em>&gt;</span></em></p>
+                           <p>The variable type (float, bool, texture, etc.).</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;<em class="replaceable"><code>variableName</code></em>&gt;</span></em></p>
+                           <p>Name used for the variable in the effect file.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;<em class="replaceable"><code>semantic</code></em>&gt;</span></em></p>
+                           <p>Name exposed to the engine.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The automatic variables are connected to the effect through the
+                           class EffectConstantValue. New automatic variables can be added by
+                           overriding the EffectConstantValue interface, implementing the operation
+                           (), and adding an instance of the new class using
+                           EffectConstantValue::set or using a handle returned from
+                           EffectConstantValue::get.
+                  </p>
+                  <p>The automatic variables set up by Moo::EffectVisualContext are
+                           listed below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Ambient</span>
+                                           (<span class="literal">float4</span>)</em></p>
+                           <p>Current ambient colour.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">CameraPos</span>
+                                           (<span class="literal">float3</span>)</em></p>
+                           <p>Current camera position in world space.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">CameraPosObjectSpace</span>
+                                           (<span class="literal">float3</span>)</em></p>
+                           <p>Current camera position in object space.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">DepthTex
+                                           (<span class="literal">texture</span>)</em></p>
+                           <p>The depth of the scene, stored encoded in a 32-bit RGBA
+                                        texture. This is only available when the Advanced Post Processing
+                                        graphics setting is switched on.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">DirectionalLightCount</span>
+                                           (<span class="literal">int</span>)</em></p>
+                           <p>Number of directional lights.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">DirectionalLights</span>
+                                           (<span class="literal">DirectionalLights[2]</span>)</em></p>
+                           <p>Current diffuse directional lights in world space.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">DirectionalLightsObjectSpace</span>
+                                           (<span class="literal">DirectionalLights[2]</span>)</em></p>
+                           <p>Current diffuse directional lights in object space.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">EnvironmentCubeMap
+                                           (<span class="literal">texture</span>)</em></p>
+                           <p>Cube map containing a low-resolution dynamic cube map of the
+                                        environment (sun, moon, sky gradient dome, sky boxes ).
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">EnvironmentTransform(<span class="literal">float4x4</span>)</em></p>
+                           <p>Matrix used to transform environmental and skybox objects to
+                                        the screen. Comes pre-multiplied with the projection matrix.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">EnvironmentShadowTransform(<span class="literal">float4x4</span>)</em></p>
+                           <p>Matrix used to transform environmental and skybox objects to
+                                        the sky light map.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">FarPlane
+                                           (<span class="literal">float</span>)</em></p>
+                           <p>Current far plane in metres.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FloraAnimationGrid</span>
+                                           (<span class="literal">float4[64]</span>)</em></p>
+                           <p>8x8 array of Perlin noise values used to animate the flora
+                                        vertex buffer.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FloraTexture</span>
+                                           (<span class="literal">texture</span>)</em></p>
+                           <p>The composite Flora texture map used by the
+                                        FloraRenderer.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FogColour</span>
+                                           (<span class="literal">float4</span>)</em></p>
+                           <p>Fog colour.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FogEnd</span>
+                                           (<span class="literal">float</span>)</em></p>
+                           <p>End of linear fog.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FogGradientTexture</span>
+                                           (<span class="literal">texture</span>)</em></p>
+                           <p>The fog texture used by the terrain renderer.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FogStart</span>
+                                           (<span class="literal">float</span>)</em></p>
+                           <p>Start of linear fog.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FogTextureTransform</span>
+                                           (<span class="literal">matrix</span>)</em></p>
+                           <p>Projects the fog texture onto the terrain.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">GUIColour</span>
+                                           (<span class="literal">float4</span>)</em></p>
+                           <p>Colour for use by the GUI.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">LastViewProjection</span>
+                                           (<span class="literal">float4x4</span>)</em></p>
+                           <p>The last frame's view*projection matrix.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">InvView</span>
+                                           (<span class="literal">float4x4</span>)</em></p>
+                           <p>Current inverse view matrix.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">InvViewProjection</span>
+                                           (<span class="literal">float4x4</span>)</em></p>
+                           <p>Current inverse view*projection matrix.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">MipFilter</span>
+                                           (<span class="literal">int</span>)</em></p>
+                           <p>Configurable MIPFILTER.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">MinMagFilter</span>
+                                           (<span class="literal">int</span>)</em></p>
+                           <p>Configurable MIN/ MAGFILTER.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">MaxAnisotropy</span>
+                                           (<span class="literal">int</span>)</em></p>
+                           <p>Configurable MAXANISOTROPY.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">NearPlane
+                                           (<span class="literal">float</span>)</em></p>
+                           <p>Current near plane in metres.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">NormalisationMap</span>
+                                           (<span class="literal">texture</span>)</em></p>
+                           <p>Normalisation cubemap.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">ObjectID
+                                           (<span class="literal">float</span>)</em></p>
+                           <p>Set to 1 when rendering a PyModel, aka a dynamic/entity model.
+                                        Set to 0 for all other models. In future, this may expand to
+                                        designate further groups of objects.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">PenumbraSize</span>
+                                           (<span class="literal">float</span>)</em></p>
+                           <p>Used by the terrain renderer for self-shadowing.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">PointLightCount</span>
+                                           (<span class="literal">int</span>)</em></p>
+                           <p>Number of point lights.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">PointLights</span>
+                                           (<span class="literal">PointLights[4]</span>)</em></p>
+                           <p>Current diffuse point lights in world space.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">PointLightsObjectSpace</span>
+                                           (<span class="literal">PointLights[4]</span>)</em></p>
+                           <p>Current diffuse point lights in object space.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Screen
+                                           (<span class="literal">float4</span>)</em></p>
+                           <p>Holds the screen dimension thus : ( width, height, half width,
+                                        half height )
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">SkyBoxController
+                                           (<span class="literal">float4</span>)</em></p>
+                           <p>Holds the current value of the Vector4 that was registered
+                                        with the sky box currently being rendered. How this variable is
+                                        interpreted is up to the individual sky box, although the fourth
+                                        component is generally treated as an alpha value.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SpecularDirectionalLightCount</span>
+                                           (<span class="literal">int</span>)</em></p>
+                           <p>Number of specular directional lights.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SpecularDirectionalLights</span>
+                                           (<span class="literal">DirectionalLights[2]</span>)</em></p>
+                           <p>Current specular directional lights in world space.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SpecularDirectionalLightsObjectSpace</span>
+                                           (<span class="literal">DirectionalLights[2]</span>)</em></p>
+                           <p>Current specular directional lights in object space.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SpecularPointLightCount</span>
+                                           (<span class="literal">int</span>)</em></p>
+                           <p>Number of specular point lights.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SpecularPointLights</span>
+                                           (<span class="literal">PointLights[2]</span>)</em></p>
+                           <p>Current specular point lights in world space.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SpecularPointLightsObjectSpace</span>
+                                           (<span class="literal">PointLights[2]</span>)</em></p>
+                           <p>Current specular point lights in object space.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SpotLightCount</span>
+                                           (<span class="literal">int</span>)</em></p>
+                           <p>Number of spot lights.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SpotLights</span>
+                                           (<span class="literal">SpotLights[2]</span>)</em></p>
+                           <p>Current diffuse spot lights in world space.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SpotLightsObjectSpace</span>
+                                           (<span class="literal">SpotLights[2]</span>)</em></p>
+                           <p>Current diffuse spot lights in object space.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">StaticLighting</span>
+                                           (<span class="literal">bool</span>)</em></p>
+                           <p>Whether static lighting is applied or not.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">StippleMap</span>
+                                           (<span class="literal">texture</span>)</em></p>
+                           <p>Map to be used for the stipple effect.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SunAngle</span>
+                                           (<span class="literal">float</span>)</em></p>
+                           <p>Used by the terrain renderer for self-shadowing.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">TerrainTextureTransform</span>
+                                           (<span class="literal">float4[2]</span>)</em></p>
+                           <p>Projects textures onto the terrain.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">Time</span>
+                                           (<span class="literal">float</span>)</em></p>
+                           <p>Time in seconds since the game started.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">View</span>
+                                           (<span class="literal">float4x4</span>)</em></p>
+                           <p>Current view matrix.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">ViewProjection</span>
+                                           (<span class="literal">float4x4</span>)</em></p>
+                           <p>Current view*projection matrix.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">WindAnimation</span>
+                                           (<span class="literal">float4</span>)</em></p>
+                           <p>Two Vector2's. in (x,y) is a value that can be used for
+                                        wind-affected texture scrolling. It keeps the incremental value of a
+                                        single uv coordinate blown around by the wind. in (x,z) is the
+                                        current wind average speed.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">World</span>
+                                           (<span class="literal">float4x4</span>)</em></p>
+                           <p>Current world matrix.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">WorldPalette</span>
+                                           (<span class="literal">float4[17*3]</span>)</em></p>
+                           <p>Matrix palette, made up of the current renderset matrices
+                                        stored as transposed 4x3 matrices.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">WorldView</span>
+                                           (<span class="literal">float4x4</span>)</em></p>
+                           <p>Current world*view matrix.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">WorldViewProjection</span>
+                                           (<span class="literal">float4x4</span>)</em></p>
+                           <p>Current world*view*projection matrix.</p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Artist_Editable_Tweakable_Variables"></a>21.5.3.&nbsp;Artist-editable/tweakable variables
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Artist-editable variables are variables that are designed to be
+                           overridden on a per-material basis. These variables can be edited in
+                           WorldEditor and ModelEditor, allowing you to change the look of a model
+                           in real time, while visualising it.
+                  </p>
+                  <p>The artist-editable variables can be exposed to the engine by
+                           setting the attribute <span class="literal">artistEditable</span> or
+                           <span class="literal">worldBuilderEditable</span> to
+                           <span class="literal">true</span>.
+                  </p>
+                  <p>Setting <span class="literal">artistEditable</span> to
+                           <span class="literal">true</span> exposes the variable to ModelEditor's <em class="emphasis">Materials Settings</em> panel (for details, see the
+                           document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section
+                           <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html" class="olink"><i>ModelEditor</i></a> <span class="symbol">&#8594;</span>
+                           <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html#xref_me_Panel_Summary" class="olink">Panel summary</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html#xref_me_Material_Settings_Panel" class="olink">Materials Settings panel</a>), while setting
+                           <span class="literal">worldBuilderEditable</span> to <span class="literal">true</span>
+                           exposes it to both ModelEditor and, if the
+                           <span class="literal">objects/materialOverrideMode</span> tag is set to
+                           <span class="literal">1</span> in
+                           <span class="literal">bigworld/tools/worldeditor/options.xml</span> (for details
+                           on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch25.html" class="olink"><i><span class="literal">options.xml</span></i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch25.html#xref_options_xml_WorldEditor" class="olink">WorldEditor</a>) file, to WorldEditor's
+                           <em class="emphasis">Properties</em> panel (for details, see the
+                           document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section
+                           <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html" class="olink"><i>WorldEditor</i></a> <span class="symbol">&#8594;</span>
+                           <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html#xref_we_Panel_Summary" class="olink">Panel summary</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html#xref_we_Properties_Panel" class="olink">Properties panel</a>).
+                  </p>
+                  <p>The notation for these variables in a FX file is described
+                           below:
+                  </p><pre class="programlisting">&lt;type&gt; &lt;variableName&gt;
+&lt;
+  bool [artistEditable|worldBuilderEditable] = true;
+  ... <a name="co6977"></a><img src="../images/callouts/1.png" alt="1" border="0">
+&gt; = &lt;defaultValue&gt;;</pre><div class="calloutlist">
+                     <table border="0" summary="Callout list">
+                        <tr>
+                           <td width="5%" valign="top" align="left"><a href="#co6977"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                           </td>
+                           <td valign="top" align="left">
+                              <p>Other attribute definitions.</p>
+                           </td>
+                        </tr>
+                     </table>
+                  </div>
+                  <p>where:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;type&gt;</span></em> &#8212; Type of the
+                                        object.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;variableName&gt;</span></em> &#8212;
+                                        Variable name in the effect file.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">&lt;defaultValue&gt;</span></em> &#8212;
+                                        Default value of the variable.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Currently, the supported types of artist-editable variables
+                           are:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">bool</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">float</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">float4</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">float4x4</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">int</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">texture</span></em></p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The conditions to have the variable exposed in either tool are
+                           described below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">If <span class="literal">artistEditable</span> is
+                                           set to <span class="literal">true</span> in the FX file</em></p>
+                           <p><em class="emphasis">Exposed in ModelEditor?</em>:
+                                        Yes
+                           </p>
+                           <p><em class="emphasis">Exposed in WorldEditor?</em>:
+                                        No
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">If
+                                           <span class="literal">worldBuilderEditable</span> is set to
+                                           <span class="literal">true</span> in the FX file</em></p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis">If
+                                                        <span class="literal">materialOverrideMode</span> is set to
+                                                        <span class="literal">1</span> in <span class="literal">bigworld/tools/
+                                                           worldeditor/options.xml</span></em></p>
+                                    <p><em class="emphasis">Exposed in ModelEditor?</em>:
+                                                     No
+                                    </p>
+                                    <p><em class="emphasis">Exposed in WorldEditor?</em>:
+                                                     No
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">If
+                                                        <span class="literal">materialOverrideMode</span> is set to
+                                                        <span class="literal">0</span> in <span class="literal">bigworld/tools/
+                                                           worldeditor/options.xml</span></em></p>
+                                    <p><em class="emphasis">Exposed in ModelEditor?</em>:
+                                                     No
+                                    </p>
+                                    <p><em class="emphasis">Exposed in WorldEditor?</em>:
+                                                     Yes
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8227"></a>21.5.4.&nbsp;Multiple-layered effects per material
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The <span class="literal">Moo::EffectMaterial</span> class supports having
+                           multiple-layered D3DXEffects per material.
+                  </p>
+                  <p>This is useful for materials that need to use a standard set of
+                           vertex shaders, but only have slight changes to the pixel shader
+                           component of the effect. These materials would generally only be created
+                           by the asset converter, as ModelEditor does not support adding more than
+                           one effect per material.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8237"></a>21.5.5.&nbsp;Recording material states
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Material states can be recorded by class
+                           <span class="literal">Moo::EffectMaterial</span> by calling the method
+                           <span class="literal">recordPass()</span> between a <span class="literal">begin()</span> and
+                           <span class="literal">end()</span> pair on the material.
+                  </p>
+                  <p>This method returns a <span class="literal">Moo::StateRecorder</span> that
+                           is used to store the current render states for delayed rendering.
+                  </p>
+                  <p>This object only stays valid until the end of the current render
+                           loop, and will not be usable after this point.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8261"></a>21.5.6.&nbsp;Using BigWorld <span class="literal">.fx</span> files with 3ds Max
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>BigWorld <span class="literal">.fx</span> files and 3ds Max .fx files
+                           unfortunately are not 100% compatible. It is however possible to create
+                           a <span class="literal">.fx</span> file that can be used in both
+                           applications.
+                  </p>
+                  <p>To expose editable parameters, BigWorld shaders use the annotation
+                           below:
+                  </p><pre class="programlisting">bool artistEditable = true;</pre><p>whereas 3ds Max requires the annotation string below:</p><pre class="programlisting">UIName="name"</pre><p>The sample effect file
+                           <span class="literal">bigworld/res/shaders/std_effects/normalmap.fx</span> exposes
+                           its parameters properly to BigWorld and 3ds Max. The exporter also
+                           exports the values entered in the 3ds Max shader material panel.
+                  </p>
+                  <p>The file <span class="literal">normalmap.fx</span> also uses a separate
+                           technique, called <span class="literal">max_preview</span>, plus additional vertex
+                           and pixel shaders.
+                  </p>
+                  <p>This is due to two reasons:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>There is no uniform way to apply the lighting in both the
+                                        BigWorld engine and 3ds Max.
+                           </p>
+                        </li>
+                        <li>
+                           <p>3ds Max uses a right-handed coordinate system, while BigWorld
+                                        uses a left-handed one.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>In itself this is not a big problem, but it means that additional
+                           shader work is required if you want to preview your shaders in 3ds
+                           Max.
+                  </p>
+                  <p>If you have not applied Service Pack 1for 3ds Max 7, an issue
+                           exists in that its <em class="emphasis">Material Panel</em> is
+                           very poor at dealing with <span class="literal">#include</span> directives in the
+                           effect files. What happens is that if you save a material with the
+                           effect <span class="literal">normalmap</span> applied, then not always it will be
+                           properly loaded up again in 3ds Max, which can cause additional
+                           confusion for the artists. This problem has been fixed in Service Pack
+                           1, so it is important to apply it if you want to use
+                           <span class="literal">.fx</span> files in 3ds Max.
+                  </p>
+                  <p>It is important to be mindful of these issues before you decide to
+                           make your <span class="literal">.fx</span> files compatible with 3ds Max.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e8326"></a>21.6.&nbsp;Visual channels
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The visual channels implement the delayed rendering pipeline in
+                      Moo.
+               </p>
+               <p>There are presently five standard channels implemented:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Sorted channel</p>
+                     </li>
+                     <li>
+                        <p>Internal sorted channel</p>
+                     </li>
+                     <li>
+                        <p>Shimmer channel</p>
+                     </li>
+                     <li>
+                        <p>Sorted shimmer channel</p>
+                     </li>
+                     <li>
+                        <p>Distortion channel</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>An application can create as many channels as it wants by overriding
+                      the <span class="literal">Moo::VisualChannel</span> interface and implementing
+                      <span class="literal">VisualChannel::addItem</span>.
+               </p>
+               <p>The following sub-sections describe these channels.</p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8359"></a>21.6.1.&nbsp;Sorted channel
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The sorted channel is used for objects that need to be rendered in
+                           a back-to-front order.
+                  </p>
+                  <p>When a primitive group from a visual is added to this channel, its
+                           triangles are not sorted internally.
+                  </p>
+                  <p>This channel is mostly useful for additive objects,
+                           <em class="emphasis">i.e.</em>, objects with a destination blend of
+                           one.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8371"></a>21.6.2.&nbsp;Internal sorted channel
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The internal sorted channel is used for objects that need to be
+                           rendered in a back-to-front order, and also have its triangles rendered
+                           in a back-to-front order.
+                  </p>
+                  <p>Objects that are added to this channel will also be sorted against
+                           objects in the sorted channel.
+                  </p>
+                  <p>This channel is useful for alpha-blended objects, and any
+                           transparent object that does not have a destination blend of one.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8380"></a>21.6.3.&nbsp;Shimmer channel
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The shimmer channel is used for objects that need a heat
+                           shimmer.
+                  </p>
+                  <p>Any object that is added to this channel should only write to the
+                           alpha channel of the frame buffer.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8387"></a>21.6.4.&nbsp;Sorted shimmer channel
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The <em class="emphasis">sorted shimmer channel</em> is used for
+                           objects that need a heat shimmer, and also need to draw colour
+                           information.
+                  </p>
+                  <p>Any object added to this channel should write to both the alpha
+                           channel (for shimmer amount) and colour channel of the frame
+                           buffer.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8397"></a>21.6.5.&nbsp;Distortion channel
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The <em class="emphasis">distortion channel</em> is used for objects
+                           that want direct access to the final scene as a texture. This can be
+                           used to achieve effects like refraction (for example, the water).
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Textures"></a>21.7.&nbsp;Textures
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Texture_Details_Levels_Compression"></a>21.7.1.&nbsp;Texture detail levels/compression
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Textures are loaded and compressed automatically based on their
+                           filenames, which control the size, format conversions, and compression
+                           levels.
+                  </p>
+                  <p>For details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch33.html" class="olink"><i><span class="literal">.texformat</span></i></a>.
+                  </p>
+                  <p>The system is implemented through the class
+                           <span class="literal">Moo::TextureDetailLevel</span>. The Texture Manager stores a
+                           list of texture detail levels and uses them to resize and compress
+                           textures based on their filenames. The legacy
+                           <span class="literal">.texformat</span> system is still supported.
+                  </p>
+                  <p>The properties for the <span class="literal">TextureDetailLevel</span> are
+                           divided into two sets:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Filename matching criterion.</p>
+                        </li>
+                        <li>
+                           <p>Conversion rule.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The filename matching criterion set of properties defines the
+                           criteria used to check if the current TextureDetailLevel applies to the
+                           texture being checked. They are described below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">contains_</span></em></p>
+                           <p>Matched strings for a string contained in the texture
+                                        filename.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">postFixes_</span></em></p>
+                           <p>Matched strings for the postfixes of the texture
+                                        filename.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">preFixes_</span></em></p>
+                           <p>Matched strings for the prefixes of the texture
+                                        filename.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Only one string from each list of strings has to match the texture
+                           name for the <span class="literal">TextureDetailLevel</span> to consider it a
+                           match. If there are no strings in one of the lists, that will be
+                           considered a match as well.
+                  </p>
+                  <p>The conversion rule set of properties defines how matching
+                           textures will be converted. They are described below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">compressedFormat_</span></em></p>
+                           <p>Format to which convert the texture (when texture compression
+                                        is enabled).<sup>AB</sup></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">format_</span></em></p>
+                           <p>The format to convert the texture to.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">lodMode_</span></em></p>
+                           <p>Defines how texture responds to the texture quality
+                                        settings.
+                           </p>
+                           <p>Texture quality is set via <span class="literal">TEXTURE_QUALITY</span>
+                                        graphics setting.<sup>AB</sup></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">maxDim_</span></em></p>
+                           <p>The maximum width/height dimension of the texture.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">minDim_</span></em></p>
+                           <p>The minimum width/height dimension of the texture.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">noResize_</span></em></p>
+                           <p>Determines that the texture will not be scaled to be a power
+                                        of two, and will not have mipmapping, compression or a .dds
+                                        version.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">reduceDim_</span></em></p>
+                           <p>The number of times to halve the dimensions of the texture
+                                        when compression is disabled.<sup>A</sup></p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p><em class="emphasis"><em class="emphasis">A</em> &#8212; Texture
+                              compression can be toggled via TEXTURE_COMPRESSION graphics
+                              setting.<sup>B</sup> </em></p>
+                  <p><em class="emphasis"><em class="emphasis">B</em> &#8212; For details, see
+                              <a href="ch21.html#xref_Graphics_Settings" title="21.9.&nbsp;Graphics settings">Graphics settings</a>.</em></p>
+                  <p>The texture detail level can be read from a datasection, as
+                           displayed in the example below:
+                  </p><pre class="programlisting">&lt;prefix&gt;     objects/ &lt;/prefix&gt;
+&lt;postfix&gt;    tga      &lt;/postfix&gt;
+&lt;postfix&gt;    bmp      &lt;/postfix&gt;
+&lt;contains&gt;   norms    &lt;/contains&gt;
+&lt;contains&gt;   normals  &lt;/contains&gt;
+&lt;maxDim&gt;     512      &lt;/maxDim&gt;
+&lt;minDim&gt;     128      &lt;/minDim&gt;
+&lt;reduceDim&gt;  1        &lt;/reduceDim&gt;
+&lt;format&gt;     A8R8G8B8 &lt;/format&gt;</pre><p><span class="citetitle">Example texture detail level format</span></p>
+                  <p>The example above results in any texture loaded from a sub-tree of
+                           folder objects/ with the extension <span class="literal">.tga</span> or
+                           <span class="literal">.bmp</span> and that contains the string norms or normals to
+                           have its dimensions reduced by half once, as long as the smallest
+                           dimension does not fall below 128. If the format is different, it will
+                           be changed to a 32-bit colour with alpha.
+                  </p>
+                  <p>The default detail levels are:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Any file with a filename ending in
+                                        <span class="literal">norms.tga</span> or <span class="literal">norms.bmp</span> will be
+                                        converted to an A8R8G8B8 texture (so as to not compress BigWorld's
+                                        normal maps).
+                           </p>
+                        </li>
+                        <li>
+                           <p>Any other <span class="literal">.tga</span> file is converted to the
+                                        DXT3 format.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Any other <span class="literal">.bmp</span> file is converted to the
+                                        DXT1 format.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>By default textures are only scaled down if their dimensions are
+                           bigger than 2048.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8587"></a>21.7.2.&nbsp;Animated textures
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Moo supports simple animated textures by texture swapping.</p>
+                  <p>When Texture Manager loads a texture, it will look for a file with
+                           the same name as the one being loaded, but with a
+                           <span class="literal">.texanim</span> extension. If such file is found, then it
+                           will be loaded as an animated texture.
+                  </p>
+                  <p>The <span class="literal">.texanim</span> file is a simple XML file that
+                           references a number of textures, contains an animation string and a
+                           frames-per-second value.
+                  </p>
+                  <p>The format of a <span class="literal">.texanim</span> file is described
+                           below:
+                  </p><pre class="programlisting"> &lt;frames&gt;  <em class="replaceable"><code>string</code></em>           &lt;/frames&gt;
+ &lt;fps&gt;     <em class="replaceable"><code>.f</code></em>               &lt;/fps&gt;
++&lt;texture&gt; <em class="replaceable"><code>TEXTURE_RESOURCE</code></em> &lt;/texture&gt;</pre><p><span class="citetitle">File <span class="literal">.texanim</span>
+                              format</span></p>
+                  <p>An example of a <span class="literal">.texanim</span> file is displayed
+                           below:
+                  </p><pre class="programlisting">&lt;frames&gt;  abcdefgh              &lt;/frames&gt;
+&lt;fps&gt;     10.0                  &lt;/fps&gt;
+&lt;texture&gt; maps/fx/fx_dirt01.tga &lt;/texture&gt;
+&lt;texture&gt; maps/fx/fx_dirt02.tga &lt;/texture&gt;
+&lt;texture&gt; maps/fx/fx_dirt03.tga &lt;/texture&gt;
+&lt;texture&gt; maps/fx/fx_dirt04.tga &lt;/texture&gt;
+&lt;texture&gt; maps/fx/fx_dirt05.tga &lt;/texture&gt;
+&lt;texture&gt; maps/fx/fx_dirt06.tga &lt;/texture&gt;
+&lt;texture&gt; maps/fx/fx_dirt07.tga &lt;/texture&gt;
+&lt;texture&gt; maps/fx/fx_dirt08.tga &lt;/texture&gt;</pre><p><span class="citetitle">Example file <span class="literal">.texanim</span>
+                              format</span></p>
+                  <p>In this case, the animating texture will play the
+                           <span class="literal">fx_dirt</span> textures back in order at a rate of ten
+                           frames per second.
+                  </p>
+                  <p>You can change the order in which the frames are played back by
+                           changing the <span class="literal">frames</span> tag . The <span class="literal">a</span> in
+                           the tag's value refers to the first texture stored in the XML file, b
+                           refers to the second texture stored, and so on.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8650"></a>21.7.3.&nbsp;Applying a code-generated texture to a character
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>To apply a code-generated texture to a model, follow the steps
+                           below:
+                  </p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Create an automatic <span class="literal">.fx</span> variable
+                                        (<em class="emphasis">e.g.</em>,
+                                        <span class="literal">customTexture</span>).
+                           </p>
+                        </li>
+                        <li>
+                           <p>Update the character's shaders so that they render using the
+                                        new <span class="literal">.fx</span> variable, instead of the
+                                        <span class="literal">diffuseMap</span> property.
+                           </p>
+                        </li>
+                        <li>
+                           <p>You will need a single <span class="literal">TextureSetter</span>, which
+                                        is a <span class="literal">Moo::EffectConstantValue</span>. This provides the
+                                        "current custom texture" to <span class="literal">.fx</span> files.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Write a <span class="literal">PyFashion</span> that sets up the "current
+                                        custom texture" when drawing an instance of a
+                                        <span class="literal">PyModel</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Create a <span class="literal">Moo::BaseTexture</span> that wraps the
+                                        custom texture creation process.
+                           </p>
+                        </li>
+                     </ol>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Loading_Textures_From_Disk"></a>21.7.3.1.&nbsp;Loading textures from disk
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>When loading texture from disk, it is recommended to have the
+                                loading thread running in the background, so that it does not
+                                interrupt the rendering thread.
+                     </p>
+                     <p>The example below illustrates a texture loader using the
+                                <span class="literal">BackgroundTask</span> and <span class="literal">BGTaskManager</span>
+                                classes. Note that the code provides two features &#8212; threaded texture
+                                loading, and providing the texture to the <span class="literal">.fx</span> file
+                                system.
+                     </p><pre class="programlisting">#include "pch.hpp"
+#include "cstdmf/bgtask_manager.hpp"
+#include "cstdmf/concurrency.hpp"
+
+DECLARE_DEBUG_COMPONENT2( "romp", 0 );
+
+// -------------------------------------------------------------------------
+// Section: Texture Setter
+// -----------------------------------------------------------------------
+/**
+ *  This class sets textures on the device.  It is also multi-threaded.
+ *  When it is told to use a new texture, it uses the background loading thread
+ *  to do so.  While it is doing this, the textureName refers to the new
+ *  texture, but isLoading() will return true.  And in this state, it will be
+ *  sneakily using the pre-existing texture until the new one is ready.
+ */
+class ThreadedTextureSetter : public Moo::EffectConstantValue
+{
+public:
+  ThreadedTextureSetter():
+    pTexture_( NULL ),
+    bgLoader_( NULL ),
+    textureName_( "" )
+  {    
+  }
+  /**
+   *  This method is called by the effect system when a material needs
+   *  to draw using a texture with the given automatic semantic.
+   */
+  bool operator()(ID3DXEffect* pEffect, D3DXHANDLE constantHandle)
+  {
+    SimpleMutexHolder holder( mutex_ );
+
+    if (pTexture_ &amp;&amp; pTexture_-&gt;pTexture())
+      pEffect-&gt;SetTexture(constantHandle, pTexture_-&gt;pTexture());
+    else
+      pEffect-&gt;SetTexture(constantHandle, NULL);
+
+    return true;
+  }
+
+  /**
+   *  This method sets our texture.  If the texture is different then
+   *  the existing one, we schedule the new one for loading, and set
+   *  the textureName and the isLoading() flag.  In an unspecified amount
+   *  of time, the new texture will be loaded and used.
+   */
+  void texture( const std::string&amp; texName )
+  {
+    if (textureName_ == texName)
+      return;
+    
+    if (this-&gt;isLoading())
+      return;
+    
+    textureName_ = texName;    
+    
+    bgLoader_ = new BackgroundTask(
+            &amp;ThreadedTextureSetter::loadTexture, this,
+            &amp;ThreadedTextureSetter::onLoadComplete, this );
+
+#ifndef EDITOR_ENABLED
+    BgTaskManager::instance()-&gt;addTask( *bgLoader_ );
+#else
+    ThreadedTextureSetter::loadTexture( this );
+    ThreadedTextureSetter::onLoadComplete( this );
+#endif
+  }
+
+  /**
+   *  This class-static method is called by the background loading thread
+   *  and allows us to load the texture resource in a blocking manner.
+   */
+  static void loadTexture( void* s )
+  {
+    ThreadedTextureSetter* setter = static_cast&lt;ThreadedTextureSetter*&gt;(s);
+    Moo::BaseTexturePtr pTex = 
+      Moo::TextureManager::instance()-&gt;get( setter-&gt;textureName() );
+    setter-&gt;pTexture(pTex);
+  }
+
+  /**
+   *  This class-static method is called when the background loading thread
+   *  has finished.
+   */
+  static void onLoadComplete( void* s )
+  {
+    ThreadedTextureSetter* setter = static_cast&lt;ThreadedTextureSetter*&gt;(s);
+    setter-&gt;onBgLoadComplete();
+  }
+
+  /**
+   *  This method returns the name of the texture we are currently
+   *  drawing with.  If isLoading() is true, then the textureName
+   *  refers to the texture we would like to draw with (however we
+   *  will be actually drawing with the previous texture ptr).
+   */
+  const std::string&amp; textureName() const
+  {
+    return textureName_;
+  }
+
+  /**
+   *  This method returns true if we are currently waiting for the
+   *  background loading thread to load our texture.
+   */
+  bool isLoading()
+  {
+    SimpleMutexHolder holder( mutex_ );
+    return (bgLoader_ != NULL);
+  }
+
+private:
+  //only called by the background loading thread
+  void pTexture( Moo::BaseTexturePtr pTex )
+  {    
+    SimpleMutexHolder holder( mutex_ );
+    pTexture_ = pTex;    
+  }
+
+  //only called by the background loading thread
+  void onBgLoadComplete()
+  {
+    SimpleMutexHolder holder( mutex_ );
+    delete bgLoader_;
+    bgLoader_ = NULL;
+  }
+
+  Moo::BaseTexturePtr pTexture_;
+  std::string textureName_;  //store a copy for use while loading.
+  BackgroundTask* bgLoader_;  
+  SimpleMutex    mutex_;
+};</pre><p><span class="citetitle">Example of texture loader</span></p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e8725"></a>21.7.3.2.&nbsp;Manipulate individual pixels within a texture
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>To manipulate pixel within a code-generated texture, there are
+                                at least two available options:
+                     </p>
+                     <div class="orderedlist">
+                        <ol type="1">
+                           <li>
+                              <p><em class="emphasis">Create the texture in the managed
+                                                pool</em></p>
+                              <p>This way there will be a system memory copy and a video
+                                             memory copy. You can then lock the texture and manipulate it as
+                                             needed &#8212; DirectX will update the changes to video memory.
+                              </p>
+                              <p>The only drawback to this option is that on some hardware
+                                             configurations, the system memory texture may be stored swizzled,
+                                             meaning that the lock operation would have to unswizzle it before
+                                             you can make changes &#8212; a potentially costly lock operation.
+                              </p>
+                              <p>Note that to use the texture, you will need to have mipmaps
+                                             available, so when performing the lock you will have to
+                                             either:
+                              </p>
+                              <div class="itemizedlist">
+                                 <ul type="disc">
+                                    <li>
+                                       <p>Update each surface of the texture individually.</p>
+                                       <p><em class="emphasis">&#8212; or &#8212;</em></p>
+                                    </li>
+                                    <li>
+                                       <p>Use stretch rect to supply the mipmap chain from the top
+                                                          surface.
+                                       </p>
+                                    </li>
+                                 </ul>
+                              </div>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Create the texture in video memory as
+                                                a render target</em></p>
+                              <p>You will have to use shaders to write your changes to the
+                                             texture.
+                              </p>
+                              <p>The drawback to this method is that if the device is reset,
+                                             then your changes will be lost. If that happens, you will have to
+                                             handle the CreateUnmanagedObjects callback (from the
+                                             DeviceCallback interface) and recreate the custom texture.
+                              </p>
+                              <p>Unfortunately, you cannot just copy the data to system
+                                             memory, because a CTRL+ALT+DEL will lose the device without giving
+                                             you a chance to save the video memory data first.
+                              </p>
+                              <p>Note again that to use the texture, you will need to have
+                                             mipmaps available. So perhaps in this instance you can create a
+                                             separate mipmap texture in video memory, and use stretch rect to
+                                             supply the mipmap chain from the source render target. The source
+                                             render target might be a 'scratch pad' used in building all the
+                                             custom character textures.
+                              </p>
+                           </li>
+                        </ol>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e8763"></a>21.7.3.3.&nbsp;Using a shader to build a custom texture
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The closest example on how to achieve this is provided by the
+                                flora light map, which uses a variation of the terrain shaders to
+                                render the lighting information to a render target. For details, see
+                                bigworld/src/lib/romp/flora_light_map.cpp.
+                     </p>
+                     <p>Note that to use shaders you will need a video memory/render
+                                target surface as described in the section above.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e8770"></a>21.7.3.4.&nbsp;Dealing with the texture cache
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The custom texture is needed to implement the Moo::BaseTexture
+                                interface, so that it can add itself to the Texture Manager. However,
+                                depending on the following step (applying custom textures to models),
+                                you may not even need to use the TextureManager, as it simply provides
+                                a 'retrieve texture by name' access to textures.
+                     </p>
+                     <p>If you are creating several custom textures for characters, then
+                                you may have an internal (hidden) naming scheme, which would result in
+                                a minimal benefit for using the texture cache. It may be good enough
+                                simply to use smart pointers to handle caching.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e8777"></a>21.7.3.5.&nbsp;Assigning custom textures to a model
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Assuming that you have one model that you want display many
+                                times, each with a unique custom texture, then you will have to
+                                implement a class deriving from the <span class="literal">PyFashion</span>
+                                class.
+                     </p>
+                     <p>Such classes are created from Python, assigned to a
+                                <span class="literal">PyModel</span> instance, and given an opportunity to alter
+                                how a shared model renders (<em class="emphasis">i.e.</em>, to set the
+                                custom texture on the model). The <span class="literal">PyFashion</span> class
+                                will become the main interface to your scripts, so in Python you can
+                                construct the <span class="literal">PyFashion</span> instance with the names of
+                                the texture you want to combine, and then assign it to a player's
+                                model by simply setting the fashion as any named attribute on its
+                                <span class="literal">PyModel</span> (<span class="literal">PyModel::pySetAttribute</span>
+                                automatically detects when a fashion is set on itself, and
+                                incorporates it into its rendering chain).
+                     </p>
+                     <p>To actually set the custom texture on the model, we recommend
+                                creating a class deriving from
+                                <span class="literal">Moo::EffectConstantValue</span>, and that provides the
+                                custom texture to <span class="literal">.fx</span> files by name. In the
+                                <span class="literal">.fx</span> files, use the automatic variable semantic
+                                (<em class="emphasis">e.g.</em>, <span class="literal">Texture diffuseMap
+                                   :customCharacterTexture</span>), instead of the existing
+                                <span class="literal">artistEditable</span> property.
+                     </p>
+                     <p>For an example code on creating a texture setter, see <a href="ch21.html#xref_Loading_Textures_From_Disk" title="21.7.3.1.&nbsp;Loading textures from disk">Loading textures from disk</a>.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e8829"></a>21.8.&nbsp;Vertex declaration
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Vertex declarations are used by Direct3D to map vertex stream data
+                      to vertex shaders.
+               </p>
+               <p>Moo uses the <span class="literal">VertexDeclaration</span> class to ease the
+                      handling of vertex declarations used by Direct3D. Vertex declarations are
+                      stored on disk in XML format and loaded as needed. The vertex declarations
+                      stored on disk can be retrieved by calling method
+                      <span class="literal">VertexDeclaration::get()</span>.
+               </p>
+               <p>By default, the vertex declarations are stored under folder
+                      bigworld/res/shaders/ formats.
+               </p>
+               <p>Two declarations can be combined with
+                      <span class="literal">VertexDeclaration::combine()</span> as long as the elements of
+                      both declarations are mutually exclusive.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8849"></a>21.8.1.&nbsp;File format
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The format of the vertex declaration file is described
+                           below:
+                  </p><pre class="programlisting">&lt;root&gt;
+
+  +&lt;USAGE&gt; (usage index, optional defaults to 0)
+
+    ?&lt;stream&gt; (strm #, opt, dflt is strm used by the prev elmnt)     &lt;/stream&gt;
+    ?&lt;offset&gt; (ofst into strm, opt, dflt is nxt ofst aft prev elmnt) &lt;/offset&gt;
+    ?&lt;type&gt;    (data type, opt, defaults to FLOAT3)                   &lt;/type&gt;
+
+   &lt;/USAGE&gt;
+
+&lt;/root&gt;</pre><p><span class="citetitle">Vertex declaration file format</span></p>
+                  <p>The <span class="literal">USAGE</span> tag maps to the enumerated type
+                           <span class="literal">D3DDECLUSAGE</span>, and its possible values are listed
+                           below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">POSITION</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">BLENDWEIGHT</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">BLENDINDICES</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">NORMAL</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">PSIZE</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">TEXCOORD</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">TANGENT</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">BINORMAL</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">TESSFACTOR</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">POSITIONT</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">COLOR</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FOG</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">DEPTH</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SAMPLE</span></em></p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The data types entered in the <span class="literal">type</span> tag map to
+                           enumerated type <span class="literal">D3DDECLTYPE</span>, and its possible values
+                           are listed below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">D3DCOLOR</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">DEC3N</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FLOAT1</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FLOAT16_2</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FLOAT16_4</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FLOAT2</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FLOAT3</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FLOAT4</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SHORT2</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SHORT2N</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SHORT4</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">SHORT4N</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">UBYTE4</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">UBYTE4N</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">UDEC3</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">USHORT2N</span></em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">USHORT4N</span></em></p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>As an example, the <span class="literal">xyznuv_d</span> vertex format is
+                           defined like this:
+                  </p><pre class="programlisting">&lt;xyznuv_d.xml&gt;
+
+  &lt;POSITION/&gt; 
+  &lt;NORMAL/&gt;
+  &lt;TEXCOORD&gt;
+    &lt;type&gt;  FLOAT2  &lt;/type&gt;
+  &lt;/TEXCOORD&gt;
+  &lt;COLOR&gt;
+    &lt;stream&gt; 1         &lt;/stream&gt;
+    &lt;offset&gt; 0         &lt;/offset&gt;
+    &lt;type&gt;   D3DCOLOR  &lt;/type&gt;
+  &lt;/COLOR&gt;
+
+&lt;/xyznuv_d.xml&gt;</pre><p><span class="citetitle">Vertex declaration file
+                              <span class="literal">xyznuv_d.xml</span></span></p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Graphics_Settings"></a>21.9.&nbsp;Graphics settings
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To allow the game client to run as smoothly as possible in the
+                      widest range of systems, BigWorld's 3D engine exposes several parameters.
+                      These can be tweaked by the player to achieve the optimal balance between
+                      visual quality and game responsiveness for his particular hardware
+                      configuration.
+               </p>
+               <p>These parameters are known as graphics settings, and are listed
+                      below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">FAR_PLANE</span><sup>A</sup></em></p>
+                        <p><em class="emphasis">Available options: <span class="literal">FAR</span>,
+                                      <span class="literal">MEDIUM</span>, <span class="literal">NEAR </span><a href="ch21.html#xref_Customising_Options" title="21.9.1.&nbsp;Customising options">Customising options</a></em></p>
+                        <p>Modifies the viewing distance. The viewing distance is defined
+                                   per space and this graphics option modifies the viewing distance by a
+                                   factor. The factors and options are configurable in the file
+                                   <span class="literal">bigworld/res/system/data/graphics_settings.xml</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">FLORA_DENSITY</span><sup>A</sup></em></p>
+                        <p><em class="emphasis">Available options:
+                                      <span class="literal">HIGH</span>, <span class="literal">MEDIUM</span>,
+                                      <span class="literal">LOW</span>, <span class="literal">OFF</span> <a href="ch21.html#xref_Customising_Options" title="21.9.1.&nbsp;Customising options">Customising options</a></em></p>
+                        <p>Sets the density of the flora detail objects by a factor. The
+                                   factors and options are configurable in the file
+                                   <span class="literal">bigworld/res/system/data/graphics_settings.xml</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">FOOT_PRINTS</span></em></p>
+                        <p><em class="emphasis">Available options: <span class="literal">ON</span>,
+                                      <span class="literal">OFF</span></em></p>
+                        <p>Toggles footprints on and off.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">OBJECT_LOD</span><sup>A</sup></em></p>
+                        <p><em class="emphasis">Available options:
+                                      <span class="literal">HIGH</span>, <span class="literal">MEDIUM</span>, <span class="literal">LOW
+                                         </span><a href="ch21.html#xref_Customising_Options" title="21.9.1.&nbsp;Customising options">Customising options</a></em></p>
+                        <p>Modifies the relative distance from the camera for LOD
+                                   transitions by a factor.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">SHADER_VERSION_CAP</span></em></p>
+                        <p><em class="emphasis">Available options:
+                                      <span class="literal">SHADER_MODEL_3</span>, <span class="literal">SHADER_MODEL_2</span>,
+                                      <span class="literal">SHADER_MODEL_1</span>,
+                                      <span class="literal">SHADER_MODEL_0</span></em></p>
+                        <p>Sets the maximum shader model version available to the
+                                   engine.
+                        </p>
+                        <p>SHADER_MODEL_0 is disabled if client is running with a graphics
+                                   card supports Shader Model 1 only. SHADER_MODEL_0 need vertex shader
+                                   2.0 capability, no matter it is software or hardware vertex
+                                   processing. SM1 graphics card such as nVidia TI4400 enables hardware
+                                   vertex processing but only support vertex shader 1.1, so
+                                   SHADER_MODEL_0 option can&#8217;t be applied.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">SHADOWS_COUNT</span><sup>A</sup></em></p>
+                        <p><em class="emphasis">Available options: From 1 to
+                                      <span class="literal">maxCount</span> (defined in <span class="literal">shadows.xml</span>
+                                      &#8212; for details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch30.html" class="olink"><i><span class="literal">shadows.xml</span></i></a>)</em></p>
+                        <p>Sets the number of simultaneously visible dynamic entity
+                                   shadows.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">SHADOWS_QUALITY</span></em></p>
+                        <p><em class="emphasis">Available options:
+                                      <span class="literal">HIGH</span>,
+                                      <span class="literal">MEDIUM</span>,<span class="literal">LOW</span>,
+                                      <span class="literal">OFF</span></em></p>
+                        <p>Sets entity shadow quality. <span class="literal">HIGH</span> uses a
+                                   12-tap filter for shadows, <span class="literal">MEDIUM</span> uses a 4-tap
+                                   filter for shadows, <span class="literal">LOW</span> uses a 1-tap filter for
+                                   shadows and <span class="literal">OFF</span> turns shadows off
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">SKY_LIGHT_MAP</span><sup>B</sup></em></p>
+                        <p><em class="emphasis">Available options: <span class="literal">ON</span>,
+                                      <span class="literal">OFF</span></em></p>
+                        <p>Toggles the cloud shadows on and off.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">TERRAIN_SPECULAR</span><sup>B</sup></em></p>
+                        <p><em class="emphasis">Available options: <span class="literal">ON</span>,
+                                      <span class="literal">OFF</span></em></p>
+                        <p>Toggles terrain specular lighting on and off.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">TERRAIN_LOD</span></em></p>
+                        <p><em class="emphasis">Available options: <span class="literal">FAR</span>,
+                                      <span class="literal">MEDIUM</span>,<span class="literal">NEAR</span></em></p>
+                        <p>Modifies the terrain geo-morphing distances by a factor. The
+                                   factors and options are configurable in the file
+                                   <span class="literal">bigworld/res/system/data/terrain2.xml</span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">TERRAIN_MESH_RESOLUTION</span></em></p>
+                        <p><em class="emphasis">Available options:
+                                      <span class="literal">HIGH</span>,
+                                      <span class="literal">MEDIUM</span>,<span class="literal">LOW</span></em></p>
+                        <p>Selects the terrain resolution to use. HIGH uses the highest
+                                   available resolution, MEDIUM uses half the available resolution, LOW
+                                   uses a quarter of the available resolution
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">TEXTURE_COMPRESSION</span><sup>AC</sup></em></p>
+                        <p><em class="emphasis">Available options: <span class="literal">ON</span>,
+                                      <span class="literal">OFF </span><a href="ch21.html#xref_Customising_Options" title="21.9.1.&nbsp;Customising options">Customising options</a></em></p>
+                        <p>Toggles texture compression on and off</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">TEXTURE_FILTERING</span></em></p>
+                        <p><em class="emphasis">Available options:
+                                      <span class="literal">ANISOTROPIC_16X</span>, <span class="literal">ANISOTROPIC_8X</span>,
+                                      <span class="literal">ANISOTROPIC_4X</span>, <span class="literal">ANISOTROPIC_2X</span>,
+                                      <span class="literal">TRILINEAR</span>, <span class="literal">BILINEAR</span>,
+                                      <span class="literal">LINEAR</span>, <span class="literal">POINT</span></em></p>
+                        <p>Selects texture filtering. Shaders can be modified to take
+                                   advantage of this setting by using the automatic variables
+                                   <span class="literal">MinMagFilter</span>, <span class="literal">MipFilter</span>, and
+                                   <span class="literal">MaxAnisotropy</span> to set the
+                                   <span class="literal">MINFILTER</span> , <span class="literal">MAGFILTER</span>,
+                                   <span class="literal">MIPFILTER</span> and <span class="literal">MAXANISOTROPY</span>
+                                   sampler states. For details, see
+                                   <span class="literal">bigworld/res/shaders/speedtree/speedtree.fx</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">TEXTURE_QUALITY</span><sup>AC
+                                         </sup><a href="ch21.html#xref_Customising_Options" title="21.9.1.&nbsp;Customising options">Customising options</a></em></p>
+                        <p><em class="emphasis">Available options:
+                                      <span class="literal">HIGH</span>, <span class="literal">MEDIUM</span>,
+                                      <span class="literal">LOW</span></em></p>
+                        <p>Sets texture quality level.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">SPEEDTREE_QUALITY</span></em></p>
+                        <p><em class="emphasis">Available options:
+                                      <span class="literal">VERYHIGH</span>, <span class="literal">HIGH</span>,
+                                      <span class="literal">MEDIUM</span>, <span class="literal">LOW</span>,
+                                      <span class="literal">LOWEST</span></em></p>
+                        <p>Sets the quality of the speedtree rendering.
+                                   <span class="literal">VERYHIGH</span> Enables per-pixel lighting (normal mapped)
+                                   on all tree parts, <span class="literal">HIGH</span> Enables per-pixel lighting
+                                   (normal mapped) on only the tree branches, <span class="literal">MEDIUM</span>
+                                   Trees use simple lighting, <span class="literal">LOW</span> Trees use simple
+                                   animation and lighting, using the fixed function pipeline.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">WATER_QUALITY</span></em></p>
+                        <p><em class="emphasis">Available options:
+                                      <span class="literal">HIGH</span>, <span class="literal">MEDIUM</span>,
+                                      <span class="literal">LOW</span>, <span class="literal">LOWEST</span></em></p>
+                        <p>Sets the quality of water reflection rendering.
+                                   <span class="literal">HIGH</span> Enables drawing of all object types,
+                                   <span class="literal">MEDIUM</span> Disables drawing of dynamic objects,
+                                   <span class="literal">LOW</span> Disables drawing of dynamic objects and halves
+                                   the resolution of the render target. <span class="literal">LOWEST</span> only
+                                   renders specular reflections.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">WATER_SIMULATION</span></em></p>
+                        <p><em class="emphasis">Available options:
+                                      <span class="literal">HIGH</span>, <span class="literal">LOW</span>,
+                                      <span class="literal">OFF</span></em></p>
+                        <p>Sets the quality of the water simulation.
+                                   <span class="literal">HIGH</span> Enables inter-cell water simulation,
+                                   <span class="literal">MEDIUM</span> enables water simulation on a cell by cell
+                                   basis, <span class="literal">OFF</span> turns water simulation off.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">POST_PROCESSING</span></em></p>
+                        <p><em class="emphasis">Available options:
+                                      <span class="literal">HIGH</span>, MEDIUM, <span class="literal">LOW</span>,
+                                      <span class="literal">OFF</span></em></p>
+                        <p>Sets the default post-processing chain. These are selected from
+                                   the chains folder, for example :
+                                   bigworld/res/system/post_processing/chains/high_graphics_setting.xml.
+                                   If you want to edit the default post-processing then edit the three
+                                   chain files there.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">MRT_DEPTH</span></em></p>
+                        <p><em class="emphasis">Available options: ON,
+                                      <span class="literal">OFF</span></em></p>
+                        <p>Enables creation of the depth texture (exposed to .fx files via
+                                   the DepthTex semantic.) This enables a variety of advanced
+                                   post-processing effects such as depth-of-field and depth-fades, as
+                                   well as the depth-based colouring of the water.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p><em class="emphasis"><em class="emphasis">A</em> &#8212; Adjustable via
+                         configuration files. For details, see <a href="ch21.html#xref_Customising_Options" title="21.9.1.&nbsp;Customising options">Customising options</a>.</em></p>
+               <p><em class="emphasis"><em class="emphasis">B </em>&#8212; Requires restart
+                         of the client. For details, see <a href="ch21.html#xref_Settings_That_Require_Restarting_The_Client" title="21.9.2.4.&nbsp;Settings that require restarting the client">Settings that require restarting the client</a>.</em></p>
+               <p><em class="emphasis"><em class="emphasis">C</em> &#8212; Delayed setting.
+                         For details, see <a href="ch21.html#xref_Delayed_Settings" title="21.9.2.3.&nbsp;Delayed settings">Delayed settings</a>.</em></p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Customising_Options"></a>21.9.1.&nbsp;Customising options
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Although most of these settings have their options determined in
+                           the engine, some settings can have their options customized via
+                           configuration files.
+                  </p>
+                  <p>These settings and their customisation are discussed in the
+                           following topics.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e9539"></a>21.9.1.1.&nbsp;<span class="literal">TEXTURE_QUALITY</span> and
+                                         <span class="literal">TEXTURE_COMPRESSION</span></h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Both <span class="literal">TEXTURE_QUALITY</span> and
+                                <span class="literal">TEXURE_COMPRESSION</span> settings are customized by the
+                                way of the texture format (<span class="literal">.texformat</span>) and detail
+                                levels (<span class="literal">texture_detail_level.xml</span>) files (for
+                                details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch33.html" class="olink"><i><span class="literal">.texformat</span></i></a>).
+                     </p>
+                     <p>Lowering the texture quality and using compressed formats helps
+                                improving engine performance, by reducing the amount of texture memory
+                                required to store them. This means that less data needs to be sent to
+                                the graphics card at each frame, ultimately improving frame
+                                rate.
+                     </p>
+                     <p><span class="literal">TEXURE_QUALITY</span> adjusts the resolution of a
+                                texture by preventing its topmost mipmap levels from being loaded.
+                                This means that, at the highest level of quality, the texture will be
+                                at the same resolution as the original texture map. At medium level,
+                                it will be at half its original size, and at a quarter of it at the
+                                lowest level of quality.
+                     </p>
+                     <p>How many mipmap levels are skipped in each quality level for
+                                each texture can be controlled by the <span class="literal">lodMode</span> tag
+                                in the texture's <span class="literal">detailLevel</span> section.
+                     </p>
+                     <p>The table below lists the values <span class="literal">lodMode</span> can
+                                assume, next to the number of mipmaps skipped for each of the texture
+                                quality setting levels:
+                     </p>
+                     <div class="altrow">
+                        <table border="0">
+                           <colgroup>
+                              <col width="39">
+                              <col width="48">
+                              <col width="51">
+                              <col width="63">
+                              <col width="50">
+                           </colgroup>
+                           <thead>
+                              <tr>
+                                 <th><span class="literal">lodMode</span></th>
+                                 <th colspan="4"># of skipped mipmaps</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr>
+                                 <td>Value</td>
+                                 <td>Description</td>
+                                 <td>High quality</td>
+                                 <td>Medium quality</td>
+                                 <td>Low quality</td>
+                              </tr>
+                              <tr>
+                                 <td>1</td>
+                                 <td>Normal</td>
+                                 <td>0</td>
+                                 <td>1</td>
+                                 <td>2</td>
+                              </tr>
+                              <tr>
+                                 <td>2</td>
+                                 <td>Low bias</td>
+                                 <td>0</td>
+                                 <td>1</td>
+                                 <td>1</td>
+                              </tr>
+                              <tr>
+                                 <td>3</td>
+                                 <td>High bias</td>
+                                 <td>0</td>
+                                 <td>0</td>
+                                 <td>1</td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                     <p><span class="citetitle">Number of skipped mipmaps per quality
+                                   setting level/ LOD level</span></p>
+                     <p><span class="literal">TEXURE_COMPRESSION</span> affects the format in
+                                which texture maps are stored in memory. When texture compression is
+                                disabled, all textures are stored using the format defined by the
+                                format tag in the texture's <span class="literal">detailLevel</span> section.
+                                When texture compression is enabled, the format defined by the
+                                <span class="literal">formatCompressed</span> is used. If
+                                <span class="literal">formatCompressed</span> is not defined for a texture, then
+                                format is used, whatever the compression setting is.
+                     </p>
+                     <p>Note that there is no restriction to what texture format is used
+                                for format or <span class="literal">formatCompressed</span>, but for the texture
+                                compression setting to yield any significant performance results,
+                                <span class="literal">formatCompressed</span> should define a texture format
+                                that uses less texture memory than its non-compressed format
+                                counterpart.
+                     </p>
+                     <p>For details on how to setup a texture's level of detail, see
+                                <a href="ch21.html#xref_Texture_Details_Levels_Compression" title="21.7.1.&nbsp;Texture detail levels/compression">Texture detail levels/compression</a>. For details
+                                on the configuration file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch33.html" class="olink"><i><span class="literal">.texformat</span></i></a>.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e9674"></a>21.9.1.2.&nbsp;<span class="literal">SHADOWS_COUNT</span></h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p><span class="literal">SHADOWS_COUNT</span> defines the maximum number of
+                                simultaneous dynamic entity shadow casters in a scene.
+                     </p>
+                     <p>Shadows are rendered using shadow buffers, thus consuming
+                                texture memory. Filling the buffers up at every frame requires
+                                rendering the scene again for each shadow caster. Reducing the number
+                                of simultaneous dynamic shadow casters reduces the memory requirements
+                                and the amount of processing used to update the buffers at every
+                                frame.
+                     </p>
+                     <p>Value ranges from 1 to value specified in
+                                <span class="literal">maxCount</span> <span class="literal">shadows.xml</span> file, in
+                                power of two steps (defined in <span class="literal">shadows.xml</span> &#8212; for
+                                details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch30.html" class="olink"><i><span class="literal">shadows.xml</span></i></a>).
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_FLORA_DENSITY"></a>21.9.1.3.&nbsp;<span class="literal">FLORA_DENSITY</span></h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p><span class="literal">FLORA_DENSITY</span> defines the size of the vertex
+                                buffer used to render the flora detail objects.
+                     </p>
+                     <p>Since the flora drawing distance to the camera is fixed,
+                                defining the size of the vertex buffer also determines the flora
+                                density. Because it uses alpha blending, drawing the flora can
+                                negatively influence the frame rendering time, especially on hardware
+                                with limited fill rate performance. Reducing the amount of flora
+                                rendered at any one time may help improving the frame rate.
+                     </p>
+                     <p>Flora density options are defined in
+                                <span class="literal">&lt;graphics_settings&gt;.xml</span> (for details on this
+                                file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch38.html#xref_graphics_settings_xml" class="olink"><span class="literal"><em class="replaceable"><code>&lt;graphics_settings&gt;</code></em>.xml</span></a>) as a multiplier of the
+                                vertex buffer, which actual size is defined per space in
+                                <span class="literal">&lt;flora&gt;.xml</span> (for details on this file's
+                                grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s
+                                section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch38.html#xref_flora_xml" class="olink"><span class="literal"><em class="replaceable"><code>&lt;flora&gt;</code></em>.xml</span></a>).
+                     </p><pre class="programlisting">&lt;graphics_settings.xml&gt;
+
+  &lt;flora&gt;
+    &lt;option&gt;
+      &lt;label&gt;  HIGH &lt;/label&gt;
+      &lt;value&gt;  1.0  &lt;/value&gt;
+    &lt;/option&gt;
+
+    &lt;option&gt;
+      &lt;label&gt;  LOW  &lt;/label&gt;
+      &lt;value&gt;  0.5  &lt;/value&gt;
+    &lt;/option&gt;
+
+    &lt;option&gt;
+      &lt;label&gt;  OFF  &lt;/label&gt;
+      &lt;value&gt;  0    &lt;/value&gt;
+    &lt;/option&gt;
+  &lt;/flora&gt;
+
+&lt;/graphics_settings.xml&gt;</pre><p><span class="citetitle">Example
+                                   <span class="literal">&lt;graphics_settings&gt;.xml</span> &#8212; Configuring flora
+                                   density</span></p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_FAR_PLANE"></a>21.9.1.4.&nbsp;<span class="literal">FAR_PLANE</span></h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p><span class="literal">FAR_PLANE</span> defines the maximum viewing
+                                distance when rendering the 3D world.
+                     </p>
+                     <p>Decreasing the viewing distance reduces the amount of geometry
+                                sent to the rendering pipeline, resulting in higher frame
+                                rates.
+                     </p>
+                     <p>Because the far plane distance can be defined on a per-space
+                                basis (in <span class="literal">space.settings</span> file &#8212; for details on this
+                                file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch31.html" class="olink"><i><span class="literal">space.settings</span></i></a>),
+                                <span class="literal">FAR_PLANE</span> is actually multiplied by the space's
+                                specific far plane value before it is applied to the camera.
+                     </p>
+                     <p>Specified in
+                                <span class="literal"><em class="replaceable"><code>&lt;graphics_settings&gt;</code></em>.xml</span>
+                                (for details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch38.html#xref_graphics_settings_xml" class="olink"><span class="literal"><em class="replaceable"><code>&lt;graphics_settings&gt;</code></em>.xml</span></a>), the far plane can be
+                                configured as in the example below:
+                     </p><pre class="programlisting">&lt;graphics_settings.xml&gt;
+
+  &lt;farPlane&gt;
+
+    &lt;option&gt;
+      &lt;value&gt;  1.0     &lt;/value&gt;
+      &lt;label&gt;  FAR     &lt;/label&gt;
+    &lt;/option&gt;
+
+    &lt;option&gt;
+      &lt;value&gt;  0.75    &lt;/value&gt;
+      &lt;label&gt;  MEDIUM  &lt;/label&gt;
+    &lt;/option&gt;
+
+    &lt;option&gt;
+      &lt;value&gt;  0.5     &lt;/value&gt;
+      &lt;label&gt;  NEAR    &lt;/label&gt;
+    &lt;/option&gt;
+
+  &lt;/farPlane&gt;
+
+&lt;/graphics_settings.xml&gt;</pre><p><span class="citetitle">Example
+                                   <span class="literal"><em class="replaceable"><code>&lt;graphics_settings&gt;</code></em>.xml</span>
+                                   &#8212; Configuring far plane</span></p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e9776"></a>21.9.1.5.&nbsp;<span class="literal">OBJECT_LOD</span></h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p><span class="literal">OBJECT_LOD</span> defines the relative distance to
+                                the camera before LOD transitions occur.
+                     </p>
+                     <p>For standard BigWorld models, LOD distances are defined using
+                                the ModelEditor. ParticleEditor is used to set the LOD distance for
+                                particle systems (the maximum distance to which the system is still
+                                visible). LOD levels and transition distances for SpeedTrees are
+                                defined inside SpeedTreeCAD (although they can be overridden by the
+                                SpeedTree's XML configuration file, which is specified in
+                                <span class="literal">resources.xml</span> file's
+                                <span class="literal">speedTreeXML</span> tag. For details on this file, see
+                                <a href="ch01.html#xref_File_resources_xml" title="1.4.1.&nbsp;File resources.xml">File <span class="literal">resources.xml</span></a>).
+                     </p>
+                     <p>The <span class="literal">OBJECT_LOD</span> setting specify multipliers
+                                that will modify those distances during runtime, allowing the user to
+                                trade some visual quality for better performance.
+                     </p>
+                     <p>The LOD multipliers are defined in
+                                <span class="literal"><em class="replaceable"><code>&lt;graphics_settings&gt;</code></em>.xml</span>
+                                (for details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch38.html#xref_graphics_settings_xml" class="olink"><span class="literal"><em class="replaceable"><code>&lt;graphics_settings&gt;</code></em>.xml</span></a>):
+                     </p><pre class="programlisting">&lt;graphics_settings.xml&gt;
+
+  &lt;objectLOD&gt;
+
+    &lt;option&gt;
+      &lt;value&gt;  1.0     &lt;/value&gt;
+      &lt;label&gt;  HIGH   &lt;/label&gt;
+    &lt;/option&gt;
+
+    &lt;option&gt;
+      &lt;value&gt;  0.66    &lt;/value&gt;
+      &lt;label&gt;  MEDIUM  &lt;/label&gt;
+    &lt;/option&gt;
+
+    &lt;option&gt;
+      &lt;value&gt;  0.33    &lt;/value&gt;
+      &lt;label&gt;  LOW     &lt;/label&gt;
+    &lt;/option&gt;
+
+  &lt;/objectLOD&gt;
+
+&lt;/graphics_settings.xml&gt;</pre><p><span class="citetitle">Example
+                                   <span class="literal"><em class="replaceable"><code>&lt;graphics_settings&gt;</code></em>.xml</span>
+                                   &#8212; Configuring object LOD</span></p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9820"></a>21.9.2.&nbsp;Using settings
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Upon startup, the client automatically tries to load the graphics
+                           settings from disk. All graphics settings are stored in the
+                           <span class="literal">graphicsPreferences</span> section of the file specified in
+                           preferences tag of the file specified in
+                           <span class="literal">resources.xml</span>'s <span class="literal">engineConfigXML</span>
+                           tag (for details, see <a href="ch01.html#xref_File_preferences_xml" title="1.4.4.&nbsp;File <preferences&gt;.xml">File
+                              <span class="literal"><em class="replaceable"><code>&lt;preferences&gt;</code></em>.xml</span></a>). The
+                           first time the application is run, and when the graphics card or its
+                           driver has changed, the graphics settings will try to auto-detect the
+                           most appropriate settings for the device.
+                  </p>
+                  <p>Saving, on the other hand, is not performed automatically; it must
+                           be controlled from the scripts, using the
+                           <span class="literal">BigWorld.savePreferences</span> method &#8212; it will save both
+                           the graphics settings and the video and script preferences.
+                  </p>
+                  <p>The game scripts can use the functions
+                           <span class="literal">BigWorld.graphicsSettings</span> and
+                           <span class="literal">BigWorld.setGraphicsSettings</span> to query and change the
+                           current state of the settings (usually trough a graphical user
+                           interface).
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e9849"></a>21.9.2.1.&nbsp;Auto-detecting settings
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Auto-detecting of settings is supported through an xml
+                                configuration file specified by the tag
+                                <span class="literal">graphicsSettingsPresets</span> in
+                                <span class="literal">resources.xml</span>. This file defines matching criteria
+                                to attempt to match a group of settings to a specific device (graphics
+                                card). There are three different ways of matching a group of settings
+                                to a device. All matching is done against the
+                                <span class="literal">D3DADAPTER_IDENTIFIER9</span> structure. The
+                                auto-detection itself is performed in the method
+                                <span class="literal">Moo::GraphicsSetting::init</span></p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">GUID</span></em></p>
+                              <p>Matches a specific device type and driver version to a
+                                             settings group, this is useful when there are known issues with a
+                                             certain driver/device pair and you can adjust your graphics
+                                             settings accordingly
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">VendorID/DeviceID
+                                                   pair</span></em></p>
+                              <p>Matches a specific device type to the settings this is
+                                             useful when you know the vendor and device id's for a specific
+                                             device
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">Device description
+                                                   string</span></em></p>
+                              <p>Matches the strings to the device description, all the
+                                             strings need to match for the setting to be selected
+                              </p>
+                           </li>
+                        </ul>
+                     </div><pre class="programlisting">&lt;graphicsPreferences&gt; HIGH &lt;=== Name of the preset, if no name is present, the preset will not appear in the list of settings, 
+                                but it will still be used when auto-detecting settings for the graphics card
+
+  &lt;entry&gt; &lt;=== a graphics setting to change 
+    &lt;label&gt; CLASSIC_TERRAIN_QUALITY &lt;/label&gt; &lt;=== the name of the graphics setting
+    &lt;activeOption&gt; 0 &lt;/activeOption&gt; &lt;===the selected option
+  &lt;/entry&gt;
+
+  &lt;GUIDMatch&gt;  01234567.89abcdef.01234567.89abcdef &lt;/GUIDMatch&gt;  
+    &lt;===  Combined GUID of device and driver version, this is the value from DeviceIdentifier in the 
+          D3DADAPTER_IDENTIFIER9 structure saved out using the BigWorld UniqueID class.
+          If this value matches, the setting will be used.
+
+  &lt;VendorDeviceIDMatch&gt;
+    &lt;VendorID&gt; 4318 &lt;/VendorID&gt; &lt;=== the VendorId from D3DADAPTER_IDENTIFIER9
+    &lt;DeviceID&gt; 1554 &lt;/DeviceID&gt; &lt;=== the DeviceId from D3DADAPTER_IDENTIFIER9
+  &lt;/VendorDeviceIDMatch&gt; &lt;=== If these two values match the current device, the setting will be selected
+                              unless there is a GUIDMatch with the current device
+
+  &lt;DeviceDescriptionMatch&gt; 
+    &lt;string&gt; nvidia &lt;/string&gt; &lt;=== Any number of strings that will be matched against the 
+    &lt;string&gt; 6800 &lt;/string&gt; &lt;=== Description property from D3DADAPTER_IDENTIFIER9
+  &lt;/DeviceDescriptionMatch&gt;  &lt;=== If these values match the current device, the setting will be selected
+                                  unless there is a GUIDMatch or VendorDeviceIDMatch with the 
+                                  current device
+
+  &lt;defaultSetting&gt; true &lt;/defaultSetting&gt; &lt;=== this value is true for the value to be used as the default setting,
+                                               the default setting is used when no other settings match.
+&lt;/graphicsPreferences&gt;</pre><p><span class="citetitle">Example
+                                   <span class="literal"><em class="replaceable"><code>&lt;graphics_settings_presets&gt;</code></em>.xml</span>
+                                   &#8212; Setting up device matches</span></p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e9897"></a>21.9.2.2.&nbsp;<span class="literal">GraphicsPresets</span> class
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>A simple python graphics presets class is also supplied. This
+                                class helps with grouping several graphics settings together so that
+                                you can have pre-defined settings for multiple graphics options for a
+                                specific level of hardware or performance. The
+                                <code class="code">GraphicsPresets</code> class can be found in the folder
+                                <span class="literal">bigworld/res/scripts/GraphicsPresets.py</span>.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Delayed_Settings"></a>21.9.2.3.&nbsp;Delayed settings
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Most settings take effect immediately after calling
+                                <span class="literal">BigWorld.setGraphicsSettings</span>, but some are just
+                                flagged as delayed. That means that after being set they are added to
+                                a list of pending settings, and that they will only come into effect
+                                when that list gets committed.
+                     </p>
+                     <p>This was designed to give the interface programmer a chance to
+                                warn the user that processing the new settings may take a while to
+                                complete before the client application blocks for a few seconds
+                                (currently, there is no support for displaying a progress bar while
+                                the settings are being processed).
+                     </p>
+                     <p>The following functions allow the scripts to manage the pending
+                                settings list:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">BigWorld.hasPendingGraphicsSettings</span></em></p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">BigWorld.commitPendingGraphicsSettings</span></em></p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">BigWorld.rollBackPendingGraphicsSettings</span></em></p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Settings_That_Require_Restarting_The_Client"></a>21.9.2.4.&nbsp;Settings that require restarting the client
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Some settings are not applied until the client application is
+                                restarted. The function
+                                <span class="literal">BigWorld.graphicsSettingsNeedRestart</span> returns true
+                                whenever the client requires a restart for a recently changed setting
+                                to take effect.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_High_Resolution_Screenshots"></a>21.10.&nbsp;Taking Screenshots
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The BigWorld client is able to take screenshots and save them to a
+                      number of different formats. It does this by retrieving the current
+                      content of the back buffer at the time the screenshot operation is called.
+                      To take an in-game screenshot, press the <span class="literal">PrtScn button</span>,
+                      or use the
+                      <span class="literal">BigWorld.screenShot(<em class="replaceable"><code>extension</code></em>,
+                         <em class="replaceable"><code>name</code></em>)</span> Python API function.
+               </p>
+               <p>The default image type, filename prefix, and output location are all
+                      configured within the <code class="code">engine_config.xml</code> (see <a href="ch01.html#xref_File_engine_config_xml" title="1.4.2.&nbsp;File <engine_config&gt;.xml">File
+                           <span class="literal"><em class="replaceable"><code>&lt;engine_config&gt;</code></em>.xml</span></a>). The schema for the
+                      <code class="code">&lt;screenShot&gt;</code> tag is:
+               </p><pre class="programlisting">&lt;engine_config.xml&gt;
+  ...
+    &lt;screenShot&gt;
+        &lt;path&gt; <em class="replaceable"><code>relativePath</code></em>
+            &lt;pathBase&gt;  <em class="replaceable"><code>basePathName</code></em> &lt;/pathBase&gt;
+        &lt;/path&gt;        
+        &lt;name&gt; <em class="replaceable"><code>prefixName</code></em> &lt;/name&gt;
+        &lt;extension&gt; <em class="replaceable"><code>extension</code></em> &lt;/extension&gt;                
+    &lt;/screenShot&gt;
+  ...
+&lt;/engine_config.xml&gt;</pre><div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">relativePath &#8212;
+                                         </span></em>This is the output path relative to basePath
+                                   (outlined below). For example, if relativePath is
+                                   <code class="code">MY_DOCS,</code> you may want to set this to something like
+                                   <code class="code">"My Company/Game Name/Screenshots"</code>. Leave blank or
+                                   specify <span class="literal">"./"</span> to place directly in
+                                   <span class="literal">basePathName</span> (which is the default
+                                   behaviour).
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">basePathName &#8212;
+                                         </span></em>This configures the base output location for the
+                                   screenshots. This can be one of the following values:
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><code class="code">EXE_PATH</code> &#8212; Screenshots relative to the location
+                                                of the client executable. This is the default location if none is
+                                                supplied.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><code class="code">CWD</code> &#8212; Screenshots will be stored relative to
+                                                the current working directory. Note that if the working directory
+                                                changes during runtime, it will save in the new working
+                                                directory.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><code class="code">APP_DATA</code> &#8212; Screenshots will be stored relative
+                                                to the current user's AppData directory.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><code class="code">MY_DOCS</code> &#8212; Screenshots will be stored relative
+                                                to the current user's My Documents directory.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><code class="code">RES_TREE</code> &#8212; Screenshots will be stored relative
+                                                to the first resource path found in <code class="code">paths.xml</code>.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                        <p>The default value is <code class="code">EXE_PATH</code>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">prefixName </span></em>&#8212;
+                                   Specifies the prefix to use when generating a numbered screenshot. The
+                                   default value is "shot".
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">extension </span></em> &#8212;
+                                   Specifies the file format to use when saving the screenshot. This can
+                                   be one of "bmp", "jpg", "tga", "png" or "dds". The default value is
+                                   "bmp".
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The full path of the generated screenshot will therefore be
+                      <code class="code">basePathName/relativePath/prefixName_<span class="literal"><em class="replaceable"><code>&lt;sequence&gt;</code></em></span>.extension</code>,
+                      where <span class="literal"><em class="replaceable"><code>&lt;sequence&gt;</code></em></span> is a
+                      four-digit non-negative integer, padded with leading zeros
+                      (<em class="emphasis">e.g.</em>, <span class="literal">shot_0012.bmp</span>). The screen
+                      capture mechanism will not overwrite pre-existing files.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10078"></a>21.10.1.&nbsp;High Resolution Screenshots
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Normally the back buffer is the same size as the window or the
+                           screen resolution when in full-screen mode. However, when running in
+                           windowed mode it is possible to have a back buffer that is larger than
+                           the window itself, thus increasing the size of the screenshot.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e10083"></a>21.10.1.1.&nbsp;The backBufferWidthOverride watcher
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The size of the back buffer can be changed (via Debug (Watchers)
+                                Console) by the <code class="code">backBufferWidthOverride</code> watcher.
+                     </p>
+                     <p>The values specified to the watcher, and their effect on the
+                                back buffer are described below:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis">Watcher's value: 0
+                                                (default)</em></p>
+                              <p><em class="emphasis">Resulting dimensions of the back
+                                                buffer:</em> Same as those of the window (when in windowed
+                                             mode) or screen (when in full-screen mode).
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Watcher's value: Between 1 and the
+                                                maximum surface width (4096 high-end cards)</em></p>
+                              <p><em class="emphasis">Resulting dimensions of the back
+                                                buffer:</em> Width of the back buffer will be as specified.
+                                             Height of the back buffer will be the specified width divided by
+                                             the aspect ratio of the window.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Watcher's value: Greater than
+                                                supported by hardware</em></p>
+                              <p><em class="emphasis">Resulting dimensions of the back
+                                                buffer:</em> Maximum value supported by the hardware
+                                             (typically 2048 or 4096). Specified value will be ignored.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e10118"></a>21.10.1.2.&nbsp;How to take a high resolution screenshot
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>To take a high-resolution screenshot</p>
+                     <div class="orderedlist">
+                        <ol type="1">
+                           <li>
+                              <p>Open <span class="literal">engine_config.xml</span> (for details on
+                                             this file, see <a href="ch01.html#xref_File_engine_config_xml" title="1.4.2.&nbsp;File <engine_config&gt;.xml">File
+                                          <span class="literal"><em class="replaceable"><code>&lt;engine_config&gt;</code></em>.xml</span></a>) and
+                                             check the settings in &lt;supershot&gt; tag. If you have a video
+                                             card with a large amount of memory you may be able to change hRes
+                                             to 4096.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Load the space/level and navigate to the place of which you
+                                             want the screenshot.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Press ctrl+PrtScn to enable high resolution screenshot
+                                             settings.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Press PrtScn to take a screenshot.</p>
+                           </li>
+                           <li>
+                              <p>Press ctrl+PrtScn to restore regular render settings.</p>
+                           </li>
+                        </ol>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e10144"></a>21.10.1.3.&nbsp;Troubleshooting
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The list below describes some errors that you might come across
+                                when taking high-resolution screenshots and how to solve them:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis">Back buffer's size did not change to
+                                                the value that I specified.</em></p>
+                              <p>When setting <span class="literal">backBufferWidthOverride</span>,
+                                             client checks if specified size is larger than the hardware can
+                                             support. If that is the case, then hardware will ignore the
+                                             specified size and use its maximum (typically 2048 or
+                                             4096).
+                              </p>
+                              <p><em class="emphasis">&#8212; or &#8212;</em></p>
+                              <p>When very large numbers are specified in the <em class="emphasis">Debug (Watchers) Console</em>, parsing may wrap
+                                             the value. If this is the case of the value specified for
+                                             backBufferWidthOverride, then it will be set to 0.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">There is a glow covering the
+                                                screen.</em></p>
+                              <p>Sometimes, limited video memory resources will stop the
+                                             renderer from allocating some of the buffers that it uses, or from
+                                             drawing full-screen post-processing.
+                              </p>
+                              <p>This is particularly common when changing to a lower
+                                             resolution after using a very large one.
+                              </p>
+                              <p>To solve this, you can either:</p>
+                              <div class="itemizedlist">
+                                 <ul type="circle">
+                                    <li>
+                                       <p>Set buffer to a smaller width (an application restart
+                                                          may also be necessary).
+                                       </p>
+                                    </li>
+                                    <li>
+                                       <p>Turn off post-processing through the graphics
+                                                          settings
+                                       </p>
+                                       <div class="itemizedlist">
+                                          <ul type="square">
+                                             <li>
+                                                <p>Press <span class="literal">DEBUG</span>+P to open the
+                                                                       <em class="emphasis">Python Console</em>.
+                                                </p>
+                                             </li>
+                                             <li>
+                                                <p>Type BigWorld.setGraphicsSetting( "POST_PROCESSING",
+                                                                       3 )
+                                                </p>
+                                             </li>
+                                          </ul>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </div>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Changing back buffer's size had no
+                                                effect when working in full-screen mode.</em></p>
+                              <p>When in full-screen mode, the back buffer must always have
+                                             the same dimensions as the screen resolution &#8212; this is a
+                                             hardware/API limitation.
+                              </p>
+                              <p>Hence, <span class="literal">backBufferWidthOverride</span> will
+                                             always be disabled (value equals 0) when running in full-screen
+                                             mode.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e10208"></a>21.10.1.4.&nbsp;Hardware recommendations
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>To produce high-resolution screenshots, a very capable video
+                                card is necessary &#8212; the two key requirements are:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>Maximum texture resolution</p>
+                           </li>
+                           <li>
+                              <p>Available video memory</p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>DirectX 9 requires 2048 resolution as a minimum, but 4096 is
+                                available on nVidia GeForce3+ (7800+ recommended) and ATI 1X800+
+                                series cards. It is recommended that you have a minimum of 256MB video
+                                memory when taking screenshots at resolutions in the order of
+                                4096x3072.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Dynamic_Entity_Shadows"></a>21.11.&nbsp;Dynamic Entity Shadows
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The client supports two different ways to allow entity models to
+                      cast shadows into the scene. The method you choose to use will depend on
+                      the target hardware as they differ greatly in cost.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10227"></a>21.11.1.&nbsp;Splodges
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This system works by drawing a special "splodge" texture onto the
+                           geometry below the feet of the entity model, projected in the direction
+                           of the sun (they are only visible while in outside chunks). This is a
+                           good low-end solution as they are inexpensive to draw, however they will
+                           only provide a crude approximation of a shadow.
+                  </p>
+                  <p>Splodges can be added to an entity model by using the PySplodge
+                           API. The PySplodge class is a type of attachment, and are attached to
+                           the feet of the entity model (one per foot). For example:
+                           
+                  </p><pre class="programlisting">&gt;&gt;&gt; lsplodge = BigWorld.Splodge()
+&gt;&gt;&gt; rsplodge = BigWorld.Splodge()
+&gt;&gt;&gt; model.node( "biped L Toe0" ).attach( lsplodge )
+&gt;&gt;&gt; model.node( "biped R Toe0" ).attach( rsplodge )</pre><p>While all splodges use the same material to draw (this can be
+                           configured by modifying the environment/splodgeMaterial section in
+                           resources.xml), each PySplodge intstance can modify the following
+                           parameters: 
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>The maximum LOD distance from the camera, after which they
+                                          are culled. Defaults to 50 metres.
+                           </p>
+                        </li>
+                        <li>
+                           <p>The size of the individual splodge.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p> Since the collision scene is used to determine where to draw a
+                                splodge, only solid objects will receive splodge shadows. 
+                     </p>
+                  </div>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/splodge.png"><span class="caption">
+                           <p>An example of splodge shadows</p></span></div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10255"></a>21.11.2.&nbsp;Shadow maps
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Entity models can be configured so that they cast a shadow into
+                           the scene based on the direction of the sun light, utilising a dynamic
+                           shadow map. Each frame the engine will select a set of shadow casting
+                           entities closest to the camera, the number of which is configured via
+                           the <code class="code">SHADOWS_COUNT</code> graphics setting. For each shadow caster
+                           it will render the caster into a texture from the direction of the light
+                           and then project this texture into the scene by re-rendering each object
+                           that intersects the shadow (using the shadow map as input).
+                  </p>
+                  <p>In order to cast shadows, an entity must be explicitly added to
+                           the entity shadow manager. Two Python API's are provided: 
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><code class="code">BigWorld.addShadowEntity</code> - this is usually
+                                          called from the <code class="code">onEnterWorld</code> entity callback.
+                           </p>
+                        </li>
+                        <li>
+                           <p><code class="code">BigWorld.delShadowEntity</code> - this is usually
+                                          called from the <code class="code">onLeaveWorld</code> entity callback.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Global shadow settings (e.g. shadow map resolution, intensity, and
+                           shaders) are configured in the shadows XML file (defined in
+                           <span class="literal">shadows.xml</span> &#8212; for details on this file's grammar, see
+                           the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch30.html" class="olink"><i><span class="literal">shadows.xml</span></i></a>).
+                  </p>
+                  <p>User controllable graphics settings are <code class="code">SHADOWS_COUNT</code>
+                           and <code class="code">SHADOWS_QUALITY</code>. See <a href="ch21.html#xref_Graphics_Settings" title="21.9.&nbsp;Graphics settings">Graphics settings</a> for details.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>Shadows will be cast onto terrain, solid models, and flora.
+                                Sorted triangles (i.e. transluscent objects) will not cast or receive
+                                shadows.
+                     </p>
+                  </div>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>Keep in mind that the expense of using entity shadows will
+                                increase as the number of rendered shadowed entities increases, so it
+                                is recommended to keep the <code class="code">SHADOWS_COUNT</code> setting as low
+                                as possible to maintain performance. As such this is not designed to
+                                be a general purpose full-scene shadowing system.
+                     </p>
+                  </div>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/shadow-map.png"><span class="caption">
+                           <p>An example of dynamic entity shadows</p></span></div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch20.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch22.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;20.&nbsp;Sounds&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;22.&nbsp;Post Processing</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

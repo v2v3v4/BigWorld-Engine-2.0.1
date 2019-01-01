@@ -1,0 +1,457 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;6.&nbsp;Inheritance in BigWorld</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Methods">
+      <link rel="next" href="ch07.html" title="Chapter&nbsp;7.&nbsp;Entity Instantiation and Destruction">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch06.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Inheritance in BigWorld</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch07.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Inheritance_In_BigWorld"></a>Chapter&nbsp;6.&nbsp;Inheritance in BigWorld
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch06.html#d0e5313">6.1. Python Class Inheritance</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#xref_Entity_Interfaces">6.2. Entity Interfaces</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#xref_Entity_Parents">6.3. Entity Parents</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#xref_Client_Entity_Reuse">6.4. Client Entity Reuse</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#d0e5727">6.5. User Data Object Interfaces and Parents</a></span></dt>
+               </dl>
+            </div>
+            <p>Class-based inheritance is a useful design technique in
+                 object-orientated software, and is implemented in most object-orientated
+                 languages.
+            </p>
+            <p>BigWorld uses three separate classes (for the cell, base, and client
+                 entity parts) to implement an entity, and a definition file
+                 (<code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>)
+                 to tie them all together. As such, there are a variety of ways that
+                 entities, or parts of entities, may use inheritance in their specification
+                 and implementation.
+            </p>
+            <p>There are three different ways to declare inheritance relationships in
+                 BigWorld, all fulfilling different needs.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e5313"></a>6.1.&nbsp;Python Class Inheritance
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The Python language allows classes to be derived from each
+                      other.
+               </p>
+               <p>For example, to define a class <code class="classname">B</code>, derived
+                      from <code class="classname">A</code>, and methods for each of them, you can have
+                      the code below:
+               </p><pre class="programlisting">class <em class="emphasis">A</em>:
+  def <em class="emphasis">f</em>( self ):
+    print "A.f was called"
+
+class <em class="emphasis">B</em>( <em class="emphasis">A</em> ):
+  def <em class="emphasis">g</em>( self ):
+    print "B.g was called"</pre><p><span class="citetitle">Declaring Python class <code class="classname">A</code> and its
+                         derived class <code class="classname">B</code></span></p>
+               <p>Then suppose you have a program with the code below:</p><pre class="programlisting">x = B()
+x.f()
+x.g()</pre><p><span class="citetitle">Program using Python class inheritance</span></p>
+               <p>The output of this program will be as illustrated below:</p><pre class="programlisting">A.f was called
+B.g was called</pre><p><span class="citetitle">Example program output</span></p>
+               <p>When used in entities, this form of inheritance allows the sharing
+                      of common implementation details between entity types. Multiple
+                      inheritance is allowed, so that you can use many Python classes to help
+                      implement disparate features in some entities.
+               </p>
+               <p>This concept is illustrated in the diagram and code fragments
+                      below:
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/python_class_inheritance.png"><span class="caption">
+                        <p>Python class inheritance</p></span></div>
+               </div>
+               <p>The code fragments below show how the Python class
+                      <code class="classname">CommonBase</code> could be used in an entity
+                      <code class="classname">DerivedEntity</code><sup>[<a name="d0e5383" href="#ftn.d0e5383">10</a>]</sup></p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>If a base class' cell script
+                                   (<code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/CommonBase.py</code>)
+                                   is defined as below:
+                        </p><pre class="programlisting"><em class="emphasis"># note that this class is not derived from BigWorld.Entity
+# so it is just an ordinary Python class</em>
+class <em class="emphasis">CommonBase</em>:
+  ...
+  def <em class="emphasis">readyForAction</em>( self ):
+    # implement method's logic
+    return True
+  ...</pre></li>
+                     <li>
+                        <p>If a derived entity's cell script
+                                   (<code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/DerivedEntity1.py</code>)
+                                   is defined as below:
+                        </p><pre class="programlisting"><em class="emphasis">import BigWorld
+from common import CommonBase</em>
+...
+# derive from CommonBase, so you can use the method readyForAction
+class <em class="emphasis">DerivedEntity1</em>( <em class="emphasis">BigWorld.Entity</em>, <em class="emphasis">CommonBase</em> ):
+  ...
+  def <em class="emphasis">__init__</em>( self ):
+    BigWorld.Entity.__init__( self )
+    CommonBase.__init__( self )
+  ...
+  def <em class="emphasis">someAction</em>( self ):
+    if self.readyForAction():
+      print "action performed"
+  ...</pre></li>
+                     <li>
+                        <p>Then you can call methods from the base class, as illustrated
+                                   below:
+                        </p><pre class="programlisting">DerivedEntity1.readyForAction()</pre></li>
+                  </ol>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Entity_Interfaces"></a>6.2.&nbsp;Entity Interfaces
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld also supports inheritance in a form similar to Java's
+                      interface system. There can be a folder <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/defs/interfaces</code>
+                      that can be used to declare common parts of entities. This allows the
+                      definition in one place of often-used declarations.
+               </p>
+               <p>This concept is illustrated below:</p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/python_entity_interfaces.png"><span class="caption">
+                        <p>Python entity interfaces</p></span></div>
+               </div>
+               <p>The format of entity interface definition files is similar to the
+                      format of entity definition files, except that interface definition files
+                      do not have the section <code class="property">&lt;Parent&gt;</code>. For more
+                      details on entity definition files, see <a href="ch02.html#xref_The_Definition_File" title="2.2.&nbsp;The Entity Definition File">The Entity Definition File</a>.
+               </p>
+               <p>The outline of an interface definition file is described below (all
+                      sections are optional):
+               </p><pre class="programlisting">&lt;root&gt;
+
+  &lt;<em class="emphasis">Implements</em>&gt;
+    <em class="emphasis">&lt;!-- interface references --&gt;</em>
+  &lt;/Implements&gt;
+  
+  &lt;<em class="emphasis">Properties</em>&gt; <a name="co3523" href="ch06.html#co3523_desc"><img src="../images/callouts/1.png" alt="1" border="0"></a>
+    &lt;!-- properties --&gt;
+  &lt;/Properties&gt;
+
+  &lt;<em class="emphasis">ClientMethods</em>&gt; <a name="co3527" href="ch06.html#co3527_desc"><img src="../images/callouts/2.png" alt="2" border="0"></a>
+    &lt;!-- client methods --&gt;
+  &lt;/ClientMethods&gt;
+
+  &lt;<em class="emphasis">CellMethods</em>&gt; <a name="co3531" href="ch06.html#co3531_desc"><img src="../images/callouts/3.png" alt="3" border="0"></a>
+    &lt;!-- cell methods --&gt;
+  &lt;/CellMethods&gt;
+
+  &lt;<em class="emphasis">BaseMethods</em>&gt; <a name="co3535" href="ch06.html#co3535_desc"><img src="../images/callouts/4.png" alt="4" border="0"></a>
+    &lt;!-- base methods --&gt;
+  &lt;/BaseMethods&gt;
+
+  &lt;<em class="emphasis">LoDLevels</em>&gt; <a name="co3539" href="ch06.html#co3539_desc"><img src="../images/callouts/5.png" alt="5" border="0"></a>
+    &lt;!-- levels of detail --&gt;
+  &lt;/LODLevels&gt;
+
+&lt;/root&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/interfaces/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                         <span class="symbol">&#8208;</span> Minimal entity definition
+                         file</span></p>
+               <div class="calloutlist">
+                  <table border="0" summary="Callout list">
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co3523_desc"></a><a href="#co3523"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a href="ch04.html" title="Chapter&nbsp;4.&nbsp;Properties"><i xmlns:xlink="http://www.w3.org/1999/xlink">Properties</i></a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co3527_desc"></a><a href="#co3527"><img src="../images/callouts/2.png" alt="2" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a href="ch05.html" title="Chapter&nbsp;5.&nbsp;Methods"><i xmlns:xlink="http://www.w3.org/1999/xlink">Methods</i></a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co3531_desc"></a><a href="#co3531"><img src="../images/callouts/3.png" alt="3" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a href="ch05.html" title="Chapter&nbsp;5.&nbsp;Methods"><i xmlns:xlink="http://www.w3.org/1999/xlink">Methods</i></a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co3535_desc"></a><a href="#co3535"><img src="../images/callouts/4.png" alt="4" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a href="ch05.html" title="Chapter&nbsp;5.&nbsp;Methods"><i xmlns:xlink="http://www.w3.org/1999/xlink">Methods</i></a>.
+                           </p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="5%" valign="top" align="left"><a name="co3539_desc"></a><a href="#co3539"><img src="../images/callouts/5.png" alt="5" border="0"></a> 
+                        </td>
+                        <td valign="top" align="left">
+                           <p>For details, see <a href="ch04.html#xref_LOD_Level_Of_Detail_On_Properties" title="4.6.&nbsp;LOD (Level of Detail) on Properties">LOD (Level of Detail) on Properties</a>.
+                           </p>
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+               <p>Unlike entities, entity interfaces do not need to have associated
+                      Python implementation files, although this can be a good idea.
+               </p>
+               <p>The code fragments below illustrate the result of using an interface
+                      in an entity definition file:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>If an entity is defined implementing an interface
+                                   (<code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/someEntity.def</code>),
+                                   as below:
+                        </p><pre class="programlisting">&lt;!-- <em class="emphasis">someEntity </em>--&gt;
+&lt;root&gt;
+  ...
+  &lt;<em class="emphasis">Implements</em>&gt;
+    &lt;<em class="emphasis">Interface</em>&gt; <em class="emphasis">someInterface</em> &lt;/Interface&gt;
+  &lt;/Implements&gt;
+  ...
+&lt;/root&gt;</pre></li>
+                     <li>
+                        <p>And if the implemented interface is defined
+                                   (<code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/interfaces/someInterface.def</code>)
+                                   as below:
+                        </p><pre class="programlisting">&lt;!-- <em class="emphasis">someInterface</em> --&gt;
+&lt;root&gt;
+  &lt;Properties&gt;
+    &lt;name&gt;
+      &lt;Type&gt;  STRING       &lt;/Type&gt;
+      &lt;Flags&gt; ALL_CLIENTS  &lt;/Flags&gt;
+    &lt;/name&gt;
+  &lt;/Properties&gt;
+&lt;/root&gt;</pre></li>
+                     <li>
+                        <p>Then conceptually, the resulting entity definition is as defined
+                                   as below:
+                        </p><pre class="programlisting">&lt;!-- <em class="emphasis">someEntity</em> --&gt;
+&lt;root&gt;
+  ...
+  &lt;Properties&gt;
+    &lt;name&gt;
+      &lt;Type&gt;  STRING       &lt;/Type&gt;
+      &lt;Flags&gt; ALL_CLIENTS  &lt;/Flags&gt;
+    &lt;/name&gt;
+  &lt;/Properties&gt;
+  ...
+&lt;/root&gt;</pre></li>
+                  </ol>
+               </div>
+               <p>A property from an interface can be overridden if the description
+                      needs to be changed. In this case, the entire property description is
+                      replaced with the new one, so all appropriate fields need to be
+                      specified.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Entity_Parents"></a>6.3.&nbsp;Entity Parents
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>It is often possible to define an entity that provides functionality
+                      common to other entity types as a single base entity. For example, a
+                      collection of NPCs may share most of their implementation, but need some
+                      specific tuning to turn them into a guard or a shopkeeper.
+               </p>
+               <p>This concept is illustrated below:</p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/python_entity_parents.png"><span class="caption">
+                        <p>Python entity parents</p></span></div>
+               </div>
+               <p>The code fragments below demonstrate this form of
+                      inheritance.
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Define the base entity <code class="classname">GenericEntity</code>
+                                   (<code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/GenericEntity.def</code>):
+                        </p><pre class="programlisting">&lt;!-- <em class="emphasis">GenericEntity</em> --&gt;
+&lt;root&gt;
+  &lt;!-- common properties and methods --&gt;
+&lt;/root&gt;</pre></li>
+                     <li>
+                        <p>Define <code class="classname">GenericEntity</code>'s base
+                                   script:
+                        </p><pre class="programlisting">import BigWorld
+
+class <em class="emphasis">GenericEntity</em>( <em class="emphasis">BigWorld.Base</em> ):
+  ...
+  def __init__( self ):
+    BigWorld.Base.__init__( self )
+  ...</pre></li>
+                     <li>
+                        <p>Define <code class="classname">GenericEntity</code>'s cell
+                                   script:
+                        </p><pre class="programlisting">import BigWorld
+
+class <em class="emphasis">GenericEntity</em>( <em class="emphasis">BigWorld.Entity</em> ):
+  ...
+  def __init__( self ):
+    BigWorld.Entity.__init__( self )
+  ...</pre></li>
+                     <li>
+                        <p>Define derived entity
+                                   <code class="classname">SpecificEntity</code>:
+                        </p><pre class="programlisting">&lt;!-- <em class="emphasis">SpecificEntity</em> --&gt;
+&lt;root&gt;
+  &lt;!-- inheritance is defined in this tag --&gt;
+  &lt;Parent&gt; <em class="emphasis">GenericEntity</em> &lt;/Parent&gt;
+
+  &lt;!-- add more properties and methods here --&gt;
+&lt;/root&gt;</pre></li>
+                     <li>
+                        <p>Define <code class="classname">SpecificEntity</code>'s base
+                                   script:
+                        </p><pre class="programlisting">import BigWorld
+<em class="emphasis">import GenericEntity</em>
+
+class <em class="emphasis">SpecificEntity</em>( <em class="emphasis">GenericEntity.GenericEntity</em> ):
+  ...
+  def __init__( self ):
+    GenericEntity.GenericEntity.__init__( self )
+ ...</pre></li>
+                     <li>
+                        <p>Define <code class="classname">SpecificEntity</code>'s cell
+                                   script:
+                        </p><pre class="programlisting">import BigWorld
+<em class="emphasis">import GenericEntity</em>
+
+class <em class="emphasis">SpecificEntity</em>( <em class="emphasis">GenericEntity.GenericEntity</em> ):
+  ...
+  def __init__( self ):
+    GenericEntity.GenericEntity.__init__( self )
+  ...</pre></li>
+                  </ol>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Client_Entity_Reuse"></a>6.4.&nbsp;Client Entity Reuse
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>There may be times when an entity type only needs to be specialised
+                      on the server. Using the optional section
+                      <code class="property">&lt;ClientName&gt;</code> in a <code class="filename">.def</code> file allows a different (usually parent)
+                      entity type to be used for the client entity.
+               </p>
+               <p>For example, if <code class="classname">NPC</code> is derived from
+                      <code class="classname">Avatar</code>, and <code class="classname">NPC</code> contains
+                      additional properties that the client does not need to access,
+                      <code class="classname">NPC</code> objects can be sent to clients as
+                      <code class="classname">Avatar</code> objects. This means that the client does not
+                      need a specific script to handle <code class="classname">NPC</code>s.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e5727"></a>6.5.&nbsp;User Data Object Interfaces and Parents
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The inheritance of interfaces and parents described for entities
+                      also apply to User Data Objects. Due to the similarity of User Data
+                      Objects to regular Entities, for further details, please refer to sections
+                      <a href="ch06.html#xref_Entity_Interfaces" title="6.2.&nbsp;Entity Interfaces">Entity Interfaces</a> and <a href="ch06.html#xref_Entity_Parents" title="6.3.&nbsp;Entity Parents">Entity Parents</a></p>
+               <p>For an example of inheritance in User Data Objects see
+                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/user_data_object_defs/testItem.def</code>
+                      and
+                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/user_data_object_defs/testParent.def</code>.
+               </p>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e5383" href="#d0e5383">10</a>] </sup>Although this example is implemented on the cell, this technique
+                             is also useful for base and client scripts.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch07.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Methods&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;7.&nbsp;Entity Instantiation and Destruction</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

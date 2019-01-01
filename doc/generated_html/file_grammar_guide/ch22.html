@@ -1,0 +1,163 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;22.&nbsp;modules.xml</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch21.html" title="Chapter&nbsp;21.&nbsp;.model">
+      <link rel="next" href="ch23.html" title="Chapter&nbsp;23.&nbsp;.mvl">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch22.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;22.&nbsp;<span class="literal">modules.xml</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch21.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch23.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Modules_XML"></a>Chapter&nbsp;22.&nbsp;<span class="literal">modules.xml</span></h2>
+                  </div>
+               </div>
+            </div>
+            <p>Used by client tools WorldEditor, ModelEditor, and ParticleEditor, and
+                 located under
+                 <span class="literal">bigworld/tools/<em class="replaceable"><code>&lt;tool_folder&gt;</code></em>/resources/data</span>,
+                 this file is used to determine which modules should be run for the
+                 tool.
+            </p>
+            <p>Its grammar is listed below:</p><pre class="programlisting">&lt;root&gt;
+
+  &lt;startup&gt;
+    *&lt;module&gt;    <em class="replaceable"><code>string</code></em>  &lt;/module&gt;
+  &lt;/startup&gt;
+
+  &lt;Bases&gt;
+    *&lt;section&gt;   <em class="replaceable"><code>string</code></em>  &lt;/section&gt;
+  &lt;/Bases&gt;
+
+  &lt;Extensions&gt;
+    *&lt;ext_name&gt;  
+      [ ScriptedModule
+        &lt;script&gt;
+          &lt;module&gt; <em class="replaceable"><code>string</code></em>  &lt;/module&gt;
+          &lt;class&gt;  <em class="replaceable"><code>string</code></em>  &lt;/class&gt;
+        &lt;/script&gt;
+      |
+        <em class="replaceable"><code>module_name</code></em>
+      ]
+  &lt;/Extensions&gt;
+
+&lt;/root&gt;</pre><p><span class="citetitle">Grammar of
+                    <span class="literal"><em class="replaceable"><code>&lt;tool_folder&gt;</code></em>/resources/data/modules.xml</span></span></p>
+            <p>The list below describes the tags in
+                 <span class="literal">bigworld/tools/<em class="replaceable"><code>&lt;tool_folder&gt;</code></em>/resources/data/modules.xml</span>:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">class</span> (section
+                                 <span class="literal">Extensions/ext_name/
+                                    ScriptedModule/script</span>)</em></p>
+                     <p>Name of the Python class to use for this module.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Extensions</span></em></p>
+                     <p>Section containing all modules that can be used by the
+                              application.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">ext_name</span> (section
+                                 <span class="literal">Extensions</span>)</em></p>
+                     <p>Section containing information for the module.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">module</span> (section
+                                 <span class="literal">startup</span>)</em></p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis">Section
+                                                <span class="literal">startup</span></em></p>
+                              <p>Module to use on startup of the application.</p>
+                              <p>This tag is one of the <span class="literal">ext_name</span> tags in
+                                             <span class="literal">Extensions</span> section.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Section <span class="literal">Extensions/ext_name/
+                                                   ScriptedModule/script</span></em></p>
+                              <p>Name (without extension) of the Python file to use for this
+                                             module.
+                              </p>
+                              <p>It is expected that the class specified in
+                                             <span class="literal">class</span> tag is located in this file.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">module_name</span> (section
+                                 <span class="literal">Extensions/ext_name</span>)</em></p>
+                     <p>Name of the module to use (referred to in
+                              <span class="literal">startup/module</span> tag)
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">script</span> (section
+                                 <span class="literal">Extensions/ext_name/
+                                    ScriptedModule</span>)</em></p>
+                     <p>Description of the Python class to use for this module.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">ScriptedModule</span> (section
+                                 <span class="literal">Extensions/ext_name</span>)</em></p>
+                     <p>Used to denote that the description following it is for a Python
+                              script.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch21.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch23.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;21.&nbsp;<span class="literal">.model</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;23.&nbsp;<span class="literal">.mvl</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

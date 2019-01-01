@@ -1,0 +1,2406 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;4.&nbsp;Properties</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Physical User Data Object Structure for Scripting">
+      <link rel="next" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Methods">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch04.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Properties</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Properties"></a>Chapter&nbsp;4.&nbsp;Properties
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch04.html#xref_Property_Types">4.1. Property Types</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#xref_Primitive_Types">4.1.1. Primitive Types</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#xref_Composite_Types">4.1.2. Composite Types</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#xref_Custom_User_Types">4.1.3. Custom User Types</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#xref_Alias_Of_Data_Types">4.1.4. Alias of Data Types</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch04.html#xref_Default_Values">4.2. Default Values</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#xref_Data_Distribution">4.3. Data Distribution</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#xref_Data_Distribution_Combinations">4.3.1. Valid Data Distribution Combinations</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#xref_Data_Distribution_Usage">4.3.2. Using Distribution Flags</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e2493">4.3.3. Data Propagation</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch04.html#xref_Implementing_Custom_Property_Data_Types">4.4. Implementing Custom Property Data Types</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#d0e2548">4.4.1. Wrapping a FIXED_DICT Data Type</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch04.html#xref_Volatile_Properties">4.5. Volatile Properties</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#xref_LOD_Level_Of_Detail_On_Properties">4.6. LOD (Level of Detail) on Properties</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#d0e3627">4.6.1. LOD and Hysteresis</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch04.html#d0e3824">4.7. Temporary Properties</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#xref_UDO_Linking">4.8. User Data Object Linking With <span class="literal">UDO_REF</span>
+                               Properties</a></span></dt>
+               </dl>
+            </div>
+            <p>Properties describe what the state of an entity is. Like traditional
+                 object systems, a BigWorld property has a type and a name. Unlike
+                 traditional object systems, a property also has distribution properties that
+                 affect where and how frequently it is distributed around the system.
+            </p>
+            <p>Properties are declared in the entity's definition file (named
+                 <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>),
+                 in a section named <code class="property">Properties</code>.
+            </p>
+            <p>The grammar for property definition is displayed below:</p><pre class="programlisting">&lt;root&gt;
+   ...
+   &lt;<em class="emphasis">Properties</em>&gt;
+      &lt;<em class="replaceable"><code>propertyName</code></em>&gt;
+         &lt;!-- type of this property --&gt;
+         &lt;<em class="emphasis">Type</em>&gt; <em class="replaceable"><code>TYPE_NAME</code></em> &lt;/Type&gt; <a name="co427" href="ch04.html#co427_desc"><img src="../images/callouts/1.png" alt="1" border="0"></a>
+
+         &lt;!-- Method of distribution --&gt;
+         &lt;<em class="emphasis">Flags</em>&gt; <em class="replaceable"><code>DISTRIBUTION_FLAGS</code></em> &lt;/Flags&gt; <a name="co430" href="ch04.html#co430_desc"><img src="../images/callouts/2.png" alt="2" border="0"></a>
+
+         &lt;!-- Default value (optional) --&gt;
+         &lt;<em class="emphasis">Default</em>&gt; <em class="replaceable"><code>DEFAULT_VALUE</code></em> &lt;/Default&gt; <a name="co433" href="ch04.html#co433_desc"><img src="../images/callouts/3.png" alt="3" border="0"></a>
+
+         &lt;!-- Is the property editable? (true/false) (optional) --&gt;
+         &lt;<em class="emphasis">Editable</em>&gt; [true|false] &lt;/Editable&gt;
+
+         &lt;!-- Level of detail for this property (optional) --&gt;
+         &lt;<em class="emphasis">DetailLevel</em>&gt; <em class="replaceable"><code>LOD</code></em> &lt;/DetailLevel&gt; <a name="co439" href="ch04.html#co439_desc"><img src="../images/callouts/4.png" alt="4" border="0"></a>
+
+         &lt;!-- Is the property persistent? --&gt;
+         &lt;<em class="emphasis">Persistent</em>&gt; [true|false] &lt;/Persistent&gt; <a name="co442" href="ch04.html#co442_desc"><img src="../images/callouts/5.png" alt="5" border="0"></a>
+
+      &lt;/<em class="replaceable"><code>propertyName</code></em>&gt;
+   &lt;/Properties&gt;
+   ...
+&lt;/root&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                    &#8212; Property definition syntax</span></p>
+            <div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a name="co427_desc"></a><a href="#co427"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>For details, see <a href="ch04.html#xref_Property_Types" title="4.1.&nbsp;Property Types">Property Types</a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a name="co430_desc"></a><a href="#co430"><img src="../images/callouts/2.png" alt="2" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>For details, see <a href="ch04.html#xref_Data_Distribution" title="4.3.&nbsp;Data Distribution">Data Distribution</a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a name="co433_desc"></a><a href="#co433"><img src="../images/callouts/3.png" alt="3" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>For details, see <a href="ch04.html#xref_Default_Values" title="4.2.&nbsp;Default Values">Default Values</a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a name="co439_desc"></a><a href="#co439"><img src="../images/callouts/4.png" alt="4" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>For details, see <a href="ch04.html#xref_LOD_Level_Of_Detail_On_Properties" title="4.6.&nbsp;LOD (Level of Detail) on Properties">LOD (Level of Detail) on Properties</a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a name="co442_desc"></a><a href="#co442"><img src="../images/callouts/5.png" alt="5" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>For details, see <a href="ch08.html" title="Chapter&nbsp;8.&nbsp;The Database Layer"><i xmlns:xlink="http://www.w3.org/1999/xlink">The Database Layer</i></a>.
+                        </p>
+                     </td>
+                  </tr>
+               </table>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Property_Types"></a>4.1.&nbsp;Property Types
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld needs to efficiently transmit data over a network between
+                      its various components. For this purpose, BigWorld definition file
+                      describes the type of each property of an entity (despite the fact that
+                      BigWorld is scripted using Python &#8212; an untyped language).
+               </p>
+               <p>Because bandwidth conservation is important in implementing an MMOG,
+                      property types should be selected such that they are the smallest type (in
+                      terms of number of bits) that can represent the data.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Primitive_Types"></a>4.1.1.&nbsp;Primitive Types
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The following list summarises the primitive types available for
+                           BigWorld properties:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">BLOB</span> &#8212; Size (bytes):
+                                           <span class="literal"><em class="replaceable"><code>N</code></em></span>+<span class="literal"><em class="replaceable"><code>k</code></em></span></em></p>
+                           <p>Binary data. Similar to a string, but can contain NULL
+                                        characters.
+                           </p>
+                           <p>Stored in base-64 encoding when in XML,
+                                        <em class="emphasis">e.g.</em>, in the XML database.
+                           </p>
+                           <p><span class="literal"><em class="replaceable"><code>N</code></em></span> is the number
+                                        of bytes in the blob, and
+                                        <span class="literal"><em class="replaceable"><code>k</code></em>=4</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FLOAT32</span> &#8212; Size
+                                           (bytes): 4</em></p>
+                           <p>IEEE 32-bit floating-point number.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">FLOAT64</span> &#8212; Size
+                                           (bytes): 8</em></p>
+                           <p>IEEE 64-bit floating-point number.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">INT8</span> &#8212; Size (bytes):
+                                           1 &#8212; Range: From: -128 To: 127</em></p>
+                           <p>Signed 8-bit integer.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">INT16</span> &#8212; Size (bytes):
+                                           2 &#8212; Range: From: -32,768 To: 32,767</em></p>
+                           <p>Signed 16-bit integer.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">INT32</span> &#8212; Size (bytes):
+                                           4 &#8212; Range: From: -2,147,483,648 To: 2,147,483,647</em></p>
+                           <p>Signed 32-bit integer.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">INT64</span> &#8212; Size (bytes):
+                                           8 &#8212; Range: From: -9,223,372,036,854,775,808 To:
+                                           9,223,372,036,854,775,807</em></p>
+                           <p>Signed 64-bit integer.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">MAILBOX</span> &#8212; Size
+                                           (bytes): 12</em></p>
+                           <p>A BigWorld mailbox.</p>
+                           <p>Passing an entity to a <span class="literal">MAILBOX</span> argument
+                                        automatically converts it to <span class="literal">MAILBOX</span>.
+                           </p>
+                           <p>For details, see <a href="ch05.html#xref_Mailboxes" title="5.8.&nbsp;Mailboxes">Mailboxes</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">PYTHON</span> &#8212; Size(bytes):
+                                           Size of pickled string, as per
+                                           <span class="literal">STRING</span></em></p>
+                           <p>Uses the Python pickler to pack any Python type into a string,
+                                        and transmits the result.
+                           </p>
+                           <p>This should not be used between client and server, as it is
+                                        insecure and inefficient.
+                           </p>
+                           <p>It is recommended to use a user data type for production code.
+                                        For more details, see <a href="ch04.html#xref_Implementing_Custom_Property_Data_Types" title="4.4.&nbsp;Implementing Custom Property Data Types">Implementing Custom Property Data Types</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">STRING</span> &#8212; Size
+                                           (bytes):
+                                           <span class="literal"><em class="replaceable"><code>N</code></em></span>+<span class="literal"><em class="replaceable"><code>k</code></em></span></em></p>
+                           <p>Character string (non-Unicode).</p>
+                           <p><span class="literal"><em class="replaceable"><code>N</code></em></span> is the number
+                                        of characters in the string, and
+                                        <span class="literal"><em class="replaceable"><code>k</code></em>=4</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">UINT8</span> &#8212; Size(bytes):
+                                           1 - Range: From: 0 To: 255</em></p>
+                           <p>Unsigned 8-bit integer.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">UINT16</span> &#8212; Size(bytes):
+                                           2 &#8212; Range: From: 0 To: 65,535</em></p>
+                           <p>Unsigned 16-bit integer.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">UINT32</span> &#8212; Size(bytes):
+                                           4 &#8212; Range: From: 0 To: 4,294,967,295</em></p>
+                           <p>Unsigned 32-bit integer.</p>
+                           <p><em class="emphasis">This type may use Python's <span class="literal">long</span>
+                                           type instead of <span class="literal">int</span>, and so might be less
+                                           efficient than <span class="literal">INT32</span>.</em></p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">UINT64</span> &#8212; Size(bytes):
+                                           8 &#8212; Range: From: 0 To: 18,446,744,073,709,551,615</em></p>
+                           <p>Unsigned 64-bit integer.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">UNICODE_STRING</span> &#8212; Size
+                                           (bytes): Up to
+                                           4<span class="literal"><em class="replaceable"><code>N</code></em></span>+<span class="literal"><em class="replaceable"><code>k</code></em></span></em></p>
+                           <p>Character string (Unicode).</p>
+                           <p><span class="literal"><em class="replaceable"><code>N</code></em></span> is the number
+                                        of characters in the string, and
+                                        <span class="literal"><em class="replaceable"><code>k</code></em>=4</span>. Streamed as
+                                        UTF-8.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">VECTOR2</span> &#8212;
+                                           Size(bytes): 8</em></p>
+                           <p>Two-dimensional vector of 32-bit floats. Represented in Python
+                                        as a tuple of two numbers (or
+                                        <span class="literal">Math.Vector2</span>).
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">VECTOR3</span> &#8212;
+                                           Size(bytes): 12</em></p>
+                           <p>Three-dimensional vector of 32-bit floats. Represented in
+                                        Python as a tuple of three numbers (or
+                                        <span class="literal">Math.Vector3</span>).
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">VECTOR4</span> &#8212;
+                                           Size(bytes): 16</em></p>
+                           <p>Four-dimensional vector of 32-bit floats. Represented in
+                                        Python as a tuple of four numbers (or
+                                        <span class="literal">Math.Vector4</span>).
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Composite_Types"></a>4.1.2.&nbsp;Composite Types
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The following sections describe the composite types available in
+                           BigWorld.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_ARRAY_And_TUPLE_Types"></a>4.1.2.1.&nbsp;ARRAY and TUPLE Types
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>BigWorld also has ARRAY and TUPLE types, which can create an
+                                array of values of any of the BigWorld primitive types.
+                     </p>
+                     <p>Properties of ARRAY type have a byte size calculated by the
+                                formula below:
+                     </p>
+                     <div class="blockquote">
+                        <blockquote class="blockquote">
+                           <p>N * t + k</p>
+                        </blockquote>
+                     </div>
+                     <p>The components of the formula are described below:</p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">N</span></em> &#8212;
+                                             Number of elements in the array.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">t</span></em> &#8212; Size
+                                             of the type contained in the array.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">k</span></em> &#8212;
+                                             Constant.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>The BigWorld TUPLE type is represented in script by the Python
+                                tuple type, while the BigWorld ARRAY type is represented in script by
+                                Python list type.
+                     </p>
+                     <p>Tuples are specified as follows:</p><pre class="programlisting">&lt;Type&gt; <em class="emphasis">TUPLE</em> &lt;of&gt; [TYPE_NAME|TYPE_ALIAS] &lt;/of&gt; [&lt;size&gt; n &lt;/size&gt;] &lt;/Type&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                                   &#8212; <span class="literal">TUPLE</span> declaration syntax</span></p>
+                     <p>Arrays are specified as follows:</p><pre class="programlisting">&lt;Type&gt; <em class="emphasis">ARRAY</em> &lt;of&gt; [TYPE_NAME|TYPE_ALIAS] &lt;/of&gt; [&lt;size&gt; n &lt;/size&gt;] &lt;/Type&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                                   &#8212; <span class="literal">ARRAY</span> declaration syntax</span></p>
+                     <p>In case the size of an <code class="property">ARRAY</code> or
+                                <code class="property">TUPLE</code> is specified, then it must have the
+                                declared <em class="emphasis">n</em> elements. Adding or deleting elements
+                                to fixed-sized <code class="property">ARRAY</code> or
+                                <code class="property">TUPLE</code> is not allowed. If the default value is not
+                                specified, then a fixed-sized <code class="property">ARRAY</code> or
+                                <code class="property">TUPLE</code> will contain <em class="emphasis">n</em> default
+                                values of the element type.
+                     </p>
+                     <p>Arrays have a special method called
+                                <code class="methodname">equals_seq()</code> that can be used for performing
+                                element-wise Boolean equality testing against any arbitrary Python
+                                sequence (including Python lists and tuples). For example:
+                     </p><pre class="programlisting">self.myList = [1,2,3]
+self.myList.equals_seq( [1,2,3] )
+# should return True
+self.myList.equals_seq( (1,2,3) )
+# should return True</pre><p>Arrays efficiently propagate changes. This includes assigning to
+                                individual elements, appending, extending, removing, popping and slice
+                                assignment.
+                     </p>
+                     <p>For example, each of the following are propagated
+                                efficiently.
+                     </p><pre class="programlisting">self.myList = [1, 2, 3, 4, 5]
+self.myList[ 3 ] = 8
+self.myList.append( 6 )
+self.myList.extend( [7, 8] )
+self.myList += [9, 10]
+self.myList.pop()
+self.myList.remove( 7 )
+self.myList[ 2 : 5 ] = [11, 12]
+del self.myList[ 2 ]
+del self.myList[ 1 : 4 ]</pre><p>Arrays can not only contain aliased data types, but may also be
+                                aliased themselves. For more details, see <a href="ch04.html#xref_Alias_Of_Data_Types" title="4.1.4.&nbsp;Alias of Data Types">Alias of Data Types</a>.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_FIXED_DICT_Data_Type"></a>4.1.2.2.&nbsp;FIXED_DICT Data Type
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">FIXED_DICT</span> data type allows you to define
+                                dictionary-like attributes with a fixed set of string keys. The keys
+                                and the types of the keyed values are predefined.
+                     </p>
+                     <p>The declaration of a <span class="literal">FIXED_DICT</span> is
+                                illustrated below:
+                     </p><pre class="programlisting">&lt;Type&gt; FIXED_DICT
+
+  &lt;Parent&gt; <em class="replaceable"><code>ParentFixedDictTypeDeclaration</code></em> &lt;/Parent&gt;
+   &lt;Properties&gt;
+
+    &lt;<em class="replaceable"><code>field</code></em>&gt;
+      &lt;Type&gt; <em class="replaceable"><code>FieldTypeDeclaration</code></em> &lt;/Type&gt;
+     &lt;/<em class="replaceable"><code>field</code></em>&gt;
+
+   &lt;/Properties&gt;
+
+  &lt;AllowNone&gt; true|false &lt;/AllowNone&gt; <a name="co734" href="ch04.html#co734_desc"><img src="../images/callouts/1.png" alt="1" border="0"></a>
+
+&lt;/Type&gt;</pre><p><span class="citetitle"><span class="literal">FIXED_DICT</span> data type
+                                   declaration</span></p>
+                     <div class="calloutlist">
+                        <table border="0" summary="Callout list">
+                           <tr>
+                              <td width="5%" valign="top" align="left"><a name="co734_desc"></a><a href="#co734"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                              </td>
+                              <td valign="top" align="left">
+                                 <p>Default is <span class="literal">false</span>. If set to
+                                                <span class="literal">true</span>, then None may be used as the value of the
+                                                whole dictionary.
+                                 </p>
+                              </td>
+                           </tr>
+                        </table>
+                     </div>
+                     <p>This data type may be declared anywhere a type declaration may
+                                appear, <em class="emphasis">e.g.</em>, in
+                                <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml</code>
+                                <sup>[<a name="d0e1420" href="#ftn.d0e1420">1</a>]</sup>, in
+                                <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>,
+                                as method call arguments, etc.
+                     </p>
+                     <p>The code excerpt below shows the declaration of a
+                                <span class="literal">FIXED_DICT</span> attribute:
+                     </p><pre class="programlisting">&lt;root&gt;
+  &lt;TradeLog&gt; <em class="emphasis">FIXED_DICT</em>
+    &lt;Properties&gt;
+      &lt;dbIDA&gt;
+        &lt;<em class="emphasis">Type</em>&gt;      INT64                 &lt;/Type&gt;
+      &lt;/dbIDA&gt;
+      &lt;itemsTypesA&gt;
+        &lt;<em class="emphasis">Type</em>&gt;      ARRAY &lt;of&gt; ITEM &lt;/of&gt; &lt;/Type&gt;      
+      &lt;/itemsTypesA&gt;
+      &lt;goldPiecesA&gt;
+        &lt;<em class="emphasis">Type</em>&gt;      GOLDPIECES            &lt;/Type&gt;
+      &lt;/goldPiecesA&gt;
+    &lt;/Properties&gt;
+  &lt;/TradeLog&gt;
+&lt;/root&gt;</pre><p><span class="citetitle"><span class="literal">fantasydemo/res/scripts/entity_defs/alias.xml</span></span></p>
+                     <p>Instances of <span class="literal">FIXED_DICT</span> can be accessed and
+                                modified like a Python dictionary, with the following
+                                exceptions:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>Keys cannot be added or deleted</p>
+                           </li>
+                           <li>
+                              <p>The type of the value must match the declaration.</p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>For example:</p><pre class="programlisting">if entity.TradeLog[ "dbIDA" ] == 0:
+  entity.TradeLog[ "dbIDA" ] = 100</pre><p><span class="citetitle">Example of <span class="literal">FIXED_DICT</span> usage in
+                                   script</span></p>
+                     <p>Alternatively, it also supports the following:</p><pre class="programlisting">if entity.TradeLog.dbIDA == 0:
+  entity.TradeLog.dbIDA = 100</pre><p><span class="citetitle">Example of <span class="literal">FIXED_DICT</span> usage as
+                                   struct in script</span></p>
+                     <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                        <h3 class="title">Note</h3>
+                        <p>Using struct syntax can cause problems with name collisions
+                                     with FIXED_DICT methods.
+                        </p>
+                     </div>
+                     <p>A <span class="literal">FIXED_DICT</span> instance can be set using a
+                                Python dictionary that has a superset of the keys required. Any
+                                unnecessary keys in the dictionary are ignored.
+                     </p>
+                     <p>For example:</p><pre class="programlisting">entity.TradeLog = { "dbIDA" : 100, "itemsTypesA" : [ 1, 2, 3 ], 
+     "goldPiecesA" : 1000, "redundantKey" : 12345 }</pre><p><span class="citetitle">Example of <span class="literal">FIXED_DICT</span> instance
+                                   being set using a Python dictionary</span></p>
+                     <p>When setting a <span class="literal">FIXED_DICT</span> instance using a
+                                Python dictionary, the values of the Python dictionary are referenced
+                                by the <span class="literal">FIXED_DICT</span> instance.
+                     </p>
+                     <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                        <h3 class="title">Note</h3>
+                        <p>When setting a <span class="literal">FIXED_DICT</span> instance using a
+                                     Python dictionary in the BaseApp, the Python dictionary replaces the
+                                     <span class="literal">FIXED_DICT</span> instance. Thus, the entire Python
+                                     dictionary is being referenced, not just its values.
+                        </p>
+                        <p>As a result of this behaviour, there is the possibility of
+                                     <span class="literal">FIXED_DICT</span> attribute having more keys than in its
+                                     declaration.
+                        </p>
+                        <p>This BaseApp behaviour may be changed in a future release of
+                                     BigWorld so that it matches the rest of the system.
+                        </p>
+                     </div>
+                     <p>Changes to <span class="literal">FIXED_DICT</span> values are propagated
+                                efficiently wherever a change to the whole property would be
+                                propagated, <em class="emphasis">i.e.</em>, to ghosts and to clients &#8212;
+                                including <code class="varname">ownClients</code>.
+                     </p>
+                     <p>The default value of a <span class="literal">FIXED_DICT</span> data type
+                                can be specified at the entity property level. For example:
+                     </p><pre class="programlisting">&lt;root&gt;
+  &lt;Properties&gt; <em class="emphasis">FIXED_DICT</em>
+    &lt;<em class="emphasis">someProperty</em>&gt;
+      &lt;Type&gt;  TradeLog    &lt;/Type&gt;    &lt;!-- From last example --&gt;
+      &lt;<em class="emphasis">Default</em>&gt;
+        &lt;dbIDA&gt;  0  &lt;/dbIDA&gt;
+        &lt;itemsTypesA&gt;
+          &lt;item&gt;  101  &lt;/item&gt;
+          &lt;item&gt;  102  &lt;/item&gt;
+        &lt;/itemsTypesA&gt;
+        &lt;goldPiecesA&gt;  100  &lt;/goldPiecesA&gt;
+      &lt;/Default&gt;
+    &lt;/someProperty&gt;
+  &lt;/Properties&gt;
+&lt;/root&gt;</pre><p> <span class="citetitle">Example of specifying default value
+                                   of a <span class="literal">FIXED_DICT</span> data type in an entity definition
+                                   file</span></p>
+                     <p>If the <code class="property">&lt;Default&gt;</code> section is not
+                                specified, then the default value of a <span class="literal">FIXED_DICT</span>
+                                data type will depend on the value of the
+                                <code class="property">&lt;allowNone&gt;</code> tag, as described below:
+                     </p>
+                     <div class="altrow"><a name="d0e1579"></a><p class="title"><b>Table&nbsp;4.1.&nbsp;Default values for a FIXED_DICT without a &lt;Default&gt;
+                                          section.</b></p>
+                        <div class="altrow-contents">
+                           <table summary="Default values for a FIXED_DICT without a <Default&gt;&#xA;            section." border="0" width="75%">
+                              <colgroup>
+                                 <col width="18%">
+                                 <col width="82%">
+                              </colgroup>
+                              <thead>
+                                 <tr>
+                                    <th align="left">&lt;AllowNone&gt;</th>
+                                    <th align="left"><span class="literal">FIXED_DICT</span> default
+                                                         value
+                                    </th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 <tr>
+                                    <td align="left">True</td>
+                                    <td align="left">Python <span class="literal">None</span>
+                                                         object.
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td align="left">False</td>
+                                    <td align="left">
+                                       <p>Python dictionary with keys as
+                                                            specified in the type definition.
+                                       </p>
+                                       <p>Each keyed
+                                                            value will have a default value according to its type. For
+                                                            example, a keyed value of <span class="literal">INT</span> type will
+                                                            have a default value of 0.
+                                       </p>
+                                    </td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                        </div>
+                     </div>
+                     <p><br class="altrow-break"></p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Custom_User_Types"></a>4.1.3.&nbsp;Custom User Types
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>There are two ways to incorporate user-defined Python classes into
+                           BigWorld entities: wrapping a <span class="literal">FIXED_DICT</span> data type,
+                           or implementing a <span class="literal">USER_TYPE</span>.
+                  </p>
+                  <p>The <span class="literal">FIXED_DICT</span> data type supports being wrapped
+                           by a user-defined Python type. When a <span class="literal">FIXED_DICT</span> is
+                           wrapped, BigWorld will instantiate the user-defined Python type in place
+                           of a <span class="literal">FIXED_DICT</span> instance. This enables the user to
+                           customise the behaviour of a <span class="literal">FIXED_DICT</span> data
+                           type.
+                  </p>
+                  <p>The type system can also be arbitrarily extended with the
+                           <span class="literal">USER_TYPE</span> type. Unlike a wrapped
+                           <span class="literal">FIXED_DICT</span> type, the structure of a
+                           <span class="literal">USER_TYPE</span> type is completely opaque to BigWorld. As
+                           such, the implementation of a <span class="literal">USER_TYPE</span> type is more
+                           involved. The implementation of the type operations is performed by a
+                           Python object (such as an instance of a class) written by the user. The
+                           Python object serves as a factory and serialiser for instances of that
+                           type, and it can choose to use whatever Python representation of that
+                           type it sees fit &#8212; it can be as simple as an integer, or it can be an
+                           instance of a Python class.
+                  </p>
+                  <p>For more details on custom user types, see <a href="ch04.html#xref_Implementing_Custom_Property_Data_Types" title="4.4.&nbsp;Implementing Custom Property Data Types">Implementing Custom Property Data Types</a>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Alias_Of_Data_Types"></a>4.1.4.&nbsp;Alias of Data Types
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>BigWorld also allows aliases of types to be created. Aliases are a
+                           concept similar to a C++ <span class="literal">typedef</span>, and are listed in
+                           the XML file
+                           <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml</code>.
+                           The format is described below:
+                  </p><pre class="programlisting">&lt;root&gt;
+  ... other alias definitions ...
+  &lt;<em class="emphasis">ALIAS_NAME</em>&gt; <em class="emphasis">TYPE_TO_ALIAS</em> [&lt;Default&gt; Value &lt;/Default&gt;<a name="co918" href="ch04.html#co918_desc"><img src="../images/callouts/1.png" alt="1" border="0"></a> ] &lt;/ALIAS_NAME&gt;
+&lt;/root&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml</code>
+                              &#8212; Data type alias declaration syntax</span></p>
+                  <div class="calloutlist">
+                     <table border="0" summary="Callout list">
+                        <tr>
+                           <td width="5%" valign="top" align="left"><a name="co918_desc"></a><a href="#co918"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                           </td>
+                           <td valign="top" align="left">
+                              <p>For details, see <a href="ch04.html#xref_Default_Values" title="4.2.&nbsp;Default Values">Default Values</a>.
+                              </p>
+                           </td>
+                        </tr>
+                     </table>
+                  </div>
+                  <p>Some examples of useful aliases are described in the list
+                           below:
+                  </p>
+                  <div class="altrow"><a name="d0e1697"></a><p class="title"><b>Table&nbsp;4.2.&nbsp;Entity Types</b></p>
+                     <div class="altrow-contents">
+                        <table summary="Entity Types" border="0">
+                           <colgroup>
+                              <col width="18%">
+                              <col width="18%">
+                              <col width="64%">
+                           </colgroup>
+                           <thead>
+                              <tr>
+                                 <th align="left">Alias</th>
+                                 <th align="left">Maps to</th>
+                                 <th align="left">Description</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr>
+                                 <td align="left"><span class="literal">ANGLE</span></td>
+                                 <td align="left"><span class="literal">FLOAT32</span></td>
+                                 <td align="left">An angle measured in radians.</td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="literal">BOOL</span></td>
+                                 <td align="left"><span class="literal">INT8</span></td>
+                                 <td align="left">
+                                    <p>A Boolean type (encoded as
+                                                       zero=false, non-zero=true).
+                                    </p>
+                                    <p>Mapped to
+                                                       <span class="literal">INT8</span>, the smallest BigWorld
+                                                       type.
+                                    </p>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="literal">INFO</span></td>
+                                 <td align="left"><span class="literal">UINT16</span></td>
+                                 <td align="left">Element of information about a
+                                                    mission.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="literal">MISSION_STATS</span></td>
+                                 <td align="left"><span class="literal">ARRAY &lt;of&gt; INFO
+                                                       &lt;/of&gt;</span></td>
+                                 <td align="left">
+                                    <p>Array of mission information data
+                                                       elements (<em class="emphasis">i.e.</em>, <span class="literal">INFO</span>
+                                                       type alias).
+                                    </p>
+                                    <p>Note that this is an aliased array,
+                                                       and the type of its elements is an aliased
+                                                       type.
+                                    </p>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="literal">OBJECT_ID</span></td>
+                                 <td align="left"><span class="literal">INT32</span></td>
+                                 <td align="left">Handle to another entity. The name makes
+                                                    clear the property contains a handle to an entity.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><span class="literal">STATS_MATRIX</span></td>
+                                 <td align="left"><span class="literal">ARRAY &lt;of&gt; MISSION_STATS
+                                                       &lt;/of&gt;</span></td>
+                                 <td align="left">
+                                    <p>Matrix of mission information data
+                                                       elements (<em class="emphasis">i.e.</em>, <span class="literal">INFO</span>
+                                                       type alias).
+                                    </p>
+                                    <p>Note that this is an aliased array,
+                                                       and the type of its elements is another aliased
+                                                       array.
+                                    </p>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+                  <p><br class="altrow-break"></p>
+                  <p>Using the syntax for alias definition to the aliases describe
+                           above, we have the following file:
+                  </p><pre class="programlisting">&lt;root&gt;
+
+  &lt;!-- Aliased data types --&gt; 
+  &lt;<em class="emphasis">OBJECT_ID</em>&gt;  <em class="emphasis">INT32</em>   &lt;/OBJECT_ID&gt;
+  &lt;<em class="emphasis">BOOL</em>&gt;       <em class="emphasis">INT8</em>    &lt;/BOOL&gt;
+  &lt;<em class="emphasis">ANGLE</em>&gt;      <em class="emphasis">FLOAT32</em> &lt;/ANGLE&gt;
+  &lt;<em class="emphasis">INFO</em>&gt;       <em class="emphasis">UINT16</em>  &lt;/INFO&gt;
+
+  &lt;!-- Aliased arrays ?
+  &lt;<em class="emphasis">MISSION_STATS</em>&gt;  <em class="emphasis">ARRAY &lt;of&gt; INFO           &lt;/of&gt; &lt;/MISSION_STATS&gt;</em>
+  &lt;<em class="emphasis">STATS_MATRIX</em>&gt;   <em class="emphasis">ARRAY &lt;of&gt; MISSION_STATS  &lt;/of&gt;  &lt;/STATS_MATRIX&gt;</em>
+
+&lt;/root&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml</code>
+                              &#8212; Definition of data type alias</span></p>
+                  <p>With aliases, one can also define custom Python data types, which
+                           have their own streaming semantics on the network. We declare these
+                           types in the file
+                           <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml</code>
+                           file as follows:
+                  </p><pre class="programlisting">&lt;root&gt;
+  &lt;<em class="emphasis">ALIAS_NAME</em>&gt; 
+    <em class="emphasis">USER_TYPE</em> 
+    &lt;<em class="emphasis">implementedBy</em>&gt; <em class="emphasis">UserDataType.instance</em> &lt;/implementedBy&gt;
+  &lt;/ALIAS_NAME&gt;
+&lt;/root&gt;</pre><p><span class="citetitle"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml</span>
+                              &#8212; Custom Python data type declaration syntax</span></p>
+                  <p>For more details on this mechanism, see <a href="ch04.html#xref_Implementing_Custom_Property_Data_Types" title="4.4.&nbsp;Implementing Custom Property Data Types">Implementing Custom Property Data Types</a>.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Default_Values"></a>4.2.&nbsp;Default Values
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>When an entity is created, its properties are initialised to their
+                      default values. Default values can be overridden at the property level (in
+                      the entity definition file<sup>[<a name="d0e1875" href="#ftn.d0e1875">2</a>]</sup>) or at the type level (in
+                      <code class="filename">alias.xml</code><sup>[<a name="d0e1881" href="#ftn.d0e1881">3</a>]</sup>).
+               </p>
+               <p>The default value for each type and the syntax for overriding it are
+                      described below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">ARRAY</span> &#8212; Default:
+                                      <span class="literal">[]</span></em></p>
+                        <p><em class="emphasis">Example: </em></p><pre class="programlisting">&lt;Default&gt; <a name="co1052" href="ch04.html#co1052_desc"><img src="../images/callouts/1.png" alt="1" border="0"></a>
+   &lt;item&gt; Health potion &lt;/item&gt;
+   &lt;item&gt; Bear skin     &lt;/item&gt;
+   &lt;item&gt; Wooden shield &lt;/item&gt;
+&lt;/Default&gt;</pre><div class="calloutlist">
+                           <table border="0" summary="Callout list">
+                              <tr>
+                                 <td width="5%" valign="top" align="left"><a name="co1052_desc"></a><a href="#co1052"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                                 </td>
+                                 <td valign="top" align="left">
+                                    <p>Constructs the equivalent Python list <span class="literal">[ 'Health
+                                                      potion', 'Bear skin', 'Wooden shield' ]</span>.
+                                    </p>
+                                 </td>
+                              </tr>
+                           </table>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">BLOB</span> &#8212; Default:
+                                      <span class="literal">''</span></em></p>
+                        <p><em class="emphasis">Example</em>:
+                        </p><pre class="programlisting">&lt;Default&gt; SGVsbG8gV29ybGQhB &lt;/Default&gt; <a name="co1073" href="ch04.html#co1073_desc"><img src="../images/callouts/1.png" alt="1" border="0"></a>
+&lt;!-Hello World! --&gt;</pre><div class="calloutlist">
+                           <table border="0" summary="Callout list">
+                              <tr>
+                                 <td width="5%" valign="top" align="left"><a name="co1073_desc"></a><a href="#co1073"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                                 </td>
+                                 <td valign="top" align="left">
+                                    <p>BASE6-encoded string value must be specified.</p>
+                                 </td>
+                              </tr>
+                           </table>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">FIXED_DICT</span></em></p>
+                        <p>For details, see <a href="ch04.html#xref_FIXED_DICT_Data_Type" title="4.1.2.2.&nbsp;FIXED_DICT Data Type">FIXED_DICT Data Type</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">FLOAT32</span> &#8212; Default:
+                                      <span class="literal">0.0</span></em></p>
+                        <p><em class="emphasis">Example:</em></p><pre class="programlisting">&lt;Default&gt; 1.234 &lt;/Default&gt;</pre></li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">FLOAT64</span> &#8212; Default:
+                                      <span class="literal">0.0</span></em></p>
+                        <p><em class="emphasis">Example:</em></p><pre class="programlisting">&lt;Default&gt; 1.23456789 &lt;/Default&gt;</pre></li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">INT8</span>,
+                                      <span class="literal">INT16</span>, <span class="literal">INT32</span>,
+                                      <span class="literal">INT64</span> &#8212; Default:
+                                      <span class="literal">0</span></em></p>
+                        <p><em class="emphasis">Example:</em></p><pre class="programlisting">&lt;Default&gt; 99 &lt;/Default&gt;</pre></li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">MAILBOX</span> &#8212; Default:
+                                      <span class="literal">None</span></em></p>
+                        <p>Default value cannot be overridden.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">PYTHON</span> &#8212; Default:
+                                      <span class="literal">None</span></em></p>
+                        <p><em class="emphasis">Example:</em></p><pre class="programlisting">&lt;Default&gt;
+  { "Strength": 90, "Agility": 77 }
+&lt;/Default&gt;</pre></li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">STRING</span> &#8212; Default:
+                                      <span class="literal">''</span></em></p>
+                        <p><em class="emphasis">Example:</em></p><pre class="programlisting">&lt;Default&gt; Hello World! &lt;/Default&gt; <a name="co1135" href="ch04.html#co1135_desc"><img src="../images/callouts/1.png" alt="1" border="0"></a></pre><div class="calloutlist">
+                           <table border="0" summary="Callout list">
+                              <tr>
+                                 <td width="5%" valign="top" align="left"><a name="co1135_desc"></a><a href="#co1135"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                                 </td>
+                                 <td valign="top" align="left">
+                                    <p>Value must be specified without quotes.</p>
+                                 </td>
+                              </tr>
+                           </table>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">TUPLE</span> &#8212; Default:
+                                      <span class="literal">()</span></em></p>
+                        <p><em class="emphasis">Example:</em> See
+                                   <span class="literal">ARRAY</span> data type
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">UINT8</span>,
+                                      <span class="literal">UINT16</span>, <span class="literal">UINT32</span>, <span class="literal">UINT64
+                                         </span>&#8212; Default: <span class="literal">0</span></em></p>
+                        <p><em class="emphasis">Example:</em></p><pre class="programlisting">&lt;Default&gt; 99 &lt;/Default&gt;</pre></li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">UNICODE_STRING</span> &#8212;
+                                      Default: <span class="literal">u''</span></em></p>
+                        <p><em class="emphasis">Example:</em></p><pre class="programlisting">&lt;Default&gt; Hello World! (this is a UTF-8 string) &lt;/Default&gt; <a name="co1136" href="ch04.html#co1136_desc"><img src="../images/callouts/1.png" alt="1" border="0"></a></pre><div class="calloutlist">
+                           <table border="0" summary="Callout list">
+                              <tr>
+                                 <td width="5%" valign="top" align="left"><a name="co1136_desc"></a><a href="#co1136"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                                 </td>
+                                 <td valign="top" align="left">
+                                    <p>Value must be specified without quotes, and must be encoded
+                                                   as UTF-8<sup>[<a name="d0e2087" href="#ftn.d0e2087">4</a>]</sup>.
+                                    </p>
+                                 </td>
+                              </tr>
+                           </table>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">USER_TYPE</span> &#8212; Default:
+                                      Return value of the user-defined <span class="literal">defaultValue()</span>
+                                      function.</em></p>
+                        <p><em class="emphasis">Example:</em></p><pre class="programlisting">&lt;Default&gt;
+   &lt;intVal&gt;  100       &lt;/intVal&gt;
+   &lt;strVal&gt;  opposites &lt;/stringVal&gt;
+   &lt;dictVal&gt;
+      &lt;value&gt;
+         &lt;key&gt;   good    &lt;/key&gt;
+         &lt;value&gt; bad     &lt;/value&gt;
+      &lt;/value&gt;
+    &lt;/dictValue&gt;
+&lt;/Default&gt;</pre></li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">VECTOR2</span> &#8212; Default:
+                                      <span class="literal">PyVector</span> of <span class="literal">0.0</span> of the
+                                      appropriate length.</em></p>
+                        <p><em class="emphasis">Example:</em></p><pre class="programlisting">&lt;Default&gt; 3.142 2.71 &lt;/Default&gt;</pre></li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">VECTOR3</span> &#8212; Default:
+                                      <span class="literal">PyVector</span> of <span class="literal">0.0</span> of the
+                                      appropriate length.</em></p>
+                        <p><em class="emphasis">Example:</em></p><pre class="programlisting">&lt;Default&gt; 3.142 2.71 1.4 &lt;/Default&gt;</pre></li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">VECTOR4</span> &#8212; Default:
+                                      <span class="literal">PyVector</span> of <span class="literal">0.0</span> of the
+                                      appropriate length.</em></p>
+                        <p><em class="emphasis">Example:</em></p><pre class="programlisting">&lt;Default&gt; 3.142 2.71 1.4 3.8 &lt;/Default&gt;</pre></li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Data_Distribution"></a>4.3.&nbsp;Data Distribution
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Properties represent the state of an entity. Some states are only
+                      relevant to the cell, others only to the base, and yet others only to the
+                      client. Some states, however, are relevant to more than one of
+                      these.
+               </p>
+               <p>Each property then has a distribution type that specifies to
+                      BigWorld which execution context (cell, base, or client) is responsible
+                      for updating the property, and where to propagate its value within the
+                      system.
+               </p>
+               <p>Data distribution is set up by specifying the sub-section
+                      <code class="property">&lt;Flags&gt;</code> of the section
+                      <code class="property">&lt;Properties&gt;</code> in the file
+                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>.
+               </p>
+               <p>The bit flags available are defined in
+                      <code class="filename">bigworld/src/lib/entitydef/data_description.hpp</code>, and
+                      are described in the list below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">DATA_BASE</span></em></p>
+                        <p><em class="emphasis">Required flags: N/A &#8212; Excluded flags:
+                                      <span class="literal">DATA_GHOSTED</span> &#8212; Master value on:
+                                      Base</em></p>
+                        <p>Data will be updated on the base, and will not be available on
+                                   the cell.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">DATA_GHOSTED</span></em></p>
+                        <p><em class="emphasis">Required flags: N/A &#8212; Excluded flags:
+                                      <span class="literal">DATA_BASE</span> &#8212; Master value on: Cell</em></p>
+                        <p>Data will be updated on the cell, and will be ghosted on other
+                                   cells.
+                        </p>
+                        <p>This means that it is safe to read the value of this property
+                                   from another entity, because BigWorld safely makes it available even
+                                   across cell boundaries.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">DATA_OTHER_CLIENT</span></em></p>
+                        <p><em class="emphasis">Required flags:
+                                      <span class="literal">DATA_GHOSTED</span> &#8212; Excluded flags: N/A &#8212; Master value
+                                      on: Cell</em></p>
+                        <p>Data will be updated on the cell, and made available to clients
+                                   who have this entity in their AoI.
+                        </p>
+                        <p>This makes the property safe to read from the client for any
+                                   entity, except for that client's player avatar entity. This flag is
+                                   often combined with <span class="literal">DATA_OWN_CLIENT</span> to create a
+                                   property that is distributed to all clients.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">DATA_OWN_CLIENT</span></em></p>
+                        <p><em class="emphasis">Required flags: N/A &#8212; Excluded flags: N/A
+                                      &#8212; Master value on: Base, if <span class="literal">DATA_BASE</span> is set.
+                                      Otherwise, on cell.</em></p>
+                        <p>Data is propagated to client owning this entity.</p>
+                        <p>This only makes sense with player entities.</p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Data_Distribution_Combinations"></a>4.3.1.&nbsp;Valid Data Distribution Combinations
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The list below describes the valid combinations of the above bit
+                           flags:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">ALL_CLIENTS</span><sup>A</sup></em></p>
+                           <p><em class="emphasis">Available to: Other cells, Cell, Own
+                                           client, Other clients</em></p>
+                           <p>Property is available to all entities on cell and
+                                        client.
+                           </p>
+                           <p>Corresponds to setting both <span class="literal">OWN_CLIENT</span> and
+                                        <span class="literal">OTHER_CLIENTS</span> flags.
+                           </p>
+                           <p>Examples include:</p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p>The name of a player.</p>
+                                 </li>
+                                 <li>
+                                    <p>The health status of a player or a creature.</p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">BASE</span></em></p>
+                           <p><em class="emphasis">Available to: Base</em></p>
+                           <p>Property is only available on the base.</p>
+                           <p>Examples include:</p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p>List of members of a chat room.</p>
+                                 </li>
+                                 <li>
+                                    <p>Items in a character's inventory.</p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">BASE_AND_CLIENT</span></em></p>
+                           <p><em class="emphasis">Available to: Base, Own
+                                           client</em></p>
+                           <p>Property is available on the base and on the owning client.
+                                        Corresponds to setting both <span class="literal">OWN_CLIENT</span> and
+                                        <span class="literal">BASE</span> flags.
+                           </p>
+                           <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                              <h3 class="title">Note</h3>
+                              <p>Properties of this type are only synchronised when the
+                                             client entity is created. Neither the client nor the base is
+                                             automatically updated when property changes. Methods must be used
+                                             to propagate new value, which is simple, since only one player
+                                             needs to receive it.
+                              </p>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">CELL_PRIVATE</span></em></p>
+                           <p><em class="emphasis">Available to: Cell</em></p>
+                           <p>Property is only available to its entity, and only on
+                                        cell.
+                           </p>
+                           <p>Examples include:</p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p>Properties of an NPCs 'thoughts' in AI algorithms.</p>
+                                 </li>
+                                 <li>
+                                    <p>Player properties relevant to game play, but dangerous to
+                                                     allow players to see (<em class="emphasis">e.g.</em>, healing time
+                                                     after battle).
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">CELL_PUBLIC</span></em></p>
+                           <p><em class="emphasis">Available to: Other cells,
+                                           Cell</em></p>
+                           <p>Property is available only on the cell, and is available to
+                                        other entities.
+                           </p>
+                           <p>Examples include:</p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p>The mana level of a player (which can be seen only by
+                                                     enemies, not by other players).
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>The call sign for grouping from enemy NPC.</p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">CELL_PUBLIC_AND_OWN</span></em></p>
+                           <p><em class="emphasis">Available to: Other cells, Cell, Own
+                                           client</em></p>
+                           <p>Property is available to other entities on the cell, and to
+                                        this one on both the cell and the client.
+                           </p>
+                           <p>Unlike <span class="literal">OWN_CLIENT</span>, this data is also
+                                        ghosted, and therefore available to other entities on the
+                                        cell.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">EDITOR_ONLY</span></em></p>
+                           <p><em class="emphasis">Available to:
+                                           WorldEditor</em></p>
+                           <p>This value may be useful when using
+                                        <code class="classname">BigWorld</code>.<code class="methodname">fetchEntitiesFromChunks</code>
+                                        from a BaseApp. It could be used to decide programmatically whether
+                                        a particular entity should be loaded.
+                           </p>
+                           <p>For example, you may associate a level of difficulty with each
+                                        entity, so entity will only be loaded if the mission's level of
+                                        difficulty is high enough.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">OTHER_CLIENTS</span><sup>A</sup></em></p>
+                           <p><em class="emphasis">Available to: Other cells, Cell, Other
+                                           clients</em></p>
+                           <p>Property is available from client to entities that are not
+                                        this player's avatar. Also available on cell to other
+                                        entities.
+                           </p>
+                           <p>Examples include:</p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p>The state of dynamic world items
+                                                     (<em class="emphasis">e.g.</em>, doors, loot containers, and
+                                                     buttons).
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>The type of a particle system effect.</p>
+                                 </li>
+                                 <li>
+                                    <p>The player who is currently sitting on a seat.</p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">OWN_CLIENT</span><sup>A</sup></em></p>
+                           <p><em class="emphasis">Available to: Cell, Own
+                                           client</em></p>
+                           <p>Property is only available to this entity, on both the cell
+                                        and the client.
+                           </p>
+                           <p>Examples include:</p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p>The character class of a player.</p>
+                                 </li>
+                                 <li>
+                                    <p>Number of experience points for a player.</p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+                  <p><em class="emphasis"><em class="emphasis">A </em>&#8212; When properties
+                              with this distribution flag are updated by server, an implicit method is
+                              called on client. For details, see <a href="ch05.html#xref_Implicit_set_property_name_Methods" title="5.5.&nbsp;Client callbacks on property changes">Client callbacks on property changes</a>.</em></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Data_Distribution_Usage"></a>4.3.2.&nbsp;Using Distribution Flags
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When choosing a distribution flag for a property, consider the
+                           points described below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">Which methods need the
+                                           property?</em></p>
+                           <p>You have to make the property available on an execution
+                                        context (cell, base, or client) if that context has a method that
+                                        manipulates the property.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Does this property need to be accessed
+                                           by other entities?</em></p>
+                           <p>This could include methods being called to access its value.
+                                        If this is the case, we need to make the property ghosted.
+                           </p>
+                           <p>When doing this, remember that the ghosted entities'
+                                        properties may be a little 'lagged', <em class="emphasis">i.e.</em>, they
+                                        may not represent the exact state of an entity at a given time.
+                                        Also, remember that other entities can only read the property; only
+                                        the entity that owns the property may change it.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Is the client interested in this value
+                                           directly?</em></p>
+                           <p>Client/server bandwidth is scarce, so the number of properties
+                                        on the client needs to be minimised.
+                           </p>
+                           <p>Sometimes, a group of properties can be maintained on the cell
+                                        and only a derived additional property needs to be sent to the
+                                        client. For example, a client part would probably not need to know
+                                        that a combination of six AI state variables are causing a guard to
+                                        be angry; they would however need to know the derived value that the
+                                        guard is brandishing an axe.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Could a player cheat by seeing this
+                                           property?</em></p>
+                           <p>If so, then care must be taken about sending it to the
+                                        client.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">There can only be one master value of
+                                           any property.</em></p>
+                           <p>The master value must reside on either the base or cell.
+                                        Consequently, if the same property is available on both the base and
+                                        the cell, the other holder of the property needs to have the value
+                                        propagated to it via a method.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2493"></a>4.3.3.&nbsp;Data Propagation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Data propagation occurs when the entity is first created.
+                           Subsequent modifications to properties will only be local to the
+                           component, except when the modification occurs in a CellApp, in which
+                           case the change will be automatically propagated to all interested
+                           parties. For example, <span class="literal">CELL_PUBLIC</span> properties are
+                           propagated to all other CellApps that have a ghost of the entity,
+                           <span class="literal">OTHER_CLIENTS</span> properties are propagated to all
+                           clients that have the entity in their AoI, and so on.
+                  </p>
+                  <p>When changing the value of a property in a component other than a
+                           CellApp, the change can be manually propagated using remote method
+                           calls. For details, see <a href="ch05.html" title="Chapter&nbsp;5.&nbsp;Methods"><i xmlns:xlink="http://www.w3.org/1999/xlink">Methods</i></a>.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e2508"></a>4.3.3.1.&nbsp;Forcing Data Propagation for Python and Custom User
+                                         Types
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Changes to properties of <span class="literal">PYTHON</span> and custom
+                                user types are not automatically propagated, unless the property is
+                                reassigned.
+                     </p>
+                     <p>This behaviour mainly affects composite Python types like
+                                dictionaries, arrays, and classes, because modifications to the object
+                                do not cause data propagation unless the property is reassigned to
+                                itself.
+                     </p>
+                     <p>For example, if entity <em class="emphasis">e</em> has the property
+                                as illustrated below:
+                     </p><pre class="programlisting">&lt;pythonProp&gt;
+  &lt;Type&gt; PYTHON &lt;/Type&gt;
+  ...
+&lt;/pythonProp&gt;</pre><p>Assigning a new value to <code class="varname">pythonProp</code> will
+                                cause data propagation:
+                     </p><pre class="programlisting">e.pythonProp = { 'gold': 100 }</pre><p>However, modifying the value will not cause data
+                                propagation:
+                     </p><pre class="programlisting">e.pythonProp[ 'gold' ] = 50
+e.pythonProp[ 'arrows' ] = 200</pre><p>Different parts of the entity will see different values for
+                                <code class="varname">pythonProp</code>, unless data propagation is manually
+                                triggered by reassigning the property back to itself:
+                     </p><pre class="programlisting">e.pythonProp = e.pythonProp</pre></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Implementing_Custom_Property_Data_Types"></a>4.4.&nbsp;Implementing Custom Property Data Types
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Custom data types are useful for the implementation of data
+                      structures with complex behaviour that is shared between different
+                      components, or that must be attached to cell entities (in which case they
+                      must be able to be transferred from one cell to another).
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2548"></a>4.4.1.&nbsp;Wrapping a FIXED_DICT Data Type
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>By default, the <span class="literal">FIXED_DICT</span> data type behaves
+                           like a Python dictionary. This behaviour can be changed by replacing the
+                           dictionary-like <span class="literal">FIXED_DICT</span> type with another Python
+                           type (referred to as a wrapper type in this document).
+                  </p>
+                  <p>To do so, specify a type converter object in the
+                           <code class="property">&lt;implementedBy&gt;</code> section in the
+                           <span class="literal">FIXED_DICT</span> type declaration. For example:
+                  </p><pre class="programlisting">&lt;Type&gt; 
+  FIXED_DICT
+  &lt;implementedBy&gt; <em class="emphasis">CustomTypeConverterInstance</em>  &lt;/implementedBy&gt;
+  &lt;Properties&gt; ... &lt;/Properties&gt;
+  ...
+&lt;/Type&gt;</pre><p><span class="citetitle">Declaration of a Wrapped <span class="literal">FIXED_DICT</span>
+                              Data Type</span></p>
+                  <p><code class="classname">CustomTypeConverterInstance</code> must be a
+                           Python object that converts between <span class="literal">FIXED_DICT</span>
+                           instances and wrapper instances.
+                  </p>
+                  <p>It must implement the following methods:</p>
+                  <div class="altrow"><a name="d0e2588"></a><p class="title"><b>Table&nbsp;4.3.&nbsp;Methods that should be implemented by wrapper type.</b></p>
+                     <div class="altrow-contents">
+                        <table summary="Methods that should be implemented by wrapper type." border="0">
+                           <colgroup>
+                              <col width="33%">
+                              <col width="67%">
+                           </colgroup>
+                           <thead>
+                              <tr>
+                                 <th align="left">Method</th>
+                                 <th align="left">Description</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr>
+                                 <td align="left"><code class="methodname">addToStream</code>(
+                                                    <em class="parameter"><code>self</code></em>, <em class="parameter"><code>obj</code></em>
+                                                    )
+                                 </td>
+                                 <td align="left">
+                                    <p>Optional method that converts a
+                                                       wrapper instance to a string suitable for transmitting over
+                                                       the network.
+                                    </p>
+                                    <p>The <code class="varname">obj</code> parameter
+                                                       is a wrapper instance. This method should return a string
+                                                       representation of <code class="varname">obj</code>. Typically, this is
+                                                       done using the <code class="classname">cPickle</code>
+                                                       module.
+                                    </p>
+                                    <p>If this method is present, then
+                                                       <code class="methodname">createFromStream</code> must also
+                                                       be.
+                                    </p>
+                                    <p>If this method is not present, then wrapper
+                                                       instances are transmitted over the network by first converting
+                                                       them to <span class="literal">FIXED_DICT</span> instances using the
+                                                       <code class="methodname">getDictFromObj</code> method, and then
+                                                       recreated at the receiving end using the
+                                                       <code class="methodname">createObjFromDict</code>
+                                                       method.
+                                    </p>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><code class="methodname">createFromStream</code>(
+                                                    <em class="parameter"><code>self</code></em>, <em class="parameter"><code>stream</code></em>
+                                                    )
+                                 </td>
+                                 <td align="left">
+                                    <p>Optional method that creates an
+                                                       instance of the wrapper type from its string network
+                                                       form.
+                                    </p>
+                                    <p>The <code class="varname">stream</code> parameter is a
+                                                       Python string obtained by calling the
+                                                       <code class="methodname">addToStream</code> method. This method
+                                                       should return a wrapper instance constructed from the data in
+                                                       stream.
+                                    </p>
+                                    <p>If this method is present, then
+                                                       <code class="methodname">addToStream</code> must also be
+                                                       provided.
+                                    </p>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><code class="methodname">createObjFromDict</code>(
+                                                    <em class="parameter"><code>self</code></em>, <em class="parameter"><code>dict</code></em>
+                                                    )
+                                 </td>
+                                 <td align="left">
+                                    <p>Method to convert a
+                                                       <span class="literal">FIXED_DICT</span> instance to a wrapper
+                                                       instance.
+                                    </p>
+                                    <p>The <code class="varname">dict</code> parameter is
+                                                       a <span class="literal">FIXED_DICT</span> instance. This method should
+                                                       return the wrapper instance constructed from the information
+                                                       in <code class="varname">dict</code>.
+                                    </p>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><code class="methodname">getDictFromObj</code>(
+                                                    <em class="parameter"><code>self</code></em>, <em class="parameter"><code>obj</code></em>
+                                                    )
+                                 </td>
+                                 <td align="left">
+                                    <p>Method to convert a wrapper instance
+                                                       to a <span class="literal">FIXED_DICT</span> instance.
+                                    </p>
+                                    <p>The
+                                                       <code class="varname">obj</code> parameter is a wrapper instance. This
+                                                       method should return a Python dictionary (or dictionary-like
+                                                       object) that contains the same set of keys as a
+                                                       <span class="literal">FIXED_DICT</span> instance.
+                                    </p>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td align="left"><code class="methodname">isSameType</code>(
+                                                    <em class="parameter"><code>self</code></em>, <em class="parameter"><code>obj</code></em>
+                                                    )
+                                 </td>
+                                 <td align="left">
+                                    <p>Method to check whether an object is
+                                                       of the wrapper type.
+                                    </p>
+                                    <p>The <code class="varname">obj</code>
+                                                       parameter in an arbitrary Python object. This method should
+                                                       return <span class="literal">True</span> if <code class="varname">obj</code> is a
+                                                       wrapper instance.
+                                    </p>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+                  <p><br class="altrow-break"></p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e2747"></a>4.4.1.1.&nbsp;Example of Wrapping FIXED_DICT with a Class
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>It is often desirable to wrap a <span class="literal">FIXED_DICT</span>
+                                data type with a class to facilitate object-oriented
+                                programming.
+                     </p><pre class="programlisting">import cPickle
+
+class MyCustomType:          # wrapper type
+  def __init__( self, dict ):
+    self.a = dict[ "a" ]
+    self.b = dict[ "b" ]
+  ...                    # other MyCustomType methods
+
+class MyCustomTypeConverter:    # type converter class
+  def <em class="emphasis">getDictFromObj</em>( self, obj ):
+    return { "a": obj.a, "b": obj.b }
+  
+  def <em class="emphasis">createObjFromDict</em>( self, dict ):
+    return MyCustomType( dict )
+
+  def <em class="emphasis">isSameType</em>( self, obj ):
+    return isinstance( obj, MyCustomType )
+
+  def <em class="emphasis">addToStream</em>( self, obj ):          # optional
+    return cPickle.dumps( obj )
+
+  def <em class="emphasis">createFromStream</em>( self, stream ):    # optional
+    return cPickle.loads( stream )
+
+instance = MyCustomTypeConverter()    # type converter object</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/common/MyCustomTypeImpl.py</code>
+                                   &#8212; Wrapper type and type converter object</span></p><pre class="programlisting">&lt;Type&gt; 
+  FIXED_DICT
+  &lt;implementedBy&gt; <em class="emphasis">MyCustomTypeImpl.instance</em>  &lt;/implementedBy&gt;
+  &lt;Properties&gt;
+    &lt;a&gt; ... &lt;/a&gt;
+    &lt;b&gt; ... &lt;/b&gt;
+  &lt;/Properties&gt;
+  ...
+&lt;/Type&gt;</pre><p><span class="citetitle">Excerpt of a wrapped <span class="literal">FIXED_DICT</span>
+                                   type declaration</span></p>
+                     <p>The above example makes a <span class="literal">FIXED_DICT</span> type
+                                behave as a class with members <code class="varname">a</code> and
+                                <code class="varname">b</code>, instead of as a dictionary with the same
+                                keys.
+                     </p>
+                     <p>The drawback with the above example is that member updates are
+                                not automatically propagated to other components. For example, if the
+                                above data type is used in an entity attribute called
+                                <code class="varname">custType</code>, the following script code would only set
+                                the value of the attribute for the local copy of the entity:
+                     </p><pre class="programlisting">e.custType.a = 100
+e.custType.b = 200</pre><p>To ensure that all copies of the entity e have the updated
+                                values, the attribute must be set to a different instance of
+                                <code class="classname">MyCustomType</code> with the updated values:
+                     </p><pre class="programlisting">e.custType = MyCustomType( { "a": 100, "b": 200 } )</pre><p>Alternatively, <span class="literal">MyCustomType</span> can be
+                                implemented using descriptors that reference the original
+                                <span class="literal">FIXED_DICT</span> instance:
+                     </p><pre class="programlisting">class MemberProxy( object ):              # descriptor class
+  def __init__( self, memberName ):
+    self.memberName = memberName
+
+  def __get__( self, instance, owner ):
+    return instance.fixedDict[ self.memberName ]
+
+  def __set__( self, instance, value ):
+    instance.fixedDict[ self.memberName ] = value
+
+  def __delete__( self, instance ):
+    raise NotImplementedError( self.memberName )
+
+class MyCustomType( object ):            # wrapper class
+  a = MemberProxy( "a" )
+  b = MemberProxy( "b" )
+
+  def __init__( self, dict ):
+    self.fixedDict = dict
+  ...                      # other MyCustomType methods
+
+class MyCustomTypeConverter( object ):      # type converter class
+  def getDictFromObj( self, obj ):
+    return obj.fixedDict        # must return original instance
+  
+  def createObjFromDict( self, dict ):
+    return MyCustomType( dict )
+
+  def isSameType( self, obj ):
+    return isinstance( obj, MyCustomType )
+
+  # addToStream and createFromStream cannot be implemented</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/common/MyCustomTypeImpl.py</code>
+                                   &#8212; Wrapper type and type converter object using
+                                   descriptors</span></p>
+                     <p>In the above example, <code class="classname">MyCustomType</code>
+                                references the original <span class="literal">FIXED_DICT</span> instance in its
+                                <code class="varname">fixedDict</code> member. Access to members
+                                <code class="varname">a</code> or <code class="varname">b</code> will be redirected via
+                                the descriptor class to the <code class="varname">fixedDict</code> member. As
+                                updates to <span class="literal">FIXED_DICT</span> instances are automatically
+                                propagated to other components, updates to members
+                                <code class="varname">a</code> and <code class="varname">b</code> are also automatically
+                                propagated.
+                     </p>
+                     <p>The drawback with this approach is that custom streaming is not
+                                possible. If the <span class="literal">addToStream</span> and
+                                <span class="literal">createFromStream</span> methods are implemented, then the
+                                custom object is created directly from the stream. Since it is not
+                                possible to instantiate a FIXED_DICT object in Python script, it will
+                                not be possible for the custom object to reference a FIXED_DICT object
+                                that will propagate partial changes.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e2869"></a>4.4.1.2.&nbsp;Implementing a USER_TYPE Data Type
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">USER_TYPE</span> data type predates the
+                                <span class="literal">FIXED_DICT</span> data type, and much of its functionality
+                                can be achieved by wrapping a <span class="literal">FIXED_DICT</span> data type.
+                                However, <span class="literal">USER_TYPE</span> data type additionally allows
+                                customising its representation as a
+                                <code class="property">&lt;DataSection&gt;</code>.
+                     </p>
+                     <p>A <span class="literal">USER_TYPE</span> data type consists of the
+                                following pieces:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>A declaration of the Python instance implementing the
+                                             <span class="literal">USER_TYPE</span> data type. For example:
+                              </p><pre class="programlisting">&lt;Type&gt; <em class="emphasis">USER_TYPE</em> &lt;implementedBy&gt; <em class="emphasis">UserType.instance</em> &lt;/implementedBy&gt; &lt;/Type&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                                                &#8212; User type declaration syntax</span></p>
+                              <p>However, it is recommended to declare a
+                                             <span class="literal">USER_TYPE</span> data type in
+                                             <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml</code>
+                                             <sup>[<a name="d0e2929" href="#ftn.d0e2929">5</a>]</sup> to give it a name that we can use in the entity
+                                             definition files <sup>[<a name="d0e2936" href="#ftn.d0e2936">6</a>]</sup> (named
+                                             <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>).
+                              </p>
+                           </li>
+                           <li>
+                              <p>A class that defines methods to read and write this data
+                                             type from various places.
+                              </p>
+                           </li>
+                           <li>
+                              <p>A module, containing the above class, and an instance of
+                                             this class, which will be used to serialise and unserialise the
+                                             custom data type.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>The custom data type might also declare a Python class that
+                                represents the type at runtime. A Python list, a dictionary, or some
+                                other native Python data type might also represent it.
+                     </p>
+                     <p>The class we implement provides methods to serialise whatever
+                                Python type we use to represent a concept. This means that we can
+                                transmit the class over the network and serialise it to a database,
+                                simply by writing the appropriate methods in this class.
+                     </p>
+                     <p>These methods are described in the list below:</p>
+                     <div class="altrow"><a name="d0e2963"></a><p class="title"><b>Table&nbsp;4.4.&nbsp;Custom data type serialisation methods.</b></p>
+                        <div class="altrow-contents">
+                           <table summary="Custom data type serialisation methods." border="0">
+                              <colgroup>
+                                 <col width="33%">
+                                 <col width="67%">
+                              </colgroup>
+                              <thead>
+                                 <tr>
+                                    <th align="left">Method</th>
+                                    <th align="left">Description</th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 <tr>
+                                    <td align="left"><code class="methodname">addToStream</code>(
+                                                         <em class="parameter"><code>self</code></em>,
+                                                         <em class="parameter"><code>obj</code></em>)
+                                    </td>
+                                    <td align="left">
+                                       <p>Converts the Python object obj
+                                                            into a string representation to be placed onto the network,
+                                                            and return that string. It does the opposite of
+                                                            <code class="methodname">createFromStream</code>. The
+                                                            <code class="classname">struct</code> library from Python is useful
+                                                            in performing this task.
+                                       </p>
+                                       <p>For example, if your
+                                                            type contains a single <span class="literal">INT32</span> member, then
+                                                            <code class="methodname">addToStream</code> could be implemented
+                                                            as:
+                                       </p><pre class="programlisting">def addToStream( self, obj ):
+	return struct.pack( "i", obj )</pre></td>
+                                 </tr>
+                                 <tr>
+                                    <td align="left"><code class="methodname">createFromStream</code>(
+                                                         <em class="parameter"><code>self</code></em>, <em class="parameter"><code>stream</code></em>
+                                                         )
+                                    </td>
+                                    <td align="left">
+                                       <p>Creates a Python object from the
+                                                            string passed in through <code class="varname">stream</code>. It does
+                                                            the opposite of
+                                                            <code class="methodname">addToStream</code>.
+                                       </p>
+                                       <p>The length
+                                                            of the <code class="varname">stream</code> must be checked before
+                                                            trying to unpack it.
+                                       </p>
+                                       <p>For example, if your type
+                                                            contains a single <span class="literal">INT32</span> member, then
+                                                            <code class="methodname">createFromStream</code> could be
+                                                            implemented as:
+                                       </p><pre class="programlisting">def createFromStream( self, stream ):
+  if len(stream) != 4: # one integer
+    raise "Error: string has wrong length"
+  else:
+    return struct.unpack( "I", stream )</pre></td>
+                                 </tr>
+                                 <tr>
+                                    <td align="left"><code class="methodname">addToSection</code>(
+                                                         <em class="parameter"><code>self</code></em>, <em class="parameter"><code>obj</code></em>,
+                                                         <em class="parameter"><code>section</code></em> )
+                                    </td>
+                                    <td align="left">
+                                       <p>Adds a representation of
+                                                            <code class="varname">obj</code> to the section
+                                                            <code class="property">&lt;DataSection&gt;</code>.
+                                       </p>
+                                       <p>It is
+                                                            used for persisting properties into the database. Hence, if
+                                                            a property is not persistent, this method does not have to
+                                                            be implemented.
+                                       </p>
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td align="left"><code class="methodname">createFromSection</code>(
+                                                         <em class="parameter"><code>self</code></em>, <em class="parameter"><code>section</code></em>
+                                                         )
+                                    </td>
+                                    <td align="left">
+                                       <p>Creates and returns a Python
+                                                            object from its persisted representation in section
+                                                            <code class="property">&lt;DataSection&gt;</code>.
+                                       </p>
+                                       <p>It is
+                                                            used for persisting properties into the database, and
+                                                            parsing default values from
+                                                            <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                                                            files.
+                                       </p>
+                                       <p>You should always implement this method,
+                                                            even if you do not implement
+                                                            <code class="methodname">addToSection</code>.
+                                       </p>
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td align="left"><code class="methodname">fromStreamToSection</code>(
+                                                         <em class="parameter"><code>self</code></em>, <em class="parameter"><code>stream</code></em>,
+                                                         <em class="parameter"><code>section</code></em> )
+                                    </td>
+                                    <td align="left">
+                                       <p>Converts data from a
+                                                            <code class="varname">stream</code> representation (a string) to a
+                                                            <code class="property">&lt;DataSection&gt;</code> representation in
+                                                            <code class="varname">section</code>. It can be implemented as
+                                                            follows:
+                                       </p><pre class="programlisting">def fromStreamToSection( self, stream, section ):
+  o = self.createFromStream( stream )
+  self.addToSection( o, section ) </pre><p>It can also be
+                                                            implemented more efficiently (for instance if the
+                                                            <code class="property">&lt;DataSection&gt;</code> representation is
+                                                            very similar to the stream representation). For
+                                                            example:
+                                       </p><pre class="programlisting">section.asBlob = stream</pre></td>
+                                 </tr>
+                                 <tr>
+                                    <td align="left"><code class="methodname">fromSectionToStream</code>(
+                                                         <em class="parameter"><code>self</code></em>, <em class="parameter"><code>section</code></em>
+                                                         )
+                                    </td>
+                                    <td align="left">
+                                       <p>Converts data from a
+                                                            <code class="property">&lt;DataSection&gt;</code> representation in
+                                                            <code class="varname">section</code> to a stream representation, and
+                                                            returns it.
+                                       </p>
+                                       <p>It can be implemented as
+                                                            follows:
+                                       </p><pre class="programlisting">def fromSectionToStream( self, section ):
+  o = self.createFromSection( section )
+  return self.addToStream( o ) </pre><p>It can also be
+                                                            implemented more efficiently (for instance if the
+                                                            <code class="property">&lt;DataSection&gt;</code> representation is
+                                                            very similar to the stream representation). For
+                                                            example:
+                                       </p><pre class="programlisting">return section.asBlob</pre></td>
+                                 </tr>
+                                 <tr>
+                                    <td align="left"><code class="methodname">defaultValue</code>(
+                                                         <em class="parameter"><code>self</code></em> )
+                                    </td>
+                                    <td align="left">
+                                       <p>Returns a reasonable default value
+                                                            for this data type.
+                                       </p>
+                                       <p>It is used when there is no
+                                                            default value specified when this data type is used in a
+                                                            property.
+                                       </p>
+                                    </td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                        </div>
+                     </div>
+                     <p><br class="altrow-break"></p>
+                     <p>We place a class implementing these methods into a module in the
+                                directory <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/common</code>,
+                                and create an instance variable as an instance of this class.
+                     </p>
+                     <p>For example, we may define a module called
+                                <code class="filename">MyCustDataType.py</code>, as illustrated below:
+                     </p><pre class="programlisting">class <em class="emphasis">MyCustDataType</em>:
+  def <em class="emphasis">addToStream</em>( self, obj ):
+    ...
+  def <em class="emphasis">createFromStream</em>( self, stream ):
+    ...
+  def <em class="emphasis">addToSection</em>( self, obj, section ):
+    ...
+  def <em class="emphasis">createFromSection</em>( self, section ):
+    ...
+  def <em class="emphasis">fromStreamToSection</em>( self, stream, section ):
+    ...
+  def <em class="emphasis">fromSectionToStream</em>( self, section ):
+    ...
+  def <em class="emphasis">defaultValue</em>( self ):
+    ...
+instance = MyCustDataType()</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/common/MyCustDataType.py</code>
+                                   &#8212; Serialisation methods</span></p>
+                     <p>If the property is persistent, and stored in a MySQL database,
+                                then an additional method has to be implemented. This method will
+                                declare the binding of the data into the database. For more details,
+                                see <a href="ch08.html" title="Chapter&nbsp;8.&nbsp;The Database Layer"><i xmlns:xlink="http://www.w3.org/1999/xlink">The Database Layer</i></a>.
+                     </p>
+                     <p>The variable instance is the object that performs the
+                                manipulation of this data type by BigWorld. In the aliases file
+                                <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/defs/alias.xml</code>,
+                                we would include the following definition:
+                     </p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;MY_CUSTOM_DATA_TYPE&gt; 
+    USER_TYPE
+    &lt;implementedBy&gt; MyCustDataType.instance &lt;/implementedBy&gt;
+  &lt;/MY_CUSTOM_DATA_TYPE&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/defs/alias.xml</code>
+                                   &#8212; Definition of
+                                   <span class="literal">MY_CUST_DATA_TYPE</span></span></p>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Volatile_Properties"></a>4.5.&nbsp;Volatile Properties
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Some properties are updated more often than others, and almost all
+                      entities have a set of properties that need to be handled specially due to
+                      this. These properties are called <em class="emphasis">volatile</em>
+                      properties, and are pre-defined by the BigWorld engine.
+               </p>
+               <p>The default volatile properties defined by BigWorld are outlined
+                      below:
+               </p>
+               <div class="altrow"><a name="d0e3256"></a><p class="title"><b>Table&nbsp;4.5.&nbsp;BigWorld's pre-defined volatile properties.</b></p>
+                  <div class="altrow-contents">
+                     <table summary="BigWorld's pre-defined volatile properties." border="0">
+                        <colgroup>
+                           <col width="11%">
+                           <col width="89%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th align="left">Property</th>
+                              <th align="left">Description</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td align="left"><code class="varname">position</code></td>
+                              <td align="left">
+                                 <p>The (x,y,z) position of the entity.
+                                                  Represented in Python as a <span class="literal">TUPLE</span> of three
+                                                  floats.
+                                 </p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td align="left">
+                                 <p><code class="varname">yaw</code></p>
+                                 <p><code class="varname">pitch</code></p>
+                                 <p><code class="varname">roll</code></p>
+                              </td>
+                              <td align="left">
+                                 <p>Three extra volatile properties, which
+                                                  are typically used for the direction an entity is facing, but
+                                                  may be used for other purposes. They still must, however, have
+                                                  the ranges of the corresponding element of a
+                                                  direction:
+                                 </p>
+                                 <div class="itemizedlist">
+                                    <ul type="disc">
+                                       <li>
+                                          <p>(<span class="literal">-pi</span>,<span class="literal">pi</span>) for
+                                                                 <code class="varname">yaw</code></p>
+                                       </li>
+                                       <li>
+                                          <p>(<span class="literal">-pi/2</span>,<span class="literal">pi/2</span>)
+                                                                 for <code class="varname">pitch</code></p>
+                                       </li>
+                                       <li>
+                                          <p>(<span class="literal">-pi</span>,<span class="literal">pi</span>) for
+                                                                 <code class="varname">roll</code></p>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <p><br class="altrow-break"></p>
+               <p>These properties are updated with an optimised protocol used between
+                      the client and the server, in order to minimise bandwidth.
+               </p>
+               <p>The volatile properties are listed separately to the normal
+                      properties in the file
+                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>.
+               </p>
+               <p>Each entity can decide which of these volatile properties are
+                      automatically updated. Additionally, they can have a priority attached to
+                      them. This priority determines a distance from the entity above which the
+                      property is no longer sent.
+               </p>
+               <p>The syntax is as follows:</p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;Volatile&gt;
+    &lt;<em class="emphasis">position</em>/&gt; | &lt;<em class="emphasis">position</em>&gt;  <em class="replaceable"><code>float</code></em>  &lt;/<em class="emphasis">position</em>&gt; 
+    &lt;<em class="emphasis">yaw</em>/&gt;      | &lt;<em class="emphasis">yaw</em>&gt;       <em class="replaceable"><code>float</code></em>  &lt;/<em class="emphasis">yaw</em>&gt; 
+    &lt;<em class="emphasis">pitch</em>/&gt;    | &lt;<em class="emphasis">pitch</em>&gt;     <em class="replaceable"><code>float</code></em>  &lt;/<em class="emphasis">pitch</em>&gt; 
+    &lt;<em class="emphasis">roll</em>/&gt;     | &lt;<em class="emphasis">roll</em>&gt;      <em class="replaceable"><code>float</code></em>  &lt;/<em class="emphasis">roll</em>&gt; 
+  &lt;/Volatile&gt;
+  ...</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                         &#8212; Declaration of volatile properties</span></p>
+               <p>This is how the volatility status and priority of a property are
+                      interpreted:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>If a property is not specified, then it will never be updated
+                                   (<code class="classname">BigWorld</code>.<code class="varname">VOLATILE_NEVER</code>).
+                        </p>
+                     </li>
+                     <li>
+                        <p>If a property is specified:</p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p>If a priority is not specified, then property will always be
+                                                updated, regardless of distance from entity
+                                                (<code class="classname">BigWorld</code>.<code class="varname">VOLATILE_ALWAYS</code>).
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>If a priority is specified, then the value is used as the
+                                                maximum distance from entity (in metres) for which property will
+                                                still be updated.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>The volatile distance for pitch cannot be less than that of yaw
+                           and the volatile distance for roll cannot be less than that of
+                           pitch.
+                  </p>
+               </div>
+               <p>Supposing an entity the volatile properties as defined below:</p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;<em class="emphasis">Volatile</em>&gt;
+    &lt;<em class="emphasis">position</em>/&gt;   
+    &lt;<em class="emphasis">yaw</em>&gt;    30.0  &lt;/<em class="emphasis">yaw</em>&gt; 
+    &lt;<em class="emphasis">pitch</em>&gt;  25.0  &lt;/<em class="emphasis">pitch</em>&gt; 
+  &lt;/Volatile&gt;
+  ...
+&lt;/root&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                         &#8212; Example definition</span></p>
+               <p>For the above example, we have the following for each
+                      property:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="varname">position</code> &#8212; Always updated
+                                   (<code class="classname">BigWorld</code>.<code class="varname">VOLATILE_ALWAYS</code>)
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="varname">yaw</code> &#8212; Updated up to a distance of 30.0
+                                   metres.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="varname">pitch</code> &#8212; Updated up to a distance of 25.0
+                                   metres.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="varname">roll</code> &#8212; Never updated
+                                   (<code class="classname">BigWorld</code>.<code class="varname">VOLATILE_NEVER</code>)
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>Only non-moving entities should be defined without volatile
+                           properties.
+                  </p>
+                  <p>Each position or direction change of an entity without any
+                           volitile properties is sent to the necessary clients in a detailed but
+                           less efficient way. This allows an entity's position to be correct when
+                           it is occasionally moved (<em class="emphasis">e.g.</em>, a chair has been
+                           slightly moved). If this happen consistently, it can consume a lot of
+                           server to client bandwidth.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_LOD_Level_Of_Detail_On_Properties"></a>4.6.&nbsp;LOD (Level of Detail) on Properties
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Sometimes bandwidth usage can be optimised even further, by not
+                      distributing information to clients that are distant. We can do this by
+                      attaching a <code class="property">&lt;DetailLevel&gt;</code> tag to a property.
+                      This tag determines the distance after which property changes will not be
+                      sent to the client.
+               </p>
+               <p>Note that this is purely an optimisation for the property. This
+                      option should only be used if bandwidth usage is proven to be too high. If
+                      this feature is enabled for the property, then you must test it very
+                      carefully to check if the result achieved in terms of game play is what
+                      you expected.
+               </p>
+               <p>The definition of the LOD (level of detail) of a property in the
+                      file
+                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                      is described below:
+               </p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;<em class="emphasis">Properties</em>&gt;
+    ...
+    &lt;<em class="emphasis">modelNumber</em>&gt;
+      ...
+      &lt;<em class="emphasis">DetailLevel</em>&gt; <em class="emphasis">NEAR</em> &lt;/DetailLevel&gt;
+    &lt;/modelNumber&gt;
+    ...</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                         &#8212; Declaration of LOD for property</span></p>
+               <p>The example above declared a LOD labelled <span class="literal">NEAR</span>
+                      for the property. The actual value of <span class="literal">NEAR</span> is defined
+                      in the sub-section <code class="property">&lt;level&gt;</code> of the section
+                      <code class="property">&lt;LodLevels&gt;</code> in the entity's file.
+               </p>
+               <p>For example, to subdivide the AoI into the ranges labelled
+                      <span class="literal">NEAR</span>, <span class="literal">MEDIUM</span>, and
+                      <span class="literal">FAR</span> (with everything further than
+                      <span class="literal">FAR</span> being transmitted whenever entities are within each
+                      other's AoI), the entity's definition file will include the lines
+                      below:
+               </p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;<em class="emphasis">LODLevels</em>&gt;
+    &lt;level&gt;  <em class="emphasis">20</em>  &lt;label&gt; <em class="emphasis">NEAR</em>    &lt;/label&gt; &lt;/level&gt;
+    &lt;level&gt; <em class="emphasis">100</em>  &lt;label&gt; <em class="emphasis">MEDIUM</em>  &lt;/label&gt; &lt;/level&gt;
+    &lt;level&gt; <em class="emphasis">250</em>  &lt;label&gt; <em class="emphasis">FAR</em>     &lt;/label&gt; &lt;/level&gt;
+  &lt;/LODLevels&gt;
+  ...
+&lt;/root&gt;</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                         &#8212; Definition of labels for LODs</span></p>
+               <p>The LODs specified for the entity in the example file above are
+                      illustrated below:
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/location_of_lod_boundaries_relative_to_the_entity.png"><span class="caption">
+                        <p>Location of LOD boundaries relative to the
+                                   entity
+                        </p></span></div>
+               </div>
+               <p>Detail levels are inherited from parent definition files. Any level
+                      with the same label as a parent will modify that level, and any new levels
+                      will be added.
+               </p>
+               <p>There is currently a limit of six levels of detail for each entity
+                      type
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e3627"></a>4.6.1.&nbsp;LOD and Hysteresis
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In addition to its parameter <code class="property">&lt;label&gt;</code>,
+                           the sub-section <code class="property">&lt;level&gt;</code> can also have
+                           <code class="property">&lt;hyst&gt;</code> parameter.
+                  </p>
+                  <p>It is defined as illustrated in the example below:</p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;<em class="emphasis">LODLevels</em>&gt;
+    &lt;level&gt;  20 &lt;label&gt; NEAR   &lt;/label&gt; &lt;<em class="emphasis">hyst</em>&gt;  4 &lt;/hyst&gt; &lt;/level&gt;
+    &lt;level&gt; 100 &lt;label&gt; MEDIUM &lt;/label&gt; &lt;<em class="emphasis">hyst</em>&gt; 10 &lt;/hyst&gt; &lt;/level&gt;
+    &lt;level&gt; 250 &lt;label&gt; FAR    &lt;/label&gt; &lt;<em class="emphasis">hyst</em>&gt; 20 &lt;/hyst&gt; &lt;/level&gt;
+  &lt;/LODLevels&gt;
+  ...</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>
+                              &#8212; Definition of hysteresis regions</span></p>
+                  <p>This parameter defines a hysteresis region starting from the LOD's
+                           outer boundary and moving outwards. It prevents frequent changes in the
+                           LOD of a property, which saves significant processing time on the cell,
+                           as properties do not have to change their priorities often. In order to
+                           do this, the <code class="property">&lt;hyst&gt;</code> specifies a buffer region
+                           around the boundary of a LOD level, which an entity must pass through
+                           completely before changing to a lower LOD.
+                  </p>
+                  <p>The declaration of the <code class="property">&lt;hyst&gt;</code> parameter
+                           is optional, and if not declared, it will default to 10 metres.
+                  </p>
+                  <p>As an example, consider a stationary entity, and another entity
+                           travelling through points <em class="emphasis">A</em>,
+                           <em class="emphasis">B</em>, <em class="emphasis">C</em>, <em class="emphasis">D</em>,
+                           <em class="emphasis">E</em>, and finally back to <em class="emphasis">A</em>, as
+                           illustrated in the diagram below:
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/entity_moving_around_lods_of_another_entity.png"><span class="caption">
+                           <p>Entity moving around LODs of another
+                                        entity
+                           </p></span></div>
+                  </div>
+                  <p>We consider the minimum LOD of properties that will be propagated
+                           from the moving entity to the stationary entity, as listed in the table
+                           below:
+                  </p>
+                  <div class="altrow"><a name="d0e3707"></a><p class="title"><b>Table&nbsp;4.6.&nbsp;Entity moving around LODs of another entity.</b></p>
+                     <div class="altrow-contents">
+                        <table summary="Entity moving around LODs of another entity." border="0" width="85%">
+                           <colgroup>
+                              <col width="8%">
+                              <col width="12%">
+                              <col width="80%">
+                           </colgroup>
+                           <thead>
+                              <tr>
+                                 <th align="left">Point</th>
+                                 <th align="left">LOD</th>
+                                 <th align="left">Reason</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr>
+                                 <td align="left">A</td>
+                                 <td align="left"><span class="literal">NEAR</span></td>
+                                 <td align="left">Unaffected by hysteresis.</td>
+                              </tr>
+                              <tr>
+                                 <td align="left">B</td>
+                                 <td align="left"><span class="literal">NEAR</span></td>
+                                 <td align="left">Entity has moved from
+                                                    <span class="literal">NEAR</span> to <span class="literal">MEDIUM</span>, but not
+                                                    yet completely through the hysteresis.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td align="left">C</td>
+                                 <td align="left"><span class="literal">MEDIUM</span></td>
+                                 <td align="left">Entity has moved from
+                                                    <span class="literal">NEAR</span> to <span class="literal">MEDIUM</span>, and
+                                                    completely through the hysteresis.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td align="left">D</td>
+                                 <td align="left"><span class="literal">MEDIUM</span></td>
+                                 <td align="left">Entity is still in
+                                                    <span class="literal">MEDIUM</span>.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td align="left">E</td>
+                                 <td align="left"><span class="literal">MEDIUM</span></td>
+                                 <td align="left">Entity is still in
+                                                    <span class="literal">MEDIUM</span>.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td align="left">A</td>
+                                 <td align="left"><span class="literal">NEAR</span></td>
+                                 <td align="left">Entity has moved from
+                                                    <span class="literal">MEDIUM</span> to <span class="literal">NEAR</span>.
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+                  <p><br class="altrow-break"></p>
+                  <p>In the example above, we have the following regarding the change
+                           of LOD for the moving entity:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>The change of LOD for the moving entity from
+                                        <span class="literal">NEAR</span> to <span class="literal">MEDIUM</span> occurs at a
+                                        distance of 24 metres from the stationary entity (20 metres as
+                                        defined for the <span class="literal">NEAR</span> LOD, plus 4 metres for its
+                                        hysteresis). If no <code class="property">&lt;hyst&gt;</code> parameter were
+                                        specified, the change would happen at 30 metres (since hysteresis
+                                        would then default to 10 metres).
+                           </p>
+                        </li>
+                        <li>
+                           <p>The change of LOD for the moving entity from
+                                        <span class="literal">MEDIUM</span> to <span class="literal">NEAR</span> occurs at 20
+                                        metres from the stationary entity (since hysteresis does not affect
+                                        moving to a higher LOD).
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e3824"></a>4.7.&nbsp;Temporary Properties
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Temporary properties can be used for properties that do not need to
+                      be backed up or offloaded with an entity.
+               </p>
+               <p>The grammar for temporary property definition is displayed
+                      below:
+               </p><pre class="programlisting">&lt;root&gt;
+   ...
+   &lt;<em class="emphasis">TempProperties</em>&gt;
+      &lt;<em class="replaceable"><code>tempPropertyName1/</code></em>&gt;
+      &lt;<em class="replaceable"><code>tempPropertyName2/</code></em>&gt;
+      ...
+   &lt;/TempProperties&gt;
+   ...
+&lt;/root&gt;</pre><p>These should generally be rare but are useful for properties that
+                      cannot be streamed such as sockets or properties that are recreated on
+                      restoring. These apply to both cell and base entities.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_UDO_Linking"></a>4.8.&nbsp;User Data Object Linking With <span class="literal">UDO_REF</span>
+                               Properties
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>There is a special property type, <span class="literal">UDO_REF</span>, that
+                      can be used in both entities and user data objects. This property type
+                      makes it possible to create a connection between an entity and a user data
+                      object, or between two user data objects. This property type is a key
+                      feature of user data objects, as it allows the creation of complex graphs
+                      made up of different types of user data objects and entities that can be
+                      used by the entity scripts as desired. A <span class="literal">UDO_REF</span>
+                      property is nothing more than a reference to a user data object. When an
+                      entity or a user data object with a <span class="literal">UDO_REF</span> property is
+                      loaded, the user data object referenced by the <span class="literal">UDO_REF</span>
+                      property could exist in an unloaded state if the user data object
+                      referenced hasn't been loaded yet. In this case, the script will only be
+                      able to get the user data object's unique identification number through
+                      the <span class="literal">guid</span> attribute. Once the referenced user data
+                      object is loaded, all it's attributes and properties can be
+                      accessed.
+               </p>
+               <p>The most important example of this property type is in the
+                      PatrolNode user data object. The old patrol path system, including the old
+                      <span class="literal">PATROL_PATH</span> property type, have been deprecated. Patrol
+                      functionality is now achieved with the <span class="literal">PatrolNode</span> user
+                      data object, which can be linked to other <span class="literal">PatrolNode</span>
+                      objects through an array of <span class="literal">UDO_REF</span> properties.
+                      Entities that wish to patrol through a graph of
+                      <span class="literal">PatrolNode</span> objects just need have a
+                      <span class="literal">UDO_REF</span> property that links to a
+                      <span class="literal">PatrolNode.</span></p>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e1420" href="#d0e1420">1</a>] </sup>For details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch02.html" class="olink"><i><span class="literal">alias.xml</span></i></a></p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e1875" href="#d0e1875">2</a>] </sup>For details, see the introduction to this chapter.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e1881" href="#d0e1881">3</a>] </sup>For details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch02.html" class="olink"><i><span class="literal">alias.xml</span></i></a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e2087" href="#d0e2087">4</a>] </sup>For more details on encodings, see <a href="ch09.html" title="Chapter&nbsp;9.&nbsp;Character Sets and Encodings"><i xmlns:xlink="http://www.w3.org/1999/xlink">Character Sets and Encodings</i></a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e2929" href="#d0e2929">5</a>] </sup>For details on this file's grammar, see the document
+                                     <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch02.html" class="olink"><i><span class="literal">alias.xml</span></i></a></p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e2936" href="#d0e2936">6</a>] </sup>For an example of declaration of aliases for data types,
+                                     see <a href="ch04.html#xref_Alias_Of_Data_Types" title="4.1.4.&nbsp;Alias of Data Types">Alias of Data Types</a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Physical User Data Object Structure for Scripting&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Methods</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,333 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;2.&nbsp;Hardware Requirements</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Installation Guide">
+      <link rel="up" href="index.html" title="Server Installation Guide">
+      <link rel="prev" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Overview">
+      <link rel="next" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Installing CentOS 5">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;2.&nbsp;Hardware Requirements</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_hardware_requirements"></a>Chapter&nbsp;2.&nbsp;Hardware Requirements
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch02.html#d0e48">2.1. CPU Specifications</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e59">2.2. Duals/Single/Quad/Blades</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e105">2.3. Network Interface Cards</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e110">2.4. Disk Storage</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e117">2.5. Power Supplies</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e122">2.6. Memory</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e139">2.7. NOC Bandwidth</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e144">2.8. VMWare</a></span></dt>
+               </dl>
+            </div>
+            <p>The quick summary: as a minimum, we require the following:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>1GHz CPU (non-mobile CPU preferred)</p>
+                  </li>
+                  <li>
+                     <p>256MB RAM</p>
+                  </li>
+                  <li>
+                     <p>8GB Hard Disk</p>
+                  </li>
+                  <li>
+                     <p>100Mbps Network Interface Card</p>
+                  </li>
+               </ul>
+            </div>
+            <p>See below for recommended hardware requirements.</p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e48"></a>2.1.&nbsp;CPU Specifications
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>In general, use the fastest CPU's that you can. Faster CPU's mean
+                      more entities per CPU and fewer machines.
+               </p>
+               <p>As far as which CPU to buy, look at the normal kinds of things for
+                      servers: big L1 and L2 cache sizes, and fast front-side buses are always
+                      better than small L1 and L2 cache sizes and slow front-side buses.
+               </p>
+               <p>Multiple processors will help you out due to lower network traffic
+                      and fewer machines, until such time as the processors are generating too
+                      much data to get to the network card (or over the PCI bus to the network
+                      card).
+               </p>
+               <p>If you have multiple processors, then make sure that you have one
+                      server component running on each CPU.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e59"></a>2.2.&nbsp;Duals/Single/Quad/Blades
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>In general CPU density in each box is a price decision. Blade
+                      machines are expensive, but if you are paying expensive rates for your NOC
+                      it may work out to be cheaper. If we ignored the NOC cost, we recommend
+                      dual CPU machines.
+               </p>
+               <p>An example Blade setup would be as follows:</p>
+               <p><em class="emphasis">BladeCenter LS20
+                         885051U</em></p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Processor: Low Power AMD Opteron Processor Model 246
+                                     (Standard)
+                        </p>
+                     </li>
+                     <li>
+                        <p>Memory: 4 GB PC3200 ECC DDR RDIMM (2 x 2 GB Kit) System
+                                     Memory
+                        </p>
+                     </li>
+                     <li>
+                        <p>IBM eServer BladeCenter &#8482; Gigabit Ethernet Expansion
+                                     Card
+                        </p>
+                     </li>
+                     <li>
+                        <p>SCSI Hard disk drive 1 : 73GB Non Hot-Swap 2.5" 10K RPM
+                                     Ultra320 SCSI HDD
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p><em class="emphasis">BladeCenter
+                         86773XU</em></p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Optical device: IBM 8X Max DVD-ROM Ultrabay Slim Drive
+                                   (Standard)
+                        </p>
+                     </li>
+                     <li>
+                        <p>Diskette drive: IBM 1.44MB 3.5-inch Diskette Drive
+                                   (Standard)
+                        </p>
+                     </li>
+                     <li>
+                        <p>Power supply modules 1 and 2: BladeCenter 2000W Power Supplies
+                                   one and two (Standard)
+                        </p>
+                     </li>
+                     <li>
+                        <p>Management modules: BladeCenter KVM / Management Module
+                                   (Standard)
+                        </p>
+                     </li>
+                     <li>
+                        <p>Switch module bay 1: Nortel Networks Layer 2/3 Copper GbE Switch
+                                   Module for IBM eServer BladeCenter
+                        </p>
+                     </li>
+                     <li>
+                        <p>Switch module bay 2: Nortel Networks Layer 2/3 Copper GbE Switch
+                                   Module for IBM eServer BladeCenter
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>A setup with 10 LS20 blades in a 86773XU BladeCenter would cost
+                      approx $60k USD.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e105"></a>2.3.&nbsp;Network Interface Cards
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>1Gbps NICs are recommended. The accurate way to determine what NIC
+                      is required is to measure the inter-server traffic for your game. If the
+                      traffic is reaching 25% of the cards capacity we recommend using a faster
+                      card (i.e. if the traffic is more than 25Mbps use a 1Gbps NIC). Note most
+                      100Mbps NIC cards cannot handle more than 50Mbps sustained
+                      throughput.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e110"></a>2.4.&nbsp;Disk Storage
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>For the general machines (CellApps, BaseApps, and the various
+                      managers) RAID disk setups are not recommended. None of these machines use
+                      the disk sub-system extensively (and are certainly not disk bound). Use
+                      standard drives, that are big enough to store the entire world data
+                      (typically in the order of 1 to 10G). If a drive dies it can be replaced
+                      and the data copied from the master.
+               </p>
+               <p>The machine with the master copy of the data should use a RAID 5
+                      system for speed and data integrity. Hot-swap drives will facilitate easy
+                      replacement when drives fail. The database server also needs to use RAID 5
+                      for data integrity and Logical Volume Management for snapshotting. We also
+                      recommend using 10k or 15k RPM drives (SATA or SCSI). The database for a
+                      game stores backup copies of all entities. This database can be large,
+                      potentially 10G to 1TB, but this should be measured during development.
+                      This can be estimated by multiplying the number of entities by their
+                      size.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e117"></a>2.5.&nbsp;Power Supplies
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>We recommend the use of dual redundant PSUs for the database
+                      machine, and the master data server. All other machines can use standard
+                      single PSU's, since a failure of these machines is not critical. It is
+                      cheaper to let the BigWorld fault tolerance system do the work on the
+                      software side.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e122"></a>2.6.&nbsp;Memory
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To calculate memory requirements for the CellApp we recommend the
+                      following:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Around 32MB to 128MB, for Linux to run comfortably (depends on
+                                   how well you have stripped back the kernel and system
+                                   services).
+                        </p>
+                     </li>
+                     <li>
+                        <p>Around 32MB for a CellApp or BaseApp to run comfortably with no
+                                   entities on them and no spaces loaded.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Enough RAM for your entities, and for your world geometry
+                                   (remember that the cell needs to load up enough geometry to cover for
+                                   the AoI for all entities it is supporting). This amount will depend on
+                                   how dense your meshes are, and how much data is stored with each
+                                   entity. 2GB of RAM would not be unusual for an average game.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The BaseApps would typically require around 512M, depending on how
+                      much entity data is stored. All other machines require around 512M.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e139"></a>2.7.&nbsp;NOC Bandwidth
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This is easy to calculate. Multiply the number of players by the
+                      desired bandwidth per player. Outgoing bandwidth is generally higher than
+                      the incoming bandwidth.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e144"></a>2.8.&nbsp;VMWare
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>It is possible to use VMWare for single developer testing purposes,
+                      however VMWare is not recommended as a scaleable production configuration
+                      due to the timing latency that can be introduced. It is also important to
+                      note that if you are intending to use a VMWare image that the architecture
+                      of the package you are creating should be same as the intended machine you
+                      will run the image on. While this may seem counter-intuitive, this is
+                      important as the cross-architecture emulation significantly slows down the
+                      server and will generally causing process deaths due to a lack of
+                      responsiveness.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Overview&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;Installing CentOS 5</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

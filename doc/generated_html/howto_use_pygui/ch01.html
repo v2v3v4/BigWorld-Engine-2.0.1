@@ -1,0 +1,190 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;1.&nbsp;Introduction</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Using PyGUI">
+      <link rel="up" href="index.html" title="Using PyGUI">
+      <link rel="prev" href="index.html" title="Using PyGUI">
+      <link rel="next" href="ch02.html" title="Chapter&nbsp;2.&nbsp;How it Works">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Introduction</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Introduction"></a>Chapter&nbsp;1.&nbsp;Introduction
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch01.html#d0e24">1.1. Overview</a></span></dt>
+                  <dt><span class="section"><a href="ch01.html#d0e55">1.2. Features</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e24"></a>1.1.&nbsp;Overview
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>PyGUI is an example high-level GUI framework that is built upon the
+                  lower level BigWorld GUI library. It is designed to complement the
+                  BigWorld GUI library (by providing a set of classes that can be attached
+                    to GUI components), rather than completely wrapping it. As such, it is
+                      highly recommended to have an understanding of how the
+                      <code class="classname">BigWorld.GUI</code> library works before starting to use
+                      PyGUI. See the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/index.html" class="olink">Client Programming Guide</a> chapter
+                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch16.html" class="olink"><i>Graphical User Interface (GUI)</i></a> for details.
+               </p>
+               <p>The scripts for PyGUI can be found at <code class="filename">fantasydemo/res/scripts/client/Helpers/PyGUI</code>.
+                      Each individual script is not too long, so it is a good idea to read
+                      through the scripts as they are mentioned in this document to get a better
+                      handle on how they work. The PyGUI library is used by the FDGUI module in
+                      <code class="filename">fantasydemo/res/scripts/client/FDGUI</code>, which
+                      can be used as an example game-specific high-level GUI
+                      implementation.
+               </p>
+               <p>While the library could be used as-is to build a game UI, it has
+                      been built specifically for the needs of the FantasyDemo and may need
+                      tweaking to suit other projects. There are two ways it could be
+                      utilised:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Copy the PyGUI module from the FantasyDemo project and tweak it
+                                   to suit any particular requirements.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Use it as a point of reference for implementing a custom GUI
+                                   framework from the ground up.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>This document will describe the PyGUI module as if it were to be
+                      used as-is.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e55"></a>1.2.&nbsp;Features
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The PyGUI library includes:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Container windows (that can be dragged across the screen with
+                                   the mouse).
+                        </p>
+                     </li>
+                     <li>
+                        <p>High-level event handling mechanisms (e.g. clicking on a button
+                                   contained within the window).
+                        </p>
+                     </li>
+                     <li>
+                        <p>A generic "visual state" definition system for defining what
+                                   components look like in different states.
+                        </p>
+                     </li>
+                     <li>
+                        <p>An input focusing system for mutually exclusive components (e.g.
+                                   multiple edit fields on the screen at the same time).
+                        </p>
+                     </li>
+                     <li>
+                        <p>Tool-tips can be associated with any PyGUI component.</p>
+                     </li>
+                     <li>
+                        <p>A number of high-level GUI component scripts:</p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p>Button</p>
+                              </li>
+                              <li>
+                                 <p>Check-box</p>
+                              </li>
+                              <li>
+                                 <p>Radio-button</p>
+                              </li>
+                              <li>
+                                 <p>Edit field (including integration with IME)</p>
+                              </li>
+                              <li>
+                                 <p>Language indicator (usually used in conjunction with an edit
+                                                field)
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>Draggable slider</p>
+                              </li>
+                              <li>
+                                 <p>Word wrapped, scrollable text buffer</p>
+                              </li>
+                              <li>
+                                 <p>Web browser (using the Mozilla integration)</p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Using PyGUI&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;How it Works</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

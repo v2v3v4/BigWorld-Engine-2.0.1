@@ -1,0 +1,277 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;8.&nbsp;Security</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Operations Guide">
+      <link rel="up" href="index.html" title="Server Operations Guide">
+      <link rel="prev" href="ch07.html" title="Chapter&nbsp;7.&nbsp;Stress Testing with Bots">
+      <link rel="next" href="ch09.html" title="Chapter&nbsp;9.&nbsp;BigWorld Server Across Multiple Machines">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_operations_guide/ch08.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;8.&nbsp;Security</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Security"></a>Chapter&nbsp;8.&nbsp;Security
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch08.html#d0e8715">8.1. Security of the Server</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#xref_Security_Server_Ports">8.2. Server Ports</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#xref_Blocking_Ports_And_Related_Security_Considerations">8.3. Blocking Ports and Related Security Considerations</a></span></dt>
+               </dl>
+            </div>
+            <p>Security has been of paramount importance in the design and
+                 implementation of all parts of BigWorld.
+            </p>
+            <p>The basic philosophy is to always handle with care any
+                 client-initiated actions or messages. This should be accomplished in a way
+                 that does not unduly limit potential game designs.
+            </p>
+            <p>For more details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>, chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch21.html" class="olink"><i>Security</i></a>.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e8715"></a>8.1.&nbsp;Security of the Server
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The internal network is assumed to be secure &#8212; BigWorld does
+                      not implement security measures to safeguard processes against an attacker
+                      gaining access to the cluster's internal LAN. Operators should ensure that
+                      the usual protections for an internal network are in place. Remote access
+                      should be very strictly controlled.
+               </p>
+               <p>The external points of contact are the area of most concern when
+                      running an exposed server. For BigWorld, these are LoginApp and BaseApp,
+                      as illustrated below:
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/bigworld_server_components.png"><span class="caption">
+                        <p>BigWorld Server components</p></span></div>
+               </div>
+               <p>Due to the bandwidth needs of a massively multiplayer online game,
+                      LoginApp and BaseApp are intended to be run on machines with external
+                      access. In some sense they are the firewall. For more details, see <a href="ch08.html#xref_Blocking_Ports_And_Related_Security_Considerations" title="8.3.&nbsp;Blocking Ports and Related Security Considerations">Blocking Ports and Related Security Considerations</a>.
+               </p>
+               <p>LoginApp receives only fixed-length queries, making it easy and
+                      transparent to secure. This process is expected to be tailored by
+                      customers to suit their game, but care should be taken when doing
+                      so.
+               </p>
+               <p>BaseApp receives more complex data, including script method calls,
+                      and is the gateway to the rest of the BigWorld Server. It has many checks
+                      in place to ensure the integrity of received data, and to discard (and
+                      warn about) corrupted data and hacking attempts. The string
+                      <span class="literal">CHEAT</span> is used in the log messages when BigWorld
+                      receives potentially malicious data that does not conform to its protocols
+                      (the CellApp may also use this indicator). It is advised that
+                      MessageLogger logs be monitored for messages containing that string. For
+                      details on MessageLogger, see <a href="ch03.html#xref_MessageLogger" title="3.2.&nbsp;Message Logger">Message Logger</a>.
+               </p>
+               <p>The security of the game-level logic rests to a certain extent with
+                      the Python scripts that implement it. For example, an entity should not be
+                      able to stab another entity that is 100 metres away. For more details on
+                      this topic and on server features such as physics checking, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch11.html" class="olink"><i>Proxies and Players</i></a>, section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch11.html#xref_Physics_Correction" class="olink">Physics Correction</a>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Security_Server_Ports"></a>8.2.&nbsp;Server Ports
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The list below describes the ports used by BigWorld server:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">20013 (Protocol: UDP, Access:
+                                      External)</em></p>
+                        <p>The default port used by LoginApp. This port can be overridden
+                                   in
+                                   <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/server/bw.xml</code>
+                                   file's <span class="literal">loginApp/externalPorts</span> section, set the
+                                   <span class="literal">port</span> configuration option. Multiple ports can be
+                                   specified and the first available one is used.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">20018 and 20019 (Protocol: UDP, Access:
+                                      Internal)</em></p>
+                        <p>Used by BWMachined.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">40001-49999 (Protocol: TCP, Access:
+                                      Internal)</em></p>
+                        <p>The Python server on BaseApp.</p>
+                        <p>All BaseApps have a Python server that can be telnetted to. If
+                                   no <span class="literal">baseApp/pythonPort</span> is specified in
+                                   <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/server/bw.xml</code>,
+                                   the port number is 40000, plus the BaseApp ID is used.
+                        </p>
+                        <p>BaseApp ID numbers start at 1, so to talk to the third started
+                                   BaseApp, telnet to 40003.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">50001-59999 (Protocol: TCP, Access:
+                                      Internal)</em></p>
+                        <p>The Python server on CellApp.</p>
+                        <p>All CellApps have a Python server that can be telnetted to. If
+                                   no <span class="literal">cellApp/pythonPort</span> is specified in
+                                   <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/server/bw.xml</code>,
+                                   the port number is 50000, plus the CellApp ID is used.
+                        </p>
+                        <p>CellApp ID numbers start at 1, so to talk to the third started
+                                   CellApp, telnet to 50003.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">32768-61000 (Protocol: TCP, Access:
+                                      Internal)</em></p>
+                        <p>Used by CellAppMgr and CellApp for viewer applications such as
+                                   Space Viewer. Automatically assigned by the kernel (see UDP
+                                   entry).
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">32768-61000 (Protocol: UDP, Access:
+                                      Internal [External for BaseApp])</em></p>
+                        <p>Used by the server components: CellApp, CellAppMgr, BaseApp,
+                                   BaseAppMgr, DBMgr, MessageLogger and StatLogger. Only the BaseApp has
+                                   an external port.
+                        </p>
+                        <p>Automatically assigned by the kernel, in the range of the kernel
+                                   setting <code class="filename">/proc/sys/net/ipv4/ip_local_port_range</code>,
+                                   which defaults to 32768-61000.
+                        </p>
+                        <p>The BaseApp external port may be exempted from random
+                                   assignment, by specifying it in the
+                                   <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/server/bw.xml</code>
+                                   file's <span class="literal">baseApp</span> section's
+                                   <span class="literal">externalPorts/port</span> configuration options.
+                        </p>
+                        <p>The port chosen can be displayed via the Watcher interface
+                                   under:
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><span class="literal">nub/address</span> for internal
+                                                interfaces.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><span class="literal">nubExternal/address</span> for the external
+                                                interfaces on BaseApp and LoginApp.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Blocking_Ports_And_Related_Security_Considerations"></a>8.3.&nbsp;Blocking Ports and Related Security Considerations
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Since TCP/IP is not used externally, you can block all TCP traffic.
+                      Leave all UDP/IP ports 32768 and above open, as well as the login port
+                      (20013 by default). This range can be reduced if you specify possible
+                      ports in <span class="literal">baseApp/externalPorts/port</span> settings in
+                      <code class="filename">bw.xml</code>.
+               </p>
+               <p>Use of a separate firewall machine is discouraged. The BaseApp
+                      machines are designed to be the firewalls themselves, and perform a very
+                      similar proxying function for clients. Their amount of processing is small
+                      enough so that they can handle a whole network adapter's worth of Internet
+                      traffic. Adding another machine would only be a waste of hardware,
+                      maintenance time, and latency. BaseApps only listen on one UDP port
+                      &#8212; and so the whole TCP stack can be disabled on the external
+                      interface. The use of standard firewall software such as iptables may be
+                      an appropriate way to accomplish this.
+               </p>
+               <p>See chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/ch05.html" class="olink"><i>Cluster Configuration</i></a> in the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/index.html" class="olink">Server Installation Guide</a> for examples of using
+                      <code class="filename">iptables</code>.
+               </p>
+               <p>Network tools such as <span><strong class="command">lsof</strong></span> and
+                      <span><strong class="command">netstat</strong></span> should be consulted, to ensure that you are not
+                      running any daemons listening on the external (or common) interface. Apart
+                      from BWMachined, you should not need to run any daemons with BigWorld, but
+                      if you wish to, then you should ensure that their ports are blocked.
+                      BWMachined should not listen on the external interface, only the internal
+                      interface.
+               </p>
+               <p>Barring all TCP packets greatly improves the security of a BaseApp
+                      machine. TCP is a complicated protocol, and requires many tables and
+                      buffers to implement or firewall. By this rationale, the security of a
+                      BaseApp machine may be considered even better than that of an ordinary
+                      firewall, which must conditionally pass TCP packets.
+               </p>
+               <p>To reduce exposure to DDOS attacks, it is recommended that the
+                      BaseApp be left to choose, within the range allocated by the operating
+                      system, a random port. This way, if an attacker discovers the IP and port
+                      of one of the BaseApp machines, then it does not mean he will
+                      automatically know those details for the other BaseApp machines.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;7.&nbsp;Stress Testing with Bots&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;9.&nbsp;BigWorld Server Across Multiple Machines</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

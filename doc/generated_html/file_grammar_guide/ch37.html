@@ -1,0 +1,199 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;37.&nbsp;visual_rules.xml</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch36.html" title="Chapter&nbsp;36.&nbsp;.visual">
+      <link rel="next" href="ch38.html" title="Chapter&nbsp;38.&nbsp;.xml">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch37.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;37.&nbsp;<span class="literal">visual_rules.xml</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch36.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch38.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Visual_Rules_XML"></a>Chapter&nbsp;37.&nbsp;<span class="literal">visual_rules.xml</span></h2>
+                  </div>
+               </div>
+            </div>
+            <p>Used by 3ds Max and Maya visual exporters to validate the files before
+                 exporting, the set of rules is defined in
+                 <span class="literal">bigworld/tools/res/visual_rules.xml</span>. For more details,
+                 see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s
+                 chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch11.html" class="olink"><i>3ds Max and Maya Exporters</i></a>.
+            </p>
+            <p>The grammar of <span class="literal">visual_rules.xml</span> is listed
+                 below:
+            </p><pre class="programlisting">&lt;visual_rules.xml&gt;
+
+  *&lt;rule&gt;
+     &lt;identifier&gt;             <em class="replaceable"><code>string</code></em>            &lt;/identifier&gt;
+    ?&lt;parent&gt;                 <em class="replaceable"><code>string</code></em>            &lt;/parent&gt;
+    ?&lt;exportAs&gt;               normal|static|static with nodes &lt;/exportAs&gt;
+    ?&lt;path&gt;                   <em class="replaceable"><code>folder</code></em>            &lt;/path&gt;
+    ?&lt;filespec&gt;               <em class="replaceable"><code>string</code></em>            &lt;/filespec&gt;
+    ?&lt;minSize&gt;                <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> &lt;/minSize&gt;
+    ?&lt;maxSize&gt;                <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> &lt;/maxSize&gt;
+    ?&lt;maxNodesPerRenderSet&gt;   <em class="replaceable"><code>integer</code></em>           &lt;/maxNodesPerRenderSet&gt;
+    ?&lt;maxTriangles&gt;           <em class="replaceable"><code>integer</code></em>           &lt;/maxTriangles&gt;
+    ?&lt;minTriangles&gt;           <em class="replaceable"><code>integer</code></em>           &lt;/minTriangles&gt;
+    ?&lt;portals&gt;                true|false        &lt;/portals&gt;
+    ?&lt;portalSnap&gt;             <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> &lt;/portalSnap&gt;
+    ?&lt;portalDistance&gt;         <em class="replaceable"><code>float</code></em>             &lt;/portalDistance&gt;
+    ?&lt;portalOffset&gt;           <em class="replaceable"><code>float</code></em>             &lt;/portalOffset&gt;
+    *&lt;hardPoint&gt;              <em class="replaceable"><code>string</code></em>            &lt;/hardPoint&gt;
+    ?&lt;checkUnknownHardPoints&gt; true|false        &lt;/checkUnknownHardPoints&gt;
+   &lt;/rule&gt;
+
+&lt;/visual_rules.xml&gt;</pre><p><span class="citetitle">Grammar of
+                    <span class="literal">bigworld/tools/res/visual_rules.xml</span></span></p>
+            <p>The list below describes the tags in file
+                 <span class="literal">visual_rules.xml</span>:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">checkUnknownHardPoints</span></em></p>
+                     <p>Specified if the hard point not specified in the set of
+                              <span class="literal">&lt;hardPoint&gt;</span> tags should be flagged as
+                              error.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">exportAs</span></em></p>
+                     <p>Specifies how to save the visual. Can have one of the following
+                              values: <span class="literal">normal</span>, <span class="literal">static</span>, or
+                              <span class="literal">static with nodes</span>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">fileSpec</span></em></p>
+                     <p>Matching criteria (using wildcards) specifying the visuals for
+                              which this rule applies to. This option is not inherited via the tag
+                              parent.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">hardPoint</span></em></p>
+                     <p>Name of the hard point that the visual must have. The set of hard
+                              points to check against is the one formed by all hard points mentioned
+                              in all parents. This tag may be defined multiple times for the same
+                              rule.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">identifier</span></em></p>
+                     <p>Name of the rule.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">ma<span class="literal">xNodesPerRenderSet</span><sup>A</sup></em></p>
+                     <p>Maximum nodes allowed per renderset, <em class="emphasis">i.e</em>.,
+                              how many bones each geometric element is allowed to use for
+                              skinning.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">maxSize</span><sup>A</sup></em></p>
+                     <p>Maximum size of the visual in metres.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">maxTriangles</span><sup>A</sup></em></p>
+                     <p>Maximum number of triangles in the visual.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">minSize</span><sup>A</sup></em></p>
+                     <p>Minimum size of the visual in metres.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">minTriangles</span><sup>A</sup></em></p>
+                     <p>Minimum number of triangles in the visual.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">parent</span></em></p>
+                     <p>Name of the rule from which to inherit options.</p>
+                     <p>For each option, the plug-in will search up the hierarchy until it
+                              finds a match for it.
+                     </p>
+                     <p>The options <span class="literal">path</span> and
+                              <span class="literal">fileSpec</span> are not inherited.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">path</span></em></p>
+                     <p>Resource folder which visuals this rule applies to.</p>
+                     <p>This option is not inherited via the tag
+                              <span class="literal">parent</span>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">portalDistance</span><sup>A</sup></em></p>
+                     <p>Number of which the distance between the origin and the portal
+                              must be a multiple of.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">portalOffset</span><sup>A</sup></em></p>
+                     <p>Number of which the centre of the portal must be a multiple of on
+                              the portal plane.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">portals</span></em></p>
+                     <p>Specifies if the visual may have portals.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">portalSnap</span><sup>A</sup></em></p>
+                     <p>Number of which the bounding box of the portal must be a multiple
+                              of.
+                     </p>
+                     <p>A value must be specified for each dimension.</p>
+                  </li>
+               </ul>
+            </div>
+            <p><em class="emphasis"><em class="emphasis">A</em> &#8212; A value of zero
+                    indicates that the option should not be checked</em></p>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch36.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch38.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;36.&nbsp;<span class="literal">.visual</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;38.&nbsp;<span class="literal">.xml</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

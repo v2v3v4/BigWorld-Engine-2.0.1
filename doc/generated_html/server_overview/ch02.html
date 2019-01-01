@@ -1,0 +1,158 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;2.&nbsp;Rules of Thumb</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Overview">
+      <link rel="up" href="index.html" title="Server Overview">
+      <link rel="prev" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Introduction">
+      <link rel="next" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Concepts">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_overview/ch02.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;2.&nbsp;Rules of Thumb</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Rules_Of_Thumb"></a>Chapter&nbsp;2.&nbsp;Rules of Thumb
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p>This is a list of rules/ideas/philosophies that have been used in the
+                 design.
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">Scalability, reliability,
+                                 efficiency</em></p>
+                     <p>The general goal is to produce a scalable, reliable, and efficient
+                              system. This should be done while keeping as much simplicity and
+                              flexibility as possible.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">Occam's Razor</em></p>
+                     <p>The simplest design that satisfies all requirements should be
+                              considered the best, or in the words of Einstein, "Make things as simple
+                              as possible, but no simpler".
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">Improve the worst case</em></p>
+                     <p>In general (mainly when it comes to the client experience), the
+                              worst case should be improved over the average case. For example, it is
+                              not beneficial to have a blinding fast and accurate situation when a
+                              client is not near a cell boundary if the experience is poor when he is
+                              near one.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">Client/server bandwidth is
+                                 valuable</em></p>
+                     <p>The most important resource is the bandwidth between the client
+                              and server. After this, it is probably CPU, and then intra-server
+                              bandwidth.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">Keep information together; Avoid two-way
+                                 calls</em></p>
+                     <p>Information (or data) that is often used together should be easily
+                              accessed together. For example, a large amount of the data processed
+                              together in the game is related to objects that are geometrically close.
+                              It makes sense then to use data partitioning based on locality.
+                     </p>
+                     <p>It is also expensive to have to request information from a
+                              separate server machine when it is necessary. This is true for a number
+                              of reasons including the extra hops and coordination required and (maybe
+                              even more importantly) the reduced likelihood of being able to batch
+                              requests together.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">Avoid bottlenecks; Make the system
+                                 distributed</em></p>
+                     <p>The design should try to avoid single central points where things
+                              occur. This approach can cause performance bottlenecks and make the
+                              design non-scalable. It can also introduce a single point of failure,
+                              therefore raising fault tolerance issues.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">Where possible, do communication in
+                                 batches</em></p>
+                     <p>There is a fairly high overhead in sending a single packet. That
+                              is, it is a lot more expensive to send ten individual packets than it is
+                              to send one packet that is ten times bigger.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Introduction&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;Concepts</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

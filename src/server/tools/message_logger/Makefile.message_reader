@@ -1,0 +1,67 @@
+SO = bwlog
+SRCS =							\
+	bwlog_common				\
+	bwlog_reader				\
+	mlutil						\
+	file_handler				\
+	text_file_handler			\
+	binary_file_handler			\
+	unary_integer_file			\
+	hostnames					\
+	format_strings				\
+	log_component_names			\
+	log_string_interpolator		\
+	log_string_writer			\
+	log_string_printer			\
+	user_log					\
+	user_log_reader				\
+	user_segment				\
+	user_segment_reader			\
+	user_components				\
+	logging_component			\
+	log_time					\
+	log_entry_address			\
+	log_entry_address_reader	\
+	query_params				\
+	query_range					\
+	query_range_iterator		\
+	query_result				\
+	bwlog_module				\
+	py_bwlog					\
+	py_query					\
+	py_user_log					\
+	py_query_result				\
+
+
+ifndef MF_ROOT
+export MF_ROOT := $(subst /bigworld/src/server/tools/message_logger,,$(CURDIR))
+endif
+
+
+# Now figure out the platform architecture for MF_CONFIG
+include $(MF_ROOT)/bigworld/src/build/architecture.mak
+
+# We need a custom configuration now to allow building against
+# the sytem version of python.
+MF_REAL_CONFIG := $(MF_CONFIG)
+
+ifeq (,$(findstring SystemPython,$(MF_CONFIG)))
+override MF_CONFIG := $(MF_CONFIG)_SystemPython
+endif
+
+export MF_CONFIG
+
+# OUTPUTDIR is required rather than INSTALL_DIR for building .so's
+OUTPUTDIR = $(MF_ROOT)/bigworld/tools/server/bin/$(MF_REAL_CONFIG)
+
+# NB: the ordering here is important because of the dynamic library that is
+#     built. errors will not show up until runtime.
+MY_LIBS = network pyscript resmgr server math zip cstdmf
+
+# Force the libraries we depend on to build for our MF_CONFIG
+MAKE_LIBS=1
+
+USE_PYTHON = 1
+
+include $(MF_ROOT)/bigworld/src/build/common.mak
+

@@ -1,0 +1,1 @@
+Please put this folder into spaces. So you will be able to see how flora appears on the terrian with different textures assigned. This space is independent from the general flora.xml, so you can play with the scrips. You can modify the values and check what is controled by them.

@@ -1,0 +1,304 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>How To Build Vehicles</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_Build_Vehicle"></a>How To Build Vehicles</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Introduction">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#xref_Controlling_Vehicles">2. Controlling Vehicles</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e53">2.1. <code class="varname">controlledBy</code></a></span></dt><dt><span class="section"><a href="#d0e81">2.2. <code class="methodname">BigWorld.player(
+    <em class="replaceable"><code>&lt;entity&gt;</code></em> )</code></a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Boarding_And_Alighting_Vehicles">3. Boarding and Alighting Vehicles</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e129">3.1. Functions</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e132">3.1.1. <code class="methodname">Entity.boardVehicle()</code></a></span></dt><dt><span class="section"><a href="#d0e160">3.1.2. <code class="methodname">Entity.alightVehicle()</code></a></span></dt></dl></dd><dt><span class="section"><a href="#d0e191">3.2. Apply gravity and moving platforms</a></span></dt><dt><span class="section"><a href="#d0e210">3.3. Player vehicle</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Models_And_Animations">4. Models and Animation</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e225">4.1. Pilot models</a></span></dt><dt><span class="section"><a href="#d0e234">4.2. Animating the vehicle</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Asynchronous_Considerations">5. Asynchronous and Ghost Cell Considerations</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e253">5.1. Entering the world</a></span></dt><dt><span class="section"><a href="#d0e266">5.2. Observing avatars interacting with vehicles</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Ripper_Example">6. Ripper Example</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e315">6.1. Base Implementation</a></span></dt><dt><span class="section"><a href="#d0e320">6.2. Cell Implementation</a></span></dt><dt><span class="section"><a href="#d0e365">6.3. Client implementation</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e476">6.3.1. PlayerRipper</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e623">6.4. Ripper definition file</a></span></dt><dt><span class="section"><a href="#d0e690">6.5. Ripper editor</a></span></dt><dt><span class="section"><a href="#d0e700">6.6. Ripper requirements of Avatar</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Introduction"></a>Chapter&nbsp;1.&nbsp;Introduction</h2></div></div></div><p>Vehicles are entities designed to be piloted and/or ridden by avatars.
+  This document will guide you through the steps necessary to implement
+  vehicles using BigWorld Technology.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Examples of vehicles would be:</p><div class="itemizedlist"><ul type="disc"><li><p>A car or a horse that can be controlled by the player.</p></li><li><p>A large boat that many avatars can board.</p></li><li><p>A moving platform (often useful in puzzle games) that can move
+        vertically (a lift), horizontally, or in any other direction.</p></li></ul></div></div><p>This document makes frequent references to an example vehicle included
+  in FantasyDemo, called Ripper. It is a pilotable hover bike vehicle that can
+  carry only the pilot.</p><div class="informalfigure"><div class="mediaobject"><img src="images/fantasydemos_ripper_vehicle_with_ranger_on_board.png"><span class="caption"><p>FantasyDemo's Ripper vehicle with Ranger on
+      board</p></span></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Controlling_Vehicles"></a>Chapter&nbsp;2.&nbsp;Controlling Vehicles</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e53">2.1. <code class="varname">controlledBy</code></a></span></dt><dt><span class="section"><a href="#d0e81">2.2. <code class="methodname">BigWorld.player(
+    <em class="replaceable"><code>&lt;entity&gt;</code></em> )</code></a></span></dt></dl></div><p>This document assumes that the majority of vehicles will be directly
+  controllable by the player. This requires reversing the direction of vehicle
+  updates, and diverting user inputs toward the vehicle.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e53"></a>2.1.&nbsp;<code class="varname">controlledBy</code></h2></div></div></div><p>The <code class="varname">controlledBy</code> property sets from whom updates
+    to the vehicle's position will come from.</p><p>Setting the vehicle's controller to the player gives responsibility
+    for the vehicle's movement to the player's client.</p><pre class="programlisting"># Give control of the Ripper to the client. At this point the
+# client Ripper will get a .physics member.
+self.controlledBy = avatar.base</pre><p><span class="citetitle"><code class="filename">cell/Ripper.py</code></span></p><p>In the example above, <code class="varname">controlledBy</code> is set to the
+    player's client, thus giving it the ability to dictate the position of the
+    vehicle. Setting <code class="varname">controlledBy</code> back to
+    <span class="literal">None</span> returns control to the vehicle's cell.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e81"></a>2.2.&nbsp;<code class="methodname">BigWorld.player(
+    <em class="replaceable"><code>&lt;entity&gt;</code></em> )</code></h2></div></div></div><p>In order to allow the vehicle to respond to user inputs, you can
+    make the vehicle become the player.</p><p>To do this, you will need to implement a specialisation of the
+    vehicle's client entity (in the same file) with the name
+    <code class="classname">Player<em class="replaceable"><code>&lt;entity
+    name&gt;</code></em></code>. For example, a client entity type of
+    <code class="classname">Avatar</code> would require a corresponding
+    <code class="classname">PlayerAvatar</code>.</p><p>Setting the player:</p><pre class="programlisting">BigWorld.player( <em class="replaceable"><code>&lt;entity_to_become_player&gt;</code></em> )</pre><p>Changing the player as above will trigger the become player and
+    become non-player events in the appropriate entities. You can use these
+    callbacks to configure and later cleanup the user input handling
+    mechanisms.</p><pre class="programlisting">class PlayerRipper( Ripper ):
+    def onBecomePlayer( self ):
+        self.setupKeyBindings()
+        self.filter = BigWorld.PlayerAvatarFilter()
+        FantasyDemo.cameraType( keys.FLEXI_CAM )
+        ...
+
+    def onBecomeNonPlayer( self ):
+        self.pilotAvatar = None
+        self.filter = BigWorld.DumbFilter()
+        self.keyBindings = []</pre><p><span class="citetitle"><code class="filename">client/Ripper.py</code></span></p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Be careful when changing from a player vehicle to a non-player
+      vehicle from within a player vehicle's member function. Changing the
+      player back to the <code class="classname">Avatar</code> will cause the type of
+      the vehicle to change immediately.</p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Boarding_And_Alighting_Vehicles"></a>Chapter&nbsp;3.&nbsp;Boarding and Alighting Vehicles</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e129">3.1. Functions</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e132">3.1.1. <code class="methodname">Entity.boardVehicle()</code></a></span></dt><dt><span class="section"><a href="#d0e160">3.1.2. <code class="methodname">Entity.alightVehicle()</code></a></span></dt></dl></dd><dt><span class="section"><a href="#d0e191">3.2. Apply gravity and moving platforms</a></span></dt><dt><span class="section"><a href="#d0e210">3.3. Player vehicle</a></span></dt></dl></div><p>Boarding and alighting changes whether and entity's position is known
+  relative to the world or relative to another entity such as a vehicle. When
+  one entity boards another, it moves with the vehicle that it has boarded.
+  This is most useful for vehicles where the entities are able to move around,
+  such as the deck of a ship, but can also be useful when implementing
+  vehicles where the avatar sits in a specific seat.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e129"></a>3.1.&nbsp;Functions</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e132"></a>3.1.1.&nbsp;<code class="methodname">Entity.boardVehicle()</code></h3></div></div></div><p>Boarding a vehicle makes the entity its passenger, and subject to
+      its movements. Which vehicle the entity has boarded can be found through
+      the entity's <code class="varname">vehicle</code> property, available on both the
+      client and cell.</p><pre class="programlisting">def requestBoardVehicle( self, sourceVehicleID ):
+    vehicle = BigWorld.entities[ sourceVehicleID ]
+    self.boardVehicle( sourceVehicleID )
+    vehicle.passengerBoarded( self.id )</pre><p><span class="citetitle"><code class="filename">cell/Avatar.py</code></span></p><p>The <em class="parameter"><code>vehicleID</code></em> parameter is the entity ID of
+      the vehicle that you are boarding (it cannot be <span class="literal">None</span>
+      or <span class="literal">0</span>).</p><p>This function changes the space of the entity to that of the
+      vehicle, and sets the entity's vehicle property.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e160"></a>3.1.2.&nbsp;<code class="methodname">Entity.alightVehicle()</code></h3></div></div></div><p>Having an entity alight from its vehicle makes its movement
+      relative to the world.</p><pre class="programlisting">def requestAlightVehicle( self, sourceVehicleID ):
+    vehicle = BigWorld.entities[ sourceVehicleID ]
+    if self.vehicle != None:
+        self.alightVehicle()
+    vehicle.passengerAlighted( self.id )</pre><p><span class="citetitle"><code class="filename">cell/Avatar.py</code></span></p><p>This function changes the space of the entity from that of the
+      vehicle to that of the world.</p><p>It also sets the entity's <code class="varname">vehicle</code> property to
+      <span class="literal">None</span>. Do not call this function if the entity is not
+      aboard a vehicle.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Both <code class="methodname">boardVehicle()</code> and
+        <code class="methodname">alightVehicle()</code> must be used only from within
+        member functions of the entity's cell. This is because they require
+        the real entity, not a ghost of an entity that is in reality in a
+        different cell.</p></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e191"></a>3.2.&nbsp;Apply gravity and moving platforms</h2></div></div></div><p>It is important to remember to disable falling when using these
+    functions.</p><p>Falling objects automatically board and alight based on whether they
+    are standing on the world, in mid-air, or are standing on a
+    <code class="classname">PyModelObstacle</code> marked with a
+    <span class="literal">vehicleID</span>. This mechanism will override whatever value
+    you set, therefore the need to disable falling.</p><pre class="programlisting">self.pilotAvatar.physics.fall = False</pre><p><span class="citetitle"><code class="filename">client/Ripper.py</code></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e210"></a>3.3.&nbsp;Player vehicle</h2></div></div></div><p>To become the player, the vehicle requires a player specialisation
+    of the vehicle. The type of the vehicle is changed dynamically to and from
+    its player variation.</p><pre class="programlisting">import BigWorld
+
+class Ripper( BigWorld.Entity ):
+    def __init__( self ):
+        BigWorld.Entity.__init__( self )
+
+    def enterWorld( self ):
+        pass
+
+    def leaveWorld( self ):
+        pass
+
+class PlayerRipper( Ripper ):
+    def onBecomePlayer( self ):
+        pass
+
+    def onBecomeNonPlayer( self ):
+        pass
+
+    def handleKeyEvent( self, isDown, key, mods ):
+        return True</pre><p><span class="citetitle">Outline of
+    <code class="filename">client/Ripper.py</code></span></p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Models_And_Animations"></a>Chapter&nbsp;4.&nbsp;Models and Animation</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e225">4.1. Pilot models</a></span></dt><dt><span class="section"><a href="#d0e234">4.2. Animating the vehicle</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e225"></a>4.1.&nbsp;Pilot models</h2></div></div></div><p>To display characters seated in or on the vehicle, use the entity's
+    model as an attachment. Entities themselves cannot be used as attachments,
+    so you will need to remove the model first, and then attach it to a hard
+    point on the vehicle.</p><pre class="programlisting">pilotModel = self.pilotAvatar.model    # hold the model with a local
+self.pilotAvatar.model = None          # detach model from entity
+self.model.mount = pilotModel          # attach model to hard point</pre><p>For each seat in the vehicle, you will need a separate hard point,
+    and a corresponding hard point in the avatar's model.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e234"></a>4.2.&nbsp;Animating the vehicle</h2></div></div></div><p>Controlling the animations of passengers and vehicles is likely to
+    be very vehicle-specific, and so might be implemented in script on a
+    per-vehicle basis, rather than using the Action Matcher.</p><p>In the Ripper example, a simple Action Matcher is implemented using
+    lists of single frame and transition animations. A method called during
+    the hover vehicle physics tick,
+    <code class="methodname">PlayerRipper.checkAnims()</code>, manages the ripper's
+    animation in flight.</p><pre class="programlisting"> vehicleActions = [ "RIdle",
+                    "RTurnLeft",
+                    "RTurnRight",
+                    "Stop",
+                    "Thrust" ]
+
+  def checkAnims( self ):
+     ...
+
+     if self.wantTurn != 0:
+         act = (self.wantTurn+1)/2 + 1
+     elif self.wantMove != 0:
+         act = (self.wantMove+1)/2 + 3
+     else:
+         act = 0
+
+     act = int(act)
+
+     ripperAction = self.model.action(Ripper.vehicleActions[act])
+     ripperAction()
+    ...</pre><p><span class="citetitle"><code class="filename">client/Ripper.py</code></span></p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Asynchronous_Considerations"></a>Chapter&nbsp;5.&nbsp;Asynchronous and Ghost Cell Considerations</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e253">5.1. Entering the world</a></span></dt><dt><span class="section"><a href="#d0e266">5.2. Observing avatars interacting with vehicles</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e253"></a>5.1.&nbsp;Entering the world</h2></div></div></div><p>When using the board / alight vehicle mechanism, the passenger's
+    position is defined in terms of the vehicle. As a result, passengers will
+    always enter the world after the vehicle. To allow the vehicle to
+    correctly handle this, we require some form of notification of the
+    passenger's entry into the world.</p><p>The excerpt below illustrates how to achieve this:</p><pre class="programlisting"># This function is called by avatar when it enters the world.
+def passengerEnterWorld( self, pilot ):
+    pilot.model.visible = False
+    pilot.model.motors[0].entityCollision = False
+    if self.model.mount == None:
+        pilotModel = pilot.model
+        pilotModel.tracker = None
+        pilot.model = makeModel( pilot.modelNumber, None )
+        pilot.model.visible = False
+        self.model.mount = pilotModel
+        self.model.mount.RipperPilotIdle()
+        self.model.mount.visible = True
+        pilot.targetCaps = []</pre><p><span class="citetitle"><code class="filename">client/Ripper.py</code></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e266"></a>5.2.&nbsp;Observing avatars interacting with vehicles</h2></div></div></div><p>Communication with third parties is done via the vehicle's cell. To
+    do this, have the vehicle cell broadcast any state-changing responses to
+    <code class="varname">self.allClients</code>, with the ID of the affected avatar as
+    a parameter.</p><pre class="programlisting">def passengerBoarded( self, sourceAvatarID ):
+    # Notify all clients about the Ripper being mounted.
+    self.allClients.mountVehicle( True, sourceAvatarID )</pre><p><span class="citetitle"><code class="filename">client/Ripper.py</code></span></p><p>Remember that third parties might not have both the vehicle and its
+    passengers in their area of interest, and so the ID might not be
+    immediately resolvable into an entity. To handle this situation, the
+    avatar should notify vehicles they are riding when they themselves enter
+    the world. The passenger will never enter the world before their vehicle,
+    as its position is known only relative to the former.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Ripper_Example"></a>Chapter&nbsp;6.&nbsp;Ripper Example</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e315">6.1. Base Implementation</a></span></dt><dt><span class="section"><a href="#d0e320">6.2. Cell Implementation</a></span></dt><dt><span class="section"><a href="#d0e365">6.3. Client implementation</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e476">6.3.1. PlayerRipper</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e623">6.4. Ripper definition file</a></span></dt><dt><span class="section"><a href="#d0e690">6.5. Ripper editor</a></span></dt><dt><span class="section"><a href="#d0e700">6.6. Ripper requirements of Avatar</a></span></dt></dl></div><p>The Ripper is a simple single-passenger hover bike, designed to
+  demonstrate vehicle implementation. In this section, Ripper's implementation
+  is detailed to help in its use as a basis for new vehicles.</p><p>The Ripper consists of the following files:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">fantasydemo/res/scripts/base/Ripper.py</code></p></li><li><p><code class="filename">fantasydemo/res/scripts/cell/Ripper.py</code></p></li><li><p><code class="filename">fantasydemo/res/scripts/client/Ripper.py</code></p></li><li><p><code class="filename">fantasydemo/res/scripts/entity_defs/Ripper.def</code></p></li><li><p><code class="filename">fantasydemo/res/scripts/editor/Ripper.py</code></p></li></ul></div><p>It also requires an entry in
+  <code class="filename">fantasydemo/res/scripts/entities.xml</code> file, and some
+  functionality in the Avatar's client and cell.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e315"></a>6.1.&nbsp;Base Implementation</h2></div></div></div><p>The Ripper's base is empty, as it does not need to do more than is
+    provided by the default base of FantasyDemo.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e320"></a>6.2.&nbsp;Cell Implementation</h2></div></div></div><p>The Ripper's cell manages control of the Ripper, and is responsible
+    for notifying all interested clients of such changes.</p><p>When the Ripper is first created, the cell has control of its
+    movements, but passes this ability to clients as they attempt to use
+    it.</p><p>The Ripper's cell contains the methods described in the list
+    below:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><span class="literal">mountVehicle( self,
+        sourceAvatarID )</span></em></p><p>Mount process stage 4 of 8, this is a Ripper specified method
+        for mounting the vehicle. In this method, control is transferred to
+        the client, and the specified avatar's cell is requested to board the
+        Ripper. The board request of the avatar forms stage 5 of 8 of the
+        dismount process.</p></li><li><p><em class="emphasis"><span class="literal">passengerBoarded( self,
+        sourceAvatarID )</span></em></p><p>Mount process stage 6 of 8, this is a callback from the pilot's
+        cell, and is specific to the Avatar implementation</p></li><li><p><em class="emphasis"><span class="literal">dismountVehicle( self,
+        sourceAvatarID )</span></em></p><p>Dismount process stage 3 of 7, this is a Ripper-specific method
+        for dismounting the vehicle In this method, the Ripper's cell takes
+        back control of its movement, and requests that the avatar alight. The
+        avatar's alight request forms stage 4 of 7 of the dismount
+        process.</p></li><li><p><em class="emphasis"><span class="literal">passengerAlighted( self,
+        sourceAvatarID )</span></em></p><p>Dismount process stage 5 of 7, this is a callback from the
+        pilot's cell, and is specific to the Avatar implementation.</p></li><li><p><em class="emphasis"><span class="literal">onLoseControlledBy( self, id
+        )</span></em></p><p>This is a server event handler that should be implemented by all
+        vehicles that transfer control to a client at some point. It is called
+        when the connection to a passenger's client is lost, and so gives the
+        vehicle the opportunity to return to a good state</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e365"></a>6.3.&nbsp;Client implementation</h2></div></div></div><p>The client side of the Ripper is the largest part of the
+    implementation, as it handles interaction and animation.</p><p>Ripper's client contains the methods described in the list
+    below:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><span class="literal">enterWorld( self
+        )</span></em></p><p>Implemented by most entities, for the Ripper contains cosmetic
+        code that does not affect functionality. Particle systems, shadows,
+        and the initial state of animation is set up. The passenger will
+        always enter the world after the vehicle, requiring a separate
+        <code class="methodname">onPassengerEnterWorld()</code>.</p></li><li><p><em class="emphasis"><span class="literal">prerequisites( self
+        )</span></em></p><p>Part of the asynchronous loading system employed by the BigWorld
+        client. By returning a list of assets used by the Ripper, pauses from
+        blocking loads can be avoided.</p></li><li><p><em class="emphasis"><span class="literal">passengerEnterWorld( self, pilot
+        )</span></em></p><p>Called by the Avatar implementation in FantasyDemo when an
+        Avatar enters the world on a vehicle. It is used by the Ripper to
+        setup the pilot model and animation.</p></li><li><p><em class="emphasis"><span class="literal">leaveWorld( self
+        )</span></em></p><p>Implemented by most entities, for the Ripper contains only some
+        minor cleanup code for particle systems and shadows. The client caches
+        entities that leave the area of interest, so be sure that the vehicle
+        will return to a good state if <code class="methodname">enterWorld()</code>
+        is called on it later.</p></li><li><p><em class="emphasis"><span class="literal">use( self
+        )</span></em></p><p>Mount process stage 1 of 8, this is an event handler override
+        for when the entity is used. In the case of the Ripper, it is used to
+        initiate the mounting process.</p></li><li><p><em class="emphasis"><span class="literal">walkToMountPosition( self,
+        success )</span></em></p><p>Mount process stage 2 of 8, this recursive function lines up the
+        player and the Ripper for the mounting animations by using the
+        <span class="literal">seek</span> commands in the player's physics object</p></li><li><p><em class="emphasis"><span class="literal">arriveAtMountPosition( self,
+        success )</span></em></p><p>Mount process stage 3 of 8, this callback is given to the
+        <span class="literal">seek</span> function to notify the Ripper when the player
+        has arrived. On success, the client-side Ripper will contact its cell
+        and attempt to acquire control for this client.</p></li><li><p><em class="emphasis"><span class="literal">mountVehicle( self, succeeded,
+        pilotAvatarID )</span></em></p><p>Mount process stage 7 of 8, this is a broadcast sent to all
+        clients interested in this Ripper. It informs them that an Avatar is
+        mounting the vehicle &#8212; the affected Avatar also receives this
+        call, and uses the ID parameter to identify itself. The Ripper becomes
+        the player in this case, and plays the mounting animations to
+        demonstrate this</p></li><li><p><em class="emphasis"><span class="literal">finishMountVehicle( self
+        )</span></em></p><p>Mount process stage 8 of 8, this is called at the end of the
+        mount animation using the
+        <code class="methodname">BigWorld.callback()</code><sup>[<a name="d0e450" href="#ftn.d0e450">1</a>]</sup> mechanism. It completes the mount process, unlocking the
+        Ripper controls.</p></li><li><p><em class="emphasis"><span class="literal">dismountVehicle( self,
+        pilotAvatarID )</span></em></p><p>Dismount process stage 6 of 7, this is the second broadcast
+        method used by the cell to notify clients of the Ripper's dismount in
+        progress. As in <code class="methodname">mountVehicle()</code>, the pilot ID
+        is provided to identify the client dismounting.</p></li><li><p><em class="emphasis"><span class="literal">finishDismountVehicle( self
+        )</span></em></p><p>Dismount process stage 7 of 7. Completing the dismount
+        animation, the player's model is returned to the avatar, which is then
+        released back to user control.</p></li></ul></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e476"></a>6.3.1.&nbsp;PlayerRipper</h3></div></div></div><p>PlayerRipper's client contains the methods described in the list
+      below:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><span class="literal">onBecomePlayer( self
+          )</span></em></p><p>Event handler triggered when the vehicle becomes a
+          PlayerRipper. Note that the PlayerRipper's constructor is not
+          called, as the object is constructed as a normal Ripper and then
+          later changes type to PlayerRipper.</p></li><li><p><em class="emphasis"><span class="literal">setupKeyBindings( self
+          )</span></em></p><p>Method used by the Ripper to setup the player's
+          controls.</p></li><li><p><em class="emphasis"><span class="literal">onBecomeNonPlayer( self
+          )</span></em></p><p>Event triggered when the Ripper changes back into a plain
+          Ripper object. Upon receiving this, clean up any members created
+          during <span class="literal">onBecomePlayer</span> event, such as key
+          bindings.</p></li><li><p><em class="emphasis"><span class="literal">handleKeyEvent( self, isDown,
+          key, mods )</span></em></p><p>Calls functions mapped to key inputs. This is basically the
+          same as the one used in the Fantasydemo Avatar.</p></li><li><p><em class="emphasis"><span class="literal">updateThrust( self
+          )</span></em></p><p>Method called as part of the key event handling process to
+          update the physics object and animations.</p></li><li><p><em class="emphasis"><span class="literal">beginDismount( self, isDown
+          )</span></em></p><p>Dismount process stage 1 of 7, this method shuts down the
+          Ripper, so that it will fall to the ground, ready for the player to
+          alight.</p></li><li><p><em class="emphasis"><span class="literal">dismountStep( self
+          )</span></em></p><p>Dismount process stage 2 of 7, this method finishes the
+          landing initiated in <span class="literal">beginDismount</span>, before
+          initiating the cell's dismount process.</p></li><li><p><em class="emphasis"><span class="literal">checkAnims( self
+          )</span></em></p><p>Method called to tick the animation of hover vehicles, as the
+          generic action matcher is not suitable for this style of
+          vehicle.</p></li><li><p><em class="emphasis"><span class="literal">playTransitionAction( self,
+          act, oldTurn, oldMove )</span></em></p><p>Utility function used by <span class="literal">checkAnims</span> to
+          blend between different states of turning.</p></li><li><p><em class="emphasis"><span class="literal">handleConsoleInput( self,
+          string )</span></em></p><p>Method that passes its calls onto the avatar that handles the
+          chat console.</p></li><li><p><em class="emphasis"><span class="literal">onCollide( self, newMomentum,
+          collidePosition, severity, triangleFlags
+          )</span></em></p><p>Method used by the Rippers to trigger sounds and particle
+          effects. The Ripper is a physical body in the world, and so can
+          receive collision callbacks.</p></li><li><p><em class="emphasis">moveForward( self, isDown
+          )</em></p><p>Key event handlers that translate the relevant 'key down'
+          state into a numerical one or zero. For use in</p></li><li><p><em class="emphasis">moveBackward( self, isDown
+          )</em></p><p>See the <span class="literal">moveForward( self, isDown )</span> entry
+          above.</p></li><li><p><em class="emphasis"><span class="literal">turnLeft( self, isDown
+          )</span></em></p><p>See the <span class="literal">moveForward( self, isDown )</span> entry
+          above.</p></li><li><p><em class="emphasis"><span class="literal">turnRight( self, isDown
+          )</span></em></p><p>See the <span class="literal">moveForward( self, isDown )</span> entry
+          above.</p></li><li><p><em class="emphasis"><span class="literal">moveUpward( self, isDown
+          )</span></em></p><p>See the <span class="literal">moveForward( self, isDown )</span> entry
+          above.</p></li><li><p><em class="emphasis"><span class="literal">updateThrust</span></em></p><p>See the <span class="literal">moveForward( self, isDown )</span> entry
+          above.</p></li></ul></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e623"></a>6.4.&nbsp;Ripper definition file</h2></div></div></div><p>Located under <code class="filename">fantasydemo/res/scripts/entity_defs</code>, the
+    <code class="filename">Ripper.def</code> definition file for the Ripper contains
+    the following properties:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><code class="varname">pilotID</code></em></p><p>Current pilot of the vehicle It is used in client-side checks to
+        prevent multiple mount attempts, and also for displaying the pilot
+        model on the vehicle.</p></li></ul></div><p>The file declares the following client methods:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><code class="methodname">mountVehicle()</code></em></p><p>Function call sent to all interested clients, to notify them of
+        an avatar boarding the Ripper.</p></li><li><p><em class="emphasis"><code class="methodname">dismountVehicle()</code></em></p><p>Function call sent to all interested clients, to notify them of
+        an avatar dismounting the Ripper.</p></li></ul></div><p>It also declares the following cell methods:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><code class="methodname">mountVehicle()</code></em></p><p>Function used by the client to actually mount the vehicle and
+        gain control of it. This function will fail if the Ripper is already
+        occupied.</p></li><li><p><em class="emphasis"><code class="methodname">dismountVehicle()</code></em></p><p>Function called by either the client or the controller lost
+        event handler to return the Ripper to a mountable state.</p></li><li><p><em class="emphasis"><code class="methodname">passengerBoarded()</code></em></p><p>Callback received from the avatar when it has boarded the
+        vehicle entity.</p></li><li><p><em class="emphasis"><code class="methodname">passengerAlighted()</code></em></p><p>Callback received from the avatar when it has alighted from the
+        vehicle entity.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e690"></a>6.5.&nbsp;Ripper editor</h2></div></div></div><p>Located under <code class="filename">fantasydemo/res/scripts/editor</code>, the purpose
+    of the editor Ripper is to provide the world editor with a representative
+    model that it can display.</p><p>For the Ripper, we just use its model.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e700"></a>6.6.&nbsp;Ripper requirements of Avatar</h2></div></div></div><p>To work with vehicles, the Avatar entity must implement the client
+    methods below:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><span class="literal">enterWorld( self
+        )</span></em></p><p>In order to display correctly on clients observing other Avatars
+        riding Rippers, the Avatar must notify its vehicle when it enters the
+        world, as this will be after the vehicle enters it. In FantasyDemo,
+        this is done using the function
+        <code class="methodname">onPassengerEnterWorld()</code>.</p></li></ul></div><p>It must also implement the following cell methods:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><span class="literal">requestBoardVehicle( self,
+        sourceVehicleID )</span></em></p><p>Because the entity board and alight functions cannot be called
+        on a ghost cell, they need to be wrapped in ghost-safe functions
+        defined in the definition file.</p></li><li><p><em class="emphasis"><span class="literal">requestAlightVehicle( self,
+        sourceVehicleID )</span></em></p><p>Similar to <code class="methodname">requestBoardVehicle()</code> this
+        provides a ghost-safe wrapper for the entity alight vehicle
+        functionality. It also does some checking, to make it safe to call
+        multiple times before remounting.</p></li><li><p><em class="emphasis"><span class="literal">chat()</span></em></p><p>In FantasyDemo, the chat system is implemented through the
+        avatar cell. Because of this, the Ripper assumes its
+        implementation.</p></li></ul></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e450" href="#d0e450">1</a>] </sup>For details on <code class="methodname">BigWorld.callback()</code>,
+            see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html#Client_Python_API" class="olink">Client Python API</a>.</p></div></div></div></div></div></body></html>

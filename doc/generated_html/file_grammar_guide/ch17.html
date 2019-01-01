@@ -1,0 +1,363 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;17.&nbsp;gui.xml</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch16.html" title="Chapter&nbsp;16.&nbsp;.gui">
+      <link rel="next" href="ch18.html" title="Chapter&nbsp;18.&nbsp;LightMapSection">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch17.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;17.&nbsp;<span class="literal">gui.xml</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch16.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch18.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Gui_XML"></a>Chapter&nbsp;17.&nbsp;<span class="literal">gui.xml</span></h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch17.html#d0e4668">17.1. ItemSection</a></span></dt>
+               </dl>
+            </div>
+            <p>The GUI XML file is used to configure WorldEditor's menus and
+                 toolbars.
+            </p>
+            <p>Defined in
+                 <span class="literal">bigworld/tools/worldeditor/resources/data</span>, the grammar of
+                 <span class="literal">gui.xml</span> is illustrated below:
+            </p><pre class="programlisting">&lt;GUI&gt;
+  <em class="emphasis">ItemSection</em>
+&lt;/GUI&gt;</pre><p><span class="citetitle">Grammar of
+                    <span class="literal">bigworld/tools/worldeditor/resources/data/gui.xml</span></span></p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4668"></a>17.1.&nbsp;ItemSection
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The grammar of <em class="emphasis">ItemSection</em> is
+                      illustrated below:
+               </p><pre class="programlisting">*&lt;item&gt;
+   &lt;name&gt;          <em class="replaceable"><code>string</code></em>                       &lt;/name&gt; 
+   &lt;type&gt;         [ACTION|CHILD|CHOICE|EXPANDED_CHOICE|GROUP|SEPARATOR|TOGGLE] &lt;/type&gt;
+  [ItemSection]
+  [&lt;width&gt;         <em class="replaceable"><code>integer</code></em>                      &lt;/width&gt;        ]
+  [&lt;displayName&gt;   <em class="replaceable"><code>string</code></em>                       &lt;/displayName&gt;  ]
+  [&lt;description&gt;   <em class="replaceable"><code>string</code></em>                       &lt;/description&gt;  ]
+  [&lt;shortcut&gt;      <em class="replaceable"><code>string</code></em>                       &lt;/shortcut&gt;     ]
+  [&lt;updater&gt;       <em class="replaceable"><code>string</code></em>                       &lt;/updater&gt;      ]
+  [&lt;commandID&gt;     <em class="replaceable"><code>integer</code></em>                      &lt;/commandID&gt;    ]
+  [&lt;action&gt;        <em class="replaceable"><code>string</code></em>                       &lt;/action&gt;       ]
+  [&lt;imageHot&gt;      <em class="replaceable"><code>file:x_bgn,y_bgn,x_end,y_end</code></em> &lt;/imageHot&gt;     ]
+  [&lt;imageDisabled&gt; <em class="replaceable"><code>file:x_bgn,y_bgn,x_end,y_end</code></em> &lt;/imageDisabled&gt;]
+  [&lt;imageNormal&gt;   <em class="replaceable"><code>file:x_bgn,y_bgn,x_end,y_end</code></em> &lt;/imageNormal&gt;  ]
+  [&lt;toolMode&gt;      <em class="replaceable"><code>string</code></em>                       &lt;/toolMode&gt;     ]
+  [&lt;transparency&gt;  [0-255],[0-255],[0-255]      &lt;/transparency&gt; ]
+ &lt;/item&gt;</pre><p><span class="citetitle">Grammar of <em class="emphasis">ItemSection</em></span></p>
+               <p>The list below describes the tags in <em class="emphasis">ItemSection</em>:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">action</span></em></p>
+                        <p>C++ function, Python method, or expression updating value of a
+                                   tag in <span class="literal">options.xml</span> to be called when the item is
+                                   fired (<em class="emphasis">i.e.</em>, pressed, selected, etc...) &#8212;
+                                   <span class="literal">options.xml</span> is located in
+                                   <span class="literal">bigworld/tools/worldeditor</span>; for details on the
+                                   file's grammar, see <a href="ch25.html#xref_options_xml_WorldEditor" title="25.4.&nbsp;WorldEditor">WorldEditor</a>.
+                        </p>
+                        <p>The possible values for this tag are described below:</p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><em class="emphasis">Type: C++ function</em></p>
+                                 <p><em class="emphasis">Defined in the tool's source
+                                                   code.</em></p>
+                                 <p><em class="emphasis">Example</em>:
+                                                <span class="literal">newSpace</span> (in <span class="literal">MainMenu</span><span class="symbol">&#8594;</span><span class="literal">File</span><span class="symbol">&#8594;</span><span class="literal">CreateNewSpace</span>)
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis">Type: Python method</em></p>
+                                 <p><em class="emphasis">Defined in any Python script located in
+                                                   <span class="literal">bigworld\tools\worldeditor\resources\scripts</span>.</em></p>
+                                 <p><em class="emphasis">Example</em>:
+                                                <span class="literal">doQuickSave</span> (in
+                                                <span class="literal">MainMenu</span><span class="symbol">&#8594;</span><span class="literal">File</span><span class="symbol">&#8594;</span><span class="literal">QuickSave</span>)
+                                 </p>
+                                 <p>Please note that if the method is defined in
+                                                <span class="literal">UIExt.py</span>, then the method need not be appended
+                                                by the module name. For example, to declare
+                                                <span class="literal">UIAdapter.py</span>'s method
+                                                <span class="literal">updateSelectionFilter</span> as the updater, you would
+                                                have to specify the value
+                                                <span class="literal">UIAdapter.updateSelectionFilter</span>.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis">Expression updating value of a tag in
+                                                   <span class="literal">options.xml</span></em></p>
+                                 <p><em class="emphasis">Defined inline (using C syntax)</em></p>
+                                 <p><em class="emphasis">Example</em>:
+                                                <span class="literal">render/terrain/wireFrame = 1</span> (in
+                                                <span class="literal">MainToolBar</span><span class="symbol">&#8594;</span><span class="literal">TerrainWireframe</span><span class="symbol">&#8594;</span><span class="literal">ShowTerrainWireframe</span>.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">commandID</span></em></p>
+                        <p>ID required by some UI item, like sub-menus or toolbar
+                                   buttons.
+                        </p>
+                        <p>Usually GUIManager can generate the command ID automatically,
+                                   but sometimes a specific command ID might be needed for an UI
+                                   item.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">description</span></em></p>
+                        <p>Text to be displayed in the item's tooltip.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">displayName</span></em></p>
+                        <p>Text to be displayed in the menu or menu item.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">imageDisabled</span></em></p>
+                        <p>Image to be displayed for the toolbar button when it is
+                                   disabled.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">imageHot</span></em></p>
+                        <p>Image to be displayed for the toolbar button when the mouse
+                                   hovers it.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">imageNormal</span></em></p>
+                        <p>Image to be displayed for the toolbar button.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">name</span></em></p>
+                        <p>Name of the item being configured (menu, menu item, toolbar
+                                   group, or toolbar button).
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">shortcut</span></em></p>
+                        <p>Keyboard shortcut to activate the item.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">toolMode</span></em></p>
+                        <p>Tool mode activated by the respective item.</p>
+                        <p>For the list of available tool modes and their description, see
+                                   the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s
+                                   section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html" class="olink"><i>WorldEditor</i></a> <span class="symbol">&#8594;</span>
+                                   <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html#xref_we_Panel_Summary" class="olink">Panel summary</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">transparency</span></em></p>
+                        <p>RGB value of the transparent color in the toolbar button
+                                   images.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">type</span></em></p>
+                        <p>Type of the item being configured.</p>
+                        <p>The list below describes the available options</p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">ACTION</span></em></p>
+                                 <p>Indicates that the item has an action associated with
+                                                it.
+                                 </p>
+                                 <p>It must then define <span class="literal">action</span> tag.
+                                 </p>
+                                 <p><em class="emphasis">Examples</em>: <em class="emphasis">File <span class="symbol">&#8594;</span> New
+                                                   Space</em> and <em class="emphasis">File <span class="symbol">&#8594;</span> Open Space</em> menu items,
+                                                <em class="emphasis">Save</em> and <em class="emphasis">Undo</em> toolbar buttons.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">CHILD</span></em></p>
+                                 <p>Indicates a sub-item of items of type
+                                                <span class="literal">CHOICE</span>, <span class="literal">EXPANDED_CHOICE</span>, or
+                                                <span class="literal">TOGGLE</span>.
+                                 </p>
+                                 <p><em class="emphasis">Examples</em>: <em class="emphasis">Tool mode</em> toolbar
+                                                buttons<sup>A</sup> (this toolbar group has type
+                                                value of <span class="literal">CHOICE</span>), and <em class="emphasis">View <span class="symbol">&#8594;</span> Status
+                                                   Bar</em> menu item's <span class="literal">ON</span> and
+                                                <span class="literal">OFF</span> definitions (this menu item has a type
+                                                value of <span class="literal">TOGGLE</span>).
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">CHOICE</span></em></p>
+                                 <p>Indicates that the only one of the
+                                                sub-items<sup>B</sup> defined for this item may be
+                                                active at any one time (<em class="emphasis">i.e.</em>, the sub-items
+                                                will act as option buttons).
+                                 </p>
+                                 <p><em class="emphasis">Examples</em>: <em class="emphasis">Tool mode</em> toolbar
+                                                buttons<sup>A</sup>, and <em class="emphasis">Camera Speed</em> toolbar buttons.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">EXPANDED_CHOICE</span></em></p>
+                                 <p>Indicates that the sub-items<sup>B</sup>
+                                                defined for this items will be displayed as entries in a drop-down
+                                                list box.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">GROUP</span></em></p>
+                                 <p>For menu items, indicates that the item has a sub-menu
+                                                associated with it.
+                                 </p>
+                                 <p>For toolbar items, indicates that the item defines other
+                                                groups or toolbar buttons.
+                                 </p>
+                                 <p><em class="emphasis">Examples</em>: <em class="emphasis">File</em> menu, <em class="emphasis">File
+                                                   <span class="symbol">&#8594;</span> Recent Files</em> menu
+                                                item, and <em class="emphasis">Edit</em> toolbar group
+                                                (with <em class="emphasis">Undo</em> and <em class="emphasis">Redo</em> buttons).
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">SEPARATOR</span></em></p>
+                                 <p>For menu items, draws a horizontal line.</p>
+                                 <p>For toolbar items, draws a vertical line.</p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis"><span class="literal">TOGGLE</span></em></p>
+                                 <p>Indicates that the item will have an ON/OFF value associated
+                                                to it (i.e., the item will act as a check box).
+                                 </p>
+                                 <p>It must define 2 sub-items: the first one specifying action
+                                                and updater for when the item is ON, and the second one specifying
+                                                <span class="literal">action</span> for when the item is OFF.
+                                 </p>
+                                 <p>Examples: <em class="emphasis">View <span class="symbol">&#8594;</span> Status Bar</em> and <em class="emphasis">View <span class="symbol">&#8594;</span> Show
+                                                   Panels</em> menu items, and <em class="emphasis">Orthographic View</em> and <em class="emphasis">Player Preview Mode</em> toolbar buttons.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                        <p><em class="emphasis"><em class="emphasis">A</em> &#8212; For the list
+                                      of available tool modes and their description, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html" class="olink"><i>WorldEditor</i></a> <span class="symbol">&#8594;</span>
+                                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch02.html#xref_we_Panel_Summary" class="olink">Panel summary</a>.</em></p>
+                        <p><em class="emphasis"><em class="emphasis">B</em> &#8212; Sub-items are
+                                      defined as having type tag set to
+                                      <span class="literal">CHILD</span>.</em></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">updater</span></em></p>
+                        <p>Name of a C++ function, Python method, or expression enquiring
+                                   value of a tag in options.xml that returns an integer value &#8212; if 0 is
+                                   returned, then the item will be disabled, otherwise it will be enabled
+                                   (for <span class="literal">CHILD</span> items of <span class="literal">CHOICE</span>
+                                   items, if 0 is returned, then the item is cleared/unchecked, otherwise
+                                   it is selected/checked).
+                        </p>
+                        <p><span class="literal">options.xml</span> is located in
+                                   <span class="literal">bigworld/tools/worldeditor</span> &#8212; for details on this
+                                   file's grammar, see <a href="ch25.html#xref_options_xml_WorldEditor" title="25.4.&nbsp;WorldEditor">WorldEditor</a>)
+                        </p>
+                        <p>The possible values for this tag are described below:</p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><em class="emphasis">Type: C++ function</em></p>
+                                 <p><em class="emphasis">Defined in the tool's source
+                                                   code.</em></p>
+                                 <p><em class="emphasis">Example</em>:
+                                                <span class="literal">updateUndo</span> (in
+                                                <span class="literal">MainMenu</span><span class="symbol">&#8594;</span><span class="literal">Edit</span><span class="symbol">&#8594;</span><span class="literal">Undo</span>)
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis">Type: Python method</em></p>
+                                 <p><em class="emphasis">Defined in any Python script located in
+                                                   bigworld\tools\ worldeditor\resources\scripts.</em></p>
+                                 <p>Please note that if the method is defined in
+                                                <span class="literal">UIExt.py</span>, then the method need not be appended
+                                                by the module name. For example, to declare
+                                                <span class="literal">UIAdapter.py</span>'s method
+                                                <span class="literal">updateSelectionFilter</span> as the updater, you would
+                                                have to specify the value
+                                                <span class="literal">UIAdapter.updateSelectionFilter</span>.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><em class="emphasis">Type: Expression enquiring value of a
+                                                   tag in <span class="literal">options.xml</span></em></p>
+                                 <p><em class="emphasis">Defined inline (using C syntax)</em></p>
+                                 <p><em class="emphasis">Example</em>:
+                                                <span class="literal">camera/ortho == 0</span> (in
+                                                <span class="literal">MainToolBar</span><span class="symbol">&#8594;</span><span class="literal">Edit</span><span class="symbol">&#8594;</span><span class="literal">ViewOrtho</span><span class="symbol">&#8594;</span><span class="literal">ShowOrthoMode</span>)
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch16.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch18.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;16.&nbsp;<span class="literal">.gui</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;18.&nbsp;LightMapSection</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

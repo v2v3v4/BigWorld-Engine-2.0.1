@@ -1,0 +1,568 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;22.&nbsp;Debugging</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch21.html" title="Chapter&nbsp;21.&nbsp;Security">
+      <link rel="next" href="ch23.html" title="Chapter&nbsp;23.&nbsp;Shared Development Environments">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch22.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;22.&nbsp;Debugging</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch21.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch23.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Debugging"></a>Chapter&nbsp;22.&nbsp;Debugging
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch22.html#d0e14272">22.1. General Debugging</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch22.html#d0e14275">22.1.1. Information and Error Messages</a></span></dt>
+                        <dt><span class="section"><a href="ch22.html#d0e14309">22.1.2. Testing Scripts Using the Python Server</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch22.html#d0e14405">22.2. Performance Profiling</a></span></dt>
+                  <dt><span class="section"><a href="ch22.html#d0e14465">22.3. Common Mistakes</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch22.html#d0e14468">22.3.1. Definition Files Inconsistent Between the Server and
+                                       Client</a></span></dt>
+                        <dt><span class="section"><a href="ch22.html#d0e14477">22.3.2. Implementation (<span class="literal">.py</span>) Does Not Match Definition
+                                       (<span class="literal">.def</span>)</a></span></dt>
+                        <dt><span class="section"><a href="ch22.html#d0e14495">22.3.3. Accessing Other Entities' Properties and Methods Not Declared in
+                                       the Definition File</a></span></dt>
+                        <dt><span class="section"><a href="ch22.html#d0e14510">22.3.4. Trying to Update the Properties of a Ghost Entity</a></span></dt>
+                        <dt><span class="section"><a href="ch22.html#d0e14537">22.3.5. Database backup and fault tolerance doesn't work for entities
+                                       lacking a Base part</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch22.html#d0e14546">22.4. Fixed Cell Boundaries</a></span></dt>
+                  <dt><span class="section"><a href="ch22.html#d0e14614">22.5. Message Reliability And Ordering</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e14272"></a>22.1.&nbsp;General Debugging
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e14275"></a>22.1.1.&nbsp;Information and Error Messages
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When running the server using
+                           <code class="filename">control_cluster.py</code>, for example, there may not be a
+                           console associated with an application. In order to view process
+                           messages when not running from the console the server tools
+                           MessageLogger<sup>[<a name="d0e14283" href="#ftn.d0e14283">33</a>]</sup>, and WebConsole<sup>[<a name="d0e14296" href="#ftn.d0e14296">34</a>]</sup> should be used for collecting process output and viewing
+                           log messages respectively.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e14309"></a>22.1.2.&nbsp;Testing Scripts Using the Python Server
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In order to test Python scripts and behaviour on a live server a
+                           telnet server can be connected to on both the BaseApp and CellApp
+                           processes to run script. The telnet server by default is run on port
+                           40001 for a BaseApp, and 50001 for a CellApp, but both can be configured
+                           in the file
+                           <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/server/bw.xml</code>
+                           using the <code class="property">&lt;pythonPort&gt;</code> configuration
+                           option.
+                  </p>
+                  <p>If the desired port is already used on the application's machine,
+                           then a random port is chosen. You can find out the assigned port by
+                           looking at the log output of the particular BaseApp or CellApp for a
+                           line such as the following:
+                  </p><pre class="programlisting">INFO: Python server is running on port 33225</pre><p>This value can also be found in the watcher value
+                           <span class="literal">pythonServerPort</span>.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>This is intended primarily as a development time only utility
+                                and should be used sparingly in a production environment. Performing
+                                CPU intensive Python operations such as listing all entities may
+                                adversely affect game behaviour for your clients.
+                     </p>
+                  </div>
+                  <p>Telnet can be used to connect to the Python server of each BaseApp
+                           and CellApp, which provides a Python console that can be used for
+                  </p>
+                  <p>There are currently three methods of connecting to the Python
+                           telnet server:
+                  </p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Connecting via WebConsole</p>
+                        </li>
+                        <li>
+                           <p>Connecting via <code class="filename">control_cluster.py</code></p>
+                        </li>
+                        <li>
+                           <p>Connecting via the commandline using
+                                        <span class="application">telnet</span></p>
+                        </li>
+                     </ol>
+                  </div>
+                  <p>Connecting to the Python server via WebConsole is the recommended
+                           method of interacting with the Python server as it allows access to the
+                           other server debugging tools as required. To connect through WebConsole
+                           simply select the <em class="emphasis">Python Console</em> module from the
+                           menu on the left hand side of the main WebConsole page.
+                  </p>
+                  <p>To connect using <code class="filename">control_cluster.py</code>, simply
+                           use the <span class="literal">pyconsole</span><sup>[<a name="d0e14364" href="#ftn.d0e14364">35</a>]</sup> option. For example, to connect to the second CellApp in a
+                           cluster:
+                  </p><pre class="programlisting">$ ./control_cluster.py pyconsole cellapp02</pre><p>To connect using <span class="application">telnet</span>, after
+                           determining the port the process has an active python server on simply
+                           provide telnet with the <em class="emphasis">hostname</em> and
+                           <em class="emphasis">port</em>. For example, to connect to a machine called
+                           <span class="literal">cluster01</span> running a BaseApp with a Python server
+                           running on port <span class="literal">40001</span> the following command would be
+                           used:
+                  </p><pre class="programlisting">$ telnet cluster01 40001</pre><p>Once connected to the Python console server it is possible to call
+                           script methods. For example, in FantasyDemo, the player entity is called
+                           <code class="classname">Avatar</code>, and it is possible to access its cell or
+                           base parts after a player logs in:
+                  </p><pre class="programlisting">$ telnet cluster02 50001
+Trying 10.40.3.4...
+Connected to cluster02.
+Escape character is '^]'.
+Welcome to Cell App 1
+Build: 13:34:56 Apr 12 2005
+&gt; BigWorld.entities.keys()
+[4848, 4849]
+&gt; BigWorld.entities[4848]
+Avatar at 0x08533FDC
+&gt; avatar = _
+&gt; avatar.playerName
+'Trogdor the Burninator'
+&gt; avatar.beginTrade()</pre><p><span class="citetitle">Accessing an avatar via the Python console on the
+                              cell</span></p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e14405"></a>22.2.&nbsp;Performance Profiling
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Python has helpful modules that can be used to profile your script.
+                      BigWorld exposes the method <em class="emphasis">_hotshot</em>
+                      through the watcher interface, to help with profiling BigWorld
+                      script.
+               </p>
+               <p>To start profiling, set the watcher
+                      <span class="literal">pythonProfile/running</span> to <span class="literal">true</span>. The
+                      profiler outputs its log to a file with the filename specified by the
+                      watcher <span class="literal">pythonProfile/filename</span>, the file name being
+                      relative to the current working directory, most likely to be
+                      <span class="literal">bigworld/bin/Hybrid</span>. Setting the watcher
+                      <span class="literal">pythonProfile/running</span> to <span class="literal">false</span> ends
+                      the profiling session, and closes the profile log.
+               </p>
+               <p>To inspect the log, use the module <em class="emphasis">hotshot.stats</em>.
+               </p>
+               <p>For example,</p><pre class="programlisting">$ python
+&gt; import hotshot.stats
+&gt; stats = hotshot.stats.load( "cell.prof" )
+&gt; stats.sort_stats( "time", "calls" )
+&gt; stats.print_stats( 20 )</pre><p>Please note that there may be problems inspecting the profiling log,
+                      if the call stack depth gets smaller than when the session was started, or
+                      the session is stopped at a different call stack depth. Due to that, care
+                      must be taken when starting and stopping profiling from script.
+               </p>
+               <p>It is also possible to use the module <em class="emphasis">_hotshot</em> in script. This may be helpful if you only
+                      want to profile specific parts of the script. A profiler object can be
+                      created, and then started and stopped over a specific method call.
+               </p>
+               <p>For example, the following could be added to file
+                      <span class="literal">fantasydemo/res/scripts/cell/Creature.py</span> to profile the
+                      method <span class="literal">Creature.onTime</span>:
+               </p><pre class="programlisting">import _hotshot
+profiler = None
+
+def startProfiling():
+  global profiler
+  profiler = _hotshot.profiler( "creature.prof" )
+
+def stopProfiling():
+  global profiler
+  profiler.close()
+  profiler = None
+
+class Creature( BigWorld.Entity ):
+  def onTimer( self, timerId, userId ):
+    if profiler:
+        profiler.start()
+
+    # Normal function body
+
+    if profiler:
+        profiler.stop()</pre><p>This can be started and stopped with something like the
+                      following.
+               </p><pre class="programlisting">$ telnet bgserver 50001
+Trying 10.40.3.4...
+Connected to bgserver.
+Escape character is '^]'.
+Welcome to Cell App 1
+Build: 13:34:56 Apr 12 2005
+&gt; import Creature
+&gt; Creature.startProfiling()
+&gt; Creature.stopProfiling()</pre><p>For more details on the hotshot module, see the Python documentation
+                      at http://docs.python.org/lib/module-hotshot.html.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e14465"></a>22.3.&nbsp;Common Mistakes
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e14468"></a>22.3.1.&nbsp;Definition Files Inconsistent Between the Server and
+                                    Client
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>To ensure that the client can understand the data sent by the
+                           server, the definition files must be kept consistent between
+                           them.
+                  </p>
+                  <p>A client will not be able to log in if it has inconsistent
+                           definition files. The LoginApp and the DBMgr produce the following
+                           error:
+                  </p><pre class="programlisting">INFO: LoginApp::sendFailure: LogOn for 10.40.3.17:2254 failed 'Bad digest'</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e14477"></a>22.3.2.&nbsp;Implementation (<span class="literal">.py</span>) Does Not Match Definition
+                                    (<span class="literal">.def</span>)
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>For each entity type, its Python script must implement the methods
+                           described in its <span class="literal">.def</span> file. The server will report an
+                           error if this does not occur.
+                  </p>
+                  <p>For example:</p><pre class="programlisting">ERROR: EntityDescription::checkMethods: class Avatar does not have method sendMessageToFriends
+ERROR: EntityType::Type: Script for Avatar is missing a method.</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e14495"></a>22.3.3.&nbsp;Accessing Other Entities' Properties and Methods Not Declared in
+                                    the Definition File
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>It is possible to access a property of another entity when it is
+                           on the same process as the calling entity. This is true for both base
+                           and cell entities.
+                  </p>
+                  <p>This works during initial testing, when only one BaseApp and one
+                           CellApp are used, but is likely to not work when more BaseApps and
+                           CellApps are used.
+                  </p>
+                  <p>Properties of remote entities cannot be written to directly (i.e.
+                           they are read-only), regardless of whether those properties are declared
+                           in the <span class="literal">.def</span> file. Also, only methods declared in the
+                           <span class="literal">.def</span> file can be called when the entity is on another
+                           application.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e14510"></a>22.3.4.&nbsp;Trying to Update the Properties of a Ghost Entity
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p><em class="emphasis">Sometimes the game design might have two
+                              entities moving through the world close to each </em>other, as
+                           would be the case of an Avatar and a Bodyguard, or a Pet. Due to their
+                           proximity, developers might assume that they will always be located in
+                           the same cell as each other, and thus have one of the entities try to
+                           update a property on the other (<em class="emphasis">e.g.</em>,
+                           <span class="literal">self.bodyguard.armour=true</span>, or
+                           <span class="literal">self.pet.state=Alert</span>).
+                  </p>
+                  <p>Though this will not cause problems most of the time, it might
+                           happen that the two entities are separated by a cell boundary, and thus
+                           will only have access to the other one's ghost, which will cause the
+                           properties to be read-only.
+                  </p>
+                  <p>To test for the existence of this kind of problem, CellApp has the
+                           configuration option <span class="literal">treatAllOtherEntitiesAsGhosts</span>.
+                           This option causes the CellApp to treat only its own entity as real, and
+                           all others as ghosts. For more details, see <a href="ch04.html#xref_Data_Distribution" title="4.3.&nbsp;Data Distribution">Data Distribution</a>.
+                  </p>
+                  <p>This debugging mode allows script writers to catch these errors
+                           immediately instead of leaving them lurking in the background to only
+                           appear on rare occasions.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e14537"></a>22.3.5.&nbsp;Database backup and fault tolerance doesn't work for entities
+                                    lacking a Base part
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>As noted in the Python API documentation, the writeToDB() method
+                           can only be called on entities that have a Base part. That means you
+                           cannot persist entities that do not have a Base part.
+                  </p>
+                  <p>The server's first-level fault tolerance (which restores entities
+                           when a CellApp dies) also relies on those entities having a Base part.
+                           The state of the entity is backed up from the Cell to the Base part over
+                           time and if the CellApp that is hosting an entity's Cell part
+                           disappears, the Base entity will restore it to another CellApp. This
+                           does not work unless you create each entity type with a Base and Cell
+                           part.
+                  </p>
+                  <p>This means that you may need to declare more-or-less empty Base
+                           entity definitions for entities that don't have any Base methods, just
+                           so that they can be written to the database and so that they will be
+                           restored in the event of a CellApp crash.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e14546"></a>22.4.&nbsp;Fixed Cell Boundaries
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To help the testing and debugging of the transitioning of entities
+                      between CellApps, it can be helpful to have fixed cell boundaries.
+               </p>
+               <p>Typical things that could be tested this way include:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Controllers and entity extras implemented in extensions.</p>
+                     </li>
+                     <li>
+                        <p>Script interaction of entities on different CellApps.</p>
+                     </li>
+                     <li>
+                        <p>Streaming of entity properties.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>To configure fixed cell boundaries in BigWorld, follow the steps
+                      below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Start the server including at least two CellApps.</p>
+                     </li>
+                     <li>
+                        <p>Make sure that cells are created on all CellApps by setting the
+                                   configuration options
+                                   <span class="literal">cellAppMgr/cellAppLoadLowerBound</span> and
+                                   <span class="literal">cellAppMgr/cellAppLoadUpperBound</span> to
+                                   <span class="literal">0.0</span> in file
+                                   <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/server/bw.xml</span>.
+                                   These options can also be changed with the watcher values
+                                   <span class="literal">cellAppLoad/ balanceLowerBound</span> and
+                                   <span class="literal">cellAppLoad/balanceUpperBound</span> of CellAppMgr.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Disable load balancing by setting the CellAppMgr watcher value
+                                   <span class="literal">debugging/shouldLoadBalance</span> to
+                                   <span class="literal">false</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>It can also be convenient to set the exact position of a
+                                   partition. Currently, only the root partition of a space can have its
+                                   position set. This can be set with the CellAppMgr watcher value
+                                   <span class="literal">spaces/<em class="replaceable"><code>&lt;spaceID&gt;</code></em>/rootPartition</span>,
+                                   where <span class="literal"><em class="replaceable"><code>&lt;spaceID&gt;</code></em></span> is
+                                   the space ID.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e14614"></a>22.5.&nbsp;Message Reliability And Ordering
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld is a networked, distributed system, and as such, script
+                      writers need to be aware of the reliability and ordering issues that can
+                      arise in such a system. All non-volatile messages are reliably delivered.
+                      BigWorld guarantees not only the reliable delivery but also the in-order
+                      delivery of some messages. These are:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Messages sent between Proxy and Client</p>
+                     </li>
+                     <li>
+                        <p>Messages sent between the Base and Cell part of the same
+                                   entity
+                        </p>
+                     </li>
+                     <li>
+                        <p>Messages sent between two Base entities</p>
+                     </li>
+                     <li>
+                        <p>Messages sent between any pair of server processes</p>
+                     </li>
+                     <li>
+                        <p>Updates sent from a real entity to its ghosts</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The offloading of Cell entities from one CellApp to another can
+                      cause some messages to be delivered slightly out-of-order. This means your
+                      game script may need to cope with method calls and property updates being
+                      slightly out-of-order if they are triggered by any of the following
+                      message types:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Messages sent between two different Cell entities</p>
+                     </li>
+                     <li>
+                        <p>Messages sent between the Cell part of one entity and the Base
+                                   part of another
+                        </p>
+                     </li>
+                     <li>
+                        <p>Messages sent between the Cell part of one entity and the Client
+                                   part of another
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>It is important to note that the probability of out-of-order
+                      delivery of these messages is directly proportional to the amount of
+                      packet loss on the network the server processes are running,
+                      <em class="emphasis">i.e.</em> this re-ordering cannot happen unless you are
+                      getting some degree of packet loss. We cannot emphasise enough the
+                      importance of using good quality hardware (both computers and network
+                      hardware) in your production deployment clusters, and having enough
+                      hardware in your clusters that you can run your game servers with an ample
+                      amount of CPU and network capacity to spare. BigWorld's experience with
+                      customer deployments has shown that inferior and/or insufficient hardware
+                      is likely to cause critical (<em class="emphasis">i.e</em> showstopping)
+                      problems at runtime.
+               </p>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e14283" href="#d0e14283">33</a>] </sup>For details on MessageLogger, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch03.html" class="olink"><i>Cluster Administration Tools</i></a>
+                               <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch03.html#xref_MessageLogger" class="olink">Message Logger</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e14296" href="#d0e14296">34</a>] </sup>For details on WebConsole, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch03.html" class="olink"><i>Cluster Administration Tools</i></a>
+                               <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch03.html#xref_WebConsole" class="olink">WebConsole</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e14364" href="#d0e14364">35</a>] </sup>For more information regarding this option see the
+                               <code class="filename">control_cluster.py</code> program help using the
+                               <code class="option">--help</code> flag.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch21.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch23.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;21.&nbsp;Security&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;23.&nbsp;Shared Development Environments</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bsdiff", "bsdiff_2005.vcproj", "{C0EB7CF4-B63D-42BE-A34C-0DECB84A2C9B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6806FEAE-7ED3-41B5-97D8-B352A4833587} = {6806FEAE-7ED3-41B5-97D8-B352A4833587}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libbz2", "bz2\libbz2_2005.vcproj", "{6806FEAE-7ED3-41B5-97D8-B352A4833587}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Hybrid|Win32 = Hybrid|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C0EB7CF4-B63D-42BE-A34C-0DECB84A2C9B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C0EB7CF4-B63D-42BE-A34C-0DECB84A2C9B}.Debug|Win32.Build.0 = Debug|Win32
+		{C0EB7CF4-B63D-42BE-A34C-0DECB84A2C9B}.Hybrid|Win32.ActiveCfg = Release|Win32
+		{C0EB7CF4-B63D-42BE-A34C-0DECB84A2C9B}.Hybrid|Win32.Build.0 = Release|Win32
+		{C0EB7CF4-B63D-42BE-A34C-0DECB84A2C9B}.Release|Win32.ActiveCfg = Release|Win32
+		{C0EB7CF4-B63D-42BE-A34C-0DECB84A2C9B}.Release|Win32.Build.0 = Release|Win32
+		{6806FEAE-7ED3-41B5-97D8-B352A4833587}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6806FEAE-7ED3-41B5-97D8-B352A4833587}.Debug|Win32.Build.0 = Debug|Win32
+		{6806FEAE-7ED3-41B5-97D8-B352A4833587}.Hybrid|Win32.ActiveCfg = Release|Win32
+		{6806FEAE-7ED3-41B5-97D8-B352A4833587}.Hybrid|Win32.Build.0 = Release|Win32
+		{6806FEAE-7ED3-41B5-97D8-B352A4833587}.Release|Win32.ActiveCfg = Release|Win32
+		{6806FEAE-7ED3-41B5-97D8-B352A4833587}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

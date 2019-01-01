@@ -1,0 +1,396 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;6.&nbsp;Other Features</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Overview">
+      <link rel="up" href="index.html" title="Server Overview">
+      <link rel="prev" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Server Components">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_overview/ch06.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Other Features</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Other_Features"></a>Chapter&nbsp;6.&nbsp;Other Features
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch06.html#d0e2082">6.1. IDs</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch06.html#d0e2087">6.1.1. ID Allocation</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch06.html#xref_Inter_Process_Communication_Mercury">6.2. Inter-Process Communication (Mercury)</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch06.html#d0e2114">6.2.1. Overview</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e2119">6.2.2. Nub</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e2128">6.2.3. Messages</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e2151">6.2.4. Requests</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e2156">6.2.5. Bundles</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e2163">6.2.6. Channels</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e2218">6.2.7. Interfaces</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch06.html#d0e2230">6.3. Fault Tolerance and Disaster Recovery</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#d0e2237">6.4. Packed Files</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e2082"></a>6.1.&nbsp;IDs
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>An ID broker or issuing service is required, whenever the CellApp
+                      creates a new entity, it needs a unique entity ID. The CellAppMgr
+                      currently provides this functionality.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2087"></a>6.1.1.&nbsp;ID Allocation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The CellAppMgr currently acts as a central ID broker for IDs. It
+                           handles requests for a block of IDs, and allows unused IDs to be
+                           returned for 'recycling'.
+                  </p>
+                  <p>If the CellAppMgr is restarted by a Reviver after crashing, then
+                           it will recover its state by querying the cells for the highest ID they
+                           are currently using. The sequence will be restarted from the highest ID
+                           of all, added by one. A small number of IDs may be wasted in the event
+                           of a failure.
+                  </p>
+                  <p>Excess unused IDs are stored in special tables
+                           <code class="varname">bigworldNewID</code> and <code class="varname">bigworldUsedIDs</code>.
+                           For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch33.html" class="olink"><i>MySQL Database Schema</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch33.html#xref_Non_Entity_Tables" class="olink">Non-Entity Tables</a>.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Inter_Process_Communication_Mercury"></a>6.2.&nbsp;Inter-Process Communication (Mercury)
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2114"></a>6.2.1.&nbsp;Overview
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Mercury is the network layer used for communications between the
+                           client and server, and between all server components. It is based on
+                           UDP, and allows both reliable and unreliable communications.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2119"></a>6.2.2.&nbsp;Nub
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The Nub is the core of Mercury. It is responsible for sending and
+                           receiving packets, delivering timer messages, and general socket
+                           notifications.
+                  </p>
+                  <p>Almost all communication uses UDP, a single socket is used for
+                           most connections.
+                  </p>
+                  <p>The Nub normally controls the event loop of the application. So it
+                           also provides a time queue, and user socket notifications. The time
+                           queue can be used to invoke callbacks at a regular interval, or to
+                           invoke a single callback after a timeout, if required. User sockets can
+                           be monitored, and callbacks invoked when they are ready for
+                           reading.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2128"></a>6.2.3.&nbsp;Messages
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A message is the basic unit of communication. It consists
+                           of:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">Message type</em> &#8212; 1
+                                        byte.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Message size</em> &#8212; 0-4
+                                        bytes.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Message data</em> &#8212;
+                                        Variable.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The message size is not needed for fixed-length messages. The
+                           message data is simply a stream of bytes that is interpreted by the
+                           client and server. Streaming operators are provided for most data types,
+                           to make marshalling easy.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2151"></a>6.2.4.&nbsp;Requests
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A request is a message that expects an answer. It is possible to
+                           issue a request to a remote process, and receive a reply associated with
+                           it without blocking the process' execution. Internally, Mercury will
+                           allocate a unique request ID that is used to associate the reply with
+                           the request. When a request is made, a reply handler is constructed to
+                           handle the reply. It also handles timeouts, and will invoke a timeout
+                           callback if no reply is received within a specified time.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2156"></a>6.2.5.&nbsp;Bundles
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>A bundle is a collection of messages that are sent and received as
+                           a unit. Grouping multiple messages together in a single packet reduces
+                           the overhead of UDP headers. If a bundle exceeds the maximum packet
+                           size, it will be split into multiple packets, and reassembled when it is
+                           received.
+                  </p>
+                  <p>The maximum size of a packet is chosen based on efficiency and is
+                           related to the MTU (Maximum Transmission Unit) of a network. Each packet
+                           in a bundle may optionally contain additional data, including sequence
+                           numbers, request IDs, and acknowledgement IDs.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2163"></a>6.2.6.&nbsp;Channels
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Channels are used to provide reliable communication between two
+                           Nubs. A channel may have different characteristics, depending on whether
+                           it is a client/server channel or a server/server channel and between
+                           which components it connects.
+                  </p>
+                  <p>The table below describes the characteristics of some
+                           channels.
+                  </p>
+                  <div class="altrow">
+                     <table border="0" width="50%">
+                        <colgroup>
+                           <col width="25%">
+                           <col width="25%">
+                           <col width="25%">
+                           <col width="25%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Channel</th>
+                              <th>Latency</th>
+                              <th>Bandwidth</th>
+                              <th>Loss</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>Client/server</td>
+                              <td>High</td>
+                              <td>Low</td>
+                              <td>High</td>
+                           </tr>
+                           <tr>
+                              <td>Server/server</td>
+                              <td>Low</td>
+                              <td>High</td>
+                              <td>Low</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <p><span class="citetitle">Channel's
+                              characteristics</span></p>
+                  <p>A channel's traits are specified when it is created, so that its
+                           reliability algorithms can be appropriately selected.
+                  </p>
+                  <p>If any message in a packet is flagged as reliable, the entire
+                           packet is also treated as reliable. The sender gives it a sequence
+                           number, and stores it in a sliding window. The receiver acknowledges the
+                           packet by placing an ACK on the next outgoing packet. Channels that have
+                           regular bi-directional communication (e.g. 10Hz for client/server, 50Hz
+                           for CellApp/CellApp) do not send the ACK immediately while other
+                           channels without regular communication will send this
+                           immediately.
+                  </p>
+                  <p>If the sender receives an out-of-order ACK, then it will assume
+                           that the previous packets were lost, and resend them. For low-latency
+                           connections, there is also a threshold in which packets will not be
+                           resent for a certain time after they were previously sent.
+                  </p>
+                  <p>For low-bandwidth connections (client/server), all unreliable
+                           messages are stripped from the packet before it is resent, and, if
+                           possible, the packet is piggybacked on the next outgoing packet, in
+                           order to save bandwidth.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e2218"></a>6.2.7.&nbsp;Interfaces
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Incoming messages on a Nub are handled by a single interface.
+                           Since the message type is a single byte, there can be up to 256
+                           single-byte messages in an interface (actually, slightly less, since
+                           Mercury reserves several messages for internal use and a lot more if
+                           single-byte messages are multiplexed to more messages).
+                  </p>
+                  <p>Interfaces are normally defined using the macros in
+                           <code class="filename">src/lib/network/interface_minder.hpp</code>. These are
+                           designed to hide the details involved in decoding the message and
+                           dispatching it. For simple fixed-length messages, the result is that a
+                           method is called on an object, with a structure containing the message
+                           parameters. For more complex variable-length messages, the method is
+                           called with a stream object, and parameters must be streamed off
+                           manually.
+                  </p>
+                  <p>Interfaces also define whether each message is variable or
+                           fixed-length. For fixed-length messages, the size need not be sent,
+                           since the receiver knows how many bytes to expect.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e2230"></a>6.3.&nbsp;Fault Tolerance and Disaster Recovery
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Each component of the server has been designed to be fault-tolerant.
+                      Any of the server processes or machines can die unexpectedly, and the
+                      server should continue with little impact. See the description of server
+                      components for details about how each of them handles fault
+                      tolerance.
+               </p>
+               <p>The BigWorld server also offers a second level of fault tolerance,
+                      known as disaster recovery. The server's state can periodically be written
+                      to the database. In the event of entire server failure, the server can be
+                      restarted using this information.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e2237"></a>6.4.&nbsp;Packed Files
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>XML files are used throughout BigWorld due to its flexibility and
+                      ease of use. However, XML files are also widely regarded as being bloated
+                      and, when used in a computer game, too easily modified by the end user.
+                      Packed files are XML files converted to a more compact binary format. The
+                      client and all server components are able to load packed files where it
+                      usually expects an XML file. Replacing XML files with packed files will
+                      improve performance and offer a degree of obfuscation that should deter
+                      casual users from modifying the contents of the files.
+               </p>
+               <p>Packed files are read-only and are usually unsuitable for use during
+                      development. Most of the tools (both client and server) will not work with
+                      packed files due to its read-only nature.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Server Components&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

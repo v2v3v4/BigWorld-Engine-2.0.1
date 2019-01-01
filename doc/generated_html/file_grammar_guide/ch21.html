@@ -1,0 +1,639 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;21.&nbsp;.model</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch20.html" title="Chapter&nbsp;20.&nbsp;.mfm">
+      <link rel="next" href="ch22.html" title="Chapter&nbsp;22.&nbsp;modules.xml">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch21.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;21.&nbsp;<span class="literal">.model</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch20.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch22.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_item_model"></a>Chapter&nbsp;21.&nbsp;<span class="literal">.model</span></h2>
+                  </div>
+               </div>
+            </div>
+            <p>Defined in various sub-folders under the resource tree
+                 <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span> (for example,
+                 <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/environments</span>,
+                 <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/flora</span>,
+                 <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/sets/vehicles</span>,
+                 etc...), the <span class="literal">.model</span> file format specification is
+                 illustrated below:
+            </p><pre class="programlisting">&lt;root&gt;
+
+  ?&lt;parent&gt;           <em class="replaceable"><code>file.model</code></em>   &lt;/parent&gt;
+  ?&lt;extent&gt;           <em class="replaceable"><code>float</code></em>        &lt;/extent&gt;
+  [&lt;nodefullVisual&gt;   <em class="replaceable"><code>file.visual</code></em>  &lt;/nodefullVisual&gt;
+  |&lt;nodelessVisual&gt;   <em class="replaceable"><code>file.visual</code></em>  &lt;/nodelessVisual&gt;
+  |&lt;billboardVisual&gt;  <em class="replaceable"><code>file</code></em>         &lt;/billboardVisual&gt;
+  ]
+
+   &lt;! if nodeless or nodefull !&gt;
+  ?&lt;batched&gt;  false &lt;/batched&gt;
+
+   &lt;! if billboard !&gt;
+  [&lt;source&gt;
+    +&lt;model&gt;   <em class="replaceable"><code>file.model</code></em>  &lt;/model&gt;
+    ?&lt;width&gt;   <em class="replaceable"><code>float</code></em>       &lt;/width&gt;
+    ?&lt;height&gt;  <em class="replaceable"><code>float</code></em>       &lt;/height&gt;
+    *&lt;dye&gt;
+       &lt;matter&gt;        <em class="replaceable"><code>string</code></em>                   &lt;/matter&gt;
+       &lt;tint&gt;          <em class="replaceable"><code>string</code></em>                   &lt;/tint&gt;
+      *&lt;property_name&gt; <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/property_name&gt;
+     &lt;/dye&gt;
+   &lt;/source&gt;
+  |
+   &lt;boundingBox&gt;
+    ?&lt;min&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/min&gt;
+    ?&lt;max&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/max&gt;
+   &lt;/boundingBox&gt;
+  ]
+
+  ?&lt;material&gt;
+     <em class="emphasis">EffectMaterial </em><a name="co3042"></a><img src="../images/callouts/1.png" alt="1" border="0">
+   &lt;/material&gt;
+
+  &lt;! endif !&gt;
+
+  *&lt;animation&gt;
+
+     &lt;! if nodefullVisual !&gt;
+    ?&lt;name&gt;          <em class="replaceable"><code>string</code></em>      &lt;/name&gt;
+     &lt;nodes&gt;         <em class="replaceable"><code>string</code></em>      &lt;/nodes&gt;
+    ?&lt;firstFrame&gt;    <em class="replaceable"><code>integer</code></em>     &lt;/firstFrame&gt;
+    ?&lt;lastFrame&gt;     <em class="replaceable"><code>integer</code></em>     &lt;/lastFrame&gt;
+    ?&lt;alpha&gt;
+       *&lt;nodeName&gt;  <em class="replaceable"><code>float</code></em>        &lt;/nodeName&gt;
+     &lt;/alpha&gt;
+    ?&lt;cognate&gt;       <em class="replaceable"><code>string</code></em>      &lt;/cognate&gt;
+
+     &lt;! if nodelessVisual !&gt;
+     &lt;name&gt;          <em class="replaceable"><code>string</code></em>      &lt;/name&gt;
+    +&lt;visual&gt;        <em class="replaceable"><code>file.visual</code></em> &lt;/visual&gt;
+
+     &lt;! if billboardVisual !&gt;
+     &lt;name&gt;          <em class="replaceable"><code>string</code></em>      &lt;/name&gt;
+     &lt;frameCount&gt;    <em class="replaceable"><code>integer</code></em>     &lt;/frameCount&gt;
+
+     &lt;! endif !&gt;
+
+    ?&lt;frameRate&gt;     <em class="replaceable"><code>float</code></em>       &lt;/frameRate&gt;
+
+   &lt;/animation&gt;
+
+  *&lt;action&gt;
+
+     &lt;name&gt;           <em class="replaceable"><code>string</code></em>       &lt;/name&gt;
+    ?&lt;animation&gt;      <em class="replaceable"><code>string</code></em>       &lt;/animation&gt;
+    ?&lt;blendInTime&gt;    <em class="replaceable"><code>float</code></em>        &lt;/blendInTime&gt;
+    ?&lt;blendOutTime&gt;   <em class="replaceable"><code>float</code></em>        &lt;/blendOutTime&gt;
+    ?&lt;filler&gt;        [true|false]  &lt;/filler&gt;
+    ?&lt;blended&gt;       [true|false]  &lt;/blended&gt; 
+    ?&lt;track&gt;          <em class="replaceable"><code>integer</code></em>      &lt;/track&gt;
+    ?&lt;isMovement&gt;    [true|false]  &lt;/isMovement&gt;
+    ?&lt;isCoordinated&gt; [true|false]  &lt;/isCoordinated&gt;
+    ?&lt;isImpacting&gt;   [true|false]  &lt;/isImpacting&gt;
+
+    ?&lt;match&gt;
+
+      ?&lt;trigger&gt;
+        ?&lt;minEntitySpeed&gt;    <em class="replaceable"><code>float</code></em>         &lt;/minEntitySpeed&gt;
+        ?&lt;maxEntitySpeed&gt;    <em class="replaceable"><code>float</code></em>         &lt;/maxEntitySpeed&gt;
+        ?&lt;minEntityAux1&gt;     <em class="replaceable"><code>float</code></em>         &lt;/minEntityAux1&gt;
+        ?&lt;maxEntityAux1&gt;     <em class="replaceable"><code>float</code></em>         &lt;/maxEntityAux1&gt;
+        ?&lt;minModelYaw&gt;       <em class="replaceable"><code>float</code></em>         &lt;/minModelYaw&gt;
+        ?&lt;maxModelYaw&gt;       <em class="replaceable"><code>float</code></em>         &lt;/maxModelYaw&gt;
+        ?&lt;capsOn&gt;            <em class="replaceable"><code>list_of_ints</code></em>  &lt;/capsOn&gt;  
+        ?&lt;capsOff&gt;           <em class="replaceable"><code>list_of_ints</code></em>  &lt;/capsOff&gt; 
+       &lt;/trigger&gt;
+
+      ?&lt;cancel&gt;
+        ?&lt;minEntitySpeed&gt;    <em class="replaceable"><code>float</code></em>         &lt;/minEntitySpeed&gt;
+        ?&lt;maxEntitySpeed&gt;    <em class="replaceable"><code>float</code></em>         &lt;/maxEntitySpeed&gt;
+        ?&lt;minEntityAux1&gt;     <em class="replaceable"><code>float</code></em>         &lt;/minEntityAux1&gt;
+        ?&lt;maxEntityAux1&gt;     <em class="replaceable"><code>float</code></em>         &lt;/maxEntityAux1&gt;
+        ?&lt;minModelYaw&gt;       <em class="replaceable"><code>float</code></em>         &lt;/minModelYaw&gt;
+        ?&lt;maxModelYaw&gt;       <em class="replaceable"><code>float</code></em>         &lt;/maxModelYaw&gt;
+        ?&lt;capsOn&gt;            <em class="replaceable"><code>list_of_ints</code></em>  &lt;/capsOn&gt;  
+        ?&lt;capsOff&gt;           <em class="replaceable"><code>list_of_ints</code></em>  &lt;/capsOff&gt; 
+       &lt;/cancel&gt;
+
+      ?&lt;scalePlaybackSpeed&gt;  [true|false]   &lt;/scalePlaybackSpeed&gt;
+      ?&lt;feetFollowDirection&gt; [true|false]   &lt;/feetFollowDirection&gt;
+      ?&lt;oneShot&gt;             [true|false]   &lt;/oneShot&gt;
+      ?&lt;promoteMotion&gt;       [true|false]   &lt;/promoteMotion&gt;
+
+     &lt;/match&gt;
+
+   &lt;/action&gt;
+
+  *&lt;dye&gt;
+     &lt;matter&gt;    <em class="replaceable"><code>string</code></em>  &lt;/matter&gt;
+     &lt;replaces&gt;  <em class="replaceable"><code>string</code></em>  &lt;/replaces&gt;
+
+    *&lt;tint&gt;
+       &lt;name&gt;    <em class="replaceable"><code>string</code></em>  &lt;/name&gt;
+       &lt;! if nodefullVisual or nodelessVisual !&gt;
+       &lt;material&gt;
+         <em class="emphasis">EffectMaterial </em><a name="co3127"></a><img src="../images/callouts/2.png" alt="2" border="0">
+       &lt;/material&gt;
+      *&lt;property&gt;
+         &lt;name&gt;     <em class="replaceable"><code>string</code></em>                  &lt;/name&gt;
+        ?&lt;controls&gt; <em class="replaceable"><code>integer</code></em>                 &lt;/controls&gt;
+        ?&lt;mask&gt;     <em class="replaceable"><code>integer</code></em>                 &lt;/mask&gt;
+        ?&lt;future&gt;   <em class="replaceable"><code>integer</code></em>                 &lt;/future&gt;
+        ?&lt;default&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> &lt;/default&gt;
+       &lt;/property&gt;
+       &lt;! if billboardVisual !&gt;
+      *&lt;dye&gt;
+         &lt;matter&gt;   <em class="replaceable"><code>string</code></em>  &lt;/matter&gt;
+         &lt;tint&gt;     <em class="replaceable"><code>string</code></em>  &lt;/tint&gt;
+        *<em class="emphasis">PropertiesList</em>
+       &lt;/dye&gt;
+     &lt;/tint&gt;
+   &lt;/dye&gt;
+
+&lt;/root&gt;</pre><p><span class="citetitle">Grammar of model file</span></p>
+            <div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co3042"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>For details, see <a href="ch11.html" title="Chapter&nbsp;11.&nbsp;EffectMaterial section"><i xmlns:xlink="http://www.w3.org/1999/xlink">EffectMaterial section</i></a>.
+                        </p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co3127"><img src="../images/callouts/2.png" alt="2" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>For details, see <a href="ch11.html" title="Chapter&nbsp;11.&nbsp;EffectMaterial section"><i xmlns:xlink="http://www.w3.org/1999/xlink">EffectMaterial section</i></a>.
+                        </p>
+                     </td>
+                  </tr>
+               </table>
+            </div>
+            <p>The list below describes the tags in the model file:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">action</span><sup>1</sup></em></p>
+                     <p>Tag for action section.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">alpha</span> (section
+                                 <span class="literal">animation</span>) &#8212; If
+                                 <span class="literal">nodefullVisual</span></em></p>
+                     <p>Tag for animation layer data.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">animation</span> (section
+                                 <span class="literal">action</span>)</em></p>
+                     <p>Name of animation played by action.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">batched</span> &#8212; If
+                                 <span class="literal">nodefullVisual</span> or
+                                 <span class="literal">nodelessVisual</span></em></p>
+                     <p>Indicates that the model allows batch rendering. This can improve
+                              performance if there are several instances of a model appearing in the
+                              game.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">billboardVisual</span></em></p>
+                     <p>Name of the texture file for the billboard.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">blended</span> (section
+                                 <span class="literal">action</span>)</em></p>
+                     <p>Deprecated. Tag &lt;track&gt; should be used instead.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">blendInTime</span> (section
+                                 <span class="literal">action</span>)</em></p>
+                     <p>Time to blend in the animation.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">blendOutTime</span> (section
+                                 <span class="literal">action</span>)</em></p>
+                     <p>Time to blend out the animation.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">boundingBox</span> &#8212; If
+                                 <span class="literal">billboardVisual</span></em></p>
+                     <p>Minimum and maximum XYZ coordinates of the model's bounding
+                              box.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">cancel</span><sup>1</sup>
+                                 (section <span class="literal">action/match</span>)</em></p>
+                     <p>Group of conditions that must be met before Action Matcher cancels
+                              the action.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">capsOff</span><sup>1</sup></em></p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis">Section
+                                              <span class="literal">action/match/cancel</span></em></p>
+                              <p>User-defined flags that cannot be matched to cancel the
+                                           action.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Section
+                                              <span class="literal">action/match/trigger</span></em></p>
+                              <p>User-defined flags that cannot be matched to trigger the
+                                           action.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>Group of conditions that must be met before Action Matcher cancels
+                              the action.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">capsOn</span><sup>1</sup></em></p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis">Section
+                                              <span class="literal">action/match/cancel</span></em></p>
+                              <p>User-defined flags that must be matched to cancel the
+                                           action.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Section
+                                              <span class="literal">action/match/trigger</span></em></p>
+                              <p>User-defined flags that must be matched to trigger the
+                                           action.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>Group of conditions that must be met before Action Matcher cancels
+                              the action.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">cognate</span> (section
+                                 <span class="literal">animation</span>) &#8212; If
+                                 <span class="literal">nodefullVisual</span></em></p>
+                     <p>Name of this animation's cognate animation.</p>
+                     <p>Cognate animations are used when models need to coordinate their
+                              movements.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">dye</span> (section
+                                 <span class="literal">source</span>) &#8212; If
+                                 <span class="literal">billboardVisual</span></em></p>
+                     <p>Dye to use for generating the billboard source model.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">EffectMaterial (section
+                                 <span class="literal">material</span>) &#8212; If
+                                 <span class="literal">billboardVisual</span></em></p>
+                     <p>For details, see <a href="ch11.html" title="Chapter&nbsp;11.&nbsp;EffectMaterial section"><i xmlns:xlink="http://www.w3.org/1999/xlink">EffectMaterial section</i></a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">extent</span></em></p>
+                     <p>Maximum distance from camera in which model will still be
+                              drawn.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">feetFollowDirection</span><sup>12</sup>
+                                 (section <span class="literal">action/match</span>)</em></p>
+                     <p>Setting this flag to TRUE means that when the action is played the
+                              model should be turned so that the direction of motion of its entity
+                              should be matched up with the direction of motion of the action.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">filler</span> (section
+                                 <span class="literal">action</span>)</em></p>
+                     <p>If set to TRUE, the animation is repeated automatically. Also
+                              known as 'loop'
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">firstFrame</span> (section
+                                 <span class="literal">animation</span>) &#8212; If
+                                 <span class="literal">nodefullVisual</span></em></p>
+                     <p>First frame to be played.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">frameCount</span> (section
+                                 <span class="literal">animation</span>) &#8212; If
+                                 <span class="literal">billboardVisual</span></em></p>
+                     <p>Number of frames in billboard's animation.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">frameRate</span> (section
+                                 <span class="literal">animation</span>)</em></p>
+                     <p>Preferred playback frame rate of animation.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">height</span> (section
+                                 <span class="literal">source</span>) &#8212; If
+                                 <span class="literal">billboardVisual</span></em></p>
+                     <p>Height of billboard-type model.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">isCoordinated</span><sup>12</sup>
+                                 (section <span class="literal">action</span>)</em></p>
+                     <p>TRUE if the animation is part of a sequence that is to be
+                              coordinated with a corresponding action on another model, and this
+                              animation does not start at the origin.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">isImpacting</span><sup>12</sup>
+                                 (section <span class="literal">action</span>)</em></p>
+                     <p>TRUE if the movement in the root node of the animation should be
+                              promoted to impact on the model. Additionally, if isImpacting is true,
+                              and the model is owned by a client-controlled Entity (such as the
+                              player), then the translation part of the action will be promoted to
+                              impact the entity's position.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">isMovement</span><sup>12</sup>
+                                 (section <span class="literal">action</span>)</em></p>
+                     <p>TRUE if the animation contains built-in movement, such as a walk
+                              or run cycle.
+                     </p>
+                     <p>The change in transform of the root node from the beginning to end
+                              is recorded, then proportionally subtracted from each frame. This means
+                              that if you turn this flag on, then a run animation that does not run on
+                              the spot will appear to.
+                     </p>
+                     <p>This option allows you to also use the <em class="emphasis">scalePlaybackSpeed</em> option.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">lastFrame</span><sup>2</sup>
+                                 (section <span class="literal">animation</span>)</em></p>
+                     <p>Last frame to be played.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">match</span><sup>1</sup>
+                                 (section <span class="literal">action</span>)</em></p>
+                     <p>Group of tags specifying when Action Matcher should trigger or
+                              cancel an action.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">material</span> &#8212; If
+                                 <span class="literal">billboardVisual</span></em></p>
+                     <p>Tag for material section of model. Contains settings for shader,
+                              collision flags, map files, etc...
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">matter</span> &#8212; If
+                                 <span class="literal">billboardVisual</span></em></p>
+                     <p>Name of model's matter.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">max</span> (section
+                                 <span class="literal">boundingBox</span>)</em></p>
+                     <p>Maximum extents of model's bounding box</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">maxEntityAux1</span><sup>1</sup>
+                                 (sections <span class="literal">action/match/cancel</span> and
+                                 <span class="literal">action/match/trigger</span>)</em></p>
+                     <p>Maximum value of some arbitrary attribute that entity must have
+                              for the action to be cancelled or triggered.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">maxEntitySpeed</span><sup>1</sup>
+                                 (section <span class="literal">action/match/cancel</span> and
+                                 <span class="literal">action/match/trigger</span>)</em></p>
+                     <p>Maximum matching speed to cancel or trigger the action.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">maxEntityYaw</span><sup>1</sup>
+                                 (section <span class="literal">action/match/cancel</span> and
+                                 <span class="literal">action/match/trigger</span>)</em></p>
+                     <p>Maximum yaw of the model in relation to the entity for the action
+                              to be cancelled or triggered.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">min</span> (section
+                                 <span class="literal">boundingBox</span>)</em></p>
+                     <p>Minimum extents of model's bounding box</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">minEntityAux1</span><sup>1</sup>
+                                 (section <span class="literal">action/match/cancel</span> and
+                                 <span class="literal">action/match/trigger</span>)</em></p>
+                     <p>Minimum value of some arbitrary attribute that entity must have
+                              for the action to be cancelled or triggered.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">minEntitySpeed</span><sup>1</sup>
+                                 (section <span class="literal">action/match/cancel</span> and
+                                 <span class="literal">action/match/trigger</span>)</em></p>
+                     <p>Minimum matching speed to cancel or trigger the action.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">minEntityYaw</span><sup>1</sup>
+                                 (section <span class="literal">action/match/cancel</span> and
+                                 <span class="literal">action/match/trigger</span>)</em></p>
+                     <p>Minimum yaw of the model in relation to the entity for the action
+                              to be cancelled or triggered.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">model</span> (section
+                                 <span class="literal">source</span>) &#8212; If
+                                 <span class="literal">billboardVisual</span></em></p>
+                     <p>The billboard's source model.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">name</span></em></p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis">Section
+                                              <span class="literal">animation</span></em></p>
+                              <p>Name of animation file containing animation data.</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Section
+                                              <span class="literal">action</span><sup>1</sup></em></p>
+                              <p><em class="emphasis">Name of action.</em></p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">nodefullVisual</span></em></p>
+                     <p>Name of the visual file containing the model's geometry.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">nodelessVisual</span></em></p>
+                     <p>Name of the visual file containing the model's geometry.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">nodeName</span><sup>1</sup>
+                                 (section <span class="literal">animation/alpha</span>)</em></p>
+                     <p>Name of node, defining section with node's blend alpha
+                              information.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">nodes</span> (section
+                                 <span class="literal">animation</span>) &#8212; If
+                                 <span class="literal">nodefullVisual</span></em></p>
+                     <p>Name of animation file containing raw keyframe data.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">oneShot</span><sup>12</sup>
+                                 (section <span class="literal">action/match</span>)</em></p>
+                     <p>Setting this to TRUE means that the Action Matcher will not
+                              continue playing that action past one cycle of it, if it is no longer
+                              triggered, but a <span class="literal">&lt;cancel&gt;</span> section was keeping
+                              it active.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">parent</span></em></p>
+                     <p>Name of parent model file, from which it inherits actions and
+                              animations.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">promoteMotion</span><sup>12</sup>
+                                 (section <span class="literal">action/match</span>)</em></p>
+                     <p>This means that the motion in the action is promoted to apply to
+                              the model on which it is played. Note that this option must be turned on
+                              for <em class="emphasis">isImpacting</em> or <em class="emphasis">isMovement</em> actions to work correctly. Also,
+                              please note that this option will do nothing unless the action <em class="emphasis">isImpacting</em> or <em class="emphasis">isMovement</em>. Please see the comments in <em class="emphasis">isImpacting</em> or <em class="emphasis">isMovement</em> for more information about motion
+                              promotion.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">property_name</span> (section
+                                 <span class="literal">source/dye</span>) &#8212; If
+                                 <span class="literal">billboardVisual</span></em></p>
+                     <p>Generic dye property.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">scalePlaybackSpeed</span><sup>12</sup>
+                                 (section <span class="literal">action/match</span>)</em></p>
+                     <p>Setting this flag to TRUE causes the speed of the animation to be
+                              scaled by the straight-line speed of the entity.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">source</span> &#8212; If
+                                 <span class="literal">billboardVisual</span></em></p>
+                     <p>Tag for source section. This section specified the source file,
+                              dimensions, dye, and bounding box for the billboard-type model.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">tint</span> (section
+                                 <span class="literal">source/dye</span>) &#8212; If
+                                 <span class="literal">billboardVisual</span></em></p>
+                     <p>Name of model's tint for generating the billboard.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">track</span><sup>12</sup>
+                                 (section <span class="literal">action</span>)</em></p>
+                     <p>The track the action plays on. Actions playing on the same track
+                              interrupt each other. There can only be one action playing at a time on
+                              each track (unless it is an old action blending out).&nbsp;
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">trigger</span><sup>1</sup>
+                                 (section <span class="literal">action/match</span>)</em></p>
+                     <p>Group of conditions that must be met before Action Matcher
+                              triggers the action.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">umbraOccluder</span></em></p>
+                     <p>TRUE if the model is used as an umbra occluder, this only has an
+                              effect when Umbra is running in software mode.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">visual</span> (section
+                                 <span class="literal">animation</span>) &#8212; If
+                                 <span class="literal">nodelessVisual</span></em></p>
+                     <p>Alternate visual used by this animation</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">width</span> (section
+                                 <span class="literal">source</span>) &#8212; If
+                                 <span class="literal">billboardVisual</span></em></p>
+                     <p>Width of billboard-type model.</p>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch20.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch22.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;20.&nbsp;<span class="literal">.mfm</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;22.&nbsp;<span class="literal">modules.xml</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

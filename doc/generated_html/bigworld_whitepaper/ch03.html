@@ -1,0 +1,693 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;3.&nbsp;Case Studies</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="BigWorld Technology Server Whitepaper">
+      <link rel="up" href="index.html" title="BigWorld Technology Server Whitepaper">
+      <link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Architecture Overview">
+      <link rel="next" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Demonstration and Analysis">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/bigworld_whitepaper/ch03.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Case Studies</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Deployment_Examples"></a>Chapter&nbsp;3.&nbsp;Case Studies
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="sect1"><a href="ch03.html#d0e149">3.1. Customer I</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="sect2"><a href="ch03.html#d0e163">3.1.1. Selected Solution:</a></span></dt>
+                        <dt><span class="sect2"><a href="ch03.html#d0e284">3.1.2. Summary</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="sect1"><a href="ch03.html#d0e289">3.2. Customer II</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="sect2"><a href="ch03.html#d0e307">3.2.1. Selected Solution</a></span></dt>
+                        <dt><span class="sect2"><a href="ch03.html#d0e430">3.2.2. Summary</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="sect1"><a href="ch03.html#d0e438">3.3. Customer III</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="sect2"><a href="ch03.html#d0e453">3.3.1. Selected Solution:</a></span></dt>
+                        <dt><span class="sect2"><a href="ch03.html#d0e574">3.3.2. Summary</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>This section discusses customers case studies. These case studies are
+                 based on real deployments. Due to commercial reasons, customer
+                 identifying details are not included in this document. We encourage
+                 you to discuss public customer information with BigWorld business
+                 managers.
+            </p>
+            <div class="sect1" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e149"></a>3.1.&nbsp;Customer I
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The game being deployed by this customer requires a very large
+                      single space (200 square kilometres).  It also requires all gamers to
+                      be connected to the same space and be able to interact with each
+                      other.
+               </p>
+               <p>Solution specific requirements:</p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Host a very large space.</p>
+                     </li>
+                     <li>
+                        <p>Support unlimited number of gamers.</p>
+                     </li>
+                  </ol>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e163"></a>3.1.1.&nbsp;Selected Solution:
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This customer choose to deploy a single BigWorld Server using a
+                           single network cluster. This BigWorld Server is scaled by adding
+                           additional machines to be used mainly as BaseApps and CellApps.
+                  </p>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e168"></a>3.1.1.1.&nbsp;Solution Features
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="informaltable">
+                        <table border="1">
+                           <colgroup>
+                              <col width="50%">
+                              <col width="50%">
+                           </colgroup>
+                           <tbody>
+                              <tr>
+                                 <td>Feature Description</td>
+                                 <td>Feature
+                                                    Applicability
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Server Fault Tolerance</td>
+                                 <td>This deployment provides a very high level of fault
+                                                    tolerance using the BigWorld fault tolerance capabilities.
+                                                    Each deployed BaseApp or CellApp is backed up by other
+                                                    BaseApps and the server can withstand multiple components
+                                                    crash without downtime.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>How to Scale</td>
+                                 <td>The game server can scale as much as required by adding
+                                                    additional CellApps and BaseApps assuming reasonable entity
+                                                    densities are maintained.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Load balancing and efficient hardware usage</td>
+                                 <td>All hardware is being utilised. Load balancing is being
+                                                    managed by the single server.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Maintenance Effort</td>
+                                 <td>Maintenance of multiple large shards on multiple
+                                                    network clusters is relatively complicated. A MySQL
+                                                    DBA is recommended to manage the MySQL database.
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e201"></a>3.1.1.2.&nbsp;Implementation
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="informaltable">
+                        <table border="1">
+                           <colgroup>
+                              <col width="50%">
+                              <col width="50%">
+                           </colgroup>
+                           <tbody>
+                              <tr>
+                                 <td>Resource Description</td>
+                                 <td>Total number of
+                                                    Resources
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Total number of shards</td>
+                                 <td>1</td>
+                              </tr>
+                              <tr>
+                                 <td>Total machines per one shard</td>
+                                 <td>30</td>
+                              </tr>
+                              <tr>
+                                 <td>Number of CPUs per machine</td>
+                                 <td>4 (Quad Core machines)</td>
+                              </tr>
+                              <tr>
+                                 <td>Memory per machine</td>
+                                 <td>6 GB</td>
+                              </tr>
+                              <tr>
+                                 <td>Hard disk requirements</td>
+                                 <td>100 GB disk</td>
+                              </tr>
+                              <tr>
+                                 <td>Total CPUs for the deployment</td>
+                                 <td>120</td>
+                              </tr>
+                              <tr>
+                                 <td>DBMgr CPUs</td>
+                                 <td>4 (single machine)</td>
+                              </tr>
+                              <tr>
+                                 <td>BaseAppMgr CPUs</td>
+                                 <td>2</td>
+                              </tr>
+                              <tr>
+                                 <td>CellAppMgr CPUs</td>
+                                 <td>2</td>
+                              </tr>
+                              <tr>
+                                 <td>LoginApp CPUs</td>
+                                 <td>4</td>
+                              </tr>
+                              <tr>
+                                 <td>BaseApp CPUs</td>
+                                 <td>27</td>
+                              </tr>
+                              <tr>
+                                 <td>CellApp CPUs</td>
+                                 <td>81</td>
+                              </tr>
+                              <tr>
+                                 <td>Estimated machines cost (USD) (per shard)</td>
+                                 <td>40,000 - 50,000</td>
+                              </tr>
+                              <tr>
+                                 <td>Observed Max CCUs</td>
+                                 <td>20,000</td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e284"></a>3.1.2.&nbsp;Summary
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This customer choose a single shard deployment. The deployed
+                           solution hosts a 200 square kilometre space with more than 20,000 CCUs and is
+                           currently available as an online game. Using the BigWorld Server
+                           solution this customer achieved a unique deployment not available from
+                           other games providers.
+                  </p>
+               </div>
+            </div>
+            <div class="sect1" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e289"></a>3.2.&nbsp;Customer II
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The game being deployed by this customer hosts more than 100,000 CCUs. The game logic
+                      allows separating this solution into multiple shards.
+               </p>
+               <p>Solution specific requirements:</p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Host more than 100,000 CCUs.</p>
+                     </li>
+                     <li>
+                        <p>Sharding is possible for this game and interconnections between
+                                   different shards are minimal
+                        </p>
+                     </li>
+                     <li>
+                        <p>The customer has chosen to invest extra resources to host each shard on a separate network cluster; this 
+                                   provides higher availability, but lower hardware efficiency.
+                        </p>
+                     </li>
+                  </ol>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e307"></a>3.2.1.&nbsp;Selected Solution
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This customer choose to deploy a Multiple Shard Deployment Using
+                           Multiple Network Clusters. This solution scales by adding additional
+                           machines for each shard or by adding more shards.
+                  </p>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e312"></a>3.2.1.1.&nbsp;Solution Features
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="informaltable">
+                        <table border="1">
+                           <colgroup>
+                              <col width="50%">
+                              <col width="50%">
+                           </colgroup>
+                           <tbody>
+                              <tr>
+                                 <td>Feature Description</td>
+                                 <td>Feature Applicability to
+                                                    this deployment
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Server Fault Tolerance</td>
+                                 <td>This deployment provides an extremely good level of
+                                                    fault tolerance as in addition to the standard fault tolerance
+                                                    capabilities of the BigWorld Server, a failure on one shard
+                                                    has no impact on the operation of other shards.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>How to Scale</td>
+                                 <td>The game server can be scaled using two methods:
+                                                    Firstly, each shard can be scaled linearly by adding hardware
+                                                    to it. Secondly, additional shards can be added in dedicated
+                                                    network clusters.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Load balancing and efficient hardware usage</td>
+                                 <td>The customer choose to dedicate separate network
+                                                    clusters for each shard. This decision requires manually
+                                                    allocating servers to each shard while removing any
+                                                    interdependency between each shard. Customers can also choose
+                                                    a deployment using one network cluster hosting multiple
+                                                    shards, this solution will provide better scaleability than
+                                                    this solution while sharing similar capabilities.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Maintenance Effort</td>
+                                 <td>Maintenance of multiple large shards on multiple
+                                                    network clusters is relatively complicated. A MySQL
+                                                    DBA is recommended to manage the MySQL database.
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e345"></a>3.2.1.2.&nbsp;Implementation
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>This example shows a typical shard which is part of a Multiple
+                                Large Shard Deployment Using Multiple Network Clusters.
+                     </p>
+                     <div class="informaltable">
+                        <table border="1">
+                           <colgroup>
+                              <col width="50%">
+                              <col width="50%">
+                           </colgroup>
+                           <tbody>
+                              <tr>
+                                 <td>Resource Description</td>
+                                 <td>Total number of
+                                                    Resources
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Total number of shards</td>
+                                 <td>Unlimited</td>
+                              </tr>
+                              <tr>
+                                 <td>Total machines per one shard</td>
+                                 <td>10</td>
+                              </tr>
+                              <tr>
+                                 <td>Number of CPUs per machine</td>
+                                 <td>4 (Quad Core machines)</td>
+                              </tr>
+                              <tr>
+                                 <td>Memory per machine</td>
+                                 <td>6 GB</td>
+                              </tr>
+                              <tr>
+                                 <td>Hard disk requirements</td>
+                                 <td>100 GB disk</td>
+                              </tr>
+                              <tr>
+                                 <td>Total CPUs for the deployment</td>
+                                 <td>40</td>
+                              </tr>
+                              <tr>
+                                 <td>DBMgr CPUs</td>
+                                 <td>2</td>
+                              </tr>
+                              <tr>
+                                 <td>BaseAppMgr CPUs</td>
+                                 <td>1</td>
+                              </tr>
+                              <tr>
+                                 <td>CellAppMgr CPUs</td>
+                                 <td>1</td>
+                              </tr>
+                              <tr>
+                                 <td>LoginApp CPUs</td>
+                                 <td>2</td>
+                              </tr>
+                              <tr>
+                                 <td>BaseApp CPUs</td>
+                                 <td>8</td>
+                              </tr>
+                              <tr>
+                                 <td>CellApp CPUs</td>
+                                 <td>27</td>
+                              </tr>
+                              <tr>
+                                 <td>Estimated machines cost (USD) (per shard)</td>
+                                 <td>14,000 - 20,000</td>
+                              </tr>
+                              <tr>
+                                 <td>Observed Max CCUs</td>
+                                 <td>6,000 per shard, 120,000 for the deployment</td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e430"></a>3.2.2.&nbsp;Summary
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This customer chose a multiple shard deployment. The deployed
+                           solution hosts around 120,000 players simultaneously. This deployment
+                           provides a world class solution and is still scaling to meet more gamers
+                           requirements.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>Deployment of this size usually requires either a dedicated
+                                deployment team or working with an experienced hosting company.
+                                BigWorld has multiple partners which are able to provide hosting
+                                solutions similar to the above solution.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="sect1" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e438"></a>3.3.&nbsp;Customer III
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This customer game is in beta stages and requires up to 2000
+                      CCUs
+               </p>
+               <p>Solution specific requirements:</p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Simple solution to allow relatively easy deployment during beta
+                                   and testing stages.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Easy scaling of the solution to the full scaled solution.</p>
+                     </li>
+                  </ol>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e453"></a>3.3.1.&nbsp;Selected Solution:
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This customer choose to deploy a single medium sized BigWorld
+                           Server using a single network cluster. This solution support the
+                           required number of CCUs and can be easily scaled to either of the
+                           solutions appearing above or to any other BigWorld Server
+                           deployment.
+                  </p>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e458"></a>3.3.1.1.&nbsp;Solution Features
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="informaltable">
+                        <table border="1">
+                           <colgroup>
+                              <col width="50%">
+                              <col width="50%">
+                           </colgroup>
+                           <tbody>
+                              <tr>
+                                 <td>Feature Description</td>
+                                 <td>Feature
+                                                    Applicability
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Server Fault Tolerance</td>
+                                 <td>This deployment provides a very high level of fault
+                                                    tolerance using the standard BigWorld Technology fault
+                                                    tolerance features.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>How to Scale</td>
+                                 <td>The game server can be scaled by adding machines or by
+                                                    adding additional shards, if game logic allows a multiple shard
+                                                    deployment.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Load balancing and efficient hardware usage</td>
+                                 <td>The BigWorld Server standard load-balancing features
+                                                    can be used for this deployment.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Maintenance Effort</td>
+                                 <td>Maintenance of a medium sized BigWorld cluster is
+                                                    relatively low, and usually doesn't require dedicated
+                                                    resources.
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+                  <div class="sect3" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e491"></a>3.3.1.2.&nbsp;Implementation
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="informaltable">
+                        <table border="1">
+                           <colgroup>
+                              <col width="50%">
+                              <col width="50%">
+                           </colgroup>
+                           <tbody>
+                              <tr>
+                                 <td>Resource Description</td>
+                                 <td>Total number of
+                                                    Resources
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Total number of shards</td>
+                                 <td>One</td>
+                              </tr>
+                              <tr>
+                                 <td>Total machines per one shard</td>
+                                 <td>6</td>
+                              </tr>
+                              <tr>
+                                 <td>Number of CPUs per machine</td>
+                                 <td>2 (Dual Core machines)</td>
+                              </tr>
+                              <tr>
+                                 <td>Memory per machine</td>
+                                 <td>2 GB</td>
+                              </tr>
+                              <tr>
+                                 <td>Hard disk requirements</td>
+                                 <td>100 GB disk</td>
+                              </tr>
+                              <tr>
+                                 <td>Total CPUs for the deployment</td>
+                                 <td>12</td>
+                              </tr>
+                              <tr>
+                                 <td>DBMgr CPUs</td>
+                                 <td>1</td>
+                              </tr>
+                              <tr>
+                                 <td>BaseAppMgr CPUs</td>
+                                 <td>0.5</td>
+                              </tr>
+                              <tr>
+                                 <td>CellAppMgr CPUs</td>
+                                 <td>0.5</td>
+                              </tr>
+                              <tr>
+                                 <td>LoginApp CPUs</td>
+                                 <td>1</td>
+                              </tr>
+                              <tr>
+                                 <td>BaseApp CPUs</td>
+                                 <td>2</td>
+                              </tr>
+                              <tr>
+                                 <td>CellApp CPUs</td>
+                                 <td>7</td>
+                              </tr>
+                              <tr>
+                                 <td>Estimated machines cost (USD) (per shard)</td>
+                                 <td>6,000 - 10,000</td>
+                              </tr>
+                              <tr>
+                                 <td>Observed Max CCUs</td>
+                                 <td>1,500</td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+               <div class="sect2" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e574"></a>3.3.2.&nbsp;Summary
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This customer choose a medium sized BigWorld Server deployment.
+                           The deployed solution hosts up to 1,500 CCUs and was used during the
+                           beta stages of the product. This beta succeeded and the game is now
+                           being officially released using a bigger deployment.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;Architecture Overview&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;Demonstration and Analysis</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

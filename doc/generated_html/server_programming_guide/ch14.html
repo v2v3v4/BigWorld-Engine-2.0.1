@@ -1,0 +1,285 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;14.&nbsp;External Services</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch13.html" title="Chapter&nbsp;13.&nbsp;XML Data File Access">
+      <link rel="next" href="ch15.html" title="Chapter&nbsp;15.&nbsp;Fault Tolerance">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch14.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;14.&nbsp;External Services</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch13.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch15.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_External_Services"></a>Chapter&nbsp;14.&nbsp;External Services
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch14.html#xref_Non-blocking_Methods">14.1. Non-blocking Methods</a></span></dt>
+                  <dt><span class="section"><a href="ch14.html#xref_Background_Threads">14.2. Background Threads</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch14.html#d0e12210">14.2.1. Caveats</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>From your game script you may want to access external services such as
+               a billing or shopping system. When doing so, it is important not to block on
+                 I/O as a process that pauses for too long may be considered as dead by other
+                 server components. To avoid blocking on I/O you can either:
+            </p>
+            <div class="orderedlist">
+               <ol type="1">
+                  <li>
+                     <p>Use non-blocking methods and handle notifications (the reactor
+                              pattern).
+                     </p>
+                  </li>
+                  <li>
+                     <p>Call blocking methods from a background thread (the thread pool
+                              pattern).
+                     </p>
+                  </li>
+               </ol>
+            </div>
+            <p>When available, non-blocking methods is preferred over background
+                 threads.
+            </p>
+            <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+               <h3 class="title">Note</h3>
+               <p>Due to the Python interpreter's implementation, the main thread
+                      could still be blocked if a background thread does not release the Global
+                      Interpreter Lock (GIL) frequently enough. By default a thread
+                      automatically releases the GIL every 100 bytecode instructions. The GIL is
+                      not automatically released when C code is called, the C code has the
+                      responsibility of periodically releasing the GIL. Please be aware that
+                      some Python modules are simply C API bindings.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Non-blocking_Methods"></a>14.1.&nbsp;Non-blocking Methods
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The easiest way to avoid blocking on I/O is to use non-blocking
+                      methods and handle notifications. You can register a callback to be
+                      invoked once a file descriptor has characters to be read with the
+                      <code class="classname">BigWorld</code>.<code class="methodname">registerFileDescriptor</code>
+                      method. Similarly, you can register a callback to be invoked once a file
+                      descriptor becomes writable with the
+                      <code class="classname">BigWorld</code>.<code class="methodname">registerWriteFileDescriptor</code>
+                      method. Both methods are respectively complemented with the
+                      <code class="classname">BigWorld</code>.<code class="methodname">deregisterFileDescriptor</code>
+                      and
+                      <code class="classname">BigWorld</code>.<code class="methodname">deregisterWriteFileDescriptor</code>
+                      methods. For more information please see the BaseApp and CellApp API
+                      documentation.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Background_Threads"></a>14.2.&nbsp;Background Threads
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To call a blocking method in a background thread you need to use the
+                      <code class="classname">BackgroundTask</code> module (this module is available
+                      from the file <code class="filename">BackgroundTask.py</code> in the import path
+                      <code class="filename">bigworld/res/scripts/server_common</code>). This module is
+                      available to both BaseApp and CellApp script. Below is a summary of
+                      usage:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Create a <code class="classname">BackgroundTask.Manager</code>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Use the <code class="classname">BackgroundTask.Manager</code> to start
+                                   background threads.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Wrap blocking calls into a <code class="classname">BackgroundTask</code>
+                                   subclass.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Add <code class="classname">BackgroundTask</code>s to the
+                                   <code class="classname">BackgroundTask.Manager</code>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Use the <code class="classname">BackgroundTask.Manager</code> to stop
+                                   background threads.
+                        </p>
+                     </li>
+                  </ol>
+               </div>
+               <p>The remainder of this section describes how to add a row to an
+                      external database in a <code class="classname">BackgroundTask</code>.
+               </p><pre class="programlisting">import BackgroundTask
+import sqlalchemy
+
+bgTaskMgr = None
+
+def init( config_file ):
+  ...
+  bgTaskMgr = BackgroundTask.BgTaskManager()
+  bgTaskMgr.startThreads( 5 ) # Can optionally pass a functor to create thread data per thread.
+  
+def fini():
+  ...
+  bgTaskMgr.stopAll()
+  
+class Note( sqlalchemy.SQLAlchemyBase ):
+  ... </pre><p><span class="citetitle"><span class="literal">fantasydemo/res/scripts/base/NoteDataStore.py</span></span></p>
+               <p>In the code above, the init method creates a
+                      <code class="classname">BackgroundTask.Manager</code> (step 1) and start
+                      background threads (step 2) while the fini method stops all background
+                      threads (step 5).
+               </p><pre class="programlisting">class AddNoteTask( BackgroundTask ):
+  def __init__( self, noteReporter, description ):
+    self.noteReporter = noteReporter
+    self.note = NoteDataStore.Note( description )
+
+  def doBackgroundTask( self, bgTaskMgr, threadData ):
+    session = create_session()
+    session.add( self.note )
+    session.flush()                          # Blocking method
+
+    bgTaskMgr.addMainThreadTask( self )      # Re-add ourself to invoke the callback in the main thread
+
+  def doMainThreadTask( self, bgTaskMgr ):   # Invoke the callback
+    ...
+    self.noteReporter.onAddNote( id )
+
+class NoteReporter( object ):
+  def addNote( self, description ):
+    ...
+    task = AddNoteTask( self, description )
+    NoteDataStore.bgTaskMgr.addBackgroundTask( task )
+
+  def onAddNote( self, id ):                   # AddNoteTask's callback
+    ...</pre><p><span class="citetitle"><span class="literal">fantasydemo/res/scripts/base/NoteReporter.py</span></span></p>
+               <p>In the code above, the <code class="classname">AddNoteTask</code> subclass
+                      wraps the blocking method <code class="methodname">session.flush</code> (step 3).
+                      The method
+                      <code class="classname">NoteReporter</code>.<code class="methodname">addNote</code>
+                      creates an <code class="classname">AddNoteTask</code> instance and adds it to the
+                      <code class="classname">BackgroundTask.Manager</code> as a background thread task
+                      (step 4). The <code class="classname">AddNoteTask</code> instance will invoke the
+                      callback
+                      <code class="classname">NoteReporter</code>.<code class="methodname">onAddNote</code>
+                      after it finishes its background thread work. To invoke a callback,
+                      overload the
+                      <code class="classname">BackgroundTask</code>.<code class="methodname">doMainThreadTask</code>
+                      method and inside
+                      <code class="classname">BackgroundTask</code>.<code class="methodname">doBackgroundTask</code>
+                      make the subclass re-add itself to the
+                      <code class="classname">BackgroundTask.Manager</code> as a main thread
+                      task.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>The <code class="classname">BackgroundTask</code> module is a Python port
+                           of the C++ version located at
+                           <code class="filename">bigworld/src/lib/cstdmf/bgtask_manager.hpp</code></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e12210"></a>14.2.1.&nbsp;Caveats
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Due to Python's thread implementation and the way that BigWorld
+                           incorporates Python, it is unsafe to perform any modifications on
+                           entities from within a background thread. For example, the following
+                           code would be considered unsafe:
+                  </p><pre class="programlisting">class DatabaseTask( BackgroundTask ):
+
+  ...
+
+  def doBackgroundTask( self, bgTaskMgr, threadData ):
+    # Interact with DB to fetch data
+    
+    self.entity.cell.applyData( dataFromDB )</pre><p>It is unsafe to call the <code class="code">cell.applyData()</code> method as
+                           the Python thread context may switch back to the main thread and send a
+                           corrupt network packet.
+                  </p>
+                  <p>A safe / correct approach to avoid these kind of issues would be
+                           the following:
+                  </p><pre class="programlisting">class DatabaseTask( BackgroundTask ):
+
+  ...
+
+  def doBackgroundTask( self, bgTaskMgr, threadData ):
+    # Interact with DB to fetch data
+    self.dataFromDB = dataFromDB
+    bgTaskMgr.addMainThreadTask( self )
+
+
+  def doMainThreadTask( self, bgTaskMgr ):
+    self.entity.cell.applyData( self.dataFromDB )</pre></div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch13.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch15.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;13.&nbsp;XML Data File Access&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;15.&nbsp;Fault Tolerance</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

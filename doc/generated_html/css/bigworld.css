@@ -1,0 +1,449 @@
+/* Bigworld documentation stylesheet */
+
+body {
+	font-family: Tahoma, Verdana, sans-serif;
+	font-size: 0.8em;
+	margin: 0px;
+	padding: 0px;
+}
+
+body table {
+	font-size: inherit; 
+}
+
+.emphasis {
+	font-weight:bold;
+	font-style:normal;
+	}
+
+.section table {
+	border: #999999 solid 1px;
+	background-color:#FFFFFF;
+	border-collapse:collapse;
+}
+
+.sect1 table {
+	border: #999999 solid 1px;
+	background-color:#FFFFFF;
+	border-collapse:collapse;
+}
+
+.section table th {
+	border: #999999 solid 1px;
+	background-color:#000000;
+	color:#FFFFFF;
+	text-align:left;
+	padding: 5px;
+}
+
+.sect1 table th {
+	border: #999999 solid 1px;
+	background-color:#000000;
+	color:#FFFFFF;
+	text-align:left;
+	padding: 5px;
+}
+
+.informalfigure{
+	margin-left:25px;
+}
+
+.informalfigure .mediaobject .caption p{
+	color:#666666;
+	margin-top:0;
+	font-weight:bold;
+}
+
+.section table td{
+	border: #999999 solid 1px;
+	padding: 5px;
+}
+
+.sect1 table td{
+	border: #999999 solid 1px;
+	padding: 5px;
+}
+
+.white table{
+	border: white solid 1px;
+	background-color:white;
+	border-collapse:collapse;
+}
+
+.white table th, .white table td{
+	background-color:#FFFFFF;
+	color: #000000;
+	text-align:left;
+	border: white solid 1px;
+	padding: 5px;
+}
+
+.striped table .odd{
+	background-color:#EFEFEF;
+}
+
+.calloutlist table{
+	border: 1;
+	background-color:#ffffff;
+	margin-top: 3pt;
+	margin-left: 25px;
+	padding: 0;
+}
+
+.calloutlist i{
+	font-weight:bold;
+	font-style:normal;
+}
+
+.calloutlist table td{
+	border: 0;
+	padding: 3pt;
+}
+
+li .programlisting {
+	color:#000000;
+}
+
+#bigworld-header {
+	background-color: ;
+	border: 			0;
+	margin: 			0;
+	padding: 			0;
+	background-image:	url( ../images/headerbg.jpg );
+	background-repeat:	no-repeat;
+	background-color:	#104D8C;
+	border-bottom: 		1px solid #104D8C;
+	height: 73px;
+}
+
+#bigworld-header img {
+	position: relative;
+	left: 0.6cm;
+	top: 6px;
+}
+
+#content {
+	/*margin: 0.5cm 1cm;  */
+}
+
+.navfooter hr.navheaderline{
+	margin-bottom:0;
+}
+
+hr.navheaderline{
+	margin-top:0;
+}
+
+hr {
+	border: 0;
+	width: 100%;
+	height: 1px;
+	background-color: #3A6CA7;
+}
+
+pre.programlisting {
+	border: 1px solid #999999;
+	background-color: #FBFBFB;
+	padding: 5px;
+	margin-left: 25px;
+	margin-right: 25px;
+	margin-bottom:0;
+}
+
+pre, code {
+	font-size: 1.2em;
+}
+
+
+h1 { /* only use on the title page */
+	font-family: Tahoma, Verdana, sans-serif;
+	color: #3577FF;
+	margin:0;
+}
+
+h2 {
+	font-family: Tahoma, Verdana, sans-serif;
+	padding: 4px 3px;
+	color:white;
+    margin:0;
+}
+
+div.chapter, div.book {
+	margin: 0cm 1cm; 
+}
+
+div.book div.titlepage{
+	padding-left:5px;
+}
+
+div.titlepage {
+	margin:0;
+	background-color:E7EFF8;
+}
+
+div.chapter div.titlepage h2 { /* chapter title */
+    font-size: 150%;
+    font-weight: Bold;
+	padding: 4px 3px;
+    background-color: #072C94;
+	color:white;
+}
+
+div.chapter div.section div.titlepage h2, div.chapter div.sect1 div.titlepage h2 { /* section title */
+    font-size: 120%;
+    font-weight: Bold;
+	background-color: #9AC5F8;
+	color: black;
+	padding: 2px 4px;
+	margin-top:20px;
+}
+
+div.article div.titlepage h2 { /* article title */
+    font-size: 150%;
+    font-weight: Bold;
+	padding: 4px 3px;
+    background-color: #072C94;
+	color:white;
+}
+
+div.article div.section div.titlepage h2, div.article div.sect1 div.titlepage h2 { /* section title */
+    font-size: 120%;
+    font-weight: Bold;
+	background-color: #9AC5F8;
+	color: black;
+	padding: 2px 4px;
+	margin-top:20px;
+}
+
+h3 {
+	color: #072C94;
+	font-size: 110%;
+	border-bottom: #072C94 solid 1px;
+	padding: 2px 4px;
+}
+
+h4 {
+	color: #3577FF;
+	font-size: 100%;
+	border-bottom: #3577FF solid 1px;
+	padding: 2px 4px;
+}
+
+h5 {
+	color: #3577FF;
+	font-size: 95%;
+	border-bottom: #3577FF solid 1px;
+	padding: 2px 4px;
+	margin-left: 10px;
+}
+
+li {
+	/*color: red; */
+}
+
+div.altrow {
+	margin-left: 20pt;
+}
+
+div.note {
+	border: 1px solid #000000;
+	padding: 0px 0px 4px 0px;
+	background-color: #E8F2FF;
+	margin: 10px 25px 20px 25px;
+}
+
+div.note h3 {
+    font-weight: Bold;
+	background-color: #000000;
+	text-align:center;
+	color: white;
+	padding: 2px 6px;
+	margin: 0;
+	padding: 5px;
+	border: 0;
+}
+
+div.note p {
+	padding: 0px 0px;
+	margin: 6px;
+}
+
+div.note .itemizedlist ul{
+	margin-top:0;
+	margin-bottom:0;
+	margin:0;
+	padding-left:20pt;
+}
+
+div.note .itemizedlist ul .itemizedlist ul{
+	padding-left:15pt;
+}
+
+div.note .itemizedlist li{
+	margin-bottom:0;
+}
+
+div.note .informalfigure {
+	padding: 0px 12px;
+}
+
+div.book div.toc {
+	margin: 0;
+	border-bottom: 0;
+}
+
+.book div.toc{
+	background-color:#FFFFFF;
+
+}
+div.toc {
+	margin: 0;
+	background-color:#E7EFF8;
+	border-bottom: 0.3pt solid navy;
+	padding-left:5px;
+}
+
+div.toc a:link, div.toc a:visited{
+	color: #072C94;
+	font-size: 90%;
+	text-decoration:none;
+}
+
+div.toc a:hover, div.toc a:active{
+	color: #FF5300;
+	font-size: 90%;
+}
+
+div.toc p{
+	margin:0;
+	padding-top:10px;
+}
+
+div.toc dl{
+	margin-top:3pt;
+	margin-bottom:2pt;
+}
+
+div.toc dl dt {
+	font-weight:bold;
+	margin-left:10px;
+}
+
+div.toc dl dd {
+	padding:0;
+	margin:0;
+}
+
+div.book div.toc dl dd dl dt {
+	margin-left: 25px;
+}
+
+div.toc dl dd dl dt {
+	margin-left: 35px;
+	font-weight:normal;
+}
+
+div.toc dl dd dl {
+	margin-top: 0pt;
+	margin-bottom: 0pt;
+}
+
+div.book div.toc dl dd dl dd {
+	margin-left: 18pt;
+}
+
+
+div.toc dl dd dl dd {
+	margin-left: 45pt;
+}
+
+div.toc dl dd dl dd dl dd {
+	margin-left: 10pt;
+}
+
+div.itemizedlist ul{
+	padding-left:18pt;
+}
+
+div.itemizedlist li{ 
+	color: #FF5300; 
+	list-style:square;
+	margin-bottom: 12px;  /* to add margin in between bullet points */
+}
+
+div.itemizedlist li p{
+	color: black;
+	margin: 3px; /* to adjust size in between paragraphs within itemizedlist*/
+}
+
+.caption {
+	color:#666666;
+	font-size: 90%;
+}
+
+p span.citetitle { /* have tried to adjust margin top to reduce space after programlisting, but doesn't work */
+	color:#666666;
+	font-size: 90%;
+	margin-left: 30px;
+	font-weight: bold;
+}
+
+/* chunked html files only */
+
+.navheader table{
+	background-color:#E7EFF8;
+}
+
+div.navheader {
+	padding-top:0px;
+}
+
+.navheaderline {
+	color: #3577FF;
+	width: 95%;
+}
+
+div.navheader th{
+	color: #FFFFFF;  /* This information is redundant, as <h2> has exactly the same text - try to remove it from html.py bigword.xsl  #3577FF; */
+	padding:0;
+	font-size:0;
+}
+
+div.navheader td{
+	padding:0;
+	font-size:90%;
+}
+
+div.navfooter {
+	padding-bottom:10px;
+}
+
+div.navfooter table {
+	background-color:#E7EFF8;
+}
+
+div.navfooter td {
+	font-size: 90%;
+	color: #666666;
+}
+
+div.navheader a:link, div.navheader a:visited, div.navfooter a:link, div.navfooter a:visited {
+	color: #3577FF;
+	font-weight: bold;
+	font-style:normal;
+}
+
+div.navheader a:hover, div.navheader a:active, div.navfooter a:hover, div.navfooter a:active {
+	color: #FF5300;
+	font-weight: bold;
+	font-style:normal;
+}
+
+div.figure {
+	font-size: 90%;
+	color: #666666;
+}
+
+span.literal {
+	font-family: Courier, mono;
+}

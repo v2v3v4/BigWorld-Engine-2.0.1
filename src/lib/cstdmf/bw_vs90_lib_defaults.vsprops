@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="bw_vs90_lib_defaults"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="..\;..\python\Include;..\umbra\interface;../fmod/api/inc;../fmod/fmoddesignerapi/api/inc;../third_party/openautomate/inc;../third_party/openautomate/oautillib;../third_party/openssl/inc32"
+		PreprocessorDefinitions="_LIB"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		OutputFile="$(OutDir)\$(ProjectName).lib"
+	/>
+</VisualStudioPropertySheet>

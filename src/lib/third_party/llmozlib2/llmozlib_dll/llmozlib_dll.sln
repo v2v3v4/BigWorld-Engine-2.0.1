@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "llmozlib2_dll_runtime", "llmozlib_dll\llmozlib2_vc8_dl_runtime.vcproj", "{CEC1BF61-DB90-4823-87A5-2BB6AEA80C19}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "llmozlib_dll", "llmozlib_dll\llmozlib_dll.vcproj", "{6BC1C2F5-6D11-4823-B8B1-60DC7913675C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CEC1BF61-DB90-4823-87A5-2BB6AEA80C19} = {CEC1BF61-DB90-4823-87A5-2BB6AEA80C19}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple", "tests\simple\a1.vcproj", "{4D30744A-E485-4A97-A8AE-6A66B33EAF69}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6BC1C2F5-6D11-4823-B8B1-60DC7913675C} = {6BC1C2F5-6D11-4823-B8B1-60DC7913675C}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEC1BF61-DB90-4823-87A5-2BB6AEA80C19}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CEC1BF61-DB90-4823-87A5-2BB6AEA80C19}.Debug|Win32.Build.0 = Debug|Win32
+		{CEC1BF61-DB90-4823-87A5-2BB6AEA80C19}.Release|Win32.ActiveCfg = Release|Win32
+		{CEC1BF61-DB90-4823-87A5-2BB6AEA80C19}.Release|Win32.Build.0 = Release|Win32
+		{6BC1C2F5-6D11-4823-B8B1-60DC7913675C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6BC1C2F5-6D11-4823-B8B1-60DC7913675C}.Debug|Win32.Build.0 = Debug|Win32
+		{6BC1C2F5-6D11-4823-B8B1-60DC7913675C}.Release|Win32.ActiveCfg = Release|Win32
+		{6BC1C2F5-6D11-4823-B8B1-60DC7913675C}.Release|Win32.Build.0 = Release|Win32
+		{4D30744A-E485-4A97-A8AE-6A66B33EAF69}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4D30744A-E485-4A97-A8AE-6A66B33EAF69}.Debug|Win32.Build.0 = Debug|Win32
+		{4D30744A-E485-4A97-A8AE-6A66B33EAF69}.Release|Win32.ActiveCfg = Release|Win32
+		{4D30744A-E485-4A97-A8AE-6A66B33EAF69}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

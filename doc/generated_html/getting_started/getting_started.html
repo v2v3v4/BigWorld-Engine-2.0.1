@@ -1,0 +1,74 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Getting Started</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="Getting_Started"></a>Getting Started</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#d0e21">1. Getting Started</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e26">1.1. BigWorld Technology Art Pipeline</a></span></dt><dt><span class="section"><a href="#d0e75">1.2. BigWorld Technology Development Framework</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_starting_up">2. How to Setup Your Development Environment</a></span></dt><dt><span class="chapter"><a href="#xref_Running_BigWorld_Demos">3. Running BigWorld Technology Demos</a></span></dt><dt><span class="chapter"><a href="#d0e225">4. Getting Support</a></span></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e21"></a>Chapter&nbsp;1.&nbsp;Getting Started</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e26">1.1. BigWorld Technology Art Pipeline</a></span></dt><dt><span class="section"><a href="#d0e75">1.2. BigWorld Technology Development Framework</a></span></dt></dl></div><p>BigWorld Technology is a mature middleware platform for developers of
+  Massively Multiplayer Online Games and Virtual Worlds. Development of an
+  online game usually requires an art pipeline used to create the look and
+  feel of the game levels, and a development framework to create the game
+  logic and AI.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e26"></a>1.1.&nbsp;BigWorld Technology Art Pipeline</h2></div></div></div><p>The BigWorld Technology art pipeline is used by artist to create
+    game assets and includes the following steps (see image below):</p><div class="itemizedlist"><ul type="disc"><li><p>Textures are developed using a texture creation tool (Photoshop,
+        Gimp or equivalent).</p></li><li><p>Meshes, animations and morph targets are built using 3ds Max or
+        Maya and exported using the supplied exporters.</p></li><li><p>Particle systems are built using Particle Editor.</p></li><li><p>Model Editor is used to edit specific Models&#8217; parameters
+        (including Lod levels, animation blends, material overrides, and
+        shader parameters).</p></li><li><p>World Editor is used to build the final game levels (integrating
+        all art assets which were generated in the previous steps).</p><p>World Editor allows creating the scenery of the level as
+        follows:</p><div class="itemizedlist"><ul type="circle"><li><p>Sculpting outdoor terrain scenery.</p></li><li><p>Creating indoor shell systems such as dungeons.</p></li><li><p>Placement of art assets generated and exported using the 3D
+            modeling tools mentioned above.</p></li><li><p>Placement of particles that have been generated using
+            Particle Editor.</p></li><li><p>Controlling default weather and lighting of the
+            world.</p></li><li><p>Other level specific parameters may be also be modified as
+            required using World Editor.</p></li></ul></div></li></ul></div><div class="informalfigure"><div class="mediaobject"><img src="images/pipeline.png" height=""><span class="caption"><p>BigWorld Technology Art Pipeline</p></span></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e75"></a>1.2.&nbsp;BigWorld Technology Development Framework</h2></div></div></div><p>The BigWorld Technology Development Framework is used by developers
+    to develop game logic and AI and is based on the Python scripting
+    language. This Framework includes the following components:</p><div class="itemizedlist"><ul type="disc"><li><p>Standard Python is used as the game engine scripting
+        language.</p></li><li><p>The BigWorld Technology engine exposes a rich set of documented
+        Python APIs to be used for game scripting.</p></li><li><p>Distributed Python objects are automatically instantiated on the
+        game client and the game server to allow data synchronisation between
+        the client and server.</p></li><li><p>Advanced users can extend either the game client or the game
+        server using C++.</p></li></ul></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_starting_up"></a>Chapter&nbsp;2.&nbsp;How to Setup Your Development Environment</h2></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>Review the BigWorld documentation for further details about
+      BigWorld Technology.</p><p>The <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//documentation_roadmap.html#Documentation_Roadmap" class="olink">Documentation Roadmap</a><sup>[<a name="d0e103" href="#ftn.d0e103">1</a>]</sup> lists all the available BigWorld documentation and will
+      guide your reading.</p></li><li><p>Install the game client machines.</p><p>These machines will contain the game client and content creation
+      tools which can be used by either developers or artists. For information
+      regarding client machine installation procedures see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_installation_guide/client_installation_guide.html#Client_Installation_Guide" class="olink">Client Installation Guide</a>.</p></li><li><p>Install one or more server machines.</p><p>Developing and testing online game logic will require setting up a
+      server. For information regarding server installation see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/server_installation_guide.html#Server_Installation_Guide" class="olink">Server Installation Guide</a>. For information regarding
+      server tools installation see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_tools_installation_guide/server_tools_installation_guide.html#Server_Tools_Installation_Guide" class="olink">Server Tools Installation Guide</a>.</p></li><li><p>First time users should review the following documents:</p><div class="itemizedlist"><ul type="circle"><li><p>The chapter <a href="#xref_Running_BigWorld_Demos" title="Chapter&nbsp;3.&nbsp;Running BigWorld Technology Demos"><i xmlns:xlink="http://www.w3.org/1999/xlink">Running BigWorld Technology Demos</i></a>.</p></li><li><p>The <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../bigworld_tutorial/bigworld_tutorial.html#BigWorld_Tutorial" class="olink">Tutorial</a> document.</p></li></ul></div></li><li><p>Setup your game directories.</p><div class="itemizedlist"><ul type="circle"><li><p>For Indie customers, The BigWorld Technology installer will
+          create a skeleton directory to be used as the first game project
+          called <code class="filename">my_game</code>.</p></li><li><p>Customers using the Commercial edition or the Indie edition
+          should create their second project using the script
+          <code class="filename">tutorial/create_new_project.py</code>. For
+          example:</p><pre class="programlisting"> c:\Python25\python.exe c:\bigworld\tutorial\create_new_project.py myproject</pre><p>The created project directory will contain all your game code
+          and assets.</p></li></ul></div></li><li><p>Customers using the Indie Edition should not change the original
+      files installed by the BigWorld Technology Indie Edition installer as
+      these changes may be lost when installing newer versions.</p><p>It is recommended to rename the <code class="filename">my_game</code> directory to your game's name. The
+      <code class="filename">run.bat</code> batch file included in this directory will
+      run your game.</p></li><li><p>When working on game aspects that require you to test online
+      functionality (i.e., connected to a game server), you will need to
+      synchronise the changes between the client and server before starting
+      either. Synchronising can be performed in one of the following
+      ways:</p><div class="itemizedlist"><ul type="circle"><li><p>Assets can be stored on a shared network directory, therefore
+          being avaialble for both the client and the server.</p></li><li><p>Assets can be committed to a source control system and
+          synchronised on both the server and the client.</p></li></ul></div><p>Both methods outlined above have the potential for problems when
+      used in an environment with a number of people working with the same
+      data. As a result of these potential problems BigWorld has a set of
+      recommendations to assist in preventing and avoiding problems in a long
+      term development environment outlined in the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#Client_Programming_Guide" class="olink">Client Programming Guide</a> section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Simplified_Server_Usage" class="olink"><i>Shared Development Environments</i></a>.</p></li></ul></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e103" href="#d0e103">1</a>] </sup><code class="filename">bigworld/doc/documentation_roadmap.html</code></p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Running_BigWorld_Demos"></a>Chapter&nbsp;3.&nbsp;Running BigWorld Technology Demos</h2></div></div></div><p>Two demos are included in your package:</p><div class="itemizedlist"><ul type="disc"><li><p>Tutorial - This demo is a basic skeleton project containing a
+      minimal game implementation. The Tutorial document will walk you through
+      creating a similar project. New game projects created based on the
+      instructions above (see chapter <a href="#xref_starting_up" title="Chapter&nbsp;2.&nbsp;How to Setup Your Development Environment"><i xmlns:xlink="http://www.w3.org/1999/xlink">How to Setup Your Development Environment</i></a>)
+      will contain a copy of the Tutorial.</p></li><li><p>Fantasy Demo - This demo is the BigWorld Technology official demo
+      which shows most of the engine capabilities. It is not recommended to
+      use this demo as a skeleton game as some of the code in it is not
+      production quality and as it is usually too complicated to start with.
+      Customers can reuse Fantasy Demo code in their game but should review it
+      to make sure it fits their game requirements and that it will scale
+      correctly for their game.</p></li></ul></div><p>Running one of these demos require the following steps:</p><div class="itemizedlist"><ul type="disc"><li><p>Setup a client and a server machine as required above (see chapter
+      <a href="#xref_starting_up" title="Chapter&nbsp;2.&nbsp;How to Setup Your Development Environment"><i xmlns:xlink="http://www.w3.org/1999/xlink">How to Setup Your Development Environment</i></a>).</p></li><li><p>Synchronise the demo assets (tutorial/res or fantasydemo/res) to the
+      server machine (see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#Client_Programming_Guide" class="olink">Client Programming Guide</a>
+      section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Simplified_Server_Usage" class="olink"><i>Shared Development Environments</i></a>.) and update your .bwmachined.conf file in accordance.</p></li><li><p>Start the server using the Cluster Control module of the Web
+      Console (see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a> for more details).</p></li><li><p>For FantasyDemo: Start the client and choose the option "Search
+      for servers on local network" to search for your server and connect to
+      it.</p></li><li><p>For Tutorial: follow the instructions on the
+      bigworld/doc/bigworld_tutorial.pdf "Connecting the client to the server"
+      chapter.</p></li></ul></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e225"></a>Chapter&nbsp;4.&nbsp;Getting Support</h2></div></div></div><p>We try to make our documentation as extensive as possible and recommend reviewing the documentation before raising support issues.</p><p> customers using the BigWorld Technology Commercial Edition can get support using our support system: http://support.bigworldtech.com</p><p>Indie customers can use the moderated support forum at <a xmlns:xlink="http://www.w3.org/1999/xlink" href="https://forum.bigworldtech.com/" target="_top">https://forum.bigworldtech.com/</a>.</p></div></div></div></body></html>

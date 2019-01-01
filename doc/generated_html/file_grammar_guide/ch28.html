@@ -1,0 +1,245 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;28.&nbsp;.ppchain</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch27.html" title="Chapter&nbsp;27.&nbsp;paths.xml">
+      <link rel="next" href="ch29.html" title="Chapter&nbsp;29.&nbsp;.primitives">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch28.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;28.&nbsp;<code class="filename">.ppchain</code></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch27.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch29.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_post_processing_chain_file"></a>Chapter&nbsp;28.&nbsp;<code class="filename">.ppchain</code></h2>
+                  </div>
+               </div>
+            </div>
+            <p>PPChain files are saved from the WorldEditor's Post Processing editor
+               panel. They describe an entire chain, or a partial chain. By default they
+                 are located in the
+                 <em class="emphasis">&lt;res&gt;/system/post_processing/chains</em> folder. A
+                 .ppchain file has the grammar described below:
+            </p><pre class="programlisting">&lt;file_name&gt;
+
+  +&lt;Effect&gt;
+    +&lt;bypass&gt;           <em class="emphasis">Vector4</em>          &lt;/bypass&gt;
+
+    *&lt;PyPhase&gt;
+      &lt;name&gt;           <em class="emphasis">string</em>            &lt;/name&gt;
+      &lt;clearRenderTarget&gt; [true|false]   &lt;/clearRenderTarget&gt;
+      &lt;material&gt;       material section  &lt;/material&gt;
+      &lt;renderTarget&gt;   <em class="emphasis">string</em>            &lt;/renderTarget&gt;
+      &lt;filterQuad&gt;
+        [ &lt;PyFilterQuad&gt;
+            *&lt;filterTap&gt; <em class="emphasis">Vector4</em>         &lt;/filterTap&gt;
+          &lt;/PyFilterQuad&gt;
+
+        | &lt;PyPointSpriteTransferMesh&gt; &lt;/PyPointSpriteTransferMesh&gt;
+
+        | &lt;PyTransferQuad&gt; &lt;/PyTransferQuad&gt;
+
+        | &lt;PyVisualTransferMesh&gt;
+             &lt;resourceID&gt; <em class="emphasis">string</em>         &lt;/resourceID&gt;
+          &lt;/PyVisualTransferMesh&gt;
+        ]
+      &lt;/filterQuad&gt;
+     &lt;/PyPhase&gt;
+
+    *&lt;PyCopyBackBuffer&gt;
+       &lt;name&gt;           <em class="emphasis">string</em>            &lt;/name&gt;
+       &lt;renderTarget&gt;   string            &lt;/renderTarget&gt;
+     &lt;/PyCopyBackBuffer&gt;
+
+    *&lt;PlayerFader&gt;
+       &lt;name&gt;           <em class="emphasis">string</em>            &lt;/name&gt;
+       &lt;renderTarget&gt;   string            &lt;/renderTarget&gt;
+     &lt;/PlayerFader&gt;
+
+   &lt;/Effect&gt;
+
+&lt;/file_name&gt;</pre><p><span class="citetitle">Grammar of ppchain file</span></p>
+            <p>The list below describes the tags in the ppchain file:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">Effect</span></em></p>
+                     <p>A .ppchain file consists solely of a list of Effects.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">bypass</span></em></p>
+                     <p>Set to (0,0,0,0) to bypass an effect, or any non-negative value to
+                              enable. This bypass value is often overriden for dynamic control by
+                              Python game scripts.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">PyPhase</span></em></p>
+                     <p>Tag for PyPhase style phase section. A PyPhase is a generic
+                              post-processing phase that is used in the majority of
+                              circumstances.
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">name</span></em></p>
+                              <p>String identifier for this phase.</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">renderTarget</span></em></p>
+                              <p>The string identifier of the render target to which this phase
+                                           will render.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">clearRenderTarget</span></em></p>
+                              <p>Whether or not the render target should be cleared before
+                                           rendering this phase.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">material</span></em></p>
+                              <p>Effect Material section, see <a href="ch11.html" title="Chapter&nbsp;11.&nbsp;EffectMaterial section"><i xmlns:xlink="http://www.w3.org/1999/xlink">EffectMaterial section</i></a></p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">filterQuad</span></em></p>
+                              <p>The filter quad geometry that will be used to render with. See
+                                           available Filter Quad sections below
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">PyCopyBackBuffer</span></em></p>
+                     <p>Tag for PyCopyBackBuffer style phase section. This type of phase
+                              performs a StretchRect copy of the device's back buffer into the render
+                              target. When making a copy of the device's back buffer it is preferable
+                              to use this phase rather than a generic transfer phase, as the
+                              StretchRect operation resolves any hardware antialiasing at this time.
+                              Additionally, this phase knows when the back buffer surface has not yet
+                              been modified by another phase and will temporarily bypass the operation
+                              in this case.
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">name</span></em></p>
+                              <p>String identifier for this phase.</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">renderTarget</span></em></p>
+                              <p>The string identifier of the render target to which this phase
+                                           will render.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">PlayerFader</span></em></p>
+                     <p>Tag for PlayerFader style phase section. The PlayerFader works in
+                              conjunction with the CursorCamera to fade out the player model when the
+                              camera moves forward and intersects with the player's bounding box due
+                              to the camera colliding with scene geometry.
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">name</span></em></p>
+                              <p>String identifier for this phase.</p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis"><span class="literal">renderTarget</span></em></p>
+                              <p>The string identifier of the render target to which this phase
+                                           will render.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">PyFilterQuad</span></em></p>
+                     <p>Tag for PyFilterQuad style filter quad. This filter quad has an
+                              arbitrary number of filter taps, and draws in multiple passes doing 4
+                              taps per pass.
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">filterTap</span></em></p>
+                              <p>Vector4 (uOffset, vOffset, weight, unused).</p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">PyPointSpriteTransferMesh</span></em></p>
+                     <p>Tag for PyPointSpriteTransferMesh style filter quad.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">PyTransferQuad</span></em></p>
+                     <p>Tag for PyTransferQuad style filter quad.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">PyVisualTransferMesh</span></em></p>
+                     <p>Tag for PyVisualTransferMesh style filter quad.</p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis"><span class="literal">resourceID</span></em></p>
+                              <p>The string identifier of the .visual file with which this
+                                           phase will render.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch27.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch29.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;27.&nbsp;<span class="literal">paths.xml</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;29.&nbsp;<span class="literal">.primitives</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

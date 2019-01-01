@@ -1,0 +1,626 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>BigWorld Web Integration Reference</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="Web_Integration"></a>Web Integration Reference</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e19"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Web_Integration_Reference">1. Overview</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e40">1.1. Security</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Remote_Methods_With_Return_Values">2. Remote Methods with Return Values</a></span></dt><dt><span class="chapter"><a href="#xref_Logging_On_Entities">3. Logging on Entities</a></span></dt><dt><span class="chapter"><a href="#xref_Keep_Alive_Messages">4. Keep-alive Messages</a></span></dt><dt><span class="chapter"><a href="#xref_Threading_Issues">5. Threading Issues</a></span></dt><dt><span class="chapter"><a href="#xref_Deployment">6. Deployment</a></span></dt><dt><span class="chapter"><a href="#xref_Python">7. Python</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e205">7.1. Apache/mod_python</a></span></dt><dt><span class="section"><a href="#xref_Python_Building_The_Module_From_Source">7.2. Building the Module From Source</a></span></dt><dt><span class="section"><a href="#d0e252">7.3. Testing the Module</a></span></dt><dt><span class="section"><a href="#xref_UID_and_Resource_Paths">7.4. BigWorld UID and Resource Paths</a></span></dt><dt><span class="section"><a href="#d0e314">7.5. Python API</a></span></dt><dt><span class="section"><a href="#d0e426">7.6. Remote Methods</a></span></dt><dt><span class="section"><a href="#d0e462">7.7. Mailboxes and Persistent Session Storage</a></span></dt><dt><span class="section"><a href="#d0e506">7.8. Example Scripts</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_PHP">8. PHP</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e587">8.1. Dependence on Python Module</a></span></dt><dt><span class="section"><a href="#d0e594">8.2. Independence From Apache</a></span></dt><dt><span class="section"><a href="#xref_PHP_Building_The_Module_From_Source">8.3. Building the Module From Source</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e605">8.3.1. Requirements</a></span></dt><dt><span class="section"><a href="#d0e619">8.3.2. Building a PHP-compatible Python Distribution</a></span></dt><dt><span class="section"><a href="#xref_PHP_Building">8.3.3. Building the PHP Module</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e700">8.4. Installation</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e703">8.4.1. Requirements</a></span></dt><dt><span class="section"><a href="#d0e708">8.4.2. Module Loading</a></span></dt><dt><span class="section"><a href="#d0e726">8.4.3. Configuration</a></span></dt><dt><span class="section"><a href="#d0e764">8.4.4. Configuration Directives</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e859">8.5. Testing</a></span></dt><dt><span class="section"><a href="#d0e896">8.6. Mailbox Session Storage</a></span></dt><dt><span class="section"><a href="#d0e949">8.7. Remote Methods</a></span></dt><dt><span class="section"><a href="#d0e995">8.8. The PHP BigWorld API</a></span></dt><dt><span class="section"><a href="#d0e1158">8.9. Example Scripts</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1167">8.9.1. Requirements</a></span></dt><dt><span class="section"><a href="#xref_WURFL">8.9.2. WURFL</a></span></dt><dt><span class="section"><a href="#d0e1201">8.9.3. Installation</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#xref_Porting_To_Other_Scripting_Languages">9. Porting to Other Scripting Languages</a></span></dt><dt><span class="chapter"><a href="#xref_Caveats">10. Caveats</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1274">10.1. Using Both the PHP BigWorld Extension and Apache/mod_python
+    Simultaneously</a></span></dt><dt><span class="section"><a href="#d0e1285">10.2. Restarting the Cluster</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Web_Integration_Reference"></a>Chapter&nbsp;1.&nbsp;Overview</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e40">1.1. Security</a></span></dt></dl></div><p>This document describes extensions to the popular scripting languages
+  PHP and Python that allow for BigWorld functionality to be integrated into a
+  web server. This document assumes familiarity with either PHP or Python, and
+  elaborates on a Linux-based Apache PHP/Python web server setup (related to
+  the <em class="emphasis">LAMP architecture</em>). It also assumes familiarity
+  with concepts presented in the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>.</p><p>For an example on how to implement a web interface to a running
+  BigWorld game cluster and a web auctioning system, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_web_integration/howto_web_integration.html#HowTo_Web_Integration" class="olink">How To Implement Web Integration</a>.</p><p>Using these extension modules, a web interface can be constructed that
+  accesses script-level BigWorld functionality. This can then be delivered to
+  devices that are web-aware, such as mobile phones, PC browsers, PDAs, and so
+  on.</p><p>It should also be noted that while this interface was designed around
+  the needs of a web scripting interface, it is not web specific in that it
+  may be imported by any Python 2.6 (or PHP) instance and used whenever you
+  require an external scripting interface to the base entities on your server.
+  Examples include custom administrative tools and statistic gathering
+  scripts.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e40"></a>1.1.&nbsp;Security</h2></div></div></div><p>Web security should be a part of all web applications. Therefore,
+    when implementing a BigWorld-aware web application, care must be taken to
+    ensure that users are not able to access privileged information or have
+    unlimited privileged access to the game script interface.</p><p>From a low-level security point of view, Apache supports HTTPS
+    transport that is transparent to modules used for PHP and mod_python
+    scripting &#8212; for details on how to enable this feature, see the Apache
+    documentation .</p><p>From a scripting point of view, much of what is relevant to other
+    web applications with regards to security applies equally to
+    BigWorld-aware web applications. Because the web integration module must
+    be run inside the cluster, care must be taken when designing interfaces to
+    the game. For example, the standard for web applications is to not expose
+    the database backend to users by giving them access to executing raw shell
+    commands or SQL statements. In the same way, do not give users
+    inappropriate privileged access to the BigWorld backend by giving them the
+    ability to run arbitrary script commands. The web integration module does
+    not have the same concepts of Areas of Interest or client controlled
+    entities, so extra care must be taken when accessing game state using this
+    interface.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Remote_Methods_With_Return_Values"></a>Chapter&nbsp;2.&nbsp;Remote Methods with Return Values</h2></div></div></div><p>Within BigWorld, remote Python method calls are one-way and
+  asynchronous. That is, methods immediately return control back to the
+  calling process. For return values, a callback method is usually defined
+  that is also one-way.</p><p>In a web server context, the web server process is only active during
+  the processing of a web request, so that it necessarily has to block if it
+  is to receive return values back from the BigWorld server cluster.</p><p>The mechanism of blocking methods with return values is useful here
+  because calls to remote methods block the web server process until a
+  response is received, or the remote method experiences a time-out condition.
+  Return value methods are currently only implemented on base methods, and
+  have the following structure in the entity definitions file:</p><pre class="programlisting">&lt;root&gt;
+   ...
+   &lt;BaseMethods&gt;
+   ...
+      &lt;myReturnValueMethod&gt;
+         &lt;Arg&gt; INT32  &lt;/Arg&gt;  &lt;!-- first argument --&gt;
+         &lt;Arg&gt; STRING &lt;/Arg&gt;  &lt;!-- second argument --&gt;
+         &lt;ReturnValues&gt;
+            &lt;someList&gt;   ARRAY &lt;of&gt; INT32&lt;/of&gt; &lt;/someList&gt;
+            &lt;someString&gt; STRING                &lt;/someString&gt;
+         &lt;/ReturnValues&gt;
+       &lt;myReturnValueMethod&gt;
+     ...
+   &lt;/BaseMethods&gt;
+   ...
+&lt;/root&gt;</pre><p><span class="citetitle">Excerpt from an entity definitions file showing a
+  return-value method</span></p><p>In the above example, the return value method is called
+  <span class="literal">myReturnValueMethod</span>, and it has two arguments &#8212; the first
+  is typed as a <span class="literal">INT32</span>, and the second as a
+  <span class="literal">STRING</span> type. It returns two values &#8212; the first is named
+  <span class="literal">someList</span> and is typed as an <span class="literal">ARRAY</span> of
+  <span class="literal">INT32</span>s, and the second is named
+  <span class="literal">someString</span> and is typed as a STRING.</p><p>Executing these remote methods from the web server context would be
+  carried out in the following manner in mod_python:</p><pre class="programlisting">playerBob = BigWorld.lookUpEntityByName( 'Avatar', 'bob' )
+result = playerBob.myReturnValueMethod( 35, 'example' )
+req.write( &#8220;someString = %s&#8221; % result[&#8216;someString'] )
+for listElement in result[&#8216;someList']:
+   req.write( &#8220;listElement: %d&#8221;, listElement )</pre><p><span class="citetitle">Executing remote methods in mod_python</span></p><p>The actual server-side implementation of remote methods with return
+  values are implemented as base entity methods on the BaseApp
+  (<em class="emphasis">e.g.</em>, <span class="literal">base/Avatar.py</span>). These
+  implementations differ from regular remote methods without return values in
+  that an extra response object is created for each request and passed to the
+  function as an extra parameter.</p><p>This response object has attributes corresponding to each return value
+  in the method definition, which the implementation of the method must set
+  values for. When the scripting code has prepared the response back, it must
+  invoke the <code class="methodname">done()</code> method on the response object for
+  the response to be sent back to the calling context of the web
+  server.</p><p>Method response objects cannot be passed as parameters to other server
+  components (<em class="emphasis">i.e.</em>, other BaseApps or CellApps), but can
+  be passed around within the same BaseApp.</p><pre class="programlisting">import BigWorld
+
+class EntityType:
+   ...
+   def myReturnValueMethod( self, response<a name="co130"></a><img src="../images/callouts/1.png" alt="1" border="0">, argInt32, argString ):
+      # The arguments argInt32 and argString match those arguments 
+      # defined in the .def file.
+      ...
+
+      # Set some values of the response, the attributes match 
+      # those that are defined in the .def file.
+      response.someList = [1, 3, 5, 7, 11]
+      response.someString = "This is my string"
+
+      # Send the response back, we are done with it, and the web 
+      # integration module is blocking, pending this response.
+      response.done()<a name="co142"></a><img src="../images/callouts/2.png" alt="2" border="0"></pre><p><span class="citetitle">Server-side implementation of a remote
+  method</span></p><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><a href="#co130"><img src="../images/callouts/1.png" alt="1" border="0"></a> </td><td valign="top" align="left"><p>The <span class="literal">response</span> object being passed.</p></td></tr><tr><td width="5%" valign="top" align="left"><a href="#co142"><img src="../images/callouts/2.png" alt="2" border="0"></a> </td><td valign="top" align="left"><p>The response object <code class="methodname">done()</code> method being
+      called.</p></td></tr></table></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Logging_On_Entities"></a>Chapter&nbsp;3.&nbsp;Logging on Entities</h2></div></div></div><p>When a player logs on with the web module, and the player's entity was
+  not previously loaded from the database, then the entity is loaded onto the
+  least loaded BaseApp. A reference to the newly created or already existing
+  entity base can then be looked up using one of the lookup methods present in
+  the API.</p><p>If the entity is already logged on, for example, via the client, then
+  the player entity has already been loaded and will have the
+  <code class="methodname">BigWorld.onLogOnAttempt()</code> method called on the
+  entity base (for details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/baseapp/index.html#Client_Python_API" class="olink">Client Python API</a>).
+  It is called with the parameters <em class="parameter"><code>ip</code></em>,
+  <em class="parameter"><code>port</code></em> and <em class="parameter"><code>password</code></em>. If the
+  logon attempt is from a web integration gateway, then the IP and port will
+  be equal to 0.</p><p>In script, the entity must deal with multiple logons from the client
+  through the LoginApp versus multiple logons from the web integration
+  gateway.</p><p>There is a facility for ensuring an entity is not destroyed
+  prematurely when accessing entity methods on a mailbox, by sending
+  keep-alive messages and specifying an interval for script callbacks when no
+  keep-alive messages have been sent in that interval (for details, see <a href="#xref_Keep_Alive_Messages" title="Chapter&nbsp;4.&nbsp;Keep-alive Messages"><i xmlns:xlink="http://www.w3.org/1999/xlink">Keep-alive Messages</i></a>).</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Keep_Alive_Messages"></a>Chapter&nbsp;4.&nbsp;Keep-alive Messages</h2></div></div></div><p>Mailboxes to entities residing on a BaseApp should exist for as long
+  as they are needed. However, these same entities may be player entities
+  controlled by the BigWorld client. These two different usages need to be
+  reconciled when it comes to managing entity lifetimes &#8212; for example, if the
+  client disconnects while the game's web interface is still using the
+  player's base entity, this entity should not be destructed until the game's
+  web interface has finished with it.</p><p>Another example is if the player is currently not logged in via the
+  BigWorld client. If the player does not explicitly log out, we would want to
+  clean up that mailbox reference after an inactivity period.</p><p>A solution to this problem is to use a keep-alive interval for
+  mailboxes that require it, so that the entity stays around even if the
+  client has disconnected (destruction of the base entity is the normal course
+  of action). If a keep-alive interval is set on a mailbox, then each time a
+  method is called on that mailbox, it causes the keep-alive interval for that
+  entity to be refreshed.</p><p>When a base entity enters a keep-alive interval, the base entity
+  script method <code class="methodname">onKeepAliveStart()</code> is called. When
+  the keep-alive interval expires without any refreshing from the web
+  integration gateway, it is assumed to be no longer required, and so
+  <code class="methodname">onKeepAliveStop()</code> is called in Python script. The
+  base entity script should decide whether it is still required, and should
+  destroy itself.</p><p>Keep-alive intervals can be used with HTTP session timeouts so that
+  players have to re-login after a certain inactivity period to create a new
+  HTTP session. Keep-alive intervals should be set to be equal to session
+  durations or longer.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Threading_Issues"></a>Chapter&nbsp;5.&nbsp;Threading Issues</h2></div></div></div><p>The BigWorld Web Integration module is required by PHP to not use any
+  threading. When used with Apache's default pre-forking multi-processing
+  module, each child fork of Apache contains one instance of the BigWorld
+  module loaded. PHP currently does not support the use of threaded Apache
+  multi-processing modules, and so the BigWorld Web Integration module also
+  does not support threading.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Deployment"></a>Chapter&nbsp;6.&nbsp;Deployment</h2></div></div></div><p>This section deals with the recommended setup for adding web
+  integration to a running BigWorld cluster.</p><p>Machines that are dedicated hosts for the web integration modules (we
+  will call them <em class="emphasis">Web Integration Gateways</em>), should reside
+  in the same subnet as the rest of the server cluster, and should have public
+  IP addresses.</p><p>Multiple web integration gateways can work side by side, with
+  implementation of load balancing done as for other web services, e.g. DNS
+  round-robin.</p><div class="informalfigure"><div class="mediaobject"><img src="images/example_deployment_configuration.png"><span class="caption"><p>Example deployment configuration</p></span></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Python"></a>Chapter&nbsp;7.&nbsp;Python</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e205">7.1. Apache/mod_python</a></span></dt><dt><span class="section"><a href="#xref_Python_Building_The_Module_From_Source">7.2. Building the Module From Source</a></span></dt><dt><span class="section"><a href="#d0e252">7.3. Testing the Module</a></span></dt><dt><span class="section"><a href="#xref_UID_and_Resource_Paths">7.4. BigWorld UID and Resource Paths</a></span></dt><dt><span class="section"><a href="#d0e314">7.5. Python API</a></span></dt><dt><span class="section"><a href="#d0e426">7.6. Remote Methods</a></span></dt><dt><span class="section"><a href="#d0e462">7.7. Mailboxes and Persistent Session Storage</a></span></dt><dt><span class="section"><a href="#d0e506">7.8. Example Scripts</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e205"></a>7.1.&nbsp;Apache/mod_python</h2></div></div></div><p>An extension called mod_python is available for Apache HTTP servers
+    that allows for web scripting using Python. There are many frameworks that
+    can use Apache/mod_python as the server base architecture
+    (<em class="emphasis">e.g.</em>, CherryPy-based frameworks such as TurboGears),
+    although not using Apache/mod_python is also an option
+    (<em class="emphasis">e.g.,</em> using the CherryPy's Python-based web
+    server).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Python_Building_The_Module_From_Source"></a>7.2.&nbsp;Building the Module From Source</h2></div></div></div><p>The sources for the Python extension module are located in
+    <span class="literal">bigworld/src/server/web/python</span>.</p><p>To build the module from source, follow the steps below:</p><div class="itemizedlist"><ul type="disc"><li><p>Change to the source directory.</p></li><li><p>Run <span class="literal">make</span> to build the module &#8212; this should
+        result in the dynamic library file <span class="literal">BigWorld.so</span>
+        being created in <span class="literal">bigworld/bin/web/Hybrid</span>.</p></li></ul></div><p>By default, the source includes header files from the version of
+    Python shipped with BigWorld (Python 2.6). When running with older Python
+    versions (<em class="emphasis">e.g.</em>, Python 2.4), warning messages such as
+    the following may appear:</p><pre class="programlisting">__main__:1: RuntimeWarning: Python C API version mismatch for module BigWorld: This Python has API version 1012, module BigWorld has version 1013.
+__main__:1: RuntimeWarning: Python C API version mismatch for module Math: This Python has API version 1012, module Math has version 1013.
+__main__:1: RuntimeWarning: Python C API version mismatch for module ResMgr: This Python has API version 1012, module ResMgr has version 1013.
+__main__:1: RuntimeWarning: Python C API version mismatch for module _BWp: This Python has API version 1012, module _BWp has version 1013.</pre><p><span class="citetitle">Example warning messages that might be displayed when
+    running older Python versions</span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e252"></a>7.3.&nbsp;Testing the Module</h2></div></div></div><p>To test the module, change to the output directory
+    <span class="literal">bigworld/bin/web/python/Hybrid</span>, then run the following
+    command:</p><pre class="programlisting">python2.5 &#8211;c "import BigWorld"</pre><p>If no error messages are issued, then it means that you have
+    successfully built the Python module.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_UID_and_Resource_Paths"></a>7.4.&nbsp;BigWorld UID and Resource Paths</h2></div></div></div><p>BigWorld processes from a particular user ID can only communicate
+    with other BigWorld processes from that same user ID, and this applies to
+    the Python web integration module. You can override this by changing the
+    <span class="literal">UID</span> environment variable before importing
+    <span class="literal">BigWorld</span>, as illustrated below:</p><pre class="programlisting">import os
+os.environ['UID'] = 500 <em class="emphasis"># substitute with desired user ID</em> 
+import BigWorld</pre><p><span class="citetitle">Changing <span class="literal">UID</span> before importing the
+    <span class="literal">BigWorld</span> module</span></p><p>The BigWorld resource paths also need to be accessible to the web
+    integration module, and they have to be matched to the resources that the
+    server is using. The resource paths are read from the
+    <span class="literal">$(HOME)/.bwmachined.conf</span> configuration file (for
+    details on BWMachined configuration, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/server_overview.html#Server_Overview" class="olink">Server Overview</a>'s section
+    <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/server_overview.html#xref_Server_Components" class="olink"><i>Server Components</i></a>
+    <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/server_overview.html#xref_BWMachined" class="olink">BWMachined</a>).</p><p>As with with the <span class="literal">UID</span> environment variable, you
+    can override the <span class="literal">HOME</span> environment variable to determine
+    where to load <span class="literal">.bwmachined.conf</span> from.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e314"></a>7.5.&nbsp;Python API</h2></div></div></div><p>The functions and attributes available in the BigWorld Python API
+    are listed below:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="function">BigWorld.logOn(
+        <em class="parameter"><code>username</code></em>, <em class="parameter"><code>password</code></em>, <em class="parameter"><code>allow_already_logged_on=False</code></em>
+        )</code></p><p>Logs on a username/password combination, and either returns
+        <span class="literal">None</span> (on success) or raises an exception (on
+        failure). The exception type reflects the kind of error that occurred,
+        and can be one of the following values: <span class="literal">IOError</span>,
+        <span class="literal">ValueError</span> and
+        <span class="literal">SystemError</span>.</p><p>If the <span class="literal">allow_already_logged_on</span> parameter is
+        <span class="literal">True</span>, then this function does not raise an
+        exception if the BigWorld server cluster reports that the user is
+        already logged on.</p></li><li><p><code class="function">BigWorld.lookUpEntityByName(
+        <em class="parameter"><code>entityType</code></em>,  <em class="parameter"><code>entityName</code></em>
+        )</code></p><p>Queries the DBMgr to look up an entity base for a given entity
+        type and entity name &#8212; if the entity exists and the entity base is
+        loaded, then it returns a mailbox object pointing to the entity base
+        that can be used for invoking remote methods. If the entity exists,
+        but is not loaded, then the function returns <span class="literal">True</span>;
+        otherwise it returns <span class="literal">False</span>.</p></li><li><p><code class="function">BigWorld.setDefaultKeepAliveSeconds (
+        <em class="parameter"><code>defaultKeepAliveSeconds</code></em> )</code></p><p>Sets the default keep-alive interval for new mailboxes.</p><p>This interval can also be adjusted per-mailbox through the
+        <span class="literal">keepAliveSeconds</span> attribute.</p></li><li><p><code class="function">BigWorld.resetNetworkInterface(
+        <em class="parameter"><code>port</code></em> )</code></p><p>Recreates the network interface (including its socket) and
+        resets any addresses to BigWorld services that it has cached.</p><p>The socket is bound to the given port, unless the given port is
+        zero, in which case the socket is bound to a random port.</p></li><li><p><span class="literal"><code class="classname">MailBox</code>.<code class="varname">keepAliveSeconds</code></span></p><p>The keep-alive interval (in seconds) of the specified entity
+        mailbox.</p><pre class="programlisting">mailbox.keepAliveSeconds = newKeepAliveSeconds</pre></li><li><p><code class="classname">MailBox</code>.<code class="methodname">serialise()</code></p><p>Serialise this mailbox to a string.</p></li><li><p><code class="function">BigWorld.deserialise(
+        <em class="parameter"><code>serialisedMailbox</code></em> )</code></p><p>Deserialise the serialised mailbox string to a mailbox.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e426"></a>7.6.&nbsp;Remote Methods</h2></div></div></div><p>Invocations of remote methods with defined return values return a
+    dictionary of those return values with the names of the defined return
+    values as keys.</p><pre class="programlisting">&lt;root&gt;
+   ...
+   &lt;BaseMethods&gt;
+      ...
+      &lt;getGoldAndInventory&gt;
+         &lt;Arg&gt;  INT32  &lt;/Arg&gt;  &lt;!-- bag ID --&gt;
+         &lt;ReturnValues&gt;
+            &lt;goldPieces&gt;    UINT32                          &lt;/goldPieces&gt;
+            &lt;inventoryList&gt; ARRAY &lt;of&gt; INVENTORY_ITEM &lt;/of&gt; &lt;/inventoryList&gt;
+         &lt;/ReturnValues&gt;
+      &lt;/getGoldAndInventory&gt;
+      ...
+   &lt;/BaseMethods&gt;
+   ...
+&lt;/root&gt;</pre><p><span class="citetitle">Example remote entity method
+    definition</span></p><p>Remote methods can be invoked on a mailbox directly, as illustrated
+    below:</p><pre class="programlisting">player = BigWorld.lookUpEntityByName( 'Avatar', &#8216;bob' )  <em class="emphasis"># mailbox to Avatar 'bob'</em>
+bagID = 0
+result = player.getGoldAndInventory( bagID )     # <em class="emphasis">argument is integer</em>
+gold = result['goldPieces']                      <em class="emphasis"># integer</em>
+inventoryList = result['inventoryList']          <em class="emphasis"># list of inventory items</em></pre><p><span class="citetitle">Example invocation of a remote entity method with return
+    values in Python</span></p><p>The remote method <span class="literal">getGoldAndInventory</span> is called
+    using the previous looked-up mailbox of the Avatar entity named
+    <span class="literal">bob</span>. The lookup involves a query to DBMgr, which gives
+    the mailbox (which locates the entity object amongst the BaseApps) and the
+    method call itself is directed to the entity base, through the BaseApp
+    that it resides on.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e462"></a>7.7.&nbsp;Mailboxes and Persistent Session Storage</h2></div></div></div><p>Apache/mod_python provides a mechanism for storing Python objects in
+    the server-side persistent session variables. This makes it unnecessary to
+    look entities up on every page request, when the mailbox can be stored in
+    the session variables on look-up, and restored on page load. This also
+    means that entity mailboxes are shared across all child processes of
+    Apache. You use the mailbox's <code class="methodname">serialise()</code> method
+    to get the mailbox serialised form as a string, and save this string to
+    the persistent session. On subsequent requests, you can re-constitute the
+    mailbox via the <code class="methodname">BigWorld.deserialise()</code>
+    method.</p><p>An example is displayed below:</p><pre class="programlisting">from mod_python import Session
+...
+import BigWorld
+...
+def handler( req ):
+   session = Session.Session( req )
+
+   if not 'player_mailbox' in session:
+      # they aren't logged in yet, login if they have supplied credentials
+      if not 'username' in req.fields or not 'password' in req.fields:
+         req.write( "login credentials required" )
+         return
+
+      playerName = req.fields['username']
+      password = req.fields['password']
+
+      try:
+         BigWorld.logOn( playerName, password )
+      except:
+         req.write( "Login failed" )
+         return
+
+      mailbox = BigWorld.lookUpEntityByName( 'Avatar', playerName )
+      if type( mailbox ) == bool:
+         req.write( "Login error" )
+         return
+
+      session['player_mailbox'] = mailbox.serialise()<a name="MailboxPersistenceSerialise"></a><img src="../images/callouts/1.png" alt="1" border="0">
+   else:
+      # we are already logged in, mailbox is in session
+      mailbox = BigWorld.deserialise( session['player_mailbox'] )<a name="MailboxPersistenceDeserialise"></a><img src="../images/callouts/2.png" alt="2" border="0">
+
+   res = mailbox.getGoldAndInventory()
+   ...</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><a href="#MailboxPersistenceSerialise"><img src="../images/callouts/1.png" alt="1" border="0"></a> </td><td valign="top" align="left"><p>The <code class="methodname">serialise()</code> method is called here
+        on a mailbox that has just been retrieved via
+        <code class="methodname">BigWorld.lookUpEntityByName()</code>. The entity was
+        created when authentication of
+        <code class="methodname">BigWorld.logOn()</code> succeeded. The string is
+        stored away in the persistent session under the key
+        <span class="literal">player_mailbox</span>.</p></td></tr><tr><td width="5%" valign="top" align="left"><a href="#MailboxPersistenceDeserialise"><img src="../images/callouts/2.png" alt="2" border="0"></a> </td><td valign="top" align="left"><p>The <code class="methodname">deserialise()</code> method is called here
+        on the serialised string stored in the persistent session under the
+        key <span class="literal">player_mailbox</span>, and the mailbox is
+        re-constituted.</p></td></tr></table></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e506"></a>7.8.&nbsp;Example Scripts</h2></div></div></div><p>Example scripts demonstrating how to use the BigWorld Python
+    extension module to integrate with mod_python are located in
+    <span class="literal">fantasydemo/src/web/mod_python.</span></p><p>To try out these scripts, you can add the following lines to your
+    Apache configuration, changing the root of the the paths (fill in the
+    ellipsis below):</p><pre class="programlisting"><em class="lineannotation"><span class="lineannotation"># Create a convenient path to these scripts</span></em>
+Alias /bw-python-example <em class="replaceable"><code>...</code></em>fantasydemo/src/web/mod_python
+<em class="lineannotation"><span class="lineannotation"># Directory containing game scripts</span></em>
+&lt;Directory <em class="replaceable"><code>...</code></em>fantasydemo/src/web/mod_python &gt;
+    <em class="lineannotation"><span class="lineannotation"># Automatically look up index.py</span></em>
+    DirectoryIndex index.py
+    <em class="lineannotation"><span class="lineannotation"># Allow MultiViews to make "page" reach "page.py"</span></em>
+    Options Indexes MultiViews
+    <em class="lineannotation"><span class="lineannotation"># Filter all python scripts through mod_python</span></em>
+    AddHandler mod_python .py
+    <em class="lineannotation"><span class="lineannotation"># Use module bwmain to execute our scripts</span></em>
+    PythonHandler bwmain
+    <em class="lineannotation"><span class="lineannotation"># Allow debugging info</span></em>
+    PythonDebug On
+    <em class="lineannotation"><span class="lineannotation"># Use Python sub-interpreter called "bigworld"</span></em>
+    PythonInterpreter bigworld
+    <em class="lineannotation"><span class="lineannotation"># Let Python find its modules</span></em>
+    PythonPath "sys.path + ['<em class="replaceable"><code>...</code></em>fantasydemo/src/web/mod_python', '<em class="replaceable"><code>...</code></em>bigworld/bin/web/Hybrid']"
+    <em class="lineannotation"><span class="lineannotation"># These Python scripts output HTML</span></em>
+    AddType text/html .py
+&lt;/Directory&gt;</pre><p>Please consult the Apache manual and/or your distribution's
+    documentation on how to add configuration directives to your Apache
+    configuration.</p><p>You also must edit
+    <code class="filename">fantasydemo/src/web/mod_python/lib/BigWorldConstants.py</code>
+    to set the correct UID to connect to your server (see <a href="#xref_UID_and_Resource_Paths" title="7.4.&nbsp;BigWorld UID and Resource Paths">BigWorld UID and Resource Paths</a>).</p><p>The example script above assumes that the mod_python module is
+    installed and loaded. For more details, see the Apache configuration file
+    documentation and the mod_python installation documentation. The
+    configuration template above will make the example scripts available at
+    <span class="literal">http://<em class="replaceable"><code>&lt;hostname&gt;</code></em>/bw-python-example</span>.</p><div class="informalfigure"><div class="mediaobject"><img src="images/mod_python_example_scripts_login_page.png"><span class="caption"><p>mod_python example scripts login page</p></span></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_PHP"></a>Chapter&nbsp;8.&nbsp;PHP</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e587">8.1. Dependence on Python Module</a></span></dt><dt><span class="section"><a href="#d0e594">8.2. Independence From Apache</a></span></dt><dt><span class="section"><a href="#xref_PHP_Building_The_Module_From_Source">8.3. Building the Module From Source</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e605">8.3.1. Requirements</a></span></dt><dt><span class="section"><a href="#d0e619">8.3.2. Building a PHP-compatible Python Distribution</a></span></dt><dt><span class="section"><a href="#xref_PHP_Building">8.3.3. Building the PHP Module</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e700">8.4. Installation</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e703">8.4.1. Requirements</a></span></dt><dt><span class="section"><a href="#d0e708">8.4.2. Module Loading</a></span></dt><dt><span class="section"><a href="#d0e726">8.4.3. Configuration</a></span></dt><dt><span class="section"><a href="#d0e764">8.4.4. Configuration Directives</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e859">8.5. Testing</a></span></dt><dt><span class="section"><a href="#d0e896">8.6. Mailbox Session Storage</a></span></dt><dt><span class="section"><a href="#d0e949">8.7. Remote Methods</a></span></dt><dt><span class="section"><a href="#d0e995">8.8. The PHP BigWorld API</a></span></dt><dt><span class="section"><a href="#d0e1158">8.9. Example Scripts</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1167">8.9.1. Requirements</a></span></dt><dt><span class="section"><a href="#xref_WURFL">8.9.2. WURFL</a></span></dt><dt><span class="section"><a href="#d0e1201">8.9.3. Installation</a></span></dt></dl></dd></dl></div><p>A PHP module is provided to interface with a BigWorld server through
+  script. PHP is a very popular open-source scripting language for web
+  development. This module is designed to be used under Linux with
+  Apache/mod_php, and in addition, it has also been known to work with the PHP
+  Linux command-line interpreter as well.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e587"></a>8.1.&nbsp;Dependence on Python Module</h2></div></div></div><p>The PHP module is actually a wrapper around the Python module
+    described above, and thus it requires the Python module to be accessible
+    for use. For details on how to install it (and, if necessary, build it),
+    see <a href="#xref_Python_Building_The_Module_From_Source" title="7.2.&nbsp;Building the Module From Source">Building the Module From Source</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e594"></a>8.2.&nbsp;Independence From Apache</h2></div></div></div><p>This installation guide supposes that you will be using Apache, but
+    this is not a hard limit &#8212; you can use the BigWorld PHP Web Integration
+    Module with any web server that supports PHP under Linux
+    (<em class="emphasis">e.g.</em>,, you could use the PHP CLI interface &#8212; this
+    implies that any web server that supports CGI will work).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_PHP_Building_The_Module_From_Source"></a>8.3.&nbsp;Building the Module From Source</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e605"></a>8.3.1.&nbsp;Requirements</h3></div></div></div><p>Building the PHP module requires a valid PHP development
+      environment available on the machine you are building on. This can be
+      either the PHP source distribution tarball or the PHP source
+      distribution packaged for your distribution (<em class="emphasis">e.g.</em>,
+      YUM package <span class="literal">php-devel</span> in Fedora / CentOS or the APT
+      package <span class="literal">php5-dev</span> in Debian). For details on how to
+      install these packages, see your distribution's documentation.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e619"></a>8.3.2.&nbsp;Building a PHP-compatible Python Distribution</h3></div></div></div><p>Due to requirements of the PHP runtime, the PHP module is required
+      to link against a version of Python 2.6 that is built without thread
+      support (see <a href="#xref_Threading_Issues" title="Chapter&nbsp;5.&nbsp;Threading Issues"><i xmlns:xlink="http://www.w3.org/1999/xlink">Threading Issues</i></a>). Also, the
+      BigWorld Python module, which is imported by the BigWorld PHP module,
+      requires that Unicode UCS4 support is enabled. Note that these
+      requirements can be different to whatever stock Python package is
+      usually distributed with supported Linux distributions, so a separate
+      local build of Python 2.6 is necessary in order to build the PHP shared
+      library.</p><p>Please note that you cannot use the Python 2.6 sources from
+      <code class="filename">src/lib/python</code>, as it has been
+      modified for use with the other BigWorld server components and
+      client.</p><p>You can download the Python 2.6 source distribution from <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.python.org" target="_top">http://www.python.org</a>. Once it has
+      been downloaded, decompress the Python 2.6 tarball, then build the
+      Python 2.6 distribution, as per below:</p><pre class="programlisting">$ ./configure EXTRA_CFLAGS=-fPIC CFLAGSFORSHARED=-fPIC --enable-unicode=ucs4 --without-threads --prefix=/usr/local/python2.6
+...
+$ make
+...
+$ sudo make install
+...</pre><p>The above example also specifies the <code class="option">--prefix</code>
+      option where the locally built Python 2.6 installation to reside
+      (<code class="filename">/usr/local/python2.6</code>). This path
+      needs to match where the PHP build process expects the Python 2.6
+      distribution to be, so ensure that the path given by
+      <span class="literal">--prefix</span> matches what is in the
+      <code class="filename">config.m4</code> file (for details, see <a href="#xref_PHP_Building" title="8.3.3.&nbsp;Building the PHP Module">Building the PHP Module</a>).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_PHP_Building"></a>8.3.3.&nbsp;Building the PHP Module</h3></div></div></div><p>You need to tell the PHP build process where to find the Python
+      source tree by editing
+      <span class="literal">bigworld/src/server/web/php/config.m4</span>, as displayed
+      in the excerpt below:</p><pre class="programlisting">  PHP_REQUIRE_CXX()
+# Put the path to your own python2.6 include path here
+  PHP_ADD_INCLUDE(/usr/local/python2.6/include/python2.6)
+  PHP_SUBST(BIGWORLD_PHP_SHARED_LIBADD)
+
+# Put the path to your own python2.6 static library path here
+  PHP_ADD_LIBRARY_WITH_PATH(python2.6, /usr/local/python2.6/lib/python2.6/config, BIGWORLD_PHP_SHARED_LIBADD)  </pre><p><span class="citetitle">Excerpt from
+      <code class="filename">bigworld/src/server/web/php/config.m4</code> &#8212; Defining
+      Python's source tree</span></p><p>You also need to run a command called <span class="literal">phpize</span> in
+      the module source's root directory at
+      <span class="literal">bigworld/src/server/web/php</span> &#8212; an example output is
+      displayed below:</p><pre class="programlisting">$ phpize
+Configuring for:
+PHP Api Version:         20020918
+Zend Module Api No:      20020429
+Zend Extension Api No:   20021010</pre><p><span class="citetitle">Example output from
+      <span class="literal">phpize</span></span></p><p>This will generate some files for facilitating the build process,
+      including a <span class="literal">configure</span> script. You may then build the
+      module and install it as follows:</p><pre class="programlisting">$ ./configure
+...
+$ make install
+...</pre><p><span class="citetitle">Configuring, building and installing the PHP
+      module</span></p><p>The above commands compile the module and install it as a PHP
+      extension in the directory where PHP expects it. Note that the last
+      command (<span class="literal">make install</span>) usually requires superuser
+      privileges.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e700"></a>8.4.&nbsp;Installation</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e703"></a>8.4.1.&nbsp;Requirements</h3></div></div></div><p>You will need both the Python extension module and the
+      appropriately versioned PHP extension module for your distribution of
+      PHP. For details on installation of PHP, see the PHP Installation
+      documentation.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e708"></a>8.4.2.&nbsp;Module Loading</h3></div></div></div><p>The BigWorld module performs some initialisation of the network
+      interfaces and structures used to talk to a BigWorld server cluster, and
+      it contains some static data that persists over the lifetime of that
+      module &#8212; loading it at start-time ensures that this step has been done
+      once and only once for the lifetime of the PHP process. The alternative
+      of not loading the module at start-time implies that the module needs to
+      be loaded every time before use, thus duplicating this load-time
+      initialisation step unnecessarily.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>If PHP is invoked as a CGI process rather than as part of the
+        web server (<em class="emphasis">e.g.</em>, PHP as an Apache Dynamic Shared
+        Object (DSO) residing within the Apache web server process), then this
+        implies that the <span class="literal">bigworld_php.so</span> PHP extension
+        module is loaded each time that PHP is invoked.</p><p>The recommended setup is for PHP to be a Dynamic Shared Object
+        and loaded into the Apache process to prevent this from happening. For
+        details, see the PHP and Apache HTTP Server documentation.</p><p>Fedora / CentOS and Debian distributions all provide binary
+        packages for PHP as a DSO. For details on installation, see your
+        distribution's documentation.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e726"></a>8.4.3.&nbsp;Configuration</h3></div></div></div><p>Packaged versions of PHP have a configuration file
+      directory<sup>[<a name="d0e731" href="#ftn.d0e731">1</a>]</sup> for which each file contained is included as part of the
+      PHP configuration. Source distributions of PHP can specify this when
+      running the configure script before building.</p><p>A sample configuration file is included in
+      <code class="filename">bigworld/src/server/web/php/sample.ini</code> and is
+      included below:</p><pre class="programlisting">;
+; Sample PHP configuration for the bigworld module
+; 
+; Put this file in your PHP configuration files directory, e.g. /etc/php.d or /etc/php/conf.d
+; and modify it with your correct settings.
+;
+
+; PHP directive to load the extension module. This requires that the PHP module be
+; built and installed into wherever PHP is expecting PHP extension modules to reside
+extension=bigworld_php.so
+
+[bigworld]
+; Change this to be the UID that your server is running under.
+bigworld.uid = 500
+
+; Change this to be the location of BigWorld.so. Typically bigworld/bin/web/Hybrid.
+; NOTE: This has to be set correctly for the PHP module to function!
+
+bigworld.additional_python_paths = /../bigworld/bin/web/Hybrid
+
+; Increase for more debugging.
+bigworld.debug_level = 0</pre><p><span class="citetitle">Sample configuration file
+      <code class="filename">bigworld/src/server/web/php/sample.ini</code></span></p><p>Some distributions have PHP packaged so that configuration can be
+      placed in <code class="filename">/etc/php/conf.d</code> or
+      similar directory. It is usually good practice to place module-specific
+      configuration in its own file in such a directory
+      (<em class="emphasis">e.g.</em>, <code class="filename">bigworld.ini</code>).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e764"></a>8.4.4.&nbsp;Configuration Directives</h3></div></div></div><p>The configuration directives used in the
+      <code class="filename">php.ini</code> file that are required for using the PHP
+      module are described in the list below.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><code class="varname">bigworld.uid</code></em></p><p>This directive specifies the user ID of the BigWorld server to
+          communicate with. This also indirectly determines the resource path,
+          as it is read from <code class="filename">~/.bwmachined.conf</code>. This is
+          required because Apache is usually run as a special web account user
+          (e.g. <span class="literal">www-data</span>).</p></li><li><p><em class="emphasis"><code class="varname">bigworld.additional_python_paths</code></em></p><p>This directive specifies the additional python paths to
+          include in the Python interpreter's
+          <span class="literal"><code class="varname">sys.path</code></span>. In practice, this is
+          used to specify the location of the BigWorld Python extention module
+          in <code class="filename"><em class="replaceable"><code>$(MF_ROOT)</code></em>/bigworld/bin/web/Hybrid</code>.
+          This path to <code class="filename">BigWorld.so</code> must be included in
+          <code class="varname">bigworld.additional_python_paths</code>.</p></li><li><p><em class="emphasis"><code class="varname">bigworld.debug_level</code></em></p><p>This optional directive specifies the level at which the error
+          log entries are generated from use of the PHP module to the PHP
+          error log. The possible values for this are:</p><div class="itemizedlist"><ul type="circle"><li><p><em class="emphasis"><span class="literal">0</span></em> &#8212;
+              Debug level: <span class="literal">ERROR</span></p><p>Only errors are output to the log.</p></li><li><p><em class="emphasis"><span class="literal">1</span></em> &#8212;
+              Debug level: <span class="literal">INFO</span></p><p>Only errors and information messages are output to the log
+              (information messages include remote method calls and their
+              parameters).</p></li><li><p><em class="emphasis"><span class="literal">2</span></em> &#8212;
+              Debug level: <span class="literal">TRACE</span></p><p>Currently, this is the same as the <span class="literal">INFO</span>
+              level.</p></li><li><p><em class="emphasis"><span class="literal">3</span></em> &#8212;
+              Debug level: <span class="literal">MEMORY</span></p><p>Additional information about memory allocations and
+              deallocations are output to the log, as well as messages for
+              lower log levels.</p></li></ul></div></li></ul></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e859"></a>8.5.&nbsp;Testing</h2></div></div></div><p>To test the configuration changes above, you can use the
+    <code class="function">phpinfo()</code> function, which prints PHP-related
+    information, including any modules that have been loaded and their
+    configuration directive values.</p><p>The easiest way to do this is to create a PHP script as illustrated
+    below and use a browser to view it:</p><pre class="programlisting">&lt;?php
+  phpinfo();
+?&gt;</pre><p><span class="citetitle">Testing PHP configuration changes</span></p><div class="informalfigure"><div class="mediaobject"><img src="images/example_phpinfo_output.png"><span class="caption"><p>Example <span class="literal">phpinfo</span>
+        output</p></span></div></div><p>The BigWorld PHP module should be listed amongst the other PHP
+    loaded modules, as illustrated below.</p><div class="informalfigure"><div class="mediaobject"><img src="images/example_phpinfo_output_bigworld_module_configuration.png"><span class="caption"><p>Example <code class="function">phpinfo()</code> output &#8212;
+        BigWorld module configuration</p></span></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e896"></a>8.6.&nbsp;Mailbox Session Storage</h2></div></div></div><p>As they stand, Python objects represented as PHP resources do not
+    persist across page requests. PHP resource objects are typically discarded
+    at the end of the page request. Without persistence, mailboxes would have
+    to be looked up each time a page was loaded that required remote methods
+    to be called.</p><p>In mod_python, when Python objects (including mailboxes) are set in
+    the session variables in the form of serialised strings (or
+    <em class="emphasis">pickles</em>, in Python parlance), they are serialised
+    when the session variable is set and then deserialised at page load into
+    mailboxes. PHP has a similar session mechanism accessed via the
+    <code class="varname">$_SESSION</code> superglobal variable, after first
+    initialising the session by calling PHP's
+    <code class="function">session_start()</code>.</p><p>There are two functions in the API to facilitate a similar mechanism
+    where mailboxes are serialised and deserialised:
+    <code class="function">bw_serialise()</code> and
+    <code class="function">bw_deserialise()</code>. The string returned from
+    <code class="function">bw_serialise()</code> applied on a mailbox can be stored in
+    a PHP session, and the mailbox can then be restored by applying
+    <code class="function">bw_deserialise()</code> &#8212; it returns a PHP resource which
+    can be used in <code class="function">bw_exec()</code> to call remote
+    methods.</p><pre class="programlisting">session_start(); <em class="emphasis">// enable PHP sessions</em>
+...
+$mailbox = bw_look_up_entity_by_name( "Account", $username );
+$_SESSION['mailbox'] = bw_serialise( $mailbox ); <em class="emphasis">// serialises the mailbox into a string using Python pickling</em></pre><p><span class="citetitle">Example of saving a mailbox to session storage in
+    PHP</span></p><pre class="programlisting">$mailbox = bw_deserialise( $_SESSION['mailbox'] ); <em class="emphasis">// deserialises the mailbox pickle string</em>
+$res = bw_exec( $mailbox, ... ); <em class="emphasis">// call some method on the deserialised mailbox</em></pre><p><span class="citetitle">Example of retrieving a mailbox from session storage in
+    PHP</span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e949"></a>8.7.&nbsp;Remote Methods</h2></div></div></div><p>Invocations of remote methods with defined return values return an
+    associative array of those return values with the names of the defined
+    return values as keys.</p><p>In the examples below, the remote method
+    <code class="methodname">getGoldAndInventory()</code> is called using the
+    previous looked-up mailbox of the Avatar entity named
+    <span class="literal">bob</span>. The lookup involves a query to the DBMgr, which
+    returns the mailbox (which locates the entity object amongst the
+    BaseApps). The method call takes an argument of <span class="literal">INT32</span>,
+    and is directed to the Avatar entity base specified by the looked-up
+    mailbox. The method invocation returns back a PHP array that has keys
+    <span class="literal">goldPieces</span> and <span class="literal">inventoryList</span> set to
+    the return values from the BigWorld server.</p><pre class="programlisting">&lt;root&gt;
+   ...
+   &lt;BaseMethods&gt;
+      ...
+      &lt;getGoldAndInventory&gt;
+         &lt;Arg&gt;  INT32  &lt;/Arg&gt; &lt;!-- bag ID --&gt;
+         &lt;ReturnValues&gt;
+            &lt;goldPieces&gt;    UINT32                          &lt;/goldPieces&gt;
+            &lt;inventoryList&gt; ARRAY &lt;of&gt; INVENTORY_ITEM &lt;/of&gt; &lt;/inventoryList&gt;
+         &lt;/ReturnValues&gt;
+      &lt;/getGoldAndInventory&gt;
+      ...
+   &lt;/BaseMethods&gt;
+   ...
+&lt;/root&gt;</pre><p><span class="citetitle">Example remote entity method
+    definition</span></p><pre class="programlisting">$player = bw_look_up_entity_by_name( "Avatar", "bob" );  <em class="emphasis"># mailbox to Avatar 'bob'</em>
+result = bw_exec( $player, "getGoldAndInventory", $player, $bagID );    # <em class="emphasis">argument is integer</em>
+gold = $result['goldPieces'];                     <em class="emphasis"># integer</em>
+inventoryList = $result['inventoryList'];         <em class="emphasis"># list of inventory items</em></pre><p><span class="citetitle">Example invocation of a remote entity method with return
+    values in PHP</span></p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Since PHP does not have any concept of a Unicode type,
+      UNICODE_STRING cannot be used with the BigWorld PHP integration module.
+      Pass strings encoded in UTF-8 and then manually decode these into
+      Unicode on the Python side. Conversely, when returning strings to PHP,
+      you should manually encode the Python Unicode object into UTF-8.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e995"></a>8.8.&nbsp;The PHP BigWorld API</h2></div></div></div><p>The methods available in the PHP BigWorld API are described in the
+    list below:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="function">bw_exec( <em class="parameter"><code>$mailbox</code></em>, 
+        <em class="parameter"><code>$baseMethodName</code></em>,  <em class="parameter"><code>...</code></em>
+        )</code></p><p>Executes a remote method on an entity mailbox given as a PHP
+        resource, as returned by
+        <code class="function">bw_look_up_entity_by_name()</code> and
+        <code class="function">bw_look_up_entity_by_dbid()</code>.</p><p>This method has a variable size argument lists, which are
+        converted to Python objects before being sent to the Python remote
+        method.</p><p>The arguments are defined in the entity definition file, and
+        should match the order in which they appear.</p><p>If the remote method contains return values, then these are
+        converted to PHP types. In particular, return values are always
+        returned as a PHP array, with the keys being the return value names as
+        defined in the function specification in the entity definition
+        file</p><p>If there are no return values, then <span class="literal">NULL</span> is
+        returned.</p></li><li><p><code class="function">bw_get_keep_alive_seconds(
+        <em class="parameter"><code>$mailbox</code></em>, <em class="parameter"><code>$keepAliveSeconds</code></em>
+        )</code></p><p>Returns the keep-alive period (in seconds) for the specified
+        mailbox.</p></li><li><p><code class="function">bw_logon(
+        <em class="parameter"><code>$username</code></em>, <em class="parameter"><code>$password</code></em>, <em class="parameter"><code>$allow_already_logged_on=FALSE</code></em>
+        )</code></p><p>Logs on a user given an input password. The method returns
+        <span class="literal">TRUE</span> if the logon attempt was successful, otherwise
+        it returns an error message string.</p></li><li><p><code class="function">bw_look_up_entity_by_dbid(
+        <em class="parameter"><code>$entityType</code></em>, <em class="parameter"><code>$dbId</code></em>
+        )</code></p><p>Queries the BigWorld server for a specific entity with the given
+        type and database ID. If the entity exists and an entity base has been
+        loaded into the BigWorld system, then it returns a an entity mailbox
+        that can be used by <code class="function">bw_exec()</code> to invoke methods
+        on that entity base.</p><p>If the entity exists but has not been loaded, then
+        <span class="literal">TRUE</span> is returned. If the entity does not exist,
+        then <span class="literal">FALSE</span> is returned.</p></li><li><p><code class="function">bw_look_up_entity_by_name(
+        <em class="parameter"><code>$entityType</code></em>,  <em class="parameter"><code>$entityName</code></em>
+        )</code></p><p>Queries the BigWorld server for a specific entity with the given
+        type and name. If the entity exists and an entity base has been loaded
+        into the BigWorld system, then it returns an entity mailbox pointing
+        to that can be used by <code class="function">bw_exec()</code> to invoke
+        methods on that entity base.</p><p>If the entity exists but has not been loaded, then
+        <span class="literal">TRUE</span> is returned. If the entity does not exist,
+        then <span class="literal">FALSE</span> is returned.</p></li><li><p><code class="function">bw_set_default_keep_alive_seconds(
+        <em class="parameter"><code>$keepAliveSeconds</code></em> )</code></p><p>Sets the default keep-alive period (in seconds) for all new
+        entity mailboxes.</p></li><li><p><code class="function">bw_set_keep_alive_seconds(
+        <em class="parameter"><code>$mailbox</code></em>, 
+        <em class="parameter"><code>$keepAliveSeconds</code></em> )</code></p><p>Sets the keep-alive period (in seconds) for the specified
+        mailbox.</p></li><li><p><code class="function">bw_reset_network_interface(
+        <em class="parameter"><code>$port</code></em> )</code></p><p>Recreates the network interface (including its socket) and
+        resets any addresses to BigWorld services that it has cached.</p><p>The socket is bound to the given port, unless the given port is
+        zero, in which case the socket is bound to a random port.</p></li><li><p><a name="xref_PHP_BigWorld_API_bw_serialise"></a><code class="function">bw_serialise( <em class="parameter"><code>$mailbox</code></em>
+        )</code></p><p>This method serialises a mailbox to a string that can be used to
+        store away a mailbox into whatever session persistence mechanism your
+        web script environment uses. The mailbox can be re-made using
+        <code class="function">bw_deserialise()</code>.</p></li><li><p><a name="xref_PHP_BigWorld_deserialise"></a><code class="function">bw_deserialise(
+        <em class="parameter"><code>$serialisedMailbox</code></em> )</code></p><p>This method deserialises a serialised mailbox string into a
+        mailbox.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1158"></a>8.9.&nbsp;Example Scripts</h2></div></div></div><p>Example scripts demonstrating how to use the BigWorld PHP extension
+    module to integrate with PHP are located in <code class="filename"><span class="literal">fantasydemo/src/web/php</span></code>.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1167"></a>8.9.1.&nbsp;Requirements</h3></div></div></div><p>For details on how to set up the requirements of the PHP example
+      scripts, see your Linux distribution instructions. The requirements are
+      listed below:</p><div class="itemizedlist"><ul type="disc"><li><p>WURFL &#8212; included with the example scripts (for details, see
+          <a href="#xref_WURFL" title="8.9.2.&nbsp;WURFL">WURFL</a>)</p></li><li><p>PHP CLI and Apache2 module &#8212; the CLI is used to install
+          WURFL</p></li><li><p>PHP <span class="literal">gd</span> module &#8212; for image operations</p></li><li><p>Apache (2.2 series)</p></li><li><p>Running BigWorld server</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_WURFL"></a>8.9.2.&nbsp;WURFL</h3></div></div></div><p>WURFL is a library for reading Wireless Universal Resource Files
+      that describe capabilities of mobile devices and provides support for
+      searching these capabilities based on the HTTP User Agent string. This
+      package needs to be set up for the example scripts you intend to use. In
+      order to use this package you will need a command-line version of PHP
+      installed. For details on WURFL, see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://wurfl.sourceforge.net" target="_top">http://wurfl.sourceforge.net</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1201"></a>8.9.3.&nbsp;Installation</h3></div></div></div><p>Make sure that the BigWorld PHP module has been built ( see <a href="#xref_PHP_Building_The_Module_From_Source" title="8.3.&nbsp;Building the Module From Source">Building the Module From Source</a>) and is being
+      loaded from startup.</p><p>The WURFL cache needs to be updated before the example scripts can
+      be used. To update WURFL, follow the steps below:</p><div class="itemizedlist"><ul type="disc"><li><p>Move to the WURFL directory.</p><pre class="programlisting">cd fantasydemo/src/web/wurfl</pre></li><li><p>Run the command below:</p><pre class="programlisting">php update_cache.php</pre></li><li><p>Make a symbolic link to <code class="filename">fantasydemo/src/web/php</code> somewhere in
+          Apache's <span class="literal">DocumentRoot</span> (<em class="emphasis">e.g.</em>,
+          <code class="filename">/var/www/html/fantasydemo</code>).</p></li><li><p>Make sure that the Apache configuration directive
+          <span class="literal">FollowSymlinks</span> is on for the directory containing
+          the symlink, and that the web server user has full read access to
+          the directories and files underneath <code class="filename">fantasydemo/src/web/php</code> (for more
+          details, see the Apache manual).</p></li><li><p>Point the browser to the corresponding URL. If you log in
+          using an account already created via the FantasyDemo client, then
+          you should be able to see the character that you created there in a
+          list on successful login. You can then view character statistics and
+          inventory, create auctions from your inventory, check your own
+          auctions, and bid on other player's auctions.</p></li></ul></div><div class="informalfigure"><div class="mediaobject"><img src="images/php_example_scripts_login_page.png"><span class="caption"><p>PHP example scripts login page</p></span></div></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e731" href="#d0e731">1</a>] </sup>The configuration file directory is located at <code class="filename">/etc/php.d</code> for Fedora / CentOS
+          distributions, or <code class="filename">/etc/php5/conf.d</code> for Debian
+          distributions.</p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Porting_To_Other_Scripting_Languages"></a>Chapter&nbsp;9.&nbsp;Porting to Other Scripting Languages</h2></div></div></div><p>The PHP module wraps the Python module and maps types between PHP and
+  Python. In theory, this could be done with other scripting languages, for
+  example Ruby.</p><p>The source to the PHP and the Python modules is located in <code class="filename">bigworld/src/server/web</code> under the directories
+  <code class="filename">php</code> and <code class="filename">python</code>. You can use the PHP module source as
+  example code to implement an extension module for other scripting
+  languages.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Caveats"></a>Chapter&nbsp;10.&nbsp;Caveats</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e1274">10.1. Using Both the PHP BigWorld Extension and Apache/mod_python
+    Simultaneously</a></span></dt><dt><span class="section"><a href="#d0e1285">10.2. Restarting the Cluster</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1274"></a>10.1.&nbsp;Using Both the PHP BigWorld Extension and Apache/mod_python
+    Simultaneously</h2></div></div></div><p>The PHP module works by embedding a Python interpreter into the PHP
+    process, which then forms part of the the Apache HTTPd process tree. This
+    is also the behaviour of the <span class="literal">mod_python</span> Apache module,
+    and loading both the PHP BigWorld extension and the
+    <span class="literal">mod_python</span> Apache module simultaneously has undefined
+    effects, and is therefore not supported.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1285"></a>10.2.&nbsp;Restarting the Cluster</h2></div></div></div><p>The web integration module will cache mailboxes between transactions
+    and even sessions for efficiency. However when the server cluster is
+    restarted these mailboxes become invalid. The module must therefore also
+    be reinitialised. The easiest way of doing this is by restarting the web
+    server that loaded it, whenever the cluster is restarted.</p></div></div></div></div></body></html>

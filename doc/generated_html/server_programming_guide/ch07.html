@@ -1,0 +1,684 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;7.&nbsp;Entity Instantiation and Destruction</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch06.html" title="Chapter&nbsp;6.&nbsp;Inheritance in BigWorld">
+      <link rel="next" href="ch08.html" title="Chapter&nbsp;8.&nbsp;The Database Layer">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch07.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;7.&nbsp;Entity Instantiation and Destruction</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch06.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch08.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Entity_Instantiation_And_Destruction"></a>Chapter&nbsp;7.&nbsp;Entity Instantiation and Destruction
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch07.html#xref_Entity_Instantiation_On_The_BaseApp">7.1. Entity Instantiation on the BaseApp</a></span></dt>
+                  <dt><span class="section"><a href="ch07.html#xref_Cell_Entity_Creation_From_BaseApp">7.2. Cell Entity Creation From BaseApp</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch07.html#d0e6011">7.2.1. Creation Near an Existing Cell Entity</a></span></dt>
+                        <dt><span class="section"><a href="ch07.html#d0e6099">7.2.2. Creation in a Numbered Space</a></span></dt>
+                        <dt><span class="section"><a href="ch07.html#d0e6149">7.2.3. Creation in a New Space</a></span></dt>
+                        <dt><span class="section"><a href="ch07.html#d0e6169">7.2.4. Creation in Default Space</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch07.html#d0e6199">7.3. Entity Destruction</a></span></dt>
+                  <dt><span class="section"><a href="ch07.html#d0e6315">7.4. Entity Instantiation From The CellApp</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch07.html#d0e6320">7.4.1. Instantiation With No Base Counterpart</a></span></dt>
+                        <dt><span class="section"><a href="ch07.html#d0e6380">7.4.2. Instantiation With Base Counterpart</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch07.html#d0e6441">7.5. Loading Entities From Chunk Files</a></span></dt>
+               </dl>
+            </div>
+            <p>Due to the way that BigWorld entities must be set up and linked to
+                 each other, they must be instantiated differently to how other objects are
+                 instantiated in Python. Similarly, because the parts must be unlinked at
+                 destruction time, there are special ways of accomplishing this.
+            </p>
+            <p>As mentioned in section <a href="ch02.html#xref_The_Script_Files" title="2.3.&nbsp;The Script Files">The Script Files</a>, an
+                 entity can have a part located on the cell (in both real and ghost forms), a
+                 part on the base, and another on clients that have the entity in their AoI.
+                 Different entity types may support their instances being only on one, two,
+                 or all three of these. Also, it is possible for instances of entity types to
+                 have less parts than their type supports.
+            </p>
+            <p>Most commonly, the base part of an entity is created first and then,
+                 if appropriate, its cell part. There are a number of reasons for
+                 this.
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>The base entity can be created directly from the database, while
+                              the cell entity cannot.
+                     </p>
+                  </li>
+                  <li>
+                     <p>The base entity can create its cell part, but the reverse is not
+                              true.
+                     </p>
+                  </li>
+                  <li>
+                     <p>The cell entity needs an associated base entity to be
+                              fault-tolerant.
+                     </p>
+                  </li>
+                  <li>
+                     <p>The cell entity needs an associated base entity to write itself to
+                              the database.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>For entity types that have base and cell parts, the base part is
+                 always created before the cell part, and destroyed after it. It is also
+                 possible to create a cell entity that does not have a base part.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Entity_Instantiation_On_The_BaseApp"></a>7.1.&nbsp;Entity Instantiation on the BaseApp
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The base entity can be created in the following ways:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Directly from script, using the methods
+                                   <code class="classname">BigWorld</code>.<code class="methodname">createBaseAnywhere</code>
+                                   <sup>[<a name="d0e5788" href="#ftn.d0e5788">11</a>]</sup>,
+                                   <code class="classname">BigWorld</code>.<code class="methodname">createBaseLocally</code>,
+                                   or
+                                   <code class="classname">BigWorld</code>.<code class="methodname">createBaseRemotely</code></p>
+                     </li>
+                     <li>
+                        <p>From the database, using the methods
+                                   <code class="classname">BigWorld</code>.<code class="methodname">createBaseFromDBID</code>
+                                   or
+                                   <code class="classname">BigWorld</code>.<code class="methodname">createBaseFromDB</code>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>For more details on instantiating entities from the data stored in
+                      the database, see <a href="ch08.html" title="Chapter&nbsp;8.&nbsp;The Database Layer"><i xmlns:xlink="http://www.w3.org/1999/xlink">The Database Layer</i></a>.
+               </p>
+               <p>The method
+                      <code class="classname">BigWorld</code>.<code class="methodname">createBaseAnywhere</code>
+                      can specify both the base and cell entity properties, and has the
+                      following signature:
+               </p><pre class="programlisting">def createBaseAnywhere( entityTypeName, *args, **kwargs ):</pre><p><span class="citetitle">Method
+                         <code class="classname">BigWorld</code>.<code class="methodname">createBaseAnywhere</code>'s
+                         signature</span></p>
+               <p>The parameter <em class="parameter"><code>entityTypeName</code></em> is a string
+                      containing the name of the entity type to instantiate. For example, to
+                      instantiate an entity <code class="classname">ExampleEntity</code>, this parameter
+                      would be <span class="literal">"ExampleEntity"</span>.
+               </p>
+               <p>In its simplest form, it creates the entity with all default values,
+                      and is invoked as in the example below:
+               </p><pre class="programlisting">newEntity = BigWorld.createBaseAnywhere( "ExampleEntity" )</pre><p><span class="citetitle">Example of method
+                         <code class="classname">BigWorld</code>.<code class="methodname">createBaseAnywhere</code></span></p>
+               <p>This method can optionally take a list of other parameters that are
+                      searched to create base and cell entity values. These parameters can
+                      be:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Keyword arguments</p>
+                     </li>
+                     <li>
+                        <p>Dictionaries</p>
+                     </li>
+                     <li>
+                        <p><code class="classname">ResMgr</code>.<code class="classname">DataSection</code></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The keyword arguments are searched first, then the dictionaries, and
+                      finally the DataSection. If a value is not found for any of the entity's
+                      properties, the default value for that property / data type is
+                      assigned.
+               </p>
+               <p>Keyword arguments and dictionary values not found in the entity's
+                      definition are set as base entity properties.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Cell_Entity_Creation_From_BaseApp"></a>7.2.&nbsp;Cell Entity Creation From BaseApp
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The method
+                      <code class="classname">BigWorld</code>.<code class="methodname">createBaseAnywhere</code>
+                      creates only the base representation of the entity. If a cell entity is
+                      required, it is the base entity's duty to instantiate its associated cell
+                      entity.
+               </p>
+               <p>To create the associated cell entity, the following methods are
+                      used:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="classname">Base</code>.<code class="methodname">createCellEntity</code></p>
+                     </li>
+                     <li>
+                        <p><code class="classname">Base</code>.<code class="methodname">createInNewSpace</code></p>
+                     </li>
+                     <li>
+                        <p><code class="classname">Base</code>.<code class="methodname">createInDefaultSpace</code></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>These methods read the base entity's special variable
+                      <code class="classname">Base</code>.<code class="varname">cellData</code> (which is
+                      initialised with the cell entity's data when the base entity is created)
+                      to get the initialisation values for the cell entity. If the entity type
+                      does not support a cell entity, the base entity will not have
+                      <code class="varname">cellData</code>.
+               </p>
+               <p>The variable <code class="varname">cellData</code> is behaves like a
+                      dictionary containing all cell properties defined in the entity's
+                      definition file
+                      (<code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>).
+               </p>
+               <p>It also has three additional members:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><code class="varname">position</code></em>
+                                   <span class="symbol">&#8208;</span> Sequence of three <span class="type">float</span>s
+                                   (x, y, z), or a <span class="type">Vector3</span> with position to create the new
+                                   entity at.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><code class="varname">direction</code></em>
+                                   <span class="symbol">&#8208;</span> Sequence of three <span class="type">float</span>s
+                                   (roll, pitch and yaw) with direction for the new cell entity.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><code class="varname">spaceID</code></em>
+                                   <span class="symbol">&#8208;</span> ID of the space for the cell entity
+                                   to be created in, if space is not specified in a different way.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Once the cell entity is successfully created, the following steps
+                      take place:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>The variable <code class="varname">cellData</code> is deleted.
+                        </p>
+                     </li>
+                     <li>
+                        <p>A variable called <code class="varname">cell</code> is created, with the
+                                   mailbox of the cell entity.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The callback
+                                   <code class="classname">Base</code>.<code class="methodname">onGetCell</code> is
+                                   invoked.
+                        </p>
+                     </li>
+                  </ol>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6011"></a>7.2.1.&nbsp;Creation Near an Existing Cell Entity
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The diagram below illustrates the creation of the cell entity
+                           using the method
+                           <code class="classname">Base</code>.<code class="methodname">createCellEntity</code> of
+                           the <code class="classname">BigWorld</code> module. This method cannot be used
+                           when the cell entity has already been created.
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/creation_of_the_cell_entity.png"><span class="caption">
+                           <p>Creation of the cell entity using the method
+                                        <code class="methodname">createCellEntity</code> of
+                                        <code class="classname">BigWorld</code>.<code class="classname">Base</code>.
+                           </p></span></div>
+                  </div>
+                  <p>The declaration of method
+                           <code class="methodname">createCellEntity</code> in Python would look like
+                           this<sup>[<a name="d0e6046" href="#ftn.d0e6046">12</a>]</sup>:
+                  </p><pre class="programlisting">class Base:
+  ...
+  def createCellEntity( self, mailbox = None ):
+    ...</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Base.py</code>
+                              <span class="symbol">&#8208;</span> Declaration of method
+                              <code class="methodname">createCellEntity</code></span></p>
+                  <p>The parameter <code class="varname">mailbox</code> is a cell entity mailbox.
+                           The new cell entity is created in the same space and cell as the mailbox
+                           references (if <code class="varname">mailbox</code> is not
+                           <span class="literal">None</span>). Ideally, the two entities are close, as this
+                           increases the likelihood of the entity starting on the correct
+                           cell.
+                  </p>
+                  <p>The diagram below shows the flow of communications if the entity
+                           is created on the correct cell:
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/flow_of_communication.png"><span class="caption">
+                           <p>Flow of communication when cell entity is created on
+                                        correct cell.
+                           </p></span></div>
+                  </div>
+                  <p>The diagram below shows the flow of communications if the entity
+                           is created on an incorrect cell:
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/flow_of_communicaton_when_cell_entity_is_created_on_the_wrong_cell.png"><span class="caption">
+                           <p>Flow of communication when cell entity is created on
+                                        an incorrect cell.
+                           </p></span></div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6099"></a>7.2.2.&nbsp;Creation in a Numbered Space
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>It is also possible to create the cell entity by having an
+                           appropriate value for <code class="varname">spaceID</code> in the property
+                           <code class="varname">cellData</code>. This should be avoided, as it requires the
+                           request to go via the CellAppMgr, which can cause a bottleneck.
+                  </p>
+                  <p>Once the cell entity has been created, the notification method
+                           <code class="methodname">onGetCell</code> is called on the base entity. This is
+                           the signal that it is now safe to start using the mailbox to the cell
+                           entity <code class="varname">self</code>.<code class="varname">cell</code>.
+                  </p>
+                  <p>For entity <code class="varname">someEntity</code>, the method
+                           <code class="methodname">onGetCell</code> can be defined as illustrated
+                           below:
+                  </p><pre class="programlisting">import BigWorld
+
+class <em class="emphasis">someEntity</em>( BigWorld.Base ):
+  ...
+  def <em class="emphasis">onGetCell</em>( self ):
+    # this method was called, that means cell entity has been created.
+  ...</pre><p><span class="citetitle"><code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/someEntity.py</code>
+                              <span class="symbol">&#8208;</span> Definition of method
+                              <code class="classname">onGetCell</code></span></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6149"></a>7.2.3.&nbsp;Creation in a New Space
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The method
+                           <code class="classname">Base</code>.<code class="methodname">createInNewSpace</code>
+                           dispatches a request to the CellAppMgr to create a new space, and the
+                           entity on it.
+                  </p>
+                  <p>The resulting message trace is illustrated below:</p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/flow_of_communication_when_creating_cell_entity_on_a_new_space.png"><span class="caption">
+                           <p>Flow of communication when creating cell entity on a
+                                        new space.
+                           </p></span></div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6169"></a>7.2.4.&nbsp;Creation in Default Space
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The method
+                           <code class="classname">Base</code>.<code class="methodname">createInDefaultSpace</code>
+                           is similar to method
+                           <code class="classname">Base</code>.<code class="methodname">createInNewSpace</code>,
+                           except that a new space is not created.
+                  </p>
+                  <p>This is only available if flag
+                           <code class="property">&lt;useDefaultSpace&gt;</code> is set to
+                           <span class="literal">true</span> in the configuration file
+                           <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/server/bw.xml</code>.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e6199"></a>7.3.&nbsp;Entity Destruction
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The base entity is always created before the cell entity and is
+                      destroyed after it.
+               </p>
+               <p>The sequence of events ensued by the destruction of a cell entity is
+                      described below:
+               </p>
+               <div class="altrow">
+                  <table border="0">
+                     <colgroup>
+                        <col width="12%">
+                        <col width="44%">
+                        <col width="44%">
+                     </colgroup>
+                     <thead>
+                        <tr>
+                           <th align="left">Step</th>
+                           <th align="left">Base</th>
+                           <th align="left">Cell</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td align="left">1</td>
+                           <td align="left">Calls method
+                                            <code class="methodname">destroyCellEntity</code>.
+                           </td>
+                           <td align="left">Calls method
+                                            <code class="methodname">destroy</code>.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td align="left">2</td>
+                           <td align="left">&nbsp;</td>
+                           <td align="left">Has method
+                                            <code class="methodname">onDestroy</code> automatically called.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td align="left">3</td>
+                           <td align="left">Has method
+                                            <code class="methodname">onLoseCell</code> automatically called. If
+                                            base is to be destroyed, this is a good place to call method
+                                            destroy.
+                           </td>
+                           <td align="left">&nbsp;</td>
+                        </tr>
+                        <tr>
+                           <td align="left">4</td>
+                           <td align="left"><code class="varname">cell</code> property is
+                                            lost<sup>[<a name="d0e6259" href="#ftn.d0e6259">a</a>]</sup>.
+                           </td>
+                           <td align="left">&nbsp;</td>
+                        </tr>
+                        <tr>
+                           <td align="left">5</td>
+                           <td align="left"><code class="varname">cellData</code> property is
+                                            restored, with values it had when destroyed<sup>[<a name="d0e6273" href="#ftn.d0e6273">b</a>]</sup>.
+                           </td>
+                           <td align="left">&nbsp;</td>
+                        </tr>
+                     </tbody>
+                     <tbody class="footnotes">
+                        <tr>
+                           <td colspan="3">
+                              <div class="footnote">
+                                 <p><sup>[<a name="ftn.d0e6259" href="#d0e6259">a</a>] </sup>For details on this property, see <a href="ch07.html#xref_Cell_Entity_Creation_From_BaseApp" title="7.2.&nbsp;Cell Entity Creation From BaseApp">Cell Entity Creation From BaseApp</a>.
+                                 </p>
+                              </div>
+                              <div class="footnote">
+                                 <p><sup>[<a name="ftn.d0e6273" href="#d0e6273">b</a>] </sup>For details on this property, see <a href="ch07.html#xref_Cell_Entity_Creation_From_BaseApp" title="7.2.&nbsp;Cell Entity Creation From BaseApp">Cell Entity Creation From BaseApp</a>.
+                                 </p>
+                              </div>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <p><span class="citetitle">Sequence of events during entity destruction
+                         on the cell.</span></p>
+               <p>The method
+                      <code class="classname">Base</code>.<code class="methodname">destroy</code> has two
+                      Boolean keyword arguments:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><em class="parameter"><code>deleteFromDB</code></em></em> <span class="symbol">&#8208;</span> The default value is
+                                   <span class="literal">false</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><em class="parameter"><code>writeToDB</code></em></em> <span class="symbol">&#8208;</span> The default value is <span class="literal">true</span>
+                                   if the entity has previously been written to the database.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e6315"></a>7.4.&nbsp;Entity Instantiation From The CellApp
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>When creating a cell entity, it can be created either with its base
+                      counterpart or not. The following sub-sections describe both
+                      approaches.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6320"></a>7.4.1.&nbsp;Instantiation With No Base Counterpart
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The method
+                           <code class="classname">BigWorld</code>.<code class="methodname">createEntity</code>
+                           can be called to create a cell entity with no associated base
+                           entity.
+                  </p>
+                  <p>This scenario is illustrated below:</p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/creation_of_cell_entity_without_base_counterpart.png"><span class="caption">
+                           <p>Creation of cell entity without base
+                                        counterpart.
+                           </p></span></div>
+                  </div>
+                  <p>The method
+                           <code class="classname">BigWorld</code>.<code class="methodname">createEntity</code>
+                           has the following signature:
+                  </p><pre class="programlisting">def createEntity( entityTypeName, spaceID, position, direction, properties ):</pre><p><span class="citetitle">Method
+                              <code class="classname">BigWorld</code>.<code class="methodname">createEntity</code>'s
+                              signature.</span></p>
+                  <p>For details on the parameters for this method, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/cellapp/index.html" class="olink">CellApp Python API</a>'s entry <em class="emphasis">Main Page
+                              <span class="symbol">&#8594;</span> Cell <span class="symbol">&#8594;</span> BigWorld <span class="symbol">&#8594;</span> Function <span class="symbol">&#8594;</span>
+                              <span class="literal">createEntity</span></em>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6380"></a>7.4.2.&nbsp;Instantiation With Base Counterpart
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The method
+                           <code class="classname">BigWorld</code>.<code class="methodname">createEntityOnBase</code>
+                           allows the CellApp to create base entities. It has the following
+                           signature:
+                  </p><pre class="programlisting">def createEntityOnBaseApp( <em class="parameter"><code>entityTypeName</code></em>, <em class="parameter"><code>properties</code></em> ):</pre><p><span class="citetitle">Method
+                              <code class="classname">BigWorld</code>.<code class="methodname">createEntityOnBaseApp</code>'s
+                              signature</span></p>
+                  <p>This function takes the following parameters:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><em class="parameter"><code>entityTypeName</code></em></em> <span class="symbol">&#8208;</span> Name of the entity type to create.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><em class="parameter"><code>properties</code></em></em> <span class="symbol">&#8208;</span> A dictionary of properties on the base as
+                                        listed in the entity's definition file.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>This function dispatches a message to a BaseApp to create a base
+                           entity, which can later call method
+                           <code class="methodname">createCellEntity</code> to create the cell
+                           entity.
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/creation_of_cell_entity_with_its_base_counterpart.png"><span class="caption">
+                           <p>Creation of cell entity with its base
+                                        counterpart
+                           </p></span></div>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e6441"></a>7.5.&nbsp;Loading Entities From Chunk Files
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>WorldEditor can be used to insert entity placeholders into chunks.
+                      These placeholders can be read by Python script on the server to load
+                      these entities into the game world using the
+                      <code class="classname">BigWorld</code>.<code class="methodname">fetchEntitiesFromChunks</code>
+                      method on BaseApps.
+               </p>
+               <p>The following example code is taken from
+                      <code class="filename">fantasydemo/res/scripts/base/TeleportPoint.py</code>:
+               </p><pre class="programlisting">class TeleportPoint( BigWorld.Base ):
+  ...
+  BigWorld.fetchEntitiesFromChunks( self.geometry, EntityLoader( self ) )
+                                                                                
+class EntityLoader:
+  def __init__( self, dstEntity ):
+    self.dstEntity = dstEntity
+                                                                                
+  def onSection( self, entityDataSection, matrix ):
+    e = BigWorld.createEntity( 
+      entityDataSection.readString( "type" ),
+      entityDataSection[ "properties" ],
+      createOnCell = self.dstEntity.cell,
+      position = matrix.applyToOrigin(),
+      direction = (matrix.roll, matrix.pitch, matrix.yaw))</pre><p><span class="citetitle"><span class="literal">fantasydemo/res/scripts/base/TeleportPoint.py</span></span></p>
+               <p>The
+                      <code class="classname">BigWorld</code>.<code class="methodname">fetchEntitiesFromChunks</code>
+                      method causes all chunks in the space to be loaded in a loading thread.
+                      Each <code class="property">&lt;entity&gt;</code> data section in the loaded chunks
+                      causes the method <code class="methodname">onSection</code> to be called on the
+                      handler object. This method can then use the data section to create an
+                      appropriate entity.
+               </p>
+               <p>For more details on loading data section information in a
+                      thread-safe way, see both the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_avoid_file_in_main_thread/index.html" class="olink">How To Avoid Files Being Loaded in the Main Thread</a> and the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/baseapp/index.html" class="olink">BaseApp Python API</a>'s entries <em class="emphasis">Main Page
+                         <span class="symbol">&#8594;</span> Base <span class="symbol">&#8594;</span> BigWorld <span class="symbol">&#8594;</span> Function <span class="symbol">&#8594;</span>
+                         <span class="literal">BigWorld.fetchDataSection</span></em>, <em class="emphasis"><span class="literal">BigWorld.fetchEntitiesFromChunks</span></em>,
+                      and <em class="emphasis"><span class="literal">BigWorld.fetchFromChunks</span></em>.
+               </p>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e5788" href="#d0e5788">11</a>] </sup><code class="classname">BigWorld</code>.<code class="methodname">createBaseAnywhere</code>
+                                 is the recommended method of creating an instance of a base entity
+                                 as it allows BaseAppMgr to select the least loaded BaseApp to be
+                                 created on.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e6046" href="#d0e6046">12</a>] </sup>The method <code class="methodname">createCellEntity</code> is
+                               implemented in C++ <span class="symbol">&#8208;</span> the example
+                               declares it in Python just for explanation purposes.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch06.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch08.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;6.&nbsp;Inheritance in BigWorld&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;8.&nbsp;The Database Layer</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

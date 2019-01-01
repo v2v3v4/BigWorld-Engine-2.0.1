@@ -1,0 +1,134 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;6.&nbsp;Server Changes</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Upgrade BigWorld Versions">
+      <link rel="up" href="index.html" title="How To Upgrade BigWorld Versions">
+      <link rel="prev" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Client Script Changes">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Server Changes</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Server_Changes"></a>Chapter&nbsp;6.&nbsp;Server Changes
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch06.html#d0e402">6.1. Server Hardware Support</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#d0e409">6.2. DBMgr source code</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e402"></a>6.1.&nbsp;Server Hardware Support
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>32 bit Linux distributions are no longer supported. Only 64 bit
+                  environments are now supported. This change was made as most hardware that
+                      has been sold recently has been 64 bit, and the increased memory
+                      availability on 64 bit servers is more suited to the requirements of the
+                      BigWorld server.
+               </p>
+               <p>While there should be no game script related changes needed as a
+                      result of this change, any code you have implemented on a 32 bit system
+                      will need to be reviewed to ensure it works safely under a 64 bit
+                      environment.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e409"></a>6.2.&nbsp;DBMgr source code
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The DBMgr source code has undergone a cleanup and refactor which has
+                      involved separating the bulk of the code into three libraries. The core
+                      DBMgr code is still located in <code class="filename">bigworld/src/server/dbmgr</code>, however the XML
+                      and MySQL implementations along with the generic DBMgr interface have been
+                      moved into <code class="filename">bigworld/src/lib</code>.
+                      Specifically the layout of the DBMgr code is as follows:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><code class="filename">bigworld/src/lib/dbmgr_lib</code></p>
+                        <p>This directory contains the interface required for DBMgr to
+                                   communicate with specific database implementations, and
+                                   vice-versa.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="filename">bigworld/src/lib/dbmgr_mysql</code></p>
+                        <p>This directory contains the MySQL implementation for DBMgr,
+                                   SyncDB and ConsolidateDBs.
+                        </p>
+                     </li>
+                     <li>
+                        <p><code class="filename">bigworld/src/lib/dbmgr_xml</code></p>
+                        <p>This directory contains the XML implementation for DBMgr.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The most significant change that occurred along with the source code
+                      moving location has been the cleanup and separation of the MySQL
+                      implementation. Most classes are now contained in their own file, and
+                      DBMgr tasks along with property data type mappings have been separated in
+                      their own subdirectories.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Client Script Changes&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

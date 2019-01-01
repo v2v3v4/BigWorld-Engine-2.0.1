@@ -1,0 +1,106 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;1.&nbsp;Entity Preloads</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Avoid Files Being Loaded in the Main Thread">
+      <link rel="up" href="index.html" title="How To Avoid Files Being Loaded in the Main Thread">
+      <link rel="prev" href="index.html" title="How To Avoid Files Being Loaded in the Main Thread">
+      <link rel="next" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Entity.prerequisites()">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_avoid_file_in_main_thread/ch01.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Entity Preloads</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Entity_Preloads"></a>Chapter&nbsp;1.&nbsp;Entity Preloads
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p>When the client starts up, it will query each entity Python module for
+                 a function named <code class="code">preload</code>. Resource names returned by this
+               function will be loaded on client startup and kept in memory for the entire
+               life-time of the client (i.e. it will be instantly available for use at any
+               time). This is useful for commonly used assets to avoid potentially loading
+               and re-loading at a later time. The tradeoff, however, is that the client
+                 will take longer to start and will use more memory (if the resource isn't
+                 actually being used at some point).
+            </p>
+            <p>To use the preloads mechanism, create a global function called
+                 <code class="code">preload</code> in the relevant entity module. It must take a single
+                 parameter which is a Python list containing resource to preload. Modify this
+                 list in place (e.g. using list.append or list concatenation), inserting the
+                 string names of each resource to be preloaded by the client.
+            </p>
+            <p>For example, <code class="code"> </code></p><pre class="programlisting"># Avatar.py
+import BigWorld
+
+class Avatar( BigWorld.Entity ):
+    def __init__( self ):
+        ...
+
+def preload( list ):
+    list.append( "characters/avatars/human_avatar.model" )
+    list.append( "system/maps/fx_flare_glow.tga" )
+    ...
+ </pre><p><code class="code">The type of resources which can be preloaded are,</code></p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Fonts</p>
+                  </li>
+                  <li>
+                     <p>Textures</p>
+                  </li>
+                  <li>
+                     <p>Shaders</p>
+                  </li>
+                  <li>
+                     <p>Models</p>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">How To Avoid Files Being Loaded in the Main Thread&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;<code class="methodname">Entity.prerequisites()</code></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

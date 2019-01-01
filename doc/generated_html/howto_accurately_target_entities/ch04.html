@@ -1,0 +1,115 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;4.&nbsp;Saving/loading the SkeletonCollider</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Perform Accurate Targeting Of Entities">
+      <link rel="up" href="index.html" title="How To Perform Accurate Targeting Of Entities">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Using the SkeletonCollider">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_accurately_target_entities/ch04.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;Saving/loading the <span class="literal">SkeletonCollider</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="d0e168"></a>Chapter&nbsp;4.&nbsp;Saving/loading the <span class="literal">SkeletonCollider</span></h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch04.html#d0e173">4.1. Saving</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e198">4.2. Loading</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e173"></a>4.1.&nbsp;Saving
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The <span class="literal">SkeletonCollider</span> can be saved to a
+                        <span class="literal">DataSection</span> by using the <span class="literal">save</span>
+                        method. The following python code will create a new xml section called
+                        <span class="literal">creature_skeleton.xml</span> in the folder
+                        <span class="literal">data</span> and save the <span class="literal">SkeletonCollider</span>
+                        to it. 
+               </p><pre class="programlisting">import ResMgr
+ds=ResMgr.openSection('data/creature_skeleton.xml',True)
+creature.skeletonCollider.save(ds)
+ds.save()</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e198"></a>4.2.&nbsp;Loading
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The <span class="literal">SkeletonCollider</span> can be loaded from a
+                        <span class="literal">DataSection</span> by using the <span class="literal">load</span>
+                        method. After loading the <span class="literal">SkeletonCollider</span>, the
+                        <span class="literal">colliders</span> need to be attached to the appropriate
+                        nodes in the model. This is why it is important to name your
+                        <span class="literal">BoxAttachments</span> using the actual node names from the
+                        model.
+               </p><pre class="programlisting">import ResMgr
+ds=ResMgr.openSection('data/creature_skeleton.xml')
+
+# Create and load the SkeletonCollider
+creature.skeletonCollider=BigWorld.SkeletonCollider()
+creature.skeletonCollider.load(ds)
+
+# Attach the collider objects to the model
+for i in range(0,creature.skeletonCollider.nColliders()):
+  collider=creature.skeletonCollider.getCollider(i)
+  creature.model.node(collider.name).attach(collider)</pre></div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Using the <span class="literal">SkeletonCollider</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

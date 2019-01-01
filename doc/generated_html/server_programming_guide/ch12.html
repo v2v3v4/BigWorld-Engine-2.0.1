@@ -1,0 +1,1287 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;12.&nbsp;Entities and the Universe</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch11.html" title="Chapter&nbsp;11.&nbsp;Proxies and Players">
+      <link rel="next" href="ch13.html" title="Chapter&nbsp;13.&nbsp;XML Data File Access">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch12.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;12.&nbsp;Entities and the Universe</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch11.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch13.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Entities_And_The_Universe"></a>Chapter&nbsp;12.&nbsp;Entities and the Universe
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch12.html#d0e10583">12.1. Multiple Spaces</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch12.html#d0e10693">12.1.1. Spaces Pool</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch12.html#xref_Navigation_System">12.2. Navigation System</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch12.html#d0e10708">12.2.1. Key Features</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e10726">12.2.2. Navpoly Data Format</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e10754">12.2.3. Script Interface</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e10840">12.2.4. Navigate</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e10879">12.2.5. Graph Searches</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e10916">12.2.6. Auto-Generation of Navpoly Regions <span class="symbol">&#8208;</span> The NavGen Utility</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch12.html#d0e10992">12.3. Time</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch12.html#d0e10999">12.3.1. Real Time</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e11004">12.3.2. Server Time</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#xref_Game_Time">12.3.3. Game Time</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch12.html#xref_Initialisation_Personality_Script_eload_And_runscript">12.4. Initialisation: Personality script, eload, and runscript</a></span></dt>
+                  <dt><span class="section"><a href="ch12.html#d0e11335">12.5. Global Data</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch12.html#d0e11345">12.5.1. <code class="varname">globalData</code>, <code class="varname">baseAppData</code> and
+                                       <code class="varname">cellAppData</code></a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch12.html#xref_Space_Data">12.6. Space Data</a></span></dt>
+                  <dt><span class="section"><a href="ch12.html#xref_Global_Bases">12.7. Global Bases</a></span></dt>
+               </dl>
+            </div>
+            <p>Entities in BigWorld are contained in the game universe. A universe is
+                 composed of spaces, which are composed of cells.
+            </p>
+            <p>Each space can contain:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Space Data for information that must be available to the entire
+                              space.
+                     </p>
+                  </li>
+                  <li>
+                     <p>Geometry to define where entities can move.</p>
+                  </li>
+                  <li>
+                     <p>Time of day, which is used by clients to determine day/night
+                              cycles.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10583"></a>12.1.&nbsp;Multiple Spaces
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld supports having multiple separate geometric spaces in a
+                      universe. Each space can have a different set of geometry mapped into it,
+                      and a different set of entities existing within it. Each CellApp can
+                      handle multiple cells in different spaces.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/visualisation_of_spaces_and_division_in_cells.png"><span class="caption">
+                        <p>Visualisation of spaces and division in cells (cell
+                                   boundaries marked in dotted lines)
+                        </p></span></div>
+               </div>
+               <p>Spaces are usually created by creating an entity in a new space. For
+                      this reason, every space needs at least one entity and as such once a
+                      space has no entities, it will cease to exist.
+               </p>
+               <p>A common design technique to make this management easier is to
+                      create an entity <code class="classname">Space</code> (usually named after the
+                      space's purpose, <em class="emphasis">e.g.</em>,
+                      <code class="classname">Mission</code>, or <code class="classname">Quest</code>). Such an
+                      entity will be created in a new space, and then be responsible for
+                      configuring that space for game play to begin. Players can then teleport
+                      into the new space to explore it, play their mission, etc.
+               </p>
+               <p>The general structure of this kind of entity is the illustrated in
+                      the code fragments below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Base script:</p><pre class="programlisting">class Space( BigWorld.Base ):
+
+  def __init__( self ):
+    # create our cell entity in a new space. self.onGetCell() will be
+    # called when the cell entity is created.
+    self.createInNewSpace()
+
+  def onGetCell( self ):
+    # create any predefined entities in the space
+    # may want to use ResMgr to load details from an XML file
+    
+    # we want to make sure that each entity's createCellEntity()
+    # method is passed the appropriate cell mailbox (this entity's
+    # cell mailbox) so that it is created in the correct space
+    # for example:
+    BigWorld.createBase( "Monster", arguments, createOnCell=self.cell )</pre><p><span class="citetitle">Example file
+                                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Space.py</code></span></p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Cell script:</em></p><pre class="programlisting">class Space( BigWorld.Entity ):
+
+  def __init__( self ):
+    # Register our mailbox for getting the callback when the space
+    # geometry finishes loading. You can choose any arbitrary string 
+    # as the key so long you can find this entry again.
+    BigWorld.cellAppData[ 'SpaceLoader:' + str(self.spaceID) ] = self
+
+    # Add the geometry mapping. This maps the set of .chunk files we  
+    # want into the space. BWPersonality.onAllSpaceGeometryLoaded will
+    # be called when BigWorld finished loading the geometry.
+    BigWorld.addSpaceGeometryMapping( self.spaceID, None, 
+      "geometry/path" )
+
+  def onGeometryLoaded( self ):
+    # we can now also teleport in any additional entities that already
+    # existed in the world (we'd probably store a mailbox somewhere in
+    # the construction sequence to make this possible)
+    # see the cell entity teleport() method for details
+    playerMB.teleport( self, position, direction )</pre><p><span class="citetitle">Example file
+                                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Space.py</code></span></p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Cell personality script:</em></p><pre class="programlisting">def onAllSpaceGeometryLoaded( spaceID, isBootstrap, lastPath ):
+  if (isBootstrap):
+    # Find the registered loader and tell it to load the entities into
+    # the space.
+    loaderKey = 'SpaceLoader:' + str(spaceID)
+    if BigWorld.cellAppData.has_key( loaderKey ):
+      BigWorld.cellAppData[ loaderKey ].onGeometryLoaded();</pre><p><span class="citetitle">Example file
+                                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/BWPersonality.py</code></span></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>To create this entity, the code below would be written<sup>[<a name="d0e10656" href="#ftn.d0e10656">24</a>]</sup>:
+               </p><pre class="programlisting">newSpace = BigWorld.createBaseAnywhere( "Space", ... )</pre><p>Notice that there are four key steps in this piece of code:
+                      
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p>Create the cell entity in a new space (in the
+                                     <code class="methodname">__init__</code> method).
+                        </p>
+                     </li>
+                     <li>
+                        <p>When the cell entity is created, map in any geometry that the
+                                     space contains.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Create any entities that are required to be in the
+                                     world.
+                        </p>
+                     </li>
+                     <li>
+                        <p>When the space geometry is loaded, bring any required players
+                                     into the space.
+                        </p>
+                     </li>
+                  </ol>
+               </div>
+               <p>It is likely that there will be management code specific to the
+                      style of space that is required (this code will be heavily dependant on
+                      your game's requirements). It is also possible to perform various steps
+                      between the cell and the base, depending on entity instantiation
+                      requirements.
+               </p>
+               <p>When all entities in a space are removed, the space will be
+                      destroyed. Alternatively, any entity in the space can call the method
+                      <code class="classname">Entity</code>.<code class="methodname">destroySpace</code> to
+                      destroy the current space the entity exists in. Each entity in the space
+                      will have its method <code class="methodname">onSpaceGone</code> called before it
+                      is actually destroyed.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10693"></a>12.1.1.&nbsp;Spaces Pool
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When your game requires multiple instances of a space
+                           (<em class="emphasis">e.g.</em>, a mission space), it is advantageous to
+                           create a pool of reusable space instance during game startup.
+                  </p>
+                  <p>This mechanism removes the need of later having to load chunks on
+                           demand, as when players request to enter a space, an instance will be
+                           chosen from the pool. After players leave the space, you can move the
+                           space back to the pool for later usage. This mechanism can greatly speed
+                           up the game loading for players on the server.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Navigation_System"></a>12.2.&nbsp;Navigation System
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The sub-sections below describe the features of the Navigation
+                      System.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10708"></a>12.2.1.&nbsp;Key Features
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The key features of the system are:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Navigation of both indoor and outdoor chunks.</p>
+                        </li>
+                        <li>
+                           <p>Seamless transition between indoor and outdoor regions.</p>
+                        </li>
+                        <li>
+                           <p>Dynamic loading of navpoly graphs.</p>
+                        </li>
+                        <li>
+                           <p>Paths caching, for efficiency.</p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10726"></a>12.2.2.&nbsp;Navpoly Data Format
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The world is broken up into chunks. Each chunk is a convex hull,
+                           and is uniquely identified by a chunk ID string,
+                           <em class="emphasis">e.g.</em>, <span class="literal">0000ffffo</span>.
+                  </p>
+                  <p>For navigation purposes, each chunk is broken up into a set of
+                           convex polygonal prisms. Such a prism is known as navpoly, and is
+                           identified by an integer navpoly ID unique to a single chunk.
+                  </p>
+                  <p>Each edge on a navpoly can be shared with the edge of an adjacent
+                           region. This means that movement between these two regions is allowed.
+                           Alternatively, an edge may be marked as being adjacent to a different
+                           chunk.
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/navpoly_edge_demarcation.png"><span class="caption">
+                           <p>Navpoly edge demarcation</p></span></div>
+                  </div>
+                  <p>A navpoly also has a height associated with it. This is the
+                           maximum height of the navpoly region, such that the client can do a drop
+                           test from this Y value, and always end up on the bottom of the
+                           navpoly.
+                  </p>
+                  <p>Vertices in the navpoly are defined in clockwise order, and have
+                           its XZ coordinates stored in the XY fields.
+                  </p>
+                  <p>The third coordinate is used to store adjacency information for
+                           the edge formed between this vertex and the next. The value of this
+                           third coordinate is either the navpoly ID of the adjacent navpoly, or an
+                           encoding of an obstacle type. Edges on chunk boundaries are indicated by
+                           the presence of a separate tag for the adjacent chunk ID. In this case,
+                           the third vertex coordinate is not used.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10754"></a>12.2.3.&nbsp;Script Interface
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When an entity wants to navigate to a position, it uses the Python
+                           <code class="classname">Entity</code>.<code class="methodname">navigate</code> script
+                           method, like the example below:
+                  </p><pre class="programlisting">self.controllerId = self.navigate( position, velocity, userTag, girth )</pre><p>The parameters for the <code class="methodname">navigate</code> script
+                           method are described below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"> <em class="parameter"><code>position</code></em>
+                                           </em> <span class="symbol">&#8208;</span> The destination
+                                        position.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"> <em class="parameter"><code>velocity</code></em>
+                                           </em> <span class="symbol">&#8208;</span> Movement velocity in
+                                        metres per second.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"> <em class="parameter"><code>userTag</code></em>
+                                           </em> <span class="symbol">&#8208;</span> Integer value passed to
+                                        the navigation callback.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"> <em class="parameter"><code>girth</code></em>
+                                           </em> <span class="symbol">&#8208;</span> Minimum width of the
+                                        gap that the entity can squeeze through.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>If there is no valid path to the destination, then navigate will
+                           fail, and throw a script exception. Otherwise, it will return a
+                           controller ID. This is a unique ID that can be used to cancel the
+                           movement request, like so:
+                  </p><pre class="programlisting">self.cancel( self.controllerID )</pre><p>When the movement is complete, the entity's
+                           <code class="methodname">onNavigate</code> method will be called, with the
+                           <code class="varname">controllerId</code> and <code class="varname">userId</code> as
+                           arguments. At this stage, all resources related to the controller have
+                           been released, and there is no need to free them by calling
+                           <code class="classname">Entity</code>.<code class="methodname">cancel</code>.
+                  </p><pre class="programlisting">self.onNavigate( controllerId, userId )</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10840"></a>12.2.4.&nbsp;Navigate
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When the
+                           <code class="classname">Entity</code>.<code class="methodname">navigate</code> script
+                           method is called, the server performs the following steps:
+                  </p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Resolve the <span class="literal">ChunkID</span> and
+                                        <span class="literal">WaypointID</span> from the source location.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Resolve the <span class="literal">ChunkID</span> and
+                                        <span class="literal">WaypointID</span> from the destination location.
+                           </p>
+                        </li>
+                        <li>
+                           <p>If the <span class="literal">ChunkID</span>s are different, then perform
+                                        a graph search on the chunk level. Otherwise, if the
+                                        <span class="literal">WaypointID</span>s are different, then perform a graph
+                                        search on the navpoly level. If both these tests fail, move in a
+                                        straight line to the specified position.
+                           </p>
+                        </li>
+                     </ol>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10879"></a>12.2.5.&nbsp;Graph Searches
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>An A* search is used for both the chunk graph search and the
+                           navpoly graph search. The <code class="classname">ChunkState</code> and
+                           <code class="classname">WaypointState</code> classes both implement the
+                           interface required for an A* search, and are used to search the chunk
+                           and navpoly graphs respectively.
+                  </p>
+                  <p>The chunk graph is searched by using the centre of each chunk for
+                           calculating distances.
+                  </p>
+                  <p>Distances on the navpoly graph are calculated based on the actual
+                           path that would be taken through the navpolys.
+                  </p>
+                  <p>Given a source location inside the navpoly, and a destination
+                           location outside the navpoly, the algorithm is as follows:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Find the point where the direct line from source to
+                                        destination would intersect the polygon border.
+                           </p>
+                        </li>
+                        <li>
+                           <p>If this point is on an edge that has an adjacency, move
+                                        directly to the point of intersection.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Otherwise, move to a vertex that has an adjacency, such that
+                                        the angle between this path and the desired path is
+                                        minimised.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>This is a simple approach, and not always optimal, but works
+                           properly in most cases.
+                  </p>
+                  <p>The <code class="classname">PathCache</code> class is used as a wrapper
+                           for performing both chunk and navpoly graph searches. It caches one path
+                           per entity, and also stores the current hop index within that path. Each
+                           time a graph search would take place, the
+                           <code class="classname">PathCache</code> checks if the goal is the same as the
+                           cached goal. If so, then the next state in the path is returned, and the
+                           hop index is incremented, if appropriate.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10916"></a>12.2.6.&nbsp;Auto-Generation of Navpoly Regions <span class="symbol">&#8208;</span> The NavGen Utility
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Based on terrain and other geometric information in the chunk
+                           files (named
+                           <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/spaces/&lt;space&gt;/<em class="replaceable"><code>&lt;chunk_ID&gt;</code></em>.chunk</code><sup>[<a name="d0e10931" href="#ftn.d0e10931">25</a>]</sup>), the NavGen utility creates the convex navpoly polygonal
+                           prisms in two phases:
+                  </p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>It flood fills each chunk, using client physics rules.</p>
+                        </li>
+                        <li>
+                           <p>It uses a BSP to recursively subdivide the space and form
+                                        convex polygonal prisms.
+                           </p>
+                        </li>
+                     </ol>
+                  </div>
+                  <p>It writes the results in the binary <code class="filename">.cdata</code> files<sup>[<a name="d0e10951" href="#ftn.d0e10951">26</a>]</sup>.
+                  </p>
+                  <p>The NavGen utility handles multiple vertical levels within a chunk
+                           (bridges, tunnels, etc...). It uses a multi-pass algorithm to analyse
+                           and describe the connectedness of such scenes.
+                  </p>
+                  <p>NavGen's XML configuration file
+                           <code class="filename"><em class="replaceable"><code>&lt;bwclient_source_folder&gt;</code></em>/../tools/misc/navgen_settings.xml</code>
+                           accounts for different entity profiles, such as their size and other
+                           physical properties. This is represented by the <span class="literal">girth</span>
+                           value. Multiple girths may be specified, in which case multiple
+                           navigation meshes will be generated and maintained. For each girth,
+                           different physical parameters may be set (<em class="emphasis">e.g.</em>,
+                           there is a flood fill parameter for the entity's height). A setting of
+                           2.0 metres is good default for humanoid entities.
+                  </p>
+                  <p>For more details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch10.html" class="olink"><i>NavGen</i></a>.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10992"></a>12.3.&nbsp;Time
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>We have seen how entities define how different pieces of a game can
+                      behave. Game play involves changing entities' states over time, and so it
+                      is important to have a good understanding of how time is managed in the
+                      BigWorld environment.
+               </p>
+               <p>It helps to think about different types of time when discussing time
+                      in BigWorld. These types are discussed in the following
+                      sub-sections.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e10999"></a>12.3.1.&nbsp;Real Time
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Real Time is simply the time on a clock in the real world. Real
+                           time is used as the basis for defining the other types of time in
+                           BigWorld.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e11004"></a>12.3.2.&nbsp;Server Time
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>On the server, game time is incremented in discrete units, based
+                           on the <code class="property">&lt;gameUpdateHertz&gt;</code> configuration option
+                           in
+                           <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/server/bw.xml</code><sup>[<a name="d0e11016" href="#ftn.d0e11016">27</a>]</sup>.
+                  </p>
+                  <p>The server keeps an integer counter that is incremented at this
+                           rate and whose initial value at server startup is
+                           <span class="literal">0</span>.
+                  </p>
+                  <p>To calculate the server time in seconds, the following formula is
+                           used:
+                  </p><pre class="programlisting">serverTime = serverTimestamp / gameUpdateHertz</pre><p>This is approximately:</p><pre class="programlisting">serverTime ~= currentRealTime - serverStartRealTime</pre><p>Each client machine calculates a synchronised version of this
+                           time, available via the
+                           <code class="classname">BigWorld</code>.<code class="methodname">serverTime</code>
+                           script method.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Game_Time"></a>12.3.3.&nbsp;Game Time
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Game Time is the time sensed by the players in the game
+                           world.
+                  </p>
+                  <p>A massively online persistent game usually has virtual days and
+                           months in its virtual world. You might want to run one game world hour
+                           for every hour of Real Time, for example. In order to support this,
+                           BigWorld has a standard piece of space data used to calculate the time
+                           of day<sup>[<a name="d0e11057" href="#ftn.d0e11057">28</a>]</sup>.
+                  </p>
+                  <p>This space data records the following numbers:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">initialTimeOfDay</span></em> <span class="symbol">&#8208;</span> Game Time when server started.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">gameSecondsPerSecond</span></em>
+                                        <span class="symbol">&#8208;</span> Conversion factor, from Server Time
+                                        update rate to Real Time.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>They are used together to define Game Time as:</p><pre class="programlisting">gameTimeOfDay = ( serverTime - initialTimeOfDay ) * gameSecondsPerSecond</pre><p>To modify game time for an entire space a CellApp Python method
+                           called
+                           <code class="classname">BigWorld</code>.<code class="methodname">setSpaceTimeOfDay</code>
+                           can be used. This method takes three parameters as follows:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><em class="parameter"><code>spaceID</code></em></em> <span class="symbol">&#8208;</span> The ID of the space which should be
+                                        effected.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><em class="parameter"><code>initialTimeOfDay</code></em></em>
+                                        <span class="symbol">&#8208;</span> The time of day at server
+                                        startup.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><em class="parameter"><code>gameSecondsPerSecond</code></em></em>
+                                        <span class="symbol">&#8208;</span> The number of game seconds that
+                                        pass for each real time second.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>To modify only client side visualisation based on time, refer to
+                           the Client Python method
+                           <code class="classname">BigWorld</code>.<code class="methodname">spaceTimeOfDay</code>.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Initialisation_Personality_Script_eload_And_runscript"></a>12.4.&nbsp;Initialisation: Personality script, eload, and runscript
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>By default, when the server is started, a single
+                      <em class="emphasis">default</em> space is created, containing no entities and
+                      no geometry. In order to make a game interesting, scripts must populate
+                      this space, and possibly create other spaces to also populate. While the
+                      server is running, you might wish to run specialist scripts to change
+                      properties of elements within the world. These tasks can be completed
+                      using the personality script, and two server side tools: eload and
+                      runscript.
+               </p>
+               <p>The personality script can contain a Python function to be executed
+                      on every BaseApp right after there is an available CellApp running. In
+                      this way, it is guaranteed that you can create both cell and base entities
+                      from the script.
+               </p>
+               <p>The script to be executed is specified in the file
+                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/server/bw.xml</code>,
+                      as in the example below:
+               </p><pre class="programlisting">&lt;root&gt;
+  ...
+  &lt;<em class="emphasis">personality</em>&gt; <em class="emphasis">personalityscript</em> &lt;/personality&gt;
+  ...
+&lt;/root&gt;</pre><p><span class="citetitle">Example file
+                         <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/server/bw.xml</code>
+                         <span class="symbol">&#8208;</span> Declaring the personality
+                         script</span></p>
+               <p>The corresponding file (following the example above would be
+                      <code class="filename">personalityscript.py</code>) is placed in the directory
+                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base</code>,
+                      to be executed at the appropriate time.
+               </p>
+               <p>If a personality script is not defined, then the default filename
+                      <code class="filename">BWPersonality.py</code> is used.
+               </p>
+               <p>The method <code class="methodname">onBaseAppReady</code> in the
+                      personality script is called by the BaseApp. The method receives one
+                      Boolean argument, whose values are defined below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">True</span></em> <span class="symbol">&#8208;</span> If the BaseApp is the first one ready in the
+                                   server clusters.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">False</span></em>
+                                   <span class="symbol">&#8208;</span> If the BaseApp is not the first ready
+                                   in the cluster.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The personality script can call any BigWorld module method, and it
+                      is the recommended point to perform the following:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Add geometry to the space by calling
+                                   <code class="methodname">addSpaceGeometryMapping</code> from a cell
+                                   entity.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Initialise the game time by calling method
+                                   <code class="methodname">setSpaceTimeOfDay</code> from a cell entity. For
+                                   more details, see <a href="ch12.html#xref_Game_Time" title="12.3.3.&nbsp;Game Time">Game Time</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Initialise any custom space data. For more details, see <a href="ch12.html#xref_Space_Data" title="12.6.&nbsp;Space Data">Space Data</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Populate the world by creating entities.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>During the execution of the personality script functions, the
+                      BaseApp cannot respond to messages received from other server components.
+                      A time-consuming personality script is likely to timeout the BaseApp from
+                      the server clusters. It is recommended to spread the entity creation in a
+                      timely manner for a smooth and robust startup.
+               </p>
+               <p>The example is illustrated below, with code on the personality,
+                      base, and client scripts.
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">In the personality
+                                      script:</em></p><pre class="programlisting">...
+def <em class="emphasis">onBaseAppReady</em>( bool isBootStrap ):
+  if isBootStrap:
+    BigWorld.createBase( "SpaceManager", {}, {} )
+    BigWorld.createBase( "EntityLoaderManager", {}, {} )
+  # every BaseApp needs an EntityLoader
+  BigWorld.createBase( "EntityLoader", {}, {} )
+...</pre><p><span class="citetitle">Example personality script
+                                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/&lt;personality_script_name&gt;.py</code></span></p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">On the </em><em class="emphasis">BaseApp:</em></p><pre class="programlisting">class <em class="emphasis">SpaceManager</em>( BigWorld.Base ):
+  def <em class="emphasis">__init__</em>( self ):
+    # create the cell entity in a new space
+    self.createInNewSpace( (0,0,0), (0,0,0), None )
+
+class <em class="emphasis">EntityLoaderManager</em>( BigWorld.Base ):
+  def <em class="emphasis">__init__</em>( self ):
+    # register globally under a well-known name (ELM for example)
+    # so the EntityLoaders can register with me
+    self.registerGlobally( "ELM", onRegister )
+    # add a timer that calls back every 1 second.
+    # User data is 999 (only for identification purpose)
+    self.addTimer( 1, 1, 999 )
+
+  def <em class="emphasis">onRegister</em>( self, succeeded ):
+    # callback from registerGlobally(). Argument succeeded should always
+    # be True there is only one EntityLoaderManager in whole system
+    if not succeeded:
+      # should not be possible, try re-register
+      self.registerGlobally( "ELM", onRegister )
+
+  def <em class="emphasis">registerLoader</em>( self, entityLoader ):
+    # append the mailbox of an entityLoader into our list
+    # might have to verify it is not re-registered though
+    self.entityLoaderList.append( entityLoader )
+
+  def <em class="emphasis">onTimer</em>( self, timerId, userData ):
+    if userData == 999:
+      # distribute entity creation tasks to every registered
+      # EntityLoader in a load spreading manner
+      for i in range( len( self.entityLoaderList ) ):
+        # prepare the argument for entity creation
+        args = ...
+        self.entityLoaderList[i].createEntities( args )
+      if allJobFinished:
+        # remove the timer if not required any more
+        delTimer( timerId )
+
+class <em class="emphasis">EntityLoader</em>( BigWorld.Base ):
+  def <em class="emphasis">__init__</em>( self ):
+    self.registerWithELM()
+
+  def <em class="emphasis">registerWithELM</em>():
+    if BigWorld.globalBases.has_key( "ELM" ):
+      # if EntityLoaderManager is available register with it now
+      elm = BigWorld.globalBases["ELM"]
+      elm.registerLoader( self )
+    else:
+      # otherwise wait a bit
+      self.addTimer( 1 )
+
+  def <em class="emphasis">onTimer</em>( self, timerId, userData ):
+    # retry registering
+    self.registerWithELM()
+
+  def <em class="emphasis">createEntities</em>( self, args ):
+    # create the entities according to the arguments</pre><p><span class="citetitle">Example file
+                                      <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/SpaceManager.py</code></span></p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">On the CellApp:</em></p><pre class="programlisting">class SpaceManager( BigWorld.Entity ):
+  def __init__( self ):
+    # add the geometry mapping
+    # this maps the set of .chunk files we want into the space
+    BigWorld.addSpaceGeometryMapping( self.spaceID, None, "geometry/path" )</pre><p><span class="citetitle">Example file
+                                      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/SpaceManager.py</span></span></p>
+                     </li>
+                  </ul>
+               </div>
+               <p>For details on <span class="literal">eload</span> and
+                      <span class="literal">runscript</span>, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch03.html" class="olink"><i>Cluster Administration Tools</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch03.html#xref_Server_Command_Line_Utilities" class="olink">Server Command-Line Utilities</a>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e11335"></a>12.5.&nbsp;Global Data
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld offers several mechanisms for distributing
+                      <em class="emphasis">global</em> data to its components. Most of these
+                      mechanisms also offer callbacks when a particular piece of global data is
+                      modified, effectively turning them into global event distribution
+                      mechanisms as well.
+               </p>
+               <p>As with most programming environments, global data should be treated
+                      with care, due to the challenges they pose to code maintenance. In a
+                      distributed system like BigWorld, globals should be used even more
+                      sparingly, because of the performance impact of data distribution, as well
+                      as the risk of race conditions.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e11345"></a>12.5.1.&nbsp;<code class="varname">globalData</code>, <code class="varname">baseAppData</code> and
+                                    <code class="varname">cellAppData</code></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>BigWorld offers three Python dictionaries that are replicated
+                           across BigWorld components. They differ in their scope of
+                           replication:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><code class="classname">BigWorld</code>.<code class="varname">globalData</code></em>
+                                        <span class="symbol">&#8208;</span> Replicated on all BaseApps and
+                                        CellApps.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><code class="classname">BigWorld</code>.<code class="varname">baseAppData</code></em>
+                                        <span class="symbol">&#8208;</span> Replicated on all BaseApps.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><code class="classname">BigWorld</code>.<code class="varname">cellAppData</code></em>
+                                        <span class="symbol">&#8208;</span> Replicated on all CellApps.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>The keys and values must be pickle-able Python objects. The value
+                           type can be any pickle-able Python object. If the value is a BigWorld
+                           entity, then it is converted to a mailbox on components where the entity
+                           does not currently reside.
+                  </p>
+                  <p>The following callbacks are invoked when items in the dictionary
+                           are modified:
+                  </p>
+                  <div class="altrow">
+                     <table border="0" width="75%">
+                        <colgroup>
+                           <col width="20%">
+                           <col width="40%">
+                           <col width="40%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th align="left">Global Data</th>
+                              <th align="left">Added or modified</th>
+                              <th align="left">Deleted</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td align="left"><code class="varname">baseAppData</code></td>
+                              <td align="left"><code class="classname">BWPersonality</code>.<code class="methodname">onBaseAppData</code></td>
+                              <td align="left"><code class="classname">BWPersonality</code>.<code class="methodname">onDelBaseAppData</code></td>
+                           </tr>
+                           <tr>
+                              <td align="left"><code class="varname">cellAppData</code></td>
+                              <td align="left"><code class="classname">BWPersonality</code>.<code class="methodname">onCellAppData</code></td>
+                              <td align="left"><code class="classname">BWPersonality</code>.<code class="methodname">onDelCellAppData</code></td>
+                           </tr>
+                           <tr>
+                              <td align="left"><code class="varname">globalData</code></td>
+                              <td align="left"><code class="classname">BWPersonality</code><code class="methodname">onGlobalData</code></td>
+                              <td align="left"><code class="classname">BWPersonality</code><code class="methodname">onDelGlobalData</code></td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <p><span class="citetitle">Callbacks invoked by manipulating global
+                              data.</span></p>
+                  <p>BigWorld only detects an item change if it is assigned to a
+                           different object, not when part of the object is changed. For
+                           example:
+                  </p><pre class="programlisting">BigWorld.globalData[ "list" ] = [1, 2, 3]   # addition is detected
+BigWorld.globalData[ "list" ][1] = 7        # modification not detected
+BigWorld.globalData[ "list" ] = [3, 4, 5]   # modification is detected</pre><p>If the modification is not detected, then the change will not
+                           replicated to other components, resulting in inconsistency between the
+                           local and remote copies.
+                  </p>
+                  <p>Each value object is pickled individually. This results in the
+                           value being a copy of the original. For example:
+                  </p><pre class="programlisting">drinks = [ "juice", "wine" ]
+# BigWorld.globalData[ "fridge" ] will have its own copy of [ "juice","wine" ]
+BigWorld.globalData[ "fridge" ] = drinks
+# BigWorld.globalData[ "cupboard" ] will have its own copy of [ "juice","wine" ]
+BigWorld.globalData[ "cupboard" ] = drinks</pre><p>If multiple components concurrently modify the same item in the
+                           dictionary, then a central authority will determine the order of
+                           modifications. For <code class="varname">globalData</code> and
+                           <code class="varname">cellAppData</code>, the authority is CellAppMgr; for
+                           <code class="varname">baseAppData</code>, the authority is BaseAppMgr.
+                  </p>
+                  <p>Callbacks for the modifications will be called in the order
+                           determined by the authority. In the components where the modifications
+                           took place, the dictionary item will temporarily have the value of the
+                           local modification before it is overridden by the value determined by
+                           the authority. Therefore, it is recommended that any actions that should
+                           take place after a change to global data be placed in the callback
+                           functions instead of inline with the code that changes the value of
+                           global data. For example:
+                  </p><pre class="programlisting">def someFunction( ):
+  BigWorld.globalData[ "mode" ] = 3
+  # Should not put actions for mode 3 here. Otherwise there is a risk
+  # that it will be performed in a different order on different
+  # components
+
+# In BWPersonality.py
+def onGlobalData( key, value ):
+  if ((key == "mode") and (value == 3)):
+    # Do actions for mode 3</pre><p>In addition to the components where <code class="varname">globalData</code>,
+                           <code class="varname">baseAppData</code> and <code class="varname">cellAppData</code> are
+                           replicated, the dictionaries are also backed up to the following
+                           locations:
+                  </p>
+                  <div class="altrow">
+                     <table border="0" width="50%">
+                        <colgroup>
+                           <col width="25%">
+                           <col width="25%">
+                           <col width="25%">
+                           <col width="25%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th align="left">Global Data</th>
+                              <th align="left">BaseAppMgr</th>
+                              <th align="left">CellAppMgr</th>
+                              <th align="left">Database</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td align="left"><code class="varname">baseAppData</code></td>
+                              <td align="left"><span class="symbol">&#10003;</span></td>
+                              <td align="left"><span class="symbol">&#10007;</span></td>
+                              <td align="left"><span class="symbol">&#10007;</span></td>
+                           </tr>
+                           <tr>
+                              <td align="left"><code class="varname">cellAppData</code></td>
+                              <td align="left"><span class="symbol">&#10007;</span></td>
+                              <td align="left"><span class="symbol">&#10003;</span></td>
+                              <td align="left"><span class="symbol">&#10007;</span></td>
+                           </tr>
+                           <tr>
+                              <td align="left"><code class="varname">globalData</code></td>
+                              <td align="left"><span class="symbol">&#10003;</span></td>
+                              <td align="left"><span class="symbol">&#10003;</span></td>
+                              <td align="left"><span class="symbol">&#10007;</span></td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <p><span class="citetitle">Locations to which dictionaries are backed
+                              up.</span></p>
+                  <p>The backup copies are used in the case of a component failure.
+                           However, since the dictionaries are never backed up to the database, in
+                           the event of entire server failure, these dictionaries will be empty
+                           after disaster recovery has completed.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Space_Data"></a>12.6.&nbsp;Space Data
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Space data is a means to distribute global data across the cell and
+                      client. It can be used for data that should be transmitted to the client,
+                      but does not fit in the entity structure. Such examples, which are built
+                      into BigWorld itself, include:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Time of day </em><span class="symbol">&#8208;</span> Two <span class="type">float</span>s containing data that
+                                   allows BigWorld to translate Server Time to Game Time.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Space geometry</em> <span class="symbol">&#8208;</span> String describing which geometries are mapped
+                                   into a space.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Space data consists of a 16-bit integer index, and a string. By
+                      packing various types into a string, it can represent any
+                      application-defined data type.
+               </p>
+               <p>A piece of space data can be set by calling the method
+                      <code class="classname">BigWorld</code>.<code class="methodname">setSpaceData</code> on
+                      the cell.
+               </p>
+               <p>The function takes the parameters described below:</p>
+               <div class="altrow">
+                  <table border="0">
+                     <colgroup>
+                        <col width="20%">
+                        <col width="80%">
+                     </colgroup>
+                     <thead>
+                        <tr>
+                           <th align="left">Parameter</th>
+                           <th align="left">Description</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td align="left"><em class="parameter"><code>spaceID</code></em></td>
+                           <td align="left">
+                              <p>The space in which to set the space
+                                               data.
+                              </p>
+                              <p>Each space has its own unique set of space
+                                               data, which is never shared between spaces.
+                              </p>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td align="left"><em class="parameter"><code>key</code></em></td>
+                           <td align="left">
+                              <p>A 16-bit integer index identifying
+                                               which piece of space data to set.
+                              </p>
+                              <p>All indices less
+                                               than 256 are reserved for internal BigWorld usage, so games
+                                               developers must choose values greater than or equal to 256
+                                               (<code class="varname">SPACE_DATA_FIRST_USER_KEY</code>).
+                              </p>
+                              <p>For
+                                               keys less than 16,384
+                                               (<code class="varname">SPACE_DATA_FIRST_CELL_ONLY_KEY</code>), space data
+                                               is automatically sent to clients.
+                              </p>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td align="left"><em class="parameter"><code>value</code></em></td>
+                           <td align="left">
+                              <p>A string to set as the current space
+                                               data value for this key.
+                              </p>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <p><span class="citetitle"><code class="classname">BigWorld</code>.<code class="methodname">setSpaceData</code>
+                         parameters.</span></p>
+               <p>When space data is set, a space data entry ID is returned. The entry
+                      ID and the <code class="varname">key</code> can be used to retrieve the space data
+                      using the
+                      <code class="classname">BigWorld</code>.<code class="methodname">getSpaceData</code>
+                      method. Entry ID is required because BigWorld supports having multiple
+                      space data entries with the same key using the method
+                      <code class="classname">BigWorld</code>.<code class="methodname">addSpaceData</code>. All
+                      entries for a particular key can be retrieved using
+                      <code class="classname">BigWorld</code>.<code class="methodname">getSpaceDataForKey</code>.
+               </p>
+               <p>For keys that should never have more than one entry, the method
+                      <code class="classname">BigWorld</code>.<code class="methodname">getSpaceDataFirstForKey</code>
+                      can be used to retrieve a space data entry with only the key. The method
+                      returns the first entry with the specified key. The ordering of entries is
+                      guaranteed to be the same across all CellApps.
+               </p>
+               <p>When multiple CellApps simultaneously call
+                      <code class="classname">BigWorld</code>.<code class="methodname">setSpaceData</code> with
+                      the same key, there is a small possibility that both entries are kept by
+                      BigWorld. In this case,
+                      <code class="classname">BigWorld</code>.<code class="methodname">getSpaceDataForKey()</code>
+                      would return many entries. But since
+                      <code class="classname">BigWorld</code>.<code class="methodname">getSpaceDataFirstForKey()</code>
+                      is more commonly used for keys that should have only one entry, the
+                      situation is usually resolved automatically.
+               </p>
+               <p>Whenever a new space data value is added,
+                      <code class="methodname">onSpaceData</code> is called on the personality script.
+                      For more details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/cellapp/index.html" class="olink">CellApp Python API</a>'s entry
+                      <em class="emphasis">Main Page <span class="symbol">&#8594;</span> Cell
+                         <span class="symbol">&#8594;</span> BW Personality <span class="symbol">&#8594;</span> Functions <span class="symbol">&#8594;</span> <span class="literal">
+                            onSpaceData</span></em>.
+               </p>
+               <p>Space data is backed up to the CellAppMgr as well as the database.
+                      Space data is preserved in all failure scenarios handled by the BigWorld
+                      server.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Global_Bases"></a>12.7.&nbsp;Global Bases
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld provides a registry of base entity mailboxes that is
+                      replicated on all BaseApps. Base entities represented in this registry are
+                      referred to as global bases, and their mailbox can be retrieved by name on
+                      all BaseApps.
+               </p>
+               <p>In order to give a name in the global registry to a base entity, you
+                      can call its method <span class="literal">registerGlobally</span><sup>[<a name="d0e11736" href="#ftn.d0e11736">29</a>]</sup>. This method takes the following parameters:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>A name for the base entity to register as.</p>
+                     </li>
+                     <li>
+                        <p>A callback function to be called when the registration is
+                                   complete or has failed. The callback function is called with a single
+                                   Boolean parameter indicating if the registration was
+                                   successful.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The method <code class="methodname">registerGlobally</code> can be called
+                      multiple times on a single entity with different names. It is not allowed
+                      to register two different entities (or the same entity twice) with the
+                      same name.
+               </p>
+               <p>The BaseApp contains the object
+                      <code class="classname">BigWorld</code>.<code class="varname">globalBases</code>, which
+                      emulates a read-only Python dictionary that provides information on global
+                      bases.
+               </p>
+               <p>The object
+                      <code class="classname">BigWorld</code>.<code class="varname">globalBases</code> can be used
+                      as illustrated below:
+               </p><pre class="programlisting">print "The main mission entity is", BigWorld.globalBases["MainMission"]
+print "There are", len( BigWorld.globalBases ), "global bases."</pre><p><span class="citetitle">Using the BaseApp's object
+                         <code class="classname">BigWorld</code>.<code class="varname">globalBases</code> to retrieve
+                         information on global bases</span></p>
+               <p>Things to consider when using global bases include:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Remember that global bases are not actually distributed
+                                   themselves, only their mailboxes are. You may not want these entities
+                                   to be accessed frequently by many different entities, as it could
+                                   affect the scalability as more players log in.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Often the game design will require an interaction to locate many
+                                   entities that might otherwise be considered global. For example,
+                                   perhaps a conversation with a faction leader is required to join that
+                                   faction, and as such might remove the need to declare that an entity
+                                   is global.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e10656" href="#d0e10656">24</a>] </sup>This entity creation would normally be initiated from a client
+                             side action such as a "Create Mission" user interface option, or from
+                             a player entering a dungeon portal.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e10931" href="#d0e10931">25</a>] </sup>For details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch08.html" class="olink"><i><span class="literal">.chunk</span></i></a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e10951" href="#d0e10951">26</a>] </sup>For details on the information held by this and other chunk
+                               files, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/index.html" class="olink">Client Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch06.html" class="olink"><i>Chunks</i></a>
+                               <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch06.html#xref_Implementation_Files" class="olink">Implementation files</a>. For details on <code class="filename">.cdata</code> files' grammar, see the document
+                               <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch07.html" class="olink"><i><span class="literal">.cdata</span></i></a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e11016" href="#d0e11016">27</a>] </sup>For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch02.html#xref_General_Configuration_Options" class="olink">General Configuration Options</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e11057" href="#d0e11057">28</a>] </sup>For more details on space data, see <a href="ch12.html#xref_Space_Data" title="12.6.&nbsp;Space Data">Space Data</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e11736" href="#d0e11736">29</a>] </sup>You can remove an entity from the global bases registry with its
+                             method <code class="methodname">deregisterGlobally</code>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch11.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch13.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;11.&nbsp;Proxies and Players&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;13.&nbsp;XML Data File Access</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

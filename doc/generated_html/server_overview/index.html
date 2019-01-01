@@ -1,0 +1,228 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Server Overview</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Overview">
+      <link rel="next" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Introduction">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_overview/index.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Server Overview</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left">&nbsp;</td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch01.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="book" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h1 class="title"><a name="Server_Overview"></a>Server Overview
+                     </h1>
+                  </div>
+                  <div>
+                     <p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p>
+                  </div>
+                  <div>
+                     <p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p>
+                  </div>
+                  <div>
+                     <div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+                           is restricted to authorised users. This document is protected by
+                           copyright laws of Australia, other countries and international treaties.
+                           Unauthorised use, reproduction or distribution of this document, or any
+                             portion of this document, may result in the imposition of civil and
+                             criminal penalties as provided by law.
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <hr>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="chapter"><a href="ch01.html">1. Introduction</a></span></dt>
+                  <dt><span class="chapter"><a href="ch02.html">2. Rules of Thumb</a></span></dt>
+                  <dt><span class="chapter"><a href="ch03.html">3. Concepts</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#d0e92">3.1. Location of an Object's Data</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e131">3.2. Actions</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e169">3.3. Latency</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e191">3.4. Spaces and Cells</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_Coordinate_system">3.5. Coordinate System</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch04.html">4. Design Introduction</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch04.html#d0e256">4.1. Hardware Components</a></span></dt>
+                        <dt><span class="section"><a href="ch04.html#d0e272">4.2. Software Components</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch04.html#d0e314">4.2.1. CellApp</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#d0e330">4.2.2. CellAppMgr</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#d0e344">4.2.3. BaseApp</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#d0e363">4.2.4. BaseAppMgr</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#xref_Software_Components_LoginApp">4.2.5. LoginApp</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#d0e377">4.2.6. DBMgr</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#d0e386">4.2.7. Reviver</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#d0e391">4.2.8. BWMachined</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch04.html#xref_Design_Introduction_Use_Cases">4.3. Use Cases</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch04.html#d0e407">4.3.1. Server Startup</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#xref_Use_Cases_Logging_In">4.3.2. Logging In</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#d0e469">4.3.3. Data From Clients</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#d0e476">4.3.4. Data To Clients</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#d0e481">4.3.5. Ghosting</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#d0e493">4.3.6. Changing Cells</a></span></dt>
+                              <dt><span class="section"><a href="ch04.html#d0e498">4.3.7. Load Balancing</a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch05.html">5. Server Components</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch05.html#xref_Server_Components_CellApp">5.1. CellApp</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e511">5.1.1. Cell Application and Cells</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e522">5.1.2. Entities</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#xref_Real_And_Ghost_Entities">5.1.3. Real and Ghost Entities</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e581">5.1.4. Transitioning Between Spaces</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e591">5.1.5. Witness Priority List</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#xref_Scripting_And_Entities">5.1.6. Scripting and Entities</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1368">5.1.7. Directed Messages</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1375">5.1.8. Forwarding From Ghosts</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1386">5.1.9. Offloading Entities</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1393">5.1.10. Adding and Removing Cells</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1402">5.1.11. Load Balancing</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1409">5.1.12. Physics</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#xref_Navigation_System">5.1.13. Navigation System</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1463">5.1.14. Range Triggers and Range Queries</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1478">5.1.15. Fault Tolerance</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch05.html#d0e1495">5.2. CellAppMgr</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e1510">5.2.1. CellApp Registration</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#xref_CellAppMgr_Load_Balancing">5.2.2. Load Balancing</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#xref_Adding_And_Removing_Cells">5.2.3. Adding and Removing Cells</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1559">5.2.4. Adding an Entity</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1566">5.2.5. Load Balancing for Multiple Spaces</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1602">5.2.6. Fault Tolerance</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch05.html#xref_Server_Components_BaseApp">5.3. BaseApp</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e1631">5.3.1. Proxies</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1644">5.3.2. Bases</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#xref_Server_Components_BaseApp_Fault_Tolerance">5.3.3. Fault Tolerance</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#xref_Server_Components_BaseApp_Secondary_Databases">5.3.4. Secondary Databases</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch05.html#d0e1712">5.4. BaseAppMgr</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e1715">5.4.1. Implementation</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1720">5.4.2. Logging In</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1725">5.4.3. Fault Tolerance</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch05.html#d0e1734">5.5. LoginApp</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e1737">5.5.1. Implementation</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1748">5.5.2. Multiple LoginApps</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch05.html#d0e1755">5.6. DBMgr</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e1769">5.6.1. XML</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1787">5.6.2. MySQL</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1813">5.6.3. Fault Tolerance</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch05.html#xref_Server_Components_Reviver">5.7. Reviver</a></span></dt>
+                        <dt><span class="section"><a href="ch05.html#xref_BWMachined">5.8. BWMachined</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch05.html#d0e1901">5.8.1. Start and Stop Server Components</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1940">5.8.2. Locate Server Components</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1989">5.8.3. Provide Machine Statistics</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#d0e1997">5.8.4. Provide Process Statistics</a></span></dt>
+                              <dt><span class="section"><a href="ch05.html#xref_BWMachined_Interface_Discovery">5.8.5. BWMachined Interface Discovery</a></span></dt>
+                           </dl>
+                        </dd>
+                     </dl>
+                  </dd>
+                  <dt><span class="chapter"><a href="ch06.html">6. Other Features</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch06.html#d0e2082">6.1. IDs</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch06.html#d0e2087">6.1.1. ID Allocation</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch06.html#xref_Inter_Process_Communication_Mercury">6.2. Inter-Process Communication (Mercury)</a></span></dt>
+                        <dd>
+                           <dl>
+                              <dt><span class="section"><a href="ch06.html#d0e2114">6.2.1. Overview</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e2119">6.2.2. Nub</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e2128">6.2.3. Messages</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e2151">6.2.4. Requests</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e2156">6.2.5. Bundles</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e2163">6.2.6. Channels</a></span></dt>
+                              <dt><span class="section"><a href="ch06.html#d0e2218">6.2.7. Interfaces</a></span></dt>
+                           </dl>
+                        </dd>
+                        <dt><span class="section"><a href="ch06.html#d0e2230">6.3. Fault Tolerance and Disaster Recovery</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e2237">6.4. Packed Files</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left">&nbsp;</td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch01.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">&nbsp;</td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;1.&nbsp;Introduction</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

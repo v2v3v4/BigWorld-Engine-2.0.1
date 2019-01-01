@@ -1,0 +1,730 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;25.&nbsp;Releasing The Game</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch24.html" title="Chapter&nbsp;24.&nbsp;Debugging">
+      <link rel="next" href="ch26.html" title="Chapter&nbsp;26.&nbsp;Shared Development Environments">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;25.&nbsp;Releasing The Game</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch24.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch26.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Releasing_The_Game"></a>Chapter&nbsp;25.&nbsp;Releasing The Game
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch25.html#xref_Limited_User_Accounts">25.1. Configure the engine for limited user accounts</a></span></dt>
+                  <dt><span class="section"><a href="ch25.html#xref_Prepare_The_Assets">25.2. Prepare the assets</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch25.html#d0e12639">25.2.1. <span class="literal">bin_convert</span></a></span></dt>
+                        <dt><span class="section"><a href="ch25.html#xref_Run_res_packer">25.2.2. <span class="literal">res_packer</span></a></span></dt>
+                        <dt><span class="section"><a href="ch25.html#d0e12948">25.2.3. Processing done in <span class="literal">bin_convert</span> and
+                                       <span class="literal">res_packer</span></a></span></dt>
+                        <dt><span class="section"><a href="ch25.html#d0e13136">25.2.4. Files and folders that do not need to be shipped to the end
+                                       user</a></span></dt>
+                        <dt><span class="section"><a href="ch25.html#d0e13211">25.2.5. Font Licensing issues with <span class="literal">bin_convert</span> and
+                                       <span class="literal">res_packer</span></a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch25.html#d0e13227">25.3. Zip assets and specify paths</a></span></dt>
+                  <dt><span class="section"><a href="ch25.html#d0e13319">25.4. Prepare the game executable</a></span></dt>
+               </dl>
+            </div>
+            <p>This chapter lists the steps necessary to prepare the game for its
+                 release.
+            </p>
+            <p>The following sections detail each of these steps.</p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Limited_User_Accounts"></a>25.1.&nbsp;Configure the engine for limited user accounts
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>In order to allow the client to run on a system with limited
+                      privileges, the engine should not try to write to the installation
+                      directory (which, depending on how the game is installed, is usually a
+                      privileged location). Certain files that need to be written must be
+                      configured to be written to the user's directory.
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>The <em class="emphasis">prefrences.xml</em> file contains end-user
+                                   specific settings such as graphics settings and is written whenever
+                                   the client closes or when <code class="code">BigWorld.savePreferences()</code> is
+                                   called. To configure where this file is saved, edit the
+                                   <code class="code">preferences/pathBase</code> configuration key in
+                                   engine_config.xml.
+                        </p>
+                        <p>For example, you may want to configure preferences.xml to be
+                                   written to
+                                   <code class="code"><code class="code">MY_DOCS/GameTitle/preferences.xml</code></code>.
+                        </p>
+                        <p>See <a xmlns:xlink="http://www.w3.org/1999/xlink" href="ch01.html#xref_File_preferences_xml" class="olink">File
+                                    <span class="literal"><em class="replaceable"><code>&lt;preferences&gt;</code></em>.xml</span></a> for details on how to
+                                   configure this setting.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Screenshots</em> can be taken either by pressing
+                                   PrtScn or by calling <code class="code">BigWorld.screenShot()</code>. To configure
+                                   where screenshots are saved, edit the
+                                   <code class="code">preferences/screenShot/path/pathBase</code> configuration key in
+                                   engine_config.xml.
+                        </p>
+                        <p>For example, you may want screen shots to be written to
+                                   <code class="code"><code class="code">MY_DOCS/GameTitle/Screenshots</code></code>.
+                        </p>
+                        <p>See <a xmlns:xlink="http://www.w3.org/1999/xlink" href="ch21.html#xref_High_Resolution_Screenshots" class="olink">Taking Screenshots</a> for details on how to
+                                   configure this setting.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Prepare_The_Assets"></a>25.2.&nbsp;Prepare the assets
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Since "just-in-time" resource processing is not enabled in the
+                      Consumer Release client (e.g. converting textures to DDS format on the
+                      fly), all resources must be pre-prepared for release. A command line tool,
+                      called <code class="code">res_packer</code>, is provided which will process a given
+                      list of assets. A higher level wrapper for <code class="code">res_packer</code> is
+                      <code class="code">bin_convert</code> (implemented in Python), which will batch process
+                      an entire resource tree.
+               </p>
+               <p>This section provides an overview of how to use both
+                      <code class="code">res_packer</code> and <code class="code">bin_convert</code>.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e12639"></a>25.2.1.&nbsp;<span class="literal">bin_convert</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p><code class="code"><span class="literal">bin_convert</span></code> is a command-line tool
+                           implemented in Python that prepares assets in batch, which makes use of
+                           the <code class="code">res_packer</code> binary. Its usage is described below:
+                  </p><pre class="programlisting">bin_convert [--res|-r search_paths] [source_path [dest_path [base_path]]]</pre><p>The options for invoking
+                           <span class="literal"><code class="code">bin_convert.py</code></span> are described
+                           below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">search_paths</span></em></p>
+                           <p>Search paths of the original source assets, as specified in
+                                        <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span> (the
+                                        resources folders list) &#8212; for details on how BigWorld compiles
+                                        this list, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch06.html" class="olink"><i>Starting the Tools</i></a>.
+                           </p>
+                           <p>This value overrides the local <span class="literal">paths.xml</span>,
+                                        if there is one.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">source_path</span></em></p>
+                           <p>Path of the original source assets.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">dest_path</span></em></p>
+                           <p>Path of the final game, <em class="emphasis">i.e.</em>, the
+                                        destination of processed assets.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">base_path</span></em></p>
+                           <p>The resource root for <span class="literal">dest_path</span>, only needs
+                                        to be specified if not converting the entire resource folder.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>This tool can be customised in different ways, so it can skip
+                           certain files, skip entire folder, have special handlers for asset types
+                           (overriding <span class="literal">res_packer</span>).
+                  </p>
+                  <p>For more information on customising
+                           <span class="literal">bin_convert.py</span>, please refer to its source
+                           code.
+                  </p>
+                  <p>If the desired processing cannot be achieved in Python, then you
+                           can modify the source of <span class="literal">res_packer</span> using any of the
+                           included packer classes as example.
+                  </p>
+                  <p>The list below shows some example of usage of
+                           <span class="literal">bin_convert.py</span>:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">python bin_convert.py
+                                              /mf/fantasydemo/res
+                                              /mf/fantasydemo/packed</span></em></p>
+                           <p>Converts all FantasyDemo assets in res to packed
+                                        folder.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">python bin_convert.py --res
+                                              /mf/fantasydemo/res;/mf/bigworld/res /mf/fantasydemo/res
+                                              /mf/fantasydemo/packed</span></em></p>
+                           <p>Converts all FantasyDemo assets in res to packed folder,
+                                        specifying the search paths in the command line.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">python bin_convert.py
+                                              /mf/fantasydemo/res/characters /mf/fantasydemo/packed/characters
+                                              /mf/fantasydemo/packed</span></em></p>
+                           <p>Converts all FantasyDemo assets in the
+                                        <span class="literal">res/characters</span> folder to the
+                                        <span class="literal">packed/characters</span> folder.
+                           </p>
+                           <p>Note that <span class="literal">base_path</span> (in this case
+                                        <span class="literal">c:/mf/ fantasydemo/packed</span>) must be specified to
+                                        ensure that <span class="literal">res_packer</span> works properly.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Run_res_packer"></a>25.2.2.&nbsp;<span class="literal">res_packer</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p><span class="literal">res_packer</span> is a command-line tool that is
+                           capable of processing assets depending on their type, pre-processing
+                           assets to make them load faster and stripping information that is not
+                           needed when running the game. Usually, it is called from
+                           <span class="literal">bin_convert</span> and is not used directly by the
+                           developer. Its usage is as follows:
+                  </p>
+                  <p>Batch list mode:</p><pre class="programlisting">res_packer [--res|-r search_paths] -list|-l asset_list_file -in|-i src_path -out|-o dest_path [-err|-e error_log_file]</pre><p>Compatible mode:</p><pre class="programlisting">res_packer [--res|-r search_paths] source_file [dest_file [base_path] ]</pre><p>The options for invoking <span class="literal">res_packer</span> are
+                           described below:
+                  </p>
+                  <p>Batch list mode:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">search_paths</span></em></p>
+                           <p>Search paths of the original source assets, as specified in
+                                        <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span> (the
+                                        resources folders list) &#8212; for details on how BigWorld compiles
+                                        this list, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch06.html" class="olink"><i>Starting the Tools</i></a>.
+                           </p>
+                           <p>This value overrides local <span class="literal">paths.xml</span>, if
+                                        there is one.
+                           </p>
+                           <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                              <h3 class="title">Note</h3>
+                              <p>For some asset types, search paths have to be specified,
+                                             either in the command line, in the game's
+                                             <span class="literal">paths.xml</span>, or in the
+                                             <span class="literal">BW_RES_PATH</span> environment variable.
+                              </p>
+                              <p>These paths should be the source search paths used by the
+                                             game, so that <span class="literal">res_packer</span> can find other source
+                                             files that might be needed in the processing.
+                              </p>
+                              <p>For instance, to process a model file, other assets such as
+                                             the visual, textures, and animations must be also read.
+                              </p>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">asset_list_file</span></em></p>
+                           <p>A text file that contains a list of all the assets to process.
+                                        This expected the dissolved paths with one per line.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">src_path</span></em></p>
+                           <p>The root path of the input files.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">dest_path</span></em></p>
+                           <p>The root path of the output files.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">error_log_file</span></em></p>
+                           <p>An optional error output log. Any files that fail to process
+                                        will be added to this log.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Compatible mode:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">source_file</span></em></p>
+                           <p>Source file (with path) to process.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">dest_file</span></em></p>
+                           <p>Destination file (with path) of the processed assets.</p>
+                           <p>In some cases, <span class="literal">source_file</span> might not be
+                                        copied at all (<span class="literal">.bmp</span> files are not copied), or the
+                                        processed file could be of a different type than the original source
+                                        file (<span class="literal">.bmp</span> files are converted to
+                                        <span class="literal">.dds</span> files).
+                           </p>
+                           <p>If this argument is missing, then
+                                        <span class="literal">source_file</span> will not be processed, and a message
+                                        will be sent to the standard output (useful for examining XML files,
+                                        for instance).
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">base_path</span></em></p>
+                           <p>Base path of the final game &#8212; usually corresponds to
+                                        <span class="literal">dest_file</span>'s path.
+                           </p>
+                           <p>This argument is used when packing file types that require
+                                        special processing, such as images, models, and chunk files.
+                           </p>
+                           <p>If this argument is missing, then the
+                                        <span class="literal">dest_file</span>'s path is used.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>To modify <span class="literal">res_packer</span>'s default behaviour for an
+                           asset type, or to add new asset types for processing, modify the source
+                           code using any of the included packer classes as example.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>When processing <span class="literal">Python</span> files,
+                                <span class="literal">res_packer</span> does not compile the
+                                <code class="filename">.py</code> files into <code class="filename">.pyc</code> when
+                                called directly without <span class="literal">bin_convert</span>. Compiling of
+                                <code class="filename">.py</code> files is done directly inside
+                                <span class="literal">bin_convert</span>. Furthermore, if old
+                                <code class="filename">.pyc</code> files exist in the source folder,
+                                <span class="literal">res_packer</span> copies them to the destination folder
+                                without recompiling when run directly without
+                                <span class="literal">bin_convert</span>.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e12948"></a>25.2.3.&nbsp;Processing done in <span class="literal">bin_convert</span> and
+                                    <span class="literal">res_packer</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The default processing done by these tools is as follows:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">bin_convert</span></em></p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p>Skips the <span class="literal">scripts/editor</span>,
+                                                     <span class="literal">scripts/cell</span> and
+                                                     <span class="literal">scripts/base</span> folders.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Skips the <span class="literal">animations</span>,
+                                                     <span class="literal">.bwthumbs</span> and <span class="literal">CVS</span>
+                                                     folders.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Skips the thumbnail files (<em class="emphasis">i.e.</em>,
+                                                     files with <span class="literal">.thumbnail.*</span> extension).
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>For <span class="literal">.py</span> files
+                                    </p>
+                                    <p>Generates <span class="literal">.pyc</span> compiled Python files
+                                                     and skips the source <span class="literal">.py</span>, using a custom
+                                                     handler.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">res_packer</span>:</em></p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p><em class="emphasis">For <span class="literal">.bmp</span>,
+                                                        <span class="literal">.tga</span>, <span class="literal">.jpg</span>,
+                                                        <span class="literal">.png</span>, <span class="literal">.texformat</span> and
+                                                        <span class="literal">.dds</span> files:</em></p>
+                                    <p>Generates DDS for source image files that do not have one,
+                                                     and copies DDS files that do not have a corresponding source
+                                                     image file. The <span class="literal">.texformat</span> files are skipped
+                                                     after processing.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">For <span class="literal">.model</span> and
+                                                        <span class="literal">.anca</span> files:</em></p>
+                                    <p>Loads models to generate <span class="literal">.anca</span> files.
+                                                     The .animation files are skipped after processing, and the
+                                                     <span class="literal">.model</span> files are packed.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">For <span class="literal">.cdata</span>
+                                                        files:</em></p>
+                                    <p>Strips thumbnail.dds and navgen sections.</p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">For <span class="literal">.chunk</span>
+                                                        files:</em></p>
+                                    <p>Strips entities that are not client-only, then packs the
+                                                     file.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">For <span class="literal">.fx</span>,
+                                                        <span class="literal">.fxh</span> and <span class="literal">.fxo</span>
+                                                        files:</em></p>
+                                    <p>By default it ignores <span class="literal"><code class="code">.fx</code>
+                                                        </span>and <span class="literal"><code class="code">.fxh</code></span> files, and
+                                                     only copies <span class="literal">.fxo</span> files, but it can also be
+                                                     configured to copy the source <span class="literal">.fx</span> and
+                                                     <span class="literal">.fxh</span> (requires recompiling, see
+                                                     <code class="code">src/tools/res_packer/config.hpp</code>) .
+                                    </p>
+                                    <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                                       <h3 class="title">Note</h3>
+                                       <p>res_packer itself does not rebuild shaders, it only
+                                                          copies any existing binaries. Use the utility script located
+                                                          in
+                                                          <code class="code">bigworld/tools/misc/rebuild_shaders/RebuildShaders.py</code>
+                                                          to pre-build all shader combinations before running
+                                                          res_packer.
+                                       </p>
+                                    </div>
+                                 </li>
+                                 <li>
+                                    <p><em class="emphasis">For all other file
+                                                        types:</em></p>
+                                    <p>Text XML files &#8212; <em class="emphasis">i.e.</em>, files
+                                                     beginning with the <span class="literal">&lt;</span> (left angle bracket)
+                                                     character, regardless of extension &#8212; will be packed, while
+                                                     others will just be copied.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13136"></a>25.2.4.&nbsp;Files and folders that do not need to be shipped to the end
+                                    user
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Both bin_convert and res_packer try their best to slim down the
+                           game's assets that will be shipped to the end user, but because each
+                           game has different architecture and requirements, some final tuning
+                           might be needed for your game. Following is a list of files and folders
+                           to help identify what should not be shipped to the end
+                           user:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Files <span class="literal">*.bmp</span>, *<span class="literal">.tga</span>,
+                                          <span class="literal">*.jpg</span>, *<span class="literal">.png</span>,
+                                          *<span class="literal">.texformat</span>: The final <span class="literal">dds</span>
+                                          files are generated and packed by <span class="literal">res_packer</span>,
+                                          so the source images are not needed.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Files *.<span class="literal">thumbnail.*:</span> These files are not
+                                          packed, as these are generated and used in the tools' Asset
+                                          Browser only.<span class="literal"> </span></p>
+                        </li>
+                        <li>
+                           <p>Files *<span class="literal">.animation:</span> Packed
+                                          <span class="literal">.anca</span> files are generated from the source
+                                          <span class="literal">.animation</span> files by
+                                          <span class="literal">res_packer</span>.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Files *.py: Compiled .<span class="literal">pyc</span> files are
+                                          generated by <span class="literal">bin_convert</span>, so Python source is
+                                          not needed.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Folders to skip: <span class="literal">animations, .bwthumbs,
+                                             <span class="literal">scripts/editor</span>,
+                                             <span class="literal">scripts/cell</span>, <span class="literal">scripts/base,
+                                                scripts/db, scripts/bot, bigworld/res/server,
+                                                bigworld/res/helpers. </span></span></p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e13211"></a>25.2.5.&nbsp;Font Licensing issues with <span class="literal">bin_convert</span> and
+                                    <span class="literal">res_packer</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>By default, <code class="filename">res_packer</code> will pack any font
+                           <span class="literal">DDS</span> files into your game's destination folder, and
+                           font authors usually require buying a license in order to allow their
+                           font(s) to be used. Please make sure you own license(s) to the font(s)
+                           you use in your game.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e13227"></a>25.3.&nbsp;Zip assets and specify paths
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To pack assets to zip files, simply create one or more zip files
+                      containing the game's assets. To create a set of Zip files that can be
+                      used by the BigWorld client application:
+               </p>
+               <div class="orderedlist">
+                  <ol type="1">
+                     <li>
+                        <p><em class="emphasis">Zip files bigger than 2GB are not
+                                      supported. More than one Zip file might be required.</em></p>
+                        <p>The maximum Zip file size supported is 2GB.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Before creating the Zip files, the assets
+                                      should be prepared via bin_convert.py.</em></p>
+                        <p>This tool is located under
+                                   <span class="literal">bigworld/tools/misc/res_packer</span> folder.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Zip file access is done through zlib, and
+                                      the supported Zip compression methods are DEFLATE and STORE. Non-ASCII
+                                      file names should be encoded as UTF-8.</em></p>
+                        <p>Zip files created with WinRAR, WinZip and 7-Zip have been
+                                   successfully tested. If Non-ASCII file names are included, make sure
+                                   they are encoded as UTF-8, ie. in the case of 7-Zip, choose "Add to
+                                   archive..", set "cu" as the parameters which will force the file names
+                                   to be encoded as UTF-8.
+                        </p>
+                        <div class="informalfigure">
+                           <div class="mediaobject"><img src="images/7-zip_archive.png"><span class="caption">
+                                 <p>7-Zip Add to Archive dialog</p></span></div>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Create Zip files for the base BigWorld
+                                      resources.</em></p>
+                        <p>Navigate to the folder containing BigWorld's packed assets, and
+                                   create the Zip files for its files and sub-folders.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Create Zip files for the actual game
+                                      assets.</em></p>
+                        <p>Navigate to the game assets folder, and create the Zip files for
+                                   its files and sub-folders.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Specify Zip files as paths in the
+                                      paths.xml file, in order of precedence.</em></p>
+                        <p>The paths.xml file's Path tag can be set either to a path, or to
+                                   a Zip file. Usually, game asset folders/zip files are listed before
+                                   BigWorld resources folders/zip files. All paths must be specified
+                                   relative to the client executable.
+                        </p>
+                        <p>Assuming the following:</p>
+                        <div class="itemizedlist">
+                           <ul type="disc">
+                              <li>
+                                 <p>Common BigWorld resources compressed to
+                                                <span class="literal">bwres001.zip</span>.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>Final game assets compressed to
+                                                <span class="literal">res001.zip</span> and
+                                                <span class="literal">res002.zip</span>.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p>The resource packages are located next to client
+                                                executable.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                        <p>Your <span class="literal">paths.xml</span> file should look similar to
+                                   this:
+                        </p><pre class="programlisting">&lt;root&gt;
+  &lt;Paths&gt;
+    &lt;Path&gt;  res001.zip    &lt;/Path&gt;
+    &lt;Path&gt;  res002.zip    &lt;/Path&gt;
+    &lt;Path&gt;  bwres001.zip  &lt;/Path&gt;
+  &lt;/Paths&gt;
+&lt;/root&gt;</pre><p>You can also combine Zip file paths with normal file system
+                                   paths as well, so that you can have additional assets in unzipped
+                                   folder (this is required, for example, by streamed FMOD sound
+                                   banks).
+                        </p>
+                        <p>If your unzipped folder is called
+                                   <span class="literal">resunpacked</span>, then <span class="literal">paths.xml</span> will
+                                   look like this:
+                        </p><pre class="programlisting">&lt;root&gt;
+  &lt;Paths&gt;
+    &lt;Path&gt;  res001.zip    &lt;/Path&gt;
+    &lt;Path&gt;  res002.zip    &lt;/Path&gt;
+    &lt;Path&gt;  bwres001.zip  &lt;/Path&gt;
+    &lt;Path&gt;  resunpacked    &lt;/Path&gt;
+  &lt;/Paths&gt;
+&lt;/root&gt;</pre></li>
+                  </ol>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e13319"></a>25.4.&nbsp;Prepare the game executable
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>If this has not already been done, compile the final release of
+                                   your game's executable. This can be done in the VisualStudio's
+                                   <em class="emphasis">Configuration Manager</em> dialog box
+                                   (accessed by the <em class="emphasis">Build <span class="symbol">&#8594;</span> Configuration Manager</em> menu
+                                   item).
+                        </p>
+                        <p>The <em class="emphasis">Active Solution
+                                      Configuration</em> drop-down list must be set to <em class="emphasis">Consumer_Release</em>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Copy binaries to their final location in the redistributable
+                                   directory structure. The final structure is quite flexible, as long as
+                                   the resource paths are specified as relative to the executable. For
+                                   example, if the paths.xml described in the previous section is used,
+                                   then the final structure would look like:
+                        </p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p><code class="code">InstallDir/bwclient.exe</code></p>
+                              </li>
+                              <li>
+                                 <p><code class="code">InstallDir/res001.zip</code></p>
+                              </li>
+                              <li>
+                                 <p><code class="code">InstallDir/res002.zip</code></p>
+                              </li>
+                              <li>
+                                 <p><code class="code">InstallDir/bwres001.zip</code></p>
+                              </li>
+                              <li>
+                                 <p><code class="code">InstallDir/resunpacked/</code></p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch24.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch26.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;24.&nbsp;Debugging&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;26.&nbsp;Shared Development Environments</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

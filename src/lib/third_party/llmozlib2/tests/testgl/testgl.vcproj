@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="testgl"
+	ProjectGUID="{2BB0EAD3-E37A-4FC8-AFC3-F9580C7587A5}"
+	RootNamespace="testgl"
+	Keyword="Win32Proj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="Debug"
+			IntermediateDirectory="Debug"
+			ConfigurationType="1"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\dependencies\include;..\..\"
+				PreprocessorDefinitions="WIN32;_DEBUG;DEBUG;_WINDOWS;XP_WIN;XP_WIN32;MOZILLA_INTERNAL_API"
+				MinimalRebuild="TRUE"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="4"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="opengl32.lib glu32.lib version.lib comctl32.lib llmozlib2d.lib"
+				OutputFile="$(OutDir)/testgl.exe"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\dependencies\lib;..\..\Debug"
+				IgnoreDefaultLibraryNames="msvcrtd.lib"
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(OutDir)/testgl.pdb"
+				SubSystem="1"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="Copying  runtime files"
+				CommandLine="if not exist &quot;$(TargetDir)\chrome\&quot; xcopy ..\..\libraries\i686-win32\runtime_debug\*.* &quot;$(TargetDir)&quot; /s /y
+if not exist &quot;$(TargetDir)\glut32.dll&quot; copy ..\dependencies\bin\glut32.dll &quot;$(TargetDir)&quot; /y
+"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="Release"
+			IntermediateDirectory="Release"
+			ConfigurationType="1"
+			CharacterSet="2"
+			WholeProgramOptimization="FALSE">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				AdditionalIncludeDirectories="..\dependencies\include;..\..\"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;XP_WIN;XP_WIN32;MOZILLA_INTERNAL_API"
+				RuntimeLibrary="0"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="3"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="FALSE"
+				AdditionalDependencies="opengl32.lib glu32.lib version.lib comctl32.lib llmozlib2.lib glui32.lib"
+				OutputFile="$(OutDir)/testgl.exe"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\dependencies\lib;..\..\Release"
+				IgnoreAllDefaultLibraries="FALSE"
+				IgnoreDefaultLibraryNames="MSVCRT.lib"
+				GenerateDebugInformation="TRUE"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="Copying  runtime files"
+				CommandLine="if not exist &quot;$(TargetDir)\chrome\&quot; xcopy ..\..\libraries\i686-win32\runtime_release\*.* &quot;$(TargetDir)&quot; /s /y
+if not exist &quot;$(TargetDir)\glut32.dll&quot; copy ..\dependencies\bin\glut32.dll &quot;$(TargetDir)&quot; /y
+"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<File
+			RelativePath=".\testgl.cpp">
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

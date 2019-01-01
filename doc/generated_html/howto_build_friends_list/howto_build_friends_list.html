@@ -1,0 +1,703 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>How To Build a Friends List</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_Friends_List"></a>How To Build a Friends List</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#d0e20">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#d0e37">2. Features</a></span></dt><dt><span class="chapter"><a href="#d0e79">3. Example Code</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e109">3.1. Where should the friends list be stored?</a></span></dt><dt><span class="section"><a href="#d0e125">3.2. Admirers</a></span></dt><dt><span class="section"><a href="#d0e190">3.3. <span class="literal">DBID</span></a></span></dt><dt><span class="section"><a href="#d0e257">3.4. Persistent friends list</a></span></dt><dt><span class="section"><a href="#d0e334">3.5. Client <span class="literal">friendsList</span></a></span></dt><dt><span class="section"><a href="#d0e361">3.6. Using list indexes as friend identifiers</a></span></dt><dt><span class="section"><a href="#d0e416">3.7. Base online friends list</a></span></dt><dt><span class="section"><a href="#d0e500">3.8. Console commands</a></span></dt><dt><span class="section"><a href="#d0e557">3.9. Initialisation and destruction</a></span></dt><dt><span class="section"><a href="#d0e673">3.10. Adding and deleting friends</a></span></dt><dt><span class="section"><a href="#d0e878">3.11. Interacting with friends</a></span></dt><dt><span class="section"><a href="#d0e1056">3.12. Declaring the methods</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Variations">4. Variations</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1097">4.1. Asking for permission to be someone&#8217;s friend</a></span></dt><dt><span class="section"><a href="#d0e1237">4.2. Enforcing mutual friendship</a></span></dt><dt><span class="section"><a href="#d0e1260">4.3. Matching request and response</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e20"></a>Chapter&nbsp;1.&nbsp;Introduction</h2></div></div></div><p>Most MMOGs allow a player to designate a list of other players as
+    <em class="emphasis">friends</em>. These friends are stored in a
+    <em class="emphasis">friends list</em>. Players like to be notified when their
+    friends log on or off. The player is usually able to interact with a
+    friend (<em class="emphasis">e.g.</em>, chat) directly using the
+    <em class="emphasis">friends list</em> without having to be in close proximity
+    to the friend in the game world.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e37"></a>Chapter&nbsp;2.&nbsp;Features</h2></div></div></div><p>In this example, we will implement the following features:</p><div class="itemizedlist"><ul type="disc"><li><p>Add and delete a friend by username from a player&#8217;s
+        <em class="emphasis">friends list</em>. The friend does not need to
+        acknowledge that he is being added.</p></li><li><p>Player will be notified when his friends log on and off.</p></li><li><p>Player can see a list of his friends and their current status
+        (<em class="emphasis">i.e.</em>, online or offline).</p></li><li><p>Send a message to an online friend regardless of where he is in
+        the game world.</p></li><li><p>Request an online friend&#8217;s health and location, regardless of
+        where he is in the game world.</p></li></ul></div><p>For details on how to implement other variants of <em class="emphasis">friends
+    list</em>, see <a href="#xref_Variations" title="Chapter&nbsp;4.&nbsp;Variations"><i xmlns:xlink="http://www.w3.org/1999/xlink">Variations</i></a>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>We are placing a fixed limit on the number of friends a player can
+      have, which influences the design.</p><p>The limit is defined by the constant
+      <span class="literal">MAX_FRIENDS</span> in the base part of Avatar.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e79"></a>Chapter&nbsp;3.&nbsp;Example Code</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e109">3.1. Where should the friends list be stored?</a></span></dt><dt><span class="section"><a href="#d0e125">3.2. Admirers</a></span></dt><dt><span class="section"><a href="#d0e190">3.3. <span class="literal">DBID</span></a></span></dt><dt><span class="section"><a href="#d0e257">3.4. Persistent friends list</a></span></dt><dt><span class="section"><a href="#d0e334">3.5. Client <span class="literal">friendsList</span></a></span></dt><dt><span class="section"><a href="#d0e361">3.6. Using list indexes as friend identifiers</a></span></dt><dt><span class="section"><a href="#d0e416">3.7. Base online friends list</a></span></dt><dt><span class="section"><a href="#d0e500">3.8. Console commands</a></span></dt><dt><span class="section"><a href="#d0e557">3.9. Initialisation and destruction</a></span></dt><dt><span class="section"><a href="#d0e673">3.10. Adding and deleting friends</a></span></dt><dt><span class="section"><a href="#d0e878">3.11. Interacting with friends</a></span></dt><dt><span class="section"><a href="#d0e1056">3.12. Declaring the methods</a></span></dt></dl></div><p>The example code is part of the <span class="literal">FantasyDemo</span>
+    example game.</p><div class="itemizedlist"><ul type="disc"><li><p>In <span class="literal">FantasyDemo</span>, the player entity is called
+        <em class="emphasis">Avatar</em>.</p></li><li><p>The MySQL database is required for the <em class="emphasis">friends
+        list</em> example to work. It does not work with the XML
+        database.</p></li><li><p>The example does not implement any graphical UI elements. It
+        uses the <span class="literal">FantasyDemo</span> console for user
+        interactions.</p></li></ul></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e109"></a>3.1.&nbsp;Where should the friends list be stored?</h2></div></div></div><p>In this example, the <em class="emphasis">friends list</em> is part of
+      the player entity (<em class="emphasis">Avatar</em>).</p><p>Since <em class="emphasis">friends list</em> is persistent, it needs to
+      be part of the base of the player entity. But because the list is
+      accessed often in the client, there will be a copy of it in the client
+      part of the player entity as well.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e125"></a>3.2.&nbsp;Admirers</h2></div></div></div><p>To speed up the notification process, each
+      <em class="emphasis">Avatar</em> base also stores a list of
+      <em class="emphasis">admirers</em>, <em class="emphasis">i.e.</em>, other players
+      who have added the player to their friends list.</p><p>Thus, when player logs on or off, <em class="emphasis">Avatar</em>'s
+      base can notify all interested parties without having to search through
+      <em class="emphasis">friends list</em> of all players in the database.</p><p>From player A&#8217;s perspective:</p><div class="itemizedlist"><ul type="disc"><li><p>The <em class="emphasis">friends list</em> is a list of players A
+          is interested in.</p></li><li><p>The <em class="emphasis">admirers list</em> is a list of players
+          that are interested in A.</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p><em class="emphasis">UNLIMITED ADMIRERS?</em></p><p>Though there is a limit on the number of
+        <em class="emphasis">friends</em> that a player can have, there is no limit
+        on the number of <em class="emphasis">admirers</em>. Since each
+        <em class="emphasis">admirer</em> must correspond to someone else&#8217;s
+        <em class="emphasis">friend</em>, the maximum total storage cost is:</p><div class="blockquote"><blockquote class="blockquote"><p><em class="emphasis">number of players &times; max. friends per
+          player.</em></p></blockquote></div><p>Since friends are limited for each player, from a system-wide
+        perspective, admirers are limited as well.</p><p>Still, there is the possibility that one player is spectacularly
+        popular and has an incredibly large admirers list. This will result in
+        a long delay when the player logs on or off, as Avatar's base notifies
+        player&#8217;s online status to each of his admirers.</p><p>In extreme circumstances, the notification process may block the
+        game on server, and thus have to be processed on a separate thread.
+        For simplicity, we do not handle this case in our example.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e190"></a>3.3.&nbsp;<span class="literal">DBID</span></h2></div></div></div><p>A <span class="literal">DBID</span> can uniquely identify an
+      <em class="emphasis">entity</em> within a <em class="emphasis">type</em>
+      (<em class="emphasis">e.g.</em>, <em class="emphasis">Avatar</em>), whether the
+      <em class="emphasis">entity</em> is running or is just an entry in the
+      database.</p><p>Since lookup by <span class="literal">DBID</span> is quicker than by name,
+      <em class="emphasis">Avatar</em>'s base also stores
+      <em class="emphasis">friend</em>&#8217;s <span class="literal">DBID</span> (alongside its
+      name) in <em class="emphasis">friends list</em>.</p><p>In fact, the <em class="emphasis">admirers list</em> is a list of
+      <span class="literal">DBID</span>s, since we are not concerned about players'
+      names.</p><p><span class="literal">DBID</span>s are 64-bit integers. They are defined in
+      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml</span>
+      for convenience:</p><pre class="programlisting">&lt;root&gt;
+   ...
+   &lt;DBID&gt;    INT64        &lt;/DBID&gt;
+   ...
+&lt;/root&gt;</pre><p><span class="citetitle">Excerpt of
+      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml</span></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e257"></a>3.4.&nbsp;Persistent friends list</h2></div></div></div><p>We declare the persistent properties of
+      <em class="emphasis">Avatar</em> in
+      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/Avatar.def</span>:</p><pre class="programlisting">&lt;root&gt;
+   ...
+   &lt;Properties&gt;
+      ...
+      &lt;friendsList&gt;
+         &lt;!-- List of tuples: ( string, DBID ) --&gt;
+         &lt;Type&gt;       PYTHON    &lt;/Type&gt;
+         &lt;Flags&gt;      BASE      &lt;/Flags&gt;
+         &lt;Default&gt;    []        &lt;/Default&gt;
+         &lt;Persistent&gt; true      &lt;/Persistent&gt;
+      &lt;/friendsList&gt;
+      &lt;admirersList&gt;
+         &lt;Type&gt;       ARRAY &lt;of&gt; DBID &lt;/of&gt; &lt;/Type&gt;
+         &lt;Flags&gt;      BASE                  &lt;/Flags&gt;
+         &lt;Default&gt;    []                    &lt;/Default&gt;
+         &lt;Persistent&gt; true                  &lt;/Persistent&gt;
+      &lt;/admirersList&gt;
+      ...
+   &lt;/Properties&gt;
+   ...
+&lt;/root&gt;</pre><p><span class="citetitle">Excerpt of
+      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/Avatar.def</span></span></p><p>The <span class="literal">friendsList</span> variable is a Python list of
+      tuples of player's <em class="emphasis">friends</em>' names and their
+      <span class="literal">DBID</span>s.</p><p>Because the properties are declared as
+      <span class="literal">&lt;Persistent&gt;</span>, when the base of the
+      <em class="emphasis">Avatar</em> entity is destroyed, the content of the
+      <span class="literal">friendsList</span> and <span class="literal">admirersList</span> is
+      written to the database. When the base of the
+      <em class="emphasis">Avatar</em> entity is re-created, both lists are
+      initialised with data from the database. The lists are initialised with
+      their <span class="literal">&lt;Default&gt;</span> value if there is no data in
+      the database.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p><em class="emphasis">Why isn't the
+        <span class="literal">BASE_CLIENT</span> flag used for
+        <span class="literal">friendsList</span>?</em></p><p>It was mentioned earlier in this document that a copy of friends
+        list should be kept on the client part of the Avatar entity because it
+        is frequently accessed there.</p><p>So it would seem logical to use the
+        <span class="literal">BASE_CLIENT</span> flag, as this would make the list
+        automatically replicated to the client as well.</p><p>Unfortunately, this would be true only during initialisation.
+        Changes to friends list during the lifetime of the Avatar object would
+        not be propagated between the client and the base.</p><p>Hence, it is made explicit that <span class="literal">friendsList</span>
+        variable in the base and the client are separate ones, and that they
+        need to be kept in sync manually.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e334"></a>3.5.&nbsp;Client <span class="literal">friendsList</span></h2></div></div></div><p>Since the <span class="literal">BASE_CLIENT</span> flag is not used, the
+      structure of the <span class="literal">friendsList</span> variable on the client
+      does not need to be identical to the one on the base.</p><p>Therefore, the client's <span class="literal">friendsList</span> variable is
+      implemented as a Python list of tuples (<span class="literal">&lt;friend&#8217;s
+      name&gt;</span>, <span class="literal">&lt;whether they are online&gt;</span>),
+      dropping <span class="literal">DBID</span> because it is not used in the
+      client.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e361"></a>3.6.&nbsp;Using list indexes as friend identifiers</h2></div></div></div><p>Even though the <span class="literal">friendsList</span> variable in the
+      client and the base are different lists, both have the same order of
+      items in them.</p><p>This allows the <em class="emphasis">Avatar</em> entity to use the list
+      index as the identifier for a <em class="emphasis">friend</em> when
+      communicating between the client and base.</p><p>The index will save on communication costs (it is only one byte if
+      a player cannot have more than 256 <em class="emphasis">friends</em>) and
+      will allow faster list lookup.</p><p>The <em class="emphasis">friends list</em> index is defined in
+      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml</span>
+      for convenience, as well as for consistency, in case you need to
+      implement lists with more than 256 <em class="emphasis">friends</em>.</p><pre class="programlisting">&lt;root&gt;
+    ...
+    &lt;FRIENDIDX&gt;    UINT8    &lt;/FRIENDIDX&gt;
+    ...
+&lt;/root&gt;</pre><p><span class="citetitle">Excerpt of
+      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/alias.xml</span></span></p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p><em class="emphasis">Indexes and race
+        conditions</em></p><p>Because the Avatar entity is using indexes in communications
+        between the client and the base, both lists have to be kept in sync at
+        all times, otherwise the index in the client may correspond to a
+        different friend than at the base.</p><p>This is impossible to achieve in the presence of race
+        conditions.</p><p>For example, if someone modifies the list in the base, the base
+        sends an update to the client. But the client sends a message to the
+        base prior to reception of the update message, so it may contain an
+        index that refers to a different friend.</p><p>In this document's example, the only operation that can make
+        indexes inconsistent is deleting a friend in the middle of the list.
+        Hence, the Avatar entity could handle the race condition by setting
+        the list entry to "empty", instead of removing it, and then re-using
+        that slot later on. For simplicity, this is not shown.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e416"></a>3.7.&nbsp;Base online friends list</h2></div></div></div><p>The <span class="literal">friendsList</span> variable as defined in
+      <span class="literal">Avatar.def</span> does not include any field for storing the
+      online status of a <em class="emphasis">friend</em>,
+      <em class="emphasis">i.e.</em>, whether he is currently online or offline.
+      This is because the online state is volatile and should not be
+      persistent.</p><p>Therefore, the <em class="emphasis">Avatar</em> base creates an
+      additional list called <span class="literal">friendBases</span>, which is a list
+      of mailboxes to the bases of <em class="emphasis">friends</em> that are
+      currently online. The index of items in <span class="literal">friendBases</span>
+      and <span class="literal">friendsList</span> should match,
+      <em class="emphasis">i.e.</em>, <span class="literal">friendBases[i]</span> should be
+      the base for the <em class="emphasis">friend</em> in
+      <span class="literal">friendsList[i]</span>. If the <em class="emphasis">friend</em> is
+      not currently online, <span class="literal">friendBases[i]</span> is set to
+      None.</p><p>This is how you would declare/initialise
+      <span class="literal">friendBases</span>&#8212;as any ordinary Python member
+      variable in
+      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Avatar.py</span>:</p><pre class="programlisting">class Avatar( BigWorld.Proxy, AvatarCommon ):
+
+    def __init__( self ):
+
+        self.friendBases = []   </pre><p><span class="citetitle">Excerpt of
+      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Avatar.py</span></span></p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p><em class="emphasis"><span class="literal">friendBases</span> not in
+        <span class="literal">Avatar.def</span></em></p><p>Note that it is not necessary to declare non-persistent
+        properties in <span class="literal">.def</span> file.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e500"></a>3.8.&nbsp;Console commands</h2></div></div></div><p>This example uses the <span class="literal">FantasyDemo</span> console for
+      user interaction.</p><p>We will add the following commands to the console:
+      <span class="literal">addfriend</span>, <span class="literal">delfriend</span>,
+      <span class="literal">listfriends</span>, <span class="literal">msgfriend</span>, and
+      <span class="literal">infofriend</span>.</p><p>Commands begin with the '<span class="literal">/</span>' character, so the
+      user would type "<span class="literal">/addfriend simon</span>" to add
+      <em class="emphasis">simon</em> as a <em class="emphasis">friend</em>, for
+      example.</p><p>For the purposes of this document, typing the command
+      "<span class="literal">/addfriend</span>" would automatically call the
+      <span class="literal">Avatar.addFriend</span> function on the client. And
+      <span class="literal">FantasyDemo.addChatMsg( -1, &lt;message&gt;)</span> outputs
+      a message to the console.</p><p>For those interested in more details, look at
+      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Helpers/ConsoleCommands.py</span>
+      file and search for its usage in Python code.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e557"></a>3.9.&nbsp;Initialisation and destruction</h2></div></div></div><p>Described below is the mechanism by which a <em class="emphasis">friend
+      list</em> is created and destroyed.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">The steps during
+          initialisation:</em></p><div class="itemizedlist"><ul type="circle"><li><p>On the base, send the <em class="emphasis">friends list</em> to
+              the client.</p></li><li><p>On the base, find out which <em class="emphasis">friends</em>
+              are currently online and store their base mailboxes in
+              <span class="literal">friendBases</span>. Tell the client which
+              <em class="emphasis">friends</em> are online.</p></li><li><p>On the base, notify all online
+              <em class="emphasis">admirers</em> that the player is currently
+              online.</p></li></ul></div></li><li><p><em class="emphasis">The steps during
+          destruction:</em></p><div class="itemizedlist"><ul type="circle"><li><p>On the base, notify all online
+              <em class="emphasis">admirers</em> that the player is going
+              offline.</p></li></ul></div></li><li><p><em class="emphasis">When the player receives a notification
+          from a friend about his online status:</em></p><div class="itemizedlist"><ul type="circle"><li><p>On the base, store the <em class="emphasis">friend</em>&#8217;s
+              mailbox or None in <span class="literal">friendBases</span> and forward
+              notification to client.</p></li></ul></div></li><li><p><em class="emphasis">In
+          <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Avatar.py</span>:</em></p><pre class="programlisting">class Avatar( BigWorld.Proxy, AvatarCommon ):
+    ...
+    def onEntitiesEnabled( self ):
+        ...
+        self.initFriendsList()
+
+    def onLoseCell( self ):
+        self.notifyAdmirers( False )
+        ...
+
+    def initFriendsList( self ):
+        # Send list of friend names to client.
+        self.client.newFriendsList( [ x[0] for x in self.friendsList ] )
+
+        # Set friend base mailboxes to None (i.e. assume they are offline)
+        # Note: Client also assumes friends are offline during initialisation.
+        self.friendBases =  [ None for x in self.friendsList ]
+        for i in range( len(self.friendsList) ):
+            BigWorld.lookUpBaseByDBID( "Avatar", self.friendsList[i][1], \
+                partial( self.onInitDBLookUpCb, i ) )
+
+        self.notifyAdmirers( True )
+
+    def onInitDBLookUpCb( self, idx, friendBase ):
+        if type(friendBase) is not bool:
+            # Friend is online
+            self.friendBases[idx] = friendBase
+            self.client.setFriendStatus( idx, True )
+          
+    def notifyAdmirers( self, online ):
+        if online:
+            ourBase = self
+        else:
+            ourBase = None
+        for admirerDBID in self.admirersList:
+            BigWorld.lookUpBaseByDBID( "Avatar", admirerDBID, \
+                partial( Avatar_onNotifyAdmirersDBLookUpCb, self.databaseID, \
+                ourBase ) )
+
+    # friendBase is None if friend is going offline.
+    # friendBase is friend's base mailbox if they are coming online
+    def onFriendStatusChange( self, friendDBID, friendBase ):
+        for i in range( len (self.friendsList ) ):
+            if self.friendsList[i][1] == friendDBID:
+                self.friendBases[i] = friendBase
+                online = friendBase != None
+                self.client.setFriendStatus( i, online )
+                break
+
+# this callback needs to be a global instead of a method of Avatar because we
+# notify our admirers when the Avatar is being destroyed.
+def Avatar_onNotifyAdmirersDBLookUpCb( ourDBID, ourBase, admirerBase ):
+    if type(admirerBase) is not bool:
+        # Admirer is online
+        admirerBase.onFriendStatusChange( ourDBID, ourBase )</pre><p><span class="citetitle"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Avatar.py</span></span></p></li><li><p><em class="emphasis">In
+          <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span>:</em></p><pre class="programlisting">
+class Avatar( BigWorld.Entity ):
+    ...
+    def __init__( self ):
+        ...
+        self.friendsList = []
+  
+    def newFriendsList( self, friendsList ):
+        self.friendsList = [ ( x, False ) for x in friendsList ]
+  
+    def setFriendStatus( self, idx, online ):
+        friend = self.friendsList[idx]
+        self.friendsList[idx] = ( friend[0], online )
+        if online:
+            FantasyDemo.addChatMsg( -1, friend[0] + " is online." )
+        else:
+            FantasyDemo.addChatMsg( -1, friend[0] + " has logged off." )</pre><p><span class="citetitle"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span></span></p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p><em class="emphasis">Maximum message size and method
+        arguments</em></p><p>Remote method calls (<em class="emphasis">e.g.</em>, from base to
+        client), are sent as messages.</p><p>The maximum size of a message is limited by the UDP packet size.
+        So there is, in fact, a limit on the amount of data
+        (<em class="emphasis">i.e.</em>, data contained in the method arguments)
+        that can be passed in a single remote method call.</p><p>A call like <span class="literal">self.client.newFriendsList</span> may be
+        needed to be broken up into multiple calls if the friends list has a
+        large number of items.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e673"></a>3.10.&nbsp;Adding and deleting friends</h2></div></div></div><p>Described below is the mechanism by which a friend is added or
+      deleted from player's friend list.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Steps in adding a
+          friend:</em></p><div class="itemizedlist"><ul type="circle"><li><p>On the client, check that the new
+              <em class="emphasis">friend</em> is not already in the list. Tell
+              base to add the <em class="emphasis">friend</em>.</p></li><li><p>On the base, check whether the <em class="emphasis">friend</em>
+              is currently online. If not online, check whether the
+              <em class="emphasis">friend</em> exists in the database. If the
+              <em class="emphasis">friend</em> exists, tell him to add player as an
+              <em class="emphasis">admirer</em>.</p></li><li><p>On the base, tell the client that the
+              <em class="emphasis">friend</em> was added.</p></li><li><p>On the client, add the new <em class="emphasis">friend</em> to
+              the list.</p></li></ul></div></li><li><p><em class="emphasis">Steps in deleting a
+          friend</em><em class="emphasis">:</em></p><div class="itemizedlist"><ul type="circle"><li><p>On the client, find the <em class="emphasis">friend</em> in
+              <span class="literal">friendsList</span> and delete it. Tell the base to
+              delete <em class="emphasis">friend</em> by index.</p></li><li><p>On the base, delete the <em class="emphasis">friend</em> from
+              <span class="literal">friendsList</span> and
+              <span class="literal">friendBases</span>. Tell the
+              <em class="emphasis">friend</em> to delete player from his
+              <em class="emphasis">admirersList</em>.</p></li></ul></div></li><li><p><em class="emphasis">In
+          <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Avatar.py</span>:</em></p><pre class="programlisting">
+class Avatar( BigWorld.Entity ):
+    ...
+    MAX_FRIENDS = 30
+
+    def addFriend( self, friendName ):
+        if friendName == self.playerName:
+            self.client.showMessage( 3, 'System',\
+                "Adding yourself as a friend is not allowed." )
+        if len(self.friendsList) &gt;= self.MAX_FRIENDS:
+            self.client.showMessage( 3, 'System',\
+                "You already have the maximum number of friends allowed: " \
+                + str(self.MAX_FRIENDS) )
+        else:
+            BigWorld.createBaseFromDB( "Avatar", friendName, \
+                partial( self.onAddFriendCreateBaseCb, friendName ) )
+  
+    def onAddFriendCreateBaseCb( self, friendName, friendBase, dbID, \
+                                wasActive ):
+        if friendBase != None:
+            if wasActive:
+                friendBase.addAdmirer( self.databaseID, self, False )
+            else:
+                # addAdmirer() needs playerName to be set.
+                friendBase.playerName = friendBase.cellData[ "playerName" ]
+                friendBase.addAdmirer( self.databaseID, self, False )
+                # Should destroy the base that we've created temporarily
+                friendBase.destroy()
+        else:
+            self.client.showMessage( 3, 'System',
+                "Cannot add unknown player: " + friendName )
+
+    def onAddedAdmirerToFriend( self, friendName, friendDBID, friendBase ):
+        # Double check here due to race condition of multiple addFriends
+        # when we have MAX_FRIENDS - 1 friends
+        if len(self.friendsList) &gt;= self.MAX_FRIENDS:
+            self.client.showMessage( 3, 'System', \
+                "You already have the maximum number of friends allowed: " \
+                + str(self.MAX_FRIENDS) )
+        else:
+            self.friendsList.append( ( friendName, friendDBID ) )
+            self.friendBases.append( friendBase )
+            online = friendBase != None
+            self.client.onAddedFriend( friendName, online )
+       
+    def delFriend( self, friendIdx ):
+        friendBase = self.friendBases.pop(friendIdx)
+        if friendBase != None:
+            friendBase.delAdmirer( self.databaseID )
+        else:
+            BigWorld.createBaseFromDBID( "Avatar", \
+                self.friendsList[friendIdx][1], self.onDelFriendCreateBaseCb )
+        del self.friendsList[ friendIdx ]
+   
+    def onDelFriendCreateBaseCb( self, friendBase, dbID, wasActive ):
+        if friendBase != None:
+            friendBase.delAdmirer( self.databaseID )
+            # Should destroy the base that we&#8217;ve created temporarily
+            friendBase.destroy()
+
+    def addAdmirer( self, admirerDBID, admirerBase, online ):
+        self.admirersList.append( admirerDBID )
+        if online:
+            onlineBase = self
+        else:
+            onlineBase = None
+        admirerBase.onAddedAdmirerToFriend( self.playerName, self.databaseID, \
+            onlineBase )
+       
+    def delAdmirer( self, admirerDBID ):
+        self.admirersList.remove( admirerDBID )</pre><p><span class="citetitle"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Avatar.py</span></span></p></li><li><p><em class="emphasis">In
+          <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span>:</em></p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>We have added additional code on the client to get the name
+            of the player currently targeted, in the case that it is not
+            specified in the console command.</p></div><pre class="programlisting"># Helper method to get the target player name if friendName is empty
+    def getTargetForFriendlyAction( self, friendName ):
+        if len(friendName) == 0:
+            target = BigWorld.target()
+            if target != None and isinstance(target, Avatar):
+                return target.playerName
+            else:
+                FantasyDemo.addChatMsg( -1, \
+                    "Please specify friend name or have friend targetted." )
+                return ""
+        else:
+            return friendName
+
+    # Helper method to find the index of friendName in self.friendsList
+    def getFriendIdxByName( self, friendName ):
+        for i in range( len(self.friendsList) ):
+            if self.friendsList[i][0] == friendName:
+                return i
+        return -1
+
+    def addFriend( self, friendName ):
+        targetFriendName = self.getTargetForFriendlyAction(friendName)
+
+        if len(targetFriendName) &gt; 0:
+            idx = self.getFriendIdxByName(targetFriendName)
+            if idx &lt; 0:
+                self.base.addFriend( targetFriendName )
+            else:
+                FantasyDemo.addChatMsg( -1, targetFriendName + \
+                    " is already your friend." )
+
+    def onAddedFriend( self, friendName, online ):
+        self.friendsList.append( ( friendName, online ) )
+        FantasyDemo.addChatMsg( -1, friendName + " is your new friend." )
+
+    def delFriend( self, friendName ):
+        targetFriendName = self.getTargetForFriendlyAction(friendName)
+
+        if len(targetFriendName) &gt; 0:
+            idx = self.getFriendIdxByName(targetFriendName)
+            if idx &gt;= 0:
+                del self.friendsList[idx]
+                self.base.delFriend(idx)
+                FantasyDemo.addChatMsg( -1, targetFriendName + \
+                    " is no longer your friend." )
+            else:
+                FantasyDemo.addChatMsg( -1, targetFriendName + \
+                    " is not currently one of your friends." )
+
+    # We received a message
+    def showMessage( self, type, source, msg ):
+        FantasyDemo.addChatMsg( -1,
+            ( "Debug", "Tell", "Group", "Info" )[type] + " - " + source + ": " + msg )</pre><p><span class="citetitle"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span></span></p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p><em class="emphasis">Local bases: Synchronous method calls and
+        other goodies</em></p><p>When bases are on the same BaseApp, method calls are
+        synchronous. That is why <span class="literal">onAddFriendCreateBaseCb</span>
+        and <span class="literal">onDelFriendCreateBaseCb</span> are able to destroy
+        <span class="literal">friendBases</span> straight after calling one of its
+        methods.</p><p>In this case, <span class="literal">friendBases</span> is guaranteed to be
+        on the same BaseApp because it was created using
+        <span class="literal">BigWorld.createBaseFromDB</span>, and was not already
+        active.</p><p>Plus, local bases can have their properties and methods
+        accessed, even if not declared in the <span class="literal">.def</span>
+        file.</p><p>So, in principle, <span class="literal">onAddFriendCreateBaseCb</span>
+        would not have to call the <span class="literal">addAdmirer</span> method and
+        receive a call to the <span class="literal">onAddedAdmirerToFriend</span>
+        method, because it would be able access
+        <span class="literal">friendBase.databaseID</span> directly. However, this is
+        would mean code duplication.</p><p>The downside to these "goodies" is that it could mask bugs
+        during initial testing, when usually only one BaseApp is running,
+        which forces all bases to be local.</p></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p><em class="emphasis">Dealing with unreliable remote base method
+        calls</em></p><p>In general, base method calls are not any more unreliable than
+        other components. But because the BigWorld Server relies on bases for
+        data persistence, things can go wrong when base methods calls are not
+        executed.</p><p>This can happen when the remote base is destroyed during message
+        transit (in which case the method call might be silently ignored), or
+        when base data changed by a call is reverted (for example, in the
+        event a BaseApp crash occurs and a backup BaseApp takes over).</p><p>The example in this document is mainly concerned with the
+        <span class="literal">addAdmirer</span> and <span class="literal">delAdmirer</span> calls.
+        If these are ignored or rolled back, player could end up with
+        inconsistent friends and admirers lists between bases
+        (<em class="emphasis">e.g.</em>, John thinks Simon is his friend, but Simon
+        does not have John in his admirers list).</p><p>This situation could be dealt with by adding self-correcting
+        code in <span class="literal">Avatar_onNotifyAdmirersDBLookUpCb</span> to remove
+        the admirer from player's <span class="literal">admirersList</span> if player is
+        not one of his friends.</p><p>Similarly, self-correcting code could be added to
+        <span class="literal">onFriendStatusChange</span> to fix the friend&#8217;s
+        <span class="literal">admirersList</span> if he is not a friend of the
+        player.</p><p>Alternatively, the design could have be changed to have a
+        dedicated base or database table responsible for storing the friends
+        and admirers list for all players. Player entities (Avatars) would
+        then talk to this base (or database) to update their
+        <span class="literal">friendsList</span>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e878"></a>3.11.&nbsp;Interacting with friends</h2></div></div></div><p>Interacting with <em class="emphasis">friends</em> is not very
+      different to interacting with other players.</p><p>In fact, the following methods could have been implemented as
+      general methods for interacting with any player (identified by his
+      username). The advantage of limiting these interactions to
+      <em class="emphasis">friends</em> is efficiency. Since the
+      <em class="emphasis">Avatar</em> entity already knows their online status and
+      has a copy of their base mailboxes, it can make smarter decisions
+      (<em class="emphasis">e.g.</em>, reject the operation when target player is
+      not online) and avoid accessing the database.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">When sending a message to a
+          friend:</em></p><div class="itemizedlist"><ul type="circle"><li><p>On the client, check that the <em class="emphasis">friend</em>
+              is in <span class="literal">friendsList</span>. Tell base to send the
+              message to the <em class="emphasis">friend</em>.</p></li><li><p>On the base, check that the <em class="emphasis">friend</em> is
+              online. Tell the <em class="emphasis">friend</em>&#8217;s base to send the
+              message to his client.</p></li></ul></div></li><li><p><em class="emphasis">When getting info on a
+          friend:</em></p><div class="itemizedlist"><ul type="circle"><li><p>On the client, check that the <em class="emphasis">friend</em>
+              is in <span class="literal">friendsList</span>. Tell the base to get info
+              on the <em class="emphasis">friend</em>.</p></li><li><p>On the base, check that the <em class="emphasis">friend</em> is
+              online. Tell the <em class="emphasis">friend</em>&#8217;s base to get info
+              on him.</p></li><li><p>On the <em class="emphasis">friend</em>&#8217;s base, get info for
+              the <em class="emphasis">admirer</em> and tell our cell to get info
+              for the <em class="emphasis">admirer</em>.</p></li><li><p>On <em class="emphasis">friend</em>&#8217;s cell, get info for the
+              <em class="emphasis">admirer</em> and tell the
+              <em class="emphasis">admirer</em>&#8217;s base to send that info to his
+              client.</p></li></ul></div><p>An extra access to the cell is made because that is where most
+          of the information is.</p></li><li><p><em class="emphasis">When getting list of
+          friends:</em></p><div class="itemizedlist"><ul type="circle"><li><p>On the client, display names and online status from
+              <span class="literal">friendsList</span>.</p></li></ul></div></li><li><p><em class="emphasis">In </em><em class="emphasis"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/Avatar.py</span>:</em></p><pre class="programlisting">class Avatar( BigWorld.Entity ):
+    ...
+    def sendMessageToFriend( self, friendIdx, message ):
+        friendBase = self.friendBases[friendIdx]
+        if friendBase != None:
+            friendBase.client.onReceiveMessageFromAdmirer( self.playerName, \
+                message )
+        else:
+            self.client.showMessage( 3, 'System',
+                "Cannot send message to offline player." )
+   
+    def getFriendInfo( self, friendIdx ):
+        friendBase = self.friendBases[friendIdx]
+        if friendBase != None:
+            friendBase.getInfoForAdmirer( self )
+        else:
+            self.client.showMessage( 3, 'System', \
+                "Cannot get information on offline player." )
+   
+    def getInfoForAdmirer( self, admirerBase ):
+        friendNames = [ name for (name, dbid) in self.friendsList ]
+        self.cell.getInfoForAdmirer( \
+            "[Friends: " + str(friendNames)[1:-1] + "]", admirerBase )</pre></li><li><p><em class="emphasis">In
+          <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Avatar.py</span>:</em></p><pre class="programlisting">class Avatar( BigWorld.Entity ):
+    ...
+    def getInfoForAdmirer( self, baseInfo, admirerBase ):
+        info =  "[Health: " + str(self.healthPercent) + "%]"
+        info += "[Frags: " + str(self.frags) + "]"
+        info += "[Position: " + str(self.position) + "]"
+        admirerBase.client.onRcvFriendInfo( self.playerName, info + baseInfo )</pre></li><li><p><em class="emphasis">In
+          <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/Avatar.py</span>:</em></p><pre class="programlisting">    def infoFriend( self, friendName ):
+        targetFriendName = self.getTargetForFriendlyAction(friendName)
+       
+        if len(targetFriendName) &gt; 0:
+            idx = self.getFriendIdxByName(targetFriendName)
+            if idx &gt;= 0:
+                self.base.getFriendInfo(idx)
+            else:
+                FantasyDemo.addChatMsg( -1, targetFriendName + \
+                    " is not one of your friends." )
+           
+    def onRcvFriendInfo( self, friendName, info ):
+        FantasyDemo.addChatMsg( -1, info )
+   
+    def listFriends( self ):
+        FantasyDemo.addChatMsg( -1, "You have " + str(len(self.friendsList)) + \
+            " friend(s):" )
+        onlineFriends = [ name for (name, online) in self.friendsList \
+                          if online ]
+        onlineFriendsStr = "   online:" + str(onlineFriends)[1:-1]
+        FantasyDemo.addChatMsg( -1, "   online: " + str(onlineFriends)[1:-1] )
+        offlineFriends = [ name for (name, online) in self.friendsList \
+                           if not online ]
+        FantasyDemo.addChatMsg( -1, "   offline: " + str(offlineFriends)[1:-1] )
+       
+    def msgFriend( self, friendName, message ):
+        targetFriendName = self.getTargetForFriendlyAction(friendName)
+       
+        if len(targetFriendName) &gt; 0:
+            idx = self.getFriendIdxByName(targetFriendName)
+            if idx &gt;= 0:
+                self.base.sendMessageToFriend( idx, message )
+                FantasyDemo.addChatMsg( -1, "You say to " + targetFriendName + \
+                    ": " + message )
+            else:
+                FantasyDemo.addChatMsg( -1, targetFriendName + \
+                    " is not one of your friends." )
+   
+    def onReceiveMessageFromAdmirer( self, admirerName, message ):
+        FantasyDemo.addChatMsg( -1, admirerName + ": " + message )</pre></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p><em class="emphasis">Special remote entity
+        properties</em></p><p>Though it is not generally possible to access a remote entity&#8217;s
+        properties, it is possible to access its mailboxes to other parts of
+        itself (<em class="emphasis">i.e.</em>, <span class="literal">base.client</span>,
+        <span class="literal">base.cell</span>, <span class="literal">cell.client</span>,
+        <span class="literal">cell.base</span>).</p><p>Hence, the call
+        <span class="literal">friendBase.client.onReceiveMessageFromAdmirer</span> in
+        base method <span class="literal">sendMessageToFriend</span> and the call
+        <span class="literal">admirerBase.client.onRcvFriendInfo</span> in cell method
+        <span class="literal">getInfoForAdmirer</span> are perfectly legitimate.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1056"></a>3.12.&nbsp;Declaring the methods</h2></div></div></div><p>Methods must be declared in the <span class="literal">.def</span> file if
+      they are called remotely (<em class="emphasis">i.e.</em>, calls between
+      client and base), between bases, between cell and base, etc.
+      Furthermore, methods called by the client must be declared
+      <span class="literal">&lt;Exposed/&gt;</span>.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">In </em><em class="emphasis"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/Avatar.def</span>:</em></p><pre class="programlisting">&lt;root&gt;
+    ...
+    &lt;ClientMethods&gt;
+        ...
+        &lt;newFriendsList&gt;
+            &lt;Arg&gt;        ARRAY &lt;of&gt; STRING &lt;/of&gt; &lt;/Arg&gt; &lt;!-- array of friend names --&gt;
+        &lt;/newFriendsList&gt;
+        &lt;onAddedFriend&gt;
+            &lt;Arg&gt;        STRING    &lt;/Arg&gt;    &lt;!-- friend's name --&gt;
+            &lt;Arg&gt;        BOOL      &lt;/Arg&gt;    &lt;!-- is friend online? --&gt;
+        &lt;/onAddedFriend&gt;
+        &lt;setFriendStatus&gt;
+            &lt;Arg&gt;        FRIENDIDX &lt;/Arg&gt;    &lt;!-- friend's list index --&gt;
+            &lt;Arg&gt;        BOOL      &lt;/Arg&gt;    &lt;!-- is friend online? --&gt;
+        &lt;/setFriendStatus&gt;
+        &lt;onReceiveMessageFromAdmirer&gt;
+            &lt;Arg&gt;        STRING    &lt;/Arg&gt;    &lt;!-- admirer's name --&gt;
+            &lt;Arg&gt;        STRING    &lt;/Arg&gt;    &lt;!-- message --&gt;
+        &lt;/onReceiveMessageFromAdmirer&gt;
+        &lt;onRcvFriendInfo&gt;
+            &lt;Arg&gt;        STRING    &lt;/Arg&gt;    &lt;!-- friend's name --&gt;
+            &lt;Arg&gt;        STRING    &lt;/Arg&gt;    &lt;!-- friend's info --&gt;
+        &lt;/onRcvFriendInfo&gt;
+        &lt;showMessage&gt;
+            &lt;Arg&gt;        UINT8     &lt;/Arg&gt;    &lt;!-- type of message --&gt;
+            &lt;Arg&gt;        STRING    &lt;/Arg&gt;    &lt;!-- source of message --&gt;
+            &lt;Arg&gt;        STRING    &lt;/Arg&gt;    &lt;!-- message to show on console --&gt;
+        &lt;/showMessage&gt;       
+    &lt;/ClientMethods&gt;
+
+    &lt;BaseMethods&gt;
+        ...
+        &lt;addFriend&gt;
+            &lt;Exposed/&gt;
+            &lt;Arg&gt;        STRING    &lt;/Arg&gt;    &lt;!-- friend's name --&gt;
+        &lt;/addFriend&gt;
+        &lt;delFriend&gt;
+            &lt;Exposed/&gt;
+            &lt;Arg&gt;        FRIENDIDX &lt;/Arg&gt;    &lt;!-- friend's list index --&gt;
+        &lt;/delFriend&gt;
+        &lt;addAdmirer&gt;
+            &lt;Arg&gt;        DBID      &lt;/Arg&gt;    &lt;!-- admirer's dbid --&gt;
+            &lt;Arg&gt;        MAILBOX   &lt;/Arg&gt;    &lt;!-- admirer's base --&gt;
+            &lt;Arg&gt;        BOOL      &lt;/Arg&gt;    &lt;!-- are we online? --&gt;
+        &lt;/addAdmirer&gt;
+        &lt;onAddedAdmirerToFriend&gt;
+            &lt;Arg&gt;        STRING    &lt;/Arg&gt;    &lt;!-- friend's name --&gt;
+            &lt;Arg&gt;        DBID      &lt;/Arg&gt;    &lt;!-- friend's dbid --&gt;
+            &lt;Arg&gt;        MAILBOX   &lt;/Arg&gt;    &lt;!-- friend's base --&gt;
+        &lt;/onAddedAdmirerToFriend&gt;
+        &lt;delAdmirer&gt;
+            &lt;Arg&gt;        DBID      &lt;/Arg&gt;    &lt;!-- admirer's dbid --&gt;
+        &lt;/delAdmirer&gt;
+        &lt;onFriendStatusChange&gt;
+            &lt;Arg&gt;        MAILBOX   &lt;/Arg&gt;    &lt;!-- friend's base --&gt;
+            &lt;Arg&gt;        BOOL      &lt;/Arg&gt;    &lt;!-- is friend online? --&gt;
+        &lt;/onFriendStatusChange&gt;
+        &lt;sendMessageToFriend&gt;
+            &lt;Exposed/&gt;
+            &lt;Arg&gt;        FRIENDIDX &lt;/Arg&gt;    &lt;!-- friend's list index --&gt;
+            &lt;Arg&gt;        STRING    &lt;/Arg&gt;    &lt;!-- message --&gt;
+        &lt;/sendMessageToFriend&gt;
+        &lt;getFriendInfo&gt;
+            &lt;Exposed/&gt;
+            &lt;Arg&gt;        FRIENDIDX &lt;/Arg&gt;    &lt;!-- friend's list index --&gt;
+        &lt;/getFriendInfo&gt;
+        &lt;getInfoForAdmirer&gt;
+            &lt;Arg&gt;        MAILBOX   &lt;/Arg&gt;    &lt;!-- admirer's base --&gt;
+        &lt;/getInfoForAdmirer&gt;
+    &lt;/BaseMethods&gt;
+
+    &lt;CellMethods&gt;
+        ...
+        &lt;getInfoForAdmirer&gt;
+            &lt;Arg&gt;        STRING    &lt;/Arg&gt;    &lt;!-- our base info for admirer --&gt;
+            &lt;Arg&gt;        MAILBOX   &lt;/Arg&gt;    &lt;!-- admirer's base --&gt;
+        &lt;/getInfoForAdmirer&gt;
+    &lt;/CellMethods&gt;</pre><p><span class="citetitle"><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/Avatar.def</span></span></p></li></ul></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Variations"></a>Chapter&nbsp;4.&nbsp;Variations</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e1097">4.1. Asking for permission to be someone&#8217;s friend</a></span></dt><dt><span class="section"><a href="#d0e1237">4.2. Enforcing mutual friendship</a></span></dt><dt><span class="section"><a href="#d0e1260">4.3. Matching request and response</a></span></dt></dl></div><p>The example here is a starting point for building your own
+    <em class="emphasis">friends list</em>. We have pointed out areas that need
+    further work before it would be suitable for use in a production system.
+    Certainly you will also have specific requirements for your game. This
+    section discusses some obvious variations and their implications.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1097"></a>4.1.&nbsp;Asking for permission to be someone&#8217;s friend</h2></div></div></div><p>This could be a requirement if <em class="emphasis">friends</em> have
+      special access (<em class="emphasis">e.g.</em>, the
+      <span class="literal">getInfo</span> command in this document's example).</p><p>Ideally, the <em class="emphasis">friend</em> can subsequently rescind
+      his friendship after granting it. This means <em class="emphasis">admirers
+      list</em> should become editable by the user. Hence, it should
+      probably store more than just the <span class="literal">DBID</span> for
+      performance reasons.</p><p>It may also be a good idea then to limit the size of the
+      <em class="emphasis">admirers list</em>, since there would be usability
+      problems when this list is large.</p><p>Each <em class="emphasis">"Can I be your friend?"</em> request should
+      also be stored somewhere. Places they could be stored:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">On the client of the player being asked
+          (the askee).</em></p><div class="itemizedlist"><ul type="circle"><li><p>This is the bare minimum, since the
+              <em class="emphasis">askee</em> must have visual indication of being
+              asked.</p></li><li><p>When the <em class="emphasis">askee</em> logs off, requests are
+              forgotten.</p></li><li><p>The <em class="emphasis">asker</em> cannot keep track of
+              outstanding requests.</p></li><li><p>A possible situation exists where acceptance is rejected
+              because the <em class="emphasis">asker</em>&#8217;s <em class="emphasis">friends
+              list</em> has become full since the request was
+              made.</p></li></ul></div></li><li><p><em class="emphasis">On the client of the askee and on the
+          base of the player who is asking (the asker).</em></p><div class="itemizedlist"><ul type="circle"><li><p>The <em class="emphasis">asker</em> can keep track of
+              outstanding requests, therefore will not exceed
+              <em class="emphasis">friends list</em> limit.</p></li><li><p>The <em class="emphasis">asker</em> can withdraw the
+              request.</p></li><li><p>The <em class="emphasis">askee</em> can notify the
+              <em class="emphasis">asker</em> when he logs off (by using info in
+              the request from the <em class="emphasis">asker</em>) and the
+              <em class="emphasis">asker</em> can remove outstanding
+              requests.</p></li><li><p>It is possible, but it does not make much sense for the
+              <em class="emphasis">asker</em> to persist requests because
+              <em class="emphasis">askee</em> will forget requests when he logs
+              off.</p></li></ul></div></li><li><p><em class="emphasis">On the client and base of the
+          </em><em class="emphasis">askee</em><em class="emphasis">, and on the base of the </em><em class="emphasis">asker</em><em class="emphasis">.</em></p><div class="itemizedlist"><ul type="circle"><li><p>Same as above except...</p></li><li><p>Both <em class="emphasis">askee</em> and
+              <em class="emphasis">asker</em> can persist requests, and requests
+              can be accepted independent of each other&#8217;s online
+              status.</p></li><li><p>Possible data integrity problems because we have
+              persistent data in two entities that needs to be kept in
+              sync.</p></li></ul></div></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1237"></a>4.2.&nbsp;Enforcing mutual friendship</h2></div></div></div><p>Where mutual friendship is enforced, it will be possible to
+      eliminate the separate <em class="emphasis">friends list</em> and
+      <em class="emphasis">admirers list</em>.</p><p>So when player A adds player B into his <em class="emphasis">friends
+      list</em>, he is automatically added to B&#8217;s <em class="emphasis">friends
+      list</em>.</p><p>It is highly recommended that players be forced to ask permission
+      before forming friendships (see above). This is to prevent total
+      strangers from using up the limited number of friends each player is
+      allowed to have.</p><p>Note that enforcing mutual friendship would not allow a game world
+      to have "leader" characters with many more admirers than friends.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1260"></a>4.3.&nbsp;Matching request and response</h2></div></div></div><p>In this document's example, the base would often call
+      <span class="literal">self.client.showMessage(&lt;type&gt;,&lt;source&gt;,&lt;message&gt;)</span>
+      as response to a request from the client.</p><p>Often this is not sufficient for real GUIs. For example, a button
+      may be disabled while the operation is in progress and re-enabled when
+      the operation completes. So the client must know that the
+      <span class="literal">showMessage</span> corresponds to an outstanding request,
+      and not some unsolicited message (<em class="emphasis">e.g.</em>, message
+      from a friend).</p><p>One solution would be to make a separate callback method for each
+      operation (<em class="emphasis">e.g.</em>, <span class="literal">onAddedFriend</span>,
+      <span class="literal">onDeletedFriend</span>, etc). But this could make the
+      <span class="literal">.def</span> file quite cluttered.</p><p>Another solution would be to pass <em class="emphasis">sequence
+      numbers</em> and have them passed back in the result
+      (<em class="emphasis">e.g.</em>, <span class="literal">showMessage(&lt;sequence
+      number&gt;,&lt;type&gt;,&lt;source&gt;,&lt;message&gt;)</span>). This
+      would have the advantage of supporting multiple outstanding requests of
+      the same type (<em class="emphasis">e.g.</em>, multiple
+      <span class="literal">addFriends</span>), but is obviously more expensive (extra
+      integer in message and dictionary in the client to map
+      <em class="emphasis">sequence number</em> to request) and therefore should be
+      limited to infrequent calls.</p></div></div></div></div></body></html>

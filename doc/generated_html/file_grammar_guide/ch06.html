@@ -1,0 +1,120 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;6.&nbsp;capabilities.xml</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Brush files">
+      <link rel="next" href="ch07.html" title="Chapter&nbsp;7.&nbsp;.cdata">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch06.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;6.&nbsp;<span class="literal">capabilities.xml</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch07.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_capabilities_xml"></a>Chapter&nbsp;6.&nbsp;<span class="literal">capabilities.xml</span></h2>
+                  </div>
+               </div>
+            </div>
+            <p>For details on match triggers and capability flags, see:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/index.html" class="olink">Client Programming Guide</a>'s section
+                              <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch09.html" class="olink"><i>Scripting</i></a>
+                              <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch09.html#xref_Functional_Components" class="olink">Functional components</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch09.html#xref_Action_Matcher" class="olink">Action Matcher</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p>Document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>'s
+                              section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html" class="olink"><i>ModelEditor</i></a> <span class="symbol">&#8594;</span>
+                              <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html#xref_me_Actions_Panel" class="olink">Actions panel</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/ch03.html#xref_me_Action_Triggers_Dialog_Box" class="olink">Action Triggers dialog box</a>.
+                     </p>
+                  </li>
+                  <li>
+                     <p>This chapter's <a href="ch21.html" title="Chapter&nbsp;21.&nbsp;.model"><i xmlns:xlink="http://www.w3.org/1999/xlink"><span class="literal">.model</span></i></a>.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>Used to create alias for entity capabilities (which are then used to
+                 trigger or cancel actions by Action Matcher), and located under
+                 <code class="filename">fantasydemo/res/scripts/common</code>, the grammar of
+                 <code class="filename">capabilities.xml</code> is described below:
+            </p><pre class="programlisting">&lt;capabilities.xml&gt;
+
+  *&lt;state&gt; <em class="replaceable"><code>integer</code></em>
+      &lt;name&gt;  <em class="replaceable"><code>string</code></em>  &lt;/name&gt;
+      &lt;id&gt;    <em class="replaceable"><code>string</code></em>  &lt;/id&gt;
+   &lt;/state&gt;
+
+&lt;/capabilities.xml&gt;</pre><p><span class="citetitle">Grammar of
+                    <span class="literal">fantasydemo/res/scripts/common/capabilities.xml</span></span></p>
+            <p>The list below describes the tags in
+                 <span class="literal">flags.xml</span>:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">id</span></em></p>
+                     <p>Python-safe name of the capability, which can be used in
+                              scripts.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">name</span></em></p>
+                     <p>Name of the capability.</p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">state</span></em></p>
+                     <p>Number representing the capability bit, integer in the range 0 -
+                              31.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch07.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;<span class="literal">Brush</span> files&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;7.&nbsp;<span class="literal">.cdata</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

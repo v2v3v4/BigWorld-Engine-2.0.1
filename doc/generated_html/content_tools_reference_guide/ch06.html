@@ -1,0 +1,120 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;6.&nbsp;Starting the Tools</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Content Tools Reference Guide">
+      <link rel="up" href="index.html" title="Content Tools Reference Guide">
+      <link rel="prev" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Tools Consoles">
+      <link rel="next" href="ch07.html" title="Chapter&nbsp;7.&nbsp;Asset Browser">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/content_tools_reference_guide/ch06.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Starting the Tools</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch07.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Starting_The_Tools"></a>Chapter&nbsp;6.&nbsp;Starting the Tools
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p>BigWorld tools (and the client as well) can be invoked from the
+                 command-line, as well as from icons or from Visual Studio.
+            </p>
+            <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+               <h3 class="title">Note</h3>
+               <p>If the tools are installed from a version control system instead of
+                      the ZIP file, then the required Visual C++ DLL will not be present in the
+                      tools' executable folders and they will fail to open.
+               </p>
+            </div>
+            <p>Whichever method you choose, the tool has to be able to locate the
+                 following folders:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>The game's assets folder</p>
+                  </li>
+                  <li>
+                     <p>BigWorld's assets folder</p>
+                  </li>
+               </ul>
+            </div>
+            <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+               <h3 class="title">Note</h3>
+               <p>When specifying paths, both forward slash (<span class="literal">/</span>) and
+                      backslash (<span class="literal">\</span>) characters can be used.
+               </p>
+            </div>
+            <p>The client engine will try to determine the folders to be used in the
+                 following order:
+            </p>
+            <div class="orderedlist">
+               <ol type="1">
+                  <li>
+                     <p><em class="emphasis">{<span class="literal">--res</span>|<span class="literal">-r</span>}
+                                 <span class="literal"><em class="replaceable"><code>game_res_folder</code></em>[;<em class="replaceable"><code>bw_res_folder</code></em>]</span>
+                                 <span class="literal"><em class="replaceable"><code>argument</code></em></span></em></p>
+                     <p>If this argument is used in the command line, then the tool will
+                              use the folders specified in
+                              <span class="literal"><em class="replaceable"><code>game_res_folder</code></em></span> and
+                              <span class="literal"><em class="replaceable"><code>bw_res_folder</code></em></span>
+                              arguments.
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis"><span class="literal">bigworld/tools/<em class="replaceable"><code>&lt;tool&gt;</code></em>/paths.xml</span>
+                                 file</em></p>
+                     <p>Located on the same folder as the tool's executable, this file is
+                              the last resource for the client engine to determine the game's assets
+                              and BigWorld assets folders.
+                     </p>
+                     <p>For details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch27.html" class="olink"><i><span class="literal">paths.xml</span></i></a>.
+                     </p>
+                  </li>
+               </ol>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch07.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Tools Consoles&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;7.&nbsp;Asset Browser</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

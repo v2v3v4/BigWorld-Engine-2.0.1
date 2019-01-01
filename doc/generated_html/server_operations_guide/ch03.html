@@ -1,0 +1,2468 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;3.&nbsp;Cluster Administration Tools</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Operations Guide">
+      <link rel="up" href="index.html" title="Server Operations Guide">
+      <link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Server Configuration with bw.xml">
+      <link rel="next" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Fault Tolerance">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_operations_guide/ch03.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Cluster Administration Tools</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Admin_Tools"></a>Chapter&nbsp;3.&nbsp;Cluster Administration Tools
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch03.html#xref_WebConsole">3.1. WebConsole</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#d0e4878">3.1.1. Modules</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_WebConsole_Installation_And_Configuration">3.1.2. Installation and Configuration</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_WebConsole_User_Admin">3.1.3. User Administration</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_WebConsole_Modes">3.1.4. Production Mode vs Development Mode</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_WebConsole_Customising">3.1.5. Customising</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch03.html#xref_MessageLogger">3.2. Message Logger</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#d0e5217">3.2.1. Configuration</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e5275">3.2.2. File Format</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_Command_Line_Utilities">3.2.3. Command Line Utilities</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e5562">3.2.4. Automatic Log Archiving</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_MessageLogger_Scalability">3.2.5. Production Scalability</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch03.html#xref_StatLogger">3.3. StatLogger</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#d0e5664">3.3.1. Requirements</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e5715">3.3.2. Output</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_StatLogger_Data_Collection_And_Aggregation">3.3.3. Data Collection and Aggregation</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_StatLogger_Configuration">3.3.4. Configuration</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e6167">3.3.5. Database</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch03.html#xref_Server_Command_Line_Utilities">3.4. Server Command-Line Utilities</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#xref_control_cluster_py">3.4.1. Control Cluster</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e6634">3.4.2. MessageLogger Related Utilities</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch03.html#xref_Space_Viewer">3.5. Space Viewer</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#d0e6693">3.5.1. Selecting Spaces to View</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e6711">3.5.2. Viewing Spaces</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_Customising_Entity_And_Display_Colours">3.5.3. Customising Entity and Display Colours</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#xref_Running_Space_Viewer_Remotely">3.5.4. Running Space Viewer Remotely</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>A variety of tools are provided to assist in managing a BigWorld
+                 server. Broadly, these fall into four categories:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">WebConsole</em></p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Logging Processes</em></p>
+                     <div class="itemizedlist">
+                        <ul type="circle">
+                           <li>
+                              <p><em class="emphasis">Message Logger</em> (See <a href="ch03.html#xref_MessageLogger" title="3.2.&nbsp;Message Logger">Message Logger</a>.)
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Stat Logger</em> (See <a href="ch03.html#xref_StatLogger" title="3.3.&nbsp;StatLogger">StatLogger</a>.)
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Server command-line utilities (e.g.,
+                                 <span class="literal">control_cluster.py</span>) </em> (See <a href="ch03.html#xref_Server_Command_Line_Utilities" title="3.4.&nbsp;Server Command-Line Utilities">Server Command-Line Utilities</a>.)
+                     </p>
+                  </li>
+                  <li>
+                     <p><em class="emphasis">Space Viewer</em> (See <a href="ch03.html#xref_Space_Viewer" title="3.5.&nbsp;Space Viewer">Space Viewer</a>.)
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>The server tools are implemented almost entirely in Python, and can be
+                 easily extended, if additional functionality is desired.
+            </p>
+            <p>Most of the server tools' functionality is available from WebConsole,
+                 an easy to use web interface which simplifies server administration for
+                 remote users and non-programmers (<em class="emphasis">e.g.</em>, artists, game
+                 designers, etc.) that may need to run and administer servers.
+            </p>
+            <p>Almost all server tool functionality is also available via
+                 command-line utilities, which is useful when only system console access is
+                 available (<em class="emphasis">e.g.</em>, when remotely administering a server
+                 cluster via ssh).
+            </p>
+            <p>Where possible, documentation for the server tools is maintained as
+                 online help. For WebConsole, this means the Help link displayed in the
+                 navigation menu for each module. For command-line utilities, help is
+                 available via the --help switch.
+            </p>
+            <p>This chapter provides an overview of the suite of tools available. For
+                 detailed documentation, however, please refer to the online help.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_WebConsole"></a>3.1.&nbsp;WebConsole
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Located under <code class="filename">bigworld/tools/server/web_console</code> ,
+                      WebConsole provides a simple web interface to manage and monitor a
+                      BigWorld server. For details on how to install and run WebConsole, see the
+                      document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_tools_installation_guide/index.html" class="olink">Server Tools Installation Guide</a>.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4878"></a>3.1.1.&nbsp;Modules
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>WebConsole is functionally divided into units referred to as
+                           <em class="emphasis">Modules</em>. Each module in WebConsole has a separate
+                           top level menu item in the main navigation menu on the left hand side of
+                           the page.
+                  </p>
+                  <p>Complete documentation for each WebConsole module is provided as
+                           online help, accessible as a link on the left hand side of the
+                           WebConsole page.
+                  </p>
+                  <p>WebConsole is composed of the modules described below.</p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_WebConsole_ClusterControl"></a>3.1.1.1.&nbsp;ClusterControl
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>Allows users to start, stop, and restart the game
+                                             server.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Browse the active machines and users on the local
+                                             network.
+                              </p>
+                           </li>
+                           <li>
+                              <p>View and modify saved cluster configurations.</p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_WebConsole_Watchers"></a>3.1.1.2.&nbsp;Watchers
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>Allows users to view and modify Watcher values of active
+                                             server processes.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Generate pre-configured and user generated tabular reports
+                                             of watcher values across sets of server processes in a
+                                             cluster.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Define custom sets of watcher values for live
+                                             monitoring.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_WebConsole_LogViewer"></a>3.1.1.3.&nbsp;LogViewer
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>Allows users to view, filter, and search server message
+                                             logs.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Provides a real time / live view of server output.</p>
+                           </li>
+                           <li>
+                              <p>Summaries of per-user log usage.</p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_WebConsole_StatGrapher"></a>3.1.1.4.&nbsp;StatGrapher
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>Provides live and historic graphic views of server
+                                             statistics.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_WebConsole_PyConsole"></a>3.1.1.5.&nbsp;Python Console
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>Allows users to connect to the Python server of any Python
+                                             enabled process (<em class="emphasis">i.e.</em>, CellApp, BaseApp,
+                                             Bots).
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_WebConsole_Commands"></a>3.1.1.6.&nbsp;Commands
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>Provides access to a set of pre-defined functionality on
+                                             server processes that can be run from WebConsole as
+                                             required.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_WebConsole_Installation_And_Configuration"></a>3.1.2.&nbsp;Installation and Configuration
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>For detailed instructions on installing and configuring WebConsole
+                           please refer to the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_tools_installation_guide/index.html" class="olink">Server Tools Installation Guide</a>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_WebConsole_User_Admin"></a>3.1.3.&nbsp;User Administration
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The first time WebConsole is started you will need to add at least
+                           one user in order to operate a BigWorld server. To achieve this, from
+                           the front page of WebConsole, login with a username / password of
+                           <span class="literal">admin</span>. If you have never loaded the WebConsole
+                           homepage before, it should be visible at the url
+                           <span class="literal">http://<em class="replaceable"><code>hostname</code></em>:8080</span>,
+                           where <em class="replaceable"><code>hostname</code></em> is the network name of the
+                           machine you install WebConsole on.
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject" align="center"><img src="images/webconsole_admin_title.png" align="middle"></div>
+                  </div>
+                  <p>Once logged in you should be presented with a webpage similar to
+                           the following.
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject" align="center"><img src="images/webconsole_admin_main.png" align="middle"></div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_WebConsole_Admin_Add_New_User"></a>3.1.3.1.&nbsp;Adding A New User
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>To add a new user, click on the "Add New User" menu item on the
+                                left hand side of the page. You will then be presented with a form to
+                                input as follows:
+                     </p>
+                     <div class="informalfigure">
+                        <div class="mediaobject" align="center"><img src="images/webconsole_admin_add_user.png" align="middle"></div>
+                     </div>
+                     <p>The table below summarises the input fields providing sample
+                                input:
+                     </p>
+                     <div class="altrow">
+                        <table border="1" width="75%">
+                           <colgroup>
+                              <col width="33%">
+                              <col width="67%">
+                           </colgroup>
+                           <thead>
+                              <tr>
+                                 <th>Field</th>
+                                 <th>Description</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr>
+                                 <td>Username</td>
+                                 <td>The username that for the new user.</td>
+                              </tr>
+                              <tr>
+                                 <td>Password</td>
+                                 <td>The password that the new user will login with.</td>
+                              </tr>
+                              <tr>
+                                 <td>Confirm Password</td>
+                                 <td>The password from the previous field, retyped to ensure
+                                                    no mistake was made on entry.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Server User</td>
+                                 <td>
+                                    <p>The Linux user this account will be associated
+                                                       with. This will be the Linux user that the BigWorld server
+                                                       processes will be run as.
+                                    </p> 
+                                    <p>If you are uncertain of
+                                                       this field, please talk to your system administrator to find
+                                                       out what your Linux user account is.
+                                    </p>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                     <p>The following image shows a new user account
+                                <span class="literal">AliceB</span> being created and associated with the Linux
+                                user account <span class="literal">alice</span>.
+                     </p>
+                     <div class="informalfigure">
+                        <div class="mediaobject" align="center"><img src="images/webconsole_admin_add_user_alice.png" align="middle"></div>
+                     </div>
+                     <p>Once all the user information has been input, simply click the
+                                <span class="guibutton">Add User</span> button and you will be returned to the
+                                main user listing with the new user in the list.
+                     </p>
+                     <div class="informalfigure">
+                        <div class="mediaobject" align="center"><img src="images/webconsole_admin_main_alice.png" align="middle"></div>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_WebConsole_Admin_Flush_User_Mappings"></a>3.1.3.2.&nbsp;Flush User Mappings
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The Flush User Mappings menu option provides the ability for
+                                WebConsole to force all BWMachined instances in the network to forget
+                                their current cached user list. This feature is useful and sometimes
+                                necessary when adding users to a network information system such as
+                                LDAP which are sometimes used as account management systems.
+                     </p>
+                     <p>If you are having problems detecting a newly added user in your
+                                network, or are seeing an old user appear in your cluster display,
+                                flushing the user mapping will quite often help resolve the
+                                issue.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_WebConsole_Modes"></a>3.1.4.&nbsp;Production Mode vs Development Mode
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>WebConsole can be started using two methods, as a system wide
+                           service<sup>[<a name="d0e5068" href="#ftn.d0e5068">4</a>]</sup>, or from the command line.
+                  </p>
+                  <p>Generally, only developers working on modifying the web page
+                           templates or underlying code will run WebConsole from the command line.
+                           In order to achieve this, make sure that the current directory is
+                           <code class="filename">bigworld/tools/server/web_console</code>, then
+                           issue the command:
+                  </p><pre class="programlisting">$ ./start-web_console.py</pre><p>There are some minor operational differences when running
+                           WebConsole in command line mode vs as a system service:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>When run as a system daemon, WebConsole uses the configuration
+                                        file <code class="filename">prod.cfg</code>, which defines a production
+                                        environment mode.
+                           </p>
+                        </li>
+                        <li>
+                           <p>When run from the command line, WebConsole uses a development
+                                        environment configuration file called
+                                        <code class="filename">dev.cfg</code>.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Running in development mode leaves the web server in a state where
+                           an automatic restart is triggered if there are any changes to the
+                           template files or Python code it is using.
+                  </p>
+                  <p>The production configuration file does not exist by default in
+                           <code class="filename">bigworld/tools/server/web_console</code>, as it is
+                           partially generated during the installation process while using the
+                           <code class="filename">install_tools.py</code> script. The original production
+                           configuration file that the installation script uses is
+                           <code class="filename">bigworld/tools/server/install/web_console.cfg</code>.
+                  </p>
+                  <p>Both configuration files need to specify the database to use.
+                           Before running WebConsole, make sure that the appropriate configuration
+                           file has a line that looks like this:
+                  </p><pre class="programlisting">sqlobject.dburi="notrans_mysql://username:password@localhost:3306/bw_web_console"</pre><p><span class="citetitle">Specifying the database</span></p>
+                  <p>To modify the
+                           <code class="filename">bigworld/tools/server/install/web_console.cfg</code> file
+                           to a working configuration file, replace the line:
+                  </p><pre class="programlisting">###BW_SQLURI###</pre><p>with an <span class="literal">sqlobject.dburi</span> line as indicated
+                           above.
+                  </p>
+                  <p>For information regarding TurboGears configuration files and
+                           content, we recommend the TurboGears documentation website <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://docs.turbogears.org/1.0/Configuration" target="_top">http://docs.turbogears.org/1.0/Configuration</a>.
+                  </p>
+                  <p>If you have never run WebConsole before and choose to run it from
+                           the command line (as opposed to installing the system service), it is
+                           necessary to create a database for WebConsole within MySQL. To do this,
+                           connect to your MySQL database using the username and password that you
+                           have defined in <code class="filename">dev.cfg</code>, then issue the following
+                           command:
+                  </p><pre class="programlisting">CREATE DATABASE bw_web_console;</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_WebConsole_Customising"></a>3.1.5.&nbsp;Customising
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>As WebConsole is a convenient interface to your cluster
+                           environment, it may be useful to add new content to WebConsole that is
+                           unique to your companies requirements. To achieve this please refer to
+                           the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a> chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch34.html" class="olink"><i>Web Console</i></a>.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_MessageLogger"></a>3.2.&nbsp;Message Logger
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Message Logger is a process used for logging output from BigWorld
+                      processes within a network. This is primarily intended as a mechanism for
+                      logging output from server processes, however in a development environment
+                      it can be useful for game clients and other tools to send log messages as
+                      well. The source code for Message Logger can be located in <code class="filename">bigworld/src/server/tools/message_logger</code>,
+                      while its executable is found in <code class="filename">bigworld/tools/server/bin</code>. Message Logger is
+                      a stand alone Linux process that can be run on any machine in a BigWorld
+                      cluster that is running BWMachined.
+               </p>
+               <p>A suite of Python tools and libraries is also provided for accessing
+                      and manipulating logs that have been generated by Message Logger. These
+                      tools can be found in <code class="filename">bigworld/tools/server/message_logger</code>.
+               </p>
+               <p>Detailed documentation for the supported command line arguments is
+                      available as online help using the <code class="option">--help</code> option.
+               </p>
+               <p>When a server process, such as a CellApp, is started it performs a
+                      search of the network cluster it is operating within for all active
+                      Message Logger processes. Any output that is generated as a result of
+                      script <code class="function">print</code> statements or C++ calls to the message
+                      handlers (<span class="literal">INFO_MSG</span>, <span class="literal">ERROR_MSG</span>,
+                      etc....) are sent to all known Message Logger instances. Message Logger
+                      processes that are started after a server process will notify all running
+                      server components of their existence and commence logging of all
+                      subsequent messages.
+               </p>
+               <p>The BigWorld Client can also be configured to send messages to
+                      Message Logger. By default this is enabled in the Hybrid build and
+                      disabled in the Release build. The Consumer build logging options are
+                      controlled by a set of <span class="literal">#define</span>s in
+                      <code class="filename">src/lib/cstdmf/config.hpp</code>.
+               </p>
+               <p>The following values should be defined in the Consumer build to
+                      enable the Client to send log messages to Message Logger instances:
+               </p><pre class="programlisting">#define FORCE_ENABLE_MSG_LOGGING     1
+#define FORCE_ENABLE_DPRINTF         1
+#define FORCE_ENABLE_WATCHERS        1</pre><p>Messages from the client are by default sent as the
+                      <span class="literal">root</span> user (i.e., with a linux UID of 0). In order to
+                      associate logs generated from a Client with a specific user within a
+                      network, a Windows environment variable <code class="envar">UID</code> can be set.
+                      This variable should have a value corresponding with the user's Linux
+                      account user id. For example a developer Alice with a Linux account name
+                      of <span class="literal">aliceb</span> could discover her user id on Linux by
+                      logging in to her Linux account and typing the following command:
+               </p><pre class="programlisting">$ id
+uid=3592(aliceb) gid=501(UmbrellaCorp)</pre><p>Alice can then set a Windows environment variable of
+                      <code class="envar">UID</code> with the value <span class="literal">3592</span>. Any logs
+                      generated by Alice running the BigWorld Client will now be associated with
+                      her.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5217"></a>3.2.1.&nbsp;Configuration
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Except where overridden by the corresponding command line option,
+                           Message Logger reads its configuration from the file
+                           <code class="filename">bigworld/tools/server/message_logger/message_logger.conf</code>.
+                  </p>
+                  <p>The configuration file is in standard Windows INI file format, and
+                           supports the following options:
+                  </p>
+                  <div class="altrow">
+                     <table border="1" width="90%">
+                        <colgroup>
+                           <col width="33%">
+                           <col width="67%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Option Name</th>
+                              <th>Description</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>logdir</td>
+                              <td>The location of the top level directory to which Message
+                                               Logger will write its logs. This option can be either a relative
+                                               or an absolute path. If a relative path is specified, then it is
+                                               calculated relative to the location of the configuration
+                                               file.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td>segment_size</td>
+                              <td>Size (in bytes) at which the logger will automatically
+                                               roll the current log segment for a particular user.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td>default_archive</td>
+                              <td>File used by <code class="filename">mltar.py</code> when the
+                                               <code class="option">--default_archive</code> option is used. This file is
+                                               also inserted into Message Logger's logrotate script during
+                                               installation.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td>groups</td>
+                              <td>A comma separated list of machine group names. When
+                                               specified MessageLogger will only accept log messages
+                                               originating from machines that have a matching group name listed
+                                               in the <span class="literal">[Groups]</span> section of
+                                               <code class="filename">/etc/bwmachined.conf</code>. For more details see
+                                               <a href="ch03.html#xref_MessageLogger_Scalability" title="3.2.5.&nbsp;Production Scalability">Production Scalability</a>.
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5275"></a>3.2.2.&nbsp;File Format
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Message Logger generates log files in a binary format in order to
+                           make the best use of disk space as possible. In order to access the
+                           binary logs, two Python modules are provided:
+                  </p>
+                  <div class="altrow">
+                     <table border="1" width="90%">
+                        <colgroup>
+                           <col width="25%">
+                           <col width="75%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Python Module</th>
+                              <th>Description</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td><code class="filename">bwlog.so</code></td>
+                              <td>
+                                 <p>Location: <code class="filename">bigworld/tools/server/bin/Hybrid<em class="replaceable"><code>64</code></em></code></p>
+                                               
+                                 <p>A binary Python extension compiled from Message Logger
+                                                  source code.
+                                 </p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><code class="filename">message_log.py</code></td>
+                              <td>
+                                 <p>Location: <code class="filename">bigworld/tools/server/message_logger</code></p>
+                                               
+                                 <p>Python classes that simplify and extend the functionality
+                                                  exposed from <code class="filename">bwlog.so</code>.
+                                 </p>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <p>For examples on how to use these modules, browse the source code
+                           of the command-line message logger utilities described in <a href="ch03.html#xref_Command_Line_Utilities" title="3.2.3.&nbsp;Command Line Utilities">Command Line Utilities</a>.
+                  </p>
+                  <p>Message Logger generates logs in a two level directory structure.
+                           The top level directory contains files that are common to all users, and
+                           contains one sub directory per user. The files in the top level
+                           directory are:
+                  </p>
+                  <div class="altrow">
+                     <table border="1" width="90%">
+                        <colgroup>
+                           <col width="28%">
+                           <col width="72%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Filename</th>
+                              <th>Description</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td><code class="filename">component_names</code></td>
+                              <td>List of all distinct component names
+                                               (<em class="emphasis">i.e.</em>, CellApp, BaseApp, etc...) that have
+                                               sent messages to this logger. This is used to resolve numeric
+                                               component type IDs to names, when displaying log output.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><code class="filename">hostnames</code></td>
+                              <td>Mapping from IP addresses to hostnames. This is used for
+                                               resolving hostnames when displaying log output.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><code class="filename">strings</code></td>
+                              <td>List of all unique format strings that have been sent by
+                                               logging components, along with parser data for interpreting
+                                               arguments to each. This is used to reconstruct the log messages
+                                               from format string IDs and binary argument blobs.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><code class="filename">version</code></td>
+                              <td>Log format version. This is used to prevent accidentally
+                                               mixing two log formats.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><code class="filename">pid</code></td>
+                              <td>Process id of the active Message Logger process writing
+                                               logs to this directory. This is used by both the tools and
+                                               Message Logger to identify the process (if any) currently
+                                               generating logs.
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <p>Each user's sub directory has a file containing its UID, as well
+                           as the following files:
+                  </p>
+                  <div class="altrow">
+                     <table border="1" width="90%">
+                        <colgroup>
+                           <col width="28%">
+                           <col width="72%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Filename</th>
+                              <th>Description</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td><code class="filename">components</code></td>
+                              <td>A record of each individual process instance registered
+                                               with this logger.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><code class="filename">entries.<em class="replaceable"><code>&lt;timestamp&gt;</code></em></code>,
+                                               <code class="filename">args.<em class="replaceable"><code>&lt;timestamp&gt;</code></em></code></td>
+                              <td>
+                                 <p>A collection of log messages.</p> 
+                                 <p>The
+                                                  fixed length portion of each log message (time, component ID,
+                                                  etc...) is stored in the
+                                                  <code class="filename">entries.<em class="replaceable"><code>&lt;timestamp&gt;</code></em></code>
+                                                  file, while the variable-length portion of the entry
+                                                  (<em class="emphasis">i.e.</em>, arguments to printf) is stored in
+                                                  the corresponding
+                                                  <code class="filename">args.<em class="replaceable"><code>&lt;timestamp&gt;</code></em></code>
+                                                  file.
+                                 </p> 
+                                 <p>The variable length section data corresponds
+                                                  to an entry in the format string file
+                                                  <code class="filename">strings</code>.
+                                 </p>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Command_Line_Utilities"></a>3.2.3.&nbsp;Command Line Utilities
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The <code class="filename">bigworld/tools/server/message_logger</code>
+                           directory contains a variety of command line utilities providing the
+                           functionality of standard UNIX shell utilities for BigWorld message
+                           logs. Using these utilities you can operate on the binary logs using
+                           standard UNIX shell utilities and pipelines in the same way you can with
+                           ordinary text files.
+                  </p>
+                  <p>The following tools are provided:</p>
+                  <div class="altrow">
+                     <table border="1" width="75%">
+                        <colgroup>
+                           <col width="25%">
+                           <col width="75%">
+                        </colgroup>
+                        <thead>
+                           <tr>
+                              <th>Utility</th>
+                              <th>Description</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td><span><strong class="command">mlcat.py</strong></span></td>
+                              <td>Provides both <span><strong class="command">cat</strong></span> and <span><strong class="command">tail
+                                                     -f</strong></span> style of text log outputting.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><span><strong class="command">mlls.py</strong></span></td>
+                              <td>Displays information about log segments, such as start
+                                               and end times, entry counts, and sizes; for individual users or
+                                               all of them.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><span><strong class="command">mltar.py</strong></span></td>
+                              <td>Provides an easy way to select log segments from a user's
+                                               log and archive them, as well as all the required shared files
+                                               for viewing on another machine.
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><span><strong class="command">mlrm.py</strong></span></td>
+                              <td>Provides an easy way to clean up unwanted log
+                                               segments.
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <p>The detailed documentation for each utility is maintained as
+                           online help, which can be accessed via the <code class="option">--help</code>
+                           option.
+                  </p>
+                  <p>The following list provides some common examples of tasks you
+                           might wish to achieve using the Message Logger tools:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">mlcat.py
+                                              -f</span></em></p>
+                           <p>Watches live server logs.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">mlcat.py --around="Mon 22 Jan
+                                              2007 19:00:00" -u devuser</span></em></p>
+                           <p>Views output surrounding a log entry of interest for user
+                                        devuser.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">mltar.py -zcf bwsupport.tar.gz
+                                              --active-segment</span></em></p>
+                           <p>Collects logs to email to support.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">mltar.py -u &lt;uid&gt; -zcf
+                                              bwsupport.tar.gz --active-segment</span></em></p>
+                           <p>Collects logs for the Unix user whose uid is <span class="literal">uid
+                                           </span>to email to support.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">mlls.py -u
+                                              gameuser</span></em></p>
+                           <p>Displays all log segments for user gameuser, to determine the
+                                        segment with entries of interest.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">mlrm.py
+                                              --days=30</span></em></p>
+                           <p>Removes logs over a month old.</p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">mltar.py -xf lastweek.tar.gz -o
+                                              samplelogs</span></em></p>
+                           <p>Extracts the archive <code class="filename">lastweek.tar.gz</code> to
+                                        the directory <code class="filename">samplelogs</code>.
+                           </p>
+                           <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                              <h3 class="title">Note</h3>
+                              <p>Since the archives are compressed tar files, you can use tar
+                                             to achieve the same results if you find that easier, as
+                                             illustrated below:
+                              </p><pre class="programlisting">$ mkdir samplelogs
+$ tar -zxf lastweek.tar.gz -C samplelogs</pre></div>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">mltar.py
+                                              -xd</span></em></p>
+                           <p>Extracts the latest archive back to the default logdir.</p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5562"></a>3.2.4.&nbsp;Automatic Log Archiving
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p><span class="literal">The Linux logrotate scripts </span>are used to rotate
+                           (stop writing an old log file and start writing to a new file), archive
+                           (backup the old log file), and delete (log files deemed to be past an
+                           expiry time) log files on a daily basis, which can assist in conserving
+                           disk space. A logrotate configuration file,
+                           <code class="filename">/etc/logrotate.d/bw_message_logger</code>, is set up as
+                           part of the Server Tools installation. For more information about
+                           <span class="literal">logrotate</span>, please see the
+                           <span class="literal">logrotate</span> manpage:
+                  </p><pre class="programlisting">$ man 8 logrotate</pre><p>There are two issues to consider when customising the
+                           <span class="literal">logrotate</span>:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Log rotation can put a load on the logging machine.</p>
+                        </li>
+                        <li>
+                           <p>If rotation is configured to occur more frequently, for
+                                        example the rotation is changed to occur on hourly basis, then in
+                                        this case the <code class="code">rotate</code> option should be updated to 168
+                                        (i.e. 7 x 24) to ensure that the log files cover the same period of
+                                        time.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_MessageLogger_Scalability"></a>3.2.5.&nbsp;Production Scalability
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In order to assist Message Logger coping with heavy network and
+                           disk load in production environments, Message Logger supports logging
+                           subsets of machines within a server cluster. This is achieved by
+                           assigning a Message Logger process a list of machine groups that it
+                           should accept logs from, as well as assigning every machine in the
+                           cluster to a machine group. Both Message Logger and cluster machines may
+                           be assigned to multiple machine groups. In order to enable this feature
+                           both MessageLogger and BWMachined will need to be configured correctly
+                           throughout your cluster environment.
+                  </p>
+                  <p>To limit a Message Logger process to only accept logs from a set
+                           of machine groups requires adding a comma separated list of group names
+                           to a <span class="literal">groups</span> entry in the file
+                           <code class="filename">bigworld/tools/server/message_logger/message_logger.conf</code>.
+                           For example, to assign a MessageLogger process to only accept logs from
+                           the machine groups <span class="literal">QA_Cluster1</span> and
+                           <span class="literal">QA_Cluster2</span> the following entry would be placed in
+                           <code class="filename">message_logger.conf</code>:
+                  </p><pre class="programlisting">[message_logger]
+...
+groups = QA_Cluster1, QA_Cluster2</pre><p>MessageLogger needs to be restarted in order to detect these
+                           changes, however once restarted an entry should appear in the
+                           MessageLogger log file
+                           <code class="filename">/var/log/bigworld/message_logger.log</code> similar to the
+                           following:
+                  </p><pre class="programlisting">2008-11-12 11:37:20: INFO: Logger::init: MessageLogger machine groups specified. Only accepting logs from: QA_Cluster1, QA_Cluster2</pre><p>For details on configuring BWMachined see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/index.html" class="olink">Server Installation Guide</a> section <span xmlns:xlink="http://www.w3.org/1999/xlink" class="olink">????</span>.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>Currently in order to view the logs generated when using the
+                                machine group log separation will require either separate
+                                installations of WebConsole, or manual searching of the files with the
+                                <code class="filename">mlcat.py</code> tool on the host where MessageLogger is
+                                running. This limitation will be addressed in a future release of
+                                BigWorld.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_StatLogger"></a>3.3.&nbsp;StatLogger
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Written in Python, StatLogger is a daemon process that runs in the
+                      background, polling all servers on the network at regular intervals (by
+                      default, every 2 seconds). Any computer running BWMachined will be
+                      automatically discovered, along with any BigWorld components running on
+                      that machine. StatLogger collects and logs information for every server
+                      component discovered, regardless of which user is running them.
+               </p>
+               <p>Statistics for machines and processes are collected in 2
+                      ways:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Communication with BWMachined daemons running on each
+                                   computer.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Requests made directly to the processes via the Watcher
+                                   mechanism.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Once collected, StatLogger logs this data to a MySQL database. For
+                      details on the structure of the database, see <a href="ch03.html#xref_Statistics_Database_Structure" title="3.3.5.1.&nbsp;Database Structure">Database Structure</a>.
+               </p>
+               <p>The main objective of StatLogger is to collect and store data in a
+                      format that can be used by StatGrapher<sup>[<a name="d0e5658" href="#ftn.d0e5658">5</a>]</sup>, which is the visualisation counterpart to StatLogger, and
+                      presents the data in a graphical format.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5664"></a>3.3.1.&nbsp;Requirements
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The list below describes the requirement for running
+                           StatLogger:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">CPU</em></p>
+                           <p>On an Athlon 2700+, monitoring 230 processes (which includes
+                                        200 CellApps) with StatLogger consumes roughly a constant 15% of
+                                        available CPU time. The MySQL daemon also experienced a constant
+                                        load increase of 5.5% due to the large amount of database queries
+                                        being generated.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Disk</em></p>
+                           <p>Due to the amount of data being collected, StatLogger can
+                                        potentially consume a lot of disk space. The rate at which disk
+                                        space is consumed depends on the amount of machines and server
+                                        process for which statistics are collected. 4GB is recommended for a
+                                        large amount of processes (around 250) and machines over a month.
+                                        The disk space consumption rate of a single log gets smaller the
+                                        longer a log is run, since StatLogger stores older data in lower
+                                        detail than newer data.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Network</em></p>
+                           <p>StatLogger's network requirements depend on the number of
+                                        server machines and components present. It can potentially require a
+                                        large amount of network throughput. For example, 230 processes and 9
+                                        server machines require 100Kb/s of downstream traffic, and 20kb/s of
+                                        upstream traffic, while 6 processes (<em class="emphasis">i.e.</em>, for
+                                        a minimal server) and 9 server machines require 4kb/s of downstream
+                                        and 2kb/s of upstream traffic.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">RAM</em></p>
+                           <p>Memory requirements are low, as statistics are immediately
+                                        logged to the database, rather than being kept in memory. Tests
+                                        indicate an average usage of memory between 7MB to 10MB, regardless
+                                        of the amount of processes running.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Software</em></p>
+                           <p>MySQL 4.1+ and Python 2.4 with MySQLdb.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>StatLogger must be run on the same local network as the BigWorld
+                           server processes that it is intended to monitor due to the manner in
+                           which machine and server component discovery occurs.
+                  </p>
+                  <p>StatLogger requires a valid MySQL user with access to create
+                           databases. Normally the creation and configuration of this MySQL user is
+                           handled during the tools installation process<sup>[<a name="d0e5707" href="#ftn.d0e5707">6</a>]</sup>, but an existing database user can be can used instead, by
+                           manually editing the configuration file. For details, see <a href="ch03.html#xref_StatLogger_Configuration" title="3.3.4.&nbsp;Configuration">Configuration</a>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5715"></a>3.3.2.&nbsp;Output
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>StatLogger outputs various status messages describing which
+                           machines and processes it discovers or loses (<em class="emphasis">i.e.</em>,
+                           from the process or machine shutting down) from the network, each
+                           prefixed with a timestamp.
+                  </p>
+                  <p>When running StatLogger manually from the command line the default
+                           is to display this information to the terminal on which it is run unless
+                           the <code class="option">-o</code> option is specified.
+                  </p>
+                  <p>When installed as a daemon, these messages output to the log file
+                           <code class="filename">/var/log/bigworld/stat_logger.log</code> by default. This
+                           log file is specified by the <code class="envar">LOG_FILE</code> variable in
+                           <code class="filename">/etc/init.d/bw_stat_logger</code>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_StatLogger_Data_Collection_And_Aggregation"></a>3.3.3.&nbsp;Data Collection and Aggregation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>As Stat Logger is responsible for collecting a constant stream of
+                           data from an arbitrarily large BigWorld server cluster for historical
+                           tracking it is necessary to prevent the database size from growing out
+                           of proportion. In order to achieve this Stat Logger implements a
+                           mechanism of aggregating and merging data from high resolution time
+                           periods into lower resolution time scales the older the data becomes.
+                           This approach allows high resolution data to be maintained for recent
+                           events when diagnostics are most likely to occur but allows a broad view
+                           of server performance over a long scale to be maintained. More
+                           information on customising how StatLogger aggregates data can be found
+                           below in <a href="ch03.html#xref_Aggregation_Window_Configuration" title="3.3.4.2.&nbsp;Aggregation Window Configuration">Aggregation Window Configuration</a>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_StatLogger_Configuration"></a>3.3.4.&nbsp;Configuration
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Located in StatLogger's directory, the preference file
+                           <code class="filename">preferences.xml</code> is used to configure the script.
+                           The preference file can be used to configure:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Database connection details.</p>
+                        </li>
+                        <li>
+                           <p>Watcher values to collect from processes.</p>
+                        </li>
+                        <li>
+                           <p>Aggregation preferences.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Apart from the database user configuration, in most cases the
+                           provided standard settings should be sufficient for development and
+                           production environments.
+                  </p>
+                  <p>The preferences.xml file configures database setup options, as
+                           well as what data StatLogger should collect from the server components
+                           and machines.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Option_Configuration"></a>3.3.4.1.&nbsp;Database Connection Details
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">&lt;options&gt;</span> section of the
+                                preferences file contains the following tags:
+                     </p>
+                     <div class="altrow">
+                        <table border="1" width="90%">
+                           <colgroup>
+                              <col width="28%">
+                              <col width="72%">
+                           </colgroup>
+                           <thead>
+                              <tr>
+                                 <th>Option Name</th>
+                                 <th>Description</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr>
+                                 <td>dbHost</td>
+                                 <td>Hostname or IP address of the MySQL database server
+                                                    that will contain the log databases.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>dbUser</td>
+                                 <td>Database user with which StatLogger (and StatGrapher)
+                                                    will access the database. For details on StatGrapher, see
+                                                    <a href="ch03.html#xref_WebConsole_StatGrapher" title="3.1.1.4.&nbsp;StatGrapher">StatGrapher</a>.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>dbPass</td>
+                                 <td>Database user's password.</td>
+                              </tr>
+                              <tr>
+                                 <td>dbPort</td>
+                                 <td>Port on which the MySQL server is listening for
+                                                    connections.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>dbPrefix</td>
+                                 <td>Prefix of database names which StatLogger can
+                                                    accesses.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>sampleTickInterval</td>
+                                 <td>Interval in seconds at which StatLogger will poll the
+                                                    components and store statistics (decimals are supported).
+                                                    Generally this value does not need to be changed, however if
+                                                    it does, then it should not be any smaller than 2 seconds (the
+                                                    default recommended value).
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Aggregation_Window_Configuration"></a>3.3.4.2.&nbsp;Aggregation Window Configuration
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">&lt;collect/aggregation/window&gt;</span>
+                                section configures the aggregation windows that will be stored in the
+                                database.
+                     </p>
+                     <p>As outlined in <a href="ch03.html#xref_StatLogger_Data_Collection_And_Aggregation" title="3.3.3.&nbsp;Data Collection and Aggregation">Data Collection and Aggregation</a>,
+                                StatLogger has been designed to stores multiple versions of data at
+                                varying levels of detail with the idea is that long term data does not
+                                need to be stored at the same level of detail as the more recent
+                                data.
+                     </p>
+                     <p>StatLogger requires at least one aggregation window setting in
+                                this section with a <span class="literal">samplePeriodTicks</span> value of
+                                1.
+                     </p>
+                     <p>Multiple aggregation window setting takes the form of:</p><pre class="programlisting">&lt;preferences&gt;
+  ...
+  &lt;collect&gt;
+    &lt;aggregation&gt;
+      *&lt;window&gt;
+         &lt;samples&gt;           &lt;num_samples_in_this_win&gt;   &lt;/samples&gt;
+         &lt;samplePeriodTicks&gt; &lt;num_of_ticks_per_sec&gt;      &lt;/samplePeriodTicks&gt;
+       &lt;/window&gt;
+      ...</pre><p><span class="citetitle">Multiple aggregation window settings
+                                   (Grammar)</span></p>
+                     <p>There are some constraints that must be adhered to when creating
+                                this list of aggregation window settings:
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p>There must always be an aggregation window with
+                                             samplePeriodTicks value of 1.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Aggregation window settings must be ordered in ascending
+                                             order by their samplePeriodTicks value, with the smallest values
+                                             first.
+                              </p>
+                           </li>
+                           <li>
+                              <p>Each successive aggregation window should cover a larger
+                                             range of ticks than the previous one. The tick range is calculated
+                                             by multiplying samples value by the samplePeriodTicks value
+                                             (<em class="emphasis">i.e.</em>, number of samples x ticks consolidated
+                                             into one sample).
+                              </p>
+                           </li>
+                           <li>
+                              <p>Each successive samplePeriodTicks value must be a multiple
+                                             of the samplePeriodTicks value from the previous window.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>These aggregation windows are used directly by StatGrapher, so
+                                it is advised not to have large discrepancies between the
+                                <span class="literal">samplePeriodTick</span> values of successive aggregation
+                                windows. Furthermore, the final aggregation window setting should not
+                                have a large samples value, as this may place a heavy load on both
+                                StatLogger and StatGrapher.
+                     </p>
+                     <p>An example aggregation section is shown below, with a samples
+                                value of 365:
+                     </p><pre class="programlisting">&lt;preferences&gt;
+  ...
+  &lt;collect&gt;
+    &lt;aggregation&gt;
+
+      &lt;!-- Every sample (2secs) in most recent 24hrs. 43200 samples --&gt;
+      &lt;window&gt;
+        &lt;samples&gt;           43200 &lt;/samples&gt;
+        &lt;samplePeriodTicks&gt; 1     &lt;/samplePeriodTicks&gt;
+      &lt;/window&gt;
+
+      &lt;!-- Every 10th sample (20secs) in most recent 48hrs. 8760samples --&gt;
+      &lt;window&gt;
+        &lt;samples&gt;           8760  &lt;/samples&gt;
+        &lt;samplePeriodTicks&gt; 10    &lt;/samplePeriodTicks&gt;
+      &lt;/window&gt;
+
+      &lt;!-- Every 150th sample (5mins) in most recent 30 days. 8760 samples --&gt;
+      &lt;window&gt;
+        &lt;samples&gt;           8760  &lt;/samples&gt;
+        &lt;samplePeriodTicks&gt; 150   &lt;/samplePeriodTicks&gt;
+      &lt;/window&gt;
+
+      &lt;!-- Every 1800th sample (60mins) in most recent 365 days. 8760 samples --&gt;
+      &lt;window&gt;
+        &lt;samples&gt;           8760  &lt;/samples&gt;
+        &lt;samplePeriodTicks&gt; 1800  &lt;/samplePeriodTicks&gt;
+      &lt;/window&gt;
+
+      &lt;!-- Every 43200th sample (1day) in most recent 365 days. 365 samples --&gt;
+      &lt;window&gt;
+        &lt;samples&gt;           365   &lt;/samples&gt;
+        &lt;samplePeriodTicks&gt; 43200 &lt;/samplePeriodTicks&gt;
+      &lt;/window&gt;
+    &lt;/aggregation&gt;
+   ...</pre><p><span class="citetitle">Multiple aggregation window settings
+                                   (Example)</span></p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e5875"></a>3.3.4.3.&nbsp;Machine Statistic Configuration
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">&lt;collect/machineStatisticList&gt;</span>
+                                section is similar to the <span class="literal">statisticList</span><sup>[<a name="d0e5885" href="#ftn.d0e5885">7</a>]</sup> and <span class="literal">allProcessStatisticList</span><sup>[<a name="d0e5893" href="#ftn.d0e5893">8</a>]</sup> sections, except in that watcher values are not
+                                supported since machines do not have a Watcher interface. The
+                                <span class="literal">&lt;valueAt&gt;</span> settings only support strings
+                                representing members of the <code class="classname">Machine</code> class
+                                defined in
+                                <code class="filename">bigworld/tools/server/pycommon/machine.py</code>.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Generic_Process_Statistic_Configuration"></a>3.3.4.4.&nbsp;Generic Process Statistic Configuration
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">&lt;collect/allProcessStatisticList&gt;</span>
+                                section is similar to the <span class="literal">statisticList</span><sup>[<a name="d0e5918" href="#ftn.d0e5918">9</a>]</sup> section, except that its statistics are regarded as
+                                common to all processes being monitored <em class="emphasis">i.e.</em>,
+                                those specified in the <span class="literal">&lt;processList&gt;</span><sup>[<a name="d0e5929" href="#ftn.d0e5929">10</a>]</sup> section.
+                     </p>
+                     <p>It is recommended that any watcher values used in this section
+                                are supported by all processes being monitored, although StatLogger
+                                will store empty values for processes that do not support a watcher
+                                value.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Process_Configuration"></a>3.3.4.5.&nbsp;Process Configuration
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The <span class="literal">&lt;collect/processList/process&gt;</span>
+                                section configures the statistics that will be collected for each
+                                process. There must be one process section for each server component
+                                to be monitored.
+                     </p>
+                     <p>The process section contains the following tags:</p>
+                     <div class="altrow">
+                        <table border="1" width="75%">
+                           <colgroup>
+                              <col width="25%">
+                              <col width="75%">
+                           </colgroup>
+                           <thead>
+                              <tr>
+                                 <th>Tag Name</th>
+                                 <th>Description</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr>
+                                 <td>name</td>
+                                 <td>Display name for the process type.</td>
+                              </tr>
+                              <tr>
+                                 <td>matchtext</td>
+                                 <td>Name of the component type's executable. Value must be
+                                                    in lowercase, like the executable names.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>statisticList</td>
+                                 <td>List of statistics to be collected for this process by
+                                                    StatLogger<sup>[<a name="d0e5975" href="#ftn.d0e5975">a</a>]</sup>.
+                                 </td>
+                              </tr>
+                           </tbody>
+                           <tbody class="footnotes">
+                              <tr>
+                                 <td colspan="2">
+                                    <div class="footnote">
+                                       <p><sup>[<a name="ftn.d0e5975" href="#d0e5975">a</a>] </sup>For details see <a href="ch03.html#xref_Process_Statistic_Configuration" title="3.3.4.6.&nbsp;Process Statistic Configuration">Process Statistic Configuration</a>.
+                                       </p>
+                                    </div>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                     <p>An example process section is shown below:</p><pre class="programlisting">&lt;preferences&gt;
+  ...
+  &lt;collect&gt;
+    ...
+    &lt;processList&gt;
+      &lt;process&gt;
+        &lt;name&gt;      CellApp &lt;/name&gt;
+        &lt;matchtext&gt; cellapp &lt;/name&gt;
+        &lt;statisticList&gt;
+          ...
+        &lt;/statisticList&gt;
+      &lt;/process&gt;
+      ...</pre><p><span class="citetitle">Example process configuration</span></p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Process_Statistic_Configuration"></a>3.3.4.6.&nbsp;Process Statistic Configuration
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The
+                                <span class="literal">&lt;collect/processList/process/statisticList/statistic&gt;</span>
+                                section specifies the statistics that must be collected for each
+                                process.
+                     </p>
+                     <p>The statistic section contains the following tags:</p>
+                     <div class="altrow">
+                        <table border="1">
+                           <colgroup>
+                              <col width="25%">
+                              <col width="75%">
+                           </colgroup>
+                           <thead>
+                              <tr>
+                                 <th>Tag Name</th>
+                                 <th>Description</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr>
+                                 <td>name</td>
+                                 <td>Display name for the statistic type.</td>
+                              </tr>
+                              <tr>
+                                 <td>valueAt</td>
+                                 <td>Where to retrieve the values from. There are two
+                                                    distinct sources of information, depending on the first
+                                                    character of this tag's value, see the section <a href="ch03.html#xref_StatLogger_valueAt" title="3.3.4.6.1.&nbsp;valueAt Properties">valueAt Properties</a> for details.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>maxAt</td>
+                                 <td>This value is not explicitly used in StatLogger,
+                                                    however it is used by StatGrapher to determine the scale of
+                                                    the graph.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>type</td>
+                                 <td>Current unused.</td>
+                              </tr>
+                              <tr>
+                                 <td>consolidate</td>
+                                 <td>
+                                    <p>Consolidation function to use when moving data up
+                                                       an aggregation window.
+                                    </p> 
+                                    <p>Possible values are:
+                                                       <span class="literal">MAX</span>, <span class="literal">MIN</span>, and
+                                                       <span class="literal">AVG</span>.
+                                    </p> 
+                                    <p><em class="emphasis">Example</em>: We consolidate four data
+                                                       samples at 4 seconds per sample into the next aggregation
+                                                       window, which stores data at 16 seconds per sample. The data
+                                                       represents CPU load consumed by a process. The
+                                                       <span class="literal">consolidate</span> value is specified as
+                                                       <span class="literal">AVG</span>, so StatLogger averages the four data
+                                                       samples, then store this value as a single value in the higher
+                                                       aggregation window.
+                                    </p>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>display</td>
+                                 <td>Contains properties that influence the StatGrapher
+                                                    display of this statistics.
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                     <p>An example statisticList section is shown below:</p><pre class="programlisting">&lt;preferences&gt;
+  ...
+  &lt;collect&gt;
+    ...
+    &lt;processList&gt;
+      &lt;process&gt;
+        &lt;name&gt;      CellApp &lt;/name&gt;
+        &lt;matchtext&gt; cellapp &lt;/name&gt;
+        &lt;statisticList&gt;
+          &lt;statistic&gt;
+            &lt;name&gt;        Cell Load                &lt;/name&gt;
+            &lt;valueAt&gt;     /load                    &lt;/valueAt&gt;
+            &lt;maxAt&gt;       1.0                      &lt;/maxAt&gt;
+            &lt;logicalMax&gt;  None                     &lt;/logicalMax&gt;
+            &lt;type&gt;        FLOAT                    &lt;/type&gt;
+            &lt;consolidate&gt; AVG                      &lt;/consolidate&gt;
+            &lt;display&gt;
+              &lt;colour&gt;    #FF6600                  &lt;/colour&gt;
+              &lt;show&gt;      true                     &lt;/show&gt;
+              &lt;description&gt;      
+                  The load of this CellApp.
+              &lt;/description&gt;
+            &lt;/display&gt;
+          &lt;/statistic&gt;
+          &lt;statistic&gt;
+            &lt;name&gt;        Num Entities Ever        &lt;/name&gt;
+            &lt;valueAt&gt;     /stats/totalEntitiesEver &lt;/valueAt&gt;
+            &lt;maxAt&gt;       10000.0                  &lt;/maxAt&gt;
+            &lt;type&gt;        FLOAT                    &lt;/type&gt;
+            &lt;consolidate&gt; MAX                      &lt;/consolidate&gt;
+            &lt;display&gt;
+              &lt;colour&gt;    #663366                  &lt;/colour&gt;
+              &lt;show&gt;      false                    &lt;/show&gt;
+              &lt;description&gt;      
+                  The number of entities created on the CellApp since server startup.
+              &lt;/description&gt;
+            &lt;/display&gt;
+          &lt;/statistic&gt;
+          ...</pre><p><span class="citetitle">Process statistic configuration &#8212;
+                                   Example</span></p>
+                     <div class="section" lang="en">
+                        <div class="titlepage">
+                           <div>
+                              <div>
+                                 <h5 class="title"><a name="xref_StatLogger_valueAt"></a>3.3.4.6.1.&nbsp;valueAt Properties
+                                 </h5>
+                              </div>
+                           </div>
+                        </div>
+                        <p>The behaviour of the <span class="literal">valueAt</span> tag changes
+                                     based on the first character of the string. If first character is a
+                                     slash '<span class="literal">/</span>' <span class="literal">valueAt</span> will be
+                                     interpreted as a watcher path. The best way to list the watchers
+                                     that can be graphed is via the WebConsole's ClusterControl
+                                     module<sup>[<a name="d0e6086" href="#ftn.d0e6086">11</a>]</sup>.
+                        </p>
+                        <p>Any single scalar value present in ClusterControl can be added
+                                     to StatGrapher, including any customer watcher values added within
+                                     your own game code.
+                        </p>
+                        <p>If the first character is not a slash, the
+                                     <span class="literal">valueAt</span> string is treated as referring to a
+                                     member a <code class="classname">Process</code> class instance as found in
+                                     <code class="filename">bigworld/tools/server/pycommon/process.py</code>.
+                                     Strictly speaking, <span class="literal">valueAt</span> is
+                                     <code class="function">eval</code>'ed against the
+                                     <code class="classname">Process</code> object which enables slightly more
+                                     flexibility than just being able to reference class members.
+                        </p>
+                        <p><em class="emphasis">Examples</em>:
+                        </p>
+                        <div class="altrow">
+                           <table border="1" width="80%">
+                              <colgroup>
+                                 <col width="28%">
+                                 <col width="72%">
+                              </colgroup>
+                              <thead>
+                                 <tr>
+                                    <th>valueAt</th>
+                                    <th>Interpretation</th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 <tr>
+                                    <td><span class="literal">/stats/numInAoI</span></td>
+                                    <td>Watcher path of <em class="replaceable"><code>&lt;process
+                                                               type&gt;</code></em>:<span class="literal">/stats/numInAoI</span></td>
+                                 </tr>
+                                 <tr>
+                                    <td><span class="literal">mem</span></td>
+                                    <td>Evaluated to
+                                                         <code class="classname">Process</code><code class="varname">.mem</code>, which
+                                                         retrieves the value of memory usage of a process.
+                                    </td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                        </div>
+                        <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                           <h3 class="title">Note</h3>
+                           <p>Caution is required with this type of value as it is
+                                          possible to use a function call that changes the state of the
+                                          process (<em class="emphasis">e.g.</em>, causing a process to
+                                          shutdown). It is highly unlikely that this will occur by accident,
+                                          unless the exact function call is entered in the
+                                          <span class="literal">valueAt</span> setting.
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e6162"></a>3.3.4.7.&nbsp;Further Notes on Configuration
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The configuration file directly affects the database structure
+                                used for storing the statistics. If the collect section of the
+                                configuration file is changed, then StatLogger will detect the change
+                                when it is next run, and will subsequently create a new statistics
+                                database from scratch, in order to accommodate the new
+                                structure.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6167"></a>3.3.5.&nbsp;Database
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>StatLogger uses two active databases during its operation, however
+                           over an installation's life multiple databases may be created as
+                           StatLogger options are modified.
+                  </p>
+                  <p>The two active databases required by StatLogger are:</p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Statistics database associated with a unique preference
+                                        configuration.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Meta database for tracking all statistic databases known by
+                                        StatLogger.
+                           </p>
+                        </li>
+                     </ol>
+                  </div>
+                  <p>By default, the meta database is named
+                           <span class="literal">bw_stat_log_info</span> and contains a single table called
+                           <span class="literal">bw_stat_log_databases</span>. The
+                           <span class="literal">bw_stat_log_databases</span> table stores the names of all
+                           the known statistics databases. The meta database is always created if
+                           it does not exist in the MySQL server.
+                  </p>
+                  <p>The statistics databases by default are named
+                           <span class="literal">bw_stat_log_data<em class="replaceable"><code>&lt;n&gt;</code></em></span>,
+                           where <span class="literal"><em class="replaceable"><code>&lt;n&gt;</code></em></span> is the
+                           incremental database number. Users can choose to create statistics
+                           databases with specific names using the <code class="option">-n</code> option when
+                           running StatLogger.
+                  </p>
+                  <p>New statistics databases are created in the following
+                           situations:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>There are no statistics databases in the MySQL server.</p>
+                        </li>
+                        <li>
+                           <p>The preferences file was structurally changed, which causes a
+                                        new statistic database to be created. For details on the
+                                        <code class="filename">preferences.xml</code> file, see <a href="ch03.html#xref_StatLogger_Configuration" title="3.3.4.&nbsp;Configuration">Configuration</a>.
+                           </p>
+                        </li>
+                        <li>
+                           <p>StatLogger was started with the <code class="option">-n
+                                           <em class="replaceable"><code>&lt;database_name&gt;</code></em></code>
+                                        command-line option, and there was no statistic database with that
+                                        name in the MySQL server.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>There is typically no need to create new statistics databases
+                           unless isolated sets of statistics are needed. This may occur when
+                           performing tests with the BigWorld server. Once StatLogger has been
+                           configured to suit your environment only one statistics database should
+                           be needed.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Statistics_Database_Structure"></a>3.3.5.1.&nbsp;Database Structure
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Below is an overview of the tables in a statistics database.
+                                This is intended as a quick reference for locating data within the
+                                database. For a comprehensive understanding of how the data is used
+                                the source code is considered to be the best reference.
+                     </p>
+                     <div class="altrow">
+                        <table border="1" width="95%">
+                           <colgroup>
+                              <col width="33%">
+                              <col width="67%">
+                           </colgroup>
+                           <thead>
+                              <tr>
+                                 <th>Table Name</th>
+                                 <th>Description</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr>
+                                 <td><span class="literal">pref_processes</span></td>
+                                 <td>
+                                    <p>Process preferences as specified in the
+                                                       configuration file's
+                                                       <span class="literal">&lt;collect/processList&gt;</span> section. For
+                                                       details, see <a href="ch03.html#xref_Process_Configuration" title="3.3.4.5.&nbsp;Process Configuration">Process Configuration</a>.
+                                    </p>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td><span class="literal">pref_statistics</span></td>
+                                 <td>Statistic preferences specified in configuration
+                                                    file.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td><span class="literal">seen_machines</span></td>
+                                 <td>Machines observed while StatLogger was running.</td>
+                              </tr>
+                              <tr>
+                                 <td><span class="literal">seen_processes</span></td>
+                                 <td>Processes observed while StatLogger was
+                                                    running.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td><span class="literal">seen_users</span></td>
+                                 <td>Users observed while StatLogger was running.</td>
+                              </tr>
+                              <tr>
+                                 <td><span class="literal">stat_<em class="replaceable"><code>&lt;proc&gt;</code></em>_lvl_<em class="replaceable"><code>&lt;lvl&gt;</code></em></span></td>
+                                 <td>Statistics collected for processes of type
+                                                    <span class="literal"><em class="replaceable"><code>&lt;proc&gt;</code></em></span>,
+                                                    with <span class="literal"><em class="replaceable"><code>&lt;lvl&gt;</code></em></span>
+                                                    index of aggregation.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td><span class="literal">stat_machines_level_<em class="replaceable"><code>&lt;lvl&gt;</code></em></span></td>
+                                 <td>Statistics collected for machines with
+                                                    <span class="literal"><em class="replaceable"><code>&lt;lvl&gt;</code></em></span>
+                                                    index of aggregation. The higher the aggregation level, the
+                                                    lower the resolution of the data being stored in that
+                                                    table.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td><span class="literal">std_aggregation_windows</span></td>
+                                 <td>Aggregation level details specified in configuration
+                                                    file's collect/aggregation section.
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td><span class="literal">std_info</span></td>
+                                 <td>
+                                    <p><span class="literal">sampleTickInterval</span> specified
+                                                       in the configuration file's <span class="literal">&lt;options&gt;</span>
+                                                       section. For details, see <a href="ch03.html#xref_Option_Configuration" title="3.3.4.1.&nbsp;Database Connection Details">Database Connection Details</a>.
+                                    </p> 
+                                    <p>Database
+                                                       structure version (Used internally by
+                                                       StatLogger).
+                                    </p>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td><span class="literal">std_session_times</span></td>
+                                 <td>Start and end times of when StatLogger was run.</td>
+                              </tr>
+                              <tr>
+                                 <td><span class="literal">std_tick_times</span></td>
+                                 <td>Timestamps of the start of each interval.</td>
+                              </tr>
+                              <tr>
+                                 <td><span class="literal">std_touch_time</span></td>
+                                 <td>
+                                    <p>The last time the database was written to, in
+                                                       database local time.
+                                    </p> 
+                                    <p>This value is only used by
+                                                       StatGrapher regardless of whether StatLogger is currently
+                                                       logging to this database or not.
+                                    </p>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Server_Command_Line_Utilities"></a>3.4.&nbsp;Server Command-Line Utilities
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_control_cluster_py"></a>3.4.1.&nbsp;Control Cluster
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Location:
+                           <code class="filename">bigworld/tools/server/control_cluster.py</code></p>
+                  <p>Control Cluster is a command line tool for managing a BigWorld
+                           cluster from a text only interface.
+                  </p>
+                  <p>For detailed information on all the available commands, please
+                           refer to the Control Cluster help by using the <code class="option">--help</code>
+                           option.
+                  </p><pre class="programlisting">$ ./control_cluster.py --help</pre><p>For detailed help information on a specific command simply provide
+                           the command name after the <code class="option">--help</code> option. For
+                           example:
+                  </p><pre class="programlisting">$ ./control_cluster.py --help getmany
+getmany &lt;processes&gt; [watcher-path]
+
+   Queries the specified watcher path on all processes of the specified type
+   currently active in the cluster. The path can contain '*' wildcards.</pre><p>Control Cluster provides functionality through a number of
+                           commands that can be used to interact within a BigWorld server
+                           environment. The commands can be discussed in terms of four functional
+                           areas.
+                  </p>
+                  <div class="variablelist">
+                     <dl>
+                        <dt><span class="term">Server Commands</span></dt>
+                        <dd>
+                           <p>Commands that operate on an entire server configuration to
+                                          either modify or report its current state. This includes starting
+                                          and stopping a server, saving the current server layout for reuse
+                                          and displaying the current server configuration on the command
+                                          line.
+                           </p>
+                           <p>As server commands require interacting with a specific
+                                          server instance, there is an implied user for performing these
+                                          commands. Unless otherwise specified the user is taken as the
+                                          username of the person running the Control Cluster command. The
+                                          user to perform a command as can be changed if required by using
+                                          the option <code class="option">--user</code>. For example:
+                           </p><pre class="programlisting">$ ./control_cluster.py --user bob start</pre></dd>
+                        <dt><span class="term">Process Commands</span></dt>
+                        <dd>
+                           <p>These commands operation on specific server process
+                                          instances. They are used for starting and stopping server
+                                          processes when there is already an active server, as well as
+                                          interacting with an active server process, for example retrieving
+                                          watcher values.
+                           </p>
+                           <p>As with the server commands, the process commands have an
+                                          implied user as they operate on server processes that have an
+                                          associated user ID at runtime. The user you run a command as can
+                                          be modified at any stage by using the <code class="option">--user</code>
+                                          option.
+                           </p>
+                        </dd>
+                        <dt><span class="term">Profiling Commands</span></dt>
+                        <dd>
+                           <p>Profiling commands are used for diagnosing problems on
+                                          server processes. While technically operating in the same way that
+                                          process commands do, they are separated into a unique category to
+                                          highlight their availability and encourage their usage.
+                           </p>
+                           <p>Profiling commands can be used for extracting all manner of
+                                          performance information from server processes including C++
+                                          performance, Python game script performance, client traffic
+                                          performance and intra-process network statistics.
+                           </p>
+                        </dd>
+                        <dt><span class="term">Cluster Commands</span></dt>
+                        <dd>
+                           <p>The cluster commands are different to the server and process
+                                          commands in that there is no implied user for them. These commands
+                                          operate on the entire cluster as represented by every machine in
+                                          the network that has a BWMachined instance running and is
+                                          reachable through broadcasting. Operations such as querying all
+                                          machines in the cluster for their current load and checking the
+                                          validity of the BWMachined ring are included in these
+                                          commands.
+                           </p>
+                        </dd>
+                     </dl>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e6427"></a>3.4.1.1.&nbsp;Machine Selection
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Many commands require a machine or machines to be provided to
+                                perform a command on. As commands quite often need to be performed
+                                across large sets of machines at the same time, Control Cluster
+                                provide a number of different shorthand notations which can be used
+                                anywhere a <span class="literal">&lt;machine&gt;</span> or
+                                <span class="literal">&lt;machines&gt;</span> is requested.
+                     </p>
+                     <p>For example the <code class="option">start</code> command requires a
+                                machine set to operate on as seen by the <code class="option">help</code>
+                                output.
+                     </p><pre class="programlisting">$ ./control_cluster.py help start
+start &lt;machines&gt;
+
+   Start the server on the specified set of machines.  To start the server on
+   all machines, you must explicitly pass 'all' for machine selection.</pre><p>The following list outlines the different machine selection
+                                approaches that can be used.
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis">All machines</em></p>
+                              <p>All machines in the network can be referred to using the
+                                             syntax <span class="literal">all</span>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Hostname</em></p>
+                              <p>An exact hostname such as <span class="literal">bw01</span>,
+                                             <span class="literal">dmz-qa-10</span>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">IP Address</em></p>
+                              <p>An exact IPv4 address such as
+                                             <span class="literal">192.168.1.34</span>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Hostname Wildcard</em></p>
+                              <p>A hostname containing a wildcard such as
+                                             <span class="literal">dmz-qa-*</span>. Be aware that depending on the unix
+                                             shell you use (<em class="emphasis">e.g.</em>, bash or zsh) you may
+                                             have to quote the wildcard <span class="literal">*</span>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">BWMachined Version</em></p>
+                              <p>BWMachined has a protocol version associated with each
+                                             instance. If you are running multiple versions of BWMachined
+                                             within your network (a practice discouraged by BigWorld), you can
+                                             specify all hosts using a particular BWMachined version using the
+                                             following syntax:
+                                             <span class="literal">version:<em class="replaceable"><code>42</code></em></span> where 42
+                                             in this case refers to protocol version 42.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">BWMachined Groups</em></p>
+                              <p>Using the <span class="literal">[Groups]</span> tag in
+                                             <code class="filename">/etc/bwmachined.conf</code> to specify different
+                                             groups of machines within your server cluster, it is then possible
+                                             to refer to these groups using the syntax
+                                             <span class="literal">group:<em class="replaceable"><code>groupname</code></em></span>.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>This information is also available from the command line help by
+                                using the <code class="option">help</code> command
+                                <code class="option">machine-selection</code>.
+                     </p><pre class="programlisting">$ ./control_cluster.py help machine-selection</pre></div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e6534"></a>3.4.1.2.&nbsp;Process Selection
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Similar to machine selection, many commands can operate on
+                                numerous processes at the same time. For example the
+                                <code class="option">getmany</code> command can select watcher values from many
+                                processes to provide a tabular report. In most cases whenever
+                                <span class="literal">&lt;processes&gt;</span> is seen in the
+                                <code class="option">help</code> output of a command, you can use one of the
+                                following approaches for supplying sets of processes.
+                     </p>
+                     <p>The following list outlines the different process naming schemes
+                                that can be used with commands.
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><em class="emphasis">All processes</em></p>
+                              <p>All processes in a server cluster can be referred to using
+                                             the statement <span class="literal">all</span>. This is especially useful in
+                                             relation to watcher commands.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Process name</em></p>
+                              <p>An exact process name such as <span class="literal">cellapp01</span>
+                                             or <span class="literal">cellappmgr</span>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">All processes of a
+                                                type</em></p>
+                              <p>A set of all process types such as
+                                             <span class="literal">cellapps</span> or <span class="literal">baseapps</span>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Single process of a
+                                                type</em></p>
+                              <p>A process type name such as <span class="literal">cellapp</span> or
+                                             <span class="literal">baseapp</span>. This can be useful when a command can
+                                             be run on any process of the provided type but there may be many
+                                             processes running within the server cluster.
+                              </p>
+                              <p>When using this method of process selection, if there are
+                                             multiple processes of the specified type running, a random process
+                                             of the provided type will be selected.
+                              </p>
+                           </li>
+                           <li>
+                              <p><em class="emphasis">Non-zero numbering</em></p>
+                              <p>An exact process name that would otherwise have zero's
+                                             padding the process id, such as <span class="literal">cellapp1</span> or
+                                             <span class="literal">baseapp9</span>.
+                              </p>
+                              <p>The advantage of this approach is that it allows the user to
+                                             take advantage of shell expansion approaches that are already
+                                             available in different shells such as bash and zsh. For example in
+                                             both bash and zsh using the syntax
+                                             <span class="literal">cellapp{1..3}</span> would expand to <span class="literal">cellapp1
+                                                cellapp2 cellapp3</span>, while <span class="literal">baseapp{1,7}</span>
+                                             would expand to <span class="literal">baseapp1 baseapp7</span>.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p>This information is also available from the command line help by
+                                using the <code class="option">help</code> command
+                                <code class="option">process-selection</code>.
+                     </p><pre class="programlisting">$ ./control_cluster.py help process-selection</pre></div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6634"></a>3.4.2.&nbsp;MessageLogger Related Utilities
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>For details on the tools available for interacting with server
+                           message logs, see <a href="ch03.html#xref_Command_Line_Utilities" title="3.2.3.&nbsp;Command Line Utilities">Command Line Utilities</a>.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Space_Viewer"></a>3.5.&nbsp;Space Viewer
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="informalfigure">
+                  <div class="mediaobject" align="center"><img src="images/space_viewer_simple_space.png" align="middle"></div>
+               </div>
+               <p>Location: <code class="filename">bigworld/tools/server/space_viewer</code></p>
+               <p>Space Viewer is a program that is used for displaying a dynamic
+                      graphic representation of spaces. This includes the distribution of cells
+                      in a space, as well as the entities within each of the cells.
+               </p>
+               <p>Space Viewer uses a client / server architecture, and is therefore
+                      composed of two distinct parts which may be used simultaneously or
+                      separately. The server component (SVLogger) either communicates with an
+                      active BigWorld server to collect and log information about a space, or is
+                      used to read a previously collected log. The client component
+                      (SpaceViewer) connects to the server process and uses a GUI to display the
+                      space information provided to it.
+               </p>
+               <p>For comprehensive documentation on Space Viewer's options and
+                      contextual help, please refer to the <code class="option">--help</code> output along
+                      with the application help available from the <span class="guimenu">Help</span>
+                      menu.
+               </p>
+               <p>Since the two halves of Space Viewer communicate via TCP, they can
+                      be run on different machines, although the client is most responsive when
+                      both components are run on the same machine.
+               </p>
+               <p>The most common use of Space Viewer is to monitor the state of a
+                      live BigWorld server, and as such, both the client and server components
+                      are run in tandem. This can be achieved by simply running the SpaceViewer
+                      script (<code class="filename">space_viewer.py</code>) when logged in to a GUI
+                      session on either Windows or Linux.
+               </p>
+               <p>Other scenarios such as during scalability testing require running
+                      the server component as a separate process. This allows collecting space
+                      data over long periods of time without requiring an attached GUI session.
+                  	In order to achieve this simply run the SVLogger script
+                      (<code class="filename">svlogger.py</code>) from a Linux command line console. The
+                      SpaceViewer GUI can be attached to the server process at any stage by
+                      using the <code class="option">--connect</code> option of SpaceViewer. For more
+                      information on remote monitoring using Space Viewer, see <a href="ch03.html#xref_Running_Space_Viewer_Remotely" title="3.5.4.&nbsp;Running Space Viewer Remotely">Running Space Viewer Remotely</a>.
+               </p>
+               <p>The following image illustrates a number of users with active
+                      servers within the same network cluster. The <span class="literal">dominicw</span>
+                      user has been expanded to show all spaces that are active within that
+                      server.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/space_viewer_window.png"><span class="caption">
+                        <p>Space Viewer window</p></span></div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6693"></a>3.5.1.&nbsp;Selecting Spaces to View
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When running SpaceViewer if you do not see your username listed in
+                           the main Space Viewer window, select the <em class="emphasis">File
+                              <span class="symbol">&#8594;</span> Refresh</em> menu item. This
+                           is sometimes required as the list is not automatically updated.
+                  </p>
+                  <p>Clicking the arrow icon to the left of user name expands the list
+                           to display all spaces available for that server instance.
+                  </p>
+                  <p>In the example above, the <span class="literal">dominicw</span> server has 4
+                           spaces. To view the top down map of a space, double click its entry on
+                           the list. This will start an SVLogger process which will log data from
+                           the selected space as well as a new client window that attaches itself
+                           to the logger. Closing the client window will cause the logger to
+                           terminate.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e6711"></a>3.5.2.&nbsp;Viewing Spaces
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Multiple spaces can be viewed simultaneously, each in their own
+                           window. To view a space, double-click its entry on the space list
+                           displayed in Space Viewer.
+                  </p>
+                  <p>The image below shows a space being managed by five cells. Cell 2
+                           is currently selected as can be seen by the thick blue border and
+                           coloured circles representing all the entities within the cell. Entities
+                           that are being ghosted on cell 2 are displayed as greyed out
+                           circles.
+                  </p>
+                  <p>Upon first loading the space window no cell is selected for
+                           viewing. The cell boundaries and the cell information (cell number, IP
+                           address, load) will always be shown, however to see the entities within
+                           a particular cell, as with cell 2 in the screenshot below, it must be
+                           selected with a single click.
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/space_viewer_window_explained.png"><span class="caption">
+                           <p>Space window</p></span></div>
+                  </div>
+                  <p>In order to facilitate identification of entities, tooltip
+                           information is available for all non-ghosted entities. This information
+                           will appear if the cursor hovers over an entity marker for a
+                           sufficiently long time.
+                  </p>
+                  <div class="informalfigure">
+                     <div class="mediaobject"><img src="images/entity_tooltip.png"><span class="caption">
+                           <p>Entity tooltip</p></span></div>
+                  </div>
+                  <p>The entity type name is retrieved from file
+                           <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entities.xml</code>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Customising_Entity_And_Display_Colours"></a>3.5.3.&nbsp;Customising Entity and Display Colours
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Space Viewer allows you to customise the colours to be used when
+                           drawing the elements in the Space window. Any customisation is not saved
+                           and thus will not be in effect the next time the application is started.
+                           If you desire to permanently change the colours, this can be achieved by
+                           customising the Space Viewer source code.
+                  </p>
+                  <p>Entities in the current cell are displayed with a coloured circle.
+                           The colour can be customised in the file
+                           <code class="filename">bigworld/tools/server/space_viewer/style.py</code>. The
+                           simplest way to modify the colours is to update the dictionary colours
+                           which contain RGB colour definitions for each entity type.
+                  </p>
+                  <p>The code fragment below illustrates the definition of permanent
+                           entity colours:
+                  </p><pre class="programlisting"># specify colour for specific entity types.
+ENTITY_COLOURS = {
+    "Avatar"  : ((111, 114, 247), 2.0), <img src="images/rgb_111_114_247.png">
+    "Guard"   : ((244, 111, 247), 1.0), <img src="images/rgb_244_111_247.png">
+    "Creature": ((124, 247, 111), 1.0), <img src="images/rgb_124_247_111.png">
+    "Merchant": ((114, 241, 244), 1.0)  <img src="images/rgb_114_241_244.png">
+}</pre><p><span class="citetitle">Example local file
+                              <code class="filename">style.py</code></span></p>
+                  <p>An alternate approach would be to replace the entire function
+                           <code class="methodname">getColourForEntity( entityID, entityTypeID )</code>,
+                           using your own algorithm to colour the entities.
+                  </p>
+                  <p>All other colours are defined by the dictionary
+                           <code class="varname">colourOptions</code>. This dictionary can be modified to any
+                           of the colours defined by the colours array.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Running_Space_Viewer_Remotely"></a>3.5.4.&nbsp;Running Space Viewer Remotely
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>As described at the start of this section, Space Viewer's two
+                           components can be run separately if required. This would usually take
+                           the form of running SVLogger over an extended period of time, connecting
+                           clients to it to monitor live state as necessary, then eventually
+                           shutting down the logger. Later, SVLogger can be connected to its
+                           previously recorded log (instead of a live server) and client windows
+                           can be attached to it to replay the log data.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e6793"></a>3.5.4.1.&nbsp;SVLogger
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Location:
+                                <code class="filename">bigworld/tools/server/space_viewer/svlogger.py</code></p>
+                     <p>The SVLogger script provides log writing and reading
+                                functionality for Space Viewer. In writing mode it is responsible for
+                                gathering the space data from a running BigWorld server which is
+                                achieved by polling the CellAppMgr approximately every second. In
+                                reading mode a previously recorded log is opened for replay using any
+                                client connections.
+                     </p>
+                     <p>When run without any options SVLogger will default to placing
+                                logs into <code class="filename">/tmp/svlog-<em class="replaceable"><code>username</code></em></code>.
+                                This location can be changed for keeping a more permanent archive of
+                                logs by using the <code class="option">-o</code> option. For example:
+                     </p><pre class="programlisting">$ ./svlogger -o /home/alice/space_logs</pre><p>For a comprehensive list of options available for SVLogger
+                                please refer to the command line help available from the
+                                <code class="option">--help</code> option.
+                     </p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="xref_Connecting_A_Client_Window_To_svlogger"></a>3.5.4.2.&nbsp;Connecting a Space Viewer Window to SVLogger
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Once you have started SVLogger manually, you will need to
+                                manually connect Space Viewer client windows to the logger if you wish
+                                to view its space data. This is easily done by running Space Viewer
+                                with the <code class="option">--connect
+                                   <em class="replaceable"><code>&lt;ip:port&gt;</code></em></code> option. For
+                                example:
+                     </p><pre class="programlisting">$ ./space_viewer --connect 192.168.1.24:20110</pre><p>The address passed to this option should be the address that
+                                SVLogger is listening for connections on, which should be displayed in
+                                the initial output from after SVLogger starts.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e5068" href="#d0e5068">4</a>] </sup>For details see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_tools_installation_guide/index.html" class="olink">Server Tools Installation Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_tools_installation_guide/ch07.html" class="olink"><i>Post-installation</i></a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e5658" href="#d0e5658">5</a>] </sup>For details, see <a href="ch03.html#xref_WebConsole_StatGrapher" title="3.1.1.4.&nbsp;StatGrapher">StatGrapher</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e5707" href="#d0e5707">6</a>] </sup>For details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_tools_installation_guide/index.html" class="olink">Server Tools Installation Guide</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e5885" href="#d0e5885">7</a>] </sup>For details see <a href="ch03.html#xref_Process_Statistic_Configuration" title="3.3.4.6.&nbsp;Process Statistic Configuration">Process Statistic Configuration</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e5893" href="#d0e5893">8</a>] </sup>For details see <a href="ch03.html#xref_Generic_Process_Statistic_Configuration" title="3.3.4.4.&nbsp;Generic Process Statistic Configuration">Generic Process Statistic Configuration</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e5918" href="#d0e5918">9</a>] </sup>For details see <a href="ch03.html#xref_Process_Statistic_Configuration" title="3.3.4.6.&nbsp;Process Statistic Configuration">Process Statistic Configuration</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e5929" href="#d0e5929">10</a>] </sup>For details see <a href="ch03.html#xref_Process_Configuration" title="3.3.4.5.&nbsp;Process Configuration">Process Configuration</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e6086" href="#d0e6086">11</a>] </sup>For details see <a href="ch03.html#xref_WebConsole_ClusterControl" title="3.1.1.1.&nbsp;ClusterControl">ClusterControl</a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;Server Configuration with <span class="literal">bw.xml</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;Fault Tolerance</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

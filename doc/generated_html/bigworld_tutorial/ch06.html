@@ -1,0 +1,1042 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;6.&nbsp;A Basic NPC Entity (BASIC_NPC)</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Tutorial">
+      <link rel="up" href="index.html" title="Tutorial">
+      <link rel="prev" href="ch05.html" title="Chapter&nbsp;5.&nbsp;EntityLoader (ENTITY_LOADER)">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;6.&nbsp;A Basic NPC Entity (<span class="literal">BASIC_NPC</span>)
+                  </th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="d0e1521"></a>Chapter&nbsp;6.&nbsp;A Basic NPC Entity (<span class="literal">BASIC_NPC</span>)
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch06.html#d0e1529">6.1. Design</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#d0e1563">6.2. Art</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch06.html#d0e1582">6.2.1. Exporting the model</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e1616">6.2.2. Configuring the model</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch06.html#d0e1677">6.3. Scripts</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch06.html#d0e1693">6.3.1. entities.xml</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e1713">6.3.2. Entity definition</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e1800">6.3.3. Base part</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e1828">6.3.4. Cell part</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e1863">6.3.5. Client part</a></span></dt>
+                        <dt><span class="section"><a href="ch06.html#d0e1998">6.3.6. Editor script</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch06.html#d0e2010">6.4. Testing</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#d0e2045">6.5. Possible improvements</a></span></dt>
+               </dl>
+            </div>
+            <p>This chapter will cover the basic steps of creating a non-player
+                 entity. While the entity presented is quite simple in terms of
+                 functionality, it covers all the common essentials required in order to get
+                 a new entity up and running in the engine (including exporting the model
+                 from 3D Studio Max and configuring the model to work correctly).
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1529"></a>6.1.&nbsp;Design
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Before creating an entity, we need to determine what functionality
+                      is required. For this tutorial we will to create an NPC which will greet a
+                      player when they get within a certain radius (think of a person who stands
+                      in a supermarket entrance greeting people).
+               </p>
+               <p>Entity requirements: </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>It should be placeable in the World Editor so that the
+                                     run-time instance is created by the SpaceLoader entity on the
+                                     server.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Model should be loaded asynchronously on the client.</p>
+                     </li>
+                     <li>
+                        <p>The entity will not move. It should stand on the spot as
+                                     placed in the World Editor.
+                        </p>
+                     </li>
+                     <li>
+                        <p>A server-side trap should be used to trigger a greet action.
+                                     The server should notify all clients in the area that it has greeted
+                                     a player (including which player).
+                        </p>
+                     </li>
+                     <li>
+                        <p>When the entity greets a player, a wave animation should be
+                                     played on all clients in the area.
+                        </p>
+                     </li>
+                     <li>
+                        <p>A message, generated on the server, should be displayed above
+                                     the Greeter's head for a couple of seconds.
+                        </p>
+                     </li>
+                     <li>
+                        <p>It should be possible to deactivate (and reactivate) the
+                                     Greeter from the client, but only if the client is within the
+                                     trigger radius.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>We shall give this entity the class name
+                      <code class="classname">Greeter</code>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1563"></a>6.2.&nbsp;Art
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>For this tutorial, we have provided the 3D Studio Max source file to
+                      the Barbarian model (a fantasy themed human). The model needs to prepared
+                      for use by the engine and needs to be configured to satisfy the
+                      requirements of the Greeter entity. This section assumes the BigWorld
+                      exporters have already been installed (see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a>).
+               </p>
+               <p>Detailed documentation about the exporters and tools can be found in
+                      the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/index.html" class="olink">Content Tools Reference Guide</a> and the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//content_creation.chm" class="olink">Content Creation Manual</a>.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>If you want to skip this section, the barbarian model has been
+                           pre-prepared for this tutorial (in <code class="filename">C:/bigworld/tutorial/res/characters</code>).
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1582"></a>6.2.1.&nbsp;Exporting the model
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Open <code class="filename">tutorial/sourceart/barbarian.max</code> in
+                                        3D Studio Max.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Copy the textures to <code class="filename">tutorial/res/characters</code>. The textures
+                                        must be in the target directory before exporting (the exporter will
+                                        display an error message and fail if they are not).
+                           </p>
+                        </li>
+                        <li>
+                           <p>Re-apply the textures to the model so that the Max scene
+                                        points to the textures copied in the step above.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Go to <em class="emphasis">File <span class="symbol">&#8594;</span> Export</em> and choose the
+                                        BigWorld visual exporter.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Save the model to
+                                        <code class="filename">tutorial/res/characters/barbarian.model</code>.
+                           </p>
+                        </li>
+                     </ol>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1616"></a>6.2.2.&nbsp;Configuring the model
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In order to automatically play an idle animation and to create the
+                           action required for the Greeter entity to wave, we need to add
+                           animations to the model and configure the appropriate actions. This is
+                           done in the Model Editor.
+                  </p>
+                  <p>While an animation is a raw sequence of key frames, an action is a
+                           higher level concept. Actions are animation wrappers that contain extra
+                           information such as animation blending and what game-play situations
+                           will trigger the animation (e.g. idling, walking or running based on the
+                           velocity of the entity).
+                  </p>
+                  <p>The Greeter will have two actions: an Idle action which is
+                           automatically selected when the entity is standing still, and a Wave
+                           action which will be explicitly invoked from the Greeter's Python
+                           scripts.
+                  </p>
+                  <div class="orderedlist">
+                     <ol type="1">
+                        <li>
+                           <p>Open up
+                                        <code class="filename">tutorial/res/characters/barbarian.model</code> in
+                                        Model Editor.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Before we can setup the actions, we need to add references to
+                                        the idle and wave animations. In the Animations tab, click the "New
+                                        animation" button and select the
+                                        <code class="filename">tutorial/res/characters/idle_a.animation</code>
+                                        animation file. A new animation will be added to the list which can
+                                        be previewed in the 3D view. Repeat this for the
+                                        <code class="filename">m_waveonehand.animation</code> file.
+                           </p>
+                        </li>
+                        <li>
+                           <p>To setup an Idle action that is automatically invoked when the
+                                        entity is standing still,
+                           </p>
+                           <div class="orderedlist">
+                              <ol type="a">
+                                 <li>
+                                    <p>Open the Actions tab in Model Editor.</p>
+                                 </li>
+                                 <li>
+                                    <p>Click the New Action button and select the m_idle
+                                                     animation in the pop-up dialog. Set the action name to
+                                                     Idle.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>Select the new Idle action from the list.</p>
+                                 </li>
+                                 <li>
+                                    <p>Setup the parameters in the Match section to allow the
+                                                     action matcher to automatically select the action when the
+                                                     entity is not moving. To do this set the following values:
+                                                     
+                                    </p>
+                                    <div class="itemizedlist">
+                                       <ul type="disc">
+                                          <li>
+                                             <p>Minimum speed=0.0, Maximum speed=0.0</p>
+                                          </li>
+                                          <li>
+                                             <p>Minimum turn=-360.0, Maximum turn=360.0</p>
+                                          </li>
+                                          <li>
+                                             <p>Minimum direction=-360.0, Maximum
+                                                                    direction=360.0
+                                             </p>
+                                          </li>
+                                       </ul>
+                                    </div>
+                                    <p> As you can see, the action will be picked
+                                                     whenever the speed of the entity is exactly zero and is facing
+                                                     in any direction.
+                                    </p>
+                                 </li>
+                              </ol>
+                           </div>
+                        </li>
+                        <li>
+                           <p>To setup a Wave action that is invoked explicitly by the
+                                        Python scripts (i.e. not automatically picked by the engine),
+                           </p>
+                           <div class="itemizedlist">
+                              <ul type="disc">
+                                 <li>
+                                    <p>Click the New Action button and select the m_wave
+                                                     animation in the pop-up dialog. Set the action name to
+                                                     Wave.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                           <p>No match settings need to be set for this action since we will
+                                        manually invoke the action from the Python scripts.
+                           </p>
+                        </li>
+                     </ol>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e1677"></a>6.3.&nbsp;Scripts
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>In order to insert the model as an entity into a space, we need to
+                      create the entity scripts. These are written in Python and perform
+                      game-specific logic and are split up into three parts: base, cell, and
+                      client.
+               </p>
+               <p>Please refer to the Python API reference documents<sup>[<a name="d0e1684" href="#ftn.d0e1684">9</a>]</sup> for detailed information on the API's mentioned here.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1693"></a>6.3.1.&nbsp;entities.xml
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>First off, we need to tell the engine about our new entity. Every
+                           entity must be defined in the <code class="filename">entities.xml</code> file
+                           located at <code class="filename">tutorial/res</code>
+                           path.
+                  </p>
+                  <p>Simply add a new empty tag between the
+                           <span class="literal">&lt;root&gt;</span>: 
+                  </p><pre class="programlisting">&lt;root&gt;
+    &lt;Space/&gt;
+    &lt;Avatar/&gt;
+    &lt;Greeter/&gt;
+&lt;/root&gt;</pre><p>Remember that since the entity name corresponds with a Python
+                           class name, the name used here must conform with Python naming
+                           rules.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1713"></a>6.3.2.&nbsp;Entity definition
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In order to allow the engine to know what methods and properties
+                           the entity has, we need to create a special file known as the entity
+                           definition file. In some ways this file is the most important part of an
+                           entity, as it defines how properties and methods are handled by the
+                           engine (e.g. property type, whether or not a property or method is
+                           exposed to clients, prioritisation of remote method calls and property
+                           updates, and configuring distance based LoD parameters for individual
+                           properties).
+                  </p>
+                  <p>See the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a> chapter
+                           <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/ch02.html#xref_The_Definition_File" class="olink">The Entity Definition File</a> for a detailed description of
+                           entity definitions.
+                  </p>
+                  <p>For the Greeter entity, create a new file named
+                           <code class="filename">Greeter.def</code> and place it in <code class="filename">tutorial/res/scripts/entity_defs/</code>. We will
+                           define the following information for our entity:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Three properties:</p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p>A <code class="varname">radius</code> property which controls the
+                                                     trigger region for the Greeter. This is exposed to the World
+                                                     Editor so that it can be tweaked by the world builder. Its type
+                                                     is <span class="literal">FLOAT</span>, it has a default value of 3 metres
+                                                     and is declared as <span class="literal">CELL_PRIVATE</span> (since this
+                                                     property is only needed on the cell part of the entity and does
+                                                     not need to be publicly accessible by other entities). 
+                                    </p>
+                                    <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                                       <h3 class="title">Note</h3>
+                                       <p>To provide a more intuitive interface for the World
+                                                            Editor, some extra meta-data has been defined for this
+                                                            property. The <span class="literal">RADIUS</span> widget allows the
+                                                            property to be manipulated via a visual spherical
+                                                            widget.
+                                       </p>
+                                    </div>
+                                 </li>
+                                 <li>
+                                    <p>A property named <code class="varname">activated</code> which is a
+                                                     boolean property representing whether or not the Greeter is
+                                                     currently active. It's flags is set to
+                                                     <span class="literal">ALL_CLIENTS</span> so that changes to this property
+                                                     on the cell are automatically propagated to the clients.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>The <code class="varname">createOnCell</code> property which
+                                                     indicates which space the entity should be created in (a
+                                                     requirement for entities loaded via the
+                                                     <code class="classname">SpaceLoader</code> entity).
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <p>Two methods:</p>
+                           <div class="itemizedlist">
+                              <ul type="circle">
+                                 <li>
+                                    <p>A client-side method named <code class="methodname">greet</code>.
+                                                     This will be remotely called by the server on all nearby clients
+                                                     whenever the entity greets a player (i.e. whenever the
+                                                     server-side trap is triggered). It takes two parameters, the ID
+                                                     of the entity is greeting, and a personalised greet
+                                                     message.
+                                    </p>
+                                 </li>
+                                 <li>
+                                    <p>A method called <code class="methodname">toggleActive</code>
+                                                     which is exposed to the client which allows the client to toggle
+                                                     the Greeter on and off. By default methods are not callable by
+                                                     the client (for security purposes), so the
+                                                     <span class="literal">&lt;Exposed&gt;</span> keyword is used to explicitly
+                                                     expose it to clients. It does not take any arguments.
+                                    </p>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
+                  </div><pre class="programlisting">&lt;root&gt;
+    &lt;Properties&gt;
+        &lt;radius&gt;
+            &lt;Type&gt;          FLOAT
+                &lt;Widget&gt;    RADIUS
+                    &lt;colour&gt;    255 0 0 192   &lt;/colour&gt;
+                    &lt;gizmoRadius&gt;    2        &lt;/gizmoRadius&gt;
+                &lt;/Widget&gt;
+            &lt;/Type&gt;
+            &lt;Flags&gt;          CELL_PRIVATE    &lt;/Flags&gt;
+            &lt;Default&gt;        3.0             &lt;/Default&gt;
+            &lt;Editable&gt;       true            &lt;/Editable&gt;
+        &lt;/radius&gt;
+        
+        &lt;activated&gt;
+            &lt;Type&gt;           INT8            &lt;/Type&gt;
+            &lt;Flags&gt;          ALL_CLIENTS     &lt;/Flags&gt;
+            &lt;Default&gt;        1               &lt;/Default&gt;
+        &lt;/activated&gt;
+
+        &lt;createOnCell&gt;
+             &lt;Type&gt;    MAILBOX        &lt;/Type&gt;
+             &lt;Flags&gt;   BASE           &lt;/Flags&gt;
+        &lt;/createOnCell&gt;
+    &lt;/Properties&gt;
+
+    &lt;ClientMethods&gt;
+        &lt;greet&gt;
+            &lt;Arg&gt; UINT32 &lt;/Arg&gt; &lt;!-- Entity ID of who we are greeting --&gt;
+            &lt;Arg&gt; STRING &lt;/Arg&gt; &lt;!-- Our greeting message --&gt;
+        &lt;/greet&gt;
+    &lt;/ClientMethods&gt;
+
+    &lt;CellMethods&gt;
+        &lt;toggleActive&gt;
+            &lt;Exposed/&gt;
+        &lt;/toggleActive&gt;
+    &lt;/CellMethods&gt;
+
+    &lt;BaseMethods&gt;
+    &lt;/BaseMethods&gt;
+&lt;/root&gt;</pre><p><span class="citetitle">Example
+                              <code class="filename">tutorial/res/scripts/entity_defs/Greeter.def</code></span></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1800"></a>6.3.3.&nbsp;Base part
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The base part of the entity is the first part that gets created by
+                           the server. The base is created on one of the BaseApp processes, and is
+                           used to define entity logic which does not require spatial information
+                           (e.g. character inventory). The base part of an entity does not migrate
+                           between BaseApps after it has been created.
+                  </p>
+                  <p>The base script for the Greeter entity is very simple and performs
+                           two tasks:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>It creates the cell part of the entity within the cell
+                                        specified by the <code class="varname">createOnCell</code> property (as setup
+                                        by the <code class="classname">EntityLoader</code> class when it loads the
+                                        entity information from the space's chunk file).
+                           </p>
+                        </li>
+                        <li>
+                           <p>It destroys itself when the cell part of the entity
+                                        disappears.
+                           </p>
+                        </li>
+                     </ul>
+                  </div><pre class="programlisting">import BigWorld
+
+class Greeter( BigWorld.Base ):
+    def __init__( self ):
+        BigWorld.Base.__init__( self )
+        self.createCellEntity( self.createOnCell )
+
+    def onLoseCell( self ):
+        self.destroy()</pre><p><span class="citetitle">Example
+                              <code class="filename">tutorial/res/scripts/base/Greeter.py</code></span></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1828"></a>6.3.4.&nbsp;Cell part
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The cell part of an entity represents the current position,
+                           orientation, and movement for an entity within a particular space.
+                           Managed by the CellApp processes, the cell part of an entity can be
+                           moved between CellApp processes at any time based on CPU load.
+                           Generally, all entity logic that requires access to spatial information
+                           is implemented in the cell part of an entity (e.g. any code that needs
+                           to find out about other nearby entities, such as AI).
+                  </p>
+                  <p>The cell part of the Greeter performs the following tasks:</p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Creates a trap when the entity is created using the radius
+                                        specified in the World Editor.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Greets any Avatars that walk into the trap by calling
+                                        <code class="methodname">greet</code> on all clients that have the Greeter
+                                        entity within their AoI.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Allow clients to toggle <code class="varname">activated</code> state of
+                                        the entity, but only if they are within the radius. Note that
+                                        exposing a method to the client implicitly adds an argument which is
+                                        the ID of the Avatar entity which invoked the method. This can (and
+                                        should) be used to validate that the Avatar is actually allowed to
+                                        perform the desired command (remember, never trust the
+                                        client).
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>Cell entities must derive from the
+                           <code class="classname">BigWorld.Entity</code> class.
+                  </p><pre class="programlisting">import BigWorld
+import Avatar
+import random
+
+MESSAGES = [ "Hello BigWorld", "Have a nice day" ]
+
+class Greeter( BigWorld.Entity ):
+
+    def __init__( self ):
+        BigWorld.Entity.__init__( self )
+
+        # Setup the trap
+        self.addProximity( self.radius, 0 )
+
+    def onEnterTrap( self, entityEntering, range, controllerID ):
+        # If we are not active, do nothing.
+        if not self.activated:
+            return
+
+        # Filter by entity class type
+        if not isinstance( entityEntering, Avatar.Avatar ):
+            return
+
+        # Notify clients.
+        self.allClients.greet( entityEntering.id, random.choice(MESSAGES) )
+
+    def toggleActive( self, sourceID ):
+        # Get the entity who called us. If the entity can't be found then they
+        # obviously not near by so just bail out.
+        try:
+            sourceEntity = BigWorld.entities[ sourceID ]
+        except KeyError:
+            return
+            
+        # Get the distance between ourself and the Avatar
+        dist = sourceEntity.position.distTo( self.position )
+        
+        # Do a check to make sure they are close enough.
+        if dist &gt; self.radius:
+            return
+            
+        # All good, toggle our state. The activated property will be automatically 
+        # propagated to all clients once this server tick is complete.
+        self.activated = not self.activated</pre><p><span class="citetitle">Example
+                              <code class="filename">tutorial/res/scripts/cell/Greeter.py</code></span></p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1863"></a>6.3.5.&nbsp;Client part
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The client part of the entity is automatically created by the
+                           engine whenever an entity appears within your Avatar's area of interest
+                           (AoI). It is the job of the client scripts to coordinate all resources
+                           and logic required to represent the entity on the client based on the
+                           information provided by the server.
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1868"></a>6.3.5.1.&nbsp;Entity module
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The client-side of an entity must derive from
+                                <code class="classname">BigWorld.Entity</code>. The bare-bones Greeter module
+                                script looks like this:
+                     </p><pre class="programlisting"># Greeter.py
+
+import BigWorld
+import GUI
+import Math
+
+class Greeter( BigWorld.Entity ):
+    def __init__( self ):
+        BigWorld.Entity.__init__( self )</pre><p><span class="citetitle">Basic
+                                   structure of
+                                   <code class="filename">tutorial/res/scripts/cell/Greeter.py</code></span></p>
+                  </div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1883"></a>6.3.5.2.&nbsp;Prerequisites list
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>To avoid stalling the main thread client when the entity is
+                                created, we will use the prerequisites functionality to load the model
+                                asynchronously in the background loading thread. This is done by
+                                implementing the <code class="methodname">prerequisites</code> method which
+                                returns a list of resources to be loaded. This means that whenever the
+                                server notifies the client that a Greeter entity has entered the AoI
+                                for the client, the client will first schedule the resources to be
+                                loaded asynchronously.
+                     </p><pre class="programlisting">GREETER_MODEL_NAME = "characters/barbarian.model"
+
+class Greeter( BigWorld.Entity ):
+    ....
+
+    def prerequisites( self ):
+        return [ GREETER_MODEL_NAME ]</pre></div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1894"></a>6.3.5.3.&nbsp;Entering and leaving the world
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Once the prerequisite resources have been loaded, the
+                                <code class="methodname">onEnterWorld</code> method is called. Since the
+                                entity class instance can leave the AoI and then re-enter the AoI, the
+                                bulk of the initialisation code will be done in here rather than in
+                                <code class="methodname">__init__</code> (so it can re-initialised each
+                                time).
+                     </p>
+                     <p>For the <code class="classname">Greeter</code> entity, the primary
+                                entity model (<code class="varname">Entity.model</code>) is set, and a network
+                                filter is setup. Since the entity will not be moving around, we can
+                                use a simple <code class="classname">DumbFilter</code> which simply snaps the
+                                entity to the last network update.
+                     </p><pre class="programlisting">class Greeter( BigWorld.Entity ):
+    ....
+
+    def onEnterWorld( self, prereqs ):
+        # Setup our model.
+        self.model = BigWorld.Model( GREETER_MODEL_NAME )
+
+        # Setup an appropriate filter.
+        self.filter = BigWorld.DumbFilter()
+
+    def onLeaveWorld( self ):
+        # Clean up.
+        self.model = None
+        self.filter = None</pre></div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1918"></a>6.3.5.4.&nbsp;Implementing greet
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The bulk of the client-side logic for the Greeter entity will go
+                                in the implementation of the <code class="methodname">greet</code> method.
+                                This method is remotely called from the cell part whenever an
+                                <code class="classname">Avatar</code> enters the trap.
+                     </p><pre class="programlisting">class Greeter( BigWorld.Entity ):
+    ....
+
+    def greet( self, targetID, msg ):
+        # Grab the entity instance, if for some reason we don't have it just do nothing.
+        try:
+            targetEntity = BigWorld.entities[targetID]
+        except KeyError:
+            return
+            
+        # Try to play the Wave action. If it doesn't exist, print a warning.
+        try:
+            self.model.Wave()
+        except AttributeError:
+            print "WARNING: Greeter model missing Wave action (%s)" % self.model.sources
+    
+        # Display the greet message above our head.
+        addressee = targetEntity.name        
+        if targetID == BigWorld.player().id:
+            addressee += "! Yes you"
+            
+        self._displayMessage( "Hey %s! '%s'!" % (addressee, msg) )</pre></div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1931"></a>6.3.5.5.&nbsp;Displaying the message
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The script that displays a text message above the Greeter's head
+                                will be implemented in a private helper method called
+                                <code class="methodname">_displayMessage</code> (note the usage of an
+                                underscore to denote a private member - this is not required but it is
+                                a useful convention to follow). The
+                                <code class="classname">TextGUIComponent</code> class from the GUI module will
+                                be used and will be inserted into the 3D scene using the
+                                <code class="classname">GUI.Attachment</code> class (as opposed to being
+                                rendered in screen space). The text is attached to the root node of
+                                the entity model and is positioned above the head of the model by
+                                inspecting the model's <code class="varname">height</code> attribute.
+                     </p><pre class="programlisting">class Greeter( BigWorld.Entity ):
+    ....
+
+    def _displayMessage( self, msg ):
+        # First make sure any previous message is cleared.
+        self._clearMessage()
+        
+        # Create our text component. Since we want to display it in the world
+        # we shall explicitly set our width and height in world units.
+        text = GUI.Text( msg )
+        text.explicitSize = True
+        text.size = ( 0, 0.5 )             # Specifying 0 for x to auto-calculate aspect ratio.
+        text.colour = (255, 0, 0, 255)     # Change the colour.
+        text.filterType = "LINEAR"         # Don't use point filtering.
+        text.verticalAnchor = "BOTTOM"     # Position relative to the bottom of the text.
+        
+        # The origin of our model is at our feet. To place the text above
+        # our head, move it up on the Y by our model's height.
+        text.position = (0, self.model.height + 0.1, 0)
+        
+        # Setup our GUI-&gt;World attachment. Tell it that we want the GUI 
+        # component to always face the camera.
+        atch = GUI.Attachment()
+        atch.component = text
+        atch.faceCamera = True
+        
+        # Attach to our model's root node.
+        self.model.root.attach( atch )
+        
+        # Save a reference to the attachment so we can clean it up later.
+        self._messageAttachment = atch
+        
+        # Setup the timer.
+        self._setMessageHideTimer()</pre><p>To make the message disappear after a certain amount of time,
+                                the <code class="methodname">BigWorld.callback</code> function is used. The
+                                hide message timer functionality is wrapped up in some additional
+                                helper methods. 
+                     </p>
+                     <div class="itemizedlist">
+                        <ul type="disc">
+                           <li>
+                              <p><code class="methodname">_clearMessage</code> clears any existing
+                                               message attachment above the entity's head.
+                              </p>
+                           </li>
+                           <li>
+                              <p><code class="methodname">_setMessageHideTimer</code> sets up the
+                                               timer, while first cancelling any existing timer.
+                              </p>
+                           </li>
+                           <li>
+                              <p><code class="methodname">_cancelMessageTimer</code> cancels the
+                                               timer by passing the previously created timer handle into
+                                               <code class="methodname">BigWorld.cancelCallback</code>.
+                              </p>
+                           </li>
+                           <li>
+                              <p><code class="methodname">_handleMessageHideTimer</code> is the
+                                               Python callable that is given to
+                                               <code class="methodname">BigWorld.callback</code>. It is executed after
+                                               the timer has elapsed, clearing the stored timer handle and
+                                               removing the current message.
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <p> </p><pre class="programlisting">class Greeter( BigWorld.Entity ):
+    ....
+
+    def _clearMessage( self ):
+        self._cancelMessageTimer()
+        if self._messageAttachment is not None:
+            self.model.root.detach( self._messageAttachment )
+            self._messageAttachment = None
+
+    def _setMessageHideTimer( self, timeout=5.0 ):
+        self._cancelMessageTimer()
+        self._messageTimerHandle = \
+            BigWorld.callback( timeout, self._handleMessageHideTimer )
+
+    def _cancelMessageTimer( self ):
+        if self._messageTimerHandle is not None:
+            BigWorld.cancelCallback( self._messageTimerHandle )
+            self._messageTimerHandle = None
+
+    def _handleMessageHideTimer( self ):
+        self._messageTimerHandle = None
+        self._clearMessage()</pre></div>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e1985"></a>6.3.5.6.&nbsp;Handling activation change
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The engine will automatically notify the entity script whenever
+                                a property has been changed by the server. It does this by looking for
+                                a method on the entity class named
+                                <code class="methodname">set_propertyName</code> which is expected to take a
+                                single parameter for the previous value of the property. The Greeter
+                                script will take advantage of this notification and display a message
+                                whenever the <code class="varname">activated</code> state has changed.
+                     </p><pre class="programlisting">    def set_activated( self, oldValue ):
+        if self.activated:
+            self._displayMessage( "Alright! I'm now ready to GREET." )
+        else:
+            self._displayMessage( "Shutting up now." )</pre></div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e1998"></a>6.3.6.&nbsp;Editor script
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The editor script for an entity allows programmatic control over
+                           how the entity behaves in the World Editor. For the Greeter entity, the
+                           script will simply override the default model used to represent the
+                           entity in the editor (it otherwise defaults to a red box).
+                  </p>
+                  <p>Editor scripts are located in <code class="filename">res/scripts/editor</code>.
+                  </p><pre class="programlisting">class Greeter:
+    def modelName( self, props ):
+        return "characters/barbarian.model"
+</pre></div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e2010"></a>6.4.&nbsp;Testing
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To test the entity it will first need to be placed into a space in
+                      World Editor. Open the <span class="literal">spaces/main</span> and place the entity
+                      by dragging the Greeter entity into the scene from the Resources tab. Save
+                      the space.
+               </p>
+               <p>If you are not using a Windows mount, update the resources on the
+                      server side and then restart the server. If all is well, you should be
+                      able to connect as per-normal and see the Greeter in the space.
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/greeter_npc.png" height=""><span class="caption">
+                        <p>Greeter entity in action</p></span></div>
+               </div>
+               <p>If you do not see the entity, there are a couple of things to
+                      check:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Check the server startup logs for any Python exceptions.</p>
+                     </li>
+                     <li>
+                        <p>Check the cell logs to make sure the entity is actually being
+                                   created. You should see a message along the lines of:
+                        </p><pre class="programlisting">CellApp INFO Cell::createEntity: New Greeter
+        (2)</pre></li>
+                     <li>
+                        <p>Check the client for any client-side Python errors (e.g. bring
+                                   up the in-game client console or use Debug View).
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Note that at this point the only way to toggle the activation state
+                      is to use the in-game Python console. For example, on the
+                      client,
+               </p><pre class="programlisting">&gt;&gt;&gt; $B.entities.items() # Find the ID for the Greeter
+[(2402, Greeter at 0x088CFFE8), (2405, PlayerAvatar at 0x088CFC10)]
+&gt;&gt;&gt; greeter = $B.entities[2402]
+&gt;&gt;&gt; greeter.cell.toggleActive()</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e2045"></a>6.5.&nbsp;Possible improvements
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>While the entity satisfies the basic requirements, there are some
+                      improvements that could be made.
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>The most obvious improvement would be to allow the user to
+                                   toggle the active state of the Greeter entity by clicking on the
+                                   entity. This could be achieved by leveraging the entity targeting
+                                   system of the client. See the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>
+                                   documentation for <code class="varname">BigWorld.target</code>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>If many player entities enter the trap at the same time, the
+                                   client will try to greet everyone at once. Instead of simply playing
+                                   the wave animation immediately when the <code class="methodname">greet</code>
+                                   method is called on the client, the client-side script could be
+                                   designed so that greets are queued up so that the next greet will not
+                                   commence until the previous greet has completed. This could be
+                                   achieved by passing a callback into
+                                   <code class="methodname">model.Wave()</code> so that the scripts get notified
+                                   when the current action has completed. See the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a> for
+                                   <code class="methodname">ActionQueuer.__call__</code> for information on how
+                                   you can use action callbacks.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Currently the Greeter entity simply plays the Wave action. It
+                                   would be nice if the entity looked towards you while it is greeting
+                                   you. A head tracker can be created by using the
+                                   <code class="classname">BigWorld.Tracker</code> class coupled with the
+                                   <code class="classname">BigWorld.TrackerNodeInfo</code> class.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The player can cause the Greeter to spam greetings if they
+                                   quickly move in and out of the trap radius. To avoid this problem, the
+                                   cell part of the entity should keep track of recent greets (associate
+                                   an entity ID with a time stamp). It should only re-greet a player if
+                                   some time has elapsed since the previous greeting. This list should be
+                                   added as a new property in <code class="filename">Greeter.def</code>, and
+                                   additional logic placed in
+                                   <code class="methodname">Greeter.onEnterTrap</code>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e1684" href="#d0e1684">9</a>] </sup><a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/baseapp/index.html" class="olink">BaseApp Python API</a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/cellapp/index.html" class="olink">CellApp Python API</a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;EntityLoader (<span class="literal">ENTITY_LOADER</span>)&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

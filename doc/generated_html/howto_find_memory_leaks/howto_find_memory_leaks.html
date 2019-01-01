@@ -1,0 +1,94 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>How To Find Memory Leaks</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="HowTo_Find_Memory_Leaks"></a>How To Find Memory Leaks</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Introduction">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#d0e35">2. Memory Tracker</a></span></dt><dt><span class="chapter"><a href="#d0e58">3. How To</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e61">3.1. Find out if your program leaks</a></span></dt><dt><span class="section"><a href="#d0e87">3.2. Break on a given memory allocation.</a></span></dt><dt><span class="section"><a href="#d0e94">3.3. Defining slots</a></span></dt><dt><span class="section"><a href="#d0e129">3.4. Ignoring leaks</a></span></dt><dt><span class="section"><a href="#d0e139">3.5. See the call stack for leaks</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Introduction"></a>Chapter&nbsp;1.&nbsp;Introduction</h2></div></div></div><p>Memory leaks occur when allocated memory is never deallocated as a
+    result of program error. Memory leaks can result in degraded performance
+    over time for all applications on the system, and are especially
+    problematic for real-time or embedded applications.</p><p>Non-trivial C++ programs can contain thousands of explicit memory
+    management calls, resulting in millions of allocations and deallocations
+    throughout the life of a program. Worse still, commonly used libraries
+    such as the STL can add thousands of implicit allocations that are far
+    less obvious. The burden of managing these and correctly freeing allocated
+    memory is generally placed on the programmer.</p><p>When memory leaks occur they are often very hard to find manually.
+    Numerous third party tools like BoundsChecker and Purify are available for
+    Windows. However these are <em class="emphasis">active</em> methods of finding
+    memory issues, whereas we require a <em class="emphasis">passive</em> method.
+    That is, we need to know exactly when leaks occur without having to add
+    instrumentation, build a particular configuration, or run an external
+    tool. External tools are more useful for investigating known leaks when
+    more data is needed.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e35"></a>Chapter&nbsp;2.&nbsp;Memory Tracker</h2></div></div></div><p>BigWorld provides a singleton class called
+    <code class="classname">MemTracker</code>, which provides the following
+    functionality: </p><div class="itemizedlist"><ul type="disc"><li><p>Automatic leak detection and reporting.</p></li><li><p>Allocation id.</p></li><li><p>A stack trace for each allocation that leaked.</p></li></ul></div><p> The first two features are enabled by default without
+    adding any instrumentation or running any external programs. Once leaks
+    are identified, users can re-run the application and break on a given
+    allocation id.</p><p><code class="classname">MemTracker</code> works on both Windows and Linux
+    platforms. The stack trace functionality is only available in debug
+    configurations.</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e58"></a>Chapter&nbsp;3.&nbsp;How To</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e61">3.1. Find out if your program leaks</a></span></dt><dt><span class="section"><a href="#d0e87">3.2. Break on a given memory allocation.</a></span></dt><dt><span class="section"><a href="#d0e94">3.3. Defining slots</a></span></dt><dt><span class="section"><a href="#d0e129">3.4. Ignoring leaks</a></span></dt><dt><span class="section"><a href="#d0e139">3.5. See the call stack for leaks</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e61"></a>3.1.&nbsp;Find out if your program leaks</h2></div></div></div><p>Link your program against the <span class="literal">cstdmf</span> library,
+      and ensure every source file includes the
+      <code class="filename">cstdmf.hpp</code> header.</p><p>Then, run the program in the <span class="literal">DEBUG</span>
+      configuration, and if leaks occur they will be output in the debugger,
+      when the program exits, in the following format:</p><pre class="programlisting">MemTracker detected the following leaks:
+Slot: Default, Id: 5007 - 88 bytes
+Slot: Default, Id: 8695 - 44 bytes
+Slot: Default, Id: 8883 - 60 bytes
+Slot: Default, Id: 8884 - 60 bytes
+Slot: Default, Id: 9435 - 28 bytes
+Slot: Default, Id: 9436 - 20 bytes
+Slot: Default, Id: 20975 - 116 bytes
+Slot: Default, Id: 20976 - 16 bytes
+Slot: Default, Id: 392363 - 12 bytes</pre><p>Note <code class="classname">MemTracker</code> can be enabled for any
+      build configuration by defining preprocessor symbol
+      <span class="literal">ENABLE_MEMTRACKER</span> for that configuration.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e87"></a>3.2.&nbsp;Break on a given memory allocation.</h2></div></div></div><p>To enter the debugger on the first allocation in the example
+      above, add the following line to your program (outside of a function
+      body).</p><pre class="programlisting">MEMTRACKER_BREAK_ON_ALLOC( Default, 5007 );</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94"></a>3.3.&nbsp;Defining slots</h2></div></div></div><p>Often it is convenient to divide up allocations into slots based
+      on function scope. To do this, <code class="classname">MemTracker</code> allows
+      you to define slots.</p><pre class="programlisting">MEMTRACKER_DECLARE( Foo, "Foo's allocations", 0 );
+
+void Foo()
+{
+    MEMTRACKER_SCOPED( Foo );
+
+    DoFooStuff();
+    DoOtherStuff();
+}
+      </pre><p>This will mark any allocations in <code class="function">Foo()</code>,
+      <code class="function">DoFooStuff()</code> and
+      <code class="function">DoOtherStuff()</code> as belonging to the
+      <span class="literal">"Foo"</span> slot, and each allocation will be numbered
+      uniquely within the <span class="literal">"Foo"</span> slot. Slots are organised
+      into a stack, so <code class="function">DoFooStuff()</code> may contain its own
+      definition for a slot, and its own leaks could be reported there.</p><p>If you do not supply any slots, then the top level slot called
+      <span class="literal">Default</span> is used.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e129"></a>3.4.&nbsp;Ignoring leaks</h2></div></div></div><p>Sometimes it isn't convenient to fix leaks as soon as they are
+      found. If this is the case, you can prevent leaks from being reported by
+      declaring a slot with the <span class="literal">FLAG_DONT_REPORT</span> flag. In
+      the example above, if we wished to ignore all leaks in the Foo slot, we
+      would declare the slot like so:</p><pre class="programlisting">MEMTRACKER_DECLARE( Foo, "Foo's allocations", FLAG_DONT_REPORT );</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e139"></a>3.5.&nbsp;See the call stack for leaks</h2></div></div></div><p>If you require a stack trace for a leak, you should define the
+      <span class="literal">ENABLE_CALLSTACK</span> symbol as <span class="literal">1</span> in
+      <code class="filename">memory_tracker.h</code> and add the
+      <span class="literal">FLAG_CALLSTACK</span> flag to the definition. Use of this
+      flag requires a large amount of overhead per allocation, so it is
+      recommended for use within a small scope (for example, do not enable it
+      in a slot that contains more than a few hundred allocations).</p><p>Here is an example stack trace from a leak, reading from bottom to
+      top, the offending function is the one that calls
+      <code class="function">bw_malloc()</code>, in this case
+      <code class="function">foo()</code>:</p><pre class="programlisting">e:\mf_19_0\src\lib\cstdmf\memory_tracker.cpp (514): bw_malloc
+e:\mf_19_0\src\lib\cstdmf\unit_test\test_memory_tracker.cpp (73): foo
+e:\mf_19_0\src\lib\cstdmf\unit_test\test_memory_tracker.cpp (79): bar
+e:\mf_19_0\src\lib\cstdmf\unit_test\test_memory_tracker.cpp (84): wuu
+e:\mf_19_0\src\lib\cstdmf\unit_test\test_memory_tracker.cpp (90): MemoryTracker_testCallstackTest::RunTest
+e:\mf\src\lib\third_party\cppunitlite2\src\test.cpp (40): Test::Run
+e:\mf\src\lib\third_party\cppunitlite2\src\testregistry.cpp (37): TestRegistry::Run
+e:\mf\src\lib\unit_test_lib\unit_test.cpp (59): BWUnitTest::runTest
+e:\mf\src\lib\cstdmf\unit_test\main.cpp (12): main
+f:\sp\vctools\crt_bld\self_x86\crt\src\crtexe.c (597): __tmainCRTStartup
+f:\sp\vctools\crt_bld\self_x86\crt\src\crtexe.c (414): mainCRTStartup
+ERROR: SymGetLineFromAddr64, GetLastError: 487 (Address: 76CE4911)
+76CE4911 (kernel32): (filename not available): BaseThreadInitThunk
+ERROR: SymGetLineFromAddr64, GetLastError: 487 (Address: 7743E4B6)
+7743E4B6 (ntdll): (filename not available): RtlInitializeExceptionChain
+ERROR: SymGetLineFromAddr64, GetLastError: 487 (Address: 7743E489)
+7743E489 (ntdll): (filename not available): RtlInitializeExceptionChain</pre></div></div></div></div></body></html>

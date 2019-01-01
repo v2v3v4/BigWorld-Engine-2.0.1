@@ -1,0 +1,404 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;3.&nbsp;Scaleform</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Third-Party Integrations">
+      <link rel="up" href="index.html" title="Third-Party Integrations">
+      <link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Umbra">
+      <link rel="next" href="ch04.html" title="Chapter&nbsp;4.&nbsp;SpeedTree">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;3.&nbsp;Scaleform</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Scaleform_Integration"></a>Chapter&nbsp;3.&nbsp;Scaleform
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch03.html#xref_ScaleForm_Introduction">3.1. Introduction</a></span></dt>
+                  <dt><span class="section"><a href="ch03.html#d0e443">3.2. Building the Client with Scaleform</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#d0e454">3.2.1. Setting the BigWorld Build Configuration Macros</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch03.html#d0e469">3.3. Displaying Flash Movies</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#d0e474">3.3.1. Getting up and running quickly</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e482">3.3.2. Python controls the lifetime of Scaleform Objects</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e491">3.3.3. Better Control over the Display of your Movie</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch03.html#d0e506">3.4. Interacting with Flash Movies</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch03.html#d0e511">3.4.1. Using fscommand in Action Script to call into Python</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e528">3.4.2. Using External Interface calls from Action Script to
+                                       Python</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e536">3.4.3. Setting and Getting Action Script variables directly from
+                                       Python</a></span></dt>
+                        <dt><span class="section"><a href="ch03.html#d0e554">3.4.4. Calling Action Script methods from Python</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_ScaleForm_Introduction"></a>3.1.&nbsp;Introduction
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Scaleform GFx is a third party Flash rendering library produced by
+                      Scaleform (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.scaleform.com" target="_top">http://www.scaleform.com/</a>).
+                      Scaleform is not provided as part of the BigWorld Technology license and
+                      needs to be licensed seperately if required.
+               </p>
+               <p>BigWorld Technology is integrated with Mozilla using llmozlib which
+                      allows showing web pages and Flash movies as part of the game but this
+                      solution is less efficient than Scaleform and therefore not suitable for
+                      game user interfaces.
+               </p>
+               <p>Scaleform provides a hardware accelerated renderer for Flash movies
+                      suitable for use in games. BigWorld has implemented an integration with
+                      Scaleform allowing Flash movies to be displayed, and controlled by
+                      Python.
+               </p>
+               <p>Scaleform IME is an optional add-on for Scaleform customers,
+                      allowing display of an in-game Scaleform IME movie to replace the windows
+                      IME language bar. BigWorld has integrated against Scaleform IME as
+                      well.
+               </p>
+               <p>While Scaleform has tried its best to optimise rendering of Flash
+                      movies, there are still a number of guidelines that artists should follow
+                      in order to create Flash movies that behave well and don't bog down
+                      performance unnecessarily. It is therefore essential that you read the
+                      appropriate Scaleform documentation before launching into full-scale
+                      production of Flash movies for use with your BigWorld game.
+               </p>
+               <p>This document describes how to display and use a Flash movie in
+                      BigWorld. It describes the changes required to the client to build in the
+                      Scaleform integration. It then describes how to use the Python API to
+                      display and manipulate a Flash movie. Finally it describes some
+                      BigWorld-specific features and limitations.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e443"></a>3.2.&nbsp;Building the Client with Scaleform
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>In order to build the client with support for Scaleform, you must
+                      download and install the SDK (version 3). The installer will create an
+                      environment variable called <code class="code">GFXSDK</code> which is used by the
+                      BigWorld client solution to locate the SDK installation. You can check
+                      that the environment variable is correctly set by opening a command prompt
+                      and entering the command <code class="code">set GFXSDK</code>. It should print out the
+                      root installation path of the Scaleform SDK.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e454"></a>3.2.1.&nbsp;Setting the BigWorld Build Configuration Macros
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The Scaleform integration library is included with your BigWorld
+                           Technology package in the
+                           <code class="filename">bigworld/src/lib/scaleform</code> directory. Contained in
+                           this directory is a file called <code class="filename">config.hpp</code>, which
+                           should be changed to look like this:
+                  </p><pre class="programlisting">#define SCALEFORM_SUPPORT 1
+#define SCALEFORM_IME 1               //only necessary if also using Scaleform IME</pre><p>Then
+                           rebuild the client. That's all you should have to do.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e469"></a>3.3.&nbsp;Displaying Flash Movies
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This section aims to show you how to load up a Flash movie and
+                      display it in your game's user interface. There are two approaches to
+                      achieving this. The first approach involves displaying a global movie
+                      which bypasses the BigWorld GUI system completely. The second approach
+                      involves showing a Scaleform movie within a BigWorld GUI tree. It is
+                      recommended to use the second approach, but for simplicity and to get up
+                      and running quickly you can display a flash movie as part of a global
+                      flash movie list.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e474"></a>3.3.1.&nbsp;Getting up and running quickly
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The simplest way to display a flash movie is to load a Movie
+                           Definition File (representing a .swf file), create a view of that (Movie
+                           View) and display the movie. This type of movie will always handle key
+                           and mouse inputs, and will always display at the full size of the client
+                           window. Note that just like any other resources loading in BigWorld,
+                           Scaleform resources must exist within your resource paths. Any attempts
+                           to load a flash file from outside of your specified resource paths will
+                           throw a Python IOError Exception.
+                  </p><pre class="programlisting">import Scaleform
+movieDef = Scaleform.MovieDef( filename )
+movieView = movieDef.createInstance()
+movieView.showAsGlobalMovie()</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e482"></a>3.3.2.&nbsp;Python controls the lifetime of Scaleform Objects
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In the above example, two objects were created, a Movie Definition
+                           and a Movie View. Both of these are Python objects that internally
+                           maintain a reference to one or more Scaleform C++ objects. As a game
+                           programmer, all you need to know is that as long as you keep your Python
+                           objects alive, the underlying Scaleform objects are kept alive too.
+                           Here's a code snippet that demonstrates the lifetime of these two Python
+                           objects :
+                  </p><pre class="programlisting">#movieDef, movieView attributes created in the above example
+
+# First we will free the movie definition.
+del movieDef
+
+# The Movie View will still play, however in future if you require a new view of that movie, you'll have to reload the entire movie.
+
+# Now free the movie view.
+del movieView
+
+# Notice that deleting the movieView object means it is no longer displaying</pre><p>If
+                           you hold onto Scaleform objects after the Personality Script is
+                           fini'd(), then you will run into problems, as the Scaleform subsytem is
+                           shut down before Python. When Python is shut down, it frees all its
+                           outstanding objects, and the Python-controlled Scaleform objects will be
+                           released too late, causing an assert. It is up to you to make sure you
+                           release these objects before shutdown.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e491"></a>3.3.3.&nbsp;Better Control over the Display of your Movie
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In the first example, the movieView created was displayed as part
+                           of a simple, global list of movies. In practice, you may want to mix
+                           BigWorld GUI objects and Scaleform movies, for example, to embed a
+                           Scaleform movie within a moveable window, or to pop up a Scaleform movie
+                           like an Inventory display in the HUD.
+                  </p>
+                  <p>In order to do this, you simply wrap the MovieView object in a
+                           Flash GUI Component. Once you do this, the GUI object takes control over
+                           the lifetime, display, size, position and input handling for your
+                           movie.
+                  </p><pre class="programlisting"># movieDef, movieView attributes created in the above example
+
+import GUI
+g = GUI.Flash( movieView )
+GUI.addRoot(g)
+
+# movie is now displayed via the GUI tree, instead of displayed via a global Scaleform movie list.
+
+# The movie can now be positioned just like other GUI components.
+g.position = (1.0,-1.0,0.6)
+g.verticalAnchor = "BOTTOM"
+g.horizontalAnchor = "RIGHT"
+g.widthMode = "PIXEL"
+g.heightMode = "PIXEL"
+g.size = (256, 256)
+
+# The movie now responds to key / mouse events just like other GUI components
+g.focus = True             # respond to key events
+g.mouseButtonFocus = True  # respond to mouse button events
+g.moveFocus = True         # respond to mouse events</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>If you attach a script object to a FlashGUIComponent, you have
+                                to pass input events through to the MovieView yourself. This allows
+                                the script to filter events before they get passed through. For
+                                example, the following snippet passes through all input events except
+                                the escape key which is handled as a special case:
+                     </p><pre class="programlisting">class MyFlashScript( object ):
+    def __init__( self, component ):
+        self.component = component
+        component.script = self
+
+    def handleKeyEvent( self, event ):
+        if event.key == Keys.ESCAPE:
+            self.visible = False
+            return False
+        
+        return self.component.movie.handleKeyEvent( event )    
+        
+    def handleMouseButtonEvent( self, comp, event ):
+        return self.component.movie.handleMouseButtonEvent( event )
+
+    def handleMouseEvent( self, comp, event ):
+        return self.component.movie.handleMouseEvent( event )</pre></div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e506"></a>3.4.&nbsp;Interacting with Flash Movies
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>No doubt you will want to build complex UI's in Flash that interact
+                      with your BigWorld game, sending and receiving events and swapping data
+                      back and forth. All method and data interactions are handled via the
+                      PyMovieView Python object. This chapter details a number of different ways
+                      to interact with your Flash movie and its action script.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e511"></a>3.4.1.&nbsp;Using fscommand in Action Script to call into Python
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In earlier versions of Action Script, the
+                           <code class="function">fscommand()</code> call was the way to call out from
+                           Action Script and into its container. <code class="function">fscommand()</code>
+                           is supported by Scaleform and BigWorld. In order to handle
+                           <code class="function">fscommand()</code> calls, you simply register a Python
+                           callback function to handle any such calls :
+                  </p><pre class="programlisting">def myFSCommandHandler( cmd, arg ):
+    # cmd, arg are both strings.  Dispatch to wherever is appropriate.
+
+movieView.setFSCommandCallback( myFSCommandHandler )</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e528"></a>3.4.2.&nbsp;Using External Interface calls from Action Script to
+                                    Python
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In later versions of Action Script, external interface is used
+                           instead to call out of Action Script and into the containing
+                           application. External Interface calls have the advantage of allowing
+                           different types and number of arguments to be passed around (instead of
+                           fscommand supporting only a single string argument). Additionally, the
+                           container can set return values for the external interface call. Usage
+                           is similar to handling fscommand, however the callback function has a
+                           different interface :
+                  </p><pre class="programlisting">def myExternalInterfaceHandler( cmd, *args ):
+    # cmd is still a string, but now we have a list of arguments, with arbitrary types.  Dispatch to wherever is appropriate
+
+movieView.setExternalInterfaceCallback( myExternalInterfaceHandler )</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e536"></a>3.4.3.&nbsp;Setting and Getting Action Script variables directly from
+                                    Python
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Action Script variables tend to be buried in a hierarchy, often
+                           looking like : <span class="literal">"_root.levelN.someVariableName"</span>.
+                           Unfortunately this syntax is misinterpreted by Python and currently
+                           there is no elegant solution to work around this. However it is still
+                           easy to exchange data with Action Script. All that is required is to use
+                           Python's <code class="function">setattr</code> and <code class="function">getattr</code>
+                           syntax. For example:
+                  </p><pre class="programlisting">setattr( movieView, "_root.level0.maxHealth", 10 )
+currentHealth = getattr( movieView, "_root.level0.health" )</pre><p>Using this syntax you can get and set any of the following types
+                           of data : boolean, int, floats, string and unicode string.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e554"></a>3.4.4.&nbsp;Calling Action Script methods from Python
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The final interaction you will want to have with your Flash movie
+                           is to call Action Script methods directly from Python. In order to do
+                           this, simply use the <code class="methodname">invoke()</code> method:
+                  </p><pre class="programlisting">result = movieView.invoke( "_root.level0.flashHealthBar", 10.0 )</pre></div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;2.&nbsp;Umbra&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;4.&nbsp;SpeedTree</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,166 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;8.&nbsp;Meta Data</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Content Tools Reference Guide">
+      <link rel="up" href="index.html" title="Content Tools Reference Guide">
+      <link rel="prev" href="ch07.html" title="Chapter&nbsp;7.&nbsp;Asset Browser">
+      <link rel="next" href="ch09.html" title="Chapter&nbsp;9.&nbsp;Panel System">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/content_tools_reference_guide/ch08.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;8.&nbsp;Meta Data</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Meta_Data"></a>Chapter&nbsp;8.&nbsp;Meta Data
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <p>Meta Data can be used to define arbitrary properties for existing
+               objects. With meta data, you can add extra properties to models, particle
+               systems or any objects in chunk. Those properties are listed along other
+                 properties and can be edited in the same way.
+            </p>
+            <p>Currently we have two kinds of meta data:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">Asset meta data</em>: They are extra
+                              properties added to individual asset like model, particle system, etc.
+                              They are saved with the asset.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis">Instance meta data</em>: They are
+                              extra properties added to the instance of an asset in the space. They
+                              are saved to chunk file by <em class="emphasis">WorldEditor</em>.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="informalfigure">
+               <div class="mediaobject"><img src="images/md_main_window.png" height=""><span class="caption">
+                     <p>Meta Data</p></span></div>
+            </div>
+            <p>Above is the <em class="emphasis">Properties</em> panel of
+                 <em class="emphasis">WorldEditor</em>, it shows properties of a
+                 selected model. The properties listed under "asset metadata" (surrounded by
+                 the red rectangle) are the meta data properties of the model itself (asset
+                 meta data). The properties marked by a prefix red bar are the meta data
+                 properties of this chunk model instance (instance meta data).
+            </p>
+            <p><em class="emphasis">Note</em>: Asset meta data is read-only in
+                 <em class="emphasis">WorldEditor</em>.
+            </p>
+            <p>Meta data properties are defined by <span class="literal">XML</span> files.
+                 Currently we only support three kind of meta data, they are:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Meta data for models: its definition file is defined in section
+                              <span class="literal">editor/metaDataConfig/model</span> of
+                              <code class="filename">resources.xml</code>, the default value is
+                              <code class="filename">helpers/meta_data/model.xml</code></p>
+                  </li>
+                  <li>
+                     <p>Meta data for particles: its definition file is defined in section
+                              <span class="literal">editor/metaDataConfig/metaParticleSystem</span> of
+                              <code class="filename">resources.xml</code>, the default value is
+                              <code class="filename">helpers/meta_data/meta_particle_system.xml</code></p>
+                  </li>
+                  <li>
+                     <p>Meta data for chunk items: its definition file is defined in
+                              section <span class="literal">editor/metaDataConfig/chunkItem</span> of
+                              <code class="filename">resources.xml</code>, the default value is
+                              <code class="filename">helpers/meta_data/chunk_item.xml</code></p>
+                  </li>
+               </ul>
+            </div>
+            <p>Each section in the files defines a property. Its format is:</p><pre class="programlisting">&lt;PropertyName&gt;
+    &lt;description&gt; optional description &lt;/description&gt;
+    &lt;type&gt; TYPE &lt;/type&gt;
+&lt;/PropertyName&gt;</pre><p>Currently, the types we support are <span class="literal">STRING</span>,
+                 <span class="literal">INT</span>, <span class="literal">FLOAT</span>, <span class="literal">COMMENT</span>
+                 and <span class="literal">DATETIME</span>. If description section is not presented, we
+                 will use. For example, if you want to add a new property named "girth
+                 index", which is the index into a girth array to describe the model's girth.
+                 As "girth index" cannot be used as <span class="literal">XML</span> section name, a
+                 description must be provided. This property could be defined as
+                 follow:
+            </p><pre class="programlisting">&lt;girth_index&gt;
+    &lt;description&gt; girth index &lt;/description&gt;
+    &lt;type&gt; INT &lt;/type&gt;
+&lt;/girth_index&gt;</pre><p>In addition to the properties defined in the <span class="literal">XML</span>
+                 files, each object with meta data also has some default properties. They are
+                 defined in the engine. Currently we only have 6 default properties:
+                 "<span class="literal">created by</span>", "<span class="literal">created on</span>",
+                 "<span class="literal">modified by</span>", "<span class="literal">modified on</span>",
+                 "<span class="literal">comments</span>" and "<span class="literal">description</span>".
+            </p>
+            <p>"<span class="literal">created by</span>" and "<span class="literal">created on</span>"
+                 are automatically filled when the object linked to this meta data is first
+                 created, i.e. when a model is exported by the exporter, a meta particle
+                 system is created in ParticleEditor or an object placed/cloned inside
+                 WorldEditor. "<span class="literal">modified by</span>" and "<span class="literal">modified
+                    on</span>" are automatically filled when there is any modification made
+                 to the object. All those fields are generated by the system and are
+                 read-only to the user.
+            </p>
+            <p>"<span class="literal">description</span>" is a single string field used to add
+                 a simple description to the object while "<span class="literal">comments</span>" can
+                 have multiple entries under it. Besides the text, each comment also records
+                 the user who creates the comment and the time the comment is created.
+            </p>
+            <p>If one of the definition files does not exist, the corresponding
+                 objects will still get their default properties.
+            </p>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;7.&nbsp;Asset Browser&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;9.&nbsp;Panel System</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

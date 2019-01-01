@@ -1,0 +1,223 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;14.&nbsp;Common Log Messages</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Operations Guide">
+      <link rel="up" href="index.html" title="Server Operations Guide">
+      <link rel="prev" href="ch13.html" title="Chapter&nbsp;13.&nbsp;First Aid After a Crash">
+      <link rel="next" href="ch15.html" title="Chapter&nbsp;15.&nbsp;Clock">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_operations_guide/ch14.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;14.&nbsp;Common Log Messages</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch13.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch15.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Common_Log_Messages"></a>Chapter&nbsp;14.&nbsp;Common Log Messages
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch14.html#d0e10093">14.1. Warnings</a></span></dt>
+                  <dt><span class="section"><a href="ch14.html#d0e10198">14.2. Errors</a></span></dt>
+               </dl>
+            </div>
+            <p>This section provides the description of common log messages.</p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10093"></a>14.1.&nbsp;Warnings
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li><pre class="programlisting">CellApp    WARNING  WatcherDoc::initWatcherDoc: unable to load watcherdoc/cellapp.xml </pre><p>This <span class="literal">WARNING</span> is due to an incomplete feature
+                                   to add documentation to our watchers. We apologise if it caused any
+                                   confusion. You can silence this warning by creating <code class="filename">cellapp.xml</code> in <code class="filename">bigworld/res/watcherdoc</code>. The file should
+                                   contain an empty <span class="literal">root</span> section:
+                        </p><pre class="programlisting">&lt;root&gt;
+&lt;/root&gt;</pre></li>
+                     <li><pre class="programlisting">CellApp    WARNING  InterfaceElement::expandLength: Received a message longer than normal length</pre><p>We try to optimise network traffic by using the smallest integer
+                                   size that can encode the expected length of the message. For example,
+                                   if we expect the message to be always less than 255 bytes, we will use
+                                   just one byte to encode the length. We use 2 bytes for messages that
+                                   are expected to be less than 65535 bytes long, etc. However, if the
+                                   message exceeds the expected size, we will fallback to using 4 bytes
+                                   to encode the length. The above <span class="literal">WARNING</span> means that
+                                   a message has exceeded the expected message length.
+                        </p>
+                     </li>
+                     <li><pre class="programlisting"> CellApp    WARNING  CellApp::handleGameTickTimeSlice: Last game tick took 0.21 seconds </pre><p>This <span class="literal">WARNING</span> means that the game tick took
+                                   longer than the normal 0.1 seconds. This can be due to many reasons
+                                   but usually it is due to a script function taking a long time. You
+                                   should ensure that your script code does not do anything that takes
+                                   significant amount of time. You may have to break your processing into
+                                   several runs by using a timer.
+                        </p>
+                     </li>
+                     <li><pre class="programlisting">CellApp    WARNING  CellApp: Scaling back!!</pre><p>In response to a game tick exceeding 0.1 seconds, the CellApp
+                                   will skip some of its usual processing to help decrease the load, e.g.
+                                   it will reduce the amount of updates sent to the client. This
+                                   <span class="literal">WARNING</span> is to inform you that clients may receive
+                                   less updates e.g. entity movements may be jerky.
+                        </p>
+                     </li>
+                     <li><pre class="programlisting">CellApp    WARNING  cellapp.cpp:1918: Profile CALL_TIMERS took 0.12 seconds </pre><p>This means that the total time of all
+                                   <code class="methodname">onTimer</code>() callbacks in that tick took 0.12
+                                   seconds. This is bad because one tick should be less than 0.1
+                                   seconds.
+                        </p><pre class="programlisting">CellApp    WARNING  cellapp.cpp:1572: Profile GAME_TICK took 0.12 seconds</pre><p>This means the game tick took more than 0.1 seconds. This time
+                                   includes the <span class="literal">CALL_TIMERS</span> time above so almost all
+                                   of the game tick was in <code class="methodname">onTimer</code>()
+                                   callbacks.
+                        </p>
+                     </li>
+                     <li><pre class="programlisting">CellApp    WARNING  Witness::update: 474 has a deficit of 2370 bytes (10.68 packets)</pre><p>This is related to the <em class="emphasis"><span class="literal">&lt;bitsPerSecondToClient&gt;</span></em>
+                                   configuration in <code class="filename">bw.xml</code>. If <em class="emphasis"><span class="literal">&lt;bitsPerSecondToClient&gt;</span></em>
+                                   is 20000, then it means that the maximum number of bytes we can send
+                                   to the client every tick is
+                                   <span class="literal">((20000/BitsPerSecond)/UpdateHertz) - UDPOverhead =
+                                      ((20000/8)/10) - 28 = 222 bytes</span>. The above
+                                   <span class="literal">WARNING</span> means that we are sending 2370 bytes to the
+                                   client in one tick. This is 10.68 times the allowed data rate.
+                        </p>
+                        <p>This is usually caused by method calls to the entities located
+                                   on the client i.e. entities in the AoI of the player or the player
+                                   itself. If many method calls are made, or if the method calls are
+                                   passing large arguments, then we will exceed the bandwidth allocation
+                                   for the client. When bandwidth allocation is exceeded, the position
+                                   updates send to the client is reduced so entity movements will become
+                                   jerky.
+                        </p>
+                     </li>
+                     <li><pre class="programlisting">CellApp    WARNING  controller.cpp:158: Profile SCRIPT_CALL took 0.63 seconds
+CellApp    WARNING  Controller::standardCallback: method = onTimer; id = 17648; controllerID = 270; userArg = 260
+CellApp    WARNING  timer_controller.cpp:156: Profile ON_TIMER took 0.62 seconds</pre><p>The above 3 <span class="literal">WARNING</span>s are generated together.
+                                   They mean a single <code class="methodname">onTimer</code>() callback took
+                                   0.62 seconds. This is very bad since it means a single entity is using
+                                   6 times a normal game tick.
+                        </p>
+                     </li>
+                     <li><pre class="programlisting">CellApp    WARNING  TimerController::New: Rounding up initial offset to 1 from 0 (initialOffset 0.000000)</pre><p>This means that you are adding a timer that is less than 0.1
+                                   seconds long. Our minimum timeout is 1 tick.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e10198"></a>14.2.&nbsp;Errors
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li><pre class="programlisting">CellApp    ERROR    CellApp: Scale back exhausted. spareTime 0.016686 tickPeriod 0.124365, real/entities 887/887, recvs 4504 trys 3958 good 0 errs (546 sels), nub timers 753 calls 752 rescheds
+	    </pre><p>The means that the game tick has exceeded 0.1 seconds for many
+                                   ticks. The CellApp has already reduced updates to the clients to a
+                                   minimum but still cannot keep the game tick shorter than 0.1
+                                   seconds.
+                        </p>
+                     </li>
+                     <li><pre class="programlisting">CellApp    ERROR    Chunk::load: Failed to load chunk 001xfffx/sep/0010fffco: unknown error in item 'model'</pre><p>This means that there is an error loading a model in the chunk
+                                   0010fffco. Unfortunately, there is not enough information to identify
+                                   what is causing the error. You can try loading the space in World
+                                   Editor and see if the same error occurs. World Editor may be able to
+                                   provide more information about the error.
+                        </p>
+                     </li>
+                     <li><pre class="programlisting">CellApp    ERROR    Received message id 41 for nonexistent entity 2844 from 192.168.50.21:49140</pre><p>Message <span class="literal">41</span> is the
+                                   <span class="literal">destroyEntity</span> message. This means that entity 2844
+                                   was already destroyed when the CellApp received this message. Make
+                                   sure that you have not called
+                                   "<code class="varname">self</code>.<code class="methodname">destroy</code>()" in the
+                                   cell and
+                                   "<code class="varname">self</code>.<code class="methodname">destroyCellEntity</code>()"
+                                   in the base at the same time.
+                        </p>
+                        <p>This may also be an indication of a BigWorld Server bug. If you are
+                                   not able to resolve the issue, please send us more log output around
+                                   the time of this error.
+                        </p>
+                     </li>
+                     <li><pre class="programlisting">BaseApp    ERROR    BaseApp::setClient: Could not find base id 2881
+
+BaseApp    ERROR    getProxyForCall: No proxy set!
+
+BaseApp    ERROR    getProxyForCall: No proxy set!</pre><p>The above messages means that the entity (2881) has been
+                                   destroyed but is still receiving messages. This may be due to another
+                                   entity calling a method using a mailbox of the destroyed entity. You
+                                   have to make sure that when an entity is destroyed, all other entities
+                                   holding a mailbox to the destroyed entity is informed so that they can
+                                   reset the mailbox.
+                        </p>
+                        <p>This may also be an indication of a BigWorld Server bug. If you are
+                                   unable to resolve the issue please send us more logs around the time
+                                   of this error.
+                        </p>
+                     </li>
+                     <li><pre class="programlisting">BaseApp    ERROR    0.0.0.0:0: Exception was thrown: REASON_GENERAL_NETWORK</pre><p>This means that there was an error with the network. Either the
+                                   machine has been disconnected from the network, or there is some sort
+                                   of hardware error.
+                        </p>
+                     </li>
+                     <li><pre class="programlisting">BaseApp    ERROR    10.40.3.17:56859: Exception was thrown: REASON_NO_SUCH_PORT</pre><p>This means that either the machine has been disconnected from
+                                   the network, or the destination process has crashed.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch13.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch15.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;13.&nbsp;First Aid After a Crash&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;15.&nbsp;Clock</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

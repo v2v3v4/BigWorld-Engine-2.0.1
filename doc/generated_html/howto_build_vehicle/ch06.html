@@ -1,0 +1,598 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;6.&nbsp;Ripper Example</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Build Vehicles">
+      <link rel="up" href="index.html" title="How To Build Vehicles">
+      <link rel="prev" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Asynchronous and Ghost Cell Considerations">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_build_vehicle/ch06.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;6.&nbsp;Ripper Example</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;</td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Ripper_Example"></a>Chapter&nbsp;6.&nbsp;Ripper Example
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch06.html#d0e315">6.1. Base Implementation</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#d0e320">6.2. Cell Implementation</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#d0e365">6.3. Client implementation</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch06.html#d0e476">6.3.1. PlayerRipper</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch06.html#d0e623">6.4. Ripper definition file</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#d0e690">6.5. Ripper editor</a></span></dt>
+                  <dt><span class="section"><a href="ch06.html#d0e700">6.6. Ripper requirements of Avatar</a></span></dt>
+               </dl>
+            </div>
+            <p>The Ripper is a simple single-passenger hover bike, designed to
+                 demonstrate vehicle implementation. In this section, Ripper's implementation
+                 is detailed to help in its use as a basis for new vehicles.
+            </p>
+            <p>The Ripper consists of the following files:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><code class="filename">fantasydemo/res/scripts/base/Ripper.py</code></p>
+                  </li>
+                  <li>
+                     <p><code class="filename">fantasydemo/res/scripts/cell/Ripper.py</code></p>
+                  </li>
+                  <li>
+                     <p><code class="filename">fantasydemo/res/scripts/client/Ripper.py</code></p>
+                  </li>
+                  <li>
+                     <p><code class="filename">fantasydemo/res/scripts/entity_defs/Ripper.def</code></p>
+                  </li>
+                  <li>
+                     <p><code class="filename">fantasydemo/res/scripts/editor/Ripper.py</code></p>
+                  </li>
+               </ul>
+            </div>
+            <p>It also requires an entry in
+                 <code class="filename">fantasydemo/res/scripts/entities.xml</code> file, and some
+                 functionality in the Avatar's client and cell.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e315"></a>6.1.&nbsp;Base Implementation
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The Ripper's base is empty, as it does not need to do more than is
+                      provided by the default base of FantasyDemo.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e320"></a>6.2.&nbsp;Cell Implementation
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The Ripper's cell manages control of the Ripper, and is responsible
+                      for notifying all interested clients of such changes.
+               </p>
+               <p>When the Ripper is first created, the cell has control of its
+                      movements, but passes this ability to clients as they attempt to use
+                      it.
+               </p>
+               <p>The Ripper's cell contains the methods described in the list
+                      below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">mountVehicle( self,
+                                         sourceAvatarID )</span></em></p>
+                        <p>Mount process stage 4 of 8, this is a Ripper specified method
+                                   for mounting the vehicle. In this method, control is transferred to
+                                   the client, and the specified avatar's cell is requested to board the
+                                   Ripper. The board request of the avatar forms stage 5 of 8 of the
+                                   dismount process.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">passengerBoarded( self,
+                                         sourceAvatarID )</span></em></p>
+                        <p>Mount process stage 6 of 8, this is a callback from the pilot's
+                                   cell, and is specific to the Avatar implementation
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">dismountVehicle( self,
+                                         sourceAvatarID )</span></em></p>
+                        <p>Dismount process stage 3 of 7, this is a Ripper-specific method
+                                   for dismounting the vehicle In this method, the Ripper's cell takes
+                                   back control of its movement, and requests that the avatar alight. The
+                                   avatar's alight request forms stage 4 of 7 of the dismount
+                                   process.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">passengerAlighted( self,
+                                         sourceAvatarID )</span></em></p>
+                        <p>Dismount process stage 5 of 7, this is a callback from the
+                                   pilot's cell, and is specific to the Avatar implementation.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">onLoseControlledBy( self, id
+                                         )</span></em></p>
+                        <p>This is a server event handler that should be implemented by all
+                                   vehicles that transfer control to a client at some point. It is called
+                                   when the connection to a passenger's client is lost, and so gives the
+                                   vehicle the opportunity to return to a good state
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e365"></a>6.3.&nbsp;Client implementation
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The client side of the Ripper is the largest part of the
+                      implementation, as it handles interaction and animation.
+               </p>
+               <p>Ripper's client contains the methods described in the list
+                      below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">enterWorld( self
+                                         )</span></em></p>
+                        <p>Implemented by most entities, for the Ripper contains cosmetic
+                                   code that does not affect functionality. Particle systems, shadows,
+                                   and the initial state of animation is set up. The passenger will
+                                   always enter the world after the vehicle, requiring a separate
+                                   <code class="methodname">onPassengerEnterWorld()</code>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">prerequisites( self
+                                         )</span></em></p>
+                        <p>Part of the asynchronous loading system employed by the BigWorld
+                                   client. By returning a list of assets used by the Ripper, pauses from
+                                   blocking loads can be avoided.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">passengerEnterWorld( self, pilot
+                                         )</span></em></p>
+                        <p>Called by the Avatar implementation in FantasyDemo when an
+                                   Avatar enters the world on a vehicle. It is used by the Ripper to
+                                   setup the pilot model and animation.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">leaveWorld( self
+                                         )</span></em></p>
+                        <p>Implemented by most entities, for the Ripper contains only some
+                                   minor cleanup code for particle systems and shadows. The client caches
+                                   entities that leave the area of interest, so be sure that the vehicle
+                                   will return to a good state if <code class="methodname">enterWorld()</code>
+                                   is called on it later.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">use( self
+                                         )</span></em></p>
+                        <p>Mount process stage 1 of 8, this is an event handler override
+                                   for when the entity is used. In the case of the Ripper, it is used to
+                                   initiate the mounting process.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">walkToMountPosition( self,
+                                         success )</span></em></p>
+                        <p>Mount process stage 2 of 8, this recursive function lines up the
+                                   player and the Ripper for the mounting animations by using the
+                                   <span class="literal">seek</span> commands in the player's physics object
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">arriveAtMountPosition( self,
+                                         success )</span></em></p>
+                        <p>Mount process stage 3 of 8, this callback is given to the
+                                   <span class="literal">seek</span> function to notify the Ripper when the player
+                                   has arrived. On success, the client-side Ripper will contact its cell
+                                   and attempt to acquire control for this client.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">mountVehicle( self, succeeded,
+                                         pilotAvatarID )</span></em></p>
+                        <p>Mount process stage 7 of 8, this is a broadcast sent to all
+                                   clients interested in this Ripper. It informs them that an Avatar is
+                                   mounting the vehicle &#8212; the affected Avatar also receives this
+                                   call, and uses the ID parameter to identify itself. The Ripper becomes
+                                   the player in this case, and plays the mounting animations to
+                                   demonstrate this
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">finishMountVehicle( self
+                                         )</span></em></p>
+                        <p>Mount process stage 8 of 8, this is called at the end of the
+                                   mount animation using the
+                                   <code class="methodname">BigWorld.callback()</code><sup>[<a name="d0e450" href="#ftn.d0e450">1</a>]</sup> mechanism. It completes the mount process, unlocking the
+                                   Ripper controls.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">dismountVehicle( self,
+                                         pilotAvatarID )</span></em></p>
+                        <p>Dismount process stage 6 of 7, this is the second broadcast
+                                   method used by the cell to notify clients of the Ripper's dismount in
+                                   progress. As in <code class="methodname">mountVehicle()</code>, the pilot ID
+                                   is provided to identify the client dismounting.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">finishDismountVehicle( self
+                                         )</span></em></p>
+                        <p>Dismount process stage 7 of 7. Completing the dismount
+                                   animation, the player's model is returned to the avatar, which is then
+                                   released back to user control.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e476"></a>6.3.1.&nbsp;PlayerRipper
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>PlayerRipper's client contains the methods described in the list
+                           below:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis"><span class="literal">onBecomePlayer( self
+                                              )</span></em></p>
+                           <p>Event handler triggered when the vehicle becomes a
+                                        PlayerRipper. Note that the PlayerRipper's constructor is not
+                                        called, as the object is constructed as a normal Ripper and then
+                                        later changes type to PlayerRipper.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">setupKeyBindings( self
+                                              )</span></em></p>
+                           <p>Method used by the Ripper to setup the player's
+                                        controls.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">onBecomeNonPlayer( self
+                                              )</span></em></p>
+                           <p>Event triggered when the Ripper changes back into a plain
+                                        Ripper object. Upon receiving this, clean up any members created
+                                        during <span class="literal">onBecomePlayer</span> event, such as key
+                                        bindings.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">handleKeyEvent( self, isDown,
+                                              key, mods )</span></em></p>
+                           <p>Calls functions mapped to key inputs. This is basically the
+                                        same as the one used in the Fantasydemo Avatar.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">updateThrust( self
+                                              )</span></em></p>
+                           <p>Method called as part of the key event handling process to
+                                        update the physics object and animations.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">beginDismount( self, isDown
+                                              )</span></em></p>
+                           <p>Dismount process stage 1 of 7, this method shuts down the
+                                        Ripper, so that it will fall to the ground, ready for the player to
+                                        alight.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">dismountStep( self
+                                              )</span></em></p>
+                           <p>Dismount process stage 2 of 7, this method finishes the
+                                        landing initiated in <span class="literal">beginDismount</span>, before
+                                        initiating the cell's dismount process.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">checkAnims( self
+                                              )</span></em></p>
+                           <p>Method called to tick the animation of hover vehicles, as the
+                                        generic action matcher is not suitable for this style of
+                                        vehicle.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">playTransitionAction( self,
+                                              act, oldTurn, oldMove )</span></em></p>
+                           <p>Utility function used by <span class="literal">checkAnims</span> to
+                                        blend between different states of turning.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">handleConsoleInput( self,
+                                              string )</span></em></p>
+                           <p>Method that passes its calls onto the avatar that handles the
+                                        chat console.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">onCollide( self, newMomentum,
+                                              collidePosition, severity, triangleFlags
+                                              )</span></em></p>
+                           <p>Method used by the Rippers to trigger sounds and particle
+                                        effects. The Ripper is a physical body in the world, and so can
+                                        receive collision callbacks.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">moveForward( self, isDown
+                                           )</em></p>
+                           <p>Key event handlers that translate the relevant 'key down'
+                                        state into a numerical one or zero. For use in
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">moveBackward( self, isDown
+                                           )</em></p>
+                           <p>See the <span class="literal">moveForward( self, isDown )</span> entry
+                                        above.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">turnLeft( self, isDown
+                                              )</span></em></p>
+                           <p>See the <span class="literal">moveForward( self, isDown )</span> entry
+                                        above.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">turnRight( self, isDown
+                                              )</span></em></p>
+                           <p>See the <span class="literal">moveForward( self, isDown )</span> entry
+                                        above.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">moveUpward( self, isDown
+                                              )</span></em></p>
+                           <p>See the <span class="literal">moveForward( self, isDown )</span> entry
+                                        above.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis"><span class="literal">updateThrust</span></em></p>
+                           <p>See the <span class="literal">moveForward( self, isDown )</span> entry
+                                        above.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e623"></a>6.4.&nbsp;Ripper definition file
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Located under <code class="filename">fantasydemo/res/scripts/entity_defs</code>, the
+                      <code class="filename">Ripper.def</code> definition file for the Ripper contains
+                      the following properties:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><code class="varname">pilotID</code></em></p>
+                        <p>Current pilot of the vehicle It is used in client-side checks to
+                                   prevent multiple mount attempts, and also for displaying the pilot
+                                   model on the vehicle.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The file declares the following client methods:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><code class="methodname">mountVehicle()</code></em></p>
+                        <p>Function call sent to all interested clients, to notify them of
+                                   an avatar boarding the Ripper.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><code class="methodname">dismountVehicle()</code></em></p>
+                        <p>Function call sent to all interested clients, to notify them of
+                                   an avatar dismounting the Ripper.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>It also declares the following cell methods:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><code class="methodname">mountVehicle()</code></em></p>
+                        <p>Function used by the client to actually mount the vehicle and
+                                   gain control of it. This function will fail if the Ripper is already
+                                   occupied.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><code class="methodname">dismountVehicle()</code></em></p>
+                        <p>Function called by either the client or the controller lost
+                                   event handler to return the Ripper to a mountable state.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><code class="methodname">passengerBoarded()</code></em></p>
+                        <p>Callback received from the avatar when it has boarded the
+                                   vehicle entity.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><code class="methodname">passengerAlighted()</code></em></p>
+                        <p>Callback received from the avatar when it has alighted from the
+                                   vehicle entity.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e690"></a>6.5.&nbsp;Ripper editor
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Located under <code class="filename">fantasydemo/res/scripts/editor</code>, the purpose
+                      of the editor Ripper is to provide the world editor with a representative
+                      model that it can display.
+               </p>
+               <p>For the Ripper, we just use its model.</p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e700"></a>6.6.&nbsp;Ripper requirements of Avatar
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To work with vehicles, the Avatar entity must implement the client
+                      methods below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">enterWorld( self
+                                         )</span></em></p>
+                        <p>In order to display correctly on clients observing other Avatars
+                                   riding Rippers, the Avatar must notify its vehicle when it enters the
+                                   world, as this will be after the vehicle enters it. In FantasyDemo,
+                                   this is done using the function
+                                   <code class="methodname">onPassengerEnterWorld()</code>.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>It must also implement the following cell methods:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">requestBoardVehicle( self,
+                                         sourceVehicleID )</span></em></p>
+                        <p>Because the entity board and alight functions cannot be called
+                                   on a ghost cell, they need to be wrapped in ghost-safe functions
+                                   defined in the definition file.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">requestAlightVehicle( self,
+                                         sourceVehicleID )</span></em></p>
+                        <p>Similar to <code class="methodname">requestBoardVehicle()</code> this
+                                   provides a ghost-safe wrapper for the entity alight vehicle
+                                   functionality. It also does some checking, to make it safe to call
+                                   multiple times before remounting.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">chat()</span></em></p>
+                        <p>In FantasyDemo, the chat system is implemented through the
+                                   avatar cell. Because of this, the Ripper assumes its
+                                   implementation.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e450" href="#d0e450">1</a>] </sup>For details on <code class="methodname">BigWorld.callback()</code>,
+                                 see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;5.&nbsp;Asynchronous and Ghost Cell Considerations&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

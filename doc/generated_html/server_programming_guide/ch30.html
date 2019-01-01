@@ -1,0 +1,349 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;30.&nbsp;The Watcher Interface</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt02.html" title="Part&nbsp;II.&nbsp;Server C++ Programming Guide">
+      <link rel="prev" href="ch29.html" title="Chapter&nbsp;29.&nbsp;Mercury Packet Structure">
+      <link rel="next" href="ch31.html" title="Chapter&nbsp;31.&nbsp;Debug Message Macros">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch30.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;30.&nbsp;The Watcher Interface</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch29.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;II.&nbsp;Server C++ Programming Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch31.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Watcher_Interface"></a>Chapter&nbsp;30.&nbsp;The Watcher Interface
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch30.html#d0e16722">30.1. Callable Function Watchers</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch30.html#xref_Forwarding_Watchers">30.1.1. Forwarding Watchers</a></span></dt>
+                        <dt><span class="section"><a href="ch30.html#xref_Implement_Function_Watchers">30.1.2. Implementing Function Watchers</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>Watcher is a mechanism that exposes internal operational parameters of
+                 a running BigWorld Server so that a developer or administrator can view and
+                 change these parameters.
+            </p>
+            <p>All BigWorld components use the Watcher interface. You can easily
+                 extend your own processes to use this interface. To enable this, the
+                 targeted server component code needs to be modified-one needs to first
+                 register a watcher interface instance, and then specify the internal
+                 parameters to be exposed through watchers.
+            </p>
+            <p>There are a number of watcher types, such as
+                 <span class="literal">DataWatcher</span>, <span class="literal">DirectoryWatcher</span>, and
+                 <span class="literal">FunctionWatcher</span>, among others. You can build a tree of
+                 different type of watchers logically linked together. To do this, you need
+                 to first create a new <span class="literal">DirectoryWatcher</span>, and then add to
+                 the tree using the function <span class="literal">addChild()</span> of the parent
+                 watcher. The root of the watcher tree can be obtained by calling the static
+                 function <span class="literal">Watcher::rootWatcher()</span>.
+            </p>
+            <p>In the case where watchers are attached to the root only, the macro
+                 <span class="literal">MF_WATCH</span> is provided to simplify the process. For more
+                 details on adding new watchers, check the existing examples in the server
+                 source code and the C++ API documentation.
+            </p>
+            <p>Once watchers are enabled, the running server process grants access to
+                 its internal statistics and debug information.
+            </p>
+            <p>Background Watcher processes can collect watcher data and republish it
+                 through WebConsole's ClusterControl module. WebConsole's StatGrapher module
+                 can poll and graph watcher data. For details on WebConsole, see the document
+                 <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/index.html" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch03.html" class="olink"><i>Cluster Administration Tools</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/ch03.html#xref_WebConsole" class="olink">WebConsole</a>.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e16722"></a>30.1.&nbsp;Callable Function Watchers
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Both Python and C++ functions can be exposed as BigWorld Watchers
+                      which enables them to be 'called' via the watcher protocol.
+               </p>
+               <p>When a function watcher has been invoked, three pieces of data will
+                      be returned to the invoker:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Call success status</p>
+                        <p>This is a boolean True / False representing whether or not the
+                                   callable watcher successfully completed running.
+                        </p>
+                        <p>A situation that may generate a status of False would be a
+                                   Python function that throws an exception that is not caught. Such
+                                   status should be rare, and we suggest that it should only happen
+                                   during development of the callable functions.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Function return data</p>
+                        <p>This is recommended to be a human-readable string, indicating
+                                   the resulting state/information pertaining to the operation of the
+                                   called watcher.
+                        </p>
+                        <p>For example, a callable watcher that changes the position of a
+                                   specific entity number may return <em class="emphasis">'Entity
+                                      <span class="literal"><em class="replaceable"><code>&lt;id&gt;</code></em></span> moved to
+                                      (x,y,z).'</em> on success, or <em class="emphasis">'No entity with id
+                                      <span class="literal"><em class="replaceable"><code>&lt;id&gt;</code></em></span>
+                                      found.'</em> if the entity did not exist at the time of calling
+                                   the watcher.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Console output (stdout/stderr)</p>
+                        <p>This is intended to provide a mechanism for developers writing
+                                   callable watchers to catch error states and have access to debugging
+                                   information while development is occurring.
+                        </p>
+                        <p>Any exception thrown in Python scripts will be be in this
+                                   segment of the return data. Console output may however also be useful
+                                   for providing more detailed information about a callable watcher
+                                   operation.
+                        </p>
+                        <p>For example, a callable watcher may be defined to display all
+                                   entities of type <span class="literal">PlayerAvatar</span>. The Function Return
+                                   Data piece of data may output <em class="emphasis">'Found
+                                      <span class="literal"><em class="replaceable"><code>&lt;count&gt;</code></em></span> entities
+                                      of type <span class="literal">PlayerAvatar</span>'</em>, while the console
+                                   output may display summary information for each of the
+                                   entities.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <p>Callable function watchers can be defined in two ways:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Via Python code, such as the ones in your game's base or cell
+                                   entities' resource directories.
+                        </p>
+                        <p>For details on how to implement Python function watchers, see
+                                   <a href="ch30.html#xref_Implement_Function_Watchers" title="30.1.2.&nbsp;Implementing Function Watchers">Implementing Function Watchers</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Via C++ in server components.</p>
+                        <p>Currently, C++ support for callable watchers is limited <span class="symbol">&#8208;</span> if you wish to use C++ callable watchers,
+                                   then please contact BigWorld support for further information on how to
+                                   use and implement these watchers.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>In order to enable any callable function watchers to be exposed
+                             on the WebConsole's <em class="emphasis">Commands</em> <span class="symbol">&#8594;</span> <em class="emphasis">My
+                                Commands</em> page, it is necessary to place the watcher under
+                             the <span class="literal">command</span> watcher path.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Forwarding_Watchers"></a>30.1.1.&nbsp;Forwarding Watchers
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The concept of watcher forwarding was introduced because quite
+                           often the knowledge of how best to run a callable function watcher is
+                           not known by the person using it <span class="symbol">&#8208;</span>
+                           <em class="emphasis">i.e.</em>, decisions such as if should all CellApps run
+                           the watcher to generate a comprehensive report, or should it be run on
+                           the first available CellApp to perform an action.
+                  </p>
+                  <p>Watcher forwarding allows a component manager
+                           (<em class="emphasis">e.g.</em>, CellAppMgr, BaseAppMgr) to forward a
+                           callable watcher request to any of its owned components, thus allowing
+                           the developer of the callable watcher to determine how best to expose
+                           the watchers functionality for general use.
+                  </p>
+                  <p>The decision regarding how best to run a callable watcher is
+                           encoded by the developer via an exposure hint. Currently there are 2
+                           forms of expose hints:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>Least Loaded:</p>
+                           <p>Run the callable watcher on the component with the least load
+                                        of all known components owned by the manager.
+                           </p>
+                        </li>
+                        <li>
+                           <p>All</p>
+                           <p>Run the callable watcher on all components owned by the
+                                        manager.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_Implement_Function_Watchers"></a>30.1.2.&nbsp;Implementing Function Watchers
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Python function watchers can be added either via a component
+                           <span class="literal">PyConsole</span> for development purposes, or via game
+                           script for a persistent callable watcher. Adding a watcher requires
+                           using the <span class="literal">BigWorld.addFunctionWatcher</span> method (for
+                           details, see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/baseapp/index.html" class="olink">BaseApp Python API</a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/cellapp/index.html" class="olink">CellApp Python API</a>, or <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>).
+                  </p>
+                  <p>Generally function watchers are added to pre-existing Python
+                           functions which functionality would be useful to expose to a wider
+                           audience. Below is a brief example of a function being exposed via a
+                           watcher.
+                  </p><pre class="programlisting">def addGuardReturnMessage( num ):<a name="co59975"></a><img src="../images/callouts/1.png" alt="1" border="0">
+   count = 0
+   resultStr = ""
+   try:
+      count = util.addGuards( num )
+      resultStr = "Added %s guards." % count
+   except Exception, e:
+      print e
+      resultStr = "Unable to add %s guards." % num
+
+   return resultStr
+
+
+BigWorld.addFunctionWatcher(
+   "command/addGuards",  <a name="co59976" href="ch30.html#co59976_desc"><img src="../images/callouts/2.png" alt="2" border="0"></a>
+   addGuardReturnMessage,  <a name="co59977" href="ch30.html#co59977_desc"><img src="../images/callouts/3.png" alt="3" border="0"></a>
+   [("Number of guards to add", int)],  <a name="co59978" href="ch30.html#co59978_desc"><img src="../images/callouts/4.png" alt="4" border="0"></a>
+   BigWorld.EXPOSE_LEAST_LOADED,  <a name="co59979" href="ch30.html#co59979_desc"><img src="../images/callouts/5.png" alt="5" border="0"></a>
+   "Add an arbitrary number of patrolling guards into the world.")  <a name="co59980" href="ch30.html#co59980_desc"><img src="../images/callouts/6.png" alt="6" border="0"></a></pre><div class="calloutlist">
+                     <table border="0" summary="Callout list">
+                        <tr>
+                           <td width="5%" valign="top" align="left"><a name="co59975_desc"></a><a href="#co59975"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                           </td>
+                           <td valign="top" align="left">
+                              <p><span class="literal">addGuardReturnMessage</span> acts as a wrapper
+                                             function for <span class="literal">util.addGuards</span>, to provide more
+                                             meaningful output for WebConsole display.
+                              </p>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td width="5%" valign="top" align="left"><a name="co59976_desc"></a><a href="#co59976"><img src="../images/callouts/2.png" alt="2" border="0"></a> 
+                           </td>
+                           <td valign="top" align="left">
+                              <p><span class="literal">command/addGuards</span> is the watcher path the
+                                             function watcher will be exposed at.
+                              </p>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td width="5%" valign="top" align="left"><a name="co59977_desc"></a><a href="#co59977"><img src="../images/callouts/3.png" alt="3" border="0"></a> 
+                           </td>
+                           <td valign="top" align="left">
+                              <p><span class="literal">addGuardReturnMessage</span> is the function
+                                             name the watcher should call when a request is received at the
+                                             watcher path.
+                              </p>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td width="5%" valign="top" align="left"><a name="co59978_desc"></a><a href="#co59978"><img src="../images/callouts/4.png" alt="4" border="0"></a> 
+                           </td>
+                           <td valign="top" align="left">
+                              <p>The argument list is defined as a list of tuples, with each
+                                             tuple containing argument name and the type of the value to be
+                                             expected.
+                              </p>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td width="5%" valign="top" align="left"><a name="co59979_desc"></a><a href="#co59979"><img src="../images/callouts/5.png" alt="5" border="0"></a> 
+                           </td>
+                           <td valign="top" align="left">
+                              <p><span class="literal">BigWorld.EXPOSE_LEAST_LOADED</span> indicates to
+                                             the component manager to run the watcher request on the component
+                                             with the lowest load.
+                              </p>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td width="5%" valign="top" align="left"><a name="co59980_desc"></a><a href="#co59980"><img src="../images/callouts/6.png" alt="6" border="0"></a> 
+                           </td>
+                           <td valign="top" align="left">
+                              <p>This is a longer description of the function watcher, which
+                                             can be useful in outlining any peculiarities or caveats with the
+                                             function watcher.
+                              </p>
+                           </td>
+                        </tr>
+                     </table>
+                  </div>
+                  <p>More examples can be found in
+                           <code class="filename">fantasydemo/res/scripts/base/Watchers.py</code> and
+                           <code class="filename">fantasydemo/res/scripts/cell/Watchers.py</code>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch29.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt02.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch31.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;29.&nbsp;Mercury Packet Structure&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;31.&nbsp;Debug Message Macros</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

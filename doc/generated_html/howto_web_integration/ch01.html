@@ -1,0 +1,199 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;1.&nbsp;Overview</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Implement Web Integration">
+      <link rel="up" href="index.html" title="How To Implement Web Integration">
+      <link rel="prev" href="index.html" title="How To Implement Web Integration">
+      <link rel="next" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Use Cases">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/howto_web_integration/ch01.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Overview</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Overview"></a>Chapter&nbsp;1.&nbsp;Overview
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch01.html#d0e111">1.1. Build and configuration</a></span></dt>
+               </dl>
+            </div>
+            <p>This document describes how to implement a web interface to a running
+               BigWorld game cluster, and how to implement a web auctioning system in order
+                 to illustrate functions accessible from the BigWorld web integration module,
+                 such as:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Authentication of player login details.</p>
+                  </li>
+                  <li>
+                     <p>Retrieval of an entity mailbox.</p>
+                  </li>
+                  <li>
+                     <p>Access to base methods that exist on a base entity through a
+                              mailbox.
+                     </p>
+                  </li>
+                  <li>
+                     <p>Passing parameters to and receiving data from the BigWorld Python
+                              scripting layer from the web scripting layer.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>For details on the integration of BigWorld functionality into a web
+                 server, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../web_integration/index.html" class="olink">BigWorld Web Integration Reference</a>.
+            </p>
+            <p>The example platform used in this document is the PHP scripting
+                 language, combined with the Apache HTTP server. This guide uses a variety of
+                 well-documented techniques for web applications (such as handling session
+                 variables). Features and techniques used in the example code are common to
+                 other web scripting languages; thus the techniques presented can also be
+                 used in other web scripting environments, such as mod_python.
+            </p>
+            <p>We provide examples on querying the player for inventory and character
+                 statistics. The item and inventory system is based on the BigWorld
+                 FantasyDemo item and inventory system. Any item or inventory system with
+                 similar concepts of item serial numbers, item types and item locking can be
+                 adapted for the web scripts. Other extensions to this model are
+                 possible.
+            </p>
+            <p>We provide a working example of an Auction House, which the player can
+                 interact with to:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Create auctions.</p>
+                  </li>
+                  <li>
+                     <p>Search for auctions.</p>
+                  </li>
+                  <li>
+                     <p>Bid on auctions.</p>
+                  </li>
+               </ul>
+            </div>
+            <p>Auctions have the following characteristics:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Refer to individual items in a player's inventory.</p>
+                  </li>
+                  <li>
+                     <p>Have a starting bid, and may optionally have a buyout
+                              price.
+                     </p>
+                  </li>
+                  <li>
+                     <p>Have adjustable expiry times specified when they are
+                              created.
+                     </p>
+                  </li>
+                  <li>
+                     <p>Every player can bid on auctions made by other players.</p>
+                  </li>
+                  <li>
+                     <p>Players can specify a maximum value for their bid &#8212; the system
+                              will automatically bid in increments on behalf of the player, up to the
+                              specified maximum.
+                     </p>
+                     <p>This is known as proxy bidding, and this Auction House model is
+                              common in other popular Internet-based auction houses. In the code, it
+                              is referred to as an <code class="classname">IncrementalAuction</code>. When
+                              entering a maximum bid, the entire amount is considered to be passed to
+                              the auction house; on auction resolution, the difference between the
+                              maximum bid amount and the actual bid amount is returned back to the
+                              player.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>We will walk through the source and highlight the salient areas
+                 relevant to building a trading system. This example consists of a
+                 presentation layer written in PHP, and a logic layer that is implemented as
+                 part of the base entity scripts for the appropriate entities, namely
+                 <code class="classname">Avatar</code>, <code class="classname">TradingSupervisor</code> and
+                 <code class="classname">AuctionHouse</code>.
+            </p>
+            <div class="informalfigure">
+               <div class="mediaobject"><img src="images/block_system_diagram.png"><span class="caption">
+                     <p>Block system diagram</p></span></div>
+            </div>
+            <p>The logic for the <code class="classname">AuctionHouse</code> entity is
+                 implemented in the game scripting layer in Python, alongside other entity
+                 logic in a BigWorld game. With some alterations, the example code used in
+                 this document can be adapted for use in a game that already has a currency
+                 and inventory system.
+            </p>
+            <p>This document assumes that the reader has read the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/index.html" class="olink">Server Programming Guide</a> and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../web_integration/index.html" class="olink">BigWorld Web Integration Reference</a>, and is familiar with BigWorld Python
+                 scripting and has a basic operation of how return-value methods work.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e111"></a>1.1.&nbsp;Build and configuration
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The Python web extension and the PHP web extension are both required
+                      to be built &#8212; for details on how to do that, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../web_integration/index.html" class="olink">BigWorld Web Integration Reference</a>'s sections <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../web_integration/ch07.html" class="olink"><i>Python</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../web_integration/ch07.html#xref_Python_Building_The_Module_From_Source" class="olink">Building the Module From Source</a> and sections
+                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../web_integration/ch08.html" class="olink"><i>PHP</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../web_integration/ch08.html#xref_PHP_Building_The_Module_From_Source" class="olink">Building the Module From Source</a>.
+               </p>
+               <p>The PHP web extension provides a compatibility layer for PHP to use
+                      the functions present in the Python web extension.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">How To Implement Web Integration&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;Use Cases</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

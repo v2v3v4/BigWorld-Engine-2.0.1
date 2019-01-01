@@ -1,0 +1,583 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Third-Party Integrations</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="Third_Party_Integrations"></a>Third-Party Integrations</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Introduction">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#xref_Umbra_Integration">2. Umbra</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e344">2.1. Building BigWorld Client with Umbra enabled</a></span></dt><dt><span class="section"><a href="#d0e371">2.2. Modes of operation</a></span></dt><dt><span class="section"><a href="#d0e402">2.3. Chunk items</a></span></dt><dt><span class="section"><a href="#d0e409">2.4. Umbra proxies</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Scaleform_Integration">3. Scaleform</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_ScaleForm_Introduction">3.1. Introduction</a></span></dt><dt><span class="section"><a href="#d0e443">3.2. Building the Client with Scaleform</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e454">3.2.1. Setting the BigWorld Build Configuration Macros</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e469">3.3. Displaying Flash Movies</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e474">3.3.1. Getting up and running quickly</a></span></dt><dt><span class="section"><a href="#d0e482">3.3.2. Python controls the lifetime of Scaleform Objects</a></span></dt><dt><span class="section"><a href="#d0e491">3.3.3. Better Control over the Display of your Movie</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e506">3.4. Interacting with Flash Movies</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e511">3.4.1. Using fscommand in Action Script to call into Python</a></span></dt><dt><span class="section"><a href="#d0e528">3.4.2. Using External Interface calls from Action Script to
+      Python</a></span></dt><dt><span class="section"><a href="#d0e536">3.4.3. Setting and Getting Action Script variables directly from
+      Python</a></span></dt><dt><span class="section"><a href="#d0e554">3.4.4. Calling Action Script methods from Python</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#xref_SpeedTree_Integration">4. SpeedTree</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e573">4.1. Building with SpeedTree support</a></span></dt><dt><span class="section"><a href="#d0e587">4.2. Resource files</a></span></dt><dt><span class="section"><a href="#d0e635">4.3. SpeedTrees in WorldEditor</a></span></dt><dt><span class="section"><a href="#xref_we_Wind_Animation">4.4. Wind animation</a></span></dt><dt><span class="section"><a href="#xref_we_Level_Of_Detail">4.5. Level of detail</a></span></dt><dt><span class="section"><a href="#d0e784">4.6. Collision geometry</a></span></dt><dt><span class="section"><a href="#xref_we_XML_File">4.7. XML file</a></span></dt><dt><span class="section"><a href="#xref_we_Watchers">4.8. Watchers</a></span></dt><dt><span class="section"><a href="#d0e1071">4.9. Troubleshooting</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_FMod_Integration">5. FMOD</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1156">5.1. Overview</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_Sound_Engine_Configuration">5.1.1. Sound Engine Configuration</a></span></dt><dt><span class="section"><a href="#d0e1242">5.1.2. Python API</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1254">5.2. Loading Sound Banks</a></span></dt><dt><span class="section"><a href="#d0e1269">5.3. Sound Playback</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1279">5.3.1. FMOD.Sound Object</a></span></dt><dt><span class="section"><a href="#d0e1294">5.3.2. Sound Playback Functions</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#xref_OpenAutomate_Integration">6. OpenAutomate</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1338">6.1. Using oaman to execute tests.</a></span></dt><dt><span class="section"><a href="#d0e1365">6.2. Scheduling command line tests.</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Introduction"></a>Chapter&nbsp;1.&nbsp;Introduction</h2></div></div></div><p>BigWorld Technology is designed to be as complete as possible, and as
+  part of our efforts we have worked with various other technology providers
+  to integrate their products. For some of these products there is a demo
+  available in the evaluation version of Fantasy Demo but, depending on
+  licensing, it may not be available in the shipped version of BigWorld
+  Technology. For some of these products you will need to contact the provider
+  to and download patch files in order to achieve a working integration. For
+  all of these products you will need to contact the provider to get more
+  information on licensing. If there is a middleware product you feel we
+  should be supporting please feel free to contact us.</p><p>Currently supported integrations:</p><div class="variablelist"><p class="title"><b>SpeedTree</b></p><dl><dt><span class="term">Provided by</span></dt><dd><p>IDV (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="www.speedtree.com" target="_top">www.speedtree.com</a>)</p></dd><dt><span class="term">Contact</span></dt><dd><p>Kevin Meredith <code class="email">&lt;<a href="mailto:meredith@idvinc.com">meredith@idvinc.com</a>&gt;</code></p></dd><dt><span class="term">Supported Version</span></dt><dd><p>SpeedTree 4.2 integrated against BigWorld Technology 1.8 and
+        later. Supported by BigWorld's Client and World Editor.</p></dd><dt><span class="term">Description</span></dt><dd><p>SpeedTree is a powerful toolkit for creating vegetation in
+        games.</p></dd><dt><span class="term">Integration Details</span></dt><dd><p>SpeedTree is used in Fantasy and Urban Demo, for demonstration
+        purposes. BigWorld maintains the integration. See also <a href="#xref_SpeedTree_Integration" title="Chapter&nbsp;4.&nbsp;SpeedTree"><i xmlns:xlink="http://www.w3.org/1999/xlink">SpeedTree</i></a>.</p></dd></dl></div><div class="variablelist"><p class="title"><b>FMOD Ex</b></p><dl><dt><span class="term">Provided by</span></dt><dd><p>Firelight Technologies Pty Ltd (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="www.fmod.org" target="_top">www.fmod.org</a>)</p></dd><dt><span class="term">Contact</span></dt><dd><p><code class="email">&lt;<a href="mailto:sales@fmod.org">sales@fmod.org</a>&gt;</code></p></dd><dt><span class="term">Supported Version</span></dt><dd><p>FMOD Ex 4.24</p></dd><dt><span class="term">Description</span></dt><dd><p>FMOD is a programming library and toolkit for the creation and
+        playback of interactive audio.</p></dd><dt><span class="term">Integration Details</span></dt><dd><p>FMOD is integrated in all versions of BigWorld Technology. It is
+        turned on by default in the evaluation but off in the shipped
+        versions. BigWorld maintains the integration in partnership with
+        Firelight Technologies. See also <a href="#xref_FMod_Integration" title="Chapter&nbsp;5.&nbsp;FMOD"><i xmlns:xlink="http://www.w3.org/1999/xlink">FMOD</i></a>.</p></dd></dl></div><div class="variablelist"><p class="title"><b>Scaleform GFx</b></p><dl><dt><span class="term">Provided by</span></dt><dd><p>Scaleform Corporation (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="www.scaleform.com" target="_top">www.scaleform.com</a>)</p></dd><dt><span class="term">Contact</span></dt><dd><p><code class="email">&lt;<a href="mailto:sales@scaleform.com">sales@scaleform.com</a>&gt;</code></p></dd><dt><span class="term">Supported Version</span></dt><dd><p>Scaleform GFx 3.0</p></dd><dt><span class="term">Description</span></dt><dd><p>Scaleform GFx accelerates Flash content. It allows development
+        teams to quickly and easily implement 3D hardware accelerated game
+        content and interfaces, including menu UIs, HUDs, animated textures,
+        mini games, and even full casual games.</p></dd><dt><span class="term">Integration Details</span></dt><dd><p>BigWorld maintains the integration in partnership with
+        Scaleform. See detailed notes below. This integration is turned off by
+        default in the shipped versions as customers need to buy a Scaleform
+        license. See also <a href="#xref_Scaleform_Integration" title="Chapter&nbsp;3.&nbsp;Scaleform"><i xmlns:xlink="http://www.w3.org/1999/xlink">Scaleform</i></a></p></dd></dl></div><div class="variablelist"><p class="title"><b>Vivox Precision Studio SDK</b></p><dl><dt><span class="term">Provided by</span></dt><dd><p>Vivox (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="www.vivox.com" target="_top">www.vivox.com</a>)</p></dd><dt><span class="term">Contact</span></dt><dd><p>info@vivox.com</p></dd><dt><span class="term">Supported Version</span></dt><dd><p>N/A</p></dd><dt><span class="term">Description</span></dt><dd><p>Vivox Precision Studio SDK is a high quality voice chat
+        solution. From basic voice chat, IM, and presence indicators to our
+        more advanced features, such as 3D positional audio, out-of-game
+        connections and voice fonts, Precision Studio enables online game
+        developers to easily bring customised voice communications to their
+        players. Vivox chat users connect to the Vivox servers directly,
+        freeing you from management and scaling issues.</p></dd><dt><span class="term">Integration Details</span></dt><dd><p>Vivox maintains the integration. Contact them directly for the
+        latest patches.</p></dd></dl></div><div class="variablelist"><p class="title"><b>Dolby Axon</b></p><dl><dt><span class="term">Provided by</span></dt><dd><p>Dolby (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="www.dolby.com" target="_top">www.dolby.com</a>)</p></dd><dt><span class="term">Contact</span></dt><dd><p><a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.dolby.com/about/contact_us/contactus.aspx?goto=20" target="_top">Dolby
+        Contact Page</a></p></dd><dt><span class="term">Supported Version</span></dt><dd><p>N/A</p></dd><dt><span class="term">Description</span></dt><dd><p>Dolby Axon is a realistic 3D voice experience that matches the
+        game environment. It delivers a clear signal, free of unwanted noise,
+        echo, and clipping. It expands creative game-play options for
+        developers, and scales seamlessly across servers to support large
+        virtual worlds. Servers are managed by the developer, allowing
+        flexibility. More details at<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.dolby.com/professional/game_development/technologies/dolby-axon.html" target="_top">www.dolby.com</a></p></dd><dt><span class="term">Integration Details</span></dt><dd><p>Dolby maintains the integration. Contact them directly for the
+        latest patches.</p></dd></dl></div><div class="variablelist"><p class="title"><b>ForkParticle</b></p><dl><dt><span class="term">Provided by</span></dt><dd><p>Fork Particle Inc (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="www.forkparticle.com" target="_top">www.forkparticle.com</a>)</p></dd><dt><span class="term">Contact</span></dt><dd><p>Shams Dar <code class="email">&lt;<a href="mailto:sdar@studiofork.com">sdar@studiofork.com</a>&gt;</code></p></dd><dt><span class="term">Supported Version</span></dt><dd><p>Fork Particle 4.0 integrated against BigWorld Technology
+        1.9.3.</p></dd><dt><span class="term">Description</span></dt><dd><p>Fork Particle provides state of the art real time particle
+        effects simulation and an authoring solution for video game and visual
+        simulation developers.</p></dd><dt><span class="term">Integration Details</span></dt><dd><p>ForkParticle maintains the integration. Contact them directly
+        for the latest patches.</p></dd></dl></div><div class="variablelist"><p class="title"><b>Umbra</b></p><dl><dt><span class="term">Provided by</span></dt><dd><p>Umbra (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="www.umbrasoftware.com" target="_top">www.umbrasoftware.com</a>)</p></dd><dt><span class="term">Contact</span></dt><dd><p><code class="email">&lt;<a href="mailto:sales@umbrasoftware.com">sales@umbrasoftware.com</a>&gt;</code></p></dd><dt><span class="term">Supported Version</span></dt><dd><p>Umbra 1.5.4 integrated against BigWorld Technology 1.9.0.
+        Supported by BigWorld's Client and World Editor.</p></dd><dt><span class="term">Description</span></dt><dd><p>Umbra is rendering optimisation middleware. It determines
+        automatically which triangles are unseen and culls them for better
+        frame rates. Umbra Software's middleware technology is the secret
+        behind some of today's best games such as Guild Wars 2 and Age of
+        Conan: Hyborian Adventures. It requires no configuration or developer
+        effort, working transparently in the background.</p></dd><dt><span class="term">Integration Details</span></dt><dd><p>BigWorld maintains the integration in partnership with Umbra.
+        See detailed notes below. This integration is turned off by default in
+        the shipped versions as customers need to buy an Umbra license. See
+        also <a href="#xref_Umbra_Integration" title="Chapter&nbsp;2.&nbsp;Umbra"><i xmlns:xlink="http://www.w3.org/1999/xlink">Umbra</i></a>.</p></dd></dl></div><div class="variablelist"><p class="title"><b>OpenAutomate</b></p><dl><dt><span class="term">Provided by</span></dt><dd><p>nVidia (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="www.nvidia.com" target="_top">www.nvidia.com</a>)</p></dd><dt><span class="term">Contact</span></dt><dd><p>N/A</p></dd><dt><span class="term">Supported Version</span></dt><dd><p>N/A</p></dd><dt><span class="term">Description</span></dt><dd><p>OpenAutomate is a new standard for application automation. Most
+        applications these days (games included) have their own, unique ways
+        of storing internal parameters and of running benchmarks.
+        OpenAutomate-enabled applications, on the other hand, are automated
+        externally via a common, standardised C-based plug-in. With virtually
+        zero overhead and no complex files to parse or write, the OpenAutomate
+        plug-in can query/set application parameters, run internal benchmarks
+        and measure the resulting performance.</p></dd><dt><span class="term">Integration Details</span></dt><dd><p>BigWorld maintains the integration. This integration is turned
+        on by default in the shipped version. See also <a href="#xref_OpenAutomate_Integration" title="Chapter&nbsp;6.&nbsp;OpenAutomate"><i xmlns:xlink="http://www.w3.org/1999/xlink">OpenAutomate</i></a>.</p></dd></dl></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Umbra_Integration"></a>Chapter&nbsp;2.&nbsp;Umbra</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e344">2.1. Building BigWorld Client with Umbra enabled</a></span></dt><dt><span class="section"><a href="#d0e371">2.2. Modes of operation</a></span></dt><dt><span class="section"><a href="#d0e402">2.3. Chunk items</a></span></dt><dt><span class="section"><a href="#d0e409">2.4. Umbra proxies</a></span></dt></dl></div><p>Umbra is a third party visibility library produced by Umbra Software
+  Ltd (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.umbra.fi" target="_top">www.umbra.fi</a>). Umbra is not
+  provided as part of the BigWorld Technology license and needs to be licensed
+  separately if required.</p><p>Umbra uses graphics hardware to determine what parts of the scene are
+  visible. Any opaque object that writes to the depth buffer can be used as an
+  occluder and any chunk item with a bounding box can potentially be
+  occluded.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e344"></a>2.1.&nbsp;Building BigWorld Client with Umbra enabled</h2></div></div></div><p>To enable Umbra, the preprocessor definition
+    <span class="literal">UMBRA_ENABLE</span> needs to be set to <span class="literal">1</span> in
+    <span class="literal">umbra_config.hpp</span> in the chunk library
+    (<span class="literal">src/lib/chunk/umbra_config.hpp</span>).</p><p>You will also need to add the Umbra include and library paths to
+    your projects.</p><p>To link against the Umbra debug library, change the <code class="code"> #pragma
+    comment(lib, "umbra.lib") </code> in the file
+    (<span class="literal">src/lib/chunk/chunk_umbra.cpp</span>).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e371"></a>2.2.&nbsp;Modes of operation</h2></div></div></div><p>Umbra can run in two different modes: Hardware and Software.</p><p>The engine will choose to use hardware mode when hardware occlusion
+    queries are supported.</p><p>In hardware mode, Umbra uses the z-buffer for occluding objects,
+    this means that any opaque object that is rendered in the scene can
+    occlude objects that are further away.</p><p>In hardware mode only 2 umbra cells are created, one for inside
+    objects and one for outside objects, both cells exist in world space and
+    are connected by umbra portals.</p><p>The BigWorld Client will chose to use Umbra in software mode when
+    hardware occlusion queries are not supported.</p><p>In software mode only objects specified as occluders can occlude
+    other objects. By default only terrain occludes geometry, additional
+    static models can be set manually as occluders in ModelEditor (for
+    details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#Content_Tools_Reference_Guide" class="olink">Content Tools Reference Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#xref_ModelEditor" class="olink"><i>ModelEditor</i></a>
+    <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#xref_me_Panel_Summary" class="olink">Panel summary</a> <span class="symbol">&#8594;</span>
+    <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#xref_me_Object_Properties_Panel" class="olink">Object Properties panel</a>). All chunk items with a
+    physical size can be occluded by Umbra. Please refer to the Umbra
+    reference documentation for descriptions of Umbra-related objects.</p><p>In software mode chunks correspond fairly well to Umbra cells. Each
+    indoor chunk has a corresponding Umbra cell, which is connected to other
+    Umbra cells by Umbra portals. All outdoor chunks share one common Umbra
+    cell, which is owned by the chunk space. All cells exist in world
+    space.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e402"></a>2.3.&nbsp;Chunk items</h2></div></div></div><p>When using Umbra to render the scene, every ChunkItem needs to have
+    a corresponding Umbra object. The chunk item is set as the Umbra object's
+    user data, so that when an Umbra object is deemed visible, its chunk item
+    can be retrieved and rendered.</p><p>When implementing a specialised chunk item, you will need to add a
+    Umbra object for it. The chunk item contains a UmbraObjectProxy and a
+    UmbraModelProxy, which can store the Umbra object and Umbra model for the
+    specialised chunk item. The object-to-cell matrix is the world transform
+    of the object.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e409"></a>2.4.&nbsp;Umbra proxies</h2></div></div></div><p>To ease handling of Umbra objects, BigWorld Technology provides
+    proxy objects for Umbra objects (class
+    <span class="literal">UmbraObjectProxy</span>) and Umbra models (class
+    <span class="literal">UmbraModelProxy</span>). These objects are a thin wrapper
+    around the corresponding Umbra objects, allowing BigWorld Technology to
+    use standard smart pointers to reference them.</p><p>The proxies are also stored in a managed list, to ensure that all
+    Umbra objects are destructed before Umbra is shut down. For details on
+    these classes, see the C++ API documentation.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Scaleform_Integration"></a>Chapter&nbsp;3.&nbsp;Scaleform</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#xref_ScaleForm_Introduction">3.1. Introduction</a></span></dt><dt><span class="section"><a href="#d0e443">3.2. Building the Client with Scaleform</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e454">3.2.1. Setting the BigWorld Build Configuration Macros</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e469">3.3. Displaying Flash Movies</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e474">3.3.1. Getting up and running quickly</a></span></dt><dt><span class="section"><a href="#d0e482">3.3.2. Python controls the lifetime of Scaleform Objects</a></span></dt><dt><span class="section"><a href="#d0e491">3.3.3. Better Control over the Display of your Movie</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e506">3.4. Interacting with Flash Movies</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e511">3.4.1. Using fscommand in Action Script to call into Python</a></span></dt><dt><span class="section"><a href="#d0e528">3.4.2. Using External Interface calls from Action Script to
+      Python</a></span></dt><dt><span class="section"><a href="#d0e536">3.4.3. Setting and Getting Action Script variables directly from
+      Python</a></span></dt><dt><span class="section"><a href="#d0e554">3.4.4. Calling Action Script methods from Python</a></span></dt></dl></dd></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_ScaleForm_Introduction"></a>3.1.&nbsp;Introduction</h2></div></div></div><p>Scaleform GFx is a third party Flash rendering library produced by
+    Scaleform (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.scaleform.com" target="_top">http://www.scaleform.com/</a>).
+    Scaleform is not provided as part of the BigWorld Technology license and
+    needs to be licensed seperately if required.</p><p>BigWorld Technology is integrated with Mozilla using llmozlib which
+    allows showing web pages and Flash movies as part of the game but this
+    solution is less efficient than Scaleform and therefore not suitable for
+    game user interfaces.</p><p>Scaleform provides a hardware accelerated renderer for Flash movies
+    suitable for use in games. BigWorld has implemented an integration with
+    Scaleform allowing Flash movies to be displayed, and controlled by
+    Python.</p><p>Scaleform IME is an optional add-on for Scaleform customers,
+    allowing display of an in-game Scaleform IME movie to replace the windows
+    IME language bar. BigWorld has integrated against Scaleform IME as
+    well.</p><p>While Scaleform has tried its best to optimise rendering of Flash
+    movies, there are still a number of guidelines that artists should follow
+    in order to create Flash movies that behave well and don't bog down
+    performance unnecessarily. It is therefore essential that you read the
+    appropriate Scaleform documentation before launching into full-scale
+    production of Flash movies for use with your BigWorld game.</p><p>This document describes how to display and use a Flash movie in
+    BigWorld. It describes the changes required to the client to build in the
+    Scaleform integration. It then describes how to use the Python API to
+    display and manipulate a Flash movie. Finally it describes some
+    BigWorld-specific features and limitations.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e443"></a>3.2.&nbsp;Building the Client with Scaleform</h2></div></div></div><p>In order to build the client with support for Scaleform, you must
+    download and install the SDK (version 3). The installer will create an
+    environment variable called <code class="code">GFXSDK</code> which is used by the
+    BigWorld client solution to locate the SDK installation. You can check
+    that the environment variable is correctly set by opening a command prompt
+    and entering the command <code class="code">set GFXSDK</code>. It should print out the
+    root installation path of the Scaleform SDK.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e454"></a>3.2.1.&nbsp;Setting the BigWorld Build Configuration Macros</h3></div></div></div><p>The Scaleform integration library is included with your BigWorld
+      Technology package in the
+      <code class="filename">bigworld/src/lib/scaleform</code> directory. Contained in
+      this directory is a file called <code class="filename">config.hpp</code>, which
+      should be changed to look like this:</p><pre class="programlisting">#define SCALEFORM_SUPPORT 1
+#define SCALEFORM_IME 1               //only necessary if also using Scaleform IME</pre><p>Then
+      rebuild the client. That's all you should have to do.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e469"></a>3.3.&nbsp;Displaying Flash Movies</h2></div></div></div><p>This section aims to show you how to load up a Flash movie and
+    display it in your game's user interface. There are two approaches to
+    achieving this. The first approach involves displaying a global movie
+    which bypasses the BigWorld GUI system completely. The second approach
+    involves showing a Scaleform movie within a BigWorld GUI tree. It is
+    recommended to use the second approach, but for simplicity and to get up
+    and running quickly you can display a flash movie as part of a global
+    flash movie list.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e474"></a>3.3.1.&nbsp;Getting up and running quickly</h3></div></div></div><p>The simplest way to display a flash movie is to load a Movie
+      Definition File (representing a .swf file), create a view of that (Movie
+      View) and display the movie. This type of movie will always handle key
+      and mouse inputs, and will always display at the full size of the client
+      window. Note that just like any other resources loading in BigWorld,
+      Scaleform resources must exist within your resource paths. Any attempts
+      to load a flash file from outside of your specified resource paths will
+      throw a Python IOError Exception.</p><pre class="programlisting">import Scaleform
+movieDef = Scaleform.MovieDef( filename )
+movieView = movieDef.createInstance()
+movieView.showAsGlobalMovie()</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e482"></a>3.3.2.&nbsp;Python controls the lifetime of Scaleform Objects</h3></div></div></div><p>In the above example, two objects were created, a Movie Definition
+      and a Movie View. Both of these are Python objects that internally
+      maintain a reference to one or more Scaleform C++ objects. As a game
+      programmer, all you need to know is that as long as you keep your Python
+      objects alive, the underlying Scaleform objects are kept alive too.
+      Here's a code snippet that demonstrates the lifetime of these two Python
+      objects :</p><pre class="programlisting">#movieDef, movieView attributes created in the above example
+
+# First we will free the movie definition.
+del movieDef
+
+# The Movie View will still play, however in future if you require a new view of that movie, you'll have to reload the entire movie.
+
+# Now free the movie view.
+del movieView
+
+# Notice that deleting the movieView object means it is no longer displaying</pre><p>If
+      you hold onto Scaleform objects after the Personality Script is
+      fini'd(), then you will run into problems, as the Scaleform subsytem is
+      shut down before Python. When Python is shut down, it frees all its
+      outstanding objects, and the Python-controlled Scaleform objects will be
+      released too late, causing an assert. It is up to you to make sure you
+      release these objects before shutdown.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e491"></a>3.3.3.&nbsp;Better Control over the Display of your Movie</h3></div></div></div><p>In the first example, the movieView created was displayed as part
+      of a simple, global list of movies. In practice, you may want to mix
+      BigWorld GUI objects and Scaleform movies, for example, to embed a
+      Scaleform movie within a moveable window, or to pop up a Scaleform movie
+      like an Inventory display in the HUD.</p><p>In order to do this, you simply wrap the MovieView object in a
+      Flash GUI Component. Once you do this, the GUI object takes control over
+      the lifetime, display, size, position and input handling for your
+      movie.</p><pre class="programlisting"># movieDef, movieView attributes created in the above example
+
+import GUI
+g = GUI.Flash( movieView )
+GUI.addRoot(g)
+
+# movie is now displayed via the GUI tree, instead of displayed via a global Scaleform movie list.
+
+# The movie can now be positioned just like other GUI components.
+g.position = (1.0,-1.0,0.6)
+g.verticalAnchor = "BOTTOM"
+g.horizontalAnchor = "RIGHT"
+g.widthMode = "PIXEL"
+g.heightMode = "PIXEL"
+g.size = (256, 256)
+
+# The movie now responds to key / mouse events just like other GUI components
+g.focus = True             # respond to key events
+g.mouseButtonFocus = True  # respond to mouse button events
+g.moveFocus = True         # respond to mouse events</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>If you attach a script object to a FlashGUIComponent, you have
+        to pass input events through to the MovieView yourself. This allows
+        the script to filter events before they get passed through. For
+        example, the following snippet passes through all input events except
+        the escape key which is handled as a special case:</p><pre class="programlisting">class MyFlashScript( object ):
+    def __init__( self, component ):
+        self.component = component
+        component.script = self
+
+    def handleKeyEvent( self, event ):
+        if event.key == Keys.ESCAPE:
+            self.visible = False
+            return False
+        
+        return self.component.movie.handleKeyEvent( event )    
+        
+    def handleMouseButtonEvent( self, comp, event ):
+        return self.component.movie.handleMouseButtonEvent( event )
+
+    def handleMouseEvent( self, comp, event ):
+        return self.component.movie.handleMouseEvent( event )</pre></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e506"></a>3.4.&nbsp;Interacting with Flash Movies</h2></div></div></div><p>No doubt you will want to build complex UI's in Flash that interact
+    with your BigWorld game, sending and receiving events and swapping data
+    back and forth. All method and data interactions are handled via the
+    PyMovieView Python object. This chapter details a number of different ways
+    to interact with your Flash movie and its action script.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e511"></a>3.4.1.&nbsp;Using fscommand in Action Script to call into Python</h3></div></div></div><p>In earlier versions of Action Script, the
+      <code class="function">fscommand()</code> call was the way to call out from
+      Action Script and into its container. <code class="function">fscommand()</code>
+      is supported by Scaleform and BigWorld. In order to handle
+      <code class="function">fscommand()</code> calls, you simply register a Python
+      callback function to handle any such calls :</p><pre class="programlisting">def myFSCommandHandler( cmd, arg ):
+    # cmd, arg are both strings.  Dispatch to wherever is appropriate.
+
+movieView.setFSCommandCallback( myFSCommandHandler )</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e528"></a>3.4.2.&nbsp;Using External Interface calls from Action Script to
+      Python</h3></div></div></div><p>In later versions of Action Script, external interface is used
+      instead to call out of Action Script and into the containing
+      application. External Interface calls have the advantage of allowing
+      different types and number of arguments to be passed around (instead of
+      fscommand supporting only a single string argument). Additionally, the
+      container can set return values for the external interface call. Usage
+      is similar to handling fscommand, however the callback function has a
+      different interface :</p><pre class="programlisting">def myExternalInterfaceHandler( cmd, *args ):
+    # cmd is still a string, but now we have a list of arguments, with arbitrary types.  Dispatch to wherever is appropriate
+
+movieView.setExternalInterfaceCallback( myExternalInterfaceHandler )</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e536"></a>3.4.3.&nbsp;Setting and Getting Action Script variables directly from
+      Python</h3></div></div></div><p>Action Script variables tend to be buried in a hierarchy, often
+      looking like : <span class="literal">"_root.levelN.someVariableName"</span>.
+      Unfortunately this syntax is misinterpreted by Python and currently
+      there is no elegant solution to work around this. However it is still
+      easy to exchange data with Action Script. All that is required is to use
+      Python's <code class="function">setattr</code> and <code class="function">getattr</code>
+      syntax. For example:</p><pre class="programlisting">setattr( movieView, "_root.level0.maxHealth", 10 )
+currentHealth = getattr( movieView, "_root.level0.health" )</pre><p>Using this syntax you can get and set any of the following types
+      of data : boolean, int, floats, string and unicode string.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e554"></a>3.4.4.&nbsp;Calling Action Script methods from Python</h3></div></div></div><p>The final interaction you will want to have with your Flash movie
+      is to call Action Script methods directly from Python. In order to do
+      this, simply use the <code class="methodname">invoke()</code> method:</p><pre class="programlisting">result = movieView.invoke( "_root.level0.flashHealthBar", 10.0 )</pre></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_SpeedTree_Integration"></a>Chapter&nbsp;4.&nbsp;SpeedTree</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e573">4.1. Building with SpeedTree support</a></span></dt><dt><span class="section"><a href="#d0e587">4.2. Resource files</a></span></dt><dt><span class="section"><a href="#d0e635">4.3. SpeedTrees in WorldEditor</a></span></dt><dt><span class="section"><a href="#xref_we_Wind_Animation">4.4. Wind animation</a></span></dt><dt><span class="section"><a href="#xref_we_Level_Of_Detail">4.5. Level of detail</a></span></dt><dt><span class="section"><a href="#d0e784">4.6. Collision geometry</a></span></dt><dt><span class="section"><a href="#xref_we_XML_File">4.7. XML file</a></span></dt><dt><span class="section"><a href="#xref_we_Watchers">4.8. Watchers</a></span></dt><dt><span class="section"><a href="#d0e1071">4.9. Troubleshooting</a></span></dt></dl></div><p>SpeedTree is a third party library used for creating and rendering
+  vegetation in games and is produced by Interactive Data Visualization, Inc
+  (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.speedtree.com" target="_top">http://www.speedtree.com/</a>).
+  SpeedTree is not provided as part of the BigWorld Technology license and
+  needs to be licensed separately if required.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e573"></a>4.1.&nbsp;Building with SpeedTree support</h2></div></div></div><p>BigWorld's source code ships with support for SpeedTree turned off
+    by default. In order to turn SpeedTree support on in BigWorld's game
+    client and tools, in
+    <code class="filename">bigworld/src/lib/speedtree/speedtree_config.hpp</code>, set
+    the <code class="varname">SPEEDTREE_SUPPORT</code> macro to <span class="literal">1</span>.
+    You will also need to have SpeedTreeRT SDK 4.2 properly installed and
+    configured.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e587"></a>4.2.&nbsp;Resource files</h2></div></div></div><p>For a SpeedTree to be available in WorldEditor, or to be loaded from
+    a chunk file into a space within the game client, the following resource
+    files need to exist in the resources tree:</p><div class="itemizedlist"><ul type="disc"><li><p>The SpeedTree file (<span class="literal">.spt</span>).</p></li><li><p>The branch texture map file.</p></li><li><p>The composite texture map file.</p></li></ul></div><p>For each tree, these files should reside in the same folder. More
+    than one tree can coexist in the same folder, as long as no filename clash
+    occurs.</p><p>For performance reasons, we assume that all trees use a composite
+    map for the frond, leaf, and billboard textures. For details on how to
+    have a tree to use composite maps, see the SpeeTreeCAD's User
+    Manual.</p><p>To take advantage of SpeedTreeCAD's alpha noise cross-fading feature
+    (a fundamental feature which use we highly recommend), you will also need
+    an accompanying <span class="literal">.texformat</span><sup>[<a name="d0e613" href="#ftn.d0e613">1</a>]</sup> filefor the composite texture map, or an appropriate
+    wildcard entry in
+    <code class="filename"><em class="replaceable"><code>&lt;texture_detail_levels&gt;</code></em>.xml</code>.
+    For details, see <a href="#xref_we_Level_Of_Detail" title="4.5.&nbsp;Level of detail">Level of detail</a>.</p><p>Optionally, you can have a <code class="filename">SpeedWind.ini</code> file
+    in this same folder if you require finer control over how this tree wind
+    animates. For details, see <a href="#xref_we_Wind_Animation" title="4.4.&nbsp;Wind animation">Wind animation</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e635"></a>4.3.&nbsp;SpeedTrees in WorldEditor</h2></div></div></div><p>Once the resource files are in place, trees are ready to be used
+    within WorldEditor. To insert a tree, either drag a
+    <span class="literal">.spt</span> file from the <em class="emphasis">Asset
+    Browser</em> panel<sup>[<a name="d0e646" href="#ftn.d0e646">2</a>]</sup> into the viewport, or select the desired
+    <span class="literal">.spt</span> file and press <span class="literal">Enter</span>.</p><p>Once a tree has been added, it can be selected, moved, rotated, and
+    scaled like any other model in WorldEditor. You can do this interactively
+    (see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#xref_we_Mouse_Controls" class="olink">Mouse controls</a>) or by editing the trees' properties
+    in the <em class="emphasis">Properties</em> panel (see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#xref_we_Properties_Panel" class="olink">Properties panel</a>). In the <em class="emphasis">Properties</em> panel, you can also edit the name of the
+    <span class="literal">.spt</span> file and the seed number used to generate the tree
+    geometry. The results of editing a tree's properties can be immediately
+    previewed in the viewport.</p><p>If a tree cannot be loaded during chunk loading then a red box model
+    will be rendered in its place. The box can still be manipulated and most
+    of its properties edited with the exception of its seed. Any changes will
+    be saved and restored if that tree is loaded in the future.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_we_Wind_Animation"></a>4.4.&nbsp;Wind animation</h2></div></div></div><p>BigWorld uses SpeedTree's new SpeedWind library to animate trees
+    swaying to the wind. SpeedWind's parameters can be tuned and previewed
+    from within SpeedTreeCAD, and then saved as a .ini file. This file can
+    then be loaded into BigWorld's 3D engine to control how trees
+    animate.</p><p>A global .ini file is used by default for all trees. Optionally, a
+    unique SpeedWind.ini file can be tied to a specific tree, by placing it in
+    the same folder as the .spt file (the name of the file is required to be
+    <span class="literal">SpeedWind.ini</span>). If neither file is present, then
+    SpeedWind's engine will be setup with its default parameters.</p><p>Although SpeedWind's parameters define how a tree should animate
+    given a wind of certain direction and strength, the actual wind's
+    direction and strength fed into SpeedWind's engine is provided by
+    BigWorld's dynamic weather system, conveying a convincing and immersive
+    experience for the player.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_we_Level_Of_Detail"></a>4.5.&nbsp;Level of detail</h2></div></div></div><p>BigWorld's 3D engine fully supports SpeedTree's LOD model. Branches
+    and fronds switch detail levels discretely, while leaves and billboards
+    LODs cross-fade according to the distance to the camera.</p><p>By default, the actual LOD level of a tree &#8212; a value that
+    ranges from 0 (minimum detail) to 1 (maximum detail) &#8212; is a linear
+    function based on the distance from the tree's origin to the camera's eye
+    position. The lodFar and lodNear parameters define the distance interval
+    within which the trees' LOD levels will vary. In the default LOD mode, the
+    LOD function is the same for all trees.</p><p>Optionally, you can rely on SpeedTree's engine to compute the LOD
+    level for each tree based on parameters contained in the .spt file (which
+    can be edited from SpeedTreeCAD). Roughly speaking, they work in the same
+    way as explained above, but with specific near and far values for each
+    tree. This allows a more fine-grained control of LOD transitions, and a
+    better match between what is previewed on SpeedTreeCAD and what is
+    rendered on the tools and the client. The only drawback is that relying on
+    SpeedTreeRT for the LOD computation is a bit slower than letting BigWorld
+    do it.</p><p>You can switch between this two LOD modes by editing the
+    <span class="literal">lodMode</span> parameter in SpeedTree's XML file (for details,
+    see <a href="#xref_we_XML_File" title="4.7.&nbsp;XML file">XML file</a>) or interactively, via watchers
+    (for details, see <a href="#xref_we_Watchers" title="4.8.&nbsp;Watchers">Watchers</a>). The parameters
+    <span class="literal">lodNear</span> and <span class="literal">lodFar </span>are also
+    accessible this way.</p><p>The <span class="literal">lodOverlap</span> parameter defines how much
+    overlapping should happen during the cross-fading of LOD levels. The valid
+    range goes from 0 to 2. The default value is 1. This parameter is also
+    accessible via XML file and watchers.</p><p>Leaves and billboards, when phasing in or out their LODs, cross-fade
+    their alpha test values in order to smooth level transitions. This
+    technique requires composite texture maps with homogeneous noise baked
+    into the alpha channel and pre-generated mipmaps. Also, BigWorld's auto
+    mipmapping generation should be disabled for this texture map.</p><p>To disable the automatic generation of mipmaps in BigWorld, you will
+    need to setup a <code class="filename">.texformat</code><sup>[<a name="d0e722" href="#ftn.d0e722">3</a>]</sup> file for each tree's composite texture map, which is
+    illustrated below:</p><pre class="programlisting">&lt;root&gt;
+  &lt;mipCount&gt;       -1    &lt;/mipCount&gt;
+  &lt;horizontalMips&gt; true  &lt;/horizontalMips&gt;
+  &lt;mipSize&gt;        0     &lt;/mipSize&gt;
+&lt;/root&gt;</pre><p><span class="citetitle">Example <span class="literal">.texformat</span>
+    file</span></p><p>The example above configures the following:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><span class="literal">mipCount</span></em></p><p>-1 ensures that all mipmap levels baked into the texture will be
+        used.</p></li><li><p><em class="emphasis"><span class="literal">horizontalMips</span></em></p><p>Should always be true for SpeedTreeCAD's generated
+        mipmaps.</p></li><li><p><em class="emphasis"><span class="literal">mipSize</span></em></p><p>Width of the top-most level mipmap. If set to zero, then will
+        use half the width of the original texture file, which is right for
+        composite maps exported from SpeedTreeCAD.</p></li></ul></div><p>A more general way of achieving this is by adding a wildcard entry
+    to
+    <code class="filename"><em class="replaceable"><code>&lt;texture_detail_levels&gt;</code></em>.xml</code>.
+    The entry should match all composite maps used by SpeedTree, and define
+    the same attributes shown above. An example of a wildcard entry is
+    illustrated below:</p><pre class="programlisting">&lt;detailLevel &gt;
+  &lt;prefix&gt;         speedtree &lt;/prefix&gt;
+  &lt;contains&gt;       composite &lt;/contains&gt;
+  &lt;mipCount&gt;       -1        &lt;/mipCount&gt;
+  &lt;horizontalMips&gt; true      &lt;/horizontalMips&gt;
+  &lt;mipSize&gt;        0         &lt;/mipSize&gt;
+&lt;/detailLevel &gt;</pre><p><span class="citetitle">Example
+    <span class="literal"><em class="replaceable"><code>&lt;texture_detail_levels&gt;</code></em>.xml</span>
+    entry</span></p><p>For details on how to create texture maps with alpha noise and
+    pre-generated mipmaps, see SpeedTreeCAD' <em class="emphasis">User
+    Manual</em>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e784"></a>4.6.&nbsp;Collision geometry</h2></div></div></div><p>The first time a tree is loaded, BigWorld uses the collision
+    geometry specified in the .spt file to generate the BSP trees that will
+    populate the collision scene in a space. In the game client, you can
+    preview these BSP trees by enabling the <span class="literal">SpeedTree/BSP</span>
+    watcher (for details, see <a href="#xref_we_Watchers" title="4.8.&nbsp;Watchers">Watchers</a>). In
+    WorldEditor, enable the <em class="emphasis">General Options</em>
+    panel's <em class="emphasis">Show</em> list box's <em class="emphasis">Scenery <span class="symbol">&#8594;</span> BSP</em>
+    item (for details, see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#xref_we_General_Options_Panel" class="olink">General Options panel</a>).</p><p>If the engine has write access to the resource path, then a cache of
+    the BSP tree will be saved, to speed upload time in the future. This cache
+    file will be re-created whenever the <span class="literal">.spt</span> file is
+    modified.</p><p>Once a tree's BSP tree has been inserted into the collision scene,
+    it will be used in all collision queries in the engine, including
+    line-of-sight, navigation paths generation, static lighting, and more.
+    When loaded from within WorldEditor, if a tree has no collision geometry
+    defined, then a temporary BSP tree in the shape of a box will be created,
+    to allow the world builder to select and interact with the tree. This
+    temporary BSP tree is not cached, and will not be created when the tree is
+    loaded into the game client.</p><p>For details on how to define a tree's collision geometry, see
+    SpeedTreeCAD's User Manual.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Although higher numbers of volumes defining a tree's geometry
+      result in higher load on the physics system, no BSP traversal is done if
+      the collision query falls outside the bounding box of the tree.</p><p>Thus, using more volumes is not as expensive as it may at first
+      seem (although it definitely more expensive than using little or no
+      volumes at all).</p></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Due to the nature of BSP trees, spheres and cylinders can be
+      inefficient in terms of memory and runtime performance when compiled
+      into a BSP.</p><p>To compensate that, BigWorld uses low-resolution tessellation when
+      generating them.</p><p>For this same reason, whenever possible you should try to use
+      boxes instead of cylinders and spheres to approximate the collision
+      geometry of a tree.</p></div><p>Normally, the server is not built to use SpeeTreeRT, and requires
+    the BSP files to be present in the resource path in order to load
+    SpeedTrees into the collision scene. The recommended approach is to check
+    all SpeedTree BSPs into the repository so that they will be accessible to
+    the server. When running the server, if the associated BSP file is not
+    available when loading a SpeedTree, then it will fail to load (the chunk
+    will be loaded successfully, though).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_we_XML_File"></a>4.7.&nbsp;XML file</h2></div></div></div><p>All game-specific settings related to rendering SpeedTrees are
+    defined in a XML file, which actual name is defined in
+    <span class="literal">resources.xml</span> (for details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#Client_Programming_Guide" class="olink">Client Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Overview" class="olink"><i>Overview</i></a><span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Configuration_Files" class="olink">Configuration files</a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_File_resources_xml" class="olink">File <span class="literal">resources.xml</span></a>) , under the
+    <span class="literal">system/speedTreeXML</span> tag, and defaults to
+    <span class="literal">speedtree/speedtree.xml</span>.</p><p>This file is read upon initialisation of BigWorld's 3D engine. For
+    details on these tags, please see inline comments in
+    <span class="literal">fantasydemo/res/speedtree/speedtree.xml</span>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_we_Watchers"></a>4.8.&nbsp;Watchers</h2></div></div></div><p>In both the game client and WorldEditor, several watchers (for
+    details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#Client_Programming_Guide" class="olink">Client Programming Guide</a>'s
+    section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Debugging" class="olink"><i>Debugging</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/client_programming_guide.html#xref_Watchers" class="olink">Watchers</a>) are
+    available to instantly customise and debug the behaviour of
+    SpeedTrees.</p><p>The list below describes them (all watchers listed are prefixed by
+    <span class="literal">SpeedTree/</span>):</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Batched rendering</em></p><p>Toggles batched rendering. Default is on.</p></li><li><p><em class="emphasis">BB Optimiser/ Active
+        buffers</em></p><p>Number of buffers in pool that are currently active &#8212;
+        these are not available for recycling. Read-only.</p></li><li><p><em class="emphasis">BB Optimiser/ Frames to
+        recycle</em></p><p>Number of frames during which a billboard optimiser buffer
+        should stay unchanged before it is set for recycling.</p></li><li><p><em class="emphasis">BB Optimiser/ Frames to
+        delete</em></p><p>Number of frames during which a billboard optimiser buffer
+        should stay unchanged before it is set for deleting.</p></li><li><p><em class="emphasis">BB Optimiser/ Pool size</em></p><p>Number of buffers in pool. Read-only.</p><p>This number minus the number of active buffers (BB
+        Optimiser/Active buffers) is the total number of buffers currently
+        available for recycling.</p></li><li><p><em class="emphasis">BB Optimiser/ Visible
+        buffers</em></p><p>Number of buffers in pool that are currently visible.
+        Read-only.</p></li><li><p><em class="emphasis">Bounding boxes</em></p><p>Toggles the rendering of trees' bounding boxes. Default is
+        off.</p></li><li><p><em class="emphasis">BSP Trees</em></p><p>Toggles the rendering of trees' BSP trees. Default is
+        off.</p></li><li><p><em class="emphasis">Counters/Instances</em></p><p>Total number of trees instantiated. Read-only.</p></li><li><p><em class="emphasis">Counters/Species</em></p><p>Number of speed tree files currently loaded. Read-only.</p></li><li><p><em class="emphasis">Counters/Unique</em></p><p>Number of unique tree models currently loaded. Read-only.</p></li><li><p><em class="emphasis">Counters/Visible</em></p><p>Number of trees currently visible in the scene.
+        Read-only.</p></li><li><p><em class="emphasis">Draw billboards</em></p><p>Toggles the rendering of billboards. Default is on.</p></li><li><p><em class="emphasis">Draw branches</em></p><p>Toggles the rendering of branches. Default is on.</p></li><li><p><em class="emphasis">Draw fronds</em></p><p>Toggles the rendering of fronds. Default is on.</p></li><li><p><em class="emphasis">Draw leaves</em></p><p>Toggles the rendering of leaves. Default is on.</p></li><li><p><em class="emphasis">Draw trees</em></p><p>Toggle the rendering of speed trees. Default is on.</p></li><li><p><em class="emphasis">LOD far</em></p><p>Distance for minimum LOD.</p></li><li><p><em class="emphasis">LOD Mode</em></p><p>Mode of handling of LODs. Value range is:</p><div class="itemizedlist"><ul type="circle"><li><p><em class="emphasis">-1</em> &#8212; Dynamic &#8212;
+            near and far LOD defined per tree.</p></li><li><p><em class="emphasis">-2 </em>&#8212; Dynamic &#8212;
+            uses global near and far LOD values.</p></li><li><p><em class="emphasis">0.0 to 1.0</em> &#8212; Forces
+            static value.</p></li></ul></div></li><li><p><em class="emphasis">LOD near</em></p><p>Distance for maximum LOD.</p></li><li><p><em class="emphasis">LOD overlap</em></p><p>LOD overlap value. Value range is 0.0 to 2.0.</p></li><li><p><em class="emphasis">Optimise billboards</em></p><p>Toggles billboard compounding. Default is on.</p></li><li><p><em class="emphasis">Play animation</em></p><p>Toggles wind animation. Default is on.</p></li><li><p><em class="emphasis">Texturing</em></p><p>Toggles texturing. Default is on.</p></li></ul></div><p>The watchers <em class="emphasis">LOD Mode</em>, <em class="emphasis">LOD Near</em>, <em class="emphasis">LOD Far</em>,
+    and <em class="emphasis">LOD Overlap</em> are read from SpeedTree's
+    XML file when the engine is initialised. Modifying them via WebConsole's
+    <em class="emphasis">ClusterControl</em> module (for details, see
+    the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Admin_Tools" class="olink"><i>Cluster Administration Tools</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_WebConsole" class="olink">WebConsole</a>) does not modify the contents written into
+    the file.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1071"></a>4.9.&nbsp;Troubleshooting</h2></div></div></div><p>The list below describes some errors that you might come across when
+    implementing SpeedTree:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Speed trees are not
+        rendered.</em></p><p>SpeedTreeRT SDK is not installed.</p><p><em class="emphasis">&#8212;or&#8212;</em></p><p>SpeedTreeRT SDK license has expired.</p></li><li><p><em class="emphasis">Leaves are textured with whole composite
+        map, instead of just the leaf part.</em></p><p>Trees have not been correctly exported for real-time use.</p><p>The best approach is to export the tree to a folder different
+        from the original tree. This will guarantee that all files in the
+        exported folder are for real-time use, and also preserve the original
+        tree files.</p></li><li><p><em class="emphasis">Cross-fading of leaves and billboards does
+        not look correct (leaves on current LOD disappear before next LOD
+        leaves are displayed).</em></p><p>Composite texture map was not generated with alpha noise.</p><p><em class="emphasis">&#8212;or&#8212;</em></p><p>BigWorld's automatic generation of mipmap is enabled. For the
+        cross-fading with alpha noise to work correctly, you must generate the
+        composite texture map with pre-generated mipmaps, and instruct
+        BigWorld to use them, instead of automatically generating the mipmaps
+        on load. For more details, see <a href="#xref_we_Level_Of_Detail" title="4.5.&nbsp;Level of detail">Level of detail</a>.</p></li><li><p><em class="emphasis">Terrain vertex shadow is not
+        correct</em></p><p>Trees do not have collision geometry, and BigWorld uses the
+        collision scene to calculate terrain shadows.</p><p>Note that, because of a known limitation in BigWorld's outdoor
+        static lighting model, shadows of tree-like objects may not look
+        correct under some sun angles.</p></li></ul></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e613" href="#d0e613">1</a>] </sup>For details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/file_grammar_guide.html#File_Grammar_Guide" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/file_grammar_guide.html#xref_texformat" class="olink"><i><span class="literal">.texformat</span></i></a>.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e646" href="#d0e646">2</a>] </sup>For details on the Asset Panel see <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../content_tools_reference_guide/content_tools_reference_guide#xref_we_Asset_Browser_Panel" class="olink">Asset Browser panel</a>.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e722" href="#d0e722">3</a>] </sup>For details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/file_grammar_guide.html#File_Grammar_Guide" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/file_grammar_guide.html#xref_texformat" class="olink"><i><span class="literal">.texformat</span></i></a>.</p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_FMod_Integration"></a>Chapter&nbsp;5.&nbsp;FMOD</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e1156">5.1. Overview</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_Sound_Engine_Configuration">5.1.1. Sound Engine Configuration</a></span></dt><dt><span class="section"><a href="#d0e1242">5.1.2. Python API</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1254">5.2. Loading Sound Banks</a></span></dt><dt><span class="section"><a href="#d0e1269">5.3. Sound Playback</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1279">5.3.1. FMOD.Sound Object</a></span></dt><dt><span class="section"><a href="#d0e1294">5.3.2. Sound Playback Functions</a></span></dt></dl></dd></dl></div><p>FMOD is a third party library for music and sound effects by Firelight
+  Technologies (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.fmod.org" target="_top">www.fmod.org</a>).
+  BigWorld provides sound support via the FMOD sound library. A license to use
+  FMOD is not included with BigWorld. Thus in order to release a title using
+  FMOD, a separate licensing agreement with Firelight Technologies needs to be
+  entered into.</p><p>Whilst FMOD is enabled in BigWorld Fantasy Demo, it is disabled in the
+  shipped source by default. To enable FMOD, edit
+  <code class="filename">bigworld/src/lib/fmodsound/fmod_config.hpp</code> and set
+  <span class="literal">FMOD_SUPPORT</span> to <span class="literal">1</span> and rebuild the
+  client. If FMOD support has been disabled, the FMOD Python module will still
+  be available, however none of the function calls will succeed.</p><p>This documentation provides an overview of how to use the FMOD sound
+  features exposed by BigWorld Technology, which is essentially a thin
+  interface to the FMOD Designer API. For documentation related to general
+  FMOD design principles and sound issues, please see the FMOD documentation
+  itself.</p><p>The features exposed by the engine are:</p><div class="itemizedlist"><ul type="disc"><li><p>Loading of one more more sound banks (preloaded or
+      streamed).</p></li><li><p>Playback of 2D and 3D sound events.</p></li><li><p>Remotely connecting to the BigWorld client using the FMOD Designer
+      in order to tweak event parameters in real time and view profiling
+      metrics.</p></li><li><p>Spatial reverb using reverb presets as defined in the FMOD
+      Designer.</p></li><li><p>Access to the FMOD dynamic music system.</p></li></ul></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1156"></a>5.1.&nbsp;Overview</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_Sound_Engine_Configuration"></a>5.1.1.&nbsp;Sound Engine Configuration</h3></div></div></div><p>High level settings can be configured by editing the soundMgr
+      section in the engine_config.xml file. Fantasy Demo provides an engine
+      configuration file which can be used as an example.</p><p>The following is a list of available settings.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1166"></a>5.1.1.1.&nbsp;enabled</h4></div></div></div><p>This controls whether sound support is enabled. When this is set
+        to false, the SoundManager will not be initialised on startup.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1171"></a>5.1.1.2.&nbsp;errorLevel</h4></div></div></div><p>This can be set to either 'silent', 'warning', or 'exception' to
+        control what happens when FMOD calls (such as
+        <span class="literal">Entity.playSound</span> or
+        <span class="literal">FMOD.playSound</span>) hit an error.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1182"></a>5.1.1.3.&nbsp;channels</h4></div></div></div><p>Defines the number of virtual channels to be made available to
+        FMOD. Please see the FMOD documentation for
+        <span class="literal">EventSystem::init</span> for a detailed description on
+        channels.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1190"></a>5.1.1.4.&nbsp;mediaPath</h4></div></div></div><p>The directory inside the res tree where your sound banks reside.
+        Note that FMOD requires that all your sound banks be in the same
+        directory, and so only the first directory in your res path that
+        matches the <span class="literal">&lt;mediaPath&gt;</span> will be used for
+        loading sounds.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1198"></a>5.1.1.5.&nbsp;soundBanks</h4></div></div></div><p>This defines the sound banks to be made available, and which
+        will be preloaded when the engine starts up. This section is made up
+        of one or more <span class="literal">project</span> tags. The schema for each
+        <span class="literal">project</span> tag is:</p><pre class="programlisting">&lt;project&gt;
+    &lt;name&gt; project_name &lt;/name&gt;
+    &lt;preload&gt; true|false &lt;/preload&gt;
+&lt;/project&gt;</pre><p>The project name is the name of the <span class="literal">.fdp</span> file
+        located in the <span class="literal">mediaPath</span> excluding the
+        extension.</p><p>If <span class="literal">preload</span> is set to true, then the sound
+        bank will be registered on startup. If it is set to false, then it
+        will only be registered when requested by the
+        <code class="code">BigWorld.loadSoundBankIntoMemory</code> Python API.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1227"></a>5.1.1.6.&nbsp;networkUpdates</h4></div></div></div><p>Enables/disables whether or not the FMOD Designer tool can
+        connect to the client and make live updates to properties on existing
+        sound events. This is always disabled on consumer release
+        builds.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1232"></a>5.1.1.7.&nbsp;enableProfiler</h4></div></div></div><p>Enables/disables external access (using FMOD Designer or FMOD
+        Profiler) to view, in real-time, information such as memory usage, CPU
+        usage and the DSP network graph in. This is always disabled on
+        consumer release builds.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1237"></a>5.1.1.8.&nbsp;maxSpeed</h4></div></div></div><p>This controls the maximum speed for 3D sounds. If the speed
+        exceeds this value, then the sound system will assume the sound source
+        has been teleported. This prevents audio glitches from excessive
+        changes in object speeds, you should set this value to some realistic
+        maximum for your application. If any 3D sound source exceeds this
+        speed the Doppler effect will be zero.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1242"></a>5.1.2.&nbsp;Python API</h3></div></div></div><p>The FMOD API can be accessed from Python by importing the FMOD
+      module. See the client Python API documentation for a description of
+      what is available in this module.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1247"></a>5.1.2.1.&nbsp;Backwards compatability</h4></div></div></div><p>For backwards compatability with previous versions of BigWorld,
+        the FMOD module will alias legacy sound functions into the BigWorld
+        module (e.g. FMOD.playSound is the same as calling
+        BigWorld.playSound). To make sure this function aliasing occurs as
+        early as possible, be sure to import the FMOD module at the top of
+        your personality script.</p><p>Since these older API functions will be deprecated, we encourage
+        you to use the new FMOD module.</p></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1254"></a>5.2.&nbsp;Loading Sound Banks</h2></div></div></div><p>To implement sounds in your game, an FMOD sound bank needs to be
+    created using the FMOD Designer tool. A very small example sound bank
+    project is provided, and is located at
+    <code class="filename">fantasydemo/audio/fd_sound.fdp</code>. Please see the
+    documentation for FMOD Designer for details on how to create and edit your
+    own sound banks.</p><p>Sound banks must be specified in the engine configuration XML file.
+    Multiple sound bank projects can be specified, and can be configured to
+    load on client startup or only by request from the scripts. See <a href="#xref_Sound_Engine_Configuration" title="5.1.1.&nbsp;Sound Engine Configuration">Sound Engine Configuration</a> for more detail on
+    this.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>If an FMOD sound bank has been configured to stream from disk, it
+      cannot be packed within a zip file system and must reside within an
+      operating system directory.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1269"></a>5.3.&nbsp;Sound Playback</h2></div></div></div><p>BigWorld provides easy to use functions for playing back sound
+    events defined by the FMOD Designer tool.</p><p>See the Client Python API documentation for more details on these
+    functions and the <code class="classname">FMOD.Sound</code> object.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1279"></a>5.3.1.&nbsp;FMOD.Sound Object</h3></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1282"></a>5.3.1.1.&nbsp;Just Fail If Quietest</h4></div></div></div><p>The FMOD Event system provides a variety of max playback
+        behaviour modes. These determine the behvaiour when the maximum number
+        of instances of an event have been generated and then another is
+        requested. One of the these is "just fail if quietest". This means
+        that once the maximum number of concurrent instances of a sound event
+        has been reached, the next attempt to playback that event will fail if
+        it's the quietest. If it is not the quietest, it will succeed by
+        stealing the handle from the quietest instance. The SoundManager will
+        update all these events each frame so that only the quietest ones will
+        be virtual.</p><p>In other words, JFIQ ensures that the loudest N instances of the
+        event are audible at any point in time, where N is the max playbacks
+        property of that event. Loudness is determined by the distance from
+        the listener as well as any sound cone/listener angle effects and
+        occlusion geometry. When an event is set to have the behaviour 'just
+        fail if quietest' there is no limit to the number of Sounds which can
+        be placed in the world using that event. Calling the following methods
+        on Sounds which are virtual will return errors: volume, pitch, paused,
+        muted, duration. There is an <code class="methodname">isVirtual</code> method
+        provided to check if a Sound is virtual or not.</p><p>An example of when to use JFIQ would be if you have 100 torches
+        crackling in a room you would only need to hear a few of the nearest
+        (loudest) torches to get the desired effect.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1294"></a>5.3.2.&nbsp;Sound Playback Functions</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>For 2D sound events (e.g. GUI sounds), use FMOD.playSound and
+          pass in the full path to the desired sound event (e.g. "ui/boop").
+          It returns an FMOD.Sound object representing the sound event being
+          played.</p></li><li><p>For 3D sounds, use:</p><div class="itemizedlist"><ul type="circle"><li><p>PyModel.playSound, which will play a sound at the location
+              of the model (it will track the model's current position). It
+              will return an <span class="literal">FMOD.Sound</span> object representing
+              the sound event being played.</p></li><li><p>FMOD.getSound to retrieve an <span class="literal">FMOD.Sound</span>
+              handle, set its position attribute, and then call its
+              <span class="literal">play</span> method directly. This technique has the
+              disadvantage that it will not take advantage of the FMOD channel
+              virtualisation features, as a single
+              <span class="literal">FMOD.Sound</span> object represents a single virtual
+              sound instance.</p></li></ul></div></li></ul></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_OpenAutomate_Integration"></a>Chapter&nbsp;6.&nbsp;OpenAutomate</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e1338">6.1. Using oaman to execute tests.</a></span></dt><dt><span class="section"><a href="#d0e1365">6.2. Scheduling command line tests.</a></span></dt></dl></div><p>OpenAutomate is a testing and benchmarking automation library produced
+  by NVIDIA. OpenAutomate is shipped as part of the BigWorld Technology
+  license. See <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://developer.nvidia.com/object/openautomate.html" target="_top">http://developer.nvidia.com/object/openautomate.html</a>
+  for more details.</p><p>BigWorld is using and extending the Open Automate API to test the
+  BigWorld client in house. The
+  <code class="filename">res\scripts\client\OpenAutomate.py</code> script contains the
+  code which runs the tests based on the Open Automate instructions.</p><p>There are several ways to use the BigWorld Technology Client with the
+  OpenAutomate framework to test a game:</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1338"></a>6.1.&nbsp;Using oaman to execute tests.</h2></div></div></div><p>NVIDIA provides a tool called oaman which allows setting specific
+    game settings and running tests. The oaman tool is available in
+    <code class="filename">src\lib\third_party\openautomate\oaman\oaman.exe</code>.</p><p>Using oaman can be done as follows:</p><div class="itemizedlist"><ul type="disc"><li><p>Start <code class="filename">oaman.exe</code></p></li><li><p>Choose <em class="emphasis">Application<span class="symbol">&#8594;</span>Add OA Application</em></p></li><li><p>Choose the BigWorld client executable being used to run your
+        game.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1365"></a>6.2.&nbsp;Scheduling command line tests.</h2></div></div></div><p>Running nightly testing to detect performance degregations and
+    stability issues is a recommended practice for game development. The
+    BigWorld Technology Client can read and execute open automate commands
+    (and additional commands) based on xml files provided as part of a command
+    line. Following is the syntax for running a test using an xml instructions
+    file:</p><pre class="programlisting"><em class="replaceable"><code>&lt;BigWorld Technology Client&gt;</code></em> -openautomate INTERNAL_TEST <em class="replaceable"><code>&lt;text xml file&gt;</code></em></pre><p>For example: </p><pre class="programlisting">bigworld.exe -openautomate INTERNAL_TEST \
+	<em class="replaceable"><code>&lt;fd res&gt;</code></em>\scripts\testing\openautomate\simpleSetAutoDetect.xml</pre><p>The
+    above example illustrates how to auto detect the client settings and use
+    the highest video mode. Please refer to the corresponding </p><pre class="programlisting">currentCommand == "CMD_AUTO_DETECT" </pre><p>in
+    <code class="filename">OpenAutomate.py</code> to understand the implementation.
+    This command should be used before running other tests to make sure that
+    we are using the same graphics and video settings when running
+    tests.</p><p>Running the command:</p><pre class="programlisting">bigworld.exe -openautomate INTERNAL_TEST \
+	<em class="replaceable"><code>&lt;fd res&gt;</code></em>\scripts\testing\openautomate\testAdvancedRunBenchmarks.xml</pre><p>will
+    run multiple benchmarks and quit.</p><p>Customers wishing to add more tests can add logic to the
+    <code class="filename">OpenAutomate.py</code> file. The function
+    <code class="function">testOAGetNextCommand()</code> available at
+    <code class="filename">src\lib\open_automate\open_automate_tester.cpp</code>
+    contains the implementation which reads the xml files and sends commands
+    to the <code class="filename">OpenAutomate.py</code> file. Changing this function
+    might be required for advanced customers wishing to add additional testing
+    capabilities to their xml files.</p></div></div></div></div></body></html>

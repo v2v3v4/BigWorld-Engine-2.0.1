@@ -1,0 +1,21 @@
+BigWorld contains a mozilla and llmozlib redistribution.
+
+Based on this software license we need to specify what changes were done to these libraries and when
+
+Changes were done on the period between 12/01/2009-23/01/2009
+
+1. No change were done to the mozilla source code except for what is required based on the llmozlib compilation instructions. see http://svn.secondlife.com/trac/llmozlib/browser/trunk/llmozlib2/README-win32.txt
+The patch file is also redistributed here just in case, see linden.patch in fantasydemo/game/mozilla
+2. No changes were done to the llmozlib source code except for:
+	a. Fixing the ubrowser to compile as ascii (this is not redistributed with our client exe but is provided here just in case)
+	b. creating a dll wrapper using llmozlib (no source changes to the original files), but still the new files are attached:
+		llmozlib_virtual_wrapper.h
+		llmozlib_virtual_wrapper.cpp
+		llmozlib_dll.h
+		llmozlib_dll.cpp
+
+
+GECKO is written by the mozilla foundation see http://www.mozilla.org/
+
+
+LLMozlib was written by Callum Prentice see http://ubrowser.com/

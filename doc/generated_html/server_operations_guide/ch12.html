@@ -1,0 +1,456 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;12.&nbsp;RPM</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Operations Guide">
+      <link rel="up" href="index.html" title="Server Operations Guide">
+      <link rel="prev" href="ch11.html" title="Chapter&nbsp;11.&nbsp;MySQL Support">
+      <link rel="next" href="ch13.html" title="Chapter&nbsp;13.&nbsp;First Aid After a Crash">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_operations_guide/ch12.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;12.&nbsp;RPM</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch11.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch13.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_RPM"></a>Chapter&nbsp;12.&nbsp;RPM
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch12.html#d0e9390">12.1. Directory Structures and Files</a></span></dt>
+                  <dt><span class="section"><a href="ch12.html#d0e9426">12.2. How to Generate Binary RPM Packages</a></span></dt>
+                  <dt><span class="section"><a href="ch12.html#d0e9521">12.3. Customising RPM Packages</a></span></dt>
+                  <dt><span class="section"><a href="ch12.html#d0e9597">12.4. Setting up a Yum Repository</a></span></dt>
+                  <dt><span class="section"><a href="ch12.html#d0e9710">12.5. Install, Upgrade and Uninstall using Yum Command</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch12.html#d0e9718">12.5.1. Install and Upgrade using a RPM Package Directly</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e9751">12.5.2. Install and Upgrade using Yum Repository</a></span></dt>
+                        <dt><span class="section"><a href="ch12.html#d0e9765">12.5.3. Remove an Installed Package</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch12.html#d0e9772">12.6. How to Obtain Version Number of an Installed Package</a></span></dt>
+               </dl>
+            </div>
+            <p>BigWorld provides a RPM implementation which allows the creation of
+                 binary RPM package for BWMachined. The RPM implementation uses the RPM
+                 system available in Linux distributions such as CentOS, RHEL and Fedora to
+                 generate RPM packages.
+            </p>
+            <p>This chapter provides the following information:</p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Directory structure and files related to BigWorld RPM
+                              implementation.
+                     </p>
+                  </li>
+                  <li>
+                     <p>How to generate BigWorld binary RPM packages.</p>
+                  </li>
+                  <li>
+                     <p>Customising RPM Packages.</p>
+                  </li>
+                  <li>
+                     <p>Setting up a <span class="literal">yum</span> repository.
+                     </p>
+                  </li>
+                  <li>
+                     <p>Install, upgrade and uninstall using <code class="code">yum</code>
+                              command.
+                     </p>
+                  </li>
+                  <li>
+                     <p>How to obtain version number of an installed package.</p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e9390"></a>12.1.&nbsp;Directory Structures and Files
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The RPM implementation is located in the <code class="filename">bigworld/tools/server/rpm</code> directory:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>The <code class="filename">Makefile
+                                      </code>is used to generate RPM packages.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The <code class="filename">generate.py</code> is used to
+                                   facilitate the creation of RPM packages.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The <code class="filename">binary_rpms</code> directory
+                                   is where generated RPM packages are placed.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The <code class="filename">rpm</code> directory also
+                                   contains package specific directories. For example, the <code class="filename">bwmachined</code> directory contains all the
+                                   files specific to BWMachined.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e9426"></a>12.2.&nbsp;How to Generate Binary RPM Packages
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Binary RPM packages must be generated using a normal Unix user
+                      account. Binary RPM packages must not be generated using the root
+                      user.
+               </p>
+               <p>In order to allow RPM's to be built into a user writeable directory,
+                      it is necessary to modify the user's <code class="filename">.rpmmacros</code> file.
+                      This file will contain the location of the directories in which the RPM
+                      files will be built. Firstly we need to create the directory structure to
+                      use. For this example we will create a new directory in the user's home
+                      directory called <code class="filename">rpmbuild</code>. We also
+                      require an <code class="filename">RPMS</code> subdirectory where
+                      package files will be placed.
+               </p><pre class="programlisting">$ mkdir -p ~/rpmbuild/RPMS</pre><p>Next we need to let the rpm build environment know how to use that
+                      directory. This simply involves creating a new user specific rpm macro
+                      file as follows.
+               </p><pre class="programlisting">$ vim ~/.rpmmacros</pre><p>Copy and paste the following content into the
+                      <code class="filename">.rpmmacros</code> file.
+               </p><pre class="programlisting">%_topdir /home/<em class="replaceable"><code>username</code></em>/rpmbuild
+%_tmppath %{_topdir}/tmp</pre><p>Write and close this file. To confirm the change you made has been
+                      successful, run the following command to ensure the path looks
+                      correct.
+               </p><pre class="programlisting">$ rpm --eval %_topdir</pre><p>To generate RPM package for BWMachined, go to the <code class="filename">bigworld/tools/server/rpm</code> directory and run
+                      the following command:
+               </p><pre class="programlisting">$ make</pre><p>The generated RPM package will be placed in the <code class="filename">bigworld/tools/server/rpm/binary_rpms</code>
+                      directory.
+               </p>
+               <p>The generated RPM package will have the following file name:</p><pre class="programlisting">bigworld-bwmachined-<em class="replaceable"><code>&lt;version&gt;</code></em>-<em class="replaceable"><code>&lt;release&gt;</code></em>.<em class="replaceable"><code>&lt;architecture&gt;</code></em>.rpm </pre><div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>The <em class="replaceable"><code>&lt;version&gt;</code></em> field is the
+                                   version number of the BigWorld release that the package was generated
+                                   from. This field is based on the version number in <code class="filename">bigworld/res/version.xml</code>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The <em class="replaceable"><code>&lt;release&gt;</code></em> field identifies
+                                   the specific build of this RPM package. By default, it is not used and
+                                   is mapped to <span class="literal">patch</span> number in <code class="filename">bigworld/res/version.xml</code>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The <em class="replaceable"><code>&lt;architecture&gt;</code></em> field will
+                                   be either <span class="literal">i386</span> for 32 bit systems, or
+                                   <span class="literal">x86_64</span> for 64 bit installations.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e9521"></a>12.3.&nbsp;Customising RPM Packages
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The most common customisation of a RPM package is the configuration
+                      file(s) installed by the package. That is, one RPM package may include the
+                      default configuration file and another may include a customised
+                      configuration file. These RPM packages can be distinguished by using the
+                      <span class="literal">release</span> field in the filename of these packages.
+               </p>
+               <p>For example, the configuration file included in a BWMachined RPM
+                      package is located in <code class="filename">rpm/bwmachined/bwmachined.conf</code>.
+               </p>
+               <p>To generate a BWMachined RPM package with the default configuration
+                      file and assign it the <span class="literal">release</span> number
+                      <span class="literal">0</span>:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Use the <code class="filename">bwmachined.conf</code> provided by
+                                   default.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Update the <code class="code">Release</code> tag in <code class="filename">rpm/bwmachined/bwmachined_template.spec
+                                      </code>to the following:
+                        </p><pre class="programlisting">Release: 0</pre></li>
+                     <li>
+                        <p>Generate the RPM package.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The file name of the RPM package generated will be, for example,
+                      <code class="filename">bigworld-bwmachined-1.9.1.0-0.i386.rpm</code>.
+               </p>
+               <p>To generate a BWMachined RPM package with customised configuration
+                      file and assign it the <span class="literal">release</span> number
+                      <span class="literal">1</span>:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>Update the bwmachined.conf as required.</p>
+                     </li>
+                     <li>
+                        <p>Update the <code class="code">Release</code> tag to
+                                   <span class="literal">1</span>.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Generate the RPM package.</p>
+                     </li>
+                  </ul>
+               </div>
+               <p>The file name of the RPM package generated will be, for example,
+                      <code class="filename">bigworld-bwmachined-1.9.1.0-1.i386.rpm</code>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e9597"></a>12.4.&nbsp;Setting up a Yum Repository
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>For a large environment where RPM Packages, e.g. the BWMachined RPM
+                      Package, need to be installed on many machines, we recommend that a Yum
+                      repository to be set up to provide these RPM packages. This allows an RPM
+                      package to be installed on any machine in the cluster by running the
+                      <span><strong class="command">yum</strong></span> command without the need to manually copy the RPM
+                      package to each machine in the cluster.
+               </p>
+               <p>The Yum repository created will need to be made available through a
+                      web server such as the <span class="literal">Apache HTTP Server</span>. The setup
+                      required is outside the scope of this document. Please consult relevant
+                      web server documentation on how to achieve this.
+               </p>
+               <p>Steps to set up a Yum repository:</p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>On the machine that will be hosting the Yum repository, create a
+                                   directory for the BigWorld RPM packages. The location of this
+                                   directory will depend on the web server chosen and the web server
+                                   configuration which is outside the scope of this document.
+                        </p>
+                     </li>
+                     <li>
+                        <p>Copy the RPM packages to the directory created.</p>
+                     </li>
+                     <li>
+                        <p>Install the <span class="literal"><span class="literal">createrepo</span></span>
+                                   package using the following command:
+                        </p><pre class="programlisting">$ yum install createrepo</pre><p>This is a utility that will generate a common metadata
+                                   repository from a directory of RPM packages.
+                        </p>
+                        <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                           <h3 class="title">Note</h3>
+                           <p>You will need to be the <span class="literal">root</span> user to
+                                        install a package.
+                           </p>
+                        </div>
+                     </li>
+                     <li>
+                        <p>Run the following command to create the necessary metadata for
+                                   the <span class="literal">yum</span> repository:
+                        </p><pre class="programlisting">$ createrepo &lt;path_to_dir&gt;</pre><p>where <em class="replaceable"><code>&lt;path_to_dir&gt;</code></em> is the path
+                                   to the directory created.
+                        </p>
+                        <p>For example, if the directory created is <code class="filename">/mnt/bigworld_repo</code>, then the command to
+                                   run is the following:
+                        </p><pre class="programlisting">$ createrepo /mnt/bigworld_repo</pre><p>This creates a <code class="filename">repodata</code>
+                                   directory in the <code class="filename">/mnt/bigworld_repo
+                                      </code>directory.
+                        </p>
+                     </li>
+                     <li>
+                        <p>The <code class="filename">/etc/yum.conf</code> on a machine that will
+                                   access the repository created will need to be updated to include the
+                                   following setting:
+                        </p><pre class="programlisting">[&lt;repo_name&gt;]
+name=&lt;repo_name&gt;
+baseurl=&lt;url_to_repo&gt;
+enabled=1</pre><p>where &lt;repo_name&gt; is replaced by the name given to the
+                                   repository and &lt;url_to_repo&gt; is replaced by the URL that refers
+                                   to the repository.
+                        </p>
+                        <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                           <h3 class="title">Note</h3>
+                           <p>By default, the <code class="filename">/etc/yum.conf</code> contains a
+                                        <span class="literal">[main]</span> entry. The entry above should be added
+                                        after the <span class="literal">[main]</span> entry.
+                           </p>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+               <p>When the <span class="literal">yum</span> repository is updated, for example,
+                      a new version of BWMachined RPM package is added, then the <code class="filename">repodata</code> directory should be deleted and the
+                      <code class="code">createrepo</code> command should be run again to generate up-to-date
+                      metadata.
+               </p>
+               <p>If a new RPM package was added to the repository but is not
+                      displayed on a machine when running a query command such as
+               </p><pre class="programlisting">$ yum info bigworld-bwmachined</pre><p>run the following command to delete the metadata used by Yum to
+                      determine the remote availability of packages:
+               </p><pre class="programlisting">$ yum clean metadata</pre><p>When the <span><strong class="command">yum</strong></span> command is run the next time, it
+                      will download the up-to-date metadata.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e9710"></a>12.5.&nbsp;Install, Upgrade and Uninstall using Yum Command
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>This section describes how to install, upgrade and uninstall using
+                      the <span><strong class="command">yum</strong></span> command. The BWMachined package is used as an
+                      example.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9718"></a>12.5.1.&nbsp;Install and Upgrade using a RPM Package Directly
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>To install a RPM Package directly without using
+                                        <span class="literal">yum</span> repository:
+                           </p><pre class="programlisting">$ yum --nogpgcheck install bigworld-bwmachined-&lt;version&gt;-&lt;release&gt;.i386.rpm</pre><p>where <em class="replaceable"><code>&lt;version&gt;</code></em> and
+                                        <em class="replaceable"><code>&lt;release&gt;</code></em> are replaced by the
+                                        actual version and release number.
+                           </p>
+                           <p>This assumes that you are running the Yum command in a
+                                        directory containing the specified <code class="filename">.rpm</code> file.
+                           </p>
+                           <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                              <h3 class="title">Note</h3>
+                              <p>The RPM packages created by BigWorld RPM implementation are
+                                             not signed, since these packages are from trusted source.
+                                             Therefore, during installation and upgrade, GPG check is
+                                             disabled.
+                              </p>
+                           </div>
+                        </li>
+                        <li>
+                           <p>To upgrade a package:</p><pre class="programlisting">$ yum --nogpgcheck upgrade bigworld-bwmachined-&lt;version&gt;-&lt;release&gt;.i386.rpm</pre></li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9751"></a>12.5.2.&nbsp;Install and Upgrade using Yum Repository
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>To install a package from a Yum repository:</p><pre class="programlisting">$ yum --nogpgcheck install bigworld-bwmachined</pre></li>
+                        <li>
+                           <p>To upgrade a package:</p><pre class="programlisting">$ yum --nogpgcheck upgrade bigworld-bwmachined</pre></li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e9765"></a>12.5.3.&nbsp;Remove an Installed Package
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>To remove an installed package:</p><pre class="programlisting">$ yum remove bigworld-bwmachined</pre></div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e9772"></a>12.6.&nbsp;How to Obtain Version Number of an Installed Package
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To obtain the version number of an installed package such as the
+                      BWMachined package, run the following command:
+               </p><pre class="programlisting">$ yum info bigworld-bwmachined</pre></div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch11.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch13.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;11.&nbsp;MySQL Support&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;13.&nbsp;First Aid After a Crash</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

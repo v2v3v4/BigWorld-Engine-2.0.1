@@ -1,0 +1,380 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;13.&nbsp;XML Data File Access</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch12.html" title="Chapter&nbsp;12.&nbsp;Entities and the Universe">
+      <link rel="next" href="ch14.html" title="Chapter&nbsp;14.&nbsp;External Services">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch13.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;13.&nbsp;XML Data File Access</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch12.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch14.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_XML_Data_File_Access"></a>Chapter&nbsp;13.&nbsp;XML Data File Access
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch13.html#d0e11794">13.1. <code class="classname">ResMgr</code>.<code class="classname">DataSection</code></a></span></dt>
+                  <dt><span class="section"><a href="ch13.html#xref_Accessing_Data">13.2. Accessing Data</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch13.html#d0e11836">13.2.1. Opening a Section Within an XML File</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch13.html#d0e11851">13.3. Data Types</a></span></dt>
+                  <dt><span class="section"><a href="ch13.html#d0e11953">13.4. Writing Data</a></span></dt>
+                  <dt><span class="section"><a href="ch13.html#d0e12017">13.5. Performance Issues</a></span></dt>
+                  <dt><span class="section"><a href="ch13.html#d0e12026">13.6. API Reference</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e11794"></a>13.1.&nbsp;<code class="classname">ResMgr</code>.<code class="classname">DataSection</code></h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Server component scripting can access custom data stored in XML
+                      files. These would typically be used to store game data resources, for
+                      example, anything from gameplay tables to configuration data. The data is
+                      stored in an XML hierarchy, accessible by traversing the tree defined in
+                      the each XML file.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_Accessing_Data"></a>13.2.&nbsp;Accessing Data
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Suppose that a data file is defined as in the example below:</p><pre class="programlisting">&lt;root&gt;
+   &lt;character&gt;     Sir Manfred
+      &lt;description&gt; White knight                       &lt;/description&gt;
+      &lt;modelName&gt;   sets/main/characters/knight.model  &lt;/modelName&gt;
+      &lt;race&gt;        human                              &lt;/race&gt;
+      &lt;gender&gt;      0                                  &lt;/gender&gt;
+   &lt;/character&gt;
+
+   &lt;character&gt;     Sofia
+      &lt;description&gt; Evil queen                         &lt;/description&gt;
+      &lt;modelName&gt;   sets/main/characters/queen.model   &lt;/modelName&gt;
+      &lt;race&gt;        undead                             &lt;/race&gt;
+      &lt;gender&gt;      1                                  &lt;/gender&gt;
+
+      &lt;slaves&gt;
+         &lt;character&gt;     Underling
+           &lt;description&gt; Hapless underling                   &lt;/description&gt;
+           &lt;modelName&gt;   sets/main/characters/guard.model    &lt;/modelName&gt;
+           &lt;race&gt;        undead                              &lt;/race&gt;
+           &lt;gender&gt;      1                                    &lt;/gender&gt;
+         &lt;/character&gt;
+
+         &lt;character&gt;      Servant
+            &lt;description&gt; Unpaid slave                       &lt;/description&gt;
+            &lt;modelName&gt;   sets/main/characters/servant.model &lt;/modelName&gt;
+            &lt;race&gt;        undead                             &lt;/race&gt;
+            &lt;gender&gt;      1                                  &lt;/gender&gt;
+         &lt;/character&gt;
+      &lt;/slaves&gt;
+   &lt;/character&gt;
+&lt;/root&gt;</pre><p><span class="citetitle">Example XML file <span class="symbol">&#8208;</span>
+                         <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/data/Characters.xml</code></span></p>
+               <p>You can access this data by creating a new
+                      <code class="classname">DataSection</code> using the
+                      <code class="classname">ResMgr</code>.<code class="methodname">openSection</code> method.
+                      The path argument used is relative to the resources path. This is
+                      illustrated in the example below:
+               </p><pre class="programlisting">ds = ResMgr.openSection( 'scripts/data/Characters.xml' )
+
+# this will retrieve "Sir Manfred"
+ds.child( 0 ).asString
+
+# this will retrieve "White knight"
+ds.child( 0 )['description'].asString
+
+# this will retrieve 1
+ds.child( 0 )['gender'].asInt</pre><p><span class="citetitle">Reading an XML data file</span></p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e11836"></a>13.2.1.&nbsp;Opening a Section Within an XML File
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>You can access a section within the XML file by adding the name of
+                           the section to the end of the path given to ResMgr.openSection:
+                  </p><pre class="programlisting">dsChild = ResMgr.openSection(
+  'scripts/data/Characters.xml/character' )</pre><p><em class="emphasis">Reading an XML data file <span class="symbol">&#8208;</span> Accessing a specific section</em></p>
+                  <p>If there are multiple elements with the same under the root
+                           element, then the first one is returned.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e11851"></a>13.3.&nbsp;Data Types
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The available data types are:</p>
+               <div class="altrow">
+                  <table border="0" width="40%">
+                     <colgroup>
+                        <col width="55%">
+                        <col width="45%">
+                     </colgroup>
+                     <thead>
+                        <tr>
+                           <th align="left">Data type</th>
+                           <th align="left">Accessed by</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td align="left">64-bit floating-point numbers</td>
+                           <td align="left"><code class="methodname">.asDouble</code></td>
+                        </tr>
+                        <tr>
+                           <td align="left">64-bit integers</td>
+                           <td align="left"><code class="methodname">.asInt64</code></td>
+                        </tr>
+                        <tr>
+                           <td align="left">Data blob</td>
+                           <td align="left"><code class="methodname">.asBlob</code></td>
+                        </tr>
+                        <tr>
+                           <td align="left">Floating-point numbers</td>
+                           <td align="left"><code class="methodname">.asFloat</code></td>
+                        </tr>
+                        <tr>
+                           <td align="left">Integers</td>
+                           <td align="left"><code class="methodname">.asInt</code></td>
+                        </tr>
+                        <tr>
+                           <td align="left">Matrix</td>
+                           <td align="left"><code class="methodname">.asMatrix</code></td>
+                        </tr>
+                        <tr>
+                           <td align="left">Raw binary representation of the XML
+                                            node
+                           </td>
+                           <td align="left"><code class="methodname">.asBinary</code></td>
+                        </tr>
+                        <tr>
+                           <td align="left">String</td>
+                           <td align="left"><code class="methodname">.asString</code></td>
+                        </tr>
+                        <tr>
+                           <td align="left">Vector2</td>
+                           <td align="left"><code class="methodname">.asVector2</code></td>
+                        </tr>
+                        <tr>
+                           <td align="left">Vector3</td>
+                           <td align="left"><code class="methodname">.asVector3</code></td>
+                        </tr>
+                        <tr>
+                           <td align="left">Vector4</td>
+                           <td align="left"><code class="methodname">.asVector4</code></td>
+                        </tr>
+                        <tr>
+                           <td align="left">Wide strings</td>
+                           <td align="left"><code class="methodname">.asWideString</code></td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <p><span class="citetitle">Available data types in
+                         XML</span></p>
+               <p>For more details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>'s
+                      entry <em class="emphasis">Class List <span class="symbol">&#8594;</span> DataSection</em>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e11953"></a>13.4.&nbsp;Writing Data
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>You can write to properties by referencing the appropriate
+                      <code class="varname">.as<em class="replaceable"><code>&lt;data type&gt;</code></em></code>
+                      property, then saving the XML file.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>This feature is for use only on server tools, and you should avoid
+                           using it in game scripts.
+                  </p>
+               </div>
+               <p>An important limitation to be aware of is that it is only possible
+                      to save a <code class="classname">DataSection</code> that has been opened by
+                      reference to an XML document. It is not possible to directly save a
+                      section that is retrieved by a path to a sub-element within a file.
+               </p>
+               <p>For example, the code below will <em class="emphasis">not</em> work:
+               </p><pre class="programlisting"># this will not work, throws IOError
+dsChild = ResMgr.openSection( 'scripts/data/Characters.xml/<em class="emphasis">character</em>' )
+dsChild.asString = "Sir Lancelot"
+dsChild.save()</pre><p><span class="citetitle">Example of incorrect procedure for writing to
+                         XML</span></p>
+               <p>The code excerpt below, on the other, will work:</p><pre class="programlisting"># this will work
+dsRoot = ResMgr.openSection( 'scripts/data/Characters.xml' )
+dsChild = dsRoot.child( 0 )
+dsChild.asString = "Sir Lancelot"
+dsRoot.save()</pre><p><span class="citetitle">Example of correct procedure for writing to
+                         XML</span></p>
+               <p>You can also add or remove child elements from each data
+                      section:
+               </p><pre class="programlisting"># get the document data section
+dsRoot = ResMgr.openSection( 'scripts/data/Characters.xml' )
+
+# this will delete the first character
+dsRoot.deleteSection( 'character' )
+
+# create a new character, which is appended to the top-level
+newChild = dsRoot.createSection( 'character' )
+newChild.asString = "King Arthur"
+
+newChild.createSection( 'description' )
+newChild.createSection( 'modelName' )
+newChild.createSection( 'race' )
+newChild.createSection( 'gender' )
+newChild.createSection( 'slaves' )
+
+newChild['description'].asString = "The King of Camelot"
+newChild['modelName'].asString = 'sets/main/character/knight.model'
+newChild['race'].asString = 'human'
+newChild['gender'].asInt = 0
+dsRoot.save()</pre><p><span class="citetitle">Deleting sections and adding new ones</span></p>
+               <p>Running the code excerpt below, and assuming a
+                      <code class="filename">Characters.xml</code> as described in <a href="ch13.html#xref_Accessing_Data" title="13.2.&nbsp;Accessing Data">Accessing Data</a>, the result will be the file below:
+               </p><pre class="programlisting">&lt;root&gt;
+   &lt;character&gt;      Sofia
+      &lt;description&gt; Evil queen                       &lt;/description&gt;
+      &lt;modelName&gt;   sets/main/characters/queen.model &lt;/modelName&gt;
+      &lt;race&gt;        undead                           &lt;/race&gt;
+      &lt;gender&gt;      1                                &lt;/gender&gt;
+
+      &lt;slaves&gt;
+         &lt;character&gt;      Underling
+            &lt;description&gt; Hapless underling                  &lt;/description&gt;
+            &lt;modelName&gt;   sets/main/characters/guard.model   &lt;/modelName&gt;
+            &lt;race&gt;        undead                             &lt;/race&gt;
+            &lt;gender&gt;      1                                  &lt;/gender&gt;
+         &lt;/character&gt;
+
+         &lt;character&gt;      Servant
+            &lt;description&gt; Unpaid slave                       &lt;/description&gt;
+            &lt;modelName&gt;   sets/main/characters/servant.model &lt;/modelName&gt;
+            &lt;race&gt;        undead                             &lt;/race&gt;
+            &lt;gender&gt;      1                                  &lt;/gender&gt;
+         &lt;/character&gt;
+      &lt;/slaves&gt;
+   &lt;/character&gt;
+
+<em class="emphasis">
+   &lt;character&gt;       King Arthur
+      &lt;description&gt;  The King of Camelot              &lt;/description&gt;
+      &lt;modelName&gt;    sets/main/character/knight.model &lt;/modelName&gt;
+      &lt;race&gt;         human                            &lt;/race&gt;
+      &lt;gender&gt;       0                                &lt;/gender&gt;
+      &lt;slaves&gt;                                        &lt;/slaves&gt;
+   &lt;/character&gt;
+</em>
+&lt;/root&gt;</pre><p><span class="citetitle">Resulting
+                         <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/data/Characters.xml</code></span></p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e12017"></a>13.5.&nbsp;Performance Issues
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Accessing the XML files on disk can potentially halt game
+                      processing. This can occur from disk I/O and parsing of the resulting
+                      data. This halt to processing can occur for both reading as well as
+                      writing of XML files and should be avoided as much as possible.
+               </p>
+               <p>Due to the adverse impact this can cause to game development and
+                      resulting behaviour, a separate document has been written to address these
+                      issues. For more details please refer to the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../howto_avoid_file_in_main_thread/index.html" class="olink">How To Avoid Files Being Loaded in the Main Thread</a>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e12026"></a>13.6.&nbsp;API Reference
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p><code class="classname">ResMgr</code> documents the
+                      <code class="classname">DataSection</code>'s methods, and can be found in the
+                      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/baseapp/index.html" class="olink">BaseApp Python API</a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/cellapp/index.html" class="olink">CellApp Python API</a>, and <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch12.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch14.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;12.&nbsp;Entities and the Universe&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;14.&nbsp;External Services</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

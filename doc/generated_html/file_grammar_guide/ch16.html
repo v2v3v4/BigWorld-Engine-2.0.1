@@ -1,0 +1,248 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;16.&nbsp;.gui</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="File Grammar Guide">
+      <link rel="up" href="index.html" title="File Grammar Guide">
+      <link rel="prev" href="ch15.html" title="Chapter&nbsp;15.&nbsp;.font">
+      <link rel="next" href="ch17.html" title="Chapter&nbsp;17.&nbsp;gui.xml">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/file_grammar_guide/ch16.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;16.&nbsp;<span class="literal">.gui</span></th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch15.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch17.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_GUI_File"></a>Chapter&nbsp;16.&nbsp;<span class="literal">.gui</span></h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch16.html#d0e4551">16.1. SimpleGUIComponentSection</a></span></dt>
+               </dl>
+            </div>
+            <p>Used to persist GUI hierarchies, these files are located under
+                 <span class="literal">fantasydemo/res/gui</span>.
+            </p>
+            <p>For a detailed description of each section (GUI class) and tag (GUI
+                 member), see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>'s entry <em class="emphasis">Modules <span class="symbol">&#8594;</span>
+                    GUI</em>.
+            </p>
+            <p>The grammar of
+                 <span class="literal"><em class="replaceable"><code>&lt;gui&gt;</code></em>.gui</span> files is
+                 listed below:
+            </p><pre class="programlisting">&lt;file_name&gt;
+
+  *&lt;SimpleGUIComponent&gt;  <em class="replaceable"><code>integer</code></em>
+       <em class="emphasis">SimpleGUIComponentSection</em>
+    &lt;/SimpleGUIComponent&gt;
+
+  *&lt;GoboComponent&gt;  <em class="replaceable"><code>integer</code></em>
+       <em class="emphasis">SimpleGUIComponentSection</em>
+   &lt;/GoboComponent&gt;
+
+  *&lt;FrameGUIComponent&gt;  <em class="replaceable"><code>integer</code></em>
+       <em class="emphasis">SimpleGUIComponentSection</em>
+       &lt;edgeTextureName&gt;    <em class="replaceable"><code>folder/file</code></em>  &lt;/edgeTextureName&gt;
+       &lt;cornerTextureName&gt;  <em class="replaceable"><code>folder/file</code></em>  &lt;/cornerTextureName&gt;
+   &lt;/FrameGUIComponent&gt;
+
+  *&lt;WindowGUIComponent&gt;  <em class="replaceable"><code>integer</code></em>
+       <em class="emphasis">SimpleGUIComponentSection</em>
+       &lt;scroll&gt;     <em class="replaceable"><code>integer</code></em>  &lt;/scroll&gt;
+       &lt;minScroll&gt;  <em class="replaceable"><code>integer</code></em>  &lt;/minScroll&gt;
+       &lt;maxScroll&gt;  <em class="replaceable"><code>integer</code></em>  &lt;/maxScroll&gt;
+   &lt;/WindowGUIComponent&gt;
+
+  *&lt;GraphGUIComponent&gt;  <em class="replaceable"><code>integer</code></em>
+       <em class="emphasis">SimpleGUIComponentSection</em>
+       &lt;nPoints&gt;    <em class="replaceable"><code>integer</code></em>  &lt;/nPoints&gt;
+       &lt;minY&gt;       <em class="replaceable"><code>float</code></em>    &lt;/minY&gt;
+       &lt;maxY&gt;       <em class="replaceable"><code>float</code></em>    &lt;/maxY&gt;
+       &lt;frequency&gt;  <em class="replaceable"><code>float</code></em>    &lt;/frequency&gt;
+   &lt;/GraphGUIComponent&gt;
+
+  *&lt;TextGUIComponent&gt;  <em class="replaceable"><code>integer</code></em>
+       <em class="emphasis">SimpleGUIComponentSection</em>
+       &lt;label&gt;         <em class="replaceable"><code>string</code></em>      &lt;/label&gt;
+       &lt;font&gt;          <em class="replaceable"><code>file</code></em><a name="co2463"></a><img src="../images/callouts/1.png" alt="1" border="0">        &lt;/font&gt;
+       &lt;pixelSnap&gt;     true|false  &lt;/pixelSnap&gt;
+       &lt;explicitSize&gt;  true|false  &lt;/explicitSize&gt;
+   &lt;/TextGUIComponent&gt;
+
+  *&lt;BoundingBoxGUIComponent&gt;  <em class="replaceable"><code>integer</code></em>
+       <em class="emphasis">SimpleGUIComponentSection</em>
+      ?&lt;clipSpaceSource&gt;        true|false         &lt;/clipSpaceSource&gt;
+      ?&lt;clipToBox&gt;              true|false         &lt;/clipToBox&gt;
+      ?&lt;absoluteSubspace&gt;       <em class="replaceable"><code>integer</code></em>            &lt;/absoluteSubspace&gt;
+      ?&lt;offsetSubspace&gt;         <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/offsetSubspace&gt;
+      ?&lt;alwaysDisplayChildren&gt;  true|false         &lt;/alwaysDisplayChildren&gt;
+   &lt;/BoundingBoxGUIComponent&gt;
+
+  *&lt;ConsoleGUIComponent&gt;  <em class="replaceable"><code>integer</code></em>
+       <em class="emphasis">SimpleGUIComponentSection</em>
+       &lt;scale&gt;  <em class="replaceable"><code>float</code></em>  &lt;/scale&gt;
+       &lt;lines&gt;
+         *&lt;colour&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/colour&gt;
+         *&lt;line&gt;    <em class="replaceable"><code>string</code></em>                   &lt;/line&gt;
+       &lt;/lines&gt;
+   &lt;/ConsoleGUIComponent&gt;
+
+  *&lt;AlphaGUIShader&gt;  <em class="replaceable"><code>integer</code></em>
+       &lt;mode&gt;   <em class="replaceable"><code>integer</code></em>  &lt;/mode&gt;
+       &lt;stop&gt;   <em class="replaceable"><code>float</code></em>    &lt;/stop&gt;
+       &lt;start&gt;  <em class="replaceable"><code>float</code></em>    &lt;/start&gt;
+       &lt;alpha&gt;  <em class="replaceable"><code>float</code></em>    &lt;/alpha&gt;
+       &lt;speed&gt;  <em class="replaceable"><code>float</code></em>    &lt;/speed&gt;
+   &lt;/AlphaGUIShader&gt;
+
+  *&lt;ClipGUIShader&gt;  <em class="replaceable"><code>integer</code></em>
+       &lt;mode&gt;   <em class="replaceable"><code>integer</code></em>  &lt;/mode&gt;
+       &lt;value&gt;  <em class="replaceable"><code>float</code></em>    &lt;/value&gt;
+       &lt;speed&gt;  <em class="replaceable"><code>float</code></em>    &lt;/speed&gt;
+       &lt;delay&gt;  <em class="replaceable"><code>float</code></em>    &lt;/delay&gt;
+       &lt;slant&gt;  <em class="replaceable"><code>float</code></em>    &lt;/slant&gt;
+   &lt;/ClipGUIShader&gt;
+
+  *&lt;ColourGUIShader&gt;  <em class="replaceable"><code>integer</code></em>
+       &lt;start&gt;   <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/start&gt;
+       &lt;middle&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/middle&gt;
+       &lt;end&gt;     <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/end&gt;
+       &lt;value&gt;   <em class="replaceable"><code>float</code></em>                    &lt;/value&gt;
+       &lt;speed&gt;   <em class="replaceable"><code>float</code></em>                    &lt;/speed&gt;
+   &lt;/ColourGUIShader&gt;
+      
+  *&lt;MatrixGUIShader&gt;  <em class="replaceable"><code>integer</code></em>
+      ?&lt;target&gt;
+          &lt;row0&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/row0&gt;
+          &lt;row1&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/row1&gt;
+          &lt;row2&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/row2&gt;
+          &lt;row3&gt;  <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/row3&gt;
+       &lt;/target&gt;
+      ?&lt;eta&gt;    <em class="replaceable"><code>float</code></em>       &lt;/eta&gt; 
+      ?&lt;blend&gt;  true|false  &lt;/blend&gt;
+   &lt;/MatrixGUIShader&gt;
+
+&lt;/file_name&gt;</pre><p><span class="citetitle">Grammar of
+                    <span class="literal">fantasydemo/res/gui/<em class="replaceable"><code>&lt;gui&gt;</code></em>.gui</span></span></p>
+            <div class="calloutlist">
+               <table border="0" summary="Callout list">
+                  <tr>
+                     <td width="5%" valign="top" align="left"><a href="#co2463"><img src="../images/callouts/1.png" alt="1" border="0"></a> 
+                     </td>
+                     <td valign="top" align="left">
+                        <p>For details on grammar of font files, see <a href="ch15.html" title="Chapter&nbsp;15.&nbsp;.font"><i xmlns:xlink="http://www.w3.org/1999/xlink"><span class="literal">.font</span></i></a>.
+                        </p>
+                     </td>
+                  </tr>
+               </table>
+            </div>
+            <p>The list below describes the tags in file
+                 <span class="literal"><em class="replaceable"><code>&lt;gui&gt;</code></em>.gui</span>:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p><em class="emphasis"><span class="literal">AlphaGUIShader</span></em>, <em class="emphasis"><span class="literal">BoundingBoxGUIComponent</span></em>,
+                              <em class="emphasis"><span class="literal">ClipGUIShader</span></em>,
+                              <em class="emphasis"><span class="literal">ColourGUIShader</span></em>,
+                              <em class="emphasis"><span class="literal">ConsoleGUIComponent</span></em>,
+                              <em class="emphasis"><span class="literal">FrameGUIComponent</span></em>,
+                              <em class="emphasis"><span class="literal">GoboComponent</span></em>,
+                              <em class="emphasis"><span class="literal">GraphGUIComponent</span></em>,
+                              <em class="emphasis"><span class="literal">MatrixGUIShader</span></em>,
+                              <em class="emphasis"><span class="literal">SimpleGUIComponent</span></em>,
+                              <em class="emphasis"><span class="literal">TextGUIComponent</span></em>,
+                              <em class="emphasis"><span class="literal">WindowGUIComponent</span></em></p>
+                     <p>Creates an object of the specified type.</p>
+                     <p>For details on GUI components, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/index.html" class="olink">Client Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch16.html" class="olink"><i>Graphical User Interface (GUI)</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../client_programming_guide/ch16.html#xref_C_GUI_Support" class="olink">C++ GUI support</a>.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4551"></a>16.1.&nbsp;SimpleGUIComponentSection
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The grammar for the <em class="emphasis">SimpleGUIComponentSection</em> is described
+                      below:
+               </p><pre class="programlisting"> &lt;position&gt;          <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>        &lt;/position&gt;
+ &lt;widthInClip&gt;       true|false               &lt;/widthInClip&gt; 
+ &lt;width&gt;             <em class="replaceable"><code>float</code></em>                    &lt;/width&gt;
+ &lt;heightInClip&gt;      true|false               &lt;/heightInClip&gt;
+ &lt;height&gt;            <em class="replaceable"><code>float</code></em>                    &lt;/height&gt;
+ &lt;colour&gt;            <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em> <em class="replaceable"><code>float</code></em>  &lt;/colour&gt;
+ &lt;angle&gt;             <em class="replaceable"><code>integer</code></em>                  &lt;/angle&gt;
+ &lt;flip&gt;              <em class="replaceable"><code>integer</code></em>                  &lt;/flip&gt;
+ &lt;visible&gt;           true|false               &lt;/visible&gt;
+ &lt;horizontalAnchor&gt;  <em class="replaceable"><code>integer</code></em>                  &lt;/horizontalAnchor&gt;
+ &lt;verticalAnchor&gt;    <em class="replaceable"><code>integer</code></em>                  &lt;/verticalAnchor&gt;
+ &lt;textureName&gt;       <em class="replaceable"><code>folder/file</code></em>              &lt;/textureName&gt;
+ &lt;materialFX&gt;        <em class="replaceable"><code>integer</code></em>                  &lt;/materialFX&gt;
+ &lt;filterType&gt;        <em class="replaceable"><code>integer</code></em>                  &lt;/filterType&gt;
+ &lt;tiled&gt;             true|false               &lt;/tiled&gt;
+ &lt;tileWidth&gt;         <em class="replaceable"><code>integer</code></em>                  &lt;/tileWidth&gt;
+ &lt;tileHeight&gt;        <em class="replaceable"><code>integer</code></em>                  &lt;/tileHeight&gt;
+ &lt;script&gt;            <em class="replaceable"><code>string</code></em>                   &lt;/script&gt;
+?&lt;children&gt;
+   +&lt;attribute&gt;  <em class="replaceable"><code>integer</code></em>  &lt;/attribute&gt;
+ &lt;/children&gt;
+?&lt;shaders&gt;
+   +&lt;attribute&gt;  <em class="replaceable"><code>integer</code></em>  &lt;/attribute&gt;
+ &lt;/shaders&gt;</pre><p><span class="citetitle">Grammar of
+                         <span class="literal"><em class="replaceable"><code>&lt;gui&gt;</code></em>.gui</span>'s <em class="emphasis">SimpleGUIComponentSection</em></span></p>
+               <p>For details on each of the tags, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//api_python/client/index.html" class="olink">Client Python API</a>, entry <em class="emphasis">Modules
+                         <span class="symbol">&#8594;</span> GUI</em>.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch15.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch17.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;15.&nbsp;<span class="literal">.font</span>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;17.&nbsp;<span class="literal">gui.xml</span></td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,156 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;1.&nbsp;Overview</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Use XMPP With BigWorld">
+      <link rel="up" href="index.html" title="How To Use XMPP With BigWorld">
+      <link rel="prev" href="index.html" title="How To Use XMPP With BigWorld">
+      <link rel="next" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Installation">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;1.&nbsp;Overview</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_XMPP_Overview"></a>Chapter&nbsp;1.&nbsp;Overview
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch01.html#d0e87">1.1. Free / Open Gateways</a></span></dt>
+               </dl>
+            </div>
+            <p>XMPP is an open XML based message protocol with origins in Instant
+               Messaging (IM) and friend presence notification. It is presented within the
+                 scope of the BigWorld FantasyDemo example code to illustrate a working
+                 implementation of the
+                 <code class="classname">BigWorld</code>.<code class="methodname">registerFileDescriptor()</code>
+                 method as well as providing a real world example of one approach that can be
+                 used for implementing a messaging system into your game using an external
+                 service.
+            </p>
+            <p>The intended audience for this document includes technical MMOG
+                 developers, designers and system administrators.
+            </p>
+            <p>XMPP was chosen as the protocol to use for illustrating in game
+                 messaging services for a number of reasons:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Open Standard</p>
+                     <p>XMPP provides a completely open protocol standard that can be
+                              re-implemented by anybody without any licensing costs. This also means
+                              that there are many free implementations of the XMPP protocol
+                              available.
+                     </p>
+                  </li>
+                  <li>
+                     <p>Decentralised architecture</p>
+                     <p>The decentralised nature of the XMPP protocol lends itself to
+                              server solutions that can scale as required and integrate with other
+                              services.
+                     </p>
+                  </li>
+                  <li>
+                     <p>Integration with other services</p>
+                     <p>Protocol extensions have been defined that describe how other
+                              services can interact with an XMPP server through various mechanisms.
+                              This allows users on an existing service such as AOL or ICQ to
+                              communicate with users on an XMPP server as though they are all within
+                              the same network.
+                     </p>
+                  </li>
+               </ul>
+            </div>
+            <p>XMPP has been used in numerous projects including, but not limited
+                 to:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>Quake Live</p>
+                     <p>Source: <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.process-one.net/en/blogs/article/idsoftware_quakelive_service_uses_xmpp/" target="_top">Process
+                                 One Blog</a></p>
+                  </li>
+                  <li>
+                     <p>Google Wave</p>
+                     <p>Source: <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.waveprotocol.org/" target="_top">Google Wave
+                                 Federation Protocol</a></p>
+                  </li>
+                  <li>
+                     <p>Jabber IM</p>
+                     <p>Source: <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.jabber.org" target="_top">Jabber.org</a></p>
+                  </li>
+                  <li>
+                     <p>Gtalk</p>
+                     <p>Source: <a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://code.google.com/apis/talk/talk_developers_home.html" target="_top">GTalk
+                                 Developer Documentation</a></p>
+                  </li>
+               </ul>
+            </div>
+            <p>There are numerous XMPP server implementations available including
+                 both free and commercial solutions. For the purposes of this document we use
+                 EjabberD (<a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.process-one.net/en/ejabberd/" target="_top">http://www.process-one.net/en/ejabberd/</a>).
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e87"></a>1.1.&nbsp;Free / Open Gateways
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Currently the only known open and free to use XMPP gateway is the
+                      GTalk gateway operated by Google. Refer to the federation documentation of
+                      your XMPP server for more details on integration.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="index.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch02.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">How To Use XMPP With BigWorld&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;2.&nbsp;Installation</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

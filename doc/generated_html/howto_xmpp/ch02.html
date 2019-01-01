@@ -1,0 +1,214 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;2.&nbsp;Installation</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Use XMPP With BigWorld">
+      <link rel="up" href="index.html" title="How To Use XMPP With BigWorld">
+      <link rel="prev" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Overview">
+      <link rel="next" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Usage">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;2.&nbsp;Installation</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_XMPP_Installation"></a>Chapter&nbsp;2.&nbsp;Installation
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch02.html#d0e95">2.1. Installing the XMPP server</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e110">2.2. Configuring the FantasyDemo example</a></span></dt>
+                  <dt><span class="section"><a href="ch02.html#d0e122">2.3. Configuring EjabberD</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch02.html#xref_XMPP_Servicing_Domains">2.3.1. Servicing Domains</a></span></dt>
+                        <dt><span class="section"><a href="ch02.html#d0e157">2.3.2. Allowing multiple account creations from a single IP</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch02.html#d0e164">2.4. Start the ejabberd server</a></span></dt>
+               </dl>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e95"></a>2.1.&nbsp;Installing the XMPP server
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>For the purposes of this example we use the ejabberd XMPP server.
+                      This is available on all BigWorld supported distributions using package
+                      management, however if necessary the official website can be found
+                      at:
+               </p>
+               <p><a xmlns:xlink="http://www.w3.org/1999/xlink" href="http://www.process-one.net/en/ejabberd" target="_top">http://www.process-one.net/en/ejabberd</a></p>
+               <p>To install ejabberd under CentOS or Red Hat Enterprise simply
+                      perform the following step as the root user:
+               </p><pre class="programlisting"># yum install ejabberd</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>Red Hat Enterprise and CentOS users will need to enable the Extra
+                           Packages for Enterprise Linux (EPEL) package repository to gain access
+                           to this.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e110"></a>2.2.&nbsp;Configuring the FantasyDemo example
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The IM chat integration example needs to know how to connect to the
+                      newly installed Jabber server. The script code reads its configuration
+                      from <code class="filename">fantasydemo/res/server/config/xmpp.xml</code>. In this
+                      file you will need to specify the details of the XMPP server (i.e.
+                      hostname and port) as well as a resource name. The resource name is a
+                      unique identifier that specifies to the server where a user is logging in
+                      from when a connection is made. The default resource name is
+                      "FantasyDemo", however this can be altered to your needs as
+                      required.
+               </p>
+               <p>In this file also ensure that the example has been enabled with the
+                      corresponding XML tag.
+               </p><pre class="programlisting">&lt;root&gt;
+
+    &lt;enabled&gt; true &lt;/enabled&gt;
+
+    &lt;!-- XMPP Chat example --&gt;
+    &lt;xmppServer&gt;
+        &lt;host&gt; ejabber_server.domain.com &lt;/host&gt;
+        &lt;port&gt; 5222 &lt;/port&gt;
+        &lt;resourceName&gt; FantasyDemo &lt;/resourceName&gt;
+    &lt;/xmppServer&gt;
+&lt;/root&gt;</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e122"></a>2.3.&nbsp;Configuring EjabberD
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Most package installations of ejabberd will place the configuration
+                      file into <code class="filename">/etc/ejabberd/ejabberd.cfg</code>. When discussing
+                      the ejabberd config file, this is the file that should be
+                      referenced.
+               </p>
+               <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                  <h3 class="title">Note</h3>
+                  <p>When modifying or adding entries to the configuration file, the
+                           entries are terminated with a full stop '.'.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="xref_XMPP_Servicing_Domains"></a>2.3.1.&nbsp;Servicing Domains
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The ejabberd server services a domain of logins. For example your
+                           environment may contain both <span class="literal">www.rpg-game.com</span> as well
+                           as <span class="literal">www.rts-game.com</span>. Each gaming environment could
+                           contain a unique user called 'tony', so we need to tell the ejabberd
+                           server that it has to service both these domains.
+                  </p>
+                  <p>By default most installations will have a working configuration
+                           for <span class="literal">localhost</span>, however we will extend this to also
+                           support a new servicing domain so other users in the office can login to
+                           the server and interact with the game clients. In order to do this we
+                           simply use the fully qualified host and domain name of the machine the
+                           ejabberd server has been installed on. For example, while testing during
+                           the writing of this installation document the ejabberd server was
+                           installed onto a host called <span class="literal">bw13</span>, so the fully
+                           domain being serviced would be <span class="literal">bw13.bigworldtech.com</span>.
+                           In the ejabberd config file edit the hostname line to look similar to
+                           the following, replacing the bw13 domain with your own hostname and
+                           domain name.
+                  </p><pre class="programlisting">{hosts, ["localhost", "bw13.bigworldtech.com"]}.</pre></div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e157"></a>2.3.2.&nbsp;Allowing multiple account creations from a single IP
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>By default the ejabberd server will limit the number of account
+                           registrations that are allowed to occur from the same IP address in
+                           order to stop the server being abused. As the ejabberd server will be
+                           running in an isolated environment where account creations can happen
+                           frequently from the same IP address (i.e. the same BaseApp registering
+                           multiple new accounts at once), we will disable this limitation. To do
+                           so, add the following entry to the ejabberd configuration file:
+                  </p><pre class="programlisting">{registration_timeout, infinity}.</pre></div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e164"></a>2.4.&nbsp;Start the ejabberd server
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Now that the server has been configured start the server. On most
+                      distributions this can be achieved using the following command run as the
+                      root user:
+               </p><pre class="programlisting"># /etc/init.d/ejabberd start</pre></div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch01.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;1.&nbsp;Overview&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;3.&nbsp;Usage</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

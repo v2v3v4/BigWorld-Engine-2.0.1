@@ -1,0 +1,288 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;9.&nbsp;BigWorld Server Across Multiple Machines</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Operations Guide">
+      <link rel="up" href="index.html" title="Server Operations Guide">
+      <link rel="prev" href="ch08.html" title="Chapter&nbsp;8.&nbsp;Security">
+      <link rel="next" href="ch10.html" title="Chapter&nbsp;10.&nbsp;Multiple BigWorld Servers in a Single LAN">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_operations_guide/ch09.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;9.&nbsp;BigWorld Server Across Multiple Machines</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch08.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch10.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_BigWorld_Server_Across_Multiple_Machines"></a>Chapter&nbsp;9.&nbsp;BigWorld Server Across Multiple Machines
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch09.html#d0e8912">9.1. How To Start</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch09.html#d0e8917">9.1.1. WebConsole</a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e8926">9.1.2. Auto Configuration Via
+                                       <span class="literal">control_cluster.py</span></a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e8938">9.1.3. Hard-Coded Scripts</a></span></dt>
+                        <dt><span class="section"><a href="ch09.html#d0e8946">9.1.4. Manual Start</a></span></dt>
+                     </dl>
+                  </dd>
+                  <dt><span class="section"><a href="ch09.html#d0e8951">9.2. How To Stop</a></span></dt>
+                  <dt><span class="section"><a href="ch09.html#d0e8967">9.3. How To Monitor</a></span></dt>
+                  <dt><span class="section"><a href="ch09.html#xref_LoginApp_And_Scalability">9.4. LoginApp and Scalability</a></span></dt>
+               </dl>
+            </div>
+            <p>To start a server cluster consisting of multiple machines, you can
+                 start each process in any of the following ways:
+            </p>
+            <div class="itemizedlist">
+               <ul type="disc">
+                  <li>
+                     <p>the command line</p>
+                  </li>
+                  <li>
+                     <p>the <span class="literal">control_cluster.py</span> script
+                     </p>
+                  </li>
+                  <li>
+                     <p>WebConsole's ClusterControl module</p>
+                  </li>
+               </ul>
+            </div>
+            <p>CellApps, BaseApps, and LoginApps can have multiple instances running,
+                 while the other processes can have only one. The clients should connect to
+                 the IP address of a machine that is running a LoginApp.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e8912"></a>9.1.&nbsp;How To Start
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The following sub-sections describe how to start server
+                      components.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8917"></a>9.1.1.&nbsp;WebConsole
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>WebConsole can be used to easily start, stop and control server
+                           components.
+                  </p>
+                  <p>For an outline of WebConsole, see <a href="ch03.html#xref_WebConsole" title="3.1.&nbsp;WebConsole">WebConsole</a>. For operational behaviour, see the online
+                           WebConsole documentation in the Cluster Control module.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8926"></a>9.1.2.&nbsp;Auto Configuration Via
+                                    <span class="literal">control_cluster.py</span></h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The script
+                           <span class="literal">bigworld/tools/server/control_cluster.py</span> is generally
+                           the easiest way to start a multi-machine BigWorld Server. For details,
+                           see <a href="ch03.html#xref_control_cluster_py" title="3.4.1.&nbsp;Control Cluster">Control Cluster</a>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8938"></a>9.1.3.&nbsp;Hard-Coded Scripts
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Create your own shell scripts using the script
+                           <span class="literal">bigworld/tools/server/misc/startsingle.sh</span> as a
+                           guide.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e8946"></a>9.1.4.&nbsp;Manual Start
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>During development and testing, it is feasible to manually start
+                           processes individually.
+                  </p>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e8951"></a>9.2.&nbsp;How To Stop
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The method used to stop the system depends on the method used to
+                      start it. For example, calling the script
+                      <span class="literal">control_cluster.py</span> with the option
+                      <span class="literal">stop</span> stops a system started with that script. Stopping
+                      LoginApp triggers other processes to terminate, unless this feature is
+                      disabled in configuration file
+                      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/server/bw.xml</span>.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e8967"></a>9.3.&nbsp;How To Monitor
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Use WebConsole<sup>[<a name="d0e8972" href="#ftn.d0e8972">13</a>]</sup> and <span class="literal">control_cluster.py</span><sup>[<a name="d0e8980" href="#ftn.d0e8980">14</a>]</sup> for monitoring and recording real-time statistics. You can
+                      also get profiling data from the watchers (via WebConsole's ClusterControl
+                      module). Use WebConsole's LogViewer module to monitor the centralised
+                      log.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="xref_LoginApp_And_Scalability"></a>9.4.&nbsp;LoginApp and Scalability
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Just as you can use multiple CellApps and BaseApps in a large
+                      cluster, you can also run multiple LoginApps in a load sharing
+                      arrangement.
+               </p>
+               <p>To do that, DNS has to set up so that it returns multiple DNS
+                      addresses for the login server's name. If you are using BIND, then you can
+                      simply put multiple A addresses in the zone configuration file. This means
+                      that when a client looks up the DNS address of the login server, it
+                      receives a login server randomly selected from the available pool.
+               </p>
+               <p>For example, if you are using BIND as your DNS server (most Linux
+                      distributions come with BIND as their default DNS server), the zone file
+                      can have configuration similar to the ones in the table below:
+               </p>
+               <div class="altrow">
+                  <table border="0" width="75%">
+                     <colgroup>
+                        <col width="20%">
+                        <col width="20%">
+                        <col width="20%">
+                        <col width="20%">
+                        <col width="20%">
+                     </colgroup>
+                     <thead>
+                        <tr>
+                           <th>Name</th>
+                           <th>TTL</th>
+                           <th><span class="literal">CLASS</span></th>
+                           <th><span class="literal">TYPE</span></th>
+                           <th><span class="literal">ResourceRecord</span></th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td rowspan="3">login</td>
+                           <td>600</td>
+                           <td>IN</td>
+                           <td>A</td>
+                           <td>10.0.0.1</td>
+                        </tr>
+                        <tr>
+                           <td>600</td>
+                           <td>IN</td>
+                           <td>A</td>
+                           <td>10.0.0.2</td>
+                        </tr>
+                        <tr>
+                           <td>600</td>
+                           <td>IN</td>
+                           <td>A</td>
+                           <td>10.0.0.3</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <p><span class="citetitle">Example configuration on a BIND zone
+                         file</span></p>
+               <p>Because there are multiple A records with different IP addresses
+                      under one name, the IP address returned to a client when it looks up the
+                      address for the login server will be picked up from the IP address list,
+                      in a round robin manner.
+               </p>
+            </div>
+            <div class="footnotes"><br><hr width="100" align="left">
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e8972" href="#d0e8972">13</a>] </sup>For details, see <a href="ch03.html#xref_WebConsole" title="3.1.&nbsp;WebConsole">WebConsole</a>.
+                  </p>
+               </div>
+               <div class="footnote">
+                  <p><sup>[<a name="ftn.d0e8980" href="#d0e8980">14</a>] </sup>For details, see <a href="ch03.html#xref_control_cluster_py" title="3.4.1.&nbsp;Control Cluster">Control Cluster</a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch08.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch10.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;8.&nbsp;Security&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;10.&nbsp;Multiple BigWorld Servers in a Single LAN</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

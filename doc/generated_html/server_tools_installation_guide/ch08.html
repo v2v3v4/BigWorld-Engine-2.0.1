@@ -1,0 +1,195 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;8.&nbsp;Upgrading From A Previous Release</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Tools Installation Guide">
+      <link rel="up" href="index.html" title="Server Tools Installation Guide">
+      <link rel="prev" href="ch07.html" title="Chapter&nbsp;7.&nbsp;Post-installation">
+      <link rel="next" href="ch09.html" title="Chapter&nbsp;9.&nbsp;Running SpaceViewer on Windows">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;8.&nbsp;Upgrading From A Previous Release</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_upgrading_from_a_previous_release"></a>Chapter&nbsp;8.&nbsp;Upgrading From A Previous Release
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch08.html#d0e401">8.1. Stop Current Services</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#d0e408">8.2. Backup Old Release and Preferences</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#d0e430">8.3. Upgrading Packages</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#d0e441">8.4. Installing the New Version</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#d0e448">8.5. Setup Preferences</a></span></dt>
+                  <dt><span class="section"><a href="ch08.html#d0e469">8.6. Re-start Services</a></span></dt>
+               </dl>
+            </div>
+            <p>Please be aware that as with any software upgrade, changes may occur
+                 in a manner you aren't expecting. We strongly urge a test period on a
+                 separate installation prior to migrating to the new release to ensure all
+                 functionality works for your site prior to making the new release
+                 live.
+            </p>
+            <p>There is currently no dedicated utility to assist with upgrading from
+                 a previous release, and while a fresh installation will ensure the best
+                 success installing the server tools, the following procedure should enable a
+                 successful migration path from a previous release.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e401"></a>8.1.&nbsp;Stop Current Services
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>As root run:</p><pre class="programlisting"># /etc/init.d/bw_web_console stop
+Stopping BigWorld web_console:                               [ OK ]
+# /etc/init.d/bw_message_logger stop
+Stopping message_logger:                                     [ OK ]
+# /etc/init.d/bw_stat_logger stop
+Stopping stat_logger:                                        [ OK ]</pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e408"></a>8.2.&nbsp;Backup Old Release and Preferences
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>As a safety measure it is recommended to keep a copy of your current
+                      installation around in case you find you need to revert to it. It is also
+                      recommended to backup your preference files to avoid performing a
+                      re-installation with the <code class="filename">install_tools.py</code>
+                      script.
+               </p>
+               <p>As the <span class="literal">bwtools</span> user:
+               </p><pre class="programlisting">$ mkdir $HOME/preferences_backup $HOME/preferences_backup/init.d 
+$ cd $HOME/mf/bigworld/tools/server 
+$ cp message_logger/message_logger.conf $HOME/preferences_backup 
+$ cp stat_logger/preferences.xml $HOME/preferences_backup 
+$ cp web_console/*.cfg $HOME/preferences_backup 
+$ cp /etc/init.d/bw_* $HOME/preferences_backup/init.d </pre><p>As the <span class="literal">bwtools</span> user:
+               </p><pre class="programlisting">$ cd $HOME
+$ mv mf old_tools_mf </pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e430"></a>8.3.&nbsp;Upgrading Packages
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>It is wise at this point to update any packages installed on the
+                      system to pickup any security patches that may have been applied since
+                      your first installation.
+               </p>
+               <p>As root:</p><pre class="programlisting"># yum update</pre><p>After performing this update it is a good idea to reboot your
+                      computer to pick up any system changes.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e441"></a>8.4.&nbsp;Installing the New Version
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>To install the new version of the server tools, follow the procedure
+                      outlined in <a href="ch06.html" title="Chapter&nbsp;6.&nbsp;Server Tools Installation"><i xmlns:xlink="http://www.w3.org/1999/xlink">Server Tools Installation</i></a>. It may also
+                  	be worthwhile skimming through the earlier chapters to ensure your system
+                  	is as up to date as possible.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e448"></a>8.5.&nbsp;Setup Preferences
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Now that the server tools should be installed, copy the old
+                      preference files into place.
+               </p>
+               <p>As the <span class="literal">bwtools</span> user:
+               </p><pre class="programlisting">$ cd $HOME/mf/bigworld/tools/server
+$ cp $HOME/preferences_backup/message_logger.conf message_logger/
+$ cp $HOME/preferences_backup/preferences.xml stat_logger/
+$ cp $HOME/preferences_backup/*.cfg web_console/</pre><p>It is also recommended to upgrade the <code class="filename">init.d</code>
+                      scripts.
+               </p>
+               <p>As root:</p><pre class="programlisting"># cd /home/bwtools/mf/bigworld/tools/server/install
+# cp bw_functions.sh /etc/init.d/
+# cp stat_logger.sh /etc/init.d/bw_stat_logger.sh
+# cp message_logger.sh /etc/init.d/bw_message_logger.sh
+# cp web_console.sh /etc/init.d/bw_web_console.sh </pre></div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e469"></a>8.6.&nbsp;Re-start Services
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>As root:</p><pre class="programlisting"># /etc/init.d/bw_stat_logger start
+Starting stat_logger:                                               [ OK ]
+# /etc/init.d/bw_message_logger start
+Starting message_logger:                                            [ OK ]
+# /etc/init.d/bw_web_console start
+Starting BigWorld web_console:                                      [ OK ] </pre></div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch07.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch09.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;7.&nbsp;Post-installation&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;9.&nbsp;Running SpaceViewer on Windows</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,937 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Server Overview</title><link rel="stylesheet" href="../css/bigworld.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div><div id="content"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="Server_Overview"></a>Server Overview</h1></div><div><p class="releaseinfo">BigWorld Technology 2.0. Released 2010.</p></div><div><p class="copyright">Copyright &copy; 1999-2010 BigWorld Pty Ltd. All rights reserved. </p></div><div><div class="legalnotice"><a name="d0e17"></a><p>This document is proprietary commercial in confidence and access
+  is restricted to authorised users. This document is protected by
+  copyright laws of Australia, other countries and international treaties.
+  Unauthorised use, reproduction or distribution of this document, or any
+  portion of this document, may result in the imposition of civil and
+  criminal penalties as provided by law.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#xref_Introduction">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#xref_Rules_Of_Thumb">2. Rules of Thumb</a></span></dt><dt><span class="chapter"><a href="#xref_Concepts">3. Concepts</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e92">3.1. Location of an Object's Data</a></span></dt><dt><span class="section"><a href="#d0e131">3.2. Actions</a></span></dt><dt><span class="section"><a href="#d0e169">3.3. Latency</a></span></dt><dt><span class="section"><a href="#d0e191">3.4. Spaces and Cells</a></span></dt><dt><span class="section"><a href="#xref_Coordinate_system">3.5. Coordinate System</a></span></dt></dl></dd><dt><span class="chapter"><a href="#xref_Design_Introduction">4. Design Introduction</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e256">4.1. Hardware Components</a></span></dt><dt><span class="section"><a href="#d0e272">4.2. Software Components</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e314">4.2.1. CellApp</a></span></dt><dt><span class="section"><a href="#d0e330">4.2.2. CellAppMgr</a></span></dt><dt><span class="section"><a href="#d0e344">4.2.3. BaseApp</a></span></dt><dt><span class="section"><a href="#d0e363">4.2.4. BaseAppMgr</a></span></dt><dt><span class="section"><a href="#xref_Software_Components_LoginApp">4.2.5. LoginApp</a></span></dt><dt><span class="section"><a href="#d0e377">4.2.6. DBMgr</a></span></dt><dt><span class="section"><a href="#d0e386">4.2.7. Reviver</a></span></dt><dt><span class="section"><a href="#d0e391">4.2.8. BWMachined</a></span></dt></dl></dd><dt><span class="section"><a href="#xref_Design_Introduction_Use_Cases">4.3. Use Cases</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e407">4.3.1. Server Startup</a></span></dt><dt><span class="section"><a href="#xref_Use_Cases_Logging_In">4.3.2. Logging In</a></span></dt><dt><span class="section"><a href="#d0e469">4.3.3. Data From Clients</a></span></dt><dt><span class="section"><a href="#d0e476">4.3.4. Data To Clients</a></span></dt><dt><span class="section"><a href="#d0e481">4.3.5. Ghosting</a></span></dt><dt><span class="section"><a href="#d0e493">4.3.6. Changing Cells</a></span></dt><dt><span class="section"><a href="#d0e498">4.3.7. Load Balancing</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#xref_Server_Components">5. Server Components</a></span></dt><dd><dl><dt><span class="section"><a href="#xref_Server_Components_CellApp">5.1. CellApp</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e511">5.1.1. Cell Application and Cells</a></span></dt><dt><span class="section"><a href="#d0e522">5.1.2. Entities</a></span></dt><dt><span class="section"><a href="#xref_Real_And_Ghost_Entities">5.1.3. Real and Ghost Entities</a></span></dt><dt><span class="section"><a href="#d0e581">5.1.4. Transitioning Between Spaces</a></span></dt><dt><span class="section"><a href="#d0e591">5.1.5. Witness Priority List</a></span></dt><dt><span class="section"><a href="#xref_Scripting_And_Entities">5.1.6. Scripting and Entities</a></span></dt><dt><span class="section"><a href="#d0e1368">5.1.7. Directed Messages</a></span></dt><dt><span class="section"><a href="#d0e1375">5.1.8. Forwarding From Ghosts</a></span></dt><dt><span class="section"><a href="#d0e1386">5.1.9. Offloading Entities</a></span></dt><dt><span class="section"><a href="#d0e1393">5.1.10. Adding and Removing Cells</a></span></dt><dt><span class="section"><a href="#d0e1402">5.1.11. Load Balancing</a></span></dt><dt><span class="section"><a href="#d0e1409">5.1.12. Physics</a></span></dt><dt><span class="section"><a href="#xref_Navigation_System">5.1.13. Navigation System</a></span></dt><dt><span class="section"><a href="#d0e1463">5.1.14. Range Triggers and Range Queries</a></span></dt><dt><span class="section"><a href="#d0e1478">5.1.15. Fault Tolerance</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1495">5.2. CellAppMgr</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1510">5.2.1. CellApp Registration</a></span></dt><dt><span class="section"><a href="#xref_CellAppMgr_Load_Balancing">5.2.2. Load Balancing</a></span></dt><dt><span class="section"><a href="#xref_Adding_And_Removing_Cells">5.2.3. Adding and Removing Cells</a></span></dt><dt><span class="section"><a href="#d0e1559">5.2.4. Adding an Entity</a></span></dt><dt><span class="section"><a href="#d0e1566">5.2.5. Load Balancing for Multiple Spaces</a></span></dt><dt><span class="section"><a href="#d0e1602">5.2.6. Fault Tolerance</a></span></dt></dl></dd><dt><span class="section"><a href="#xref_Server_Components_BaseApp">5.3. BaseApp</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1631">5.3.1. Proxies</a></span></dt><dt><span class="section"><a href="#d0e1644">5.3.2. Bases</a></span></dt><dt><span class="section"><a href="#xref_Server_Components_BaseApp_Fault_Tolerance">5.3.3. Fault Tolerance</a></span></dt><dt><span class="section"><a href="#xref_Server_Components_BaseApp_Secondary_Databases">5.3.4. Secondary Databases</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1712">5.4. BaseAppMgr</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1715">5.4.1. Implementation</a></span></dt><dt><span class="section"><a href="#d0e1720">5.4.2. Logging In</a></span></dt><dt><span class="section"><a href="#d0e1725">5.4.3. Fault Tolerance</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1734">5.5. LoginApp</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1737">5.5.1. Implementation</a></span></dt><dt><span class="section"><a href="#d0e1748">5.5.2. Multiple LoginApps</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1755">5.6. DBMgr</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1769">5.6.1. XML</a></span></dt><dt><span class="section"><a href="#d0e1787">5.6.2. MySQL</a></span></dt><dt><span class="section"><a href="#d0e1813">5.6.3. Fault Tolerance</a></span></dt></dl></dd><dt><span class="section"><a href="#xref_Server_Components_Reviver">5.7. Reviver</a></span></dt><dt><span class="section"><a href="#xref_BWMachined">5.8. BWMachined</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1901">5.8.1. Start and Stop Server Components</a></span></dt><dt><span class="section"><a href="#d0e1940">5.8.2. Locate Server Components</a></span></dt><dt><span class="section"><a href="#d0e1989">5.8.3. Provide Machine Statistics</a></span></dt><dt><span class="section"><a href="#d0e1997">5.8.4. Provide Process Statistics</a></span></dt><dt><span class="section"><a href="#xref_BWMachined_Interface_Discovery">5.8.5. BWMachined Interface Discovery</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#xref_Other_Features">6. Other Features</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e2082">6.1. IDs</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e2087">6.1.1. ID Allocation</a></span></dt></dl></dd><dt><span class="section"><a href="#xref_Inter_Process_Communication_Mercury">6.2. Inter-Process Communication (Mercury)</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e2114">6.2.1. Overview</a></span></dt><dt><span class="section"><a href="#d0e2119">6.2.2. Nub</a></span></dt><dt><span class="section"><a href="#d0e2128">6.2.3. Messages</a></span></dt><dt><span class="section"><a href="#d0e2151">6.2.4. Requests</a></span></dt><dt><span class="section"><a href="#d0e2156">6.2.5. Bundles</a></span></dt><dt><span class="section"><a href="#d0e2163">6.2.6. Channels</a></span></dt><dt><span class="section"><a href="#d0e2218">6.2.7. Interfaces</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e2230">6.3. Fault Tolerance and Disaster Recovery</a></span></dt><dt><span class="section"><a href="#d0e2237">6.4. Packed Files</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Introduction"></a>Chapter&nbsp;1.&nbsp;Introduction</h2></div></div></div><p>BigWorld Technology is a BigWorld's middleware for implementing
+  Massively Multiplayer Online Games. This document gives an overview of the
+  current implementation of BigWorld Technology.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>For details on BigWorld terminology, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../glossary_of_terms/glossary_of_terms.html#Glossary_Of_Terms" class="olink">Glossary of Terms</a>.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Rules_Of_Thumb"></a>Chapter&nbsp;2.&nbsp;Rules of Thumb</h2></div></div></div><p>This is a list of rules/ideas/philosophies that have been used in the
+  design.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Scalability, reliability,
+      efficiency</em></p><p>The general goal is to produce a scalable, reliable, and efficient
+      system. This should be done while keeping as much simplicity and
+      flexibility as possible.</p></li></ul></div><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Occam's Razor</em></p><p>The simplest design that satisfies all requirements should be
+      considered the best, or in the words of Einstein, "Make things as simple
+      as possible, but no simpler".</p></li></ul></div><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Improve the worst case</em></p><p>In general (mainly when it comes to the client experience), the
+      worst case should be improved over the average case. For example, it is
+      not beneficial to have a blinding fast and accurate situation when a
+      client is not near a cell boundary if the experience is poor when he is
+      near one.</p></li></ul></div><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Client/server bandwidth is
+      valuable</em></p><p>The most important resource is the bandwidth between the client
+      and server. After this, it is probably CPU, and then intra-server
+      bandwidth.</p></li></ul></div><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Keep information together; Avoid two-way
+      calls</em></p><p>Information (or data) that is often used together should be easily
+      accessed together. For example, a large amount of the data processed
+      together in the game is related to objects that are geometrically close.
+      It makes sense then to use data partitioning based on locality.</p><p>It is also expensive to have to request information from a
+      separate server machine when it is necessary. This is true for a number
+      of reasons including the extra hops and coordination required and (maybe
+      even more importantly) the reduced likelihood of being able to batch
+      requests together.</p></li></ul></div><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Avoid bottlenecks; Make the system
+      distributed</em></p><p>The design should try to avoid single central points where things
+      occur. This approach can cause performance bottlenecks and make the
+      design non-scalable. It can also introduce a single point of failure,
+      therefore raising fault tolerance issues.</p></li></ul></div><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Where possible, do communication in
+      batches</em></p><p>There is a fairly high overhead in sending a single packet. That
+      is, it is a lot more expensive to send ten individual packets than it is
+      to send one packet that is ten times bigger.</p></li></ul></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Concepts"></a>Chapter&nbsp;3.&nbsp;Concepts</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e92">3.1. Location of an Object's Data</a></span></dt><dt><span class="section"><a href="#d0e131">3.2. Actions</a></span></dt><dt><span class="section"><a href="#d0e169">3.3. Latency</a></span></dt><dt><span class="section"><a href="#d0e191">3.4. Spaces and Cells</a></span></dt><dt><span class="section"><a href="#xref_Coordinate_system">3.5. Coordinate System</a></span></dt></dl></div><p>This section explains general concepts and issues relevant to the
+  design.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e92"></a>3.1.&nbsp;Location of an Object's Data</h2></div></div></div><p>There are four main locations for the active data of an
+    object:</p><div class="orderedlist"><ol type="1"><li><p>Associated with the cell part of an entity.</p></li><li><p>Associated with the base part of an entity.</p></li><li><p>In the persistent world database.</p></li><li><p>On the client.</p></li></ol></div><p>Data associated with an entity on a cell can be categorised
+    as:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Internal data</em></p><p>Used and stored only on the cell in which it lives.</p></li><li><p><em class="emphasis">Server (or ghosted) data</em></p><p>Available to other entities on the server.</p></li><li><p><em class="emphasis">Client data</em></p><p>Available to (at least some) client machines.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e131"></a>3.2.&nbsp;Actions</h2></div></div></div><p>From the client's perspective, there are conceptually four types of
+    action:</p><div class="orderedlist"><ol type="1"><li><p><em class="emphasis">Server action</em></p><p>This is an unsolicited action that comes from the server, and is
+        not generated by this client.</p><p>For example, another avatar jumping.</p></li><li><p><em class="emphasis">Local action</em></p><p>This is an action that only occurs locally on the client, and
+        does not need to be communicated to the server or other
+        clients.</p><p>For example, special effects like particles bouncing or a flame
+        slightly flaring.</p></li><li><p><em class="emphasis">Undoable action</em></p><p>This is an action that the client takes immediately, under the
+        assumption that it is correct, and then communicates to the server.
+        The server has the ability to disallow the action and make the client
+        rollback the action.</p><p>For example, the client stepping forward.</p></li><li><p><em class="emphasis">Server-confirmed action</em></p><p>This is an action that needs to receive confirmation from the
+        server to be performed on the client.</p><p>For example, the player wanting to shake hands with another
+        player. Another example may be hitting a player (and thinking that it
+        is dead) but not showing this until the server has confirmed it (this
+        has some similarity to the Server action, except that the origin of
+        the action was from this client).</p></li></ol></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e169"></a>3.3.&nbsp;Latency</h2></div></div></div><p>The game designer needs to hide the latency from the player using as
+    many latency-hiding tricks as possible. There are two main sources of
+    latency:</p><div class="orderedlist"><ol type="1"><li><p><em class="emphasis">Internet latency</em></p><p>All information that travels between clients goes via the
+        server, and so must have two trips on the Internet.</p></li><li><p><em class="emphasis">Server latency</em></p><p>This is the time between information being received by the
+        server, processing it, and responding back to the client. In an MMOG
+        environment with large numbers of players, bandwidth is a precious
+        resource, so not all new information can be sent out immediately. In
+        BigWorld, the Priority Queue manages this.</p></li></ol></div><p>The Priority Queue can be tuned to reduce the latency on critical
+    information caused by the server. This does not affect the Internet
+    latency, though.</p><p>Latency can also be introduced on the client side. This can occur if
+    the developer allows a delay between receiving data and sending it to the
+    server, or between receiving data and displaying it.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e191"></a>3.4.&nbsp;Spaces and Cells</h2></div></div></div><p>The game world is made up of multiple spaces. Each space is a
+    continuous Euclidean region, spanned by a single coordinate system.</p><p>Spaces may be always present, or be dynamically created to enable a
+    group of one or more players to adventure in isolation from other players.
+    There may be many instances of a given space running the same geometry
+    simultaneously and independently.</p><div class="informalfigure"><div class="mediaobject"><img src="images/visualisation_of_spaces_and_division_in_cells.png"><span class="caption"><p>Visualisation of spaces and division in cells (cell
+        boundaries marked in dotted lines)</p></span></div></div><p>The space is a logical concept, dealt with in game script.</p><p>Cells exist at a more physical level. They divide large game spaces
+    geometrically, for the purpose of load balancing across multiple
+    CellApps.</p><div class="informalfigure"><div class="mediaobject"><img src="images/a_large_space_divided_into_cells.png"><span class="caption"><p>A large space divided into cells</p></span></div></div><p>For a small space, a single cell is enough to cover it.</p><div class="informalfigure"><div class="mediaobject"><img src="images/a_small_space_covered_by_only_one_cell.png"><span class="caption"><p>A small space covered by only one cell</p></span></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Coordinate_system"></a>3.5.&nbsp;Coordinate System</h2></div></div></div><p>BigWorld uses a left-hand coordinate system. The x-axis points
+    <em class="emphasis">"left"</em>, the y-axis points <em class="emphasis">"up"</em>
+    and the z-axis points <em class="emphasis">"forward"</em>.</p><p><em class="emphasis">yaw</em> is rotation around the y-axis. Positive is
+    to the right, negative is to the left.</p><p><em class="emphasis">pitch</em> is rotation around the x-axis. Positive
+    is nose pointing down, negative is nose pointing up.</p><p><em class="emphasis">roll</em> is rotation around the z-axis. Positive is
+    to the left, negative is to the right.</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Design_Introduction"></a>Chapter&nbsp;4.&nbsp;Design Introduction</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e256">4.1. Hardware Components</a></span></dt><dt><span class="section"><a href="#d0e272">4.2. Software Components</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e314">4.2.1. CellApp</a></span></dt><dt><span class="section"><a href="#d0e330">4.2.2. CellAppMgr</a></span></dt><dt><span class="section"><a href="#d0e344">4.2.3. BaseApp</a></span></dt><dt><span class="section"><a href="#d0e363">4.2.4. BaseAppMgr</a></span></dt><dt><span class="section"><a href="#xref_Software_Components_LoginApp">4.2.5. LoginApp</a></span></dt><dt><span class="section"><a href="#d0e377">4.2.6. DBMgr</a></span></dt><dt><span class="section"><a href="#d0e386">4.2.7. Reviver</a></span></dt><dt><span class="section"><a href="#d0e391">4.2.8. BWMachined</a></span></dt></dl></dd><dt><span class="section"><a href="#xref_Design_Introduction_Use_Cases">4.3. Use Cases</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e407">4.3.1. Server Startup</a></span></dt><dt><span class="section"><a href="#xref_Use_Cases_Logging_In">4.3.2. Logging In</a></span></dt><dt><span class="section"><a href="#d0e469">4.3.3. Data From Clients</a></span></dt><dt><span class="section"><a href="#d0e476">4.3.4. Data To Clients</a></span></dt><dt><span class="section"><a href="#d0e481">4.3.5. Ghosting</a></span></dt><dt><span class="section"><a href="#d0e493">4.3.6. Changing Cells</a></span></dt><dt><span class="section"><a href="#d0e498">4.3.7. Load Balancing</a></span></dt></dl></dd></dl></div><p>This section discusses the design of BigWorld Server environment, with
+  a brief overview of its components and a series of Use Cases.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e256"></a>4.1.&nbsp;Hardware Components</h2></div></div></div><p>The BaseApps and the LoginApps are the only server hardware that
+    needs to be connected to the Internet.</p><p>For security purposes, it is recommended that the BaseApp and
+    LoginApp machines have two network cards; one to connect to the Internet,
+    and the other to connect to the rest of the server cluster.</p><p>The diagram below shows the connection between the different
+    components of server hardware.</p><div class="informalfigure"><div class="mediaobject"><img src="images/bigworld_server_components.png"><span class="caption"><p>BigWorld Server components</p></span></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e272"></a>4.2.&nbsp;Software Components</h2></div></div></div><p>The primary software components of the server are:</p><div class="itemizedlist"><ul type="disc"><li><p>CellApp</p></li><li><p>CellAppMgr</p></li><li><p>BaseApp</p></li><li><p>BaseAppMgr</p></li><li><p>LoginApp</p></li><li><p>DBMgr</p></li><li><p>Reviver</p></li></ul></div><p>There is also a special daemon process called BWMachined, which runs
+    on each machine.</p><p>In a production environment, each CellApp runs on its own machine,
+    as does each BaseApp. All other processes (apart from BWMachined) can be
+    organised to run in various combinations across one or more servers,
+    depending on system loads.</p><p>In the hardware diagram above, LoginApp runs on its own machine(s),
+    directly connected to the Internet. The DBMgr also runs on its own
+    machine, whereas the CellAppMgr and BaseAppMgr both run on the World
+    server.</p><p>The diagram below shows the communication paths between many of the
+    software components:</p><div class="informalfigure"><div class="mediaobject"><img src="images/communication_between_bigworld_components.png"><span class="caption"><p>Communication between BigWorld
+        components</p></span></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e314"></a>4.2.1.&nbsp;CellApp</h3></div></div></div><p>Each CellApp is responsible for all cells running on it.</p><p>CellApps are probably the most important part of the architecture.
+      Each cell is responsible for either part of a large space or an entire
+      one. Within the game world, cells do not overlap, and collectively they
+      cover all game spaces.</p><p>Each cell is responsible for maintaining the entities located
+      within its boundaries. The entity is the basic element of operations
+      within the BigWorld game environment. Its distinguishing feature is its
+      point position in a space. A cell may also keep ghosts (copies) of
+      entities that are near, but outside its own boundary.</p><div class="informalfigure"><div class="mediaobject"><img src="images/cellapps_managing_cells.png"><span class="caption"><p>CellApps managing cells</p></span></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e330"></a>4.2.2.&nbsp;CellAppMgr</h3></div></div></div><p>The main responsibility of the CellAppMgr is to direct the cells
+      and CellApps.</p><p>It coordinates which cells run on which CellApps, and balances the
+      load on each of them by varying the size of the cells.</p><div class="informalfigure"><div class="mediaobject"><img src="images/cellappmgr_managing_cellapps.png"><span class="caption"><p>CellAppMgr managing CellApps</p></span></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e344"></a>4.2.3.&nbsp;BaseApp</h3></div></div></div><p>In some respects, BaseApps can be seen as the firewalls for the
+      server.</p><p>For the client, their main purpose is to isolate it from
+      transitions of its entity between CellApps.</p><p>Each BaseApp contains many bases.</p><p>Connected clients are served by an enhanced base known as a proxy.
+      Each proxy is responsible for at most one client. Each client talks to
+      one proxy. This proxy is responsible for redirecting messages from the
+      client to the correct cell.</p><p>In general, the BaseApp maintains bases. A base represents an
+      object or function that does not need to have a position in the
+      world.</p><p>For example, an object used for group chat is a base without a
+      corresponding cell entity.</p><p>Any cell entity can have a corresponding base entity, giving it a
+      fixed point of contact in the game world.</p><p>A base is also considered to be part of an entity, so a proxy is
+      the 'base entity' for a client, which will usually have a related 'cell
+      entity' part, as well as a 'client entity' part instantiated on any
+      clients that can see it.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e363"></a>4.2.4.&nbsp;BaseAppMgr</h3></div></div></div><p>The game world has a single BaseAppMgr running, which is
+      responsible for managing the BaseApps.</p><p>Its main job is to allocate new client connections to the most
+      appropriate BaseApp, and keep track of them.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_Software_Components_LoginApp"></a>4.2.5.&nbsp;LoginApp</h3></div></div></div><p>Clients talk to this component to initiate a session with the
+      server. The LoginApp then adds the player as a proxy on a BaseApp, which
+      may go on to create an entity on a CellApp.</p><p>Multiple instances of this component can be running at
+      once.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e377"></a>4.2.6.&nbsp;DBMgr</h3></div></div></div><p>DBMgr is the interface to the database, where the persistent state
+      of the world is stored.</p><p>When a player logs in, the login process requests from the
+      database the full set of properties for that player's entity. This data
+      is used to instantiate a proxy for the player on the BaseApp.</p><p>When the player logs out, the BaseApp sends a logoff message to
+      the database. This message contains the player's entity's properties,
+      which may have been modified by the base (or cell) entity.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e386"></a>4.2.7.&nbsp;Reviver</h3></div></div></div><p>Reviver is a watchdog process used to restart other processes that
+      have failed, either because the machine they were running on has failed,
+      or because the processes themselves have crashed or are
+      unresponsive.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e391"></a>4.2.8.&nbsp;BWMachined</h3></div></div></div><p>BWMachined is a daemon process that runs on each machine in the
+      server cluster. It can be used to remotely start, stop, and locate
+      server components. It also monitors CPU, memory, and network usage, and
+      provides this information to network users.</p><p>This is how server components locate each other during startup,
+      via a broadcast message. Its operation is similar to a CORBA Name
+      Server.</p><p>This daemon must be running at all times on each machine in the
+      server's cluster, and must be started as root. For installation
+      instructions, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/server_installation_guide.html#Server_Installation_Guide" class="olink">Server Installation Guide</a>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Design_Introduction_Use_Cases"></a>4.3.&nbsp;Use Cases</h2></div></div></div><p>This section describes how some of the functionality of the server
+    works. It is intended to give an introductory view of the components in
+    the server, and how they relate to each other.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e407"></a>4.3.1.&nbsp;Server Startup</h3></div></div></div><p>The important things about startup are the dependencies between
+      processes and how different processes find one another.</p><p>As mentioned in <a href="#xref_BWMachined" title="5.8.&nbsp;BWMachined">BWMachined</a>, BWMachined runs
+      on each machine in the server cluster, and is responsible for monitoring
+      the processes running on its machine.</p><p>When a process starts up, it registers itself with the daemon
+      running on the local machine. The registration includes an interface
+      name.</p><p>Many processes need to know the location of other
+      processes.</p><p>For example, a CellApp needs to know the location of a CellAppMgr,
+      so that it can register with it. So when CellApp starts up, it asks for
+      the location of a CellAppMgr by sending a broadcast message on
+      BWMachined's port, to which all BWMachined processes listen. If a
+      BWMachined has a CellAppMgr (associated with the correct user), it sends
+      the CellAppMgr's contact details as a response.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>The BWMachined daemon should always be running on each machine
+        in the server cluster.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_Use_Cases_Logging_In"></a>4.3.2.&nbsp;Logging In</h3></div></div></div><p>When a client starts up, it communicates with LoginApp (for more
+      details, see <a href="#xref_Software_Components_LoginApp" title="4.2.5.&nbsp;LoginApp">LoginApp</a>).</p><p>The login process follows the steps below:</p><div class="orderedlist"><ol type="1"><li><p>Client sends a login request (for which it needs to know
+          LoginApp's IP address).</p></li><li><p>While listening to its fixed (user-specified) port, LoginApp
+          receives the request.</p></li><li><p>LoginApp forwards the request to DBMgr, so it can check if
+          login details are valid.</p></li><li><p>DBMgr queries the database regarding login details.</p></li><li><p>If the details are valid, DBMgr instructs BaseAppMgr to create
+          a new entity.</p></li><li><p>BaseAppMgr forwards entity creation request to the least
+          loaded BaseApp.</p></li><li><p>BaseApp creates new proxy, which is an object derived from
+          Base class.</p></li><li><p>The newly created proxy now may create the cell entity on a
+          CellApp (this step might be delayed by the proxy until client
+          selects a character, for example.).When creating the cell entity,
+          the proxy may send a message via the CellAppMgr or directly to a
+          CellApp</p></li><li><p>The UDP port of the proxy is returned to the client (via
+          BaseAppMgr, DBMgr, then LoginApp).</p></li></ol></div><div class="informalfigure"><div class="mediaobject"><img src="images/login_process.png"><span class="caption"><p>Login process</p></span></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e469"></a>4.3.3.&nbsp;Data From Clients</h3></div></div></div><p>All communication from the client to the server is sent to the
+      address of the client's proxy that was sent to it during login.</p><p>This communication uses Mercury (the BigWorld communication
+      mechanism) on top of UDP. Once the proxy receives the packet, it
+      forwards the messages (generally most, if not all) to the appropriate
+      CellApp. This will then update the data of the appropriate entity. If
+      the entity has any ghosts, these are also updated.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e476"></a>4.3.4.&nbsp;Data To Clients</h3></div></div></div><p>Periodically, at 10 Hertz (configurable), the client's cell entity
+      constructs a packet full of messages about the entities in the client's
+      AoI. This packet is then sent via the proxy to the client.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e481"></a>4.3.5.&nbsp;Ghosting</h3></div></div></div><p>Each client's entity keeps a priority queue of other entities in
+      its AoI. One issue that arises is that not all these entities might be
+      on the same cell. The solution to this is ghosting.</p><p>A ghost is a copy of an entity from an adjacent cell. The ghost
+      copy contains all data that may be wanted when other entities are going
+      through their priority queues to construct their update packets. If
+      there is a possibility that an entity is within the AoI of another
+      entity in a different cell, it must have a ghost in that cell. To
+      achieve this, if an entity is within the AoI distance (or ghost
+      distance) of a cell boundary, BigWorld creates a ghost of the entity on
+      that cell.</p><p>When a real entity (<em class="emphasis">i.e.</em>, the master,
+      non-ghost entity) is updated, it updates its ghosts as well, if
+      any.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e493"></a>4.3.6.&nbsp;Changing Cells</h3></div></div></div><p>As an entity moves around, it may actually leave the boundary of
+      the cell it is currently on. When this occurs, the entity is moved to
+      the relevant new cell. It then informs the base of its new address, so
+      that the base can find it in the future (and in the case of a proxy, so
+      that the proxy can continue to forward messages correctly).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e498"></a>4.3.7.&nbsp;Load Balancing</h3></div></div></div><p>A CellApp machine, like any other machine, has a limit to the load
+      it can handle. To avoid some CellApps getting overloaded, there is a
+      mechanism to balance the load. In general, if a cell is overloaded, then
+      it reduces its size, thus offloading some entities. If it is
+      underloaded, it increases its size to assume control of more
+      entities.</p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Server_Components"></a>Chapter&nbsp;5.&nbsp;Server Components</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#xref_Server_Components_CellApp">5.1. CellApp</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e511">5.1.1. Cell Application and Cells</a></span></dt><dt><span class="section"><a href="#d0e522">5.1.2. Entities</a></span></dt><dt><span class="section"><a href="#xref_Real_And_Ghost_Entities">5.1.3. Real and Ghost Entities</a></span></dt><dt><span class="section"><a href="#d0e581">5.1.4. Transitioning Between Spaces</a></span></dt><dt><span class="section"><a href="#d0e591">5.1.5. Witness Priority List</a></span></dt><dt><span class="section"><a href="#xref_Scripting_And_Entities">5.1.6. Scripting and Entities</a></span></dt><dt><span class="section"><a href="#d0e1368">5.1.7. Directed Messages</a></span></dt><dt><span class="section"><a href="#d0e1375">5.1.8. Forwarding From Ghosts</a></span></dt><dt><span class="section"><a href="#d0e1386">5.1.9. Offloading Entities</a></span></dt><dt><span class="section"><a href="#d0e1393">5.1.10. Adding and Removing Cells</a></span></dt><dt><span class="section"><a href="#d0e1402">5.1.11. Load Balancing</a></span></dt><dt><span class="section"><a href="#d0e1409">5.1.12. Physics</a></span></dt><dt><span class="section"><a href="#xref_Navigation_System">5.1.13. Navigation System</a></span></dt><dt><span class="section"><a href="#d0e1463">5.1.14. Range Triggers and Range Queries</a></span></dt><dt><span class="section"><a href="#d0e1478">5.1.15. Fault Tolerance</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1495">5.2. CellAppMgr</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1510">5.2.1. CellApp Registration</a></span></dt><dt><span class="section"><a href="#xref_CellAppMgr_Load_Balancing">5.2.2. Load Balancing</a></span></dt><dt><span class="section"><a href="#xref_Adding_And_Removing_Cells">5.2.3. Adding and Removing Cells</a></span></dt><dt><span class="section"><a href="#d0e1559">5.2.4. Adding an Entity</a></span></dt><dt><span class="section"><a href="#d0e1566">5.2.5. Load Balancing for Multiple Spaces</a></span></dt><dt><span class="section"><a href="#d0e1602">5.2.6. Fault Tolerance</a></span></dt></dl></dd><dt><span class="section"><a href="#xref_Server_Components_BaseApp">5.3. BaseApp</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1631">5.3.1. Proxies</a></span></dt><dt><span class="section"><a href="#d0e1644">5.3.2. Bases</a></span></dt><dt><span class="section"><a href="#xref_Server_Components_BaseApp_Fault_Tolerance">5.3.3. Fault Tolerance</a></span></dt><dt><span class="section"><a href="#xref_Server_Components_BaseApp_Secondary_Databases">5.3.4. Secondary Databases</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1712">5.4. BaseAppMgr</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1715">5.4.1. Implementation</a></span></dt><dt><span class="section"><a href="#d0e1720">5.4.2. Logging In</a></span></dt><dt><span class="section"><a href="#d0e1725">5.4.3. Fault Tolerance</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1734">5.5. LoginApp</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1737">5.5.1. Implementation</a></span></dt><dt><span class="section"><a href="#d0e1748">5.5.2. Multiple LoginApps</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e1755">5.6. DBMgr</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1769">5.6.1. XML</a></span></dt><dt><span class="section"><a href="#d0e1787">5.6.2. MySQL</a></span></dt><dt><span class="section"><a href="#d0e1813">5.6.3. Fault Tolerance</a></span></dt></dl></dd><dt><span class="section"><a href="#xref_Server_Components_Reviver">5.7. Reviver</a></span></dt><dt><span class="section"><a href="#xref_BWMachined">5.8. BWMachined</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e1901">5.8.1. Start and Stop Server Components</a></span></dt><dt><span class="section"><a href="#d0e1940">5.8.2. Locate Server Components</a></span></dt><dt><span class="section"><a href="#d0e1989">5.8.3. Provide Machine Statistics</a></span></dt><dt><span class="section"><a href="#d0e1997">5.8.4. Provide Process Statistics</a></span></dt><dt><span class="section"><a href="#xref_BWMachined_Interface_Discovery">5.8.5. BWMachined Interface Discovery</a></span></dt></dl></dd></dl></div><p>This section describes the various components on the server side of
+  BigWorld Technology and how they work together to support the game
+  environment.</p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Server_Components_CellApp"></a>5.1.&nbsp;CellApp</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e511"></a>5.1.1.&nbsp;Cell Application and Cells</h3></div></div></div><p>A Cell Application, or CellApp, is the actual process or
+      executable running on a CellApp machine.</p><p>A CellApp manages various cells, or instances of the Cell class. A
+      cell is a geometric part of a large space, or the entirety of a small
+      space.</p><p>BigWorld divides large spaces into multiple cells in order to
+      share the load evenly. It typically allocates one large cell to each
+      CellApp. When handling smaller spaces, such as dynamically created
+      mission ones, BigWorld typically allocates several cells to each
+      CellApp.</p><p>In BigWorld, the CellApp machines are intended to run only
+      BWMachined and one CellApp per CPU, and nothing else.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e522"></a>5.1.2.&nbsp;Entities</h3></div></div></div><p>CellApps are concerned with a generic type, the entity. Each
+      CellApp maintains a list of the real and ghost entities within its
+      reach. The CellApp also maintains a list of any real entities that need
+      to be updated periodically (<em class="emphasis">e.g.</em>, 10 times per
+      second), and those that maintain an AoI.</p><p>Each entity understands the messages that are associated with its
+      type. The CellApp delivers entity messages to the appropriate entity,
+      and it is up to it to interpret them. The way this is implemented is by
+      having every entity include a pointer to an entity type object. This
+      object has information related to the entity's type, such as the
+      messages that the type can handle and the script associated with
+      it.</p><p>Every entity type has it own script file. Scripts execute in the
+      context of a particular entity (<em class="emphasis">i.e.</em>, they have a
+      this or self), and have access to the data that other entities choose to
+      make available (server and client data), as well as the basic members of
+      every entity (<code class="varname">id</code>, <code class="varname">position</code>,
+      &#8230;).</p><p>Scripts are responsible for handling messages sent to an
+      entity.</p><p>When any server or client data is changed, the changes are
+      automatically forwarded to interested entities.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_Real_And_Ghost_Entities"></a>5.1.3.&nbsp;Real and Ghost Entities</h3></div></div></div><p>In order to efficiently update its client, each avatar keeps a
+      list of entities in its AoI, which is typically a circle with a radius
+      of 500m. One issue that arises is that not all entities might be
+      controlled by the same cell.</p><div class="informalfigure"><div class="mediaobject"><img src="images/entitys_aoi_of_crossing_cell_boundaries.png"><span class="caption"><p>Entity's AoI of crossing cell
+          boundaries</p></span></div></div><p>The solution to this is ghosting. A ghost is a copy of an entity
+      from a nearby cell. The ghost copy contains all entity data that may be
+      needed when avatars consume their priority queues to construct their
+      update packets.</p><p>However, it would be very inefficient to have each entity
+      individually determine which entities on adjacent cells should be
+      ghosted. The solution is to have cells generically manage ghost
+      entities. If an entity is within the ghost distance of a cell boundary,
+      the cell creates a ghost of the entity on that nearby cell.</p><p>The term real entity is introduced to distinguish between the
+      master representations and the (imported) ghosts. The figure below shows
+      all entities maintained by cell 1.</p><div class="informalfigure"><div class="mediaobject"><img src="images/cell_1_maintains_ghosts_of_entities_controlled_by_adjacent_cells.png"><span class="caption"><p>Cell 1 maintains ghosts of entities controlled by
+          adjacent cells</p></span></div></div><p>Once a second, a cell goes through its real entities to check if
+      it should add or delete ghosts for them on neighbouring cells. It sends
+      messages to the neighbour to add and remove the ghosts.</p><div class="informalfigure"><div class="mediaobject"><img src="images/cell_1_ensures_that_adjacent_cells_maintain_ghosts_of_its_real_entities.png"><span class="caption"><p>Cell 1 ensures that adjacent cells maintain ghosts of
+          its real entities</p></span></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e581"></a>5.1.4.&nbsp;Transitioning Between Spaces</h3></div></div></div><p>The simplest method to transition between different spaces is
+      simply to 'pop', <em class="emphasis">i.e.</em>, to remove the entity from
+      the old space and recreate it in the new one. This is simple on both
+      client and server.</p><p>A somewhat more sophisticated technique is to have an enclosed
+      transition area such as a lift, which is precisely duplicated in both
+      spaces. After the player enters the transition area, and it becomes
+      enclosed, the developer can 'pop' the player out of the old space and
+      into the duplicate copy of the area in the new space. The client needs
+      to transform the player's position into the new coordinate system,
+      discard knowledge of entities in the old space, and start building up
+      knowledge of entities in the new space. Once the client has been updated
+      and the position filters of the new entities are sufficiently filled,
+      the player can leave the transition area (lift door opens) and continue.
+      Much of this is automated by the CellApp.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e591"></a>5.1.5.&nbsp;Witness Priority List</h3></div></div></div><p>Whenever an entity has a client attached to it, a sub-object known
+      as a witness is associated to the entity, in order to maintain the list
+      of entities in its AoI. The witness builds update packets to send to its
+      client, and it must send the most important information as a priority.
+      The client requires the position and other information of other entities
+      that are closest to it to be the most accurate and current. Closer
+      entities should be updated more frequently. To achieve this, the witness
+      keeps the list of entities in its AoI as a priority queue.</p><p>To construct a packet to be sent to the client, relevant
+      information about the entities on the top of the list is added to the
+      packet until the desired size is reached. The information can include
+      position and direction, as well as events that the entity has processed
+      since the last update. For more details, see <a href="#xref_Event_History" title="5.1.5.1.&nbsp;Event History">Event History</a>.</p><p>Closer entities receive more frequent updates, and get a greater
+      share of the available bandwidth.</p><p>BigWorld throttles downstream bandwidth according to both the size
+      of update packets, and their frequency. These parameters are specified
+      in the configuration file
+      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/server/bw.xml</span>.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="xref_Event_History"></a>5.1.5.1.&nbsp;Event History</h4></div></div></div><p>Each entity keeps a history of its recent events. The history
+        includes both events that change its state (such as weapon change), as
+        well as actions that do not (such as jumping and shooting). Frequent
+        actions, such as movement, which affect volatile data, are not kept in
+        the history list.</p><p>When an entity consumes its priority queue to construct an
+        update packet, it searches through new events of the top entities
+        (<em class="emphasis">i.e.</em>, the ones closes to it), and adds all
+        messages it is interested in. This requires keeping a timestamp
+        (actually a sequence number) for the last update of each entity in the
+        priority queue.</p><p>The history of these types of events is fairly short (around 60
+        seconds) since we expect that each entity in the priority queue will
+        be considered (roughly) once every 30 seconds in the worst case
+        scenario.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e621"></a>5.1.5.2.&nbsp;Level of Detail</h4></div></div></div><p>The priority queue handles the data throttling for continuous
+        information. For events, we still need to handle the case where there
+        are too many events filling up available downstream bandwidth to the
+        client.</p><p>When there are many entities in an entity's AoI, information
+        about each one is sent less often, but the total number of events
+        remains the same.</p><p>To address this, BigWorld uses a Level of Detail (LOD) system
+        for handling event-based changes. Its principle is that the closer an
+        entity is to the avatar, the more detail it should send to its client.
+        For example, when a player initially comes within the avatar's AoI,
+        the avatar does not need to know all details about the other player.
+        The visible inventory may only be required when within, say, 100
+        metres. Finer details, such as a badge on clothing, might only be
+        needed within 20 metres.</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Non-state-changing
+            events</em></p><p>In the description of each entity type, there is a
+            description of all messages (non-state-changing events) it can
+            generate, along with the priority associated with each one.</p><p>When an avatar adds information about an entity, it only
+            adds messages with a priority greater than the avatar's current
+            interest in the entity. Therefore, messages will be ignored
+            depending on the distance between the avatar and the
+            entity.</p><p>For example, there might be a type of chat heard only within
+            50 metres, or a jump seen only within 100 metres.</p></li></ul></div><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">State-changing
+            events</em></p><p>BigWorld cannot ignore state-changing events that occur out
+            of range, because if the entity subsequently does get close
+            enough, the client will have an incorrect copy of the entity's
+            state.</p><p>For example, the client may be interested in the type of
+            weapon that an entity is carrying, but only when it is within 100
+            metres. If the entity changes its weapon outside this range, then
+            this information is not sent to the client as yet. BigWorld will
+            only send it if the entity comes within range.</p><p>Unlike non-state-changing events, in which the priority
+            level can have any value, state-changing events have a discrete
+            number of state LODs specified by the developer. These can be
+            thought of as rings around the client. Each property of an
+            entity's type can be associated with one of these rings. For an
+            example, see the properties <span class="literal">&lt;SeatType&gt;</span>
+            and <span class="literal">&lt;LODLevels&gt;</span> in the file
+            <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/Seat.def</span>
+            on <a href="#xref_Example_Entity_Definition_File" title="5.1.6.2.&nbsp;Example Entity Definition File">Example Entity Definition File</a>.</p><p>For example, supposed an avatar <span class="literal">A</span> is
+            surrounded by four entities of the same type, with LOD levels at
+            20m, 100m, and 500m. It will process each entity according to its
+            distance, as described in the table below:</p><div class="altrow"><table border="0" width="50%"><colgroup><col width="20%"><col width="20%"><col width="20%"><col width="20%"><col width="20%"></colgroup><thead><tr><th>Entity</th><th>Distance</th><th colspan="3">Process LOD
+                      events</th></tr><tr><th>&nbsp;</th><th>&nbsp;</th><th>20m</th><th>100m</th><th>500m</th></tr></thead><tbody><tr><td>E1</td><td>15m</td><td><span class="symbol">&#10003;</span></td><td><span class="symbol">&#10003;</span></td><td><span class="symbol">&#10003;</span></td></tr><tr><td>E2</td><td>90m</td><td><span class="symbol">&#10007;</span></td><td><span class="symbol">&#10003;</span></td><td><span class="symbol">&#10003;</span></td></tr><tr><td>E3</td><td>400m</td><td><span class="symbol">&#10007;</span></td><td><span class="symbol">&#10007;</span></td><td><span class="symbol">&#10003;</span></td></tr><tr><td>E4</td><td>1,000m</td><td><span class="symbol">&#10007;</span></td><td><span class="symbol">&#10007;</span></td><td><span class="symbol">&#10007;</span></td></tr></tbody></table></div><p><span class="citetitle">LOD events processed by avatar
+            <span class="literal">A</span></span></p></li></ul></div><p>The diagram below illustrates the example:</p><div class="informalfigure"><div class="mediaobject"><img src="images/lod_levels_of_entities_surrounding_avatar_a.png"><span class="caption"><p>LOD levels of entities surrounding avatar
+            A</p></span></div></div><p>When an entity with an associated witness comes within an
+        <em class="emphasis">LOD</em> ring of another entity, any state associated
+        with the ring that has changed <em class="emphasis">since they were last this
+        close</em> is sent to the client. BigWorld uses timestamps to
+        achieve this. A timestamp is stored with each property of each entity.
+        This timestamp indicates when that property was last changed. Also,
+        for each entity in a witness' <em class="emphasis">AoI</em>, a timestamp
+        corresponding to when that entity last left that level is kept for
+        each <em class="emphasis">LOD</em> ring.</p><p>By itself, this does not allow us to throttle this data. To
+        achieve this, we only need to apply a multiplying factor to the
+        interested level of the avatar when it is calculated for other
+        entities. Multiplying by a factor less than one has the effect of
+        reducing the amount of data sent.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_Scripting_And_Entities"></a>5.1.6.&nbsp;Scripting and Entities</h3></div></div></div><p>The following sub-sections describe how to use scripting for
+      entities.</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e788"></a>5.1.6.1.&nbsp;Entity Classes</h4></div></div></div><p>An entity class describes a type of entity. The list below
+        describes its component parts:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">An XML definition
+            file</em></p><p><span class="literal"><em class="replaceable"><code>
+            &lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</span></p></li><li><p><em class="emphasis">A Python cell script</em></p><p><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/<em class="replaceable"><code>&lt;entity&gt;</code></em>.py</span></p></li><li><p><em class="emphasis">A Python base script</em></p><p><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/base/<em class="replaceable"><code>&lt;entity&gt;</code></em>.py</span></p></li><li><p><em class="emphasis">A Python client
+            script</em></p><p><span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/client/<em class="replaceable"><code>&lt;entity&gt;</code></em>.py</span></p></li></ul></div><p>The XML definition file can be considered the interface between
+        the Cell, Base and Client scripts. It defines all available public
+        methods, and all properties of an entity. In addition, it defines
+        global characteristics of the class, such as:</p><div class="itemizedlist"><ul type="disc"><li><p>Whether the entity requires volatile position
+            updates.</p></li><li><p>How the entity is instantiated on the client.</p></li><li><p>The base class of the entity, if any.</p></li><li><p>The interfaces implemented by the entity, if any.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="xref_Example_Entity_Definition_File"></a>5.1.6.2.&nbsp;Example Entity Definition File</h4></div></div></div><p>The following is an example entity definition file
+        <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/Seat.def</span>.</p><pre class="programlisting">&lt;root&gt;
+  &lt;Properties&gt;
+    &lt;seatType&gt;
+      &lt;Type&gt;         INT8          &lt;/Type&gt;
+      &lt;Flags&gt;        OTHER_CLIENT  &lt;/Flags&gt;
+      &lt;Default&gt;      -1            &lt;/Default&gt;  &lt;!-- See Seat.py --&gt;
+      &lt;DetailLevel&gt;  NEAR          &lt;/DetailLevel&gt;
+    &lt;/seatType&gt;
+    &lt;ownerID&gt;
+      &lt;Type&gt;         INT32         &lt;/Type&gt;
+      &lt;Flags&gt;        OTHER_CLIENT  &lt;/Flags&gt;
+      &lt;Default&gt;      0             &lt;/Default&gt;
+    &lt;/ownerID&gt;
+    &lt;channel&gt;
+      &lt;Type&gt;         INT32         &lt;/Type&gt;
+      &lt;Flags&gt;        PRIVATE       &lt;/Flags&gt;
+    &lt;/channel&gt;
+  &lt;/Properties&gt;
+
+  &lt;ClientMethods&gt;
+
+    &lt;clientMethod1&gt;
+      &lt;Arg&gt;            STRING  &lt;/Arg&gt;  &lt;!-- msg --&gt;
+      &lt;DetailDistance&gt; 30      &lt;/DetailDistance&gt;
+    &lt;/clientMethod1&gt;
+
+  &lt;/ClientMethods&gt;
+
+  &lt;CellMethods&gt;
+
+    &lt;sitDownRequest&gt;
+      &lt;Exposed/&gt;
+      &lt;Arg&gt;      OBJECT_ID  &lt;/Arg&gt;  &lt;!-- WHO --&gt;
+    &lt;/sitDownRequest&gt;
+
+    &lt;getUpRequest&gt;
+      &lt;Exposed/&gt;
+      &lt;Arg&gt;      OBJECT_ID  &lt;/Arg&gt;  &lt;!-- WHO --&gt;
+    &lt;/getUpRequest&gt;
+
+    &lt;ownerNotSeated&gt;
+    &lt;/ownerNotSeated&gt;
+
+    &lt;tableChat&gt;
+      &lt;Arg&gt;      STRING    &lt;/Arg&gt;  &lt;!-- msg --&gt;
+    &lt;/tableChat&gt;
+
+  &lt;/CellMethods&gt;
+  &lt;LODLevels&gt;
+    &lt;level&gt;  20   &lt;hyst&gt;   4  &lt;/hyst&gt; &lt;label&gt; NEAR   &lt;/label&gt;  &lt;/level&gt;
+    &lt;level&gt;  100  &lt;hyst&gt;  10  &lt;/hyst&gt; &lt;label&gt; MEDIUM &lt;/label&gt;  &lt;/level&gt;
+    &lt;level&gt;  250  &lt;hyst&gt;  20  &lt;/hyst&gt; &lt;label&gt; FAR    &lt;/label&gt;  &lt;/level&gt;
+  &lt;/LODLevels&gt;
+
+&lt;/root&gt;</pre><p><span class="citetitle">Entity definition file
+        <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/Seat.def</span></span></p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e876"></a>5.1.6.3.&nbsp;Properties</h4></div></div></div><p>As shown in the listing in the previous sub-section, all
+        properties are defined in the XML file, along with their data type, an
+        optional default value, flags to indicate how they should be
+        replicated, and an optional tag <span class="literal">DetailLevel</span> for LOD
+        processing.</p><p>All cell entity properties need to be defined, even if they are
+        private to the class. This is because CellApps need to offload
+        entities to other CellApps, and having the data types of all
+        properties defined allows the data to be transported as efficiently as
+        possible.</p><p>When a Python script modifies the value of a property, the
+        server does the work of propagating this property change to the
+        correct places.</p><p>The following flags are used in the XML definition to determine
+        how each property should be replicated<sup>[<a name="d0e890" href="#ftn.d0e890">1</a>]</sup>:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><span class="literal">ALL_CLIENT</span></em></p><p><em class="emphasis">Implies the <span class="literal">CELL_PUBLIC</span>
+            flag</em></p><p><em class="emphasis">Only relevant for entities with an associated
+            client, i.e., a player entity</em></p><p>Properties that are visible to all nearby clients, including
+            the owner. Corresponds to setting both the
+            <span class="literal">OWN_CLIENT</span> and <span class="literal">OTHER_CLIENT</span>
+            flags.</p></li><li><p><em class="emphasis"><span class="literal">ALL_CLIENTS</span></em></p><p>Same as <span class="literal">ALL_CLIENT</span>. This enumeration is
+            deprecated.</p></li><li><p><em class="emphasis"><span class="literal">BASE</span></em></p><p>Properties that are used on bases.</p></li><li><p><em class="emphasis"><span class="literal">BASE_AND_CLIENT</span></em></p><p>Properties that are used both on bases and clients.
+            Corresponds to setting both <span class="literal">OWN_CLIENT</span> and
+            <span class="literal">BASE</span> flags.</p></li><li><p><em class="emphasis"><span class="literal">CELL</span></em></p><p>Same as CELL_PUBLIC. This enumeration is deprecated.</p></li><li><p><em class="emphasis"><span class="literal">CELL_AND_OWN</span></em></p><p><em class="emphasis">Implies the <span class="literal">CELL_PUBLIC</span>
+            flag</em></p><p>Same as CELL_PUBLIC_AND_OWN. This enumeration is
+            deprecated.</p></li><li><p><em class="emphasis"><span class="literal">CELL_PRIVATE</span></em></p><p>Properties that contain state information that is internal
+            to an entity. They are available on to the owner, and only on the
+            cell. They will not be ghosted, and as such, entities on other
+            cells will not be able to see them.</p></li><li><p><em class="emphasis"><span class="literal">CELL_PUBLIC</span></em></p><p>Properties that are visible to other entities on the server.
+            They will be ghosted, and any other nearby entity will be able to
+            read them, whether they are in the same cell or not (as long as
+            they are within the AoI distance).</p></li><li><p><em class="emphasis"><span class="literal">CELL_PUBLIC_AND_OWN</span></em></p><p>Properties that are available to other entities on the cell,
+            and to this one on both the cell and the client.</p></li><li><p><em class="emphasis"><span class="literal">CLIENT_ONLY</span></em></p><p>Properties that are used only on clients.</p></li><li><p><em class="emphasis"><span class="literal">GHOSTED</span></em></p><p>Same as CELL_PUBLIC. This enumeration is deprecated.</p></li><li><p><em class="emphasis"><span class="literal">GHOSTED_AND_OWN</span></em></p><p>Same as CELL_PUBLIC_AND_OWN. This enumeration is
+            deprecated.</p></li><li><p><em class="emphasis"><span class="literal">OTHER_CLIENT</span></em></p><p><em class="emphasis">Implies the <span class="literal">CELL_PUBLIC</span>
+            flag</em></p><p>Same as OTHER_CLIENTS. This enumeration is
+            deprecated.</p></li><li><p><em class="emphasis"><span class="literal">OTHER_CLIENTS</span></em></p><p><em class="emphasis">Implies the <span class="literal">CELL_PUBLIC</span>
+            flag</em></p><p>Properties that are visible to nearby clients, but not to
+            the owner.</p></li><li><p><em class="emphasis"><span class="literal">OWN_CLIENT</span></em></p><p><em class="emphasis">Only relevant for entities with an associated
+            client, i.e., a player entity</em></p><p>Properties that are only visible to the client who owns the
+            entity.</p></li><li><p><em class="emphasis"><span class="literal">PRIVATE</span></em></p><p>Same as CELL_PRIVATE. This enumeration is deprecated.</p></li></ul></div><p>When a property changes, the server uses the flags OWN_CLIENT
+        and ALL_CLIENTS to determine if an update should be sent to the
+        entity's own client, and the flags OTHER_CLIENTS and ALL_CLIENTS to
+        determine if an update should be sent to the other clients.</p><p>If a server script modifies a property marked as ALL_CLIENTS,
+        then that change will be replicated to:</p><div class="itemizedlist"><ul type="disc"><li><p>The owner of the entity Because it corresponds to also
+            setting the OWN_CLIENT flag.</p></li><li><p>All nearby clients Because it corresponds to also setting
+            the OTHER_CLIENT flag.</p></li><li><p>All ghosts on adjacent cells Because it implies the GHOSTED
+            flag.</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>When a client modifies a shared property, the change is not
+          propagated to the server. All communication from the client to the
+          server must be done using method calls.</p></div><p>Property definitions can also include the tag
+        <span class="literal">DetailLevel</span>. This is used for data LOD processing.
+        For an example, see the property <span class="literal">SeatType</span> defined
+        in the example definition file on <a href="#xref_Example_Entity_Definition_File" title="5.1.6.2.&nbsp;Example Entity Definition File">Example Entity Definition File</a>. For details on LOD
+        processing, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Proxies_And_Players" class="olink"><i>Proxies and Players</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Entity_Control" class="olink">Entity Control</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1097"></a>5.1.6.4.&nbsp;Built-in Properties</h4></div></div></div><p>In addition to the properties defined in the XML file, cell
+        entity scripts also have access to several built-in properties
+        provided by the cell scripting environment. These include:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><code class="varname">id</code>
+            (Read-only)</em></p><p>Integer ID of the entity.</p></li><li><p><em class="emphasis"><code class="varname">spaceID</code>
+            (Read-only)</em></p><p>ID of the space that the entity is in.</p></li><li><p><em class="emphasis"><code class="varname">vehicle</code>
+            (Read-only)</em></p><p>Some other entity (or None) that the entity is riding
+            upon.</p></li><li><p><em class="emphasis"><code class="varname">position</code>
+            (Read/write)</em></p><p>Position of the entity, as a tuple of 3 floats.</p></li><li><p><em class="emphasis"><code class="varname">direction</code>
+            (Read/write)</em></p><p>Direction of the entity, as a tuple of roll, pitch, and
+            yaw.</p></li><li><p><em class="emphasis"><code class="varname">isOnGround</code>
+            (Read/write)</em></p><p>Integer flag, containing 1 if the entity is on the ground,
+            or 0 otherwise.</p></li></ul></div><p>It is possible to move an entity by changing its position
+        property. However, for continuous movement, the method
+        <code class="methodname">moveToPoint</code> is recommended. The
+        <code class="varname">spaceID</code> and <code class="varname">vehicle</code> properties
+        are influenced by the <code class="methodname">teleport</code> and
+        <code class="methodname">boardVehicle</code> methods, respectively.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1168"></a>5.1.6.5.&nbsp;Methods</h4></div></div></div><p>Like properties, methods are defined in the entity type's XML
+        definition file (named
+        <code class="filename"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</code>).
+        There are different sections for client, cell, and base methods, and
+        each method contains its name and its list of arguments.</p><p>Cell and base methods can also have an optional
+        <code class="property">&lt;Exposed/&gt;</code> tag. This indicates whether the
+        client can call this method. Exposed methods on the cell have an
+        implicit argument, <code class="varname">source</code>, which is the ID of the
+        entity associated with the client that called the method.</p><p>Method definitions can also have a
+        <code class="property">&lt;DetailDistance&gt;</code> attribute which is used in
+        relation to Level of Detail filtering.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1194"></a>5.1.6.6.&nbsp;Calling Client methods</h4></div></div></div><p>A client has references to all entities that are within its AoI.
+        A cell component of an entity can call methods on other client
+        entities (including its own) that exist within this AoI.</p><p>Four properties are available to the cell script, to facilitate
+        calling client methods. These are:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><code class="varname">ownClient</code> (or
+            <code class="varname">client</code>)</em></p></li><li><p><em class="emphasis"><code class="varname">otherClients</code></em></p></li><li><p><em class="emphasis"><code class="varname">allClients</code></em></p></li><li><p><em class="emphasis"><code class="methodname">clientEntity</code></em></p></li></ul></div><p>A method called on one of these objects will be delivered to the
+        indicated clients.</p><p>For example, to call the chat method on the client script for
+        this object, for all nearby clients:</p><pre class="programlisting">self.allClients.chat( "hi!" )</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1232"></a>5.1.6.7.&nbsp;Built-in Methods</h4></div></div></div><p>The cell script has access to numerous built-in script methods,
+        some of which are described in the list below:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><code class="methodname">destroy</code>
+            </em> &#8212; Destroys the entity.</p></li><li><p><em class="emphasis"><code class="methodname">addTimer</code>
+            </em> &#8212; Adds an asynchronous timer callback.</p></li><li><p><em class="emphasis"><code class="methodname">moveToPoint</code></em>
+            &#8212; Moves the entity in a straight line towards a
+            point.</p></li><li><p><em class="emphasis"><code class="methodname">moveToEntity</code></em>
+            &#8212; Moves the entity towards another entity.</p></li><li><p><em class="emphasis"><code class="methodname">navigate</code>
+            </em> &#8212; Moves the entity towards a point, avoiding
+            obstacles.</p></li><li><p><em class="emphasis"><code class="methodname">cancel</code>
+            </em> &#8212; Cancels a controller (timers, movement,
+            etc...).</p></li><li><p><em class="emphasis"><code class="methodname">entitiesInRange</code></em>
+            &#8212; Finds entities within a given distance of the
+            entity.</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1284"></a>5.1.6.8.&nbsp;Controllers</h4></div></div></div><p>A controller is a C++ object associated with a cell entity. It
+        normally performs a task that would be inefficient or difficult to do
+        from script. It also generally has state information, which must be
+        sent across the network if the entity is offloaded to another
+        cell.</p><p>Examples of currently implemented controllers are:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><code class="classname">TimerController
+            </code></em> &#8212; Provides asynchronous timed
+            callbacks.</p></li><li><p><em class="emphasis"><code class="classname">MoveToPointController
+            </code></em> &#8212; Moves the entity to a position, at
+            a given velocity.</p></li></ul></div><p>Controllers are normally created by a script call, such as
+        <em class="replaceable"><code>entity</code></em>.<code class="methodname">moveToPoint</code>,
+        or
+        <em class="replaceable"><code>entity</code></em>.<code class="methodname">addTimer</code>.
+        Any script call that creates a controller should return a controller
+        ID. This is an integer that uniquely identifies the controller, and
+        can later be used to destroy it. Calling <em class="replaceable"><code>entity
+        </code></em>.<code class="methodname">cancel</code>, and passing in the
+        controller ID can destroy any controller. Note that the cell
+        automatically destroys all controllers when an entity is
+        destroyed.</p><p>Since controllers normally perform operations asynchronously,
+        they notify the script object of completion by calling a named script
+        callback. For example, the <code class="classname">TimerController</code>
+        always calls the <code class="methodname">onTimer</code> event handler, and
+        the <code class="classname">MoveToPointController</code> always calls the
+        <code class="methodname">onMove</code> event handler.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1338"></a>5.1.6.9.&nbsp;Inheritance</h4></div></div></div><p>An entity class may be derived from another entity class. It
+        receives all properties and methods of its base class, and adds its
+        own interfaces. The <code class="property">&lt;Implements&gt;</code> section in
+        the <code class="filename">.def</code> files can be used to
+        describe multiple interfaces.</p><p>In addition, it is possible for a derived class to appear as a
+        base class when instantiated on the client. This is useful in
+        circumstances where the client does not need to be aware of all extra
+        methods and properties implemented for the derived class on the
+        server; the client can just treat derived class entities as base class
+        entities. This also allows new classes to be derived from the base
+        class on the server, without the client being updated.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1351"></a>5.1.6.10.&nbsp;Example Script File</h4></div></div></div><p>The following is an example cell entity script file for a
+        <code class="classname">Seat</code> object:</p><pre class="programlisting">"This module implements the Seat entity."
+import BigWorld
+import Avatar
+# -----------------------------------------------------------------------
+# Section: class Seat
+# -----------------------------------------------------------------------
+class Seat( BigWorld.Entity ):
+  "A Seat entity."
+  def __init__( self ):
+    BigWorld.Entity.__init__( self )
+
+  def sitDownRequest( self, source, entityID ):
+    if self.ownerID == 0 and source == entityID:
+      self.ownerID = entityID
+      BigWorld.entities[ self.ownerID ].enterMode(
+        Avatar.Avatar.MODE_SEATED, self.id, 0 )
+      if self.channel:
+        try:
+          channel = BigWorld.entities[ self.channel ]
+          channel.register( self.ownerID )
+        except:
+          pass
+
+  def getUpRequest( self, source, entityID ):
+    if self.ownerID == entityID and source == entityID:
+      if self.channel:
+        try:
+          channel = BigWorld.entities[ self.channel ]
+          channel.deregister( entityID )
+        except:
+          pass
+      BigWorld.entities[ self.ownerID ].cancelMode()
+      # The Avatar's cancelMode() method will in-turn call this
+      # Seat's ownerNotSeated() method to release itself.
+
+  def ownerNotSeated( self ):
+    self.ownerID = 0
+
+  def tableChat( self, msg ):
+    if self.channel:
+      channel = BigWorld.entities[ self.channel ]
+      assert( channel )
+      assert( self.ownerID )
+      channel.tellOthers( self.ownerID, "[local] " + msg )</pre><p><span class="citetitle">Cell entity script &#8212;
+        <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/cell/Seat.py</span></span></p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1368"></a>5.1.7.&nbsp;Directed Messages</h3></div></div></div><p>Not all events are propagated via the event history. If an event
+      is destined for a specific player, or a small number of players, then it
+      can be delivered almost immediately in its next packet.</p><p>An example is when a player talks to a targeted avatar. When the
+      message arrives, it can be delivered to the desired avatar immediately,
+      which in turn can add it to its next bundle to be delivered to the
+      client.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1375"></a>5.1.8.&nbsp;Forwarding From Ghosts</h3></div></div></div><p>Each ghost knows its real cell, so that it can forward messages to
+      its real version to be processed.</p><p>Most messages are of the pull variety, as in when another player
+      jumps &#8212; it is up to the avatar (via the priority queue) to decide
+      if and when to send this to its client.</p><p>A minority of the messages is of the push variety, as in when
+      player A wants to shake hands with player B. To do this, client A sends
+      a handshake request to its cell, which in turns makes a request to
+      avatar B on the same cell. Avatar B may be a ghost, in which case it
+      forwards the request to its real representation. This communication
+      happens automatically and transparently.</p><p>The mechanism of forwarding messages from ghosts to their reals is
+      also used to circumvent the synchronisation problem that occurs when
+      entities change cells. Normally the base entity sends messages directly
+      to the real, but it may temporarily send messages via a ghost when the
+      cell entity is in transit.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1386"></a>5.1.9.&nbsp;Offloading Entities</h3></div></div></div><p>Approximately once a second each cell checks whether to offload
+      any entities to other cells. Each entity is considered against the
+      boundary of the current cell. The boundary is artificially increased (by
+      about 10 metres) to avoid hysteresis. If an entity is found to be
+      outside the boundary of the current cell, it is offloaded to the most
+      appropriate one.</p><p>When an entity is offloaded, the real entity object is transformed
+      into a ghost entity, and vice-versa when an entity is loaded.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1393"></a>5.1.10.&nbsp;Adding and Removing Cells</h3></div></div></div><p>When a cell is added to a large multi-cellular space during
+      runtime, it is done by gradually increasing its area, in order to avoid
+      a large spike in entities trying to change cells. Similarly for removing
+      a cell, its area slowly decreases until all entities are gone.</p><p>For more details, see <a href="#xref_Adding_And_Removing_Cells" title="5.2.3.&nbsp;Adding and Removing Cells">Adding and Removing Cells</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1402"></a>5.1.11.&nbsp;Load Balancing</h3></div></div></div><p>Cell boundaries are moved in order to adjust the proportion of the
+      server load that an individual cell is responsible for.</p><p>The basic (simplified) idea is that if a cell is overloaded in
+      comparison to other cells, then its area is reduced. Conversely, if it
+      is underloaded, then its area is increased.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1409"></a>5.1.12.&nbsp;Physics</h3></div></div></div><p>Because of factors such as latency inherent in traversing the
+      Internet, large number of desired players, and bandwidth limits, it is
+      difficult (if not impossible) to achieve a convincing game where full
+      collision handling is attempted.</p><p>For example, consider running through a crowd. Because of the
+      inaccuracy in player positions resulting from latency and bandwidth
+      limits, their server positions might have them colliding, when in fact
+      they are avoiding each other on the client. Even with full collisions,
+      it is still not clear that this is good from a game play point of view,
+      since it might become too difficult to walk through the crowd.</p><p>For these reasons, BigWorld implements an entity-to-entity
+      collision detection system only on the client side, whereby clients are
+      bumped aside when they try to occupy the same space. There is potential
+      to extend this to send messages to the server when the collision is
+      severe, <em class="emphasis">e.g.</em>, the server can check the situation
+      and maybe change each avatar's position/velocity.</p><p>Collisions against the static scene however, may be checked by the
+      server. The algorithm works by ensuring that player entities travel
+      through well-defined portals, and not through walls, floors, and
+      ceilings. This is enabled by setting the topSpeed property to greater
+      than zero (the entity's speed is also checked).</p><p>For more details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Proxies_And_Players" class="olink"><i>Proxies and Players</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Entity_Control" class="olink">Entity Control</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_Navigation_System"></a>5.1.13.&nbsp;Navigation System</h3></div></div></div><p>The key features of the navigation system are:</p><div class="itemizedlist"><ul type="disc"><li><p>Navigation of both indoor and outdoor chunks.</p></li><li><p>Seamless transition between indoor and outdoor regions.</p></li><li><p>Dynamic loading of navpoly graphs.</p></li><li><p>Paths caching, for efficiency.</p></li></ul></div><p>For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>, section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Entities_And_The_Universe" class="olink"><i>Entities and the Universe</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Navigation_System" class="olink">Navigation System</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1463"></a>5.1.14.&nbsp;Range Triggers and Range Queries</h3></div></div></div><p>There is often the need to trigger an event when an entity (of a
+      specific type) gets close enough to another. These are called Range
+      Triggers.</p><p>There is also the need to find all entities that are in a given
+      area. This is called a Range Query.</p><p>To support these functions, each cell maintains two lists of all
+      its entities, sorted by X and Z.</p><p>To perform a range query, the software searches just one of these
+      lists to the distance of the query range, and then selects the entities
+      geometrically in range.</p><p>To perform a range trigger, the entity that is interested in a
+      particular range inserts high and low triggers in both the X and Z
+      lists. When the entity moves, the lists and the triggers are updated.
+      When other entities move, the lists are updated. If an entity crosses a
+      trigger, or a trigger crosses an entity, then the software checks the
+      other dimension to test whether it is actually a trigger event.</p><p>For the majority of situations this algorithm has been found to be
+      very effective.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1478"></a>5.1.15.&nbsp;Fault Tolerance</h3></div></div></div><p>The CellApp is designed to be fault tolerant. A CellApp process
+      can stop suddenly, or its machine can become disconnected from the
+      network, with little noticeable impact on the server.</p><p>Each entity on a CellApp is periodically backed up to its base
+      entity. Should a CellApp become unavailable, the CellAppMgr ensures that
+      each space still has at least one cell. The base entities detect if
+      their cell entities have been lost, and restore them to an alternate
+      cell of their space. Script methods are available to ensure that
+      restored entities are consistent with the game world.</p><p>For more details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Fault_Tolerance" class="olink"><i>Fault Tolerance</i></a>.
+      For details on the implementation of CellApp fault tolerance on code
+      level, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>'s
+      chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Fault_Tolerance" class="olink"><i>Fault Tolerance</i></a>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1495"></a>5.2.&nbsp;CellAppMgr</h2></div></div></div><p>The CellAppMgr is responsible for:</p><div class="itemizedlist"><ul type="disc"><li><p>Maintaining the correct adjacencies between cells.</p></li><li><p>Adding new avatars to the correct cell.</p></li><li><p>Acting as a global entity ID broker.</p></li></ul></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1510"></a>5.2.1.&nbsp;CellApp Registration</h3></div></div></div><p>When a new CellApp is started, it finds the location of the
+      CellAppMgr by broadcasting a message to all BWMachined daemons.</p><p>If a BWMachined process has a CellAppMgr on its machine, then its
+      address is returned to the CellApp. Once the CellApp has the location of
+      the CellAppMgr, the CellApp registers itself with it. Next time the
+      CellAppMgr needs to create more cells, the new CellApp will be
+      considered as a potential host for it.</p><p>Similarly, when the CellApp stops, it deregisters itself with the
+      CellAppMgr, after having all its cells gradually removed.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_CellAppMgr_Load_Balancing"></a>5.2.2.&nbsp;Load Balancing</h3></div></div></div><p>BigWorld dynamically balances the load of cells for all spaces,
+      from small single-cell spaces to potentially huge multi-cell
+      ones.</p><p>BigWorld divides large spaces into cells using a geometric
+      tessellation. The example tessellation provided below illustrates the
+      current algorithm.</p><div class="informalfigure"><div class="mediaobject"><img src="images/example_of_typical_space.png"><span class="caption"><p>Example of typical space</p></span></div></div><p>The amount of Euclidean space covered by a cell is determined by
+      whatever load can be supported by its CellApp. This may vary with either
+      CPU or entity density.</p><p>The details of the current tessellation scheme are beyond the
+      scope of this document.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_Adding_And_Removing_Cells"></a>5.2.3.&nbsp;Adding and Removing Cells</h3></div></div></div><p>In order to support smooth start up, shutdown, and scalability,
+      BigWorld needs to be able to add and remove cells in an orderly fashion.
+      To smoothly add a new cell to the system, BigWorld slowly increases the
+      area managed by the new cell.</p><p>At first, no entity is maintained by the new cell, since none lies
+      within its initial area. As the cell's area increases, entities migrate
+      to it at a controlled rate. The reverse is done to remove cells.</p><p>The image below shows a potential mechanism for achieving this, in
+      line with the tessellation example in topic <a href="#xref_CellAppMgr_Load_Balancing" title="5.2.2.&nbsp;Load Balancing">Load Balancing</a>.</p><div class="informalfigure"><div class="mediaobject"><img src="images/inserting_a_new_cell_into_the_system.png"><span class="caption"><p>Inserting a new cell into the system</p></span></div></div><p>It is the CellAppMgr's job to divide the space, based on reports
+      by the CellApps of their current load and areas of space they are
+      managing. CellAppMgr uses this information to decide whether a CellApp
+      should adjust its area of responsibility, or a new cell be created or an
+      existing one be removed. Whatever is the outcome, it will communicate
+      with the CellApp.</p><p>Apart from knowing its own area of responsibility, every CellApp
+      also has some basic knowledge (address and area of responsibility) of
+      the other CellApps sharing the same space (this information is provided
+      to them by CellAppMgr). A CellApp can decide to establish communication
+      channels with any number of existing CellApps (usually with its
+      neighbours) to either offload entities, or to mirror entity data on them
+      (based on entity's location).</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1559"></a>5.2.4.&nbsp;Adding an Entity</h3></div></div></div><p>The CellAppMgr can easily determine which cell to add a new entity
+      to, since it controls the tessellation of the space.</p><p>However, a new cell entity will often bypass the CellAppMgr
+      (thereby reducing its load) if it knows of another entity in the same
+      space, close to where it wants to be created. In that case it will
+      simply create itself on the same CellApp of the existing entity.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1566"></a>5.2.5.&nbsp;Load Balancing for Multiple Spaces</h3></div></div></div><p>In case of multiple spaces, BigWorld dynamically and continuously
+      balances their load, from large to very small, using a single algorithm
+      of optimal fitting.</p><p>The basic goal of the algorithm is to allocate sufficient
+      processing power to each space, and minimise the distribution of
+      processing of each one to as few CellApps (machines) as possible. Where
+      a space must be distributed over more than one machine, an algorithm is
+      used to break up that space into multiple cells.</p><p>The algorithm is based on the current CPU requirement for each
+      space. In the example below, there are five spaces, three of which
+      require more than one CPU. For this example, all available CPUs are
+      assumed to be of equal power.</p><div class="informalfigure"><div class="mediaobject"><img src="images/cpu_requirement_per_space.png"><span class="caption"><p>CPU requirement per space</p></span></div></div><p>Working from the largest CPU consumer to the smallest, BigWorld
+      might distribute the load across seven identical CPUs, as
+      follows:</p><div class="informalfigure"><div class="mediaobject"><img src="images/cpu_allocation_per_space_identical_cpus.png"><span class="caption"><p>CPU allocation per space (identical
+          CPUs)</p></span></div></div><p>BigWorld can profile CPUs individually to make optimal use of
+      them</p><p>In the diagram below, the same spaces are allocated to CPUs with
+      different power (more powerful CPUs are represented by taller
+      boxes.):</p><div class="informalfigure"><div class="mediaobject"><img src="images/cpu_allocation_per_space_different_cpus.png"><span class="caption"><p>CPU allocation per space (different
+          CPUs)</p></span></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1602"></a>5.2.6.&nbsp;Fault Tolerance</h3></div></div></div><p>In case of failure, a Reviver restarts the CellAppMgr. It finds
+      all CellApps, and queries them for their cells and the area they
+      cover.</p><p>From this point on, it can keep maintaining the cells, CellApps,
+      and spaces, and is able to add new entities to the correct cell. It can
+      continue in its role as a space ID and entity ID broker by recovering
+      data from stored checkpoints, or ID ranges maintained by the
+      cells.</p><p>For more details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Fault_Tolerance" class="olink"><i>Fault Tolerance</i></a>.
+      For details on the implementation of CellApp fault tolerance on code
+      level, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>'s
+      chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Fault_Tolerance" class="olink"><i>Fault Tolerance</i></a>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Server_Components_BaseApp"></a>5.3.&nbsp;BaseApp</h2></div></div></div><p>The BaseApp manages entity bases and proxies. A proxy is a
+    specialisation of an entity base.</p><div class="informalfigure"><div class="mediaobject"><img src="images/baseapp_managing_bases_and_proxies.png"><span class="caption"><p>BaseApp managing bases and proxies</p></span></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1631"></a>5.3.1.&nbsp;Proxies</h3></div></div></div><p>When a player logs into the server, a proxy is created on a
+      BaseApp, which may decide to create an entity in a cell on a CellApp.
+      The BaseAppMgr creates the proxy on the least loaded BaseApp.</p><p>Besides the LoginApp, the machines running the BaseApps are the
+      only ones that need to be connected directly to the Internet. The proxy
+      gives the client a fixed object on a fixed IP and port to talk to. The
+      LoginApp returns this IP address to the client after the proxy has been
+      created.</p><p>When the client wants to send messages to its entity on the cell,
+      it first sends it to the proxy, which then forwards it to the cell. This
+      isolates the client from cell switches. To achieve this, the proxy needs
+      to know the address of the CellApp that its associated entity is on.
+      Whenever the cell entity changes CellApps, it communicates with the
+      proxy.</p><p>The cell entity also communicates with its client via the
+      associated proxy. The main benefit of this approach is that it allows
+      the proxy to be responsible for handling message reliability. Other
+      benefits include shielding the CellApps from talking directly to the
+      Internet, and limiting the addresses that the client receives data
+      from.</p><p>The proxy can also aggregate messages from multiple sources and
+      deliver them to the client as one packet. This may include messages from
+      the proxy itself, or other objects, such as team bases. It is up to the
+      proxy to allocate bandwidth to each source that communicates to the
+      client.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1644"></a>5.3.2.&nbsp;Bases</h3></div></div></div><p>Bases have the following characteristics:</p><div class="orderedlist"><ol type="1"><li><p>A base can store entity properties that do not need to travel
+          around on the cells &#8212; a good example is storing a player's
+          inventory on the base, and active item(s) on the cell.</p></li><li><p>A cell entity (or any other server object) can talk to a base
+          entity when it does not know which cell the entity is currently on.
+          The base acts as an anchor point.</p></li><li><p>Some properties are more efficiently kept on the base, since
+          they are accessed (or subscribed to) by 'remote' objects.</p></li><li><p>A good example is a team chat system.</p></li><li><p>A base can be an entity that has no sense of location, such as
+          entity controlling world events.</p></li></ol></div><p>The proxy is a special type of base. It has an associated client
+      and controls messages to and from it.</p><p>Like entities on the cells, bases have a script associated with
+      them. Thus, it is possible to implement different base types in script
+      only. A typical example would be a group chat system.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_Server_Components_BaseApp_Fault_Tolerance"></a>5.3.3.&nbsp;Fault Tolerance</h3></div></div></div><p>The BaseApp supports a scheme for fault tolerance where each
+      BaseApp backs up its entities on other (more than one) regular
+      BaseApps.</p><p>For more details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>, chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Fault_Tolerance" class="olink"><i>Fault Tolerance</i></a>.
+      For details on the implementation of BaseApp fault tolerance on code
+      level, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>,
+      chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Fault_Tolerance" class="olink"><i>Fault Tolerance</i></a>.</p><p>Each BaseApp backs up its entities across a number of other real
+      BaseApps. Each BaseApp is assigned a set of other BaseApps and a hash
+      function from an entity's ID to one of these backups.</p><p>Over a period of time, all entities of each BaseApp will be backed
+      up on other regular BaseApps. This process constantly runs, making sure
+      that new entities are backed up.</p><p>If a BaseApp dies, each of its entities is restored on the BaseApp
+      that was backing it up.</p><div class="informalfigure"><div class="mediaobject"><img src="images/distributed_baseapp_backup.png"><span class="caption"><p>Distributed BaseApp Backup &#8212; Dead BaseApp's
+          entities can be restored to Backup BaseApp</p></span></div></div><p>There is a possibility of base entities that were previously on
+      the same BaseApp ending up on different BaseApps (which places limits on
+      scripting).</p><p>In addition, any attached clients will be disconnected on an
+      unexpected BaseApp failure, requiring a re-login. However, if BaseApps
+      are retired, attached clients will be migrated to another running
+      BaseApp.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_Server_Components_BaseApp_Secondary_Databases"></a>5.3.4.&nbsp;Secondary Databases</h3></div></div></div><p>To reduce the load on the primary database and DBMgr, the BaseApp
+      stores persistent data temporarily in a secondary database on its local
+      disk. While an entity is active, changes to the entity's persistent data
+      is stored only in the secondary database. When the entity is unloaded,
+      its persistent data will be transferred from the secondary database to
+      the primary database.</p><p>For details on secondary databases, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>, chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Secondary_Databases" class="olink">Secondary Databases</a>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1712"></a>5.4.&nbsp;BaseAppMgr</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1715"></a>5.4.1.&nbsp;Implementation</h3></div></div></div><p>When a BaseApp starts up, it registers itself with the BaseAppMgr.
+      The BaseAppMgr maintains a list of all BaseApps.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1720"></a>5.4.2.&nbsp;Logging In</h3></div></div></div><p>When a client logs in, the LoginApp makes a request to the
+      BaseAppMgr (via the DBMgr) to add a player to the system. The BaseAppMgr
+      then adds a proxy to the least loaded BaseApp. The BaseAppMgr sends the
+      IP address of the proxy to the LoginApp. This is sent to the client,
+      which then uses it for all future communication with the server.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1725"></a>5.4.3.&nbsp;Fault Tolerance</h3></div></div></div><p>In case of failure, a Reviver restarts the BaseAppMgr. The
+      BaseApps re-register with the BaseAppMgr, allowing it to continue
+      normally.</p><p>For more details, see <a href="#xref_Server_Components_Reviver" title="5.7.&nbsp;Reviver">Reviver</a>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1734"></a>5.5.&nbsp;LoginApp</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1737"></a>5.5.1.&nbsp;Implementation</h3></div></div></div><p>Each LoginApp listens to a fixed (configurable) port for requests
+      to log in from clients.</p><p>The steps for client login are described in <a href="#xref_Use_Cases_Logging_In" title="4.3.2.&nbsp;Logging In">Logging In</a>.</p><p>All requests made by the LoginApp are non-blocking, so that it can
+      handle many simultaneous logins.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1748"></a>5.5.2.&nbsp;Multiple LoginApps</h3></div></div></div><p>In terms of load, a single LoginApp should be sufficient for most
+      purposes. However, as this is still a potential bottleneck, and single
+      point of failure, BigWorld supports running multiple LoginApps.</p><p>The remaining issue then is how to distribute the client login
+      requests across multiple login servers. The standard way to do this is
+      use a DNS solution similar to how popular web sites balance traffic load
+      across multiple machines.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1755"></a>5.6.&nbsp;DBMgr</h2></div></div></div><p>The DBMgr is the interface to the primary database. There are
+    currently two implementations of the database interface component:</p><div class="itemizedlist"><ul type="disc"><li><p>XML</p></li><li><p>MySQL</p></li></ul></div><p>Others can also be added.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1769"></a>5.6.1.&nbsp;XML</h3></div></div></div><p>The XML implementation saves data in a single XML file &#8212;
+      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/db.xml</span>.
+      This is good for running small servers, since it is lightweight, and
+      does not have any dependencies on an external database.</p><p>In this implementation, DBMgr reads the XML file on startup, and
+      caches all player descriptions in memory. No disk I/O is performed until
+      shutdown, when the entire XML file is written to disk.</p><p>The XML database has several known limitations that make it
+      unsuitable for production or serious development environments. It
+      differs significantly to the MySQL database in the area of login
+      processing. For more details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_User_Authentication_And_Proxy_Selection" class="olink"><i>User Authentication and Billing System Integration</i></a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1787"></a>5.6.2.&nbsp;MySQL</h3></div></div></div><p>The MySQL implementation communicates with a MySQL database, via
+      the native MySQL interface. MySQL can be running on the same machine, or
+      a different machine, since the protocol works over TCP.</p><p>Each class of entity is stored in a separate SQL table, and each
+      property of a class is a column. The tables are indexed by
+      DatabaseIDs.</p><p>On startup, the SQL database schema is checked against the XML
+      entity definition files (named
+      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/scripts/entity_defs/<em class="replaceable"><code>&lt;entity&gt;</code></em>.def</span>
+      &#8212; for details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Physical_Entity_Structure_For_Scripting" class="olink"><i>Physical Entity Structure for Scripting</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_The_Definition_File" class="olink">The Entity Definition File</a>), to ensure that they are
+      consistent. If any entity class does not have a database table, then one
+      is automatically created. If any class has new properties in the XML
+      file that are not in the database, then columns are automatically added
+      to the appropriate tables. This functionality is mainly useful during
+      development, when the schema may change frequently.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1813"></a>5.6.3.&nbsp;Fault Tolerance</h3></div></div></div><p>In case of a failure, the DBMgr can be restarted by a
+      Reviver<sup>[<a name="d0e1818" href="#ftn.d0e1818">2</a>]</sup>, which may be on a different physical machine. Once the
+      DBMgr is restarted, it advertises its presence via BWMachined, and then
+      all interested parties will start communicating with it.</p><p>The XML database is not fault-tolerant, since all data is held in
+      RAM until shutdown. Although the DBMgr may be restarted by a Reviver,
+      all updates since the server was last shutdown will be lost.</p><p>The DBMgr also plays an important role in BigWorld's second level
+      of fault tolerance. For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>, chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Disaster_Recovery" class="olink"><i>Disaster Recovery</i></a>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Server_Components_Reviver"></a>5.7.&nbsp;Reviver</h2></div></div></div><p>The Reviver is a watchdog process used to restart other processes
+    that fail (either because the machine the process was running on has
+    failed, or the process itself has crashed or is unresponsive). The Reviver
+    is started on machines reserved for fault tolerance purposes, and waits
+    for processes to attach themselves to it.</p><p>The processes that use Reviver include:</p><div class="itemizedlist"><ul type="disc"><li><p>CellAppMgr</p></li><li><p>BaseAppMgr</p></li><li><p>DBMgr</p></li><li><p>LoginApp</p></li></ul></div><p>When each of these processes is started, it searches the network for
+    a Reviver, then attaches itself &#8212; if it is supported by Reviver
+    (this configuration is done via <code class="filename">/etc/bwmachined.conf</code>
+    &#8212; for details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Fault_Tolerance" class="olink"><i>Fault Tolerance</i></a>,
+    <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Fault_Tolerance_With_Reviver" class="olink">Fault Tolerance with Reviver</a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Specifying_Components_To_Support" class="olink">Specifying Components to Support</a>.).</p><p>The Reviver will then ping this process regularly, to check if it is
+    available &#8212; if it fails to reply, the Reviver will restart itself as
+    the failed process, replacing the process and the machine. The faulty
+    machine/process can then be shut down for service.</p><p>Since Revivers normally stop running after reviving a process,
+    generally a few of them are needed (preferably on different machines). The
+    Revivers use BWMachined to start the new processes.</p><p>If a Reviver crashes, then the process requesting the monitoring
+    will detect the missing pings and look for a new Reviver. It is up to the
+    operator to ensure that enough Revivers are running on appropriate
+    machines.</p><p>Even though it is not recommended, Reviver can also be started via
+    the command line. For more details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Fault_Tolerance" class="olink"><i>Fault Tolerance</i></a>,
+    <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Fault_Tolerance_With_Reviver" class="olink">Fault Tolerance with Reviver</a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Command_Line_Options" class="olink">Command-Line Options</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_BWMachined"></a>5.8.&nbsp;BWMachined</h2></div></div></div><p>The BWMachined daemon runs on every machine in the server cluster,
+    and is started automatically at boot time. Its responsibilities
+    are:</p><div class="itemizedlist"><ul type="disc"><li><p>Start and stop server components.</p></li><li><p>Locate server components.</p></li><li><p>Provide machine statistics (CPU speeds, network stats,
+        etc&#8230;).</p></li><li><p>Provide process statistics (memory and CPU usage).</p></li></ul></div><p>The following sub-sections describe each responsibility.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1901"></a>5.8.1.&nbsp;Start and Stop Server Components</h3></div></div></div><p>BWMachined can be used to remotely start and stop server
+      components. This functionality is used by the Server Control
+      Tool.</p><p>It is possible to start components using any user ID, as well as
+      to specify which build configuration should be used (<em class="emphasis">Debug</em>, <em class="emphasis">Hybrid</em>,
+      or <em class="emphasis">Release</em>).</p><p>Since not all users will have their own build of the server, it is
+      possible to specify the location of the server binaries to be used, on a
+      per-user basis. This can be done either in the file
+      <code class="filename"><code class="envar">$HOME</code>/.bwmachined.conf</code>, or in the
+      file <code class="filename">/etc/bwmachined.conf</code>.</p><p>The file <span class="literal">/etc/bwmachined.conf</span> can also be used
+      to specify the server components that should be supported by the
+      Reviver. For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Fault_Tolerance" class="olink"><i>Fault Tolerance</i></a>,
+      <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Fault_Tolerance_With_Reviver" class="olink">Fault Tolerance with Reviver</a>, <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Specifying_Components_To_Support" class="olink">Specifying Components to Support</a>.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1940"></a>5.8.2.&nbsp;Locate Server Components</h3></div></div></div><p>Whenever a server component starts, it can choose to publicise its
+      Mercury interface. If it does, Mercury will send a registration packet
+      to BWMachined on the local machine.</p><p>The list below describes the fields included in the packet:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis"><span class="literal">UID</span></em>
+          &#8212; User ID.</p></li><li><p><em class="emphasis"><span class="literal">PID</span></em>
+          &#8212; Process ID.</p></li><li><p><em class="emphasis"><span class="literal">Name</span></em>
+          &#8212; Name (<em class="emphasis">e.g.</em>, CellAppMgr)</p></li><li><p><em class="emphasis"><span class="literal">ID</span></em> &#8212;
+          An optional unique ID (<em class="emphasis">e.g.</em>, Cell ID).</p></li></ul></div><p>BWMachined will then add the process to its list of registered
+      processes. It polls the <span class="literal">/proc</span> file system every
+      second, to determine CPU and memory usage for each process.</p><p>When a publicised server component shuts down, it must send a
+      deregistration packet to the local BWMachined. If a process dies without
+      deregistering, BWMachined will find this out when it next polls and
+      updates its list of known components.</p><p>It is possible to search for server components that match certain
+      fields by sending a query packet to BWMachined. It will reply by sending
+      a response packet for each matching process.</p><p>For example, when a CellApp starts, it needs to find the address
+      of the CellAppMgr process running under the current UID. It sends a
+      broadcast query to every BWMachined on the network, asking for all
+      processes that match the current UID, and the name "CellAppMgr".</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1989"></a>5.8.3.&nbsp;Provide Machine Statistics</h3></div></div></div><p>On startup, BWMachined examines the file
+      <code class="filename">/proc/cpuinfo</code> to determine the number of CPUs and
+      their speed. It also regularly monitors CPU, memory, and network usage
+      for the whole machine. This information can be obtained via a UDP
+      request, and is displayed in the StatGrapher component of
+      WebConsole.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1997"></a>5.8.4.&nbsp;Provide Process Statistics</h3></div></div></div><p>BWMachined polls the <code class="filename">/proc</code> file system every
+      second, and gathers memory and CPU statistics for all registered
+      processes. This information can be obtained via a UDP request, and is
+      displayed in the StatGrapher component of WebConsole.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="xref_BWMachined_Interface_Discovery"></a>5.8.5.&nbsp;BWMachined Interface Discovery</h3></div></div></div><p>In order to assist with error detection of misconfigured default
+      broadcast addresses and reduce the amount of configuration required,
+      BWMachined determines at startup which interface is configured as the
+      default broadcast route<sup>[<a name="d0e2010" href="#ftn.d0e2010">3</a>]</sup>.</p><p>If no <code class="property">&lt;internalInterface&gt;</code> tag is
+      defined in the <code class="filename">bw.xml</code> configuration file<sup>[<a name="d0e2028" href="#ftn.d0e2028">4</a>]</sup>, then the server components will query BWMachined over the
+      <span class="literal">localhost</span> interface, and request the interface to use
+      as the internal interface.</p><p>If the <code class="property">&lt;monitoringInterface&gt;</code>
+      tag<sup>[<a name="d0e2044" href="#ftn.d0e2044">5</a>]</sup> is left undefined in <code class="filename">bw.xml</code>, then
+      MessageLogger<sup>[<a name="d0e2060" href="#ftn.d0e2060">6</a>]</sup> will query BWMachined for the internal interface, and any
+      server components will fall back to using the internal interface they
+      have already discovered during startup for the monitoring
+      interface.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>The <code class="property">&lt;internalInterface&gt;</code> tags are
+        deprecated, and while their behaviour is still consistent with
+        previous releases, it is recommended to not use them.</p></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.d0e890" href="#d0e890">1</a>] </sup>For more details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Properties" class="olink"><i>Properties</i></a>
+            <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Data_Distribution" class="olink">Data Distribution</a>.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e1818" href="#d0e1818">2</a>] </sup>For details, see <a href="#xref_Server_Components_Reviver" title="5.7.&nbsp;Reviver">Reviver</a>.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e2010" href="#d0e2010">3</a>] </sup>For details on how to setup the default broadcast route, see
+          the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/server_installation_guide.html#Server_Installation_Guide" class="olink">Server Installation Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/server_installation_guide.html#xref_Cluster_Configuration" class="olink"><i>Cluster Configuration</i></a>, section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_installation_guide/server_installation_guide.html#xref_Cluster_Configuration_Routing" class="olink">Routing</a>.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e2028" href="#d0e2028">4</a>] </sup>For details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Server_Configuration_With_bw_xml" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a>.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e2044" href="#d0e2044">5</a>] </sup>For details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Server_Configuration_With_bw_xml" class="olink"><i>Server Configuration with <span class="literal">bw.xml</span></i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_General_Configuration_Options" class="olink">General Configuration Options</a>.</p></div><div class="footnote"><p><sup>[<a name="ftn.d0e2060" href="#d0e2060">6</a>] </sup>For details, see the <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#Server_Operations_Guide" class="olink">Server Operations Guide</a>'s chapter <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_Admin_Tools" class="olink"><i>Cluster Administration Tools</i></a>
+          <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_operations_guide/server_operations_guide.html#xref_MessageLogger" class="olink">Message Logger</a>.</p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="xref_Other_Features"></a>Chapter&nbsp;6.&nbsp;Other Features</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e2082">6.1. IDs</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e2087">6.1.1. ID Allocation</a></span></dt></dl></dd><dt><span class="section"><a href="#xref_Inter_Process_Communication_Mercury">6.2. Inter-Process Communication (Mercury)</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e2114">6.2.1. Overview</a></span></dt><dt><span class="section"><a href="#d0e2119">6.2.2. Nub</a></span></dt><dt><span class="section"><a href="#d0e2128">6.2.3. Messages</a></span></dt><dt><span class="section"><a href="#d0e2151">6.2.4. Requests</a></span></dt><dt><span class="section"><a href="#d0e2156">6.2.5. Bundles</a></span></dt><dt><span class="section"><a href="#d0e2163">6.2.6. Channels</a></span></dt><dt><span class="section"><a href="#d0e2218">6.2.7. Interfaces</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e2230">6.3. Fault Tolerance and Disaster Recovery</a></span></dt><dt><span class="section"><a href="#d0e2237">6.4. Packed Files</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e2082"></a>6.1.&nbsp;IDs</h2></div></div></div><p>An ID broker or issuing service is required, whenever the CellApp
+    creates a new entity, it needs a unique entity ID. The CellAppMgr
+    currently provides this functionality.</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2087"></a>6.1.1.&nbsp;ID Allocation</h3></div></div></div><p>The CellAppMgr currently acts as a central ID broker for IDs. It
+      handles requests for a block of IDs, and allows unused IDs to be
+      returned for 'recycling'.</p><p>If the CellAppMgr is restarted by a Reviver after crashing, then
+      it will recover its state by querying the cells for the highest ID they
+      are currently using. The sequence will be restarted from the highest ID
+      of all, added by one. A small number of IDs may be wasted in the event
+      of a failure.</p><p>Excess unused IDs are stored in special tables
+      <code class="varname">bigworldNewID</code> and <code class="varname">bigworldUsedIDs</code>.
+      For details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#Server_Programming_Guide" class="olink">Server Programming Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_MySQL_Database_Schema" class="olink"><i>MySQL Database Schema</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_programming_guide/server_programming_guide.html#xref_Non_Entity_Tables" class="olink">Non-Entity Tables</a>.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xref_Inter_Process_Communication_Mercury"></a>6.2.&nbsp;Inter-Process Communication (Mercury)</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2114"></a>6.2.1.&nbsp;Overview</h3></div></div></div><p>Mercury is the network layer used for communications between the
+      client and server, and between all server components. It is based on
+      UDP, and allows both reliable and unreliable communications.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2119"></a>6.2.2.&nbsp;Nub</h3></div></div></div><p>The Nub is the core of Mercury. It is responsible for sending and
+      receiving packets, delivering timer messages, and general socket
+      notifications.</p><p>Almost all communication uses UDP, a single socket is used for
+      most connections.</p><p>The Nub normally controls the event loop of the application. So it
+      also provides a time queue, and user socket notifications. The time
+      queue can be used to invoke callbacks at a regular interval, or to
+      invoke a single callback after a timeout, if required. User sockets can
+      be monitored, and callbacks invoked when they are ready for
+      reading.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2128"></a>6.2.3.&nbsp;Messages</h3></div></div></div><p>A message is the basic unit of communication. It consists
+      of:</p><div class="itemizedlist"><ul type="disc"><li><p><em class="emphasis">Message type</em> &#8212; 1
+          byte.</p></li><li><p><em class="emphasis">Message size</em> &#8212; 0-4
+          bytes.</p></li><li><p><em class="emphasis">Message data</em> &#8212;
+          Variable.</p></li></ul></div><p>The message size is not needed for fixed-length messages. The
+      message data is simply a stream of bytes that is interpreted by the
+      client and server. Streaming operators are provided for most data types,
+      to make marshalling easy.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2151"></a>6.2.4.&nbsp;Requests</h3></div></div></div><p>A request is a message that expects an answer. It is possible to
+      issue a request to a remote process, and receive a reply associated with
+      it without blocking the process' execution. Internally, Mercury will
+      allocate a unique request ID that is used to associate the reply with
+      the request. When a request is made, a reply handler is constructed to
+      handle the reply. It also handles timeouts, and will invoke a timeout
+      callback if no reply is received within a specified time.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2156"></a>6.2.5.&nbsp;Bundles</h3></div></div></div><p>A bundle is a collection of messages that are sent and received as
+      a unit. Grouping multiple messages together in a single packet reduces
+      the overhead of UDP headers. If a bundle exceeds the maximum packet
+      size, it will be split into multiple packets, and reassembled when it is
+      received.</p><p>The maximum size of a packet is chosen based on efficiency and is
+      related to the MTU (Maximum Transmission Unit) of a network. Each packet
+      in a bundle may optionally contain additional data, including sequence
+      numbers, request IDs, and acknowledgement IDs.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2163"></a>6.2.6.&nbsp;Channels</h3></div></div></div><p>Channels are used to provide reliable communication between two
+      Nubs. A channel may have different characteristics, depending on whether
+      it is a client/server channel or a server/server channel and between
+      which components it connects.</p><p>The table below describes the characteristics of some
+      channels.</p><div class="altrow"><table border="0" width="50%"><colgroup><col width="25%"><col width="25%"><col width="25%"><col width="25%"></colgroup><thead><tr><th>Channel</th><th>Latency</th><th>Bandwidth</th><th>Loss</th></tr></thead><tbody><tr><td>Client/server</td><td>High</td><td>Low</td><td>High</td></tr><tr><td>Server/server</td><td>Low</td><td>High</td><td>Low</td></tr></tbody></table></div><p><span class="citetitle">Channel's
+      characteristics</span></p><p>A channel's traits are specified when it is created, so that its
+      reliability algorithms can be appropriately selected.</p><p>If any message in a packet is flagged as reliable, the entire
+      packet is also treated as reliable. The sender gives it a sequence
+      number, and stores it in a sliding window. The receiver acknowledges the
+      packet by placing an ACK on the next outgoing packet. Channels that have
+      regular bi-directional communication (e.g. 10Hz for client/server, 50Hz
+      for CellApp/CellApp) do not send the ACK immediately while other
+      channels without regular communication will send this
+      immediately.</p><p>If the sender receives an out-of-order ACK, then it will assume
+      that the previous packets were lost, and resend them. For low-latency
+      connections, there is also a threshold in which packets will not be
+      resent for a certain time after they were previously sent.</p><p>For low-bandwidth connections (client/server), all unreliable
+      messages are stripped from the packet before it is resent, and, if
+      possible, the packet is piggybacked on the next outgoing packet, in
+      order to save bandwidth.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2218"></a>6.2.7.&nbsp;Interfaces</h3></div></div></div><p>Incoming messages on a Nub are handled by a single interface.
+      Since the message type is a single byte, there can be up to 256
+      single-byte messages in an interface (actually, slightly less, since
+      Mercury reserves several messages for internal use and a lot more if
+      single-byte messages are multiplexed to more messages).</p><p>Interfaces are normally defined using the macros in
+      <code class="filename">src/lib/network/interface_minder.hpp</code>. These are
+      designed to hide the details involved in decoding the message and
+      dispatching it. For simple fixed-length messages, the result is that a
+      method is called on an object, with a structure containing the message
+      parameters. For more complex variable-length messages, the method is
+      called with a stream object, and parameters must be streamed off
+      manually.</p><p>Interfaces also define whether each message is variable or
+      fixed-length. For fixed-length messages, the size need not be sent,
+      since the receiver knows how many bytes to expect.</p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e2230"></a>6.3.&nbsp;Fault Tolerance and Disaster Recovery</h2></div></div></div><p>Each component of the server has been designed to be fault-tolerant.
+    Any of the server processes or machines can die unexpectedly, and the
+    server should continue with little impact. See the description of server
+    components for details about how each of them handles fault
+    tolerance.</p><p>The BigWorld server also offers a second level of fault tolerance,
+    known as disaster recovery. The server's state can periodically be written
+    to the database. In the event of entire server failure, the server can be
+    restarted using this information.</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e2237"></a>6.4.&nbsp;Packed Files</h2></div></div></div><p>XML files are used throughout BigWorld due to its flexibility and
+    ease of use. However, XML files are also widely regarded as being bloated
+    and, when used in a computer game, too easily modified by the end user.
+    Packed files are XML files converted to a more compact binary format. The
+    client and all server components are able to load packed files where it
+    usually expects an XML file. Replacing XML files with packed files will
+    improve performance and offer a degree of obfuscation that should deter
+    casual users from modifying the contents of the files.</p><p>Packed files are read-only and are usually unsuitable for use during
+    development. Most of the tools (both client and server) will not work with
+    packed files due to its read-only nature.</p></div></div></div></div></body></html>

@@ -1,0 +1,122 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;4.&nbsp;File Format Changes</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="How To Upgrade BigWorld Versions">
+      <link rel="up" href="index.html" title="How To Upgrade BigWorld Versions">
+      <link rel="prev" href="ch03.html" title="Chapter&nbsp;3.&nbsp;Upgrading using Asset Processor">
+      <link rel="next" href="ch05.html" title="Chapter&nbsp;5.&nbsp;Client Script Changes">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL:$" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;4.&nbsp;File Format Changes</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_File_Format_Changes"></a>Chapter&nbsp;4.&nbsp;File Format Changes
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch04.html#d0e74">4.1. XML Format</a></span></dt>
+                  <dt><span class="section"><a href="ch04.html#d0e84">4.2. Font Format</a></span></dt>
+               </dl>
+            </div>
+            <p>This chapter describes changes made to BigWorld Technology's file
+                 formats between this version and the previous version.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e74"></a>4.1.&nbsp;XML Format
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The
+                      <code class="classname">DataSection</code><code class="methodname">.asWideString</code>
+                  API now expects a UTF-8 string and not a Base64 string. This change is
+                    automatically done by Asset Processor to all of the GUI files. Customers
+                      which are using wide strings in other XML files and which are using this
+                      API to parse these XML files should convert their string from Base64 to
+                      UTF-8. XML values using the "!" prefix and an ASCII string will also be
+                      converted.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e84"></a>4.2.&nbsp;Font Format
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The font system has been changed to utilise a glyph-caching system,
+                      rather than baking entire font sets out to a texture map. This has been
+                      added as part of internationalisation support. In particular, the Font
+                      files no longer need a <span class="literal">&lt;generated&gt;</span> section, and
+                      they no longer store their <code class="filename">.dds</code>
+                      files on disk.
+               </p>
+               <p>A new rule has been added to the Asset Processor; running this will
+                      change your font files to the new format, thereby enabling the glyph cache
+                      for all fonts.
+               </p>
+               <p>If you have any fonts that you do not want changed, for example if
+                      you are using artist-modified font textures, then add the names of the
+                      font files you wish to exclude from the process to
+                      <code class="filename">bigworld/tools/misc/asset_processor/FontGlyphCacheUpdate.py</code></p>
+               <p>Once the AssetProcessor has been run, you will be able to see in the
+                      output log which fonts were modified. You can then delete their associated
+                      <code class="filename">.dds</code> files from your source control
+                      repository.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch05.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;3.&nbsp;Upgrading using Asset Processor&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;5.&nbsp;Client Script Changes</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

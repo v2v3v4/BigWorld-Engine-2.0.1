@@ -1,0 +1,293 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;14.&nbsp;Detail Objects</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch13.html" title="Chapter&nbsp;13.&nbsp;Particles">
+      <link rel="next" href="ch15.html" title="Chapter&nbsp;15.&nbsp;Water">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch14.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;14.&nbsp;Detail Objects</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch13.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch15.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Detail_Objects"></a>Chapter&nbsp;14.&nbsp;Detail Objects
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch14.html#d0e4946">14.1. Flora</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch14.html#d0e4964">14.1.1. Placement</a></span></dt>
+                        <dt><span class="section"><a href="ch14.html#d0e5009">14.1.2. Implementation</a></span></dt>
+                        <dt><span class="section"><a href="ch14.html#d0e5034">14.1.3. Frame coherency</a></span></dt>
+                        <dt><span class="section"><a href="ch14.html#d0e5041">14.1.4. Animation</a></span></dt>
+                        <dt><span class="section"><a href="ch14.html#d0e5048">14.1.5. Lighting</a></span></dt>
+                        <dt><span class="section"><a href="ch14.html#d0e5055">14.1.6. File format</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>A detail object is a small mesh drawn in large numbers onto the
+                 terrain around the camera position. They are separated from ordinary models
+                 for efficiency. The selection and placement of these objects is largely
+                 automatic &#8212; it is based on the texture used by the underlying
+                 terrain.
+            </p>
+            <p>Examples of detail objects are: grasses, ferns, bulrushes, pebbles,
+                 and rocks. The user does not interact with detail objects (for example, no
+                 collision detection is performed).
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4946"></a>14.1.&nbsp;Flora
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>BigWorld by default has about 60,000 triangles of flora active at
+                      any time, of which about 15,000 will be drawn at any one time. You may
+                      change the size of the vertex buffer used by changing the value of the
+                      <span class="literal">vb_size</span> tag in your flora configuration file (which is
+                      specified by the <span class="literal">environment/floraXML</span> tag in your
+                      configuration file
+                      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/resources.xml</span> &#8212;
+                      for details, see <a href="ch01.html#xref_File_resources_xml" title="1.4.1.&nbsp;File resources.xml">File <span class="literal">resources.xml</span></a>.).
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e4964"></a>14.1.1.&nbsp;Placement
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Because of the multitude of objects involved, it is impractical to
+                           place detail objects by hand. Instead, BigWorld has Ecotypes.
+                  </p>
+                  <p>Ecotypes define objects that are automatically placed within the
+                           world, guided by terrain texture. They are defined in XML, and have the
+                           following properties:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p>One or more units (Moo visuals).</p>
+                        </li>
+                        <li>
+                           <p>One or more textures, which are used to match the terrain to
+                                        an ecotype.
+                           </p>
+                        </li>
+                        <li>
+                           <p>Sound tag, for character footsteps.</p>
+                        </li>
+                     </ul>
+                  </div>
+                  <p>For example, a grass ecotype could contain two separate meshes:
+                           one for low-height grass, and another for mid-height grass.
+                  </p>
+                  <p>The set of ecotypes currently active is managed by the Flora
+                           class, which also manages the individual active detail objects,
+                           allocating and de-allocating them as required.
+                  </p>
+                  <p>Each terrain block can have four textures, and each of these
+                           textures can have one associated ecotype. This allows for four different
+                           ecotypes per terrain block. Hence, within the detail sphere (50-metre
+                           radius from the camera) up to 16 different ecotypes may be
+                           visible.
+                  </p>
+                  <p>Detail objects are not placed precisely within the terrain blocks
+                           &#8212; this would create square regions of detail objects. Detail objects
+                           'jitter' their position before querying the terrain for its detail
+                           mapping. This effectively antialiases the quantized detail map.
+                  </p>
+                  <p>Flora is calculated and stored in terrain files by the World
+                           Editor. For more details, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../..//content_creation.chm" class="olink">Content Creation Manual</a> (accessible in WorldEditor,
+                           ModelEditor, and ParticleEditor via the <em class="emphasis">Help
+                              <span class="symbol">&#8594;</span> Content Creation</em> menu
+                           item, or by pressing <span class="literal">F1</span>).
+                  </p>
+                  <div class="section" lang="en">
+                     <div class="titlepage">
+                        <div>
+                           <div>
+                              <h4 class="title"><a name="d0e5002"></a>14.1.1.1.&nbsp;Visual consistency
+                              </h4>
+                           </div>
+                        </div>
+                     </div>
+                     <p>The detail objects are mapped directly from terrain textures.
+                                Visually this is correct, since in real life the colour on the terrain
+                                is actually made from the colour of millions of detail objects (blades
+                                of grass, etc...). Thus, a green 'grassy' terrain texture can be made
+                                to map perfectly to a grass ecotype.
+                     </p>
+                     <p>In BigWorld, whenever a texture is used, its accompanying detail
+                                objects are displayed.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5009"></a>14.1.2.&nbsp;Implementation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>Drawing detail objects is an extremely performance-critical area,
+                           as all routines are run thousands of times per frame.
+                  </p>
+                  <p>Vertex buffers are the perfect solution. The detail objects are
+                           kept transformed in a large vertex buffer. Thus, 1,000 pieces of grass
+                           at 6 vertices each means a world-space vertex buffer of 6,000 vertices.
+                           This allows all grass to be drawn using one call to the video card,
+                           using one transform matrix. 3D accelerators are extremely fast
+                           performing this kind of batched rendering.
+                  </p>
+                  <p>As the player moves around the world, he sees the detail objects
+                           in the immediate vicinity (50m). In reality, this means that the active
+                           set of detail objects must change according to the camera position.
+                           Detail objects that are just coming into view are faded in, using alpha
+                           blending.
+                  </p>
+                  <p>The flora configuration XML file
+                           <span class="literal"><em class="replaceable"><code>&lt;flora&gt;</code></em>.xml</span> (for
+                           details on this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch38.html#xref_flora_xml" class="olink"><span class="literal"><em class="replaceable"><code>&lt;flora&gt;</code></em>.xml</span></a>) can define
+                           the size of the vertex buffer either statically or as a set of options
+                           selectable by the user via the <span class="literal">FLORA_DENSITY</span> graphics
+                           setting. For details, see <a href="ch21.html#xref_FLORA_DENSITY" title="21.9.1.3.&nbsp;FLORA_DENSITY"><span class="literal">FLORA_DENSITY</span></a>.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5034"></a>14.1.3.&nbsp;Frame coherency
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In a multi-thousand object system, frame coherency must be
+                           utilised aggressively. The obvious choice for frame coherency is the
+                           vertex transforms. Each detail object is kept transformed in a vertex
+                           buffer in world space, until its terrain tile (or 'flora block') leaves
+                           the detail radius, at which point another terrain tile will have moved
+                           into the detail radius. Then the new tile's detail objects will be
+                           transformed and placed in the freed up vertex buffer memory.
+                  </p>
+                  <p>On average, detail objects have shown around 97% coherency between
+                           frames, making for a huge saving in transformation cost.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5041"></a>14.1.4.&nbsp;Animation
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>In order to create an immersive, living, breathing world, most
+                           things must animate.
+                  </p>
+                  <p>Animating detail objects add greatly to the illusion of the world.
+                           The BigWorld client uses 3D Perlin noise based on (wx, wz, time) to
+                           create believable procedural animation to the detail objects. Perlin
+                           noise was chosen because it is a cheap way to create space-time coherent
+                           noise. The implementation performs the animation efficiently in the
+                           vertex shader.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5048"></a>14.1.5.&nbsp;Lighting
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>When using simplified meshes (which is crucial in a multi-thousand
+                           object ornamentation system), lighting becomes challenging. Consider a
+                           criss-cross grass object rising vertically out of the terrain. If lit
+                           using standard procedures, the criss-cross objects would flare up in the
+                           evening sun.
+                  </p>
+                  <p>In the BigWorld client, lighting for detail objects is performed
+                           using the light map calculated from the actual terrain. Thus, it picks
+                           up terrain shadows as well. This is a mostly correct solution, because
+                           the mesh-based terrain itself is really a simplified version of the
+                           millions of detail objects in existence.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e5055"></a>14.1.6.&nbsp;File format
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The XML flora file defines among other things, the light map to be
+                           used, plus the ecotypes and noise generation functions. For details on
+                           this file's grammar, see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/index.html" class="olink">File Grammar Guide</a>'s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../file_grammar_guide/ch38.html#xref_flora_xml" class="olink"><span class="literal"><em class="replaceable"><code>&lt;flora&gt;</code></em>.xml</span></a>.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch13.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch15.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;13.&nbsp;Particles&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;15.&nbsp;Water</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,56 @@
+/******************************************************************************
+BigWorld Technology 
+Copyright BigWorld Pty, Ltd.
+All Rights Reserved. Commercial in confidence.
+
+WARNING: This computer program is protected by copyright law and international
+treaties. Unauthorized use, reproduction or distribution of this program, or
+any portion of this program, may result in the imposition of civil and
+criminal penalties as provided by law.
+******************************************************************************/
+
+/*~ module BWPersonality
+ *	@components{ db }
+ *	The name of this module is actually specified by the personality option in
+ *	the configuration file. This module should be implemented by the user.
+ *	It should contain callback methods that will be called by the server at
+ *	specific events.
+ */
+
+/*~	function BWPersonality.onInit
+ *	@components{ db }
+ *	This is a callback function that can be implemented by the user.
+ *
+ *	If present, this method is called whenever the Python scripts have
+ *	completed loading.
+ *
+ *	@param isReload True if the loading was caused by a call to
+ *	BigWorld.reloadScript, otherwise, False
+ */
+
+/*~ function BWPersonality.connectToBillingSystem
+ *	@components{ db }
+ *
+ *	This is a callback function that can be implemented by the user.
+ *
+ *	If present, this method is called during DBMgr startup. To connect to
+ *	a billing system via script, this method should return an object that
+ *	implements <code>getEntityKeyForAccount</code> and optionally
+ *	<code>setEntityKeyForAccount</code> methods.
+ *
+ *	For example:
+ *	<pre>
+ *	class BillingSystem( object ):
+ *	    def getEntityKeyForAccount( username, password, clientAddr, response ):
+ *	        ...
+ *	    def setEntityKeyForAccount( username, password, entityType, entityID ):
+ *	        ...
+ *
+ *	def connectToBillingSystem():
+ *	    return BillingSystem()</pre>
+ *
+ *	Refer to the Server Programming Guide for more information.
+ *
+ *	@return A custom billing system object or None if the default billing
+ *		system should be used.
+ */

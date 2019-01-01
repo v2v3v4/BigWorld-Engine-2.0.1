@@ -1,0 +1,296 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;11.&nbsp;Animation System</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Client Programming Guide">
+      <link rel="up" href="index.html" title="Client Programming Guide">
+      <link rel="prev" href="ch10.html" title="Chapter&nbsp;10.&nbsp;Models">
+      <link rel="next" href="ch12.html" title="Chapter&nbsp;12.&nbsp;Server Communications">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/client_programming_guide/ch11.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;11.&nbsp;Animation System</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch10.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">&nbsp;</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch12.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Animation_System"></a>Chapter&nbsp;11.&nbsp;Animation System
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch11.html#d0e4345">11.1. Basic keyframed animations</a></span></dt>
+                  <dt><span class="section"><a href="ch11.html#d0e4361">11.2. Animation layering and blending</a></span></dt>
+                  <dt><span class="section"><a href="ch11.html#d0e4401">11.3. Animation data files</a></span></dt>
+                  <dt><span class="section"><a href="ch11.html#d0e4435">11.4. Animation data streaming</a></span></dt>
+                  <dt><span class="section"><a href="ch11.html#d0e4460">11.5. Actions</a></span></dt>
+               </dl>
+            </div>
+            <p>The animation system in the BigWorld engine combines many
+               sophisticated techniques that are accessed via an easy-to-use interface.
+                 This system allows game developers to quickly create lifelike characters and
+                 environments. The problem this system solves is taking the raw content that
+                 is created by artists and integrating it into a believable dynamic game
+                 world.
+            </p>
+            <p>Artists working on design tools such as 3ds Max or Maya can create
+                 models and animations, then use the BigWorld Exporter plug-in to export them
+                 into data files of a format understandable by the graphics engine.
+            </p>
+            <p>The ModelEditor tool can be used to view these models and play back
+                 animations. It is then used to create a list of actions from these
+                 animations that are the Python-accessible interfaces within the game
+                 engine.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4345"></a>11.1.&nbsp;Basic keyframed animations
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The motions of an object over time can be stored as an array of
+                      keyframes that describe the position, rotation, and scale of an object (or
+                      part of one) at different points in time. These keyframes are then used as
+                      reference values and intermediate positions and rotations are calculated
+                      by interpolating between keyframe data.
+               </p>
+               <p>More realistic intricate objects are described as nodal trees
+                      representing a bone hierarchy. An example is a simple biped character that
+                      would have a typical hierarchy shown below:
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/typical_biped_hierarchy.png"><span class="caption">
+                        <p>Typical biped hierarchy</p></span></div>
+               </div>
+               <p>Each node represents the spatial state of a part of an object. These
+                      can map to rendered geometry either directly for rigid objects such as a
+                      hydraulic machine or as bone transforms that are used to update a skinned
+                      mesh (each geometry vertex having a set of weights that define how each
+                      bone influences its movement).
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4361"></a>11.2.&nbsp;Animation layering and blending
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>A simple animation such as a man waving may consists of keyframe
+                      arrays from a subset of the whole bone tree, <em class="emphasis">e.g.</em>,
+                      only for <span class="literal">Torso</span>, <span class="literal">UpperArmRight</span> and
+                      <span class="literal">LowerArmRight</span>.
+               </p>
+               <p>A different animation of the man walking may include only the
+                      <span class="literal">Torso</span> and <span class="literal">Pelvis</span> sub-tree. These two
+                      animations can be seen as different layers of the total movement. Within
+                      the BigWorld framework, this layering is achieved via setting nodal alpha
+                      values with the ModelEditor tool, as illustrated below:
+               </p>
+               <div class="informalfigure">
+                  <div class="mediaobject"><img src="images/modeleditor_blending_fields.png"><span class="caption">
+                        <p>ModelEditor 'Blending' fields</p></span></div>
+               </div>
+               <p>Within the engine, different layers can be seen to be played on
+                      different animation tracks, which control the stopping and starting of
+                      animations for particular parts of the body (the usual separation into
+                      upper and lower body allows motion and action to be dealt with smoothly
+                      yet independently within a game).
+               </p>
+               <p>It is possible to play an arbitrary number of animations at once and
+                      have the resulting motion be a blended interpolation of all the
+                      animations. This is essentially the same procedure as keyframed
+                      interpolation, as we are interpolating position, rotation, and scale data.
+                      When the different animation layers need to be combined into a single
+                      motion, the nodes that overlap in the different tracks need to be blended
+                      together.
+               </p>
+               <p>Transitions between animations could be achieved by creating all
+                      possible animation transitions and allowing all animations to complete
+                      their cycle before starting a new animation.
+               </p>
+               <p>A much more adaptable and robust method is to blend out ending
+                      animations and blend in starting animations over a period of time. As long
+                      as the animation list is large enough to account for possible jarring
+                      transitions. For example, instead of having only stand and run animations,
+                      include also walk and jog ones, then this system combined with good
+                      animations creates smooth lifelike behaviour in game characters.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4401"></a>11.3.&nbsp;Animation data files
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The BigWorld exporter outputs the following data files (all file
+                      types exported to the resource tree
+                      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span>):
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis"><span class="literal">.visual</span>
+                                      files</em></p>
+                        <p>Define an object's bone structure and material data.</p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">.primitive</span>
+                                      files</em></p>
+                        <p>Define the vertex data such as offset and weighting values for a
+                                   skinned object, and contain BSP data where appropriate.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis"><span class="literal">.animation</span>
+                                      files</em></p>
+                        <p>Define the keyframe data of an animation.</p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4435"></a>11.4.&nbsp;Animation data streaming
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Animation data is stored as a series of blocks that are
+                      asynchronously streamed into memory on demand.
+               </p>
+               <p>The sum of all these blocks is referred to as the streamed block
+                      cache, which size is constrained to prevent excessive memory usage. To
+                      specify the size of the cache, set the
+                      <span class="literal">animation/streamChacheSizeKB</span> tag in
+                      <span class="literal"><em class="replaceable"><code>&lt;engine_config&gt;</code></em>.xml</span>
+                      (for details, see <a href="ch01.html#xref_File_engine_config_xml" title="1.4.2.&nbsp;File <engine_config&gt;.xml">File
+                           <span class="literal"><em class="replaceable"><code>&lt;engine_config&gt;</code></em>.xml</span></a>)
+               </p>
+               <p>The watchers <span class="literal">Memory/StreamedBlocks_CacheSize</span> and
+                      <span class="literal">Memory/StreamedBlocks_CacheMaxSize</span> display the current
+                      size and the limit of the cache in bytes, respectively.
+               </p>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e4460"></a>11.5.&nbsp;Actions
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>An action is a wrapper object that links an animation to in-game
+                      behaviour and events. Action objects differ from animation ones in the
+                      information they hold, as described below:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Animation object</em></p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p>Raw keyframe data.</p>
+                              </li>
+                              <li>
+                                 <p>Information on frame rate.</p>
+                              </li>
+                              <li>
+                                 <p>Functionality on how to play itself on a model.</p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Action object</em></p>
+                        <div class="itemizedlist">
+                           <ul type="circle">
+                              <li>
+                                 <p>Blending time information.</p>
+                              </li>
+                              <li>
+                                 <p>Information on whether action is loop.</p>
+                              </li>
+                              <li>
+                                 <p>Information on whether an animation is movement.</p>
+                              </li>
+                              <li>
+                                 <p>Animation-matching data specifying particular object state
+                                                values for when a particular action should be played.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+               <p>The raw data describing an action is defined in a
+                      <span class="literal">.model</span> file in XML format (located in any of the
+                      various sub-folders under the resource tree
+                      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em></span>, such as for
+                      example,
+                      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/environments</span>,
+                      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/flora</span>,
+                      <span class="literal"><em class="replaceable"><code>&lt;res&gt;</code></em>/sets/vehicles</span>,
+                      etc...).. This data is produced from the ModelEditor tool.
+               </p>
+               <p>For details, see <a href="ch09.html#xref_Action_Matcher" title="9.1.6.&nbsp;Action Matcher">Action Matcher</a>.
+               </p>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch10.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center">&nbsp;</td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch12.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;10.&nbsp;Models&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;12.&nbsp;Server Communications</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

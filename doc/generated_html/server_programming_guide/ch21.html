@@ -1,0 +1,439 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   
+      <title>Chapter&nbsp;21.&nbsp;Security</title>
+      <link rel="stylesheet" href="../css/bigworld.css" type="text/css">
+      <meta name="generator" content="DocBook XSL Stylesheets V1.72.0">
+      <link rel="start" href="index.html" title="Server Programming Guide">
+      <link rel="up" href="pt01.html" title="Part&nbsp;I.&nbsp;Server Scripting Guide">
+      <link rel="prev" href="ch20.html" title="Chapter&nbsp;20.&nbsp;User Authentication and Billing System Integration">
+      <link rel="next" href="ch22.html" title="Chapter&nbsp;22.&nbsp;Debugging">
+   </head>
+   <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+      <div id="bigworld-header"><img src="http://try.bigworldtech.com/bigworld/image.php?img=bigworld_logo.gif&amp;svn=$HeadURL: https://svn01.bigworldtech.com/svn/customers/Xingyulongying/2.0/current/bigworld/doc/generated_html/server_programming_guide/ch21.html $" alt="bw logo"></div>
+      <div id="content">
+         <div class="navheader">
+            <table width="95%" align="center" summary="Navigation header">
+               <tr>
+                  <th colspan="3" align="center">Chapter&nbsp;21.&nbsp;Security</th>
+               </tr>
+               <tr>
+                  <td width="20%" align="left"><a accesskey="p" href="ch20.html">Prev</a>&nbsp;
+                  </td>
+                  <th width="55%" align="center">Part&nbsp;I.&nbsp;Server Scripting Guide</th>
+                  <td width="20%" align="right">&nbsp;<a accesskey="n" href="ch22.html">Next</a></td>
+               </tr>
+            </table>
+            <hr class="navheaderline">
+         </div>
+         <div class="chapter" lang="en">
+            <div class="titlepage">
+               <div>
+                  <div>
+                     <h2 class="title"><a name="xref_Security_Systems_In_BigWorld_Technology"></a>Chapter&nbsp;21.&nbsp;Security
+                     </h2>
+                  </div>
+               </div>
+            </div>
+            <div class="toc">
+               <p><b>Table of Contents</b></p>
+               <dl>
+                  <dt><span class="section"><a href="ch21.html#d0e14054">21.1. Client/Server Communications</a></span></dt>
+                  <dt><span class="section"><a href="ch21.html#d0e14143">21.2. Server-Side Network</a></span></dt>
+                  <dt><span class="section"><a href="ch21.html#d0e14180">21.3. Client Side</a></span></dt>
+                  <dt><span class="section"><a href="ch21.html#d0e14197">21.4. Client Cheating</a></span></dt>
+                  <dd>
+                     <dl>
+                        <dt><span class="section"><a href="ch21.html#d0e14209">21.4.1. General Rules for Managing Entity Data</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e14242">21.4.2. Writing Secure Game Script</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e14255">21.4.3. Balancing Security vs. Latency</a></span></dt>
+                        <dt><span class="section"><a href="ch21.html#d0e14262">21.4.4. Balancing Security vs. Server CPU Cost</a></span></dt>
+                     </dl>
+                  </dd>
+               </dl>
+            </div>
+            <p>Any MMOG needs to implement robust solutions to safeguard its
+                 environment from exploits. This chapter describes the measures adopted by
+                 BigWorld to provide safety for your data.
+            </p>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e14054"></a>21.1.&nbsp;Client/Server Communications
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The list below describes the measures taken to guarantee the
+                      security of client/server communications:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Security measure: Login
+                                      authentication</em></p>
+                        <p><em class="emphasis">Opportunity thwarted: Unknown user using a
+                                      player's account.</em></p>
+                        <p>When a player logs in to a BigWorld server, he sends a username
+                                   and a password. These are compared to a server-side database, to make
+                                   sure that the user is subscribed.
+                        </p>
+                        <p>The source code is available to the login procedure, so this
+                                   method can be customised as desired.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Security measure: Packet
+                                      authentication</em></p>
+                        <p><em class="emphasis">Opportunity thwarted: Player pretending to
+                                      be someone else, by spoofing another player's data.</em></p>
+                        <p>When a player logs in to a BigWorld server, the server sends a
+                                   32-bit session key back to the client. The client must use this key in
+                                   all further packets sent to the server, or the packet will be
+                                   rejected.
+                        </p>
+                        <p>Optionally, the server can also send to the client an
+                                   authentication key with every packet. This makes it very hard for an
+                                   attacker to successfully masquerade as the server.
+                        </p>
+                        <p>Also, every command called on the server has the client's ID
+                                   added to the arguments. This is done by the BaseApp before the command
+                                   is transmitted, so the client cannot fake the ID.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Security measure:
+                                      Encryption</em></p>
+                        <p><em class="emphasis">Opportunity thwarted: Attacker sniffing
+                                      data to gain privileged information, or injecting new packets into
+                                      client-server streams.</em></p>
+                        <p>All traffic between the client and server is encrypted. The
+                                   credentials sent to the server during login are RSA-encrypted and all
+                                   client-server traffic after this point is encrypted with 128-bit modal
+                                   Blowfish. This makes it very difficult for an attacker to inject new
+                                   packets into either the upstream or downstream traffic; without
+                                   knowing the Blowfish key, the probability of generating a packet that
+                                   will parse correctly and not be discarded is extremely low.
+                        </p>
+                        <p>It would still be possible for a player to hack its own binary
+                                   and sniff the data stream from the server after it has been
+                                   decrypted.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Security measure: Data
+                                      hiding</em></p>
+                        <p><em class="emphasis">Opportunity thwarted: Player accessing
+                                      privileged information.</em></p>
+                        <p>All properties of entities are tagged with propagation
+                                   specifiers. These allow the server to control where information is
+                                   sent.
+                        </p>
+                        <p>For example, you may want to hide the actual health of NPC
+                                   players, to prevent players from cheating by sniffing the data
+                                   stream.
+                        </p>
+                        <p>This is a common problem on MMOGs that receive data that is not
+                                   always displayed to the user.
+                        </p>
+                        <p>For more details, see <a href="ch04.html#xref_Data_Distribution" title="4.3.&nbsp;Data Distribution">Data Distribution</a>.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Security measure: Sequence
+                                      numbers</em></p>
+                        <p><em class="emphasis">Opportunity thwarted: User spoofing and
+                                      replaying captured stream.</em></p>
+                        <p>All packets are stamped with a sequence number, and packets are
+                                   rejected if the sequence number is repeated.
+                        </p>
+                        <p>This makes it much harder for a hacker to capture a data stream
+                                   and replay it, or inject packets to fake game operations.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Security measure: IP address
+                                      masking</em></p>
+                        <p><em class="emphasis">Opportunity thwarted: User doing DOS
+                                      attacks on clients.</em></p>
+                        <p>A player's IP address is not shared between clients, making it
+                                   impossible for hackers to sniff it and then perform a Denial Of
+                                   Service attack on that client.
+                        </p>
+                     </li>
+                     <li>
+                        <p><em class="emphasis">Security measure: Privilege checks on
+                                      RPCs</em></p>
+                        <p><em class="emphasis">Opportunity thwarted: Player calling
+                                      server-only functions.</em></p>
+                        <p>Both client and server entities call functions (Remote Procedure
+                                   Calls) on Python objects.
+                        </p>
+                        <p>The developer tags all methods with accessibility flags. This
+                                   enables the server to check all calls to make sure that they are
+                                   legal.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e14143"></a>21.2.&nbsp;Server-Side Network
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>Security for the internal server-side network is provided by a
+                      simple proxy mechanism <span class="symbol">&#8208;</span> the only machines
+                      exposed to the Internet are the LoginApps and BaseApps (for more details,
+                      see the document <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/index.html" class="olink">Server Overview</a>s section <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html" class="olink"><i>Server Components</i></a> <span class="symbol">&#8594;</span> <a xmlns:xlink="http://www.w3.org/1999/xlink" href="../server_overview/ch05.html#xref_Server_Components_BaseApp" class="olink">BaseApp</a>).
+               </p>
+               <p>As such, internal server traffic between BigWorld components
+                      (<em class="emphasis">e.g.</em>, CellApp to BaseApp traffic, CellApp to
+                      CellAppMgr traffic) cannot be sniffed.
+               </p>
+               <p>Additionally, each server component is only required to listen for
+                      all external communications on a single UDP port. This way, all other
+                      network services can be disabled, including TCP, which is the target of
+                      many known attacks. Listening on a single UDP port for communications with
+                      all clients (as opposed to a distinct port for each) also has the
+                      following advantages:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p>It becomes impossible for one client to guess another's port,
+                                   and thereby impersonate it.
+                        </p>
+                     </li>
+                     <li>
+                        <p>A single <span class="literal">recv()</span> is used for all incoming
+                                   messages on the server side, instead of a <span class="literal">select()</span>
+                                   across a large number of per-player sockets. This results in a more
+                                   efficient message handling implementation.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e14180"></a>21.3.&nbsp;Client Side
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>The list below describes the measures taken to guarantee the
+                      security of the client side:
+               </p>
+               <div class="itemizedlist">
+                  <ul type="disc">
+                     <li>
+                        <p><em class="emphasis">Security measure: CD Key</em></p>
+                        <p><em class="emphasis">Opportunity thwarted: Stealing of CD
+                                      images</em></p>
+                        <p>BigWorld Technology does not cover distribution issues.</p>
+                        <p>But since an MMOG client must connect to a server to play the
+                                   game, this problem can be solved by modifying the login process so
+                                   that, in addition to the username and password, the CD key is also
+                                   sent to the server and checked against a database.
+                        </p>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="section" lang="en">
+               <div class="titlepage">
+                  <div>
+                     <div>
+                        <h2 class="title" style="clear: both"><a name="d0e14197"></a>21.4.&nbsp;Client Cheating
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+               <p>As a developer, you need to watch out for hacked clients, and third
+                      party apps (often called 'trainers'). It is also important to realise that
+                      it is very hard to prevent all forms of cheating. You should decide what
+                      forms of cheating will impact you and/or your customers, and work on those
+                      issues, and do not let minor cheating distract you.
+               </p>
+               <p>The most important rule is to always be careful with data sent from
+                      the client. If possible, everything that the client does should be checked
+                      for validity on the server. Simple rules, like ensuring that a switch can
+                      only be activated when the player is close enough to throw the lever, are
+                      easy to enforce. To simplify these checks, an extra 'source' argument is
+                      added to the parameter list for every method exposed to the client. The
+                      client does not send it up <span class="symbol">&#8208;</span> it is added by
+                      the BaseApp automatically. Also, to make it harder for clients to cheat,
+                      methods not exposed to the client are excised from the address space that
+                      it sees.
+               </p>
+               <p>Generalised physics checking on more frequent interactions, such as
+                      movement, is not so easy, since running the physics of every player on the
+                      server would be quite expensive. One solution is to use the high-level
+                      geometry of the world as the expression of the important physical rules.
+                      The world is built up of polyhedral chunks connected by portals. A chunk
+                      equates to one room in inside areas. Whenever the player moves between
+                      chunks, we check that the movement passes through a portal, and that the
+                      player has not moved too fast. This means that we are not concerned about
+                      petty violations of physical rules, like standing in the middle of a
+                      table, but we do catch violations that influence the game, like moving
+                      through walls or locked doors, and moving too quickly.
+               </p>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e14209"></a>21.4.1.&nbsp;General Rules for Managing Entity Data
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>The general rule is to send data to the client only if it is
+                           necessary. This saves bandwidth, as well as helping reduce hacking.
+                           There are three techniques you can use with BigWorld Technology:
+                  </p>
+                  <div class="itemizedlist">
+                     <ul type="disc">
+                        <li>
+                           <p><em class="emphasis">Level of Detail</em></p>
+                           <p>Instead of constantly sending entity information, you might
+                                        want to send it only when it is within range. For example, a player
+                                        might be able to see a monster from 500 metres away, but its level
+                                        does not have to be sent to the client until it is within 20
+                                        metres.
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Data hiding</em></p>
+                           <p>Some information should never be sent to the client. For
+                                        example, NPC health could be kept local to the server, and the
+                                        client can just call functions that affect it
+                                        (<em class="emphasis">e.g.</em>, <span class="literal">doDamage(10)</span>). The
+                                        server sends the results to the client (<em class="emphasis">e.g.</em>,
+                                        monster limping because health is below 50%).
+                           </p>
+                        </li>
+                        <li>
+                           <p><em class="emphasis">Data on request</em></p>
+                           <p>The client should call server functions to request data only
+                                        when needed. For example, your game could be designed such that the
+                                        client must physically 'con' a monster by calling a server-side
+                                        function that returns level and health. To detect potential cheating
+                                        the server could then flag clients that con more than one monster
+                                        per second, or con monsters further than 20 metres away.
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e14242"></a>21.4.2.&nbsp;Writing Secure Game Script
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>As mentioned in other places, the responsibility for security in a
+                           BigWorld-based game is shared between the engine itself and the game
+                           script running on top of it. In particular, script writers must be very
+                           careful in the design and implementation of
+                           <code class="code">&lt;Exposed/&gt;</code> methods. Please see <a href="ch05.html#xref_SPG_ExposedMethods" title="5.4.&nbsp;Exposed Methods &#8208; Client-to-Server Communication">Exposed Methods <span class="symbol">&#8208;</span> Client-to-Server
+                            Communication</a> for more details on the specifics of
+                           the security requirements for exposed methods.
+                  </p>
+                  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+                     <h3 class="title">Note</h3>
+                     <p>Please be aware that at this point in time, the FantasyDemo game
+                                that ships with each BigWorld package has not been bulletproofed
+                                against the actions of malicious clients and in all likelihood
+                                contains security vulnerabilities in its exposed methods. We are
+                                working on improving this and offering a FantasyDemo to customers that
+                                serves as both a good feature demonstration as well as a good example
+                                of secure script.
+                     </p>
+                  </div>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e14255"></a>21.4.3.&nbsp;Balancing Security vs. Latency
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>As much as security is important, as a developer you have to be
+                           careful so that it does not impact too much the player's experience of
+                           the game.
+                  </p>
+                  <p>The game has to be responsive, but the game play may feel very
+                           lagged if the client passed all movement and combat commands to the
+                           server for validation before showing results. Therefore, you are best
+                           off handling movement on the client side, or simultaneously on the
+                           client and the server. For example, to have a fast-paced shooting game,
+                           you would need to perform client-side tests for impact, and show the
+                           result immediately (monster recoils when hit, etc...). Simultaneously,
+                           you would send the shoot command to the server, and let the server send
+                           down any changes of health if the monster is really hit. This means that
+                           the client cannot cheat with shooting, but still gets lag-free
+                           results.
+                  </p>
+               </div>
+               <div class="section" lang="en">
+                  <div class="titlepage">
+                     <div>
+                        <div>
+                           <h3 class="title"><a name="d0e14262"></a>21.4.4.&nbsp;Balancing Security vs. Server CPU Cost
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <p>This is one of the biggest issues in controlling hacking. For
+                           example, it may be too expensive to check all player physics on the
+                           server. The developer has to pick the most common forms of cheating, and
+                           check for those.
+                  </p>
+                  <p>It is sensible to allow checks to be turned on and off per player,
+                           or only check 10% of the players at any one time. Statistical checking
+                           can be useful, for example by monitoring how many XP are gained over
+                           time by players, to check if they are accumulating points at an
+                           unfeasible rate. If the player becomes a suspect of cheating, then more
+                           checks can be turned on for him.
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="navfooter">
+            <hr class="navheaderline">
+            <table width="95%" align="center" summary="Navigation footer">
+               <tr>
+                  <td width="38%" align="left"><a accesskey="p" href="ch20.html">Prev</a>&nbsp;
+                  </td>
+                  <td width="20%" align="center"><a accesskey="u" href="pt01.html">Up</a></td>
+                  <td width="37%" align="right">&nbsp;<a accesskey="n" href="ch22.html">Next</a></td>
+               </tr>
+               <tr>
+                  <td width="40%" align="left" valign="top">Chapter&nbsp;20.&nbsp;User Authentication and Billing System Integration&nbsp;</td>
+                  <td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td>
+                  <td width="40%" align="right" valign="top">&nbsp;Chapter&nbsp;22.&nbsp;Debugging</td>
+               </tr>
+               <tr>
+                  <td colspan="3">Copyright 1999-2010 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+                     		   
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>
