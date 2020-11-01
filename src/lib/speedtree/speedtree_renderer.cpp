@@ -470,7 +470,7 @@ SpeedTreeRenderer::~SpeedTreeRenderer()
 void SpeedTreeRenderer::init()
 {
 	BW_GUARD;
-	CSpeedTreeRT::Authorize("your license key goes here");
+	CSpeedTreeRT::Authorize("25F75B5C4FC44B55");
 
 	if ( !CSpeedTreeRT::IsAuthorized() )
 	{
